@@ -57,8 +57,9 @@ watchEffect(() => state.ensure('slider', props.lane))
 function updateLaneSize() {
   if (!sliderEl.value) return
   const size = horizontal.value ? sliderEl.value.offsetWidth : sliderEl.value.offsetHeight
-  state.setSize('slider', props.lane, size)
-  // state.setMinMax('slider', props.lane, 0, size)
+  const thumbEl = sliderEl.value.querySelector('.slider-thumb > *')
+  const thumbSize = thumbEl ? (horizontal.value ? thumbEl.offsetWidth : thumbEl.offsetHeight) : 0
+  state.setSize('slider', props.lane, size - thumbSize)
 }
 
 let observer

@@ -88,6 +88,7 @@ export const sliderStateFn = {
    */
   swipeCommit(desc) {
     const slider = this.ensure(desc.laneId)
+
     // desc.delta is already in logical units (converted by solver)
     slider.value = Math.min(slider.max, Math.max(slider.min, slider.value + desc.delta))
     slider.offset = 0

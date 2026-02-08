@@ -41,7 +41,7 @@ export const sliderSolver = {
     const maxOffset = ((max - value) / range) * laneSize
     const minOffset = ((min - value) / range) * laneSize
     desc.delta = Math.max(minOffset, Math.min(maxOffset, delta))
-    
+
     desc.reaction = desc.type
     return desc
   },
@@ -67,7 +67,7 @@ export const sliderSolver = {
     // newValue = value + deltaLogical, clamped to [min, max]
     // Therefore deltaLogical must be in [min - value, max - value]
     const clampedDelta = Math.max(min - value, Math.min(max - value, deltaLogical))
-    
+
     desc.delta = clampedDelta  // logical units, safe to apply
     desc.reaction = desc.type
     return desc

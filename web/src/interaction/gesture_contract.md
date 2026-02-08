@@ -425,6 +425,23 @@ const clamped = Math.min(max, delta)  // NO!
 - ❌ Input handling
 - ❌ Solver logic (commit vs revert decision)
 
+### value
+
+`value` is a normalized scalar (0–100) representing the starting position
+of the gesture target at gesture start.
+
+- Sampled once at gesture start
+- Remains constant throughout the gesture lifecycle
+- Used by solvers and/or state to compute relative movement
+- Not updated by delta application
+
+Value is:
+
+Read by sliderSolver during swipe and swipeCommit
+Ignored during swipeStart
+Written only by sliderState during commit
+Passed forward to become the next gesture’s startValue
+
 #### Correct Usage Example
 ```javascript
 // State mutation - correct

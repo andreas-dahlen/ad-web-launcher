@@ -29,10 +29,11 @@ export const resolve = {
 
     swipe(intent, facts) {
         if (policy.resolveSupports(intent.type, facts.target)) {
+            const resolvedDelta = policy.resolveDelta(intent.delta, facts.axis, facts.swipeType)
             return {
                 type: intent.type,
                 target: facts.target,
-                delta: policy.resolveDelta(intent.delta, facts.axis, facts.swipeType),
+                delta: policy.normalizedDelta(resolvedDelta),
             }
         }
         return null
@@ -40,11 +41,11 @@ export const resolve = {
 
     swipeCommit(intent, facts) {
         if (policy.resolveSupports(intent.type, facts.target)) {
-
+            const resolvedDelta = policy.resolveDelta(intent.delta, facts.axis, facts.swipeType)
             return {
                 type: intent.type,
                 target: facts.target,
-                delta: policy.resolveDelta(intent.delta, facts.axis, facts.swipeType)
+                delta: policy.normalizedDelta(resolvedDelta)
             }
         }
         return null
