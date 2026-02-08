@@ -1,11 +1,11 @@
 import { carouselStateFn } from './carouselState'
 import { sliderStateFn } from './sliderState'
-// import { dragStateFn } from './dragState'
+import { dragStateFn } from './dragState'
 
 const stateFiles = {
     carousel: carouselStateFn,
     slider: sliderStateFn,
-    // drag: dragStateFn
+    drag: dragStateFn
 }
 function call(type, fnName, ...args) {
     return stateFiles[type]?.[fnName]?.(...args) ?? null
@@ -27,6 +27,7 @@ export const state = {
     setSize(type, laneId, value) { return call(type, 'setSize', laneId, value) },
     finalTransition(type, laneId) { return call(type, 'finalTransition', laneId)},
      setMinMax(type, laneId, min, max) { return call(type, 'setMinMax', laneId, min, max)},
+     setBounds(type, laneId, packet) { return call(type, 'setBounds', laneId, packet)},
 
     // descriptor calls
     swipeStart(type, desc){ return call(type, 'swipeStart', desc)},

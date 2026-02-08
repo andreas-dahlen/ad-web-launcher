@@ -114,10 +114,16 @@ const thumbStyle = computed(() => {
 }
 
 .slider-track {
-  position: absolute;
-  inset: 40% 5%;
   border-radius: 999px;
-  background: rgba(0, 0, 0, 0.08);
+  background: rgba(0, 0, 0, 0.163);
+  position: absolute;
+}
+.slider-container[data-axis="horizontal"] .slider-track {
+  inset: 40% 5%;
+}
+
+.slider-container[data-axis="vertical"] .slider-track {
+  inset: 5% 40%;
 }
 
 .slider-thumb {
@@ -125,7 +131,13 @@ const thumbStyle = computed(() => {
   width: 100%;
   height: 100%;
   display: flex;
-  justify-content: left;
-  align-items: bottom;
+}
+
+.slider-container[data-axis="horizontal"] .slider-thumb {
+  align-items: center;
+}
+
+.slider-container[data-axis="vertical"] .slider-thumb {
+  justify-content: center;
 }
 </style>

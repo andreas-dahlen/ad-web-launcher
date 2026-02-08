@@ -35,10 +35,7 @@ defineOptions({ name: 'MidB' })
   width: 40%;
   color: white;
   font-weight: bold;
-}
-
-.slider-content {
-  background: #4285f4;
-  border-radius: 10px;
+    border-radius: 10px;
+      background: #4285f4;
 }
 </style>
