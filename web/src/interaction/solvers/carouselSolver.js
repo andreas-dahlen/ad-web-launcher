@@ -15,7 +15,7 @@ import {
   resolveDirection,
   shouldCommit,
   getCommitOffset
-} from '../policy/carouselPolicy'
+} from './policy/carouselPolicy'
 
 export const carouselSolver = {
   /**
@@ -46,7 +46,7 @@ export const carouselSolver = {
     const { delta, axis, laneSize } = desc
     const clampedDelta = clampDelta(delta, laneSize)
 
-    if (shouldCommit(clampedDelta, laneSize)) {
+    if (shouldCommit(clampedDelta, laneSize, axis)) {
       const direction = resolveDirection(clampedDelta, axis)
       const targetOffset = getCommitOffset(direction, laneSize)
 

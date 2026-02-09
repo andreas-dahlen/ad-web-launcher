@@ -19,7 +19,7 @@ import {
   clampDelta2D,
   resolveDirection,
   getCommitDelta
-} from '../policy/dragPolicy'
+} from './policy/dragPolicy'
 
 export const dragSolver = {
   /**
@@ -34,12 +34,12 @@ export const dragSolver = {
    * Handle swipe (drag) - clamp deltas and return offset reaction
    */
   swipe(desc) {
-    const { deltaX, deltaY, bounds } = desc
+    const { delta, bounds } = desc
+    const {x: deltaX, y: deltaY } = delta
     const clamped = clampDelta2D(deltaX, deltaY, bounds)
-
     desc.reaction = desc.type
-    desc.deltaX = clamped.x
-    desc.deltaY = clamped.y
+    desc.delta.x = clamped.x
+    desc.delta.y = clamped.y
     return desc
   },
 
@@ -47,15 +47,16 @@ export const dragSolver = {
    * Handle swipeCommit - always commit at current position (no revert)
    */
   swipeCommit(desc) {
-    const { deltaX, deltaY, bounds } = desc
+    const { delta, bounds } = desc
+    const {x: deltaX, y: deltaY } = delta
     const clamped = clampDelta2D(deltaX, deltaY, bounds)
     const commit = getCommitDelta(clamped.x, clamped.y)
     const direction = resolveDirection(commit.x, commit.y)
 
     desc.reaction = desc.type
     desc.direction = direction
-    desc.deltaX = commit.x
-    desc.deltaY = commit.y
+    desc.delta.x = commit.x
+    desc.delta.y = commit.y
     return desc
   }
 }

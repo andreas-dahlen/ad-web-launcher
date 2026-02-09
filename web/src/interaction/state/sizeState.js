@@ -67,3 +67,12 @@ export function getAxisSize(axis) {
 export function normalizeSwipeDelta(delta) {
   return delta / scale.value
 }
+
+function isFiniteNumber(value) {
+  return Number.isFinite(value)
+}
+
+export function clampNumber(value, min = 0, max = 1) {
+  const v = isFiniteNumber(value) ? value : min
+  return Math.min(Math.max(v, min), max)
+}

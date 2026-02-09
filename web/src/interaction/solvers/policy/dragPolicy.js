@@ -21,7 +21,7 @@
  * @param {number} max - Maximum bound
  * @returns {number} Clamped delta
  */
-export function clampDelta(delta, min, max) {
+function clampDelta(delta, min, max) {
   if (min === undefined || max === undefined) return delta
   return Math.max(min, Math.min(max, delta))
 }
@@ -35,6 +35,8 @@ export function clampDelta(delta, min, max) {
  */
 export function clampDelta2D(deltaX, deltaY, bounds = {}) {
   const { minX, maxX, minY, maxY } = bounds
+  console.log(deltaX, deltaY, bounds)
+  console.log(clampDelta(deltaX, minX, maxX))
   return {
     x: clampDelta(deltaX, minX, maxX),
     y: clampDelta(deltaY, minY, maxY)

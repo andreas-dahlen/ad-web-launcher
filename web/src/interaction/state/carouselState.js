@@ -1,6 +1,6 @@
 import { reactive } from 'vue'
-import { clampNumber } from '../math/clampMath'
-import { getNextIndex } from '../reaction/policy/carouselPolicy'
+import { clampNumber } from '../state/sizeState'
+import { getNextIndex } from '../solvers/policy/carouselPolicy'
 
 /* -------------------------------------------------
 Central carousel state

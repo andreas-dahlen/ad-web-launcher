@@ -16,6 +16,7 @@ export const domRegistry = {
    * Includes lane/action info and reaction booleans.
    */
   findElementAt(x, y) {
+
     const el = document.elementsFromPoint(x, y).find(el => {
       const ds = el.dataset || {}
       return (
@@ -43,6 +44,7 @@ export const domRegistry = {
   // Lane / axis helpers
   // ------------------------
   findLaneByAxis(x, y, inputAxis) {
+
     const el = document.elementsFromPoint(x, y).find(el => {
       const ds = el.dataset
       return ds?.lane && ds?.axis && (ds.axis === inputAxis || ds.axis === 'both')

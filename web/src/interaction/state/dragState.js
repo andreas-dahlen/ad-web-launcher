@@ -17,6 +17,17 @@ export const dragStateFn = {
   getSize(laneId) {
     return dragState.lanes[laneId]?.size ?? 0
   },
+
+  getBounds(laneId) {
+    const lane = dragState.lanes[laneId]
+    return {
+      minX: lane.minX,
+      minY: lane.minY,
+      maxX: lane.maxX,
+      maxY: lane.maxY
+    }
+  },
+
   ensure(laneId) {
     if (!dragState.lanes[laneId]) {
       dragState.lanes[laneId] = {

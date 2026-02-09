@@ -13,13 +13,20 @@ function call(type, fnName, ...args) {
 
 export const state = {
     //buildPayload
-    getSize(type, laneId) { return call(type, 'getSize', laneId) },
+    getSize(type, laneId) { 
+        if (type !== 'drag') return call(type, 'getSize', laneId) },
 
-    getMin(type, laneId) { return call(type, 'getMin', laneId) },
+    getMin(type, laneId) {
+        if (type === 'slider')  return call(type, 'getMin', laneId) },
 
-    getMax(type, laneId) { return call(type, 'getMax', laneId) },
+    getMax(type, laneId) { 
+        if (type === 'slider') return call(type, 'getMax', laneId) },
 
-    getValue(type, laneId) { return call(type, 'getValue', laneId) },
+    getValue(type, laneId) { 
+        if (type === 'slider') return call(type, 'getValue', laneId) },
+
+    getBounds(type, laneId) {
+        if (type === 'drag') return call (type, 'getBounds', laneId) },
 
     //calls from Vue components
     ensure(type, laneId) { return call(type, 'ensure', laneId) },

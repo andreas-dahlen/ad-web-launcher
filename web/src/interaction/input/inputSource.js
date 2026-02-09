@@ -13,7 +13,7 @@
 
 import { APP_SETTINGS } from '../../config/appSettings'
 import { log } from '../../debug/functions'
-import { intentMap } from './intentMapper'
+import { intentDeriver } from './intentDeriver'
 
 let currentSeqId = 0
 
@@ -57,25 +57,25 @@ function handleAndroidTouch(type, x, y, seqId) {
 
   switch (type) {
     case 'down':
-      intentMap.onDown(x, y)
+      intentDeriver.onDown(x, y)
       break
     case 'move':
-      intentMap.onMove(x, y)
+      intentDeriver.onMove(x, y)
       break
     case 'up':
-      intentMap.onUp(x, y)
+      intentDeriver.onUp(x, y)
       break
   }
 }
 
 function onPointerDown(e) {
-  intentMap.onDown(e.clientX, e.clientY)
+  intentDeriver.onDown(e.clientX, e.clientY)
 }
 
 function onPointerMove(e) {
-  intentMap.onMove(e.clientX, e.clientY)
+  intentDeriver.onMove(e.clientX, e.clientY)
 }
 
 function onPointerUp(e) {
-  intentMap.onUp(e.clientX, e.clientY)
+  intentDeriver.onUp(e.clientX, e.clientY)
 }

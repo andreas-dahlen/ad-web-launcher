@@ -42,9 +42,12 @@ export function resolveDirection(delta, axis) {
  * @param {number} laneSize - Size of the lane
  * @returns {boolean} True if should commit
  */
-export function shouldCommit(delta, laneSize) {
+export function shouldCommit(delta, laneSize, axis) {
   if (!laneSize) return false
-  const threshold = laneSize * APP_SETTINGS.swipeCommitRatio
+
+  const axisBias = axis === 'vertical' ? 0.65 : 1
+  const threshold = laneSize * APP_SETTINGS.swipeCommitRatio * axisBias
+
   return Math.abs(delta) >= threshold
 }
 
