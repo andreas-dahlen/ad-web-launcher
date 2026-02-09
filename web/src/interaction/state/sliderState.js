@@ -32,15 +32,20 @@ export const sliderStateFn = {
   getSize(laneId) {
     return sliderState.sliders[laneId]?.size ?? 0
   },
-  getMin(laneId) {
-    return sliderState.sliders[laneId]?.min ?? 0
+  getConstraints(laneId) {
+    return {
+      min: sliderState.sliders[laneId]?.min ?? 0,
+      max: sliderState.sliders[laneId]?.max ?? 100
+    }
   },
-  getMax(laneId) {
-    return sliderState.sliders[laneId]?.max ?? 100
-  },
-  getValue(laneId) {
+  getPosition(laneId) {
     return sliderState.sliders[laneId]?.value ?? 0
   },
+
+  get(laneId) {
+    return sliderState.sliders[laneId] ?? null
+  },
+
   ensure(laneId) {
     if (!sliderState.sliders[laneId]) {
       sliderState.sliders[laneId] = {
@@ -53,10 +58,10 @@ export const sliderStateFn = {
     }
     return sliderState.sliders[laneId]
   },
-  setMinMax(laneId, min, max) {
+  setConstraints(laneId, packet) {
     const slider = this.ensure(laneId)
-    slider.min = min
-    slider.max = max
+    slider.min = packet.min
+    slider.max = packet.max
   },
   setSize(laneId, size) {
     this.ensure(laneId).size = size
@@ -86,14 +91,21 @@ export const sliderStateFn = {
    * Commit slider to new value - called by dispatcher on slider:swipeCommit
    * Receives logical delta (already converted from pixels by solver)
    */
+
   swipeCommit(desc) {
     const slider = this.ensure(desc.laneId)
-
-    // desc.delta is already in logical units (converted by solver)
-    slider.value = Math.min(slider.max, Math.max(slider.min, slider.value + desc.delta))
+    slider.value = desc.delta   // delta already “final value”
     slider.offset = 0
     slider.dragging = false
   }
+  // swipeCommit(desc) {
+  //   const slider = this.ensure(desc.laneId)
+
+  //   // desc.delta is already in logical units (converted by solver)
+  //   slider.value = Math.min(slider.max, Math.max(slider.min, slider.value + desc.delta))
+  //   slider.offset = 0
+  //   slider.dragging = false
+  // }
 }
 
 /* -------------------------------------------------

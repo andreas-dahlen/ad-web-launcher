@@ -32,7 +32,6 @@ export const intentDeriver = {
 
 function onDown(x, y) {
     drawDots(x, y, 'green')
-    // console.log(x, y)
     state.phase = 'PENDING'
     state.start.x = x
     state.start.y = y
@@ -54,8 +53,6 @@ function onDown(x, y) {
 function onMove(x, y) {
     if (state.phase === 'IDLE') return
     drawDots(x, y, 'yellow')
-    // console.log(x, y)
-
 
     // Compute deltas
     const startDeltaX = x - (state.start.x)

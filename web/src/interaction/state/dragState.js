@@ -18,14 +18,22 @@ export const dragStateFn = {
     return dragState.lanes[laneId]?.size ?? 0
   },
 
-  getBounds(laneId) {
+  getConstraints(laneId) {
     const lane = dragState.lanes[laneId]
     return {
-      minX: lane.minX,
-      minY: lane.minY,
-      maxX: lane.maxX,
-      maxY: lane.maxY
+      minX: lane.minX ?? 0,
+      minY: lane.minY ?? 0,
+      maxX: lane.maxX ?? 0,
+      maxY: lane.maxY ?? 0
     }
+  },
+
+  getPosition(laneId) {
+    return dragState.lanes[laneId]?.position ?? { x: 0, y: 0 }
+  },
+
+  get(laneId) {
+    return dragState.lanes[laneId] ?? null
   },
 
   ensure(laneId) {
@@ -44,13 +52,18 @@ export const dragStateFn = {
     lane.size = size ?? 0
   },
 
-  setBounds(laneId, packet) {
+  setConstraints(laneId, packet) {
     const drag = this.ensure(laneId)
-    const {minX, minY, maxX, maxY } = packet
+    const { minX, minY, maxX, maxY } = packet
     drag.minX = minX
     drag.minY = minY
     drag.maxX = maxX
     drag.maxY = maxY
+  },
+
+  setPosition(laneId, pos) {
+    const lane = this.ensure(laneId)
+    lane.position = { x: pos.x ?? 0, y: pos.y ?? 0 }
   },
 
   /**
@@ -60,6 +73,7 @@ export const dragStateFn = {
     const lane = this.ensure(desc.laneId)
     lane.dragging = true
     lane.offset = { ...ZERO_POINT }
+    console.log('SWIPESTART(STATE): delta:', desc.delta, 'constraints:', desc.constraints, 'position: ', lane.position)
   },
 
   /**
@@ -68,6 +82,7 @@ export const dragStateFn = {
   swipe(desc) {
     const lane = this.ensure(desc.laneId)
     lane.offset = desc.delta
+    console.log('SWIPE(STATE): delta:', desc.delta, 'offset: ', lane.offset, 'position: ', lane.position)
   },
 
   /**
@@ -75,13 +90,14 @@ export const dragStateFn = {
    */
   swipeCommit(desc) {
     const lane = this.ensure(desc.laneId)
-    const delta = desc.delta
 
     lane.position = {
-      x: lane.position.x + delta.x,
-      y: lane.position.y + delta.y
+      x: desc.delta.x,
+      y: desc.delta.y
     }
     lane.offset = { ...ZERO_POINT }
     lane.dragging = false
+
+    console.log('SWIPECOMMIT(STATE): delta:', desc.delta, 'offset: ', lane.offset, 'position: ', lane.position)
   }
 }

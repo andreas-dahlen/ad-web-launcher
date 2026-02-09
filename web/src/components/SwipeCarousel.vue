@@ -73,7 +73,7 @@ const props = defineProps({
 })
 
 const horizontal = computed(() => props.axis === 'horizontal')
-const laneState = computed(() => state.ensure('carousel', props.lane))
+const laneState = computed(() => state.get('carousel', props.lane))
 
 watchEffect(() => {
   state.setCount('carousel', props.lane, props.scenes.length)
@@ -161,7 +161,7 @@ const carouselStyle = computed(() => ({
 -------------------------- */
 function onTransitionEnd(e) {
   if (e.propertyName !== 'transform') return
-  state.finalTransition('carousel', props.lane)
+  state.setPosition('carousel', props.lane)
 }
 </script>
 

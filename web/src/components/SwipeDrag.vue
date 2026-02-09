@@ -36,38 +36,49 @@ const dragItem = ref(null)
 /* -------------------------
 Drag state refs
 -------------------------- */
-const laneState = computed(() => state.ensure('drag', props.lane))
-const basePosition = computed(() => laneState.value?.position ?? { x: 0, y: 0 })
+// const laneConstraints = computed(() => state.getConstraints('drag', props.lane) ?? { minX: 0, minY: 0, maxX: 0, maxY: 0 })
+// const laneSize = computed(() => state.getSize('drag', props.lane) ?? { width:0, height:0 })
+const laneState = computed(() => state.get('drag', props.lane))
+const lanePosition = computed(() => laneState.value?.position ?? { x: 0, y: 0 })
 const offset = computed(() => laneState.value?.offset ?? { x: 0, y: 0 })
 const dragging = computed(() => laneState.value?.dragging ?? false)
-
-
 /* -------------------------
    Watch / ensure drag exists
    -------------------------- */
 
    watchEffect(() => state.ensure('drag', props.lane))
 /* -------------------------
-   Resize / lane bounds
+   Resize / lane metrics
 -------------------------- */
-function updateLaneBounds() {
+function updateLaneMetrics() {
   if (!dragEl.value || !dragItem.value) return
 
-  const surface = dragEl.value.getBoundingClientRect()
-  const item = dragItem.value.getBoundingClientRect()
+  // pixel dimensions
+  const containerWidth = dragEl.value.offsetWidth
+  const containerHeight = dragEl.value.offsetHeight
+  const itemWidth = dragItem.value.offsetWidth
+  const itemHeight = dragItem.value.offsetHeight
 
-  state.setBounds('drag', props.lane, {
+  // set constraints (logical min/max)
+  state.setConstraints('drag', props.lane, {
     minX: 0,
     minY: 0,
-    maxX: surface.width  - item.width,
-    maxY: surface.height - item.height
+    maxX: containerWidth - itemWidth,
+    maxY: containerHeight - itemHeight
+  })
+
+  // set size (usable pixel space)
+  state.setSize('drag', props.lane, {
+    width: containerWidth - itemWidth,
+    height: containerHeight - itemHeight
   })
 }
 
+
 let observer
 onMounted(() => {
-  updateLaneBounds()
-  observer = new ResizeObserver(updateLaneBounds)
+  updateLaneMetrics()
+  observer = new ResizeObserver(updateLaneMetrics)
   observer.observe(dragEl.value)
   observer.observe(dragItem.value)
 
@@ -92,9 +103,9 @@ function onReaction(e) {
    Computed item style
 -------------------------- */
 const itemStyle = computed(() => {
-  const x = (basePosition.value?.x ?? 0) + (offset.value?.x ?? 0)
-  const y = (basePosition.value?.y ?? 0) + (offset.value?.y ?? 0)
-  
+  const x = (lanePosition.value?.x ?? 0) + (offset.value?.x ?? 0)
+  const y = (lanePosition.value?.y ?? 0) + (offset.value?.y ?? 0)
+
   return {
     transform: `translate3d(${x}px, ${y}px, 0)`,
     transition: dragging.value ? 'none' : 'transform 180ms ease-out',

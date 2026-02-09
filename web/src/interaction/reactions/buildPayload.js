@@ -26,10 +26,12 @@ export function buildPayload(result) {
     laneId: current.laneId ?? null,
     swipeType: current.swipeType ?? null,
     laneSize: state.getSize(current.swipeType, current.laneId) ?? null,
-    min: state.getMin(current.swipeType, current.laneId) ?? null,
-    max: state.getMax(current.swipeType, current.laneId) ?? null,
-    value: state.getValue(current.swipeType, current.laneId) ?? null,
-    bounds: state.getBounds(current.swipeType, current.laneId) ?? null
+    position: state.getPosition(current.swipeType, current.laneId) ?? null,
+    constraints: state.getConstraints(current.swipeType, current.laneId) ?? null
+    // min: state.getMin(current.swipeType, current.laneId) ?? null,
+    // max: state.getMax(current.swipeType, current.laneId) ?? null,
+    // value: state.getValue(current.swipeType, current.laneId) ?? null,
+    // bounds: state.getBounds(current.swipeType, current.laneId) ?? null
   })
   return reactions
 }

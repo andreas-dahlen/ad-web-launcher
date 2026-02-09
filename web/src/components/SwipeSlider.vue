@@ -38,12 +38,12 @@ const horizontal = computed(() => props.axis === 'horizontal')
 /* -------------------------
    Slider state refs
 -------------------------- */
-const laneState = computed(() => state.ensure('slider', props.lane))
+// const laneState = computed(() => state.ensure('slider', props.lane))
+const laneState = computed(() => state.get('slider', props.lane))
 const laneOffset = computed(() => laneState.value?.offset ?? 0)
 const dragging = computed(() => laneState.value?.dragging ?? false)
-const laneValue = computed(() => laneState.value?.value ?? 0)
-const laneMin = computed(() => state.getMin('slider', props.lane) ?? 0)
-const laneMax = computed(() => state.getMax('slider', props.lane) ?? 100)
+const lanePosition = computed(() => state.getPosition('slider', props.lane) ?? 0)
+const laneConstraints = computed(() => state.getConstraints('slider', props.lane) ?? {min:0, max:100})
 const laneSize = computed(() => state.getSize('slider', props.lane) ?? 0)
 
 /* -------------------------
@@ -90,8 +90,13 @@ function onReaction(e) {
 -------------------------- */
 const thumbStyle = computed(() => {
   // Map value to position
-  const posRatio = (laneValue.value - laneMin.value) / (laneMax.value - laneMin.value)
-  const pos = posRatio * laneSize.value + laneOffset.value
+  const {min, max } = laneConstraints.value
+  const value = lanePosition.value
+
+  const range = max - min || 1
+
+  const ratio = (value - min) / range
+  const pos = ratio * laneSize.value + laneOffset.value
 
   return {
     transform: horizontal.value

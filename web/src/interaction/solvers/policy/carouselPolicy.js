@@ -63,24 +63,3 @@ export function getCommitOffset(direction, laneSize) {
   if (direction === 'left' || direction === 'up') return -laneSize
   return 0
 }
-
-/**
- * Calculate new index after commit
- * @param {number} currentIndex - Current lane index
- * @param {string} direction - Commit direction
- * @param {number} count - Total item count
- * @returns {number} New index (wrapped)
- */
-export function getNextIndex(currentIndex, direction, count) {
-  if (!count) return 0
-  switch (direction) {
-    case 'right':
-    case 'down':
-      return (currentIndex - 1 + count) % count
-    case 'left':
-    case 'up':
-      return (currentIndex + 1) % count
-    default:
-      return currentIndex
-  }
-}

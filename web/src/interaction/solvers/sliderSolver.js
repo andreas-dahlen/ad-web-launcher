@@ -28,7 +28,9 @@ export const sliderSolver = {
    * Handle swipe (drag) - clamp delta so thumb stays within [min, max] visually
    */
   swipe(desc) {
-    const { delta, laneSize, min = 0, max = 100, value = 0 } = desc
+    // const { delta, laneSize, min = 0, max = 100, value = 0 } = desc
+    const {delta, laneSize, position, constraints } = desc
+    const {min, max} = constraints
     
     const range = max - min
     if (!laneSize || !range) {
@@ -37,9 +39,9 @@ export const sliderSolver = {
       return desc
     }
     
-    // Calculate valid pixel offset range based on current value
-    const maxOffset = ((max - value) / range) * laneSize
-    const minOffset = ((min - value) / range) * laneSize
+    // Calculate valid pixel offset range based on current position
+    const maxOffset = ((max - position) / range) * laneSize
+    const minOffset = ((min - position) / range) * laneSize
     desc.delta = Math.max(minOffset, Math.min(maxOffset, delta))
 
     desc.reaction = desc.type
@@ -48,28 +50,28 @@ export const sliderSolver = {
 
   /**
    * Handle swipeCommit - convert pixel delta to logical delta
-   * Clamps result so value stays within [min, max]
+   * Clamps result so position stays within [min, max]
    */
   swipeCommit(desc) {
-    const { delta, laneSize, min, max, value } = desc
-    
+    // const { delta, laneSize, min, max, value } = desc
+    const {delta, laneSize, position, constraints } = desc
+    const {min, max} = constraints
     // Guard against division by zero
     if (!laneSize) {
-      desc.delta = 0
+      desc.delta = position
       desc.reaction = desc.type
       return desc
     }
     
     // Convert pixel delta → logical delta
-    const deltaLogical = (delta / laneSize) * (max - min)
-    
-    // Clamp so resulting value stays in bounds
-    // newValue = value + deltaLogical, clamped to [min, max]
-    // Therefore deltaLogical must be in [min - value, max - value]
-    const clampedDelta = Math.max(min - value, Math.min(max - value, deltaLogical))
+  const deltaLogical = (delta / laneSize) * (max - min)
 
-    desc.delta = clampedDelta  // logical units, safe to apply
-    desc.reaction = desc.type
-    return desc
+  const unclamped = position + deltaLogical
+
+  const finalValue = Math.max(min, Math.min(max, unclamped))
+
+  desc.delta = finalValue   // ← FINAL VALUE
+  desc.reaction = desc.type
+  return desc
   }
 }

@@ -1,6 +1,5 @@
 import { reactive } from 'vue'
 import { clampNumber } from '../state/sizeState'
-import { getNextIndex } from '../solvers/policy/carouselPolicy'
 
 /* -------------------------------------------------
 Central carousel state
@@ -15,7 +14,11 @@ export const carouselState = reactive({
 
 export const carouselStateFn = {
   getSize(laneId) {
-     return carouselState.lanes[laneId]?.size ?? 0
+    return carouselState.lanes[laneId]?.size ?? 0
+  },
+
+  get(laneId) {
+    return carouselState.lanes[laneId] ?? null
   },
 
   ensure(laneId) {
@@ -34,36 +37,51 @@ export const carouselStateFn = {
   /* -------------------------------------------------
      Configuration (called by layout / renderer)
      ------------------------------------------------- */
-     
-     setCount(laneId, count) {
-       const lane = this.ensure(laneId)
-       lane.count = Math.max(0, count)
-       lane.index = clampNumber(lane.index, 0, lane.count - 1)
-      },
-      
-      setSize(laneId, size) {
-        this.ensure(laneId).size = size
-      },
-      /**
-       * Finalize transition after CSS animation completes.
-       * Called by renderer when transitionend fires.
-       */
-      finalTransition(laneId) {
-        const lane = this.ensure(laneId)
-        if (!lane || !lane.pendingDir) return false
-      
-        lane.index = getNextIndex(lane.index, lane.pendingDir, lane.count)
-        lane.offset = 0
-        lane.pendingDir = null
-        return true
-      },
+
+  setCount(laneId, count) {
+    const lane = this.ensure(laneId)
+    lane.count = Math.max(0, count)
+    lane.index = clampNumber(lane.index, 0, lane.count - 1)
+  },
+
+  setSize(laneId, size) {
+    this.ensure(laneId).size = size
+  },
+  /**
+   * Finalize transition after CSS animation completes.
+   * Called by renderer when transitionend fires.
+   */
+  setPosition(laneId) {
+    const lane = this.ensure(laneId)
+    if (!lane || !lane.pendingDir) return false
+
+    lane.index = this.getNextIndex(lane.index, lane.pendingDir, lane.count)
+    lane.offset = 0
+    lane.pendingDir = null
+    return true
+  },
+
+  getNextIndex(currentIndex, direction, count) {
+    if (!count) return 0
+    switch (direction) {
+      case 'right':
+      case 'down':
+        return (currentIndex - 1 + count) % count
+      case 'left':
+      case 'up':
+        return (currentIndex + 1) % count
+      default:
+        return currentIndex
+    }
+  },
+
   /* -------------------------------------------------
      Dispatcher Actions (single choke point for mutations)
      
      These are the only functions that should mutate
      carousel state during gesture handling.
   ------------------------------------------------- */
-  
+
   /**
    * Start dragging - called by dispatcher on carousel:dragStart
    */
@@ -82,8 +100,8 @@ export const carouselStateFn = {
    * Commit swipe animation - called by dispatcher on carousel:commit
    */
   swipeCommit(desc) {
-    const {direction, delta, laneId} = desc
-  const lane = this.ensure(laneId)
+    const { direction, delta, laneId } = desc
+    const lane = this.ensure(laneId)
     lane.pendingDir = direction
     lane.offset = delta
     lane.dragging = false
