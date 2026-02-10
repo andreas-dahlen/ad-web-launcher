@@ -15,11 +15,13 @@
  * - No swipeRevert reaction
  */
 
-import {
-  clampDelta2D,
-  resolveDirection,
-  clampCommitPosition
-} from './policy/dragPolicy'
+// import {
+//   clampDelta2D,
+//   resolveDirection,
+//   clampCommitPosition
+// } from './policy/dragPolicy'
+
+import { utils } from './solverUtils'
 
 export const dragSolver = {
   /**
@@ -35,7 +37,7 @@ export const dragSolver = {
    */
   swipe(desc) {
     const {delta, position, constraints } = desc
-    const clamped = clampDelta2D(delta, position, constraints)
+    const clamped = utils.relativeClamp2D(delta, position, constraints)
     desc.reaction = desc.type
     desc.delta.x = clamped.x
     desc.delta.y = clamped.y
@@ -47,11 +49,11 @@ export const dragSolver = {
    */
   swipeCommit(desc) {
     const {delta, constraints, position} = desc
-    const finalPos = clampCommitPosition(delta, position, constraints)
+    const finalPos = utils.clamp2D(delta, position, constraints)
     const {x: fx, y: fy} = finalPos
     const {x: px, y: py} = position
 
-    const direction = resolveDirection(fx - px, fy - py)
+    const direction = utils.resolveDirection({x:fx - px, y:fy - py})
 
     desc.reaction = desc.type
     desc.direction = direction

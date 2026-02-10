@@ -38,7 +38,6 @@ const horizontal = computed(() => props.axis === 'horizontal')
 /* -------------------------
    Slider state refs
 -------------------------- */
-// const laneState = computed(() => state.ensure('slider', props.lane))
 const laneState = computed(() => state.get('slider', props.lane))
 const laneOffset = computed(() => laneState.value?.offset ?? 0)
 const dragging = computed(() => laneState.value?.dragging ?? false)

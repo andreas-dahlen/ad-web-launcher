@@ -73,7 +73,6 @@ export const dragStateFn = {
     const lane = this.ensure(desc.laneId)
     lane.dragging = true
     lane.offset = { ...ZERO_POINT }
-    console.log('SWIPESTART(STATE): delta:', desc.delta, 'constraints:', desc.constraints, 'position: ', lane.position)
   },
 
   /**
@@ -82,7 +81,6 @@ export const dragStateFn = {
   swipe(desc) {
     const lane = this.ensure(desc.laneId)
     lane.offset = desc.delta
-    console.log('SWIPE(STATE): delta:', desc.delta, 'offset: ', lane.offset, 'position: ', lane.position)
   },
 
   /**
@@ -97,7 +95,5 @@ export const dragStateFn = {
     }
     lane.offset = { ...ZERO_POINT }
     lane.dragging = false
-
-    console.log('SWIPECOMMIT(STATE): delta:', desc.delta, 'offset: ', lane.offset, 'position: ', lane.position)
   }
 }

@@ -1,7 +1,6 @@
 import { domRegistry } from "../dom/domRegistry"
-import { normalizeSwipeDelta } from '../state/sizeState'
+import { normalizeSwipeDelta, getAxisSize } from '../state/sizeState'
 import { APP_SETTINGS } from '../../config/appSettings'
-import { getAxisSize } from '../state/sizeState'
 
 export const utils = {
     //gesturePolicy.js

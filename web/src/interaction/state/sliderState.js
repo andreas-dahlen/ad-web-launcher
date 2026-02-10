@@ -20,10 +20,6 @@ export const sliderState = reactive({
   sliders: {}
 })
 
-
-// export function getSlider(laneId) {
-//   return sliderState.sliders[laneId] ?? null
-// }
 /* -------------------------------------------------
 Slider creation / access
 ------------------------------------------------- */
@@ -98,37 +94,5 @@ export const sliderStateFn = {
     slider.offset = 0
     slider.dragging = false
   }
-  // swipeCommit(desc) {
-  //   const slider = this.ensure(desc.laneId)
-
-  //   // desc.delta is already in logical units (converted by solver)
-  //   slider.value = Math.min(slider.max, Math.max(slider.min, slider.value + desc.delta))
-  //   slider.offset = 0
-  //   slider.dragging = false
-  // }
 }
-
-/* -------------------------------------------------
-   Configuration (called by layout / renderer)
-------------------------------------------------- */
-
-
-
-// function setSliderBounds(laneId, min, max) {
-//   const slider = this.ensure(laneId)
-//   slider.min = min
-//   slider.max = max
-//   // Clamp current value to new bounds
-//   slider.value = Math.max(min, Math.min(max, slider.value))
-// }
-
-// function setSliderStep(laneId, stepSize) {
-//   this.ensure(laneId).stepSize = stepSize
-// }
-
-// function setSliderValue(laneId, value) {
-//   const slider = this.ensure(laneId)
-//   slider.value = Math.max(slider.min, Math.min(slider.max, value))
-//   slider.offset = 0
-// }
 

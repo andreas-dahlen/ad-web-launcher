@@ -36,8 +36,6 @@ const dragItem = ref(null)
 /* -------------------------
 Drag state refs
 -------------------------- */
-// const laneConstraints = computed(() => state.getConstraints('drag', props.lane) ?? { minX: 0, minY: 0, maxX: 0, maxY: 0 })
-// const laneSize = computed(() => state.getSize('drag', props.lane) ?? { width:0, height:0 })
 const laneState = computed(() => state.get('drag', props.lane))
 const lanePosition = computed(() => laneState.value?.position ?? { x: 0, y: 0 })
 const offset = computed(() => laneState.value?.offset ?? { x: 0, y: 0 })

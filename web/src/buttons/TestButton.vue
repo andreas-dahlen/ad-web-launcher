@@ -13,9 +13,6 @@
         </InputElement>
     </div>
 </template>
-<!-- @swipe-start="onSwipeStart"
-@swipe="onSwipe"
-@swipe-commit="onSwipeCommit" -->
 
 <script setup>
 import { ref } from 'vue'
@@ -32,9 +29,7 @@ function onPressRelease() {
 function onPressCancel() {
     interaction.value = 'cancel'
 }
-// const onSwipeStart = () => { swiping.value = true }
-// const onSwipe = () => {}
-// const onSwipeCommit = () => { swiping.value = false }
+
 </script>
 
 <style scoped>
@@ -74,10 +69,4 @@ function onPressCancel() {
 .test-button :deep(.input-element[data-state='cancel']) {
     background-color: tomato;
 }
-
-/* .test-button[data-pressed="true"],
-.test-button :deep(.input-element[data-pressed="true"]) {
-    transform: translateY(2px);
-    background: #0f172a;
-} */
 </style>

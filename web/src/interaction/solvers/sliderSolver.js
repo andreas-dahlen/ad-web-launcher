@@ -15,6 +15,8 @@
  * - No swipeRevert reaction
  */
 
+import { utils } from './solverUtils'
+
 export const sliderSolver = {
   /**
    * Handle swipeStart - returns reaction to enable dragging
@@ -42,7 +44,7 @@ export const sliderSolver = {
     // Calculate valid pixel offset range based on current position
     const maxOffset = ((max - position) / range) * laneSize
     const minOffset = ((min - position) / range) * laneSize
-    desc.delta = Math.max(minOffset, Math.min(maxOffset, delta))
+    desc.delta = utils.clamp(delta, minOffset, maxOffset)
 
     desc.reaction = desc.type
     return desc
@@ -65,10 +67,8 @@ export const sliderSolver = {
     
     // Convert pixel delta → logical delta
   const deltaLogical = (delta / laneSize) * (max - min)
-
   const unclamped = position + deltaLogical
-
-  const finalValue = Math.max(min, Math.min(max, unclamped))
+  const finalValue = utils.clamp(unclamped, min, max )
 
   desc.delta = finalValue   // ← FINAL VALUE
   desc.reaction = desc.type
