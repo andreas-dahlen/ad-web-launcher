@@ -18,6 +18,7 @@
 <script setup>
 import { computed, ref, onMounted, onBeforeUnmount, watchEffect } from 'vue'
 import { state } from '../interaction/state/stateManager'
+import { intentDeriver } from '../interaction/input/intentDeriver'
 
 const emit = defineEmits(['swipeCommit'])
 
@@ -61,18 +62,80 @@ function updateLaneSize() {
   state.setSize('slider', props.lane, size - thumbSize)
 }
 
+// Build a context snapshot for the gesture engine.
+function buildContext(targetEl) {
+  if (!targetEl) return null
+  const ctx = {
+    element: targetEl,
+    laneId: props.lane,
+    axis: props.axis,
+    swipeType: 'slider',
+    reactions: {
+      press: false,
+      pressRelease: false,
+      pressCancel: true,
+      swipeStart: true,
+      swipe: true,
+      swipeCommit: true,
+      swipeRevert: false,
+      select: false,
+      deselect: false
+    }
+  }
+
+  const size = state.getSize('slider', props.lane)
+  const position = state.getPosition('slider', props.lane)
+  const constraints = state.getConstraints('slider', props.lane)
+
+  if (size !== undefined && size !== null) ctx.laneSize = size
+  if (position !== undefined && position !== null) ctx.position = position
+  if (constraints !== undefined && constraints !== null) ctx.constraints = constraints
+
+  // If fallback selection is needed (e.g., alternative lane picking), add it here.
+  return ctx
+}
+
+// Pointer event forwarding — Vue owns DOM listeners, engine receives (x, y) only.
+function handlePointerDown(e) {
+  e.stopPropagation()
+  e.currentTarget.setPointerCapture(e.pointerId)
+  intentDeriver.onDown(e.clientX, e.clientY, buildContext(e.currentTarget))
+}
+function handlePointerMove(e) {
+  if (!e.currentTarget.hasPointerCapture(e.pointerId)) return
+  intentDeriver.onMove(e.clientX, e.clientY)
+}
+function handlePointerUp(e) {
+  if (!e.currentTarget.hasPointerCapture(e.pointerId)) return
+  intentDeriver.onUp(e.clientX, e.clientY)
+}
+
 let observer
 onMounted(() => {
   updateLaneSize()
   observer = new ResizeObserver(updateLaneSize)
   observer.observe(sliderEl.value)
 
-  sliderEl.value?.addEventListener('reaction', onReaction)
+  const el = sliderEl.value
+  if (el) {
+    el.addEventListener('pointerdown', handlePointerDown)
+    el.addEventListener('pointermove', handlePointerMove)
+    el.addEventListener('pointerup', handlePointerUp)
+    el.addEventListener('pointercancel', handlePointerUp)
+    el.addEventListener('reaction', onReaction)
+  }
 })
 
 onBeforeUnmount(() => {
   observer?.disconnect()
-  sliderEl.value?.removeEventListener('reaction', onReaction)
+  const el = sliderEl.value
+  if (el) {
+    el.removeEventListener('pointerdown', handlePointerDown)
+    el.removeEventListener('pointermove', handlePointerMove)
+    el.removeEventListener('pointerup', handlePointerUp)
+    el.removeEventListener('pointercancel', handlePointerUp)
+    el.removeEventListener('reaction', onReaction)
+  }
 })
 
 /* -------------------------

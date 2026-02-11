@@ -20,6 +20,7 @@
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount, watchEffect } from 'vue'
 import { state } from '../interaction/state/stateManager'
+import { intentDeriver } from '../interaction/input/intentDeriver'
 
 const emit = defineEmits(['swipeCommit'])
 
@@ -73,6 +74,54 @@ function updateLaneMetrics() {
 }
 
 
+// Build a context snapshot for drag gestures.
+function buildContext(targetEl) {
+  if (!targetEl) return null
+  const ctx = {
+    element: targetEl,
+    laneId: props.lane,
+    axis: 'both',
+    swipeType: 'drag',
+    reactions: {
+      press: false,
+      pressRelease: false,
+      pressCancel: true,
+      swipeStart: true,
+      swipe: true,
+      swipeCommit: true,
+      swipeRevert: false,
+      select: false,
+      deselect: false
+    }
+  }
+
+  const size = state.getSize('drag', props.lane)
+  const position = state.getPosition('drag', props.lane)
+  const constraints = state.getConstraints('drag', props.lane)
+
+  if (size !== undefined && size !== null) ctx.laneSize = size
+  if (position !== undefined && position !== null) ctx.position = position
+  if (constraints !== undefined && constraints !== null) ctx.constraints = constraints
+
+  // Add fallback element resolution here if alternate drag targets are needed.
+  return ctx
+}
+
+// Pointer event forwarding — Vue owns DOM listeners, engine receives (x, y) only.
+function handlePointerDown(e) {
+  e.stopPropagation()
+  e.currentTarget.setPointerCapture(e.pointerId)
+  intentDeriver.onDown(e.clientX, e.clientY, buildContext(e.currentTarget))
+}
+function handlePointerMove(e) {
+  if (!e.currentTarget.hasPointerCapture(e.pointerId)) return
+  intentDeriver.onMove(e.clientX, e.clientY)
+}
+function handlePointerUp(e) {
+  if (!e.currentTarget.hasPointerCapture(e.pointerId)) return
+  intentDeriver.onUp(e.clientX, e.clientY)
+}
+
 let observer
 onMounted(() => {
   updateLaneMetrics()
@@ -80,12 +129,26 @@ onMounted(() => {
   observer.observe(dragEl.value)
   observer.observe(dragItem.value)
 
-  dragItem.value?.addEventListener('reaction', onReaction)
+  const el = dragItem.value
+  if (el) {
+    el.addEventListener('pointerdown', handlePointerDown)
+    el.addEventListener('pointermove', handlePointerMove)
+    el.addEventListener('pointerup', handlePointerUp)
+    el.addEventListener('pointercancel', handlePointerUp)
+    el.addEventListener('reaction', onReaction)
+  }
 })
 
 onBeforeUnmount(() => {
   observer?.disconnect()
-  dragItem.value?.removeEventListener('reaction', onReaction)
+  const el = dragItem.value
+  if (el) {
+    el.removeEventListener('pointerdown', handlePointerDown)
+    el.removeEventListener('pointermove', handlePointerMove)
+    el.removeEventListener('pointerup', handlePointerUp)
+    el.removeEventListener('pointercancel', handlePointerUp)
+    el.removeEventListener('reaction', onReaction)
+  }
 })
 
 /* -------------------------

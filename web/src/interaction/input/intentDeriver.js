@@ -1,5 +1,5 @@
 import { log, drawDots } from '../../debug/functions'
-import { intentForward } from '../reactions/delegator'
+import { forward } from '../reactions/delegator'
 import { utils } from './intentUtils'
 
 /*
@@ -21,7 +21,7 @@ const state = {
     start: { x: 0, y: 0 },    // initial pointer down
     last: { x: 0, y: 0 },     // last pointer position
     totalDelta: { x: 0, y: 0 }, // accumulated delta
-    target: null
+    targetInfo: null
 }
 
 export const intentDeriver = {
@@ -30,7 +30,7 @@ export const intentDeriver = {
     onUp
 }
 
-function onDown(x, y) {
+function onDown(x, y, context) {
     drawDots(x, y, 'green')
     state.phase = 'PENDING'
     state.start.x = x
@@ -39,12 +39,13 @@ function onDown(x, y) {
     state.last.y = y
     state.totalDelta.x = 0
     state.totalDelta.y = 0
-    state.target = utils.resolveTarget(x, y)
+    //element is already resolved.. should only check if supported
+    state.targetInfo = context
 
-    if (utils.resolveSupports('press', state.target)) {
-        intentForward({
+    if (utils.resolveSupports('press', state.targetInfo)) {
+        forward({
+            ...state.targetInfo,
             type: 'press',
-            target: state.target,
             delta: { x: x, y: y }
         })
     }
@@ -55,28 +56,34 @@ function onMove(x, y) {
     drawDots(x, y, 'yellow')
 
     // Compute deltas
-    const startDeltaX = x - (state.start.x)
-    const startDeltaY = y - (state.start.y)
-    const absX = Math.abs(startDeltaX)
-    const absY = Math.abs(startDeltaY)
-    const biggest = absX > absY ? absX : absY
+    const deltaX = x - (state.start.x)
+    const deltaY = y - (state.start.y)
+    const absX = Math.abs(deltaX)
+    const absY = Math.abs(deltaY)
+    const biggest = Math.max(absX, absY)
+
     if (state.phase === 'PENDING') {
         if (utils.swipeThresholdCalc(biggest)) {
             const intentAxis = absX > absY ? 'horizontal' : 'vertical'
-            const resolved = utils.resolveSwipeTarget(x, y, intentAxis, state.target)
-            
+            const resolved = utils.resolveSwipeTarget(x, y, intentAxis, state.targetInfo)
+
+
             if (resolved) {
-            intentForward({
-                type: 'swipeStart',
-                target: resolved.target,
-                delta: utils.resolveDelta({ x, y }, resolved.axis, resolved.target.swipeType),
-                axis: resolved.axis,
-                pressCancel: resolved.pressCancel
-                    ? state.target
-                    : null
-            })
+                if (resolved.pressCancel) {
+                    forward({
+                        ...state.targetInfo,
+                        type: 'pressCancel',
+                        delta: {x: x, y: y}
+                    })
+                }
                 state.phase = 'SWIPING'
-                state.target = resolved.target
+                state.targetInfo = resolved.targetInfo
+
+                forward({
+                    ...state.targetInfo,
+                    type: 'swipeStart',
+                    delta: utils.resolveDelta({ x, y }, state.targetInfo.axis, state.targetInfo.swipeType)
+                })
             } else {
                 return
             }
@@ -92,13 +99,12 @@ function onMove(x, y) {
         state.totalDelta.x += deltaX
         state.totalDelta.y += deltaY
 
-        const resolvedDelta = utils.resolveDelta(state.totalDelta, state.target.axis, state.target.swipeType)
+        const resolvedDelta = utils.resolveDelta(state.totalDelta, state.targetInfo.axis, state.targetInfo.swipeType)
 
-        intentForward({
+        forward({
+            ...state.targetInfo,
             type: 'swipe',
-            target: state.target,
             delta: utils.normalizedDelta(resolvedDelta),
-            axis: state.target.axis
         })
     }
     state.last.x = x
@@ -113,19 +119,18 @@ function onUp(x, y) {
         return
     }
     if (state.phase === 'SWIPING') {
-        const resolvedDelta = utils.resolveDelta(state.totalDelta, state.target.axis, state.target.swipeType)
-        intentForward({
+        const resolvedDelta = utils.resolveDelta(state.totalDelta, state.targetInfo.axis, state.targetInfo.swipeType)
+        forward({
+            ...state.targetInfo,
             type: 'swipeCommit',
-            target: state.target,
             delta: utils.normalizedDelta(resolvedDelta),
-            axis: state.target.axis
         })
     }
     else if (state.phase === 'PENDING') {
         // Pointer up without swipe → release
-        intentForward({
+        forward({
+            ...state.targetInfo,
             type: 'pressRelease',
-            target: state.target,
             delta: { x: x, y: y }
         })
     }
@@ -141,5 +146,5 @@ function resetState() {
     state.last.y = 0
     state.totalDelta.x = 0
     state.totalDelta.y = 0
-    state.target = null
+    state.targetInfo = null
 }

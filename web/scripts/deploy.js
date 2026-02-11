@@ -26,6 +26,7 @@ const ANDROID_ASSETS = path.join(
 
 const SRC_INDEX = path.join(WEB_DIST, 'index.html')
 const DEST_INDEX = path.join(ANDROID_ASSETS, 'index.html')
+
 /* -------------------------------------------------
    Guards
 -------------------------------------------------- */
@@ -49,4 +50,6 @@ if (fs.existsSync(DEST_INDEX)) {
 
 fs.copyFileSync(SRC_INDEX, DEST_INDEX)
 
-console.log('✅ Android assets updated successfully (DEBUG)')
+console.log('✅ Asset updated successfully')
+
+console.log(`✅ Asset updated successfully [DEBUG]:${import.meta.env.VITE_DEBUG}`)

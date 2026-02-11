@@ -31,6 +31,7 @@
 
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { intentDeriver } from '../interaction/input/intentDeriver'
 
 defineOptions({ name: 'InputElement' })
 
@@ -84,6 +85,33 @@ const emit = defineEmits([
 
 const el = ref(null)
 
+// Build a minimal context packet for intentDeriver using DOM + current state.
+function buildContext(targetEl) {
+  if (!targetEl) return null
+  const ds = targetEl.dataset || {}
+  const ctx = {
+    element: targetEl,
+    laneId: ds.lane || null,
+    axis: ds.axis || axis || null,
+    swipeType: ds.swipeType || swipeType || null,
+    actionId: ds.action || action || null,
+    reactions: {
+      press: press || reactPress || reactPressRelease || reactPressCancel,
+      pressRelease: press || reactPressRelease,
+      pressCancel: press || swipe || reactPressCancel || reactPressRelease,
+      swipeStart: swipe || reactSwipe || reactSwipeStart || reactSwipeCommit || reactSwipeRevert,
+      swipe: swipe || reactSwipe,
+      swipeCommit: swipe || reactSwipeCommit,
+      swipeRevert: swipe || reactSwipeRevert,
+      select: reactSelected,
+      deselect: reactDeselected
+    }
+  }
+
+  // Placeholder for future fallback resolution (e.g., domRegistry lookup).
+  return ctx
+}
+
 // -------------------------------
 // Handle reactions from engine
 // -------------------------------
@@ -105,12 +133,41 @@ function handleReaction(e) {
   emit(type, e.detail)
 }
 
+// Pointer event forwarding — Vue owns DOM listeners, engine receives (x, y) only.
+function handlePointerDown(e) {
+  e.stopPropagation()
+  e.currentTarget.setPointerCapture(e.pointerId)
+  intentDeriver.onDown(e.clientX, e.clientY, buildContext(e.currentTarget))
+}
+function handlePointerMove(e) {
+  if (!e.currentTarget.hasPointerCapture(e.pointerId)) return
+  intentDeriver.onMove(e.clientX, e.clientY)
+}
+function handlePointerUp(e) {
+  if (!e.currentTarget.hasPointerCapture(e.pointerId)) return
+  intentDeriver.onUp(e.clientX, e.clientY)
+}
+
 onMounted(() => {
-  el.value?.addEventListener('reaction', handleReaction)
+  const root = el.value
+  if (root) {
+    root.addEventListener('pointerdown', handlePointerDown)
+    root.addEventListener('pointermove', handlePointerMove)
+    root.addEventListener('pointerup', handlePointerUp)
+    root.addEventListener('pointercancel', handlePointerUp)
+    root.addEventListener('reaction', handleReaction)
+  }
 })
 
 onBeforeUnmount(() => {
-  el.value?.removeEventListener('reaction', handleReaction)
+  const root = el.value
+  if (root) {
+    root.removeEventListener('pointerdown', handlePointerDown)
+    root.removeEventListener('pointermove', handlePointerMove)
+    root.removeEventListener('pointerup', handlePointerUp)
+    root.removeEventListener('pointercancel', handlePointerUp)
+    root.removeEventListener('reaction', handleReaction)
+  }
 })
 </script>
 

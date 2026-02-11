@@ -1,14 +1,13 @@
 /**
- * inputRouter.js - Platform input wiring
+ * inputSource.js - Platform input routing
  *
  * Responsibilities:
- * - Detect platform using APP_SETTINGS.platform
- * - Wire event sources once
- * - Route events to intentMap
+ * - Initialize Android bridge (window.handleTouch) when on Android
+ * - Export onDown/onMove/onUp for Vue components to forward raw coordinates
+ * - Route raw (x, y) to intentDeriver
  *
- * Rules:
- * - No DOM logic
- * - No rendering calls
+ * DOM listener attachment is owned by Vue components (see gesture_contract_v2.md).
+ * This module does NOT attach browser pointer listeners.
  */
 
 import { APP_SETTINGS } from '../../config/appSettings'
@@ -19,28 +18,24 @@ let currentSeqId = 0
 
 let initialized = false
 
-export function initInputSystem() {
+/**
+ * Initialize platform-specific bridge (Android only).
+ * Browser pointer listeners are owned by Vue components.
+ */
+export function initPlatformBridge() {
   if (initialized) return
   initialized = true
 
   if (APP_SETTINGS.platform === 'android') {
     initAndroidInput()
-  } else {
-    initBrowserInput()
   }
+
+  log('init', `Platform bridge initialized (${APP_SETTINGS.platform})`)
 }
 
 function initAndroidInput() {
   window.handleTouch = handleAndroidTouch
   log('init', 'Initialized in Android mode')
-}
-
-function initBrowserInput() {
-  window.addEventListener('pointerdown', onPointerDown)
-  window.addEventListener('pointermove', onPointerMove)
-  window.addEventListener('pointerup', onPointerUp)
-  window.addEventListener('pointercancel', onPointerUp)
-  log('init', 'Initialized in Browser mode')
 }
 
 window.initAndroidEngine = () => {
@@ -68,14 +63,18 @@ function handleAndroidTouch(type, x, y, seqId) {
   }
 }
 
-function onPointerDown(e) {
-  intentDeriver.onDown(e.clientX, e.clientY)
+/**
+ * Forwarding API for Vue components.
+ * Components extract (x, y) from DOM events and call these.
+ */
+export function onDown(x, y) {
+  intentDeriver.onDown(x, y)
 }
 
-function onPointerMove(e) {
-  intentDeriver.onMove(e.clientX, e.clientY)
+export function onMove(x, y) {
+  intentDeriver.onMove(x, y)
 }
 
-function onPointerUp(e) {
-  intentDeriver.onUp(e.clientX, e.clientY)
+export function onUp(x, y) {
+  intentDeriver.onUp(x, y)
 }

@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
-import android.view.Choreographer
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +12,7 @@ import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.FrameLayout
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -23,60 +23,46 @@ class LauncherActivity : AppCompatActivity() {
 
     private lateinit var webView: WebView
     private val handler = Handler(Looper.getMainLooper())
-    private val choreographer = Choreographer.getInstance()
 
     private var deviceWidthPx = 0f
     private var deviceHeightPx = 0f
     private var deviceDensity = 1f
 
-    // =========================================================================
-    // PERFORMANCE: Throttle move events to reduce JS bridge overhead
-    // =========================================================================
+    // Move throttling (~60fps)
     private var lastMoveTime = 0L
-    private val moveThrottleMs = 16L  // ~60fps for move events
+    private val moveThrottleMs = 16L
 
-    // Gesture sequence ID to ignore stale events
     private var gestureSeqId = 0
-
-    // Track if we're in an active gesture (for frame scheduling)
     private var isGestureActive = false
-
-    // Frame throttling to keep battery usage low while allowing animations
-    private val frameThrottleMs = 33L  // ~30fps cap for CSS animations
-    private var lastFrameTimeMs = 0L
-    private var frameCallback: Choreographer.FrameCallback? = null
-
-    private var isForeground = false
 
     // =========================================================================
     // Lifecycle
     // =========================================================================
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         captureDeviceMetrics()
         enterImmersiveMode()
         setupWebView()
+        setupBackHandler()
     }
 
     override fun onResume() {
         super.onResume()
         captureDeviceMetrics()
         injectDeviceMetrics()
-        isForeground = true
         webView.onResume()
-        startFrameLoop()
+        evalJS("window.__onLifecycle?.('resume')")
     }
 
     override fun onPause() {
-        stopFrameLoop()
+        evalJS("window.__onLifecycle?.('pause')")
         webView.onPause()
-        isForeground = false
         super.onPause()
     }
 
     override fun onDestroy() {
         handler.removeCallbacksAndMessages(null)
-        stopFrameLoop()
         webView.destroy()
         super.onDestroy()
     }
@@ -84,6 +70,7 @@ class LauncherActivity : AppCompatActivity() {
     // =========================================================================
     // UI setup
     // =========================================================================
+
     private fun enterImmersiveMode() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         WindowInsetsControllerCompat(window, window.decorView).apply {
@@ -92,18 +79,21 @@ class LauncherActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupBackHandler() {
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                evalJS("window.__onBackPressed?.()")
+            }
+        })
+    }
+
     @SuppressLint("SetJavaScriptEnabled")
     private fun setupWebView() {
         webView = WebView(this).apply {
-            // =========================================================
-            // CRITICAL: Enable hardware acceleration for smooth animations
-            // =========================================================
             setLayerType(View.LAYER_TYPE_HARDWARE, null)
 
             settings.javaScriptEnabled = true
             settings.domStorageEnabled = true
-
-            // Additional WebView optimizations
             settings.useWideViewPort = false
             settings.loadWithOverviewMode = false
             settings.setSupportZoom(false)
@@ -144,39 +134,19 @@ class LauncherActivity : AppCompatActivity() {
     }
 
     // =========================================================================
-    // Touch handling mirrors previous launcher gesture pipeline
+    // Touch → JS forwarding
     // =========================================================================
+
     private fun handleTouch(event: MotionEvent) {
-        val w = (webView.width.takeIf { it > 0 } ?: webView.measuredWidth).toFloat()
-        val h = (webView.height.takeIf { it > 0 } ?: webView.measuredHeight).toFloat()
-
-        // Fallback to display metrics if layout is still measuring
-        val width = if (w > 0f) w else resources.displayMetrics.widthPixels.toFloat()
-        val height = if (h > 0f) h else resources.displayMetrics.heightPixels.toFloat()
-
-        val safeWidth = if (width > 0f) width else 1f
-        val safeHeight = if (height > 0f) height else 1f
-
-        val targetWidth = deviceWidthPx.takeIf { it > 0f } ?: width
-        val targetHeight = deviceHeightPx.takeIf { it > 0f } ?: height
-
-        // Convert to CSS px space so JS does not scale.
-        val cssWidth = targetWidth / deviceDensity
-        val cssHeight = targetHeight / deviceDensity
-
-        val normX = (event.x / safeWidth) * cssWidth
-        val normY = (event.y / safeHeight) * cssHeight
+        val cssX = event.x / deviceDensity
+        val cssY = event.y / deviceDensity
 
         when (event.actionMasked) {
             MotionEvent.ACTION_DOWN -> {
                 gestureSeqId++
                 isGestureActive = true
                 lastMoveTime = 0L
-
-                // Ensure frame loop is running during interaction
-                startFrameLoop()
-
-                sendToJS("down", normX, normY)
+                sendToJS("down", cssX, cssY)
             }
 
             MotionEvent.ACTION_MOVE -> {
@@ -184,154 +154,73 @@ class LauncherActivity : AppCompatActivity() {
                 val now = SystemClock.uptimeMillis()
                 if (now - lastMoveTime >= moveThrottleMs) {
                     lastMoveTime = now
-                    sendToJS("move", normX, normY)
+                    sendToJS("move", cssX, cssY)
                 }
             }
 
             MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                // Send final position (in case last move was throttled)
-                sendToJS("move", normX, normY)
-
-                // JS commits or rejects the swipe; CSS transitions handle animation
-                sendToJS("up", normX, normY)
-
+                sendToJS("move", cssX, cssY)
+                sendToJS("up", cssX, cssY)
                 isGestureActive = false
                 lastMoveTime = 0L
-
-                // Final redraw after gesture completes
-                handler.postDelayed({
-                    needsRedraw = true
-                }, 50)
             }
         }
     }
 
-    /**
-     * Capture current device metrics once per resume.
-     */
-private fun captureDeviceMetrics() {
-    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
-        val metrics = windowManager.currentWindowMetrics
-        val bounds = metrics.bounds
-        deviceWidthPx = bounds.width().toFloat()
-        deviceHeightPx = bounds.height().toFloat()
-        deviceDensity = resources.displayMetrics.density
-    } else {
-        val metrics = resources.displayMetrics
-        deviceWidthPx = metrics.widthPixels.toFloat()
-        deviceHeightPx = metrics.heightPixels.toFloat()
-        deviceDensity = metrics.density
+    private fun sendToJS(type: String, cssX: Float, cssY: Float) {
+        evalJS("handleTouch('$type',$cssX,$cssY,$gestureSeqId)")
     }
-}
 
-    /**
-     * Inject device dimensions into the WebView for JS to consume.
-     */
+    // =========================================================================
+    // Device metrics
+    // =========================================================================
+
+    private fun captureDeviceMetrics() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+            val metrics = windowManager.currentWindowMetrics
+            val bounds = metrics.bounds
+            deviceWidthPx = bounds.width().toFloat()
+            deviceHeightPx = bounds.height().toFloat()
+            deviceDensity = resources.displayMetrics.density
+        } else {
+            val metrics = resources.displayMetrics
+            deviceWidthPx = metrics.widthPixels.toFloat()
+            deviceHeightPx = metrics.heightPixels.toFloat()
+            deviceDensity = metrics.density
+        }
+    }
+
     private fun injectDeviceMetrics() {
         val cssWidth = (deviceWidthPx / deviceDensity).toInt()
         val cssHeight = (deviceHeightPx / deviceDensity).toInt()
         val density = String.format(Locale.US, "%.4f", deviceDensity)
 
-        val js = """
+        evalJS("""
             (function() {
                 window.__DEVICE = { width: $cssWidth, height: $cssHeight, density: $density, platform: 'android' };
             })();
-        """.trimIndent()
-
-        webView.evaluateJavascript(js, null)
-    }
-
-    /**
-     * Send gesture event to JavaScript.
-     * Minimal overhead: just the essential data.
-     */
-    private fun sendToJS(type: String, normX: Float, normY: Float) {
-        webView.evaluateJavascript(
-            "handleTouch('$type',$normX,$normY,$gestureSeqId)",
-            null
-        )
-        needsRedraw = true
-        // Ensure animations keep running during gesture-driven updates
-        if (isGestureActive) startFrameLoop()
+        """.trimIndent())
     }
 
     // =========================================================================
-    // PERFORMANCE: Continuous but throttled rendering for CSS animations
+    // JS helpers
     // =========================================================================
-    private var needsRedraw = true
 
-    /**
-     * Start a light frame loop driven by Choreographer to keep CSS animations alive.
-     */
-    private fun startFrameLoop() {
-        if (frameCallback != null) return
-
-        frameCallback = Choreographer.FrameCallback {
-            val now = SystemClock.uptimeMillis()
-            if (now - lastFrameTimeMs >= frameThrottleMs) {
-                lastFrameTimeMs = now
-                if (needsRedraw) {
-                    webView.invalidate() 
-
-// This works (webView.invalidate() — but note:
-
-// WebView already schedules its own draws
-
-// Invalidating manually is fine only because you throttle it
-
-// 🟡 Keep this, but:
-
-// If you later see redundant frames, this is the first place to look
-
-// Never call this unthrottled
-
-
-
-
-                    needsRedraw = false
-                }
-            }
-
-            if (isForeground) {
-                choreographer.postFrameCallback(frameCallback!!)
-            } else {
-                frameCallback = null
-            }
-        }
-
-        choreographer.postFrameCallback(frameCallback!!)
+    private fun evalJS(script: String) {
+        webView.evaluateJavascript(script, null)
     }
 
-    /**
-     * Stop the frame loop when the launcher is backgrounded.
-     */
-    private fun stopFrameLoop() {
-        frameCallback?.let { choreographer.removeFrameCallback(it) }
-        frameCallback = null
-    }
-
-    /**
-     * Initialize gesture engine with simple retry logic.
-     */
     private fun initializeGestureEngine(attempt: Int = 1) {
-        webView.evaluateJavascript(
-            """
-                (function() {
-                    if (typeof window.initAndroidEngine === 'function') {
-                        return window.initAndroidEngine();
-                    }
-                    return 'not_ready';
-                })();
-            """.trimIndent()
-        ) { result ->
-            when {
-                result?.contains("success") == true -> {
-                    needsRedraw = true
-                    startFrameLoop()
+        webView.evaluateJavascript("""
+            (function() {
+                if (typeof window.initAndroidEngine === 'function') {
+                    return window.initAndroidEngine();
                 }
-                attempt < 3 -> {
-                    handler.postDelayed({ initializeGestureEngine(attempt + 1) }, 100L * attempt)
-                }
+                return 'not_ready';
+            })();
+        """.trimIndent()) { result ->
+            if (result?.contains("not_ready") == true && attempt < 3) {
+                handler.postDelayed({ initializeGestureEngine(attempt + 1) }, 100L * attempt)
             }
         }
     }

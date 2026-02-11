@@ -5,9 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
-    "build:android": "vite build --mode android && node scripts/deploy-android.js",
-    "build:debug": "vite build --mode debug && node scripts/deploy-debug.js",
+    "build": "vite build && node scripts/deploy.js",
+    "build:prod": "vite build --mode production && node scripts/deploy.js",
     "lint": "eslint src"
   },
   "dependencies": {

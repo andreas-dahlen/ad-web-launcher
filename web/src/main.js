@@ -6,8 +6,8 @@ import './styles/main.css'
 import { APP_SETTINGS } from './config/appSettings'
 import { log } from './debug/functions'
 
-// Input router selects platform wiring for the intent engine
-import { initInputSystem } from './interaction/input/inputSource'
+// Platform bridge initializes Android touch bridge (browser listeners owned by App.vue)
+import { initPlatformBridge } from './interaction/input/inputSource'
 // import { exportCSS } from './config/exportSettings'
 
 log('init', APP_SETTINGS.platform)
@@ -22,8 +22,8 @@ function applyRuntimeLayout() {
 const app = createApp(App)
 app.mount('#app')
 
-// Initialize input system after Vue mounts (ensures DOM is ready)
-initInputSystem()
+// Initialize platform bridge after Vue mounts (Android bridge needs DOM ready)
+initPlatformBridge()
 
 // Apply CSS variables from JS after DOM is ready
 applyRuntimeLayout()

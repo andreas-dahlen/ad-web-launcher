@@ -28,37 +28,36 @@ export const dragSolver = {
    * Handle swipeStart - returns reaction to enable dragging
    */
   swipeStart(desc) {
-    desc.reaction = desc.type
-    return desc
+    return {...desc, stateAccepted: true }
   },
 
   /**
    * Handle swipe (drag) - clamp deltas and return offset reaction
    */
   swipe(desc) {
-    const {delta, position, constraints } = desc
+    const {delta, position = { x: 0, y: 0 }, constraints = { min: 0, max: 100 } } = desc
     const clamped = utils.relativeClamp2D(delta, position, constraints)
-    desc.reaction = desc.type
-    desc.delta.x = clamped.x
-    desc.delta.y = clamped.y
-    return desc
+    const dx = clamped.x
+    const dy = clamped.y
+    return {...desc, 
+      delta: { x: dx, y: dy },
+      stateAccepted: true }
   },
 
   /**
    * Handle swipeCommit - always commit at current position (no revert)
    */
   swipeCommit(desc) {
-    const {delta, constraints, position} = desc
+    const { delta,  position = { x: 0, y: 0 }, constraints = { min: 0, max: 100 } } = desc
     const finalPos = utils.clamp2D(delta, position, constraints)
     const {x: fx, y: fy} = finalPos
     const {x: px, y: py} = position
 
     const direction = utils.resolveDirection({x:fx - px, y:fy - py})
 
-    desc.reaction = desc.type
-    desc.direction = direction
-    desc.delta.x = fx
-    desc.delta.y = fy
-    return desc
+    return {...desc, 
+      direction: direction,
+      delta: { x: fx, y: fy },
+      stateAccepted: true }
   }
 }
