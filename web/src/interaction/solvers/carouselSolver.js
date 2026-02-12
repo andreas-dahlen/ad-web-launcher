@@ -16,8 +16,8 @@ export const carouselSolver = {
   /**
    * Handle swipeStart - returns reaction to enable dragging
    */
-  swipeStart(desc) {
-    return {...desc, stateAccepted: true }
+  swipeStart() {
+    return {stateAccepted: true }
   },
 
   /**
@@ -27,7 +27,7 @@ export const carouselSolver = {
     const { delta, laneSize } = desc
     const clampedDelta = utils.clamp(delta, laneSize)
 
-    return {...desc, 
+    return { 
       delta: clampedDelta,
       stateAccepted: true }
   },
@@ -38,18 +38,19 @@ export const carouselSolver = {
   swipeCommit(desc) {
     const { delta, axis, laneSize } = desc
     const clampedDelta = utils.clamp(delta, laneSize)
-
+    console.log('SOLVER LANE:', desc.laneId)
+console.log('SOLVER SIZE:', laneSize)
     if (utils.shouldCommit(clampedDelta, laneSize, axis)) {
       const direction = utils.resolveDirection(clampedDelta, axis)
       const targetOffset = utils.getCommitOffset(direction, laneSize)
 
-      return {...desc, 
+      return { 
         direction: direction,
         delta: targetOffset,
         stateAccepted: true }
     }
     // Revert case
-    return {...desc, 
+    return { 
       type: 'swipeRevert',
       stateAccepted: true }
   }

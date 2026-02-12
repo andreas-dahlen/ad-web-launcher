@@ -21,11 +21,8 @@ export const sliderSolver = {
   /**
    * Handle swipeStart - returns reaction to enable dragging
    */
-  swipeStart(desc) {
-      return {
-        ...desc,
-        stateAccepted: true
-      }
+  swipeStart() {
+      return { stateAccepted: true }
     },
 
     /**
@@ -38,7 +35,7 @@ export const sliderSolver = {
 
       const range = max - min
       if (!laneSize || !range) {
-        return {...desc, stateAccepted: true }
+        return {stateAccepted: true }
       }
 
       // Calculate valid pixel offset range based on current position
@@ -46,7 +43,7 @@ export const sliderSolver = {
       const minOffset = ((min - position) / range) * laneSize
       const newDelta = utils.clamp(delta, minOffset, maxOffset)
 
-      return {...desc, delta: newDelta, stateAccepted: true }
+      return {delta: newDelta, stateAccepted: true }
     },
 
     /**
@@ -60,7 +57,7 @@ export const sliderSolver = {
       // Guard against division by zero
       if (!laneSize) {
 
-        return {...desc, delta: position, stateAccepted: true }
+        return {delta: position, stateAccepted: true }
       }
 
       // Convert pixel delta → logical delta
@@ -68,6 +65,6 @@ export const sliderSolver = {
       const unclamped = position + deltaLogical
       const finalValue = utils.clamp(unclamped, min, max)
 
-      return {...desc, delta: finalValue, stateAccepted: true }
+      return {delta: finalValue, stateAccepted: true }
     }
   }

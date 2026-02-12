@@ -45,11 +45,14 @@ function updateLaneSize() {
   if (!carouselEl.value) return
   const size = horizontal.value ? carouselEl.value.offsetWidth : carouselEl.value.offsetHeight
   laneSize.value = size
+  console.log('SETTING SIZE:', props.axis, props.lane, size)
+  console.log('lane exists?', state.get('carousel', props.lane))
   state.setSize('carousel', props.lane, laneSize.value)
 }
 
 // Build a context snapshot for carousel gestures.
 function buildContext(targetEl) {
+  console.log('BUILD CONTEXT SIZE:', props.lane, state.getSize('carousel', props.lane))
   if (!targetEl) return null
   const ctx = {
     element: targetEl,

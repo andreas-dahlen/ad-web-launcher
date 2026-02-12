@@ -7,7 +7,7 @@ import { APP_SETTINGS } from './config/appSettings'
 import { log } from './debug/functions'
 
 // Platform bridge initializes Android touch bridge (browser listeners owned by App.vue)
-import { initPlatformBridge } from './interaction/input/inputSource'
+// import { initPlatformBridge } from './interaction/input/inputSource'
 // import { exportCSS } from './config/exportSettings'
 
 log('init', APP_SETTINGS.platform)
@@ -23,7 +23,7 @@ const app = createApp(App)
 app.mount('#app')
 
 // Initialize platform bridge after Vue mounts (Android bridge needs DOM ready)
-initPlatformBridge()
+// initPlatformBridge()
 
 // Apply CSS variables from JS after DOM is ready
 applyRuntimeLayout()

@@ -33,8 +33,8 @@ function dispatchEvent(element, descriptor) {
    Carousel domain reaction handlers
 ------------------------------------------------- */
 function handleReaction(desc) {
-  const { reaction, swipeType } = desc
-  switch (reaction) {
+  const { type, swipeType } = desc
+  switch (type) {
     case 'swipeStart':
       state.swipeStart(swipeType, desc)
       break
@@ -71,7 +71,7 @@ export const dispatcher = {
     if (!descriptor || !descriptor.element) return
 
     // 1️⃣ Apply domain reaction if present
-    if (descriptor.reaction) {
+    if (descriptor.stateAccepted) {
       handleReaction(descriptor)
     }
     // 2️⃣ Apply DOM / UI attributes

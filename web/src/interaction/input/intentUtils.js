@@ -76,7 +76,7 @@ export const utils = {
             const axis = this.resolveAxis(intentAxis, target)
             if (this.resolveSupports('swipeStart', target) && axis) {
                 return {
-                    target: target,
+                    targetInfo: target,
                     pressCancel: false
                 }
             }
@@ -86,7 +86,7 @@ export const utils = {
         const newTarget = domRegistry.findLaneByAxis(x, y, intentAxis)
         if (newTarget) {
             return {
-                target: newTarget,
+                targetInfo: newTarget,
                 pressCancel: this.resolveSupports('pressCancel', target)
             }
         }

@@ -27,8 +27,8 @@ export const dragSolver = {
   /**
    * Handle swipeStart - returns reaction to enable dragging
    */
-  swipeStart(desc) {
-    return {...desc, stateAccepted: true }
+  swipeStart() {
+    return {stateAccepted: true }
   },
 
   /**
@@ -39,7 +39,7 @@ export const dragSolver = {
     const clamped = utils.relativeClamp2D(delta, position, constraints)
     const dx = clamped.x
     const dy = clamped.y
-    return {...desc, 
+    return { 
       delta: { x: dx, y: dy },
       stateAccepted: true }
   },
@@ -55,7 +55,7 @@ export const dragSolver = {
 
     const direction = utils.resolveDirection({x:fx - px, y:fy - py})
 
-    return {...desc, 
+    return {
       direction: direction,
       delta: { x: fx, y: fy },
       stateAccepted: true }

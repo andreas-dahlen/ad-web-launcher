@@ -41,7 +41,6 @@ function onDown(x, y, context) {
     state.totalDelta.y = 0
     //element is already resolved.. should only check if supported
     state.targetInfo = context
-
     if (utils.resolveSupports('press', state.targetInfo)) {
         forward({
             ...state.targetInfo,
@@ -66,8 +65,6 @@ function onMove(x, y) {
         if (utils.swipeThresholdCalc(biggest)) {
             const intentAxis = absX > absY ? 'horizontal' : 'vertical'
             const resolved = utils.resolveSwipeTarget(x, y, intentAxis, state.targetInfo)
-
-
             if (resolved) {
                 if (resolved.pressCancel) {
                     forward({
@@ -78,7 +75,6 @@ function onMove(x, y) {
                 }
                 state.phase = 'SWIPING'
                 state.targetInfo = resolved.targetInfo
-
                 forward({
                     ...state.targetInfo,
                     type: 'swipeStart',
@@ -98,7 +94,6 @@ function onMove(x, y) {
 
         state.totalDelta.x += deltaX
         state.totalDelta.y += deltaY
-
         const resolvedDelta = utils.resolveDelta(state.totalDelta, state.targetInfo.axis, state.targetInfo.swipeType)
 
         forward({
