@@ -1,11 +1,12 @@
-import { domRegistry } from "../dom/domRegistry"
 import { normalizeSwipeDelta, getAxisSize } from '../state/sizeState'
 import { APP_SETTINGS } from '../../config/appSettings'
+import { targetResolver } from "../dom/resolveTargetInfo"
 
 export const utils = {
     //gesturePolicy.js
 
     resolveSupports(type, target) {
+        console.log(type, target)
         return !!target?.reactions?.[type]
     },
 
@@ -65,9 +66,8 @@ export const utils = {
     },
 
     resolveTarget(x, y) {
-        const target = domRegistry.findElementAt(x, y)
-        if (target) return target
-        return null
+        const target = targetResolver.resolveFromPoint(x, y)
+        return target
     },
 
     resolveSwipeTarget(x, y, intentAxis, target) {
@@ -83,7 +83,7 @@ export const utils = {
         }
 
         // Fallback: find lane by axis
-        const newTarget = domRegistry.findLaneByAxis(x, y, intentAxis)
+        const newTarget = targetResolver.resolveLaneByAxis(x, y, intentAxis)
         if (newTarget) {
             return {
                 targetInfo: newTarget,

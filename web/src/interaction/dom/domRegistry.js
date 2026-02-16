@@ -7,7 +7,6 @@
  * - Never mutates DOM, never triggers callbacks
  */
 
-export const domRegistry = {
   // ------------------------
   // Core intent resolver
   // ------------------------

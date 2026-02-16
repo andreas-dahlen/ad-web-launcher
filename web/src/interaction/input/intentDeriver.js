@@ -30,7 +30,7 @@ export const intentDeriver = {
     onUp
 }
 
-function onDown(x, y, context) {
+function onDown(x, y) {
     drawDots(x, y, 'green')
     state.phase = 'PENDING'
     state.start.x = x
@@ -40,7 +40,7 @@ function onDown(x, y, context) {
     state.totalDelta.x = 0
     state.totalDelta.y = 0
     //element is already resolved.. should only check if supported
-    state.targetInfo = context
+    state.targetInfo = utils.resolveTarget(x, y)
     if (utils.resolveSupports('press', state.targetInfo)) {
         forward({
             ...state.targetInfo,

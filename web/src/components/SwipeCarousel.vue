@@ -62,17 +62,6 @@ const { laneSize } = useLaneSizing({
 
 usePointerForwarding({
   elRef: carouselEl,
-  reactions: {
-    press: false,
-    pressRelease: false,
-    pressCancel: true,
-    swipeStart: true,
-    swipe: true,
-    swipeCommit: true,
-    swipeRevert: true,
-    select: false,
-    deselect: false
-  },
   onReaction: handleReaction
 })
 
