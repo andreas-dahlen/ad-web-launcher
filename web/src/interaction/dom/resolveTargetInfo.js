@@ -32,12 +32,22 @@ export const targetResolver = {
   },
 
   resolveFromPoint(x, y) {
-    const el = document.elementsFromPoint(x, y).find(el => {
-      const ds = el.dataset || {}
-      return ds.lane || ds.action || ds.swipeType
-    })
+    const elements = document.elementsFromPoint(x, y)
 
-    return el ? this.resolveFromElement(el) : null
+    for (const el of elements) {
+      const ds = el.dataset || {}
+
+      const laneValid = ds.lane && ds.axis && ds.swipeType
+      const reactions = this.buildReactions(ds, laneValid)
+
+      const isEligible = Object.values(reactions).some(Boolean)
+
+      if (isEligible) {
+        return this.resolveFromElement(el)
+      }
+    }
+
+    return null
   },
 
   resolveLaneByAxis(x, y, inputAxis) {

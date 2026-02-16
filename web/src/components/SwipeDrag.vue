@@ -40,7 +40,6 @@ const dragging = computed(() => laneState.value?.dragging ?? false)
 /* -------------------------
    Watch / ensure drag exists
    -------------------------- */
-
 watchEffect(() => state.ensure('drag', props.lane))
 /* -------------------------
    Lane sizing
@@ -53,12 +52,10 @@ useDragSizing({
 /* -------------------------
    Gesture forwarding (EXTRACTED)
 -------------------------- */
-
 usePointerForwarding({
   elRef: dragItem,
   onReaction: handleReaction
 })
-
 /* -------------------------
 Reaction handling
 -------------------------- */

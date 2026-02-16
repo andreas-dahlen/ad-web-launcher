@@ -44,37 +44,6 @@ const carouselEl = ref(null)
 
 const horizontal = computed(() => props.axis === 'horizontal')
 const laneState = computed(() => state.get('carousel', props.lane))
-
-/* -------------------------
-   Lane sizing (EXTRACTED)
--------------------------- */
-
-const { laneSize } = useLaneSizing({
-  elRef: carouselEl,
-  axisRef: computed(() => props.axis),
-  swipeType: 'carousel',
-  laneId: computed(() => props.lane)
-})
-
-/* -------------------------
-   Gesture forwarding (EXTRACTED)
--------------------------- */
-
-usePointerForwarding({
-  elRef: carouselEl,
-  onReaction: handleReaction
-})
-
-/* -------------------------
-   Reaction handling
--------------------------- */
-
-function handleReaction(e) {
-  if (!props.reactSwipeCommit) return
-  if (e.detail?.type !== 'swipeCommit') return
-  emit('swipeCommit', e.detail)
-}
-
 /* -------------------------
    State syncing
 -------------------------- */
@@ -82,9 +51,31 @@ function handleReaction(e) {
 watchEffect(() => {
   state.setCount('carousel', props.lane, props.scenes.length)
 })
+/* -------------------------
+   Lane sizing (EXTRACTED)
+-------------------------- */
+const { laneSize } = useLaneSizing({
+  elRef: carouselEl,
+  axisRef: computed(() => props.axis),
+  swipeType: 'carousel',
+  laneId: computed(() => props.lane)
+})
+/* -------------------------
+   Gesture forwarding (EXTRACTED)
+-------------------------- */
+usePointerForwarding({
+  elRef: carouselEl,
+  onReaction: handleReaction
+})
+/* -------------------------
+   Reaction handling
+-------------------------- */
+function handleReaction(e) {
+  if (!props.reactSwipeCommit) return
+  if (e.detail?.type !== 'swipeCommit') return
+  emit('swipeCommit', e.detail)
+}
 
-// const horizontal = computed(() => props.axis === 'horizontal')
-// const laneState = computed(() => state.get('carousel', props.lane))
 
 /* -------------------------
    Scene indexes

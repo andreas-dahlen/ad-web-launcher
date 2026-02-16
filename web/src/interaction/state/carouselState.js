@@ -86,7 +86,6 @@ export const carouselStateFn = {
    * Start dragging - called by dispatcher on carousel:dragStart
    */
   swipeStart(desc) {
-    console.log('[STATE] swipeStart')
     const lane = this.ensure(desc.laneId)
     lane.dragging = true
     lane.pendingDir = null
@@ -95,14 +94,12 @@ export const carouselStateFn = {
    * Apply offset during drag - called by dispatcher on carousel:offset
    */
   swipe(desc) {
-    console.log('[STATE] swipe')
     this.ensure(desc.laneId).offset = desc.delta
   },
   /**
    * Commit swipe animation - called by dispatcher on carousel:commit
    */
   swipeCommit(desc) {
-    console.log('[STATE] swipeCommit')
     const { direction, delta, laneId } = desc
     const lane = this.ensure(laneId)
     lane.pendingDir = direction
@@ -113,7 +110,6 @@ export const carouselStateFn = {
    * Revert to original position - called by dispatcher on carousel:revert
    */
   swipeRevert(desc) {
-    console.log('[STATE] swipeRevert')
     const lane = this.ensure(desc.laneId)
     lane.offset = 0
     lane.dragging = false

@@ -61,7 +61,6 @@ export const utils = {
 
         const axisBias = axis === 'vertical' ? 0.65 : 1
         const threshold = laneSize * APP_SETTINGS.swipeCommitRatio * axisBias
-        console.log(Math.abs(delta))
         return Math.abs(delta) >= threshold
     }
 }

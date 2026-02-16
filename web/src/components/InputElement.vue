@@ -30,14 +30,11 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue'
-import { intentDeriver } from '../interaction/input/intentDeriver'
+import { ref } from 'vue'
+import { usePointerForwarding } from '../interaction/input/usePointerForwarding'
 
 defineOptions({ name: 'InputElement' })
 
-// -------------------------------
-// Props: configure engine eligibility
-// -------------------------------
 const {
   action,
   press,
@@ -85,41 +82,11 @@ const emit = defineEmits([
 
 const el = ref(null)
 
-// Build a minimal context packet for intentDeriver using DOM + current state.
-function buildContext(targetEl) {
-  if (!targetEl) return null
-  const ds = targetEl.dataset || {}
-  const ctx = {
-    element: targetEl,
-    laneId: ds.lane || null,
-    axis: ds.axis || axis || null,
-    swipeType: ds.swipeType || swipeType || null,
-    actionId: ds.action || action || null,
-    reactions: {
-      press: press || reactPress || reactPressRelease || reactPressCancel,
-      pressRelease: press || reactPressRelease,
-      pressCancel: press || swipe || reactPressCancel || reactPressRelease,
-      swipeStart: swipe || reactSwipe || reactSwipeStart || reactSwipeCommit || reactSwipeRevert,
-      swipe: swipe || reactSwipe,
-      swipeCommit: swipe || reactSwipeCommit,
-      swipeRevert: swipe || reactSwipeRevert,
-      select: reactSelected,
-      deselect: reactDeselected
-    }
-  }
-
-  // Placeholder for future fallback resolution (e.g., domRegistry lookup).
-  return ctx
-}
-
-// -------------------------------
-// Handle reactions from engine
-// -------------------------------
+// Only emit if this component declared it cares
 function handleReaction(e) {
   const type = e.detail?.type
   if (!type) return
 
-  // Only emit Vue event if corresponding react* prop is true
   if (type === 'press' && !reactPress) return
   if (type === 'pressRelease' && !reactPressRelease) return
   if (type === 'pressCancel' && !reactPressCancel) return
@@ -133,43 +100,15 @@ function handleReaction(e) {
   emit(type, e.detail)
 }
 
-// Pointer event forwarding — Vue owns DOM listeners, engine receives (x, y) only.
-function handlePointerDown(e) {
-  e.stopPropagation()
-  e.currentTarget.setPointerCapture(e.pointerId)
-  intentDeriver.onDown(e.clientX, e.clientY, buildContext(e.currentTarget))
-}
-function handlePointerMove(e) {
-  if (!e.currentTarget.hasPointerCapture(e.pointerId)) return
-  intentDeriver.onMove(e.clientX, e.clientY)
-}
-function handlePointerUp(e) {
-  if (!e.currentTarget.hasPointerCapture(e.pointerId)) return
-  intentDeriver.onUp(e.clientX, e.clientY)
-}
+// 🚀 No buildContext.
+// Engine resolves everything via targetResolver.
 
-onMounted(() => {
-  const root = el.value
-  if (root) {
-    root.addEventListener('pointerdown', handlePointerDown)
-    root.addEventListener('pointermove', handlePointerMove)
-    root.addEventListener('pointerup', handlePointerUp)
-    root.addEventListener('pointercancel', handlePointerUp)
-    root.addEventListener('reaction', handleReaction)
-  }
-})
-
-onBeforeUnmount(() => {
-  const root = el.value
-  if (root) {
-    root.removeEventListener('pointerdown', handlePointerDown)
-    root.removeEventListener('pointermove', handlePointerMove)
-    root.removeEventListener('pointerup', handlePointerUp)
-    root.removeEventListener('pointercancel', handlePointerUp)
-    root.removeEventListener('reaction', handleReaction)
-  }
+usePointerForwarding({
+  elRef: el,
+  onReaction: handleReaction
 })
 </script>
+
 
 <style scoped>
 .input-element {

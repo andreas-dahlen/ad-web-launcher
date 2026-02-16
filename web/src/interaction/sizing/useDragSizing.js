@@ -31,8 +31,8 @@ export function useDragSizing({ containerRef, itemRef, laneId }) {
     constraints.value = constraint
 
     // forward to stateManager
-    state.setSize('drag', laneId, size)
-    state.setConstraints('drag', laneId, constraint)
+    state.setSize('drag', laneId.value, size)
+    state.setConstraints('drag', laneId.value, constraint)
   }
 
   onMounted(() => {

@@ -38,8 +38,6 @@ export const carouselSolver = {
   swipeCommit(desc) {
     const { delta, axis, laneSize } = desc
     const clampedDelta = utils.clamp(delta, laneSize)
-    console.log('SOLVER LANE:', desc.laneId)
-console.log('SOLVER SIZE:', laneSize)
     if (utils.shouldCommit(clampedDelta, laneSize, axis)) {
       const direction = utils.resolveDirection(clampedDelta, axis)
       const targetOffset = utils.getCommitOffset(direction, laneSize)

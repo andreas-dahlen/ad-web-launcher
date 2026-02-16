@@ -16,9 +16,10 @@
 </template>
 
 <script setup>
-import { computed, ref, onMounted, onBeforeUnmount, watchEffect } from 'vue'
+import { computed, ref, watchEffect } from 'vue'
 import { state } from '../interaction/state/stateManager'
-import { intentDeriver } from '../interaction/input/intentDeriver'
+import { useSliderSizing } from '../interaction/sizing/useSliderSizing'
+import { usePointerForwarding } from '../interaction/input/usePointerForwarding'
 
 const emit = defineEmits(['swipeCommit'])
 
@@ -34,6 +35,7 @@ const props = defineProps({
    Refs / basics
 -------------------------- */
 const sliderEl = ref(null)
+
 const horizontal = computed(() => props.axis === 'horizontal')
 
 /* -------------------------
@@ -47,106 +49,33 @@ const laneConstraints = computed(() => state.getConstraints('slider', props.lane
 const laneSize = computed(() => state.getSize('slider', props.lane) ?? 0)
 
 /* -------------------------
-   Watch / ensure slider exists
+Watch / ensure slider exists
 -------------------------- */
 watchEffect(() => state.ensure('slider', props.lane))
-
 /* -------------------------
-   Resize / lane size
+   Lane sizing
 -------------------------- */
-function updateLaneSize() {
-  if (!sliderEl.value) return
-  const size = horizontal.value ? sliderEl.value.offsetWidth : sliderEl.value.offsetHeight
-  const thumbEl = sliderEl.value.querySelector('.slider-thumb > *')
-  const thumbSize = thumbEl ? (horizontal.value ? thumbEl.offsetWidth : thumbEl.offsetHeight) : 0
-  state.setSize('slider', props.lane, size - thumbSize)
-}
-
-// Build a context snapshot for the gesture engine.
-function buildContext(targetEl) {
-  if (!targetEl) return null
-  const ctx = {
-    element: targetEl,
-    laneId: props.lane,
-    axis: props.axis,
-    swipeType: 'slider',
-    reactions: {
-      press: false,
-      pressRelease: false,
-      pressCancel: true,
-      swipeStart: true,
-      swipe: true,
-      swipeCommit: true,
-      swipeRevert: false,
-      select: false,
-      deselect: false
-    }
-  }
-
-  const size = state.getSize('slider', props.lane)
-  const position = state.getPosition('slider', props.lane)
-  const constraints = state.getConstraints('slider', props.lane)
-
-  if (size !== undefined && size !== null) ctx.laneSize = size
-  if (position !== undefined && position !== null) ctx.position = position
-  if (constraints !== undefined && constraints !== null) ctx.constraints = constraints
-
-  // If fallback selection is needed (e.g., alternative lane picking), add it here.
-  return ctx
-}
-
-// Pointer event forwarding — Vue owns DOM listeners, engine receives (x, y) only.
-function handlePointerDown(e) {
-  e.stopPropagation()
-  e.currentTarget.setPointerCapture(e.pointerId)
-  intentDeriver.onDown(e.clientX, e.clientY, buildContext(e.currentTarget))
-}
-function handlePointerMove(e) {
-  if (!e.currentTarget.hasPointerCapture(e.pointerId)) return
-  intentDeriver.onMove(e.clientX, e.clientY)
-}
-function handlePointerUp(e) {
-  if (!e.currentTarget.hasPointerCapture(e.pointerId)) return
-  intentDeriver.onUp(e.clientX, e.clientY)
-}
-
-let observer
-onMounted(() => {
-  updateLaneSize()
-  observer = new ResizeObserver(updateLaneSize)
-  observer.observe(sliderEl.value)
-
-  const el = sliderEl.value
-  if (el) {
-    el.addEventListener('pointerdown', handlePointerDown)
-    el.addEventListener('pointermove', handlePointerMove)
-    el.addEventListener('pointerup', handlePointerUp)
-    el.addEventListener('pointercancel', handlePointerUp)
-    el.addEventListener('reaction', onReaction)
-  }
+useSliderSizing({
+  elRef: sliderEl,
+axisRef: computed(() => props.axis),
+  swipeType: 'slider',
+  laneId: computed(() => props.lane)
 })
-
-onBeforeUnmount(() => {
-  observer?.disconnect()
-  const el = sliderEl.value
-  if (el) {
-    el.removeEventListener('pointerdown', handlePointerDown)
-    el.removeEventListener('pointermove', handlePointerMove)
-    el.removeEventListener('pointerup', handlePointerUp)
-    el.removeEventListener('pointercancel', handlePointerUp)
-    el.removeEventListener('reaction', onReaction)
-  }
-})
-
 /* -------------------------
-   Reaction handling
+   Gesture forwarding (EXTRACTED)
 -------------------------- */
-function onReaction(e) {
+usePointerForwarding({
+  elRef: sliderEl,
+  onReaction: handleReaction
+})
+/* -------------------------
+Reaction handling
+-------------------------- */
+function handleReaction(e) {
   if (!props.reactSwipeCommit) return
   if (e.detail?.type !== 'swipeCommit') return
   emit('swipeCommit', e.detail)
 }
-
 /* -------------------------
    Computed thumb style
 -------------------------- */

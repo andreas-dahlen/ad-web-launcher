@@ -6,7 +6,6 @@ export const utils = {
     //gesturePolicy.js
 
     resolveSupports(type, target) {
-        console.log(type, target)
         return !!target?.reactions?.[type]
     },
 
