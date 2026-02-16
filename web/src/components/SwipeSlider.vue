@@ -18,8 +18,8 @@
 <script setup>
 import { computed, ref, watchEffect } from 'vue'
 import { state } from '../interaction/state/stateManager'
-import { useSliderSizing } from '../interaction/sizing/useSliderSizing'
-import { usePointerForwarding } from '../interaction/input/usePointerForwarding'
+import { useSliderSizing } from '../interaction/adapters/useSliderSizing'
+import { usePointerForwarding } from '../interaction/input/pointerBridge'
 
 const emit = defineEmits(['swipeCommit'])
 

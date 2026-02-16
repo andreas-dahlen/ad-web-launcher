@@ -1,7 +1,6 @@
 export const APP_SETTINGS = {
-  debugPanel: true,
-  DebugWrapper: true,
-  platform: import.meta.env.VITE_PLATFORM || 'web',
+  debugPanel: import.meta.env.VITE_DEBUG || true,
+  DebugWrapper: import.meta.env.VITE_DEBUG || true,
 
   rawPhoneValues: {
     width: 1272,

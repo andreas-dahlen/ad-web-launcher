@@ -31,7 +31,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import { usePointerForwarding } from '../interaction/input/usePointerForwarding'
+import { usePointerForwarding } from '../interaction/input/pointerBridge'
 
 defineOptions({ name: 'InputElement' })
 

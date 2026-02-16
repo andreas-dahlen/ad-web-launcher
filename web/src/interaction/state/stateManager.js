@@ -21,9 +21,7 @@ function call(type, fnName, ...args) {
  */
 export const state = {
     // ----- METADATA READS ----- (for buildPayload.js)
-    getSize(type, laneId) {
-        if (type !== 'drag') return call(type, 'getSize', laneId)
-    },
+    getSize(type, laneId) { return call(type, 'getSize', laneId) },
     getPosition(type, laneId) { return call(type, 'getPosition', laneId) },
     getConstraints(type, laneId) { return call(type, 'getConstraints', laneId) },
 

@@ -1,5 +1,5 @@
 import { log, drawDots } from '../../debug/functions'
-import { forward } from '../reactions/delegator'
+import { forward } from '../reactions/gestureRouter'
 import { utils } from './intentUtils'
 
 /*

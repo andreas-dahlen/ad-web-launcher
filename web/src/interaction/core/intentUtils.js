@@ -1,6 +1,6 @@
 import { normalizeSwipeDelta, getAxisSize } from '../state/sizeState'
 import { APP_SETTINGS } from '../../config/appSettings'
-import { targetResolver } from "../dom/resolveTargetInfo"
+import { targetResolver } from "./targetResolver"
 
 export const utils = {
     //gesturePolicy.js

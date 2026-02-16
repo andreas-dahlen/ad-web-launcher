@@ -1,6 +1,5 @@
 <template>
   <div class="phone">
-    <DebugPanel/>
     <div class="app-content">
       <LaneWallpaper/>
       <LanesHorizontal/>
@@ -10,7 +9,6 @@
 </template>
 
 <script setup>
-import DebugPanel from '../components/DebugPanel.vue'
 import LaneWallpaper from './LaneWallpaper.vue'
 import LanesHorizontal from './LanesHorizontal.vue'
 import TestButton from '../buttons/TestButton.vue'
