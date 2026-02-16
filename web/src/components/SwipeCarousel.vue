@@ -28,7 +28,7 @@ import { ref, computed, watchEffect, markRaw } from 'vue'
 import { state } from '../interaction/state/stateManager'
 import { APP_SETTINGS } from '../config/appSettings'
 import { useLaneSizing } from '../interaction/adapters/useCarouselSizing'
-import { usePointerForwarding } from '../interaction/input/pointerBridge'
+import { usePointerForwarding } from '../interaction/bridge/bridge'
 
 const emit = defineEmits(['swipeCommit'])
 

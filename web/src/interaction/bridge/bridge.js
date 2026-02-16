@@ -1,7 +1,7 @@
 // usePointerForwarding.js
 
 import { onMounted, onBeforeUnmount } from 'vue'
-import { intentDeriver } from '../core/intentDeriver'
+import { intentDeriver } from '../core/interpreter'
 
 export function usePointerForwarding({ elRef, onReaction }) {
 

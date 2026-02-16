@@ -1,9 +1,11 @@
 // intentForwarder.js
-import { dispatcher } from './dispatcher'
+import { dispatcher } from './renderer'
 // import { log } from '../../debug/functions'
 import { carouselSolver } from '../solvers/carouselSolver'
 import { sliderSolver } from '../solvers/sliderSolver'
 import { dragSolver } from '../solvers/dragSolver'
+
+
 
 const solvers = {
   carousel: carouselSolver,

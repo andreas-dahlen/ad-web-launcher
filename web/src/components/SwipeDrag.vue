@@ -16,7 +16,7 @@
 import { ref, computed, watchEffect } from 'vue'
 import { state } from '../interaction/state/stateManager'
 import { useDragSizing } from '../interaction/adapters/useDragSizing'
-import { usePointerForwarding } from '../interaction/input/pointerBridge'
+import { usePointerForwarding } from '../interaction/bridge/bridge'
 
 const emit = defineEmits(['swipeCommit'])
 
