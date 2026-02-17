@@ -1,5 +1,4 @@
 import { log, drawDots } from '../../debug/functions'
-import { forward } from '../updater/gestureRouter'
 import { utils } from './intentUtils'
 
 /*
@@ -24,10 +23,11 @@ const state = {
     targetInfo: null
 }
 
-export const intentDeriver = {
+export const interpreter = {
     onDown,
     onMove,
-    onUp
+    onUp,
+    resetGesture
 }
 
 function onDown(x, y) {
@@ -42,50 +42,48 @@ function onDown(x, y) {
     //element is already resolved.. should only check if supported
     state.targetInfo = utils.resolveTarget(x, y)
     if (utils.resolveSupports('press', state.targetInfo)) {
-        forward({
+        return {
             ...state.targetInfo,
             type: 'press',
             delta: { x: x, y: y }
-        })
+        }
     }
+    return null
 }
 
 function onMove(x, y) {
-    if (state.phase === 'IDLE') return
+    if (state.phase === 'IDLE') return null
     drawDots(x, y, 'yellow')
 
     // Compute deltas
-    const deltaX = x - (state.start.x)
-    const deltaY = y - (state.start.y)
-    const absX = Math.abs(deltaX)
-    const absY = Math.abs(deltaY)
+    const absX = Math.abs(x - state.start.x)
+    const absY = Math.abs(y - state.start.y)
     const biggest = Math.max(absX, absY)
 
     if (state.phase === 'PENDING') {
-        if (utils.swipeThresholdCalc(biggest)) {
-            const intentAxis = absX > absY ? 'horizontal' : 'vertical'
-            const resolved = utils.resolveSwipeTarget(x, y, intentAxis, state.targetInfo)
-            if (resolved) {
-                if (resolved.pressCancel) {
-                    forward({
-                        ...state.targetInfo,
-                        type: 'pressCancel',
-                        delta: {x: x, y: y}
-                    })
-                }
-                state.phase = 'SWIPING'
-                state.targetInfo = resolved.targetInfo
-                forward({
+        if (!utils.swipeThresholdCalc(biggest)) return null
+        const intentAxis = absX > absY ? 'horizontal' : 'vertical'
+        const resolved = utils.resolveSwipeTarget(x, y, intentAxis, state.targetInfo)
+        if (resolved) {
+            let cancel = null
+            if (resolved.pressCancel) {
+                cancel = {
                     ...state.targetInfo,
-                    type: 'swipeStart',
-                    delta: utils.resolveDelta({ x, y }, state.targetInfo.axis, state.targetInfo.swipeType)
-                })
-            } else {
-                return
+                    type: 'pressCancel',
+                    delta: { x: x, y: y }
+                }
+            }
+
+            state.phase = 'SWIPING'
+            state.targetInfo = resolved.targetInfo
+            return {
+                ...state.targetInfo,
+                type: 'swipeStart',
+                delta: utils.resolveDelta({ x, y }, state.targetInfo.axis, state.targetInfo.swipeType),
+                extra: cancel
             }
         }
     }
-
     // Track swipe delta
     if (state.phase === 'SWIPING') {
 
@@ -96,44 +94,45 @@ function onMove(x, y) {
         state.totalDelta.y += deltaY
         const resolvedDelta = utils.resolveDelta(state.totalDelta, state.targetInfo.axis, state.targetInfo.swipeType)
 
-        forward({
+        state.last.x = x
+        state.last.y = y
+
+        return {
             ...state.targetInfo,
             type: 'swipe',
             delta: utils.normalizedDelta(resolvedDelta),
-        })
+        }
     }
-    state.last.x = x
-    state.last.y = y
+    return null
 }
 
 
 function onUp(x, y) {
     if (state.phase !== 'SWIPING' && state.phase !== 'PENDING') {
         log('init', 'state.phase error: ', state.phase)
-        resetState()
-        return
+        return null
     }
     if (state.phase === 'SWIPING') {
         const resolvedDelta = utils.resolveDelta(state.totalDelta, state.targetInfo.axis, state.targetInfo.swipeType)
-        forward({
+        return {
             ...state.targetInfo,
             type: 'swipeCommit',
             delta: utils.normalizedDelta(resolvedDelta),
-        })
+        }
     }
     else if (state.phase === 'PENDING') {
         // Pointer up without swipe → release
-        forward({
+        return {
             ...state.targetInfo,
             type: 'pressRelease',
             delta: { x: x, y: y }
-        })
+        }
     }
-    resetState()
+    return null
 }
 
 // Helper: reset all gesture state
-function resetState() {
+function resetGesture() {
     state.phase = 'IDLE'
     state.start.x = 0
     state.start.y = 0

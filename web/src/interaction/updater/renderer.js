@@ -7,10 +7,8 @@
  * - Applies carousel reactions to carouselState
  * - Applies drag reactions to dragState
  * - Applies slider reactions to sliderState
- * - Updates DOM attributes & dispatches events
  * - Does NOT contain decision logic
  */
-import { state } from '../state/stateManager'
 
 /* -------------------------------------------------
    DOM helpers
@@ -30,27 +28,6 @@ function dispatchEvent(element, descriptor) {
 }
 
 /* -------------------------------------------------
-   Carousel domain reaction handlers
-------------------------------------------------- */
-function handleReaction(desc) {
-  const { type, swipeType } = desc
-  switch (type) {
-    case 'swipeStart':
-      state.swipeStart(swipeType, desc)
-      break
-    case 'swipe':
-      state.swipe(swipeType, desc)
-      break
-    case 'swipeCommit':
-      state.swipeCommit(swipeType, desc)
-      break
-    case 'swipeRevert':
-      state.swipeRevert(swipeType, desc)
-      break
-  }
-}
-
-/* -------------------------------------------------
    DOM / UI attribute handlers
 ------------------------------------------------- */
 const typeHandlers = {
@@ -64,16 +41,12 @@ const typeHandlers = {
 }
 
 /* -------------------------------------------------
-   Dispatcher
+   Render
 ------------------------------------------------- */
-export const dispatcher = {
+export const render = {
   handle(descriptor) {
     if (!descriptor || !descriptor.element) return
 
-    // 1️⃣ Apply domain reaction if present
-    if (descriptor.stateAccepted) {
-      handleReaction(descriptor)
-    }
     // 2️⃣ Apply DOM / UI attributes
     typeHandlers[descriptor.type]?.(descriptor.element)
 

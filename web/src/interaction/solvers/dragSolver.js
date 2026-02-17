@@ -52,9 +52,7 @@ export const dragSolver = {
     const finalPos = utils.clamp2D(delta, position, constraints)
     const {x: fx, y: fy} = finalPos
     const {x: px, y: py} = position
-
     const direction = utils.resolveDirection({x:fx - px, y:fy - py})
-
     return {
       direction: direction,
       delta: { x: fx, y: fy },

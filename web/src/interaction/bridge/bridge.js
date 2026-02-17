@@ -1,21 +1,24 @@
-// usePointerForwarding.js
+// bridge.js
 
 import { onMounted, onBeforeUnmount } from 'vue'
-import { intentDeriver } from '../core/interpreter'
+import { pipeline } from '../core/pipeline' // assuming pipeline is exported
 
 export function usePointerForwarding({ elRef, onReaction }) {
-
   let isActive = false
 
   function handlePointerDown(e) {
     e.stopPropagation()
-
     const el = elRef.value
     if (!el) return
 
     isActive = true
 
-    intentDeriver.onDown(e.clientX, e.clientY)
+    pipeline.orchestrate({
+      eventType: 'down',
+      x: e.clientX,
+      y: e.clientY,
+      // originalEvent: e
+    })
 
     // Move & up handled globally during active gesture
     window.addEventListener('pointermove', handlePointerMove)
@@ -25,13 +28,23 @@ export function usePointerForwarding({ elRef, onReaction }) {
 
   function handlePointerMove(e) {
     if (!isActive) return
-    intentDeriver.onMove(e.clientX, e.clientY)
+    pipeline.orchestrate({
+      eventType: 'move',
+      x: e.clientX,
+      y: e.clientY,
+      // originalEvent: e
+    })
   }
 
   function handlePointerUp(e) {
     if (!isActive) return
 
-    intentDeriver.onUp(e.clientX, e.clientY)
+    pipeline.orchestrate({
+      eventType: 'up',
+      x: e.clientX,
+      y: e.clientY,
+      // originalEvent: e
+    })
 
     isActive = false
 
