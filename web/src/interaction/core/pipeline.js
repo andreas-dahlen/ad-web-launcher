@@ -25,42 +25,42 @@ export const pipeline = {
       console.warn('invalid eventPackage for interpreter', event, event.eventType)
       return null
     }
-/* -------------------------
-        Interpreter
--------------------------- */
+    /* -------------------------
+            Interpreter
+    -------------------------- */
     const { eventType, x, y } = event
     const interpreterFn = interpreterMap[eventType]
     if (!interpreterFn) {
       console.warn('Unknown eventType', eventType)
       return null
     }
-    const facts = interpreterFn(x, y)
-    if (!facts) return null
-    
-    if (facts.type === 'swipeCommit' || facts.type === 'pressRelease') {
-    interpreter.resetGesture()
-}
-/* -------------------------
-        Solvers
--------------------------- */
-    const { swipeType, type } = facts
+    const descriptor = interpreterFn(x, y)
+    if (!descriptor) return null
+
+    if (descriptor.type === 'swipeCommit' || descriptor.type === 'pressRelease') {
+      interpreter.resetGesture()
+    }
+    /* -------------------------
+            Solvers
+    -------------------------- */
+    const { swipeType, type } = descriptor
     const solverfn = solvers[swipeType]?.[type]
 
-    // Apply solver if available, merging with interpreter facts
-    let solution = facts
+    // Apply solver if available, merging with interpreter descriptor
+    let solution = descriptor
     if (solverfn) {
-      solution = {...facts, ...solverfn(facts)}
+      solution = { ...descriptor, ...solverfn(descriptor) }
     }
-/* -------------------------
-        Mutate state files (swipeStart, swipe, swipeCommit, swipeRevert)
--------------------------- */
+    /* -------------------------
+            Mutate state files (swipeStart, swipe, swipeCommit, swipeRevert)
+    -------------------------- */
     if (solution.stateAccepted && state[solution.type]) {
       state[solution.type](solution.swipeType, solution)
     }
     /* -------------------------
         Renderer
 -------------------------- */
-    if(solution.extra) {
+    if (solution.extra) {
       render.handle(solution.extra)
     }
     render.handle(solution)

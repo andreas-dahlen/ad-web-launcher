@@ -20,7 +20,8 @@ const state = {
     start: { x: 0, y: 0 },    // initial pointer down
     last: { x: 0, y: 0 },     // last pointer position
     totalDelta: { x: 0, y: 0 }, // accumulated delta
-    targetInfo: null
+    targetInfo: null,
+    lockedAxis: 'both'
 }
 
 export const interpreter = {
@@ -66,6 +67,7 @@ function onMove(x, y) {
         const resolved = utils.resolveSwipeTarget(x, y, intentAxis, state.targetInfo)
         if (resolved) {
             let cancel = null
+            state.lockedAxis = resolved.lockedAxis
             if (resolved.pressCancel) {
                 cancel = {
                     ...state.targetInfo,
@@ -79,7 +81,7 @@ function onMove(x, y) {
             return {
                 ...state.targetInfo,
                 type: 'swipeStart',
-                delta: utils.resolveDelta({ x, y }, state.targetInfo.axis, state.targetInfo.swipeType),
+                delta: utils.resolveDelta({ x, y }, state.lockedAxis, state.targetInfo.swipeType),
                 extra: cancel
             }
         }
@@ -92,7 +94,7 @@ function onMove(x, y) {
 
         state.totalDelta.x += deltaX
         state.totalDelta.y += deltaY
-        const resolvedDelta = utils.resolveDelta(state.totalDelta, state.targetInfo.axis, state.targetInfo.swipeType)
+        const resolvedDelta = utils.resolveDelta(state.totalDelta, state.lockedAxis, state.targetInfo.swipeType)
 
         state.last.x = x
         state.last.y = y
@@ -113,7 +115,7 @@ function onUp(x, y) {
         return null
     }
     if (state.phase === 'SWIPING') {
-        const resolvedDelta = utils.resolveDelta(state.totalDelta, state.targetInfo.axis, state.targetInfo.swipeType)
+        const resolvedDelta = utils.resolveDelta(state.totalDelta, state.lockedAxis, state.targetInfo.swipeType)
         return {
             ...state.targetInfo,
             type: 'swipeCommit',
@@ -141,4 +143,5 @@ function resetGesture() {
     state.totalDelta.x = 0
     state.totalDelta.y = 0
     state.targetInfo = null
+    state.lockedAxis = 'both'
 }

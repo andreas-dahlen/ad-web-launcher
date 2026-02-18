@@ -33,15 +33,19 @@ export const sliderSolver = {
       const { delta, laneSize, position = { x: 0, y: 0 }, constraints = { min: 0, max: 100 } } = desc
       const { min, max } = constraints
 
-      const range = max - min
       if (!laneSize || !range) {
         return {stateAccepted: true }
       }
+        const axisKey = desc.lockedAxis === 'horizontal' ? 'x' : 'y'
+        const constraintKey = desc.lockedAxis === 'horizontal' ? 'y' : 'x'
+        // const lockedDelta = axisKey === 'x' ? delta.x : delta.y
+        // const clampDelta = axisKey === 'x' ? delta.y : delta.x
 
+      const range = max - min
       // Calculate valid pixel offset range based on current position
-      const maxOffset = ((max - position) / range) * laneSize
-      const minOffset = ((min - position) / range) * laneSize
-      const newDelta = utils.clamp(delta, minOffset, maxOffset)
+      const maxOffset = ((max - position[axisKey]) / range) * laneSize
+      const minOffset = ((min - position[axisKey]) / range) * laneSize
+      const newDelta = utils.clamp(delta[axisKey], minOffset, maxOffset)
 
       return {delta: newDelta, stateAccepted: true }
     },

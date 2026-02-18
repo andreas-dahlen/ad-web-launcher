@@ -76,7 +76,8 @@ export const utils = {
             if (this.resolveSupports('swipeStart', target) && axis) {
                 return {
                     targetInfo: target,
-                    pressCancel: false
+                    pressCancel: false,
+                    lockedAxis: target.axis
                 }
             }
         }
@@ -86,7 +87,8 @@ export const utils = {
         if (newTarget) {
             return {
                 targetInfo: newTarget,
-                pressCancel: this.resolveSupports('pressCancel', target)
+                pressCancel: this.resolveSupports('pressCancel', target),
+                lockedAxis: newTarget.axis
             }
         }
         return null

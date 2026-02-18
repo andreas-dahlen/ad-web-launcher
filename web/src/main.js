@@ -10,7 +10,11 @@ import { log } from './debug/functions'
 // import { initPlatformBridge } from './interaction/input/inputSource'
 // import { exportCSS } from './config/exportSettings'
 
-log('init', APP_SETTINGS.platform)
+if (APP_SETTINGS.debugPanel) {
+	log('init', 'DEBUG MODE')
+} else {
+	log('init', 'PROD MODE')
+}
 
 function applyRuntimeLayout() {
 	// exportCSS()
