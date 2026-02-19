@@ -31,41 +31,31 @@ export const sliderSolver = {
     swipe(desc) {
       const { delta, 
         laneSize, 
-        position = { x: 0, y: 0 }, 
-        constraints = { min: 0, max: 100 },
+        sliderPosition = { x: 0, y: 0 }, 
+        sliderConstraints = { min: 0, max: 100 },
         axis,
         swipeType
       } = desc
-      const { min, max } = constraints
+      const { min, max } = sliderConstraints
       const range = max - min
 
       if (!laneSize || !range) {
         return {stateAccepted: true }
       }
-      console.log('laneSize:', laneSize)
+
       const {primSize, gateSize} = utils.resolveSize(laneSize, axis)
+      if (!primSize) return { stateAccepted: true }
       const gateDelta = utils.resolveGateDelta(delta, axis, swipeType)
-      console.log('primSize:', primSize)
-      console.log('gateSize:', gateSize)
-
-
-      console.log('delta: ', delta)
       const primaryDelta = utils.resolveDelta1D(delta, axis, swipeType)
       if (gateSize != null && Math.abs(gateDelta) > gateSize) {
         return {stateAccepted: false}
       }
-      console.log('primDelta: ', primaryDelta)
 
-      console.log('gateDelta:', gateDelta)
-
-      console.log('position', position)
       // Calculate valid pixel offset range based on current position
-      const maxOffset = ((max - position) / range) * primSize
-      const minOffset = ((min - position) / range) * primSize
-      console.log('minOffset:', minOffset)
+      const maxOffset = ((max - sliderPosition) / range) * primSize
+      const minOffset = ((min - sliderPosition) / range) * primSize
       const newDelta = utils.clamp(primaryDelta, minOffset, maxOffset)
 
-      console.log(newDelta)
       return {delta: newDelta, stateAccepted: true }
     },
 
@@ -75,17 +65,30 @@ export const sliderSolver = {
      */
     swipeCommit(desc) {
       // const { delta, laneSize, min, max, value } = desc
-      const { delta, laneSize, position = { x: 0, y: 0 }, constraints = { min: 0, max: 100 } } = desc
-      const { min, max } = constraints
+      const { delta, 
+        laneSize, sliderPosition = { x: 0, y: 0 }, 
+        sliderConstraints = { min: 0, max: 100 },
+        axis,
+        swipeType
+      } = desc
+      const { min, max } = sliderConstraints
       // Guard against division by zero
       if (!laneSize) {
 
-        return {delta: position, stateAccepted: true }
+        return {delta: sliderPosition, stateAccepted: true }
       }
 
+        const {primSize, gateSize} = utils.resolveSize(laneSize, axis)
+
+      const gateDelta = utils.resolveGateDelta(delta, axis, swipeType)
+      const primaryDelta = utils.resolveDelta1D(delta, axis, swipeType)
+      if (gateSize != null && Math.abs(gateDelta) > gateSize) {
+        return {stateAccepted: false}
+      }
+      
       // Convert pixel delta → logical delta
-      const deltaLogical = (delta / laneSize) * (max - min)
-      const unclamped = position + deltaLogical
+      const deltaLogical = (primaryDelta / primSize) * (max - min)
+      const unclamped = sliderPosition + deltaLogical
       const finalValue = utils.clamp(unclamped, min, max)
 
       return {delta: finalValue, stateAccepted: true }

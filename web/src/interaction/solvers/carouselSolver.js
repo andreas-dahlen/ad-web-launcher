@@ -17,7 +17,7 @@ export const carouselSolver = {
    * Handle swipeStart - returns reaction to enable dragging
    */
   swipeStart() {
-    return {stateAccepted: true }
+    return { stateAccepted: true }
   },
 
   /**
@@ -25,13 +25,20 @@ export const carouselSolver = {
    */
   swipe(desc) {
     const { delta, laneSize, axis, swipeType } = desc
-    const lockedDelta = utils.resolveDelta1D(delta, axis, swipeType)
-    const primarySize = utils.resolveSize(laneSize)
-    const clampedDelta = utils.clamp(lockedDelta, primarySize)
+    
+    const { primSize, gateSize } = utils.resolveSize(laneSize, axis)
 
-    return { 
+    const lockedDelta = utils.resolveDelta1D(delta, axis, swipeType)
+    const clampedDelta = utils.clamp(lockedDelta, primSize)
+    const gateDelta = utils.resolveGateDelta(delta, axis, swipeType)
+    console.log('laneSize: ', desc.laneSize, 'position: ', desc.position, 'constraints: ', desc.constraints)
+    if (gateSize != null && Math.abs(gateDelta) > gateSize) {
+      return { stateAccepted: false }
+    }
+    return {
       delta: clampedDelta,
-      stateAccepted: true }
+      stateAccepted: true
+    }
   },
 
   /**
@@ -39,22 +46,25 @@ export const carouselSolver = {
    */
   swipeCommit(desc) {
     const { swipeType, delta, axis, laneSize } = desc
-        const primarySize = utils.resolveSize(laneSize)
-        const lockedDelta = utils.resolveDelta1D(delta, axis, swipeType)
-    const clampedDelta = utils.clamp(lockedDelta, primarySize)
-    if (utils.shouldCommit(clampedDelta, primarySize, axis)) {
-      const direction = utils.resolveDirection(clampedDelta, axis)
-      const targetOffset = utils.getCommitOffset(direction, primarySize)
 
-      return { 
+    const {primSize} = utils.resolveSize(laneSize, axis)
+    const lockedDelta = utils.resolveDelta1D(delta, axis, swipeType)
+    const clampedDelta = utils.clamp(lockedDelta, primSize)
+
+    if (utils.shouldCommit(clampedDelta, primSize, axis)) {
+      const direction = utils.resolveDirection(clampedDelta, axis)
+      const targetOffset = utils.getCommitOffset(direction, primSize)
+      return {
         direction: direction,
         delta: targetOffset,
-        stateAccepted: true }
+        stateAccepted: true
+      }
     }
     // Revert case
-    return { 
+    return {
       type: 'swipeRevert',
-      stateAccepted: true }
+      stateAccepted: true
+    }
   }
 }
 

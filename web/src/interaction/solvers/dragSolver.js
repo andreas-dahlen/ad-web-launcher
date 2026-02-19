@@ -35,8 +35,8 @@ export const dragSolver = {
    * Handle swipe (drag) - clamp deltas and return offset reaction
    */
   swipe(desc) {
-    const {delta, position = { x: 0, y: 0 }, constraints = { min: 0, max: 100 } } = desc
-    const clamped = utils.relativeClamp2D(delta, position, constraints)
+    const {delta, dragPosition = { x: 0, y: 0 }, dragConstraints = { min: 0, max: 100 } } = desc
+    const clamped = utils.relativeClamp2D(delta, dragPosition, dragConstraints)
     const dx = clamped.x
     const dy = clamped.y
     return { 
@@ -48,10 +48,10 @@ export const dragSolver = {
    * Handle swipeCommit - always commit at current position (no revert)
    */
   swipeCommit(desc) {
-    const { delta,  position = { x: 0, y: 0 }, constraints = { min: 0, max: 100 } } = desc
-    const finalPos = utils.clamp2D(delta, position, constraints)
+    const { delta,  dragPosition = { x: 0, y: 0 }, dragConstraints = { min: 0, max: 100 } } = desc
+    const finalPos = utils.clamp2D(delta, dragPosition, dragConstraints)
     const {x: fx, y: fy} = finalPos
-    const {x: px, y: py} = position
+    const {x: px, y: py} = dragPosition
     const direction = utils.resolveDirection({x:fx - px, y:fy - py})
     return {
       direction: direction,

@@ -13,26 +13,33 @@ export function useSliderSizing({
   function updateMetrics() {
     const el = elRef.value
     if (!el) return
-
+    /* -------------------------
+            Main axis
+    -------------------------- */
     const horizontal = axisRef.value === 'horizontal'
-
     const trackSize = horizontal
       ? el.offsetWidth
       : el.offsetHeight
 
     const thumbEl = el.querySelector('.slider-thumb > *')
-
     const thumbSize = thumbEl
       ? (horizontal ? thumbEl.offsetWidth : thumbEl.offsetHeight)
       : 0
 
     const usableSize = Math.max(trackSize - thumbSize, 0)
-
     laneSize.value = usableSize
-
-    const size =  horizontal
-    ? { x: usableSize, y: thumbSize }
-    : { x: thumbSize, y: usableSize }
+    /* -------------------------
+            Gated axis
+    -------------------------- */
+    const thumbGate = thumbEl
+      ? (horizontal ? thumbEl.offsetHeight : thumbEl.offsetWidth)
+      : 0
+    /* -------------------------
+            Finalization
+    -------------------------- */
+    const size = horizontal
+      ? { x: usableSize, y: thumbGate }
+      : { x: thumbGate, y: usableSize }
 
     state.setSize(swipeType, laneId.value, size)
   }

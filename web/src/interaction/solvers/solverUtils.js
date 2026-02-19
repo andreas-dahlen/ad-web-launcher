@@ -91,7 +91,6 @@ export const utils = {
     },
     shouldCommit(delta, laneSize, axis) {
         if (!laneSize) return false
-
         const axisBias = axis === 'vertical' ? 0.65 : 1
         const threshold = laneSize * APP_SETTINGS.swipeCommitRatio * axisBias
         return Math.abs(delta) >= threshold

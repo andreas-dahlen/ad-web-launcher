@@ -46,7 +46,11 @@ const laneOffset = computed(() => laneState.value?.offset ?? 0)
 const dragging = computed(() => laneState.value?.dragging ?? false)
 const lanePosition = computed(() => state.getPosition('slider', props.lane) ?? 0)
 const laneConstraints = computed(() => state.getConstraints('slider', props.lane) ?? {min:0, max:100})
-const laneSize = computed(() => state.getSize('slider', props.lane) ?? 0)
+const laneSize = computed(() => {
+  const size = state.getSize('slider', props.lane)
+  if (!size) return 0
+  return horizontal.value ? size.x : size.y
+})
 
 /* -------------------------
 Watch / ensure slider exists
