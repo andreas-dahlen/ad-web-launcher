@@ -2,16 +2,8 @@
 import { APP_SETTINGS } from "../../config/appSettings"
 
 export const utils = {
-    clamp(delta, arg2, max) {
-        // Carousel-style: only 2 args, second is laneSize
-        if (max === undefined) {
-            const laneSize = arg2
-            if (laneSize === undefined) return delta
-            return Math.max(-laneSize, Math.min(laneSize, delta))
-        }
-
-        // Generic min/max: 3 args
-        const min = arg2
+    clamp(delta, min, max) {
+        if (min === undefined || max === undefined) return delta
         return Math.max(min, Math.min(max, delta))
     },
 
@@ -33,6 +25,47 @@ export const utils = {
             y: clamped.y - position.y
         }
     },
+
+    resolveDelta1D(delta, axis, swipeType) {
+        if (!delta) return delta
+        if (swipeType === 'drag') {
+            return delta // keep {x,y}
+        }
+        if (swipeType === 'carousel' || swipeType === 'slider') {
+            if (axis === 'horizontal') return delta.x
+            if (axis === 'vertical') return delta.y
+        }
+        return delta
+    },
+
+    resolveGateDelta(delta, axis, swipeType) {
+        if (!delta) return delta
+        if (swipeType === 'drag') {
+            return delta // keep {x,y}
+        }
+        if (swipeType === 'carousel' || swipeType === 'slider') {
+            if (axis === 'horizontal') return delta.y
+            if (axis === 'vertical') return delta.x
+        }
+        return delta
+    },
+
+    resolveSize(laneSize, axis) {
+        if (!axis || !laneSize) return laneSize
+        if (axis === 'horizontal') {
+            return {
+                primSize: laneSize.x,
+                gateSize: laneSize.y
+            }
+        }
+        if (axis === 'vertical') {
+            return {
+                primSize: laneSize.y,
+                gateSize: laneSize.x
+            }
+        }
+    },
+
     resolveDirection(delta, axis) {
         // 1D axis-based
         if (axis) {

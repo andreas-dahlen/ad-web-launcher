@@ -23,18 +23,11 @@ export const utils = {
 
     normalizedDelta(delta) {
         if (!delta) return 0
-
-        if (typeof delta === 'object') {
-            return {
-                x: 'x' in delta ? normalizeSwipeDelta(delta.x) : 0,
-                y: 'y' in delta ? normalizeSwipeDelta(delta.y) : 0
-            }
+        return {
+            x: 'x' in delta ? normalizeSwipeDelta(delta.x) : 0,
+            y: 'y' in delta ? normalizeSwipeDelta(delta.y) : 0
         }
 
-        if (typeof delta === 'number') return normalizeSwipeDelta(delta)
-
-        // anything else → force 0
-        return 0
     },
 
     /**

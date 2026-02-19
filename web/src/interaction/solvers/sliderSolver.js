@@ -29,24 +29,43 @@ export const sliderSolver = {
      * Handle swipe (drag) - clamp delta so thumb stays within [min, max] visually
      */
     swipe(desc) {
-      // const { delta, laneSize, min = 0, max = 100, value = 0 } = desc
-      const { delta, laneSize, position = { x: 0, y: 0 }, constraints = { min: 0, max: 100 } } = desc
+      const { delta, 
+        laneSize, 
+        position = { x: 0, y: 0 }, 
+        constraints = { min: 0, max: 100 },
+        axis,
+        swipeType
+      } = desc
       const { min, max } = constraints
+      const range = max - min
 
       if (!laneSize || !range) {
         return {stateAccepted: true }
       }
-        const axisKey = desc.lockedAxis === 'horizontal' ? 'x' : 'y'
-        const constraintKey = desc.lockedAxis === 'horizontal' ? 'y' : 'x'
-        // const lockedDelta = axisKey === 'x' ? delta.x : delta.y
-        // const clampDelta = axisKey === 'x' ? delta.y : delta.x
+      console.log('laneSize:', laneSize)
+      const {primSize, gateSize} = utils.resolveSize(laneSize, axis)
+      const gateDelta = utils.resolveGateDelta(delta, axis, swipeType)
+      console.log('primSize:', primSize)
+      console.log('gateSize:', gateSize)
 
-      const range = max - min
+
+      console.log('delta: ', delta)
+      const primaryDelta = utils.resolveDelta1D(delta, axis, swipeType)
+      if (gateSize != null && Math.abs(gateDelta) > gateSize) {
+        return {stateAccepted: false}
+      }
+      console.log('primDelta: ', primaryDelta)
+
+      console.log('gateDelta:', gateDelta)
+
+      console.log('position', position)
       // Calculate valid pixel offset range based on current position
-      const maxOffset = ((max - position[axisKey]) / range) * laneSize
-      const minOffset = ((min - position[axisKey]) / range) * laneSize
-      const newDelta = utils.clamp(delta[axisKey], minOffset, maxOffset)
+      const maxOffset = ((max - position) / range) * primSize
+      const minOffset = ((min - position) / range) * primSize
+      console.log('minOffset:', minOffset)
+      const newDelta = utils.clamp(primaryDelta, minOffset, maxOffset)
 
+      console.log(newDelta)
       return {delta: newDelta, stateAccepted: true }
     },
 

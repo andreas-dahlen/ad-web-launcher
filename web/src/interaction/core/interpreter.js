@@ -81,7 +81,7 @@ function onMove(x, y) {
             return {
                 ...state.targetInfo,
                 type: 'swipeStart',
-                delta: utils.resolveDelta({ x, y }, state.lockedAxis, state.targetInfo.swipeType),
+                delta: {x: x, y: y },
                 extra: cancel
             }
         }
@@ -94,7 +94,6 @@ function onMove(x, y) {
 
         state.totalDelta.x += deltaX
         state.totalDelta.y += deltaY
-        const resolvedDelta = utils.resolveDelta(state.totalDelta, state.lockedAxis, state.targetInfo.swipeType)
 
         state.last.x = x
         state.last.y = y
@@ -102,7 +101,7 @@ function onMove(x, y) {
         return {
             ...state.targetInfo,
             type: 'swipe',
-            delta: utils.normalizedDelta(resolvedDelta),
+            delta: utils.normalizedDelta(state.totalDelta),
         }
     }
     return null
@@ -115,11 +114,10 @@ function onUp(x, y) {
         return null
     }
     if (state.phase === 'SWIPING') {
-        const resolvedDelta = utils.resolveDelta(state.totalDelta, state.lockedAxis, state.targetInfo.swipeType)
         return {
             ...state.targetInfo,
             type: 'swipeCommit',
-            delta: utils.normalizedDelta(resolvedDelta),
+            delta: utils.normalizedDelta(state.totalDelta),
         }
     }
     else if (state.phase === 'PENDING') {

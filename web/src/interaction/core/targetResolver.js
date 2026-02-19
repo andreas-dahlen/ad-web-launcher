@@ -15,7 +15,7 @@ export const targetResolver = {
     const laneValid = laneId && axis && swipeType
 
     const reactions = this.buildReactions(ds, laneValid)
-
+    console.log('position: ', state.getPosition(swipeType, laneId))
     return {
       element: el,
       laneId: laneValid ? laneId : null,

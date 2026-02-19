@@ -24,8 +24,10 @@ export const carouselSolver = {
    * Handle swipe (drag) - clamp delta and return offset reaction
    */
   swipe(desc) {
-    const { delta, laneSize } = desc
-    const clampedDelta = utils.clamp(delta, laneSize)
+    const { delta, laneSize, axis, swipeType } = desc
+    const lockedDelta = utils.resolveDelta1D(delta, axis, swipeType)
+    const primarySize = utils.resolveSize(laneSize)
+    const clampedDelta = utils.clamp(lockedDelta, primarySize)
 
     return { 
       delta: clampedDelta,
@@ -36,11 +38,13 @@ export const carouselSolver = {
    * Handle swipeCommit - decide commit vs revert
    */
   swipeCommit(desc) {
-    const { delta, axis, laneSize } = desc
-    const clampedDelta = utils.clamp(delta, laneSize)
-    if (utils.shouldCommit(clampedDelta, laneSize, axis)) {
+    const { swipeType, delta, axis, laneSize } = desc
+        const primarySize = utils.resolveSize(laneSize)
+        const lockedDelta = utils.resolveDelta1D(delta, axis, swipeType)
+    const clampedDelta = utils.clamp(lockedDelta, primarySize)
+    if (utils.shouldCommit(clampedDelta, primarySize, axis)) {
       const direction = utils.resolveDirection(clampedDelta, axis)
-      const targetOffset = utils.getCommitOffset(direction, laneSize)
+      const targetOffset = utils.getCommitOffset(direction, primarySize)
 
       return { 
         direction: direction,

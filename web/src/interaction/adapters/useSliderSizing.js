@@ -30,7 +30,11 @@ export function useSliderSizing({
 
     laneSize.value = usableSize
 
-    state.setSize(swipeType, laneId.value, usableSize)
+    const size =  horizontal
+    ? { x: usableSize, y: thumbSize }
+    : { x: thumbSize, y: usableSize }
+
+    state.setSize(swipeType, laneId.value, size)
   }
 
   onMounted(() => {
