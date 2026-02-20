@@ -75,7 +75,6 @@ function onMove(x, y) {
                     delta: { x: x, y: y }
                 }
             }
-
             state.phase = 'SWIPING'
             state.targetInfo = resolved.targetInfo
             return {

@@ -36,12 +36,12 @@ buildBase(ctx) {
 buildSwipe(ctx) {
   if (!ctx.laneValid) return {}
   const { laneId, swipeType } = ctx
+
   return {
     //ALL
     laneSize: state.getSize(swipeType, laneId),//{x, y}
     //CAROUSEL
-    // carouselStartOffset: swipeType === 'carousel'
-    //     ? state.getStartOffset(swipeType, laneId) : null,//number
+    carouselStartOffset: null, //number
     // //SLIDER
     sliderPosition: swipeType === 'slider'
         ? state.getPosition(swipeType, laneId) : null, //{x, y}
