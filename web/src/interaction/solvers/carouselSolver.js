@@ -9,8 +9,8 @@
  * - Does NOT mutate state directly
  * - Does NOT access DOM
  */
-
 import { utils } from './solverUtils'
+import { vector } from './vectorUtils'
 
 export const carouselSolver = {
   /**
@@ -24,30 +24,18 @@ export const carouselSolver = {
    * Handle swipe (drag) - clamp delta and return offset reaction
    */
   swipe(desc) {
-    const { delta, laneSize, axis, swipeType, carouselStartOffset } = desc
-    console.log('carouselStartOffset: ', carouselStartOffset)
-    const { primSize, gateSize } = utils.resolveSize(laneSize, axis)
+    const { delta, laneSize, axis, swipeType, startOffset } = desc
+    const { primSize, gateSize } = vector.resolveSize(laneSize, axis)
 
-    const lockedDelta = utils.resolveDelta1D(delta, axis, swipeType)
-    const clampedDelta = utils.clamp(lockedDelta, primSize)
-
-    //these convert to x or y axis
-    const gateStart = utils.resolveGateDelta(carouselStartOffset, axis, swipeType)
-    const gateAxisDelta = utils.resolveGateDelta(delta, axis, swipeType)
-
-    const gateDelta = gateAxisDelta - gateStart
-
-    const outOfBounds = gateDelta < 0 || gateDelta > gateSize
-
+    const gateStart1D = vector.resolveGateDelta1D(startOffset, axis, swipeType)
+    const gateDelta1D = vector.resolveGateDelta1D(delta, axis, swipeType)
+    
+    const currentPos = gateDelta1D + gateStart1D
+    const outOfBounds = currentPos < 0 || currentPos > gateSize
     if (outOfBounds) return { stateAccepted: false }
     
-    // const withinBounds = Math.abs(gateDelta - gateStart) <= gateSize
-    // if(!withinBounds) return { stateAccepted: false }
-
-    // console.log('laneSize: ', desc.laneSize, 'position: ', desc.position, 'constraints: ', desc.constraints)
-    // console.log('bounds is if this:', Math.abs(gateDelta - gateStart), 'is smaller or equal to this: ', gateSize, '(gateSize)')
-    // console.log('gateDelta: ', gateDelta, 'gateStart: ', gateStart)
-
+    const lockedDelta = vector.resolveDelta1D(delta, axis, swipeType)
+    const clampedDelta = vector.clamp(lockedDelta, primSize)
     return {
       delta: clampedDelta,
       stateAccepted: true
@@ -60,12 +48,12 @@ export const carouselSolver = {
   swipeCommit(desc) {
     const { swipeType, delta, axis, laneSize } = desc
 
-    const {primSize} = utils.resolveSize(laneSize, axis)
-    const lockedDelta = utils.resolveDelta1D(delta, axis, swipeType)
-    const clampedDelta = utils.clamp(lockedDelta, primSize)
+    const {primSize} = vector.resolveSize(laneSize, axis)
+    const lockedDelta = vector.resolveDelta1D(delta, axis, swipeType)
+    const clampedDelta = vector.clamp(lockedDelta, primSize)
 
     if (utils.shouldCommit(clampedDelta, primSize, axis)) {
-      const direction = utils.resolveDirection(clampedDelta, axis)
+      const direction = vector.resolveDirection(clampedDelta, axis)
       const targetOffset = utils.getCommitOffset(direction, primSize)
       return {
         direction: direction,

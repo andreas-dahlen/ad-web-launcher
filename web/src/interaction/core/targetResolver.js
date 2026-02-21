@@ -29,7 +29,8 @@ buildBase(ctx) {
     laneId: ctx.laneValid ? ctx.laneId : null,
     axis: ctx.laneValid ? ctx.axis : null,
     swipeType: ctx.laneValid ? ctx.swipeType : null,
-    actionId: ctx.ds.action || null
+    actionId: ctx.ds.action || null,
+    startOffset: null
   }
 },
 
@@ -40,8 +41,6 @@ buildSwipe(ctx) {
   return {
     //ALL
     laneSize: state.getSize(swipeType, laneId),//{x, y}
-    //CAROUSEL
-    carouselStartOffset: null, //number
     // //SLIDER
     sliderPosition: swipeType === 'slider'
         ? state.getPosition(swipeType, laneId) : null, //{x, y}

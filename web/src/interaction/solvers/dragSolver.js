@@ -21,7 +21,7 @@
 //   clampCommitPosition
 // } from './policy/dragPolicy'
 
-import { utils } from './solverUtils'
+import { vector } from "./vectorUtils"
 
 export const dragSolver = {
   /**
@@ -36,7 +36,7 @@ export const dragSolver = {
    */
   swipe(desc) {
     const {delta, dragPosition = { x: 0, y: 0 }, dragConstraints = { min: 0, max: 100 } } = desc
-    const clamped = utils.relativeClamp2D(delta, dragPosition, dragConstraints)
+    const clamped = vector.relativeClamp2D(delta, dragPosition, dragConstraints)
     const dx = clamped.x
     const dy = clamped.y
     return { 
@@ -49,10 +49,10 @@ export const dragSolver = {
    */
   swipeCommit(desc) {
     const { delta,  dragPosition = { x: 0, y: 0 }, dragConstraints = { min: 0, max: 100 } } = desc
-    const finalPos = utils.clamp2D(delta, dragPosition, dragConstraints)
+    const finalPos = vector.clamp2D(delta, dragPosition, dragConstraints)
     const {x: fx, y: fy} = finalPos
     const {x: px, y: py} = dragPosition
-    const direction = utils.resolveDirection({x:fx - px, y:fy - py})
+    const direction = vector.resolveDirection({x:fx - px, y:fy - py})
     return {
       direction: direction,
       delta: { x: fx, y: fy },

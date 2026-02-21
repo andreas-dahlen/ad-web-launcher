@@ -3,22 +3,10 @@ import { APP_SETTINGS } from '../../config/appSettings'
 import { targetResolver } from "./targetResolver"
 
 export const utils = {
-    //gesturePolicy.js
+    //intentUtils.js
 
     resolveSupports(type, target) {
         return !!target?.reactions?.[type]
-    },
-
-    resolveDelta(delta, axis, swipeType) {
-        if (!delta) return delta
-        if (swipeType === 'drag') {
-            return delta // keep {x,y}
-        }
-        if (swipeType === 'carousel' || swipeType === 'slider') {
-            if (axis === 'horizontal') return delta.x
-            if (axis === 'vertical') return delta.y
-        }
-        return delta
     },
 
     normalizedDelta(delta) {
@@ -27,7 +15,6 @@ export const utils = {
             x: 'x' in delta ? normalizeSwipeDelta(delta.x) : 0,
             y: 'y' in delta ? normalizeSwipeDelta(delta.y) : 0
         }
-
     },
 
     /**
@@ -85,5 +72,19 @@ export const utils = {
             }
         }
         return null
+    },
+    resolveStartOffset(x, y, element) {
+        const rect = element.getBoundingClientRect()
+
+        // console.log('client:', x, y)
+        // console.log('rect:', rect.left, rect.top)
+            // const normalized = this.normalizedDelta({x, y})
+
+            // const normRectLeft = normalizeSwipeDelta(rect.left)
+            // const normRectTop = normalizeSwipeDelta(rect.top)
+            return {
+            x: x - rect.left,
+            y: y - rect.top
+        }
     }
 }

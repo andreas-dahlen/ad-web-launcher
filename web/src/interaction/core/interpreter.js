@@ -77,6 +77,7 @@ function onMove(x, y) {
             }
             state.phase = 'SWIPING'
             state.targetInfo = resolved.targetInfo
+            state.targetInfo.startOffset = utils.resolveStartOffset(x, y, state.targetInfo.element)
             return {
                 ...state.targetInfo,
                 type: 'swipeStart',
