@@ -68,20 +68,13 @@ export const utils = {
             return {
                 targetInfo: newTarget,
                 pressCancel: this.resolveSupports('pressCancel', target),
-                lockedAxis: newTarget.axis
             }
         }
         return null
     },
     resolveStartOffset(x, y, element) {
+        //static start poisition inside of element at x, y
         const rect = element.getBoundingClientRect()
-
-        // console.log('client:', x, y)
-        // console.log('rect:', rect.left, rect.top)
-            // const normalized = this.normalizedDelta({x, y})
-
-            // const normRectLeft = normalizeSwipeDelta(rect.left)
-            // const normRectTop = normalizeSwipeDelta(rect.top)
             return {
             x: x - rect.left,
             y: y - rect.top

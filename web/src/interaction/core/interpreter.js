@@ -9,8 +9,7 @@ Converts raw pointer events into semantic intents:
 press, swipeStart, swipe, swipeCommit, pressRelease.
 
 Delta semantics:
-- press / release: raw {x,y}
-- swipeStart: raw, axis-resolved
+- press / release / swipeStart: raw {x,y}
 - swipe / commit: normalized totalDelta
 */
 
@@ -20,8 +19,7 @@ const state = {
     start: { x: 0, y: 0 },    // initial pointer down
     last: { x: 0, y: 0 },     // last pointer position
     totalDelta: { x: 0, y: 0 }, // accumulated delta
-    targetInfo: null,
-    lockedAxis: 'both'
+    targetInfo: null, // targetResolvers descriptor
 }
 
 export const interpreter = {
@@ -40,7 +38,7 @@ function onDown(x, y) {
     state.last.y = y
     state.totalDelta.x = 0
     state.totalDelta.y = 0
-    //element is already resolved.. should only check if supported
+
     state.targetInfo = utils.resolveTarget(x, y)
     if (utils.resolveSupports('press', state.targetInfo)) {
         return {
@@ -55,7 +53,6 @@ function onDown(x, y) {
 function onMove(x, y) {
     if (state.phase === 'IDLE') return null
     drawDots(x, y, 'yellow')
-
     // Compute deltas
     const absX = Math.abs(x - state.start.x)
     const absY = Math.abs(y - state.start.y)
@@ -67,7 +64,6 @@ function onMove(x, y) {
         const resolved = utils.resolveSwipeTarget(x, y, intentAxis, state.targetInfo)
         if (resolved) {
             let cancel = null
-            state.lockedAxis = resolved.lockedAxis
             if (resolved.pressCancel) {
                 cancel = {
                     ...state.targetInfo,
@@ -141,5 +137,4 @@ function resetGesture() {
     state.totalDelta.x = 0
     state.totalDelta.y = 0
     state.targetInfo = null
-    state.lockedAxis = 'both'
 }

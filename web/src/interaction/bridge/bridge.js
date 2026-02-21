@@ -1,7 +1,7 @@
 // bridge.js
 
 import { onMounted, onBeforeUnmount } from 'vue'
-import { pipeline } from '../core/pipeline' // assuming pipeline is exported
+import { pipeline } from '../core/pipeline'
 
 export function usePointerForwarding({ elRef, onReaction }) {
   let isActive = false

@@ -1,94 +1,77 @@
 
 import { APP_SETTINGS } from "../../config/appSettings"
+import { vector } from "./vectorUtils"
 
 export const utils = {
-    // clamp(delta, min, max) {
-    //     if (min === undefined || max === undefined) return delta
-    //     return Math.max(min, Math.min(max, delta))
-    // },
+    /* -------------------------
+        noramlize
+    -------------------------- */
+    normalize1D(desc) {
+        const { delta, laneSize, axis, startOffset } = desc
+        const { primSize, gateSize } = vector.resolveSize(laneSize, axis)
+        const gateStart = vector.resolveGateDelta1D(startOffset, axis)
+        const gateDelta = vector.resolveGateDelta1D(delta, axis)
+        const primDelta = vector.resolveDelta1D(delta, axis)
+        return { primSize, gateSize, gateStart, gateDelta, primDelta }
+    },
+    /* -------------------------
+        generic
+    -------------------------- */
+    resolveGate(norm) {
+        const { gateSize, gateStart, gateDelta } = norm
+        const currentPos = gateDelta + gateStart
+        return currentPos < 0 || currentPos > gateSize
+    },
+    /* -------------------------
+        slider-specifics
+    -------------------------- */
+    resolveSliderSwipe(norm, sliderConstraints, sliderPosition) {
+        const { primSize, primDelta } = norm
 
-    // clamp2D(delta, position, constraints) {
-    //     const { x: dx, y: dy } = delta
-    //     const { x: px, y: py } = position
-    //     const { minX, maxX, minY, maxY } = constraints
+        const { min, max } = sliderConstraints
+        const range = max - min
 
-    //     return {
-    //         x: this.clamp(px + dx, minX, maxX),
-    //         y: this.clamp(py + dy, minY, maxY)
-    //     }
-    // },
-    // relativeClamp2D(delta, position, constraints) {
-    //     const clamped = this.clamp2D(delta, position, constraints)
+        // Calculate valid pixel offset range based on current position
+        const maxOffset = ((max - sliderPosition) / range) * primSize
+        const minOffset = ((min - sliderPosition) / range) * primSize
+        const newDelta = vector.clamp(primDelta, minOffset, maxOffset)
 
-    //     return {
-    //         x: clamped.x - position.x,
-    //         y: clamped.y - position.y
-    //     }
-    // },
+        return newDelta
+    },
 
-    // resolveDelta1D(delta, axis, swipeType) {
-    //     if (!delta) return delta
-    //     if (swipeType === 'drag') {
-    //         return delta // keep {x,y}
-    //     }
-    //     if (swipeType === 'carousel' || swipeType === 'slider') {
-    //         if (axis === 'horizontal') return delta.x
-    //         if (axis === 'vertical') return delta.y
-    //     }
-    //     return delta
-    // },
+    resolveSliderCommit(norm, sliderConstraints, sliderPosition) {
+        const { primSize, primDelta } = norm
 
-    // resolveGateDelta1D(delta, axis, swipeType) {
-    //     if (!delta) return delta
-    //     if (swipeType === 'drag') {
-    //         return delta // keep {x,y}
-    //     }
-    //     if (swipeType === 'carousel' || swipeType === 'slider') {
-    //         if (axis === 'horizontal') return delta.y
-    //         if (axis === 'vertical') return delta.x
-    //     }
-    //     return delta
-    // },
+        const { min, max } = sliderConstraints
+        const range = max - min
 
-    // resolveSize(laneSize, axis) {
-    //     if (!axis || !laneSize) return laneSize
-    //     if (axis === 'horizontal') {
-    //         return {
-    //             primSize: laneSize.x,
-    //             gateSize: laneSize.y
-    //         }
-    //     }
-    //     if (axis === 'vertical') {
-    //         return {
-    //             primSize: laneSize.y,
-    //             gateSize: laneSize.x
-    //         }
-    //     }
-    // },
+        // Convert pixel delta → logical delta
+        const deltaLogical = (primDelta / primSize) * range
+        const unclamped = sliderPosition + deltaLogical
+        const finalValue = vector.clamp(unclamped, min, max)
 
-    // resolveDirection(delta, axis) {
-    //     // 1D axis-based
-    //     if (axis) {
-    //         if (!delta) return null
-    //         return axis === 'horizontal'
-    //             ? (delta > 0 ? 'right' : 'left')
-    //             : (delta > 0 ? 'down' : 'up')
-    //     }
+        return finalValue
+    },
+    /* -------------------------
+        carousel-specifics
+    -------------------------- */
+    resolveCarouselCommit(norm, axis) {
+        const { primSize, primDelta } = norm
+        if (this.shouldCommit(primDelta, primSize, axis)) {
+            const direction = vector.resolveDirection(primDelta, axis)
+            const delta = this.getCommitOffset(direction, primSize)
+            return {direction, delta}
+        }
+        return null
+    },
 
-    //     // 2D dominant axis
-    //     const { x, y } = delta
-    //     if (x === 0 && y === 0) return null
-    //     return Math.abs(x) >= Math.abs(y)
-    //         ? (x > 0 ? 'right' : 'left')
-    //         : (y > 0 ? 'down' : 'up')
-    // },
-    //carousel-specific-helpers
     getCommitOffset(direction, laneSize) {
         if (!laneSize) return 0
         if (direction === 'right' || direction === 'down') return laneSize
         if (direction === 'left' || direction === 'up') return -laneSize
         return 0
     },
+
     shouldCommit(delta, laneSize, axis) {
         if (!laneSize) return false
         const axisBias = axis === 'vertical' ? 0.65 : 1
