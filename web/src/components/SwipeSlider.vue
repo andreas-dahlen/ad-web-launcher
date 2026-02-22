@@ -1,20 +1,14 @@
 <template>
-  <div
-    ref="sliderEl"
-    v-bind="$attrs"
-    class="slider-container"
-    :data-lane="lane"
-    :data-axis="axis"
-    data-swipe-type="slider"
-    :data-press="true"
-    :data-react-swipe="reactSwipe ? true : null"
-    :data-react-swipe-start="reactSwipeStart ? true : null"
-  >
+  <div ref="sliderEl" 
+  v-bind="$attrs" class="slider-container" 
+  :data-lane="lane" 
+  :data-axis="axis"
+  data-swipe-type="slider" 
+  :data-react-swipe="reactSwipe ? true : null"
+  :data-react-swipe-start="reactSwipeStart ? true : null">
     <div class="slider-track"></div>
-    <div class="slider-thumb" :style="thumbStyle">
-      <div ref="thumbEl" :class="['thumb-inner', axis]">
-        <slot />
-      </div>
+    <div ref="thumbEl" class="thumbEl" :style="thumbStyle">
+      <slot />
     </div>
   </div>
 </template>
@@ -51,7 +45,7 @@ const laneState = computed(() => state.get('slider', props.lane))
 const laneOffset = computed(() => laneState.value?.offset ?? 0)
 const dragging = computed(() => laneState.value?.dragging ?? false)
 const lanePosition = computed(() => state.getPosition('slider', props.lane) ?? 0)
-const laneConstraints = computed(() => state.getConstraints('slider', props.lane) ?? {min:0, max:100})
+const laneConstraints = computed(() => state.getConstraints('slider', props.lane) ?? { min: 0, max: 100 })
 const laneSize = computed(() => {
   const size = state.getSize('slider', props.lane)
   if (!size) return 0
@@ -93,7 +87,7 @@ function handleReaction(e) {
 -------------------------- */
 const thumbStyle = computed(() => {
   // Map value to position
-  const {min, max } = laneConstraints.value
+  const { min, max } = laneConstraints.value
   const value = lanePosition.value
 
   const range = max - min || 1
@@ -112,29 +106,31 @@ const thumbStyle = computed(() => {
 </script>
 
 <style scoped>
-.thumb-inner {
-  display: flex;
-  width: auto;
-  height: auto;
-}
-
-.thumb-inner.horizontal {
+/* .thumb-inner.horizontal {
   justify-content: center;
   align-items: flex-start;
-}
-
-.thumb-inner.vertical {
+  }
+  
+  .thumb-inner.vertical {
   justify-content: flex-start;
   align-items: center;
-}
+} */
 
 .slider-container {
   position: relative;
-  width: 100%;
-  height: 100%;
+  /* width: 100%;
+  height: 100%; */
   background: #eee;
   overflow: hidden;
   touch-action: none;
+}
+.slider-container[data-axis="horizontal"] {
+  display: flex;
+  align-items: center;
+}
+.slider-container[data-axis="vertical"] {
+  display: flex;
+  justify-content: center;
 }
 
 .slider-track {
@@ -145,23 +141,27 @@ const thumbStyle = computed(() => {
 .slider-container[data-axis="horizontal"] .slider-track {
   inset: 40% 5%;
 }
-
 .slider-container[data-axis="vertical"] .slider-track {
   inset: 5% 40%;
 }
 
-.slider-thumb {
+.thumbEl {
   position: absolute;
-  width: 100%;
-  height: 100%;
-  display: flex;
+  top: 0;
+  left: 0;
+  /* width: 100%;
+  height: 100%; */
+  /* display: flex; */
+  will-change: transform;
 }
 
-.slider-container[data-axis="horizontal"] .slider-thumb {
+/* .slider-container[data-axis="horizontal"] .slider-thumb {
+  height: 100%;
   align-items: center;
 }
 
 .slider-container[data-axis="vertical"] .slider-thumb {
+  width: 100%;
   justify-content: center;
-}
+} */
 </style>

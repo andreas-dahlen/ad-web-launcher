@@ -4,7 +4,8 @@
       class="swipe-slider"
       lane="slider2"
       axis="vertical"
-      :reactSwipeCommit="true"
+      :reactSwipeStart="true"
+      :reactSwipe="true"
     >
       <div class="slider-content">Slide Me!</div>
     </SwipeSlider>
@@ -31,14 +32,11 @@ defineOptions({ name: 'bottomB' })
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 40%;
+  height: 100%;
   width: 90%;
   color: white;
   font-weight: bold;
-}
-
-.slider-content {
-  background: #4285f4;
+    background: #4285f4;
   border-radius: 10px;
 }
 </style>

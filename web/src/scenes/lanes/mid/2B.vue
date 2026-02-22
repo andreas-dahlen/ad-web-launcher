@@ -4,7 +4,8 @@
       class="swipe-slider"
       lane="slider1"
       axis="horizontal"
-      :reactSwipeCommit="true"
+      :reactSwipeStart="true"
+      :reactSwipe="true"
     >
       <div class="slider-content">Slide Me!</div>
     </SwipeSlider>
@@ -31,8 +32,8 @@ defineOptions({ name: 'MidB' })
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 90%;
-  width: 40%;
+  /* height: 100%; */
+  /* width: 40%; */
   color: white;
   font-weight: bold;
     border-radius: 10px;
