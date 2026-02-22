@@ -6,11 +6,15 @@
     :data-lane="lane"
     :data-axis="axis"
     data-swipe-type="slider"
-    :data-react-swipe-commit="reactSwipeCommit ? true : null"
+    :data-press="true"
+    :data-react-swipe="reactSwipe ? true : null"
+    :data-react-swipe-start="reactSwipeStart ? true : null"
   >
     <div class="slider-track"></div>
     <div class="slider-thumb" :style="thumbStyle">
-      <slot />
+      <div ref="thumbEl" :class="['thumb-inner', axis]">
+        <slot />
+      </div>
     </div>
   </div>
 </template>
@@ -21,20 +25,22 @@ import { state } from '../interaction/state/stateManager'
 import { useSliderSizing } from '../interaction/adapters/useSliderSizing'
 import { usePointerForwarding } from '../interaction/bridge/bridge'
 
-const emit = defineEmits(['swipeCommit'])
+const emit = defineEmits(['swipe'])
 
 defineOptions({ name: 'SwipeSlider' })
 
 const props = defineProps({
   lane: { type: String, required: true },
   axis: { type: String, default: 'horizontal' },
-  reactSwipeCommit: { type: Boolean, default: false },
+  reactSwipe: { type: Boolean, default: false },
+  reactSwipeStart: { type: Boolean, default: false },
 })
 
 /* -------------------------
    Refs / basics
 -------------------------- */
 const sliderEl = ref(null)
+const thumbEl = ref(null)
 
 const horizontal = computed(() => props.axis === 'horizontal')
 
@@ -61,7 +67,8 @@ watchEffect(() => state.ensure('slider', props.lane))
 -------------------------- */
 useSliderSizing({
   elRef: sliderEl,
-axisRef: computed(() => props.axis),
+  thumbRef: thumbEl,
+  // axisRef: computed(() => props.axis),
   swipeType: 'slider',
   laneId: computed(() => props.lane)
 })
@@ -76,9 +83,10 @@ usePointerForwarding({
 Reaction handling
 -------------------------- */
 function handleReaction(e) {
-  if (!props.reactSwipeCommit) return
-  if (e.detail?.type !== 'swipeCommit') return
-  emit('swipeCommit', e.detail)
+  const type = e.detail?.type
+  if (!type) return
+  if (type === 'swipe' && props.reactSwipe) { emit('volumeChange', e.detail) }
+  if (type === 'swipeStart' && props.reactSwipeStart) { emit('volumeChange', e.detail) }
 }
 /* -------------------------
    Computed thumb style
@@ -104,6 +112,22 @@ const thumbStyle = computed(() => {
 </script>
 
 <style scoped>
+.thumb-inner {
+  display: flex;
+  width: auto;
+  height: auto;
+}
+
+.thumb-inner.horizontal {
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.thumb-inner.vertical {
+  justify-content: flex-start;
+  align-items: center;
+}
+
 .slider-container {
   position: relative;
   width: 100%;

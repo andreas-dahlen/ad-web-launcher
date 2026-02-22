@@ -28,6 +28,11 @@ export const sliderStateFn = {
   getSize(laneId) {
     return sliderState.sliders[laneId]?.size ?? 0
   },
+
+  getThumbSize(laneId) {
+    return sliderState.sliders[laneId]?.thumbSize ?? 0
+  },
+
   getConstraints(laneId) {
     return {
       min: sliderState.sliders[laneId]?.min ?? 0,
@@ -62,6 +67,9 @@ export const sliderStateFn = {
   setSize(laneId, size) {
     this.ensure(laneId).size = size
   },
+
+  setThumbSize(laneId, thumbSize) {
+    this.ensure(laneId).thumbSize = thumbSize },
   /* -------------------------------------------------
      Dispatcher Actions (single choke point for mutations)
      
@@ -75,6 +83,7 @@ export const sliderStateFn = {
   swipeStart(desc) {
     const slider = this.ensure(desc.laneId)
     slider.dragging = true
+    slider.value = desc.delta
   },
   /**
    * Apply offset during drag - called by dispatcher on slider:swipe

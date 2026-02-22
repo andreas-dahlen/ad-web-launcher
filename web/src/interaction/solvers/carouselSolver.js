@@ -26,7 +26,7 @@ export const carouselSolver = {
     const norm = utils.normalize1D(desc)
     const gated = utils.resolveGate(norm)
     if (gated) return {stateAccepted: false }
-    return { delta: norm.primDelta, stateAccepted: true }
+    return { delta: norm.mainDelta, stateAccepted: true }
   },
 
   /**

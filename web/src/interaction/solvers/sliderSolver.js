@@ -17,11 +17,17 @@
 import { utils } from "./solverUtils"
 
 export const sliderSolver = {
+
   /**
    * Handle swipeStart - returns reaction to enable dragging
    */
-  swipeStart() {
-    return { stateAccepted: true }
+
+  swipeStart(desc) {
+    const norm = utils.normalize1D(desc)
+    const resolvedDelta = 
+    utils.resolveSliderStart(norm, desc.sliderConstraints)
+    // console.log('SWIPESTART: ', resolvedDelta)
+    return { delta: resolvedDelta, stateAccepted: true}
   },
 
   /**
@@ -33,7 +39,8 @@ export const sliderSolver = {
     const gated = utils.resolveGate(norm)
     if (gated) return {stateAccepted: false }
     const resolvedDelta = 
-    utils.resolveSliderSwipe(norm, desc.sliderConstraints, desc.sliderPosition)
+    utils.resolveSliderSwipe(norm, desc.sliderConstraints)
+    // console.log('SWIPE: ', resolvedDelta)
     return { delta: resolvedDelta, stateAccepted: true }
   },
 
@@ -48,7 +55,8 @@ export const sliderSolver = {
     if (gated) return {stateAccepted: false }
 
     const resolvedDelta = 
-    utils.resolveSliderCommit(norm, desc.sliderConstraints, desc.sliderPosition)
+    utils.resolveSliderCommit(norm, desc.sliderConstraints)
+    // console.log('SWIPECOMMIT: ',resolvedDelta)
     return { delta: resolvedDelta, stateAccepted: true }
   },
 

@@ -2,66 +2,68 @@ import { state } from '../state/stateManager'
 
 export const targetResolver = {
   resolveFromElement(el) {
-  if (!el) return null
+    if (!el) return null
 
-  const ctx = this.buildContext(el)
-  if (!ctx) return null
+    const ctx = this.buildContext(el)
+    if (!ctx) return null
 
-  return {
-    ...this.buildBase(ctx),
-    ...this.buildSwipe(ctx),
-    reactions: this.buildReactions(ctx.ds, ctx.laneValid)
-  }
-},
+    return {
+      ...this.buildBase(ctx),
+      ...this.buildSwipe(ctx),
+      reactions: this.buildReactions(ctx.ds, ctx.laneValid)
+    }
+  },
 
-buildContext(el) {
-  const ds = el.dataset || {}
-  const laneId = ds.lane || null
-  const axis = ds.axis || null
-  const swipeType = ds.swipeType || null
-  const laneValid = Boolean(laneId && axis && swipeType)
-  return { el, ds, laneId, axis, swipeType, laneValid }
-},
+  buildContext(el) {
+    const ds = el.dataset || {}
+    const laneId = ds.lane || null
+    const axis = ds.axis || null
+    const swipeType = ds.swipeType || null
+    const laneValid = Boolean(laneId && axis && swipeType)
+    return { el, ds, laneId, axis, swipeType, laneValid }
+  },
 
-buildBase(ctx) {
-  return {
-    element: ctx.el,
-    laneId: ctx.laneValid ? ctx.laneId : null,
-    axis: ctx.laneValid ? ctx.axis : null,
-    swipeType: ctx.laneValid ? ctx.swipeType : null,
-    actionId: ctx.ds.action || null,
-    startOffset: null
-  }
-},
+  buildBase(ctx) {
+    return {
+      element: ctx.el,
+      laneId: ctx.laneValid ? ctx.laneId : null,
+      axis: ctx.laneValid ? ctx.axis : null,
+      swipeType: ctx.laneValid ? ctx.swipeType : null,
+      actionId: ctx.ds.action || null,
+      startOffset: null
+    }
+  },
 
-buildSwipe(ctx) {
-  if (!ctx.laneValid) return {}
-  const { laneId, swipeType } = ctx
+  buildSwipe(ctx) {
+    if (!ctx.laneValid) return {}
+    const { laneId, swipeType } = ctx
 
-  return {
-    //ALL
-    laneSize: state.getSize(swipeType, laneId),//{x, y}
-    // //SLIDER
-    sliderPosition: swipeType === 'slider'
-        ? state.getPosition(swipeType, laneId) : null, //{x, y}
-    sliderConstraints: swipeType === 'slider'
+    return {
+      //ALL
+      laneSize: state.getSize(swipeType, laneId),//{x, y}
+      // //SLIDER
+      sliderThumbSize: swipeType === 'slider'
+        ? state.getThumbSize(swipeType, laneId) : null,
+      // sliderPosition: swipeType === 'slider'
+      //   ? state.getPosition(swipeType, laneId) : null, //number
+      sliderConstraints: swipeType === 'slider'
         ? state.getConstraints(swipeType, laneId) : null,//{min, max}
-    //DRAG
-    dragPosition: swipeType === 'drag'
+      //DRAG
+      dragPosition: swipeType === 'drag'
         ? state.getPosition(swipeType, laneId) : null,//{x, y}
-    dragConstraints: swipeType === 'drag'
+      dragConstraints: swipeType === 'drag'
         ? state.getConstraints(swipeType, laneId) : null//{minX, maxX, minY, maxY}
-  }
-},
+    }
+  },
   // resolveFromElement(el) {
   //   if (!el) return null
   //   const ds = el.dataset || {}
-    
+
   //   const laneId = ds.lane || null
   //   const axis = ds.axis || null
   //   const swipeType = ds.swipeType || null
   //   const actionId = ds.action || null
-    
+
   //   const laneValid = laneId && axis && swipeType
 
   //   const reactions = this.buildReactions(ds, laneValid)

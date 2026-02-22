@@ -23,34 +23,34 @@ export const vector = {
         }
     },
 
-    resolveDelta1D(delta, axis) {
-        if (!delta || !axis) return undefined
+    // resolvePrim1D(value, axis) {
+    //     if (!value || !axis) return undefined
 
-        if (axis === 'horizontal') return delta.x
-        if (axis === 'vertical') return delta.y
-    },
+    //     if (axis === 'horizontal') return value.x
+    //     if (axis === 'vertical') return value.y
+    // },
 
-    resolveGateDelta1D(delta, axis) {
-        if (!delta || !axis) return undefined
+    // resolveSub1D(value, axis) {
+    //     if (!value || !axis) return undefined
 
-        if (axis === 'horizontal') return delta.y
-        if (axis === 'vertical') return delta.x
-    },
+    //     if (axis === 'horizontal') return value.y
+    //     if (axis === 'vertical') return value.x
+    // },
 
-    resolveSize(laneSize, axis) {
-        if (!axis || !laneSize) {
-            return { primSize: undefined, gateSize: undefined }
+    resolveByAxis1D(value, axis) {
+        if (!axis || !value) {
+            return { prim: undefined, sub: undefined }
         }
         if (axis === 'horizontal') {
             return {
-                primSize: laneSize.x,
-                gateSize: laneSize.y
+                prim: value.x,
+                sub: value.y
             }
         }
         if (axis === 'vertical') {
             return {
-                primSize: laneSize.y,
-                gateSize: laneSize.x
+                prim: value.y,
+                sub: value.x
             }
         }
     },

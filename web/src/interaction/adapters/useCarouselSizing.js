@@ -9,22 +9,18 @@ export function useLaneSizing({ elRef, axisRef, swipeType, laneId }) {
     const el = elRef.value
     if (!el) return
 
-    const horizontal = axisRef.value === 'horizontal'
-    const trackSize = horizontal
-      ? el.offsetWidth
-      : el.offsetHeight
+    const trackSize = {
+      x: el.offsetWidth,
+      y: el.offsetHeight
+    }
 
-    laneSize.value = trackSize
+    const sizeValue = axisRef.value === 'horizontal' ?
+    el.offsetWidth
+    : el.offsetHeight
 
-    const gatedSize = horizontal
-    ? el.offsetHeight
-    : el.offsetWidth
+    laneSize.value = sizeValue
 
-    const finalSize = horizontal
-      ? { x: trackSize, y: gatedSize }
-      : { x: gatedSize, y: trackSize }
-
-    state.setSize(swipeType, laneId.value, finalSize)
+    state.setSize(swipeType, laneId.value, trackSize)
   }
 
   onMounted(() => {

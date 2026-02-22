@@ -3,7 +3,8 @@
     :style="carouselStyle" 
     :data-lane="lane" 
     :data-axis="axis"
-    :data-swipe-type="'carousel'" :data-react-swipe-commit="reactSwipeCommit ? true : null">
+    :data-swipe-type="'carousel'" 
+    :data-react-swipe-commit="reactSwipeCommit ? true : null">
 
     <component 
       v-if="totalScenes > 0" 

@@ -1,4 +1,4 @@
-// dispatcher.js
+// renderer.js
 /**
  * Single choke point for applying reactions to state.
  *

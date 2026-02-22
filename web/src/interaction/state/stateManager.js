@@ -22,6 +22,7 @@ function call(type, fnName, ...args) {
 export const state = {
     // ----- METADATA READS ----- (for buildPayload.js)
     getSize(type, laneId) { return call(type, 'getSize', laneId) },
+    getThumbSize(type, laneId) { return call(type, 'getThumbSize', laneId)},
     getPosition(type, laneId) { return call(type, 'getPosition', laneId) },
     getConstraints(type, laneId) { return call(type, 'getConstraints', laneId) },
 
@@ -33,6 +34,7 @@ export const state = {
     ensure(type, laneId) { return call(type, 'ensure', laneId) },
     setCount(type, laneId, length) { return call(type, 'setCount', laneId, length) },
     setSize(type, laneId, value) { return call(type, 'setSize', laneId, value) },
+    setThumbSize(type, laneId, value) { return call(type, 'setThumbSize', laneId, value)},
     setPosition(type, laneId, position) { return call(type, 'setPosition', laneId, position) },
     setConstraints(type, laneId, constraints) { return call(type, 'setConstraints', laneId, constraints) },
 

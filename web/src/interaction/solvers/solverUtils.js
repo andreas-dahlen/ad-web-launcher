@@ -7,59 +7,87 @@ export const utils = {
         noramlize
     -------------------------- */
     normalize1D(desc) {
-        const { delta, laneSize, axis, startOffset } = desc
-        const { primSize, gateSize } = vector.resolveSize(laneSize, axis)
-        const gateStart = vector.resolveGateDelta1D(startOffset, axis)
-        const gateDelta = vector.resolveGateDelta1D(delta, axis)
-        const primDelta = vector.resolveDelta1D(delta, axis)
-        return { primSize, gateSize, gateStart, gateDelta, primDelta }
+        const { delta, laneSize, thumbSize, axis, startOffset } = desc
+        const { prim: mainTrackSize, sub: crossTrackSize } = 
+        vector.resolveByAxis1D(laneSize, axis)
+        const { prim: mainThumbSize, sub: crossThumbSize } = 
+        vector.resolveByAxis1D(thumbSize, axis)
+        const { prim: mainOffset, sub: crossOffset }  = 
+        vector.resolveByAxis1D(startOffset, axis)
+        const { prim: mainDelta, sub: crossDelta } = 
+        vector.resolveByAxis1D(delta, axis)
+        return { mainTrackSize, 
+            crossTrackSize, 
+            mainThumbSize, 
+            crossThumbSize, 
+            mainOffset, 
+            crossOffset, 
+            mainDelta, 
+            crossDelta }
     },
     /* -------------------------
         generic
     -------------------------- */
     resolveGate(norm) {
-        const { gateSize, gateStart, gateDelta } = norm
-        const currentPos = gateDelta + gateStart
-        return currentPos < 0 || currentPos > gateSize
+        const { crossThumbSize, crossOffset, crossDelta } = norm
+        const currentPos = crossDelta + crossOffset
+        return currentPos < 0 || currentPos > crossThumbSize
     },
     /* -------------------------
         slider-specifics
     -------------------------- */
-    resolveSliderSwipe(norm, sliderConstraints, sliderPosition) {
-        const { primSize, primDelta } = norm
+
+    resolveSliderStart(norm, sliderConstraints) {
+        const { mainTrackSize, mainOffset } = norm
 
         const { min, max } = sliderConstraints
         const range = max - min
+        //psudocode ... need to do mainTrackSize - mainThumbSize or something... 
+        const ratio = mainOffset / mainTrackSize
+        const clampedRatio = vector.clamp(ratio, 0, 1)
+        const value = min + clampedRatio * range
+        // console.log('startOffsetDelta', startOffsetDelta)
+        // console.log('primSize: ', primSize)
+        // console.log('ratio: ', ratio)
+        console.log('swipeStart: ', value)
+        return value
+    },
 
-        // Calculate valid pixel offset range based on current position
-        const maxOffset = ((max - sliderPosition) / range) * primSize
-        const minOffset = ((min - sliderPosition) / range) * primSize
-        const newDelta = vector.clamp(primDelta, minOffset, maxOffset)
+    resolveSliderSwipe(norm, sliderConstraints, sliderPosition) {
+    //     const { primSize, primDelta } = norm
+    //     console.log('swipe position: ', sliderPosition)
+    //     const { min, max } = sliderConstraints
+    //     const range = max - min
 
-        return newDelta
+    //     // Calculate valid pixel offset range based on current position
+    //     const maxOffset = ((max - sliderPosition) / range) * primSize
+    //     const minOffset = ((min - sliderPosition) / range) * primSize
+    //     const newDelta = vector.clamp(primDelta, minOffset, maxOffset)
+    //     return newDelta
+    return undefined
     },
 
     resolveSliderCommit(norm, sliderConstraints, sliderPosition) {
-        const { primSize, primDelta } = norm
+        // const { primSize, primDelta } = norm
+        // console.log('swipeCommit position: ', sliderPosition)
+        // const { min, max } = sliderConstraints
+        // const range = max - min
 
-        const { min, max } = sliderConstraints
-        const range = max - min
-
-        // Convert pixel delta → logical delta
-        const deltaLogical = (primDelta / primSize) * range
-        const unclamped = sliderPosition + deltaLogical
-        const finalValue = vector.clamp(unclamped, min, max)
-
-        return finalValue
+        // // Convert pixel delta → logical delta
+        // const deltaLogical = (primDelta / primSize) * range
+        // const unclamped = sliderPosition + deltaLogical
+        // const finalValue = vector.clamp(unclamped, min, max)
+        // return finalValue
+        return undefined
     },
     /* -------------------------
         carousel-specifics
     -------------------------- */
     resolveCarouselCommit(norm, axis) {
-        const { primSize, primDelta } = norm
-        if (this.shouldCommit(primDelta, primSize, axis)) {
-            const direction = vector.resolveDirection(primDelta, axis)
-            const delta = this.getCommitOffset(direction, primSize)
+        const { mainTrackSize, mainDelta } = norm
+        if (this.shouldCommit(mainDelta, mainTrackSize, axis)) {
+            const direction = vector.resolveDirection(mainDelta, axis)
+            const delta = this.getCommitOffset(direction, mainTrackSize)
             return {direction, delta}
         }
         return null

@@ -74,10 +74,12 @@ function onMove(x, y) {
             state.phase = 'SWIPING'
             state.targetInfo = resolved.targetInfo
             state.targetInfo.startOffset = utils.resolveStartOffset(x, y, state.targetInfo.element)
+            state.last.x = x
+            state.last.y = y
             return {
                 ...state.targetInfo,
                 type: 'swipeStart',
-                delta: {x: x, y: y },
+                delta: {x: x, y: y }, //this should be same location as press?
                 extra: cancel
             }
         }
@@ -102,7 +104,6 @@ function onMove(x, y) {
     }
     return null
 }
-
 
 function onUp(x, y) {
     if (state.phase !== 'SWIPING' && state.phase !== 'PENDING') {
