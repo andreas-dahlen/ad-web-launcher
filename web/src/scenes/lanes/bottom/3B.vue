@@ -7,7 +7,7 @@
       :reactSwipeStart="true"
       :reactSwipe="true"
     >
-      <div class="slider-content">Slide Me!</div>
+      <div class="slider-content">..</div>
     </SwipeSlider>
   </div>
 </template>
@@ -25,15 +25,15 @@ defineOptions({ name: 'bottomB' })
 }
 .swipe-slider {
   height: 90%;
-  width: 70px;
+  width: 30%;
 }
 
 .slider-content {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100%;
-  width: 90%;
+  height: 50px;
+  width: 50px;
   color: white;
   font-weight: bold;
     background: #4285f4;

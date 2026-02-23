@@ -21,10 +21,11 @@ export function useSliderSizing({
       x: el.offsetWidth, 
       y: el.offsetHeight
     }
-    
+    const thumbContent = thumbEl?.firstElementChild
+
     const thumbSize = { 
-      x: thumbEl ? thumbEl.offsetWidth : 0, 
-      y: thumbEl ? thumbEl.offsetHeight : 0}
+      x: thumbEl ? thumbContent.offsetWidth : 0, 
+      y: thumbEl ? thumbContent.offsetHeight : 0}
 
     state.setSize(swipeType, laneId.value, trackSize)
     state.setThumbSize(swipeType, laneId.value, thumbSize)

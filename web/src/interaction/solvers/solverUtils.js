@@ -7,11 +7,11 @@ export const utils = {
         noramlize
     -------------------------- */
     normalize1D(desc) {
-        const { delta, laneSize, thumbSize, axis, startOffset } = desc
+        const { delta, laneSize, sliderThumbSize, axis, startOffset } = desc
         const { prim: mainTrackSize, sub: crossTrackSize } = 
         vector.resolveByAxis1D(laneSize, axis)
         const { prim: mainThumbSize, sub: crossThumbSize } = 
-        vector.resolveByAxis1D(thumbSize, axis)
+        vector.resolveByAxis1D(sliderThumbSize, axis)
         const { prim: mainOffset, sub: crossOffset }  = 
         vector.resolveByAxis1D(startOffset, axis)
         const { prim: mainDelta, sub: crossDelta } = 
@@ -38,19 +38,16 @@ export const utils = {
     -------------------------- */
 
     resolveSliderStart(norm, sliderConstraints) {
-        const { mainTrackSize, mainOffset } = norm
-
-        const { min, max } = sliderConstraints
-        const range = max - min
-        //psudocode ... need to do mainTrackSize - mainThumbSize or something... 
-        const ratio = mainOffset / mainTrackSize
-        const clampedRatio = vector.clamp(ratio, 0, 1)
-        const value = min + clampedRatio * range
-        // console.log('startOffsetDelta', startOffsetDelta)
-        // console.log('primSize: ', primSize)
-        // console.log('ratio: ', ratio)
-        console.log('swipeStart: ', value)
-        return value
+    const { mainTrackSize, mainOffset, mainThumbSize } = norm
+    const { min, max } = sliderConstraints
+    const range = max - min
+    const halfThumb = mainThumbSize / 2
+    const usable = mainTrackSize - mainThumbSize
+    const shifted = mainOffset - halfThumb
+    const ratio = shifted / usable
+    const clampedRatio = vector.clamp(ratio, 0, 1)
+    const value = min + clampedRatio * range
+    return value
     },
 
     resolveSliderSwipe(norm, sliderConstraints, sliderPosition) {

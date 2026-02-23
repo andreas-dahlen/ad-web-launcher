@@ -75,9 +75,13 @@ export const utils = {
     resolveStartOffset(x, y, element) {
         //static start poisition inside of element at x, y
         const rect = element.getBoundingClientRect()
-            return {
-            x: x - rect.left,
-            y: y - rect.top
+            const left = x - rect.left
+            const right = y - rect.top
+            console.log('element: ', element)
+
+            // clamp to element bounds just in case
+        return { x: Math.max(0, Math.min(left, rect.width)),
+                 y: Math.max(0, Math.min(right, rect.height))
         }
     }
 }

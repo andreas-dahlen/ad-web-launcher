@@ -7,7 +7,7 @@
       :reactSwipeStart="true"
       :reactSwipe="true"
     >
-      <div class="slider-content">Slide Me!</div>
+      <div class="slider-content">..</div>
     </SwipeSlider>
   </div>
 </template>
@@ -24,16 +24,16 @@ defineOptions({ name: 'MidB' })
   background: linear-gradient(135deg, #7aa2ff, #47c6ff);
 }
 .swipe-slider {
-  height: 70px;
-  width: 90%;
+  height: 30%;
+  width: 50%;
 }
 
 .slider-content {
   display: flex;
   align-items: center;
   justify-content: center;
-  /* height: 100%; */
-  /* width: 40%; */
+  width: 50px;
+  height: 50px;
   color: white;
   font-weight: bold;
     border-radius: 10px;

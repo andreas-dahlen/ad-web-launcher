@@ -19,7 +19,7 @@ import { state } from '../interaction/state/stateManager'
 import { useSliderSizing } from '../interaction/adapters/useSliderSizing'
 import { usePointerForwarding } from '../interaction/bridge/bridge'
 
-const emit = defineEmits(['swipe'])
+const emit = defineEmits(['volumeChange'])
 
 defineOptions({ name: 'SwipeSlider' })
 
@@ -48,6 +48,12 @@ const lanePosition = computed(() => state.getPosition('slider', props.lane) ?? 0
 const laneConstraints = computed(() => state.getConstraints('slider', props.lane) ?? { min: 0, max: 100 })
 const laneSize = computed(() => {
   const size = state.getSize('slider', props.lane)
+  if (!size) return 0
+  return horizontal.value ? size.x : size.y
+})
+
+const laneThumbSize = computed(() => {
+  const size = state.getThumbSize('slider', props.lane)
   if (!size) return 0
   return horizontal.value ? size.x : size.y
 })
@@ -93,7 +99,9 @@ const thumbStyle = computed(() => {
   const range = max - min || 1
 
   const ratio = (value - min) / range
-  const pos = ratio * laneSize.value + laneOffset.value
+  // Use usable space (track - thumb), same coordinate space as solver
+  const usable = Math.max(laneSize.value - laneThumbSize.value, 0)
+  const pos = ratio * usable + laneOffset.value
 
   return {
     transform: horizontal.value
@@ -106,62 +114,53 @@ const thumbStyle = computed(() => {
 </script>
 
 <style scoped>
-/* .thumb-inner.horizontal {
-  justify-content: center;
-  align-items: flex-start;
-  }
-  
-  .thumb-inner.vertical {
-  justify-content: flex-start;
-  align-items: center;
-} */
 
 .slider-container {
   position: relative;
-  /* width: 100%;
-  height: 100%; */
+  width: 100%;
+  height: 100%;
   background: #eee;
-  overflow: hidden;
+  /* overflow: hidden; */
   touch-action: none;
-}
-.slider-container[data-axis="horizontal"] {
-  display: flex;
-  align-items: center;
-}
-.slider-container[data-axis="vertical"] {
-  display: flex;
-  justify-content: center;
 }
 
 .slider-track {
   border-radius: 999px;
+  width: 100%;
+  height: 100%;
   background: rgba(0, 0, 0, 0.163);
   position: absolute;
 }
 .slider-container[data-axis="horizontal"] .slider-track {
-  inset: 40% 5%;
+  height: 10px;
+  width: 90%;
+  left: 5%;
+  right: 5%;
+  top: 50%;
+  transform: translateY(-50%);
 }
 .slider-container[data-axis="vertical"] .slider-track {
-  inset: 5% 40%;
+  width: 10px;
+  height: 90%;
+  top: 5%;
+  bottom: 5%;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .thumbEl {
-  position: absolute;
-  top: 0;
-  left: 0;
-  /* width: 100%;
-  height: 100%; */
-  /* display: flex; */
   will-change: transform;
 }
-
-/* .slider-container[data-axis="horizontal"] .slider-thumb {
+/* Horizontal slider → center vertically */
+.slider-container[data-axis="horizontal"] .thumbEl {
+  display: flex;
   height: 100%;
   align-items: center;
 }
-
-.slider-container[data-axis="vertical"] .slider-thumb {
-  width: 100%;
+/* Vertical slider → center horizontally */
+.slider-container[data-axis="vertical"] .thumbEl {
+    display: flex;
+    width: 100%;
   justify-content: center;
-} */
+}
 </style>
