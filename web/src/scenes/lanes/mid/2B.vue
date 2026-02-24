@@ -25,7 +25,7 @@ defineOptions({ name: 'MidB' })
 }
 .swipe-slider {
   height: 30%;
-  width: 50%;
+  width: 90%;
 }
 
 .slider-content {

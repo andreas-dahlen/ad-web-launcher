@@ -89,7 +89,8 @@ export const sliderStateFn = {
    * Apply offset during drag - called by dispatcher on slider:swipe
    */
   swipe(desc) {
-    this.ensure(desc.laneId).offset = desc.delta
+    const slider = this.ensure(desc.laneId)
+    slider.value = desc.delta
   },
 
   /**
@@ -99,8 +100,7 @@ export const sliderStateFn = {
 
   swipeCommit(desc) {
     const slider = this.ensure(desc.laneId)
-    slider.value = desc.delta   // delta already “final value”
-    slider.offset = 0
+    slider.value = desc.delta
     slider.dragging = false
   }
 }

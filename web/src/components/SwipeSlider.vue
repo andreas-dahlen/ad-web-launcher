@@ -101,7 +101,7 @@ const thumbStyle = computed(() => {
   const ratio = (value - min) / range
   // Use usable space (track - thumb), same coordinate space as solver
   const usable = Math.max(laneSize.value - laneThumbSize.value, 0)
-  const pos = ratio * usable + laneOffset.value
+  const pos = ratio * usable
 
   return {
     transform: horizontal.value

@@ -55,57 +55,6 @@ export const targetResolver = {
         ? state.getConstraints(swipeType, laneId) : null//{minX, maxX, minY, maxY}
     }
   },
-  // resolveFromElement(el) {
-  //   if (!el) return null
-  //   const ds = el.dataset || {}
-
-  //   const laneId = ds.lane || null
-  //   const axis = ds.axis || null
-  //   const swipeType = ds.swipeType || null
-  //   const actionId = ds.action || null
-
-  //   const laneValid = laneId && axis && swipeType
-
-  //   const reactions = this.buildReactions(ds, laneValid)
-  //   return {
-  //     element: el,
-  //     laneId: laneValid ? laneId : null,
-  //     axis: laneValid ? axis : null,
-  //     swipeType: laneValid ? swipeType : null,
-  //     actionId,
-  //     // ----- SWIPE SPECIFICS -----
-  //     ////////////////////////////////
-  //     // ----- All -----
-  //     laneSize: laneValid
-  //     ? state.getSize(swipeType, laneId) 
-  //     : null, // {x, y}
-
-  //     // ----- CAROUSEL -----
-  //     carouselStartOffset: laneValid && swipeType === 'carousel'
-  //     ? state.getStartOffset('carousel', laneId) 
-  //     : null, // number
-
-  //     // ----- SLIDER -----
-  //     sliderPosition: laneValid && swipeType === 'slider'
-  //     ? state.getPosition('slider', laneId) 
-  //     : null, // number
-  //     sliderConstraints: laneValid && swipeType === 'slider'
-  //     ? state.getConstraints('slider', laneId) 
-  //     : null, //min, max
-
-  //     // ----- DRAG -----
-  //     dragPosition: laneValid && swipeType === 'drag'
-  //     ? state.getPosition('drag', laneId) 
-  //     : null, //{x, y}
-  //     dragConstraints: laneValid && swipeType === 'drag'
-  //     ? state.getConstraints('drag', laneId) 
-  //     : null, //{minX, maxX, minY, maxY}
-
-  //     // position: laneValid ? state.getPosition(swipeType, laneId) : null,
-  //     // constraints: laneValid ? state.getConstraints(swipeType, laneId) : null,
-  //     reactions
-  //   }
-  // },
 
   resolveFromPoint(x, y) {
     const elements = document.elementsFromPoint(x, y)

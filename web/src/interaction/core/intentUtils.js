@@ -1,4 +1,4 @@
-import { normalizeSwipeDelta, getAxisSize } from '../state/sizeState'
+import { normalizeParameter, getAxisSize } from '../state/sizeState'
 import { APP_SETTINGS } from '../../config/appSettings'
 import { targetResolver } from "./targetResolver"
 
@@ -12,8 +12,8 @@ export const utils = {
     normalizedDelta(delta) {
         if (!delta) return 0
         return {
-            x: 'x' in delta ? normalizeSwipeDelta(delta.x) : 0,
-            y: 'y' in delta ? normalizeSwipeDelta(delta.y) : 0
+            x: 'x' in delta ? normalizeParameter(delta.x) : 0,
+            y: 'y' in delta ? normalizeParameter(delta.y) : 0
         }
     },
 
@@ -55,7 +55,7 @@ export const utils = {
             const axis = this.resolveAxis(intentAxis, target)
             if (this.resolveSupports('swipeStart', target) && axis) {
                 return {
-                    targetInfo: target,
+                    desc: target,
                     pressCancel: false,
                     lockedAxis: target.axis
                 }
@@ -66,7 +66,7 @@ export const utils = {
         const newTarget = targetResolver.resolveLaneByAxis(x, y, intentAxis)
         if (newTarget) {
             return {
-                targetInfo: newTarget,
+                desc: newTarget,
                 pressCancel: this.resolveSupports('pressCancel', target),
             }
         }
@@ -75,13 +75,12 @@ export const utils = {
     resolveStartOffset(x, y, element) {
         //static start poisition inside of element at x, y
         const rect = element.getBoundingClientRect()
-            const left = x - rect.left
-            const right = y - rect.top
-            console.log('element: ', element)
-
-            // clamp to element bounds just in case
-        return { x: Math.max(0, Math.min(left, rect.width)),
-                 y: Math.max(0, Math.min(right, rect.height))
+        const left = (x - rect.left)
+        const top = (y - rect.top)
+        return {
+            x: normalizeParameter(left),
+            y: normalizeParameter(top)
         }
     }
 }
+

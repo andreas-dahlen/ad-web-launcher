@@ -50,6 +50,9 @@ export const pipeline = {
     let solution = descriptor
     if (solverfn) {
       solution = { ...descriptor, ...solverfn(descriptor) }
+      if(solution.gestureUpdate) {
+        interpreter.applyGestureUpdate(solution.gestureUpdate)
+      }
     }
     /* -------------------------
             Mutate state files (swipeStart, swipe, swipeCommit, swipeRevert)

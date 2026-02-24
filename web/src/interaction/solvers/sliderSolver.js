@@ -27,7 +27,11 @@ export const sliderSolver = {
     const resolvedDelta = 
     utils.resolveSliderStart(norm, desc.sliderConstraints)
     // console.log('SWIPESTART: ', resolvedDelta)
-    return { delta: resolvedDelta, stateAccepted: true}
+    return { 
+      delta: resolvedDelta, 
+      stateAccepted: true,
+      gestureUpdate: {sliderBaseOffset: resolvedDelta}
+    }
   },
 
   /**
@@ -39,7 +43,10 @@ export const sliderSolver = {
     const gated = utils.resolveGate(norm)
     if (gated) return {stateAccepted: false }
     const resolvedDelta = 
-    utils.resolveSliderSwipe(norm, desc.sliderConstraints)
+    utils.resolveSliderSwipe(
+      norm, 
+      desc.sliderConstraints,
+      desc.sliderBaseOffset)
     // console.log('SWIPE: ', resolvedDelta)
     return { delta: resolvedDelta, stateAccepted: true }
   },

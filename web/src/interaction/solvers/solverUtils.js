@@ -50,18 +50,19 @@ export const utils = {
     return value
     },
 
-    resolveSliderSwipe(norm, sliderConstraints, sliderPosition) {
-    //     const { primSize, primDelta } = norm
-    //     console.log('swipe position: ', sliderPosition)
-    //     const { min, max } = sliderConstraints
-    //     const range = max - min
+    resolveSliderSwipe(norm, sliderConstraints, sliderBaseOffset) {
+        const { mainDelta, mainTrackSize, mainThumbSize } = norm
+        const { min, max } = sliderConstraints
+        console.log(sliderBaseOffset)
+        const range = max - min || 1
+        const usable = mainTrackSize - mainThumbSize
+        const pixelNext = sliderBaseOffset + mainDelta
+        const clampedPixel = vector.clamp(pixelNext, 0, usable)
+        const ratio = clampedPixel / usable
+        const result = min + ratio * range
+        console.log(result)
+        return result
 
-    //     // Calculate valid pixel offset range based on current position
-    //     const maxOffset = ((max - sliderPosition) / range) * primSize
-    //     const minOffset = ((min - sliderPosition) / range) * primSize
-    //     const newDelta = vector.clamp(primDelta, minOffset, maxOffset)
-    //     return newDelta
-    return undefined
     },
 
     resolveSliderCommit(norm, sliderConstraints, sliderPosition) {

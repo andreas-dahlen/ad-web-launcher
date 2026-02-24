@@ -14,35 +14,54 @@ Delta semantics:
 */
 
 // Gesture state (no DOM refs)
-const state = {
+const gesture = {
     phase: 'IDLE',            // gesture lifecycle
     start: { x: 0, y: 0 },    // initial pointer down
     last: { x: 0, y: 0 },     // last pointer position
     totalDelta: { x: 0, y: 0 }, // accumulated delta
-    targetInfo: null, // targetResolvers descriptor
+    desc: null, // targetResolvers descriptor
 }
 
 export const interpreter = {
     onDown,
     onMove,
     onUp,
-    resetGesture
+    resetGesture,
+    applyGestureUpdate
+}
+function applyGestureUpdate(update) {
+    gesture.desc = {
+        ...gesture.desc,
+        ...update
+    }
+}
+
+// Helper: reset all gesture
+function resetGesture() {
+    gesture.phase = 'IDLE'
+    gesture.start.x = 0
+    gesture.start.y = 0
+    gesture.last.x = 0
+    gesture.last.y = 0
+    gesture.totalDelta.x = 0
+    gesture.totalDelta.y = 0
+    gesture.desc = null
 }
 
 function onDown(x, y) {
     drawDots(x, y, 'green')
-    state.phase = 'PENDING'
-    state.start.x = x
-    state.start.y = y
-    state.last.x = x
-    state.last.y = y
-    state.totalDelta.x = 0
-    state.totalDelta.y = 0
+    gesture.phase = 'PENDING'
+    gesture.start.x = x
+    gesture.start.y = y
+    gesture.last.x = x
+    gesture.last.y = y
+    gesture.totalDelta.x = 0
+    gesture.totalDelta.y = 0
 
-    state.targetInfo = utils.resolveTarget(x, y)
-    if (utils.resolveSupports('press', state.targetInfo)) {
+    gesture.desc = utils.resolveTarget(x, y)
+    if (utils.resolveSupports('press', gesture.desc)) {
         return {
-            ...state.targetInfo,
+            ...gesture.desc,
             type: 'press',
             delta: { x: x, y: y }
         }
@@ -51,33 +70,33 @@ function onDown(x, y) {
 }
 
 function onMove(x, y) {
-    if (state.phase === 'IDLE') return null
+    if (gesture.phase === 'IDLE') return null
     drawDots(x, y, 'yellow')
     // Compute deltas
-    const absX = Math.abs(x - state.start.x)
-    const absY = Math.abs(y - state.start.y)
+    const absX = Math.abs(x - gesture.start.x)
+    const absY = Math.abs(y - gesture.start.y)
     const biggest = Math.max(absX, absY)
 
-    if (state.phase === 'PENDING') {
+    if (gesture.phase === 'PENDING') {
         if (!utils.swipeThresholdCalc(biggest)) return null
         const intentAxis = absX > absY ? 'horizontal' : 'vertical'
-        const resolved = utils.resolveSwipeTarget(x, y, intentAxis, state.targetInfo)
+        const resolved = utils.resolveSwipeTarget(x, y, intentAxis, gesture.desc)
         if (resolved) {
             let cancel = null
             if (resolved.pressCancel) {
                 cancel = {
-                    ...state.targetInfo,
+                    ...gesture.desc,
                     type: 'pressCancel',
                     delta: { x: x, y: y }
                 }
             }
-            state.phase = 'SWIPING'
-            state.targetInfo = resolved.targetInfo
-            state.targetInfo.startOffset = utils.resolveStartOffset(x, y, state.targetInfo.element)
-            state.last.x = x
-            state.last.y = y
+            gesture.phase = 'SWIPING'
+            gesture.desc = resolved.desc
+            gesture.desc.startOffset = utils.resolveStartOffset(x, y, gesture.desc.element)
+            gesture.last.x = x
+            gesture.last.y = y
             return {
-                ...state.targetInfo,
+                ...gesture.desc,
                 type: 'swipeStart',
                 delta: {x: x, y: y }, //this should be same location as press?
                 extra: cancel
@@ -85,42 +104,42 @@ function onMove(x, y) {
         }
     }
     // Track swipe delta
-    if (state.phase === 'SWIPING') {
+    if (gesture.phase === 'SWIPING') {
 
-        const deltaX = x - state.last.x
-        const deltaY = y - state.last.y
+        const deltaX = x - gesture.last.x
+        const deltaY = y - gesture.last.y
 
-        state.totalDelta.x += deltaX
-        state.totalDelta.y += deltaY
+        gesture.totalDelta.x += deltaX
+        gesture.totalDelta.y += deltaY
 
-        state.last.x = x
-        state.last.y = y
+        gesture.last.x = x
+        gesture.last.y = y
 
         return {
-            ...state.targetInfo,
+            ...gesture.desc,
             type: 'swipe',
-            delta: utils.normalizedDelta(state.totalDelta),
+            delta: utils.normalizedDelta(gesture.totalDelta),
         }
     }
     return null
 }
 
 function onUp(x, y) {
-    if (state.phase !== 'SWIPING' && state.phase !== 'PENDING') {
-        log('init', 'state.phase error: ', state.phase)
+    if (gesture.phase !== 'SWIPING' && gesture.phase !== 'PENDING') {
+        log('init', 'gesture.phase error: ', gesture.phase)
         return null
     }
-    if (state.phase === 'SWIPING') {
+    if (gesture.phase === 'SWIPING') {
         return {
-            ...state.targetInfo,
+            ...gesture.desc,
             type: 'swipeCommit',
-            delta: utils.normalizedDelta(state.totalDelta),
+            delta: utils.normalizedDelta(gesture.totalDelta),
         }
     }
-    else if (state.phase === 'PENDING') {
+    else if (gesture.phase === 'PENDING') {
         // Pointer up without swipe → release
         return {
-            ...state.targetInfo,
+            ...gesture.desc,
             type: 'pressRelease',
             delta: { x: x, y: y }
         }
@@ -128,14 +147,3 @@ function onUp(x, y) {
     return null
 }
 
-// Helper: reset all gesture state
-function resetGesture() {
-    state.phase = 'IDLE'
-    state.start.x = 0
-    state.start.y = 0
-    state.last.x = 0
-    state.last.y = 0
-    state.totalDelta.x = 0
-    state.totalDelta.y = 0
-    state.targetInfo = null
-}

@@ -64,8 +64,8 @@ export function getAxisSize(axis) {
   return 0
 }
 
-export function normalizeSwipeDelta(delta) {
-  return delta / scale.value
+export function normalizeParameter(parameter) {
+  return parameter / scale.value
 }
 
 function isFiniteNumber(value) {
