@@ -24,13 +24,16 @@ export const sliderSolver = {
 
   swipeStart(desc) {
     const norm = utils.normalize1D(desc)
-    const resolvedDelta = 
+    const { value, valuePerPixel }= 
     utils.resolveSliderStart(norm, desc.sliderConstraints)
     // console.log('SWIPESTART: ', resolvedDelta)
     return { 
-      delta: resolvedDelta, 
+      delta: value, 
       stateAccepted: true,
-      gestureUpdate: {sliderBaseOffset: resolvedDelta}
+      gestureUpdate: {
+        sliderStartOffset: value,
+        sliderValuePerPixel: valuePerPixel
+      }
     }
   },
 
@@ -42,13 +45,9 @@ export const sliderSolver = {
     const norm = utils.normalize1D(desc)
     const gated = utils.resolveGate(norm)
     if (gated) return {stateAccepted: false }
-    const resolvedDelta = 
-    utils.resolveSliderSwipe(
-      norm, 
-      desc.sliderConstraints,
-      desc.sliderBaseOffset)
-    // console.log('SWIPE: ', resolvedDelta)
-    return { delta: resolvedDelta, stateAccepted: true }
+    const value = 
+    utils.resolveSliderSwipe(norm, desc, desc.sliderConstraints)
+    return { delta: value, stateAccepted: true }
   },
 
   /**
@@ -61,10 +60,10 @@ export const sliderSolver = {
     const gated = utils.resolveGate(norm)
     if (gated) return {stateAccepted: false }
 
-    const resolvedDelta = 
-    utils.resolveSliderCommit(norm, desc.sliderConstraints)
+    const value = 
+    utils.resolveSliderSwipe(norm, desc)
     // console.log('SWIPECOMMIT: ',resolvedDelta)
-    return { delta: resolvedDelta, stateAccepted: true }
+    return { delta: value, stateAccepted: true }
   },
 
 

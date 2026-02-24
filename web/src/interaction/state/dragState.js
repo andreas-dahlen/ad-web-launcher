@@ -93,6 +93,7 @@ export const dragStateFn = {
       x: desc.delta.x,
       y: desc.delta.y
     }
+    console.log(lane.position)
     lane.offset = { ...ZERO_POINT }
     lane.dragging = false
   }

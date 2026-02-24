@@ -27,6 +27,7 @@
       lane="bottom"
       :scenes="bottomScenes"
       axis="horizontal"
+
     />
   </div>
 </template>

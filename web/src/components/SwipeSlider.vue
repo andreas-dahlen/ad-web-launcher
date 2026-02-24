@@ -5,7 +5,8 @@
   :data-axis="axis"
   data-swipe-type="slider" 
   :data-react-swipe="reactSwipe ? true : null"
-  :data-react-swipe-start="reactSwipeStart ? true : null">
+  :data-react-swipe-start="reactSwipeStart ? true : null"
+  :data-react-swipe-commit="reactSwipeCommit ? true : null">
     <div class="slider-track"></div>
     <div ref="thumbEl" class="thumbEl" :style="thumbStyle">
       <slot />
@@ -28,6 +29,7 @@ const props = defineProps({
   axis: { type: String, default: 'horizontal' },
   reactSwipe: { type: Boolean, default: false },
   reactSwipeStart: { type: Boolean, default: false },
+  reactSwipeCommit: { type: Boolean, default: false },
 })
 
 /* -------------------------
@@ -35,6 +37,7 @@ const props = defineProps({
 -------------------------- */
 const sliderEl = ref(null)
 const thumbEl = ref(null)
+const lastEmitted = ref(null)
 
 const horizontal = computed(() => props.axis === 'horizontal')
 
@@ -42,7 +45,6 @@ const horizontal = computed(() => props.axis === 'horizontal')
    Slider state refs
 -------------------------- */
 const laneState = computed(() => state.get('slider', props.lane))
-const laneOffset = computed(() => laneState.value?.offset ?? 0)
 const dragging = computed(() => laneState.value?.dragging ?? false)
 const lanePosition = computed(() => state.getPosition('slider', props.lane) ?? 0)
 const laneConstraints = computed(() => state.getConstraints('slider', props.lane) ?? { min: 0, max: 100 })
@@ -85,8 +87,21 @@ Reaction handling
 function handleReaction(e) {
   const type = e.detail?.type
   if (!type) return
-  if (type === 'swipe' && props.reactSwipe) { emit('volumeChange', e.detail) }
-  if (type === 'swipeStart' && props.reactSwipeStart) { emit('volumeChange', e.detail) }
+
+  const shouldReact =
+  (type === 'swipe' && props.reactSwipe) ||
+  (type === 'swipeStart' && props.reactSwipeStart) ||
+  (type === 'swipeCommit' && props.reactSwipeCommit)
+
+  if(!shouldReact) return
+  let value = Math.round(lanePosition.value)
+  if (!horizontal.value) {
+    const { min, max } = laneConstraints.value
+    value = max - (value - min)
+  }
+  if (value === lastEmitted.value) return
+  emit('volumeChange', value)
+  lastEmitted.value = value
 }
 /* -------------------------
    Computed thumb style

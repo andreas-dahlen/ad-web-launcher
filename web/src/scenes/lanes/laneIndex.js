@@ -16,7 +16,7 @@ import C4 from './wallpaper/WallC.vue'
 
 export const LANES = {
   top: [A1, B1, C1],
-  mid: [A2, B2, C2],
+  mid: [A2, B2, C2, C3],
   bottom: [A3, B3, C3],
-  wallpaper: [A4, B4, C4]
+  wallpaper: [A4, B4, C4, C3]
 }
