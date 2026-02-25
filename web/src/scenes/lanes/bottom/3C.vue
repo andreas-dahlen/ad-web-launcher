@@ -5,7 +5,7 @@
       lane="bottom-drag"
       axis="both"
       :reactSwipeCommit="true"
-    >
+      >
       <div class="drag-content">Drag me</div>
     </SwipeDrag>
   </div>
@@ -14,6 +14,12 @@
 <script setup>
 import SwipeDrag from '../../../components/SwipeDrag.vue'
 defineOptions({ name: 'BottomC' })
+
+// :snapX="snappingX"
+// :snapY="snappingY"
+// const snappingX = "100"
+// const snappingY = "200"
+
 </script>
 
 <style scoped>

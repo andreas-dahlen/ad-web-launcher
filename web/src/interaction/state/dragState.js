@@ -88,7 +88,7 @@ export const dragStateFn = {
    */
   swipeCommit(desc) {
     const lane = this.ensure(desc.laneId)
-
+    console.log(desc.delta)
     lane.position = {
       x: desc.delta.x,
       y: desc.delta.y

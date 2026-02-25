@@ -21,41 +21,48 @@
 //   clampCommitPosition
 // } from './policy/dragPolicy'
 
-import { vector } from "./vectorUtils"
+import { utils } from "./solverUtils"
 
 export const dragSolver = {
   /**
    * Handle swipeStart - returns reaction to enable dragging
    */
   swipeStart() {
-    return {stateAccepted: true }
+    return { stateAccepted: true }
   },
 
   /**
    * Handle swipe (drag) - clamp deltas and return offset reaction
    */
   swipe(desc) {
-    const {delta, dragPosition = { x: 0, y: 0 }, dragConstraints = { min: 0, max: 100 } } = desc
-    const clamped = vector.relativeClamp2D(delta, dragPosition, dragConstraints)
-    const dx = clamped.x
-    const dy = clamped.y
-    return { 
-      delta: { x: dx, y: dy },
-      stateAccepted: true }
+    const delta = utils.resolveDragSwipe(desc)
+    return {
+      delta,
+      stateAccepted: true
+    }
   },
 
   /**
    * Handle swipeCommit - always commit at current position (no revert)
    */
   swipeCommit(desc) {
-    const { delta,  dragPosition = { x: 0, y: 0 }, dragConstraints = { min: 0, max: 100 } } = desc
-    const finalPos = vector.clamp2D(delta, dragPosition, dragConstraints)
-    const {x: fx, y: fy} = finalPos
-    const {x: px, y: py} = dragPosition
-    const direction = vector.resolveDirection({x:fx - px, y:fy - py})
+    let value = utils.resolveDragCommit(desc)
+    const snap = utils.resolveSnapAdjustment(desc, value)
+    if (snap != null) { value = snap }
+    const direction = utils.resolveDragDirection(desc.dragPosition, value)
     return {
-      direction: direction,
-      delta: { x: fx, y: fy },
-      stateAccepted: true }
+      direction,
+      delta: value,
+      stateAccepted: true
+    }
   }
 }
+
+// const finalPos = vector.clamp2D(delta, dragPosition, dragConstraints)
+// const {x: fx, y: fy} = finalPos
+// const {x: px, y: py} = dragPosition
+// const direction = vector.resolveDirection({x:fx - px, y:fy - py})
+// return {
+//   direction: direction,
+//   delta: { x: fx, y: fy },
+//   stateAccepted: true }

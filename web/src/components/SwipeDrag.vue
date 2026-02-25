@@ -6,6 +6,8 @@
       :data-lane="lane"
       data-axis="both" 
       data-swipe-type="drag"
+      :data-snap-x="snapX"
+      :data-snap-y="snapY"
       :data-react-swipe-commit="reactSwipeCommit ? true : null">
       <slot />
     </div>
@@ -22,7 +24,9 @@ const emit = defineEmits(['swipeCommit'])
 
 const props = defineProps({
   lane: { type: String, required: true },
-  reactSwipeCommit: { type: Boolean, default: false }
+  reactSwipeCommit: { type: Boolean, default: false },
+  snapX: { type: String, required: false },
+  snapY: { type: String, required: false }
 })
 /* -------------------------
    Refs / basics

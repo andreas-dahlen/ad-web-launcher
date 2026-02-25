@@ -10,6 +10,7 @@ export const targetResolver = {
     return {
       ...this.buildBase(ctx),
       ...this.buildSwipe(ctx),
+      ...this.buildModifiers(ctx),
       reactions: this.buildReactions(ctx.ds, ctx.laneValid)
     }
   },
@@ -20,7 +21,16 @@ export const targetResolver = {
     const axis = ds.axis || null
     const swipeType = ds.swipeType || null
     const laneValid = Boolean(laneId && axis && swipeType)
-    return { el, ds, laneId, axis, swipeType, laneValid }
+    const snapX = ds.snapX != null ? Number(ds.snapX) : null
+    const snapY = ds.snapY != null ? Number(ds.snapY) : null
+    return { el, ds, laneId, axis, swipeType, laneValid, snapX, snapY }
+  },
+
+  buildModifiers(ctx) {
+    if (ctx.snapX == null && ctx.snapY == null) return null
+    return {
+      snap: { x: ctx.snapX, y: ctx.snapY }
+    }
   },
 
   buildBase(ctx) {
@@ -30,7 +40,8 @@ export const targetResolver = {
       axis: ctx.laneValid ? ctx.axis : null,
       swipeType: ctx.laneValid ? ctx.swipeType : null,
       actionId: ctx.ds.action || null,
-      startOffset: null
+      startOffset: null,
+      // snap: ctx.snapValid ? { snapX: ctx.snapX, snapY: ctx.snapY } : null
     }
   },
 
@@ -94,6 +105,8 @@ export const targetResolver = {
       (laneValid)
     )
     const selectable = !!(ds.reactSelected !== undefined || pressable || swipeable)
+    const modifiable = !!(ds.modifiable !== undefined || ds.snapX !== undefined || ds.snapY !== undefined)
+
     return {
       press: pressable,
       pressRelease: pressable,
@@ -103,7 +116,8 @@ export const targetResolver = {
       swipeCommit: swipeable,
       swipeRevert: swipeable,
       select: selectable,
-      deselect: selectable
+      deselect: selectable,
+      snap: modifiable
     }
   }
 }

@@ -57,6 +57,7 @@ export const pipeline = {
     /* -------------------------
             Mutate state files (swipeStart, swipe, swipeCommit, swipeRevert)
     -------------------------- */
+    console.log('pipeline: ', solution.delta)
     if (solution.stateAccepted && state[solution.type]) {
       state[solution.type](solution.swipeType, solution)
     }

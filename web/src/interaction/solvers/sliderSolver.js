@@ -64,37 +64,5 @@ export const sliderSolver = {
     utils.resolveSliderSwipe(norm, desc)
     // console.log('SWIPECOMMIT: ',resolvedDelta)
     return { delta: value, stateAccepted: true }
-  },
-
-
-  // swipeCommit(desc) {
-  //   // const { delta, laneSize, min, max, value } = desc
-  //   const { delta,
-  //     laneSize, sliderPosition = { x: 0, y: 0 },
-  //     sliderConstraints = { min: 0, max: 100 },
-  //     axis,
-  //     swipeType
-  //   } = desc
-  //   const { min, max } = sliderConstraints
-  //   // Guard against division by zero
-  //   if (!laneSize) {
-
-  //     return { delta: sliderPosition, stateAccepted: true }
-  //   }
-
-  //   const { primSize, gateSize } = vector.resolveSize(laneSize, axis)
-
-  //   const gateDelta = vector.resolveGateDelta1D(delta, axis, swipeType)
-  //   const primaryDelta = vector.resolveDelta1D(delta, axis, swipeType)
-  //   if (gateSize != null && Math.abs(gateDelta) > gateSize) {
-  //     return { stateAccepted: false }
-  //   }
-
-  //   // Convert pixel delta → logical delta
-  //   const deltaLogical = (primaryDelta / primSize) * (max - min)
-  //   const unclamped = sliderPosition + deltaLogical
-  //   const finalValue = vector.clamp(unclamped, min, max)
-
-  //   return { delta: finalValue, stateAccepted: true }
-  // }
+  }
 }

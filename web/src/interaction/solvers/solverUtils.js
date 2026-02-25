@@ -28,13 +28,13 @@ export const utils = {
     /* -------------------------
         generic
     -------------------------- */
-resolveGate(norm) {
-  const { crossTrackSize, crossOffset, crossDelta } = norm
+    resolveGate(norm) {
+        const { crossTrackSize, crossOffset, crossDelta } = norm
 
-  const currentPos = crossOffset + crossDelta
+        const currentPos = crossOffset + crossDelta
 
-  return currentPos < 0 || currentPos > crossTrackSize
-},
+        return currentPos < 0 || currentPos > crossTrackSize
+    },
     /* -------------------------
         slider-specifics
     -------------------------- */
@@ -82,5 +82,49 @@ resolveGate(norm) {
         const threshold = laneSize * APP_SETTINGS.swipeCommitRatio * axisBias
         return Math.abs(delta) >= threshold
     },
+    /* -------------------------
+         drag-specifics
+    -------------------------- */
+    resolveDragSwipe(desc) {
+        const { delta, dragPosition = { x: 0, y: 0 }, dragConstraints = { min: 0, max: 100 } } = desc
+        const clamped = vector.relativeClamp2D(delta, dragPosition, dragConstraints)
+        const dx = clamped.x
+        const dy = clamped.y
+        return { x: dx, y: dy }
+    },
 
+    resolveDragCommit(desc) {
+        return vector.clamp2D(desc.delta, desc.dragPosition, desc.dragConstraints)
+    },
+
+    resolveSnapAdjustment(desc, value) {
+        console.log(desc.snap)
+        if (!desc.snap) return null
+        const { x: stepX, y:stepY } = desc.snap
+
+        return {
+            x: stepX > 0 ? Math.round(value.x / stepX) * stepX : value.x,
+            y: stepY > 0 ? Math.round(value.y / stepY) * stepX : value.y
+        }
+    },
+
+    resolveDragDirection(oldPosition, value) {
+    const {x: fx, y: fy} = value
+    const {x: px, y: py} = oldPosition
+    return vector.resolveDirection({x:fx - px, y:fy - py})
+    }
+
+
+
+
+    // const { delta,  dragPosition = { x: 0, y: 0 }, dragConstraints = { min: 0, max: 100 } } = desc
+    // const finalPos = vector.clamp2D(delta, dragPosition, dragConstraints)
+    // const {x: fx, y: fy} = finalPos
+    // const {x: px, y: py} = dragPosition
+    // const direction = vector.resolveDirection({x:fx - px, y:fy - py})
+    // return {
+    //   direction: direction,
+    //   delta: { x: fx, y: fy },
+    //   stateAccepted: true }
 }
+
