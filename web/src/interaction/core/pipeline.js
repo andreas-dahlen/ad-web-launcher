@@ -37,15 +37,12 @@ export const pipeline = {
     const descriptor = interpreterFn(x, y)
     if (!descriptor) return null
 
-    if (descriptor.type === 'swipeCommit' || descriptor.type === 'pressRelease') {
-      interpreter.resetGesture()
-    }
     /* -------------------------
-            Solvers
+    Solvers
     -------------------------- */
     const { swipeType, type } = descriptor
     const solverfn = solvers[swipeType]?.[type]
-
+    
     // Apply solver if available, merging with interpreter descriptor
     let solution = descriptor
     if (solverfn) {
@@ -54,10 +51,13 @@ export const pipeline = {
         interpreter.applyGestureUpdate(solution.gestureUpdate)
       }
     }
+    if (descriptor.type === 'swipeCommit' || descriptor.type === 'pressRelease') {
+      interpreter.resetGesture()
+    }
     /* -------------------------
             Mutate state files (swipeStart, swipe, swipeCommit, swipeRevert)
     -------------------------- */
-    console.log('pipeline: ', solution.delta)
+
     if (solution.stateAccepted && state[solution.type]) {
       state[solution.type](solution.swipeType, solution)
     }

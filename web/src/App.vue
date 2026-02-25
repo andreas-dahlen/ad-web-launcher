@@ -1,12 +1,10 @@
 <!-- App.vue -->
 <template>
-  <div id="app">
     <DebugWrapper v-if="APP_SETTINGS.DebugWrapper">
           <DebugPanel v-if="APP_SETTINGS.DebugWrapper"/>
       <Root />
     </DebugWrapper>
     <Root v-else />
-  </div>
 </template>
 
 <script setup>

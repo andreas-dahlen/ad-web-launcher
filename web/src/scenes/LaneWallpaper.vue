@@ -34,7 +34,7 @@ const scenes = LANES.wallpaper
   opacity: 100;
   
   /* Lowest z-index - behind all other layers */
-  z-index: 1;
+  /* z-index: 1; */
   
   /* GPU compositing */
   transform: translateZ(0);

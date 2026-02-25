@@ -10,7 +10,7 @@
   which overlays invisible touch areas with data-lane attributes.
 -->
 <template>
-  <div class="layout">
+  <div class="carousel-layer">
     <SwipeCarousel
       lane="top"
       :scenes="topScenes"
@@ -43,7 +43,7 @@ const bottomScenes = LANES.bottom
 </script>
 
 <style scoped>
-.layout {
+.carousel-layer {
   position: absolute;
   top: 0;
   left: 0;
@@ -55,7 +55,7 @@ const bottomScenes = LANES.bottom
   flex-direction: column;
   
   /* Layer above background, below swipe zones */
-  z-index: 10;
+  /* z-index: 1; */
   
   /* GPU compositing hint */
   transform: translateZ(0);
@@ -65,7 +65,7 @@ const bottomScenes = LANES.bottom
 }
 
 /* Allow pointer events on carousel children */
-.layout :deep(.carousel) {
+.carousel-layer :deep(.carousel) {
   pointer-events: auto;
 }
 </style>

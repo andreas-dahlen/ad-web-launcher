@@ -29,7 +29,7 @@ const showPanel = APP_SETTINGS.debugPanel && DEBUG.enabled
   color: #e2e8f0;
   font-size: 12px;
   pointer-events: none;
-  z-index: 5;
+  z-index: 20;
 }
 
 .row {

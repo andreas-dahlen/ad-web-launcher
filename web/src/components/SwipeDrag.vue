@@ -91,7 +91,7 @@ const itemStyle = computed(() => {
   height: 100%;
   pointer-events: none;
   /* 👈 CRITICAL */
-  background-color: rgba(73, 153, 46, 0.75);
+  /* background-color: rgba(73, 153, 46, 0.75); */
 }
 
 .drag-item {
@@ -100,5 +100,6 @@ const itemStyle = computed(() => {
   pointer-events: auto;
   /* 👈 only this receives input */
   contain: layout style paint;
+  z-index: 10;
 }
 </style>

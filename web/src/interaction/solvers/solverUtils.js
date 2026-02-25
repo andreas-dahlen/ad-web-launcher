@@ -97,34 +97,32 @@ export const utils = {
         return vector.clamp2D(desc.delta, desc.dragPosition, desc.dragConstraints)
     },
 
-    resolveSnapAdjustment(desc, value) {
-        console.log(desc.snap)
-        if (!desc.snap) return null
-        const { x: stepX, y:stepY } = desc.snap
+resolveSnapAdjustment(desc, value) {
+    if (!desc.snap) return null
+    const { x: snapX, y: snapY } = desc.snap
+    const { dragConstraints } = desc
 
-        return {
-            x: stepX > 0 ? Math.round(value.x / stepX) * stepX : value.x,
-            y: stepY > 0 ? Math.round(value.y / stepY) * stepX : value.y
-        }
-    },
+    const snapAxis = (v, count, min, max) => {
+        if (!count || count <= 0) return v
+        const range = max - min
+        if (count === 1) { return min + range / 2 }
+        // Divide range into equal segments
+        const step = range / (count - 1)
+        // Translate to 0-based range before snapping
+        const relative = v - min
+        const snapped = Math.round(relative / step) * step
+        return min + snapped
+    }
+    return {
+        x: snapAxis(value.x, snapX, dragConstraints.minX, dragConstraints.maxX),
+        y: snapAxis(value.y, snapY, dragConstraints.minY, dragConstraints.maxY)
+    }
+},
 
     resolveDragDirection(oldPosition, value) {
     const {x: fx, y: fy} = value
     const {x: px, y: py} = oldPosition
     return vector.resolveDirection({x:fx - px, y:fy - py})
     }
-
-
-
-
-    // const { delta,  dragPosition = { x: 0, y: 0 }, dragConstraints = { min: 0, max: 100 } } = desc
-    // const finalPos = vector.clamp2D(delta, dragPosition, dragConstraints)
-    // const {x: fx, y: fy} = finalPos
-    // const {x: px, y: py} = dragPosition
-    // const direction = vector.resolveDirection({x:fx - px, y:fy - py})
-    // return {
-    //   direction: direction,
-    //   delta: { x: fx, y: fy },
-    //   stateAccepted: true }
 }
 

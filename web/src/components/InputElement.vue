@@ -114,5 +114,6 @@ usePointerForwarding({
 .input-element {
   user-select: none;
   touch-action: none;
+  z-index: 10;
 }
 </style>

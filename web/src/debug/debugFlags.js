@@ -3,7 +3,7 @@
 export const DEBUG = {
   enabled: import.meta.env.VITE_DEBUG || true,
 
-  drawDots: true,
+  drawDots: false, //this could actually be turned into a nice visual heptic feedback thingie majingie
 
   lagTime: false,
 

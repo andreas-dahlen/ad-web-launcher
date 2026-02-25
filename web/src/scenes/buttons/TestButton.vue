@@ -16,7 +16,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import InputElement from '../components/inputElement.vue'
+import InputElement from '../../components/InputElement.vue'
 
 const interaction = ref('idle')
 

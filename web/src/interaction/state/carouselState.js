@@ -91,13 +91,11 @@ export const carouselStateFn = {
     const lane = this.ensure(desc.laneId)
     lane.dragging = true
     lane.pendingDir = null
-    // console.log('swipeStart STATE delta: ', desc.delta)
   },
   /**
    * Apply offset during drag - called by dispatcher on carousel:offset
    */
   swipe(desc) {
-    // console.log(this.ensure(desc.laneId)?.startOffset)
     this.ensure(desc.laneId).offset = desc.delta
   },
   /**

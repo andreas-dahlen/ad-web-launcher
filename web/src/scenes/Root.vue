@@ -1,17 +1,17 @@
 <template>
-  <div class="phone">
+  <!-- <div class="phone"> -->
     <div class="app-content">
       <LaneWallpaper/>
       <LanesHorizontal/>
-      <TestButton/>
+      <contentLayer/>
     </div>
-  </div>
+  <!-- </div> -->
 </template>
 
 <script setup>
 import LaneWallpaper from './LaneWallpaper.vue'
 import LanesHorizontal from './LanesHorizontal.vue'
-import TestButton from '../buttons/TestButton.vue'
+import contentLayer from './contentLayer.vue'
 </script>
 
 <style scoped>
