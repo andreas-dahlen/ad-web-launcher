@@ -7,7 +7,8 @@
 -->
 <template>
   <div class="wallpaper-layer">
-    <SwipeCarousel
+    <SwipeLane
+      type="carousel"
       lane="wallpaper"
       :scenes="scenes"
       axis="vertical"
@@ -16,8 +17,8 @@
 </template>
 
 <script setup>
-import SwipeCarousel from '../components/SwipeCarousel.vue'
-import { LANES } from './lanes/laneIndex'
+import SwipeLane from '../map/SwipeLane.vue'
+import { LANES } from '../scenes/laneIndex'
 
 // Wallpaper scenes from lane index
 const scenes = LANES.wallpaper

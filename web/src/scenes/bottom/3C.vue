@@ -1,18 +1,19 @@
 <template>
   <div class="scene-root c">
-    <SwipeDrag
+    <SwipeLane
+      type="drag"
       class="drag-container"
       lane="bottom-drag"
       axis="both"
       :reactSwipeCommit="true"
       >
       <div class="drag-content">Drag me</div>
-    </SwipeDrag>
+    </SwipeLane>
   </div>
 </template>
 
 <script setup>
-import SwipeDrag from '../../../components/SwipeDrag.vue'
+import SwipeLane from '../../map/SwipeLane.vue'
 defineOptions({ name: 'BottomC' })
 
 // :snapX="snappingX"

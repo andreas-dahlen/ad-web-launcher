@@ -8,8 +8,8 @@
 </template>
 
 <script setup>
-import DebugPanel from './components/DebugPanel.vue'
+import DebugPanel from './debug/DebugPanel.vue'
 import { APP_SETTINGS } from './config/appSettings'
-import DebugWrapper from './components/DebugWrapper.vue'
+import DebugWrapper from './debug/DebugWrapper.vue'
 import Root from './scenes/Root.vue'
 </script>

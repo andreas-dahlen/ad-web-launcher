@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import buttonRoot from './buttons/buttonRoot.vue'
+import buttonRoot from '../components/buttons/ButtonRoot.vue'
 </script>
 
 <style scoped>

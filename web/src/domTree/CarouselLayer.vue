@@ -4,26 +4,29 @@
   
   Layout Structure:
   - 3 horizontal lanes (top, mid, bottom) stacked vertically
-  - Each lane is a SwipeCarousel with its own scenes
+  - Each lane is a SwipeLane with its own scenes
   
   The swipe detection zones are handled separately in SwipeZones.vue
   which overlays invisible touch areas with data-lane attributes.
 -->
 <template>
   <div class="carousel-layer">
-    <SwipeCarousel
+    <SwipeLane
+      type="carousel"
       lane="top"
       :scenes="topScenes"
       axis="horizontal"
     />
 
-    <SwipeCarousel
+    <SwipeLane
+      type="carousel"
       lane="mid"
       :scenes="midScenes"
       axis="horizontal"
     />
 
-    <SwipeCarousel
+    <SwipeLane
+      type="carousel"
       lane="bottom"
       :scenes="bottomScenes"
       axis="horizontal"
@@ -33,8 +36,8 @@
 </template>
 
 <script setup>
-import SwipeCarousel from '../components/SwipeCarousel.vue'
-import { LANES } from './lanes/laneIndex'
+import SwipeLane from '../map/SwipeLane.vue'
+import { LANES } from '../scenes/laneIndex'
 
 // Scene components for each lane
 const topScenes = LANES.top

@@ -1,6 +1,7 @@
 <template>
     <div class="test-button">
-        <InputElement 
+        <InputElement
+        class="floating-btn"
             :data-state="interaction" 
             press 
             react-press 
@@ -8,7 +9,12 @@
             react-press-cancel 
             @press="onPress"
             @pressRelease="onPressRelease" 
-            @pressCancel="onPressCancel">
+            @pressCancel="onPressCancel"
+            
+            lane-type="carousel"
+            lane-id="top"
+            :lane-index="0"
+            :lane-fields="['progress', 'offset']">
             Fire Test Action
         </InputElement>
     </div>
@@ -16,7 +22,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import InputElement from '../../components/InputElement.vue'
+import InputElement from '../InputElement.vue'
 
 const interaction = ref('idle')
 
@@ -33,6 +39,14 @@ function onPressCancel() {
 </script>
 
 <style scoped>
+.floating-btn {
+  /* Move with lane offset */
+  transform: translateX(calc(var(--lane-offset, 0) * 1px));
+  /* Fade when not at target index */
+  opacity: 1;
+  transition: transform 250ms ease;
+}
+
 .test-button {
     position: absolute;
     display: flex;
