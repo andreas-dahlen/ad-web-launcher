@@ -44,8 +44,9 @@ const horizontal = computed(() => props.axis === 'horizontal')
 /* -------------------------
    Slider state refs
 -------------------------- */
-const laneState = computed(() => state.get('slider', props.lane))
-const dragging = computed(() => laneState.value?.dragging ?? false)
+const laneState = state.get('slider', props.lane)
+console.log('sliderGet= ', laneState)
+const dragging = computed(() => laneState.dragging ?? false)
 const lanePosition = computed(() => state.getPosition('slider', props.lane) ?? 0)
 const laneConstraints = computed(() => state.getConstraints('slider', props.lane) ?? { min: 0, max: 100 })
 const laneSize = computed(() => {

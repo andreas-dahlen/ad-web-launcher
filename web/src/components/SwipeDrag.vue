@@ -37,10 +37,11 @@ const dragItem = ref(null)
 /* -------------------------
 Lane / drag state
 -------------------------- */
-const laneState = computed(() => state.get('drag', props.lane))
-const lanePosition = computed(() => laneState.value?.position ?? { x: 0, y: 0 })
-const offset = computed(() => laneState.value?.offset ?? { x: 0, y: 0 })
-const dragging = computed(() => laneState.value?.dragging ?? false)
+const laneState = state.get('drag', props.lane)
+console.log('dragGet= ', laneState)
+const lanePosition = computed(() => laneState.position ?? { x: 0, y: 0 })
+const offset = computed(() => laneState.offset ?? { x: 0, y: 0 })
+const dragging = computed(() => laneState.dragging ?? false)
 /* -------------------------
    Watch / ensure drag exists
    -------------------------- */

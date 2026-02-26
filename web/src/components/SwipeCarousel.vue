@@ -44,7 +44,8 @@ const carouselEl = ref(null)
 // const laneSize = ref(0)
 
 const horizontal = computed(() => props.axis === 'horizontal')
-const laneState = computed(() => state.get('carousel', props.lane))
+const laneState = state.get('carousel', props.lane)
+console.log('carouselGet= ', laneState)
 /* -------------------------
    State syncing
 -------------------------- */
@@ -82,7 +83,7 @@ function handleReaction(e) {
    Scene indexes
 -------------------------- */
 const totalScenes = computed(() => props.scenes.length)
-const index = computed(() => laneState.value.index)
+const index = computed(() => laneState.index)
 
 const safeScenes = computed(() => props.scenes.map(s => markRaw(s)))
 const currentScene = computed(() => safeScenes.value[index.value] || null)
@@ -103,8 +104,8 @@ const nextScene = computed(() => {
    Movement math
 -------------------------- */
 
-const delta = computed(() => laneState.value.offset || 0)
-const isDragging = computed(() => laneState.value.dragging)
+const delta = computed(() => laneState.offset || 0)
+const isDragging = computed(() => laneState.dragging)
 
 // CSS transition: none during drag, eased during animation
 const transition = computed(() => {

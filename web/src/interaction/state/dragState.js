@@ -1,5 +1,6 @@
 import { reactive } from 'vue'
-
+import { computed } from 'vue'
+import { readonly } from 'vue'
 /**
  * dragState.js - Drag state management
  *
@@ -12,6 +13,8 @@ const ZERO_POINT = { x: 0, y: 0 }
 export const dragState = reactive({
   lanes: {}
 })
+
+const laneViews = {}
 
 export const dragStateFn = {
   getSize(laneId) {
@@ -32,9 +35,19 @@ export const dragStateFn = {
     return dragState.lanes[laneId]?.position ?? { x: 0, y: 0 }
   },
 
-  get(laneId) {
-    return dragState.lanes[laneId] ?? null
-  },
+get(laneId) {
+  const lane = this.ensure(laneId)
+
+  if (!laneViews[laneId]) {
+    laneViews[laneId] = readonly({
+      position: computed(() => lane.position),
+      offset: computed(() => lane.offset),
+      dragging: computed(() => lane.dragging),
+      // size: computed(() => lane.size),
+    })
+  }
+  return laneViews[laneId]
+},
 
   ensure(laneId) {
     if (!dragState.lanes[laneId]) {

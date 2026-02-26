@@ -1,5 +1,6 @@
 import { reactive } from 'vue'
-
+import { computed } from 'vue'
+import { readonly } from 'vue'
 /**
  * sliderState.js - Slider state management
 *
@@ -19,6 +20,7 @@ should flow through dispatcher actions.
 export const sliderState = reactive({
   sliders: {}
 })
+const laneViews = {}
 
 /* -------------------------------------------------
 Slider creation / access
@@ -44,7 +46,22 @@ export const sliderStateFn = {
   },
 
   get(laneId) {
-    return sliderState.sliders[laneId] ?? null
+    const lane = this.ensure(laneId)
+
+    if (!laneViews[laneId]) {
+      laneViews[laneId] = readonly({
+        value: computed (() => lane.value),
+        offset: computed(() => lane.offset),
+        // index: computed(() => lane.index),
+        dragging: computed(() => lane.dragging),
+        // size: computed(() => lane.size),
+        // count: computed(() => lane.count),
+        // progress: computed(() =>
+        //   lane.size ? lane.offset / lane.size : 0
+        // )
+      })
+    }
+    return laneViews[laneId]
   },
 
   ensure(laneId) {

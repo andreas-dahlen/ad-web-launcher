@@ -1,6 +1,7 @@
 import { reactive } from 'vue'
 import { clampNumber } from '../state/sizeState'
-
+import { computed } from 'vue'
+import { readonly } from 'vue'
 /* -------------------------------------------------
 Central carousel state
 
@@ -12,13 +13,33 @@ export const carouselState = reactive({
   lanes: {}
 })
 
+const laneViews = {}
+
 export const carouselStateFn = {
   getSize(laneId) {
     return carouselState.lanes[laneId]?.size ?? 0
   },
 
+  // get(laneId) {
+  //   return carouselState.lanes[laneId] ?? null
+  // },
+
   get(laneId) {
-    return carouselState.lanes[laneId] ?? null
+    const lane = this.ensure(laneId)
+
+    if (!laneViews[laneId]) {
+      laneViews[laneId] = readonly({
+        offset: computed(() => lane.offset),
+        index: computed(() => lane.index),
+        dragging: computed(() => lane.dragging),
+        size: computed(() => lane.size),
+        count: computed(() => lane.count),
+        progress: computed(() =>
+          lane.size ? lane.offset / lane.size : 0
+        )
+      })
+    }
+    return laneViews[laneId]
   },
 
   ensure(laneId) {
@@ -33,8 +54,8 @@ export const carouselStateFn = {
       }
     }
     return carouselState.lanes[laneId]
-  },  
-  
+  },
+
 
   /* -------------------------------------------------
      Configuration (called by layout / renderer)

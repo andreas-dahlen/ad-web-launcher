@@ -26,10 +26,11 @@ export const state = {
     getPosition(type, laneId) { return call(type, 'getPosition', laneId) },
     getConstraints(type, laneId) { return call(type, 'getConstraints', laneId) },
 
-    // ----- PURE READ ----- (for vue components)
+    // ----- PURE READ ----- (for vue components and for importing reacting with the registered element)
     get(type, laneId) {
         return call(type, 'get', laneId)
     },
+
     // ----- EFFECTFUL WRITES ----- (by vue components)
     ensure(type, laneId) { return call(type, 'ensure', laneId) },
     setCount(type, laneId, length) { return call(type, 'setCount', laneId, length) },
