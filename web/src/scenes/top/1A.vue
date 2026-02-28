@@ -1,12 +1,12 @@
 <template>
   <div class="scene-root a">
     TOP · A
-    <!-- <TestButton /> -->
+    <TestButton />
   </div>
 </template>
 
 <script setup>
-// import TestButton from '../../buttons/TestButton.vue'
+import TestButton from '../../components/buttons/TestButton.vue'
 defineOptions({ name: 'TopA' })
 </script>
 

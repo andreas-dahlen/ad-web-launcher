@@ -15,7 +15,7 @@
 </template>
 
 <script setup>
-import SwipeLane from '../../map/SwipeLane.vue'
+import SwipeLane from '../../lanes/SwipeLane.vue'
 defineOptions({ name: 'WallD' })
 
 const snappingX = "4"

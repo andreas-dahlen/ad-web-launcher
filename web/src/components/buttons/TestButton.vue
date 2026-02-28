@@ -9,12 +9,7 @@
             react-press-cancel 
             @press="onPress"
             @pressRelease="onPressRelease" 
-            @pressCancel="onPressCancel"
-            
-            lane-type="carousel"
-            lane-id="top"
-            :lane-index="0"
-            :lane-fields="['progress', 'offset']">
+            @pressCancel="onPressCancel">
             Fire Test Action
         </InputElement>
     </div>
@@ -39,13 +34,6 @@ function onPressCancel() {
 </script>
 
 <style scoped>
-.floating-btn {
-  /* Move with lane offset */
-  transform: translateX(calc(var(--lane-offset, 0) * 1px));
-  /* Fade when not at target index */
-  opacity: 1;
-  transition: transform 250ms ease;
-}
 
 .test-button {
     position: absolute;

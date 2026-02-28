@@ -1,0 +1,69 @@
+<template>
+  <div class="carousel" :style="carouselStyle">
+    <component
+      v-if="totalScenes > 0"
+      :key="'p-' + prevIndex"
+      :is="prevScene"
+      class="scene"
+      :style="prevStyle" />
+
+    <component
+      v-if="totalScenes > 0"
+      :key="'c-' + index"
+      :is="currentScene"
+      class="scene"
+      :style="currentStyle" />
+
+    <component
+      v-if="totalScenes > 0"
+      :key="'n-' + nextIndex"
+      :is="nextScene"
+      class="scene"
+      :style="nextStyle" />
+  </div>
+</template>
+
+<script setup>
+import { computed } from 'vue'
+import { state } from '../interaction/state/stateManager'
+import { useCarouselMotion } from './useLaneMotion'
+import { useCarouselScenes } from './useLaneScenes'
+
+const props = defineProps({
+  sourceLane: { type: String, required: true },
+  scenes: { type: Array, required: true },
+  axis: { type: String, default: 'horizontal' }
+})
+
+const horizontal = computed(() => props.axis === 'horizontal')
+const laneState = state.get('carousel', props.sourceLane)
+
+const laneSize = computed(() => {
+  const size = laneState?.size
+  if (!size) return 0
+  return horizontal.value ? size.x : size.y
+})
+
+const { totalScenes, index, currentScene, prevScene, nextScene } =
+  useCarouselScenes({
+    scenes: computed(() => props.scenes),
+    laneState
+  })
+
+const prevIndex = computed(() => {
+  const t = totalScenes.value
+  return t > 0 ? (index.value - 1 + t) % t : 0
+})
+const nextIndex = computed(() => {
+  const t = totalScenes.value
+  return t > 0 ? (index.value + 1) % t : 0
+})
+
+const { currentStyle, prevStyle, nextStyle, carouselStyle } =
+  useCarouselMotion({
+    laneState,
+    laneSize,
+    horizontal,
+    lane: props.sourceLane
+  })
+</script>

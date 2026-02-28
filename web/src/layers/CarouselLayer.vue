@@ -36,13 +36,19 @@
 </template>
 
 <script setup>
-import SwipeLane from '../map/SwipeLane.vue'
+import SwipeLane from '../lanes/SwipeLane.vue'
 import { LANES } from '../scenes/laneIndex'
+// import EmptyLane  from '../scenes/EmptyLane.vue'
 
 // Scene components for each lane
 const topScenes = LANES.top
 const midScenes = LANES.mid
 const bottomScenes = LANES.bottom
+
+// const emptyTopScenes = new Array(topScenes.length).fill(EmptyLane)
+// const emptyMidScenes = new Array(midScenes.length).fill(EmptyLane)
+// const emptyBottomScenes = new Array(bottomScenes.length).fill(EmptyLane)
+
 </script>
 
 <style scoped>

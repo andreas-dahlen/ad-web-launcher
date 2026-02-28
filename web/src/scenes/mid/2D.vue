@@ -13,7 +13,7 @@
 </template>
 
 <script setup>
-import SwipeLane from '../../map/SwipeLane.vue'
+import SwipeLane from '../../lanes/SwipeLane.vue'
 defineOptions({ name: 'MidD' })
 
 // :snapX="snappingX"

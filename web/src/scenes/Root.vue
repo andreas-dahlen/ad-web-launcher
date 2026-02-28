@@ -9,9 +9,9 @@
 </template>
 
 <script setup>
-import LaneWallpaper from '../domTree/WallpaperLayer.vue'
-import LanesHorizontal from '../domTree/CarouselLayer.vue'
-import contentLayer from '../domTree/InteractiveLayer.vue'
+import LaneWallpaper from '../layers/WallpaperLayer.vue'
+import LanesHorizontal from '../layers/CarouselLayer.vue'
+import contentLayer from '../layers/InteractiveLayer.vue'
 </script>
 
 <style scoped>

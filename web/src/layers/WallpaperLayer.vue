@@ -17,11 +17,14 @@
 </template>
 
 <script setup>
-import SwipeLane from '../map/SwipeLane.vue'
+import SwipeLane from '../lanes/SwipeLane.vue'
 import { LANES } from '../scenes/laneIndex'
+// import EmptyLane from '../scenes/EmptyLane.vue';
 
 // Wallpaper scenes from lane index
 const scenes = LANES.wallpaper
+
+// const emptyScenes = new Array(scenes.length).fill(EmptyLane)
 </script>
 
 <style scoped>
