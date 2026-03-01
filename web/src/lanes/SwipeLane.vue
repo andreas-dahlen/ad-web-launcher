@@ -5,6 +5,8 @@
     :style="carouselStyle" 
     :data-lane="lane" 
     :data-axis="axis"
+    :data-lock-prev="indexP"
+    :data-lock-next="indexN"
     :data-swipe-type="'carousel'" 
     :data-react-swipe-commit="reactSwipeCommit ? true : null">
 
@@ -75,12 +77,14 @@ const props = defineProps({
   // carousel
   scenes: { type: Array, default: () => [] },
   reactSwipeCommit: { type: Boolean, default: false },
+  indexP: {type: Number, required: false}, 
+  indexN: {type: Number, required: false},
   // slider
   reactSwipe: { type: Boolean, default: false },
   reactSwipeStart: { type: Boolean, default: false },
   // drag
-  snapX: { type: String, required: false },
-  snapY: { type: String, required: false }
+  snapX: { type: Number, required: false },
+  snapY: { type: Number, required: false }
 })
 
 /* ==========================================================
@@ -125,7 +129,9 @@ if (props.type === 'carousel') {
     laneState,
     laneSize,
     horizontal,
-    lane: props.lane
+    lane: props.lane,
+    indexP: props.indexP,
+    indexN: props.indexN
   }))
 }
 
@@ -255,6 +261,7 @@ if (props.type === 'drag') {
   height: 100%;
   background: #eee;
   touch-action: none;
+  pointer-events: auto;
 }
 
 .slider-track {

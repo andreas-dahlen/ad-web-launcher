@@ -1,15 +1,15 @@
 <template>
   <div class="scene-root c">
+    MID · C
   </div>
 </template>
 
 <script setup>
-
-defineOptions({ name: 'BottomC' })
-
+defineOptions({ name: 'MidMir3' })
 </script>
+
 <style scoped>
 .c {
-  background: linear-gradient(135deg, #7affb2, #47ff7a);
+opacity: 100%;
 }
 </style>

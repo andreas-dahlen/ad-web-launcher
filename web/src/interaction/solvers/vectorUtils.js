@@ -23,20 +23,6 @@ export const vector = {
         }
     },
 
-    // resolvePrim1D(value, axis) {
-    //     if (!value || !axis) return undefined
-
-    //     if (axis === 'horizontal') return value.x
-    //     if (axis === 'vertical') return value.y
-    // },
-
-    // resolveSub1D(value, axis) {
-    //     if (!value || !axis) return undefined
-
-    //     if (axis === 'horizontal') return value.y
-    //     if (axis === 'vertical') return value.x
-    // },
-
     resolveByAxis1D(value, axis) {
         if (!axis || !value) {
             return { prim: undefined, sub: undefined }

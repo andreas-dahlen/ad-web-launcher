@@ -1,6 +1,8 @@
+import { reactive } from "vue"
+
 export const APP_SETTINGS = {
-  debugPanel: import.meta.env.VITE_DEBUG || true,
-  DebugWrapper: import.meta.env.VITE_DEBUG || true,
+  debugPanel: import.meta.env.VITE_DEBUG === 'true',
+  DebugWrapper: import.meta.env.VITE_DEBUG === 'true',
 
   rawPhoneValues: {
     width: 1272,
@@ -12,5 +14,12 @@ export const APP_SETTINGS = {
   swipeSpeedMultiplier: 1.2,
 
   swipeThresholdRatio: 0.05,// start of swipe distance
-  swipeCommitRatio: 0.2 // commitmant distance on release
+  swipeCommitRatio: 0.2, // commitmant distance on release
 }
+
+export const USER_SETTINGS = reactive({
+  dragLock: false,
+  DragGridVisual: false,
+  defaultSnapX: 8,
+  defaultSnapY: 16 
+})

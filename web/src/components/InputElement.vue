@@ -103,6 +103,6 @@ usePointerForwarding({
 .input-element {
   user-select: none;
   touch-action: none;
-  z-index: 10;
+  pointer-events: auto;
 }
 </style>

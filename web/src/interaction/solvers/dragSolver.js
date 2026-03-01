@@ -22,12 +22,14 @@
 // } from './policy/dragPolicy'
 
 import { utils } from "./solverUtils"
+import { USER_SETTINGS } from "../../config/appSettings"
 
 export const dragSolver = {
   /**
    * Handle swipeStart - returns reaction to enable dragging
    */
   swipeStart() {
+    if (USER_SETTINGS.dragLock === true) return { stateAccepted: false }
     return { stateAccepted: true }
   },
 
@@ -35,6 +37,7 @@ export const dragSolver = {
    * Handle swipe (drag) - clamp deltas and return offset reaction
    */
   swipe(desc) {
+    if (USER_SETTINGS.dragLock === true) return { stateAccepted: false }
     const delta = utils.resolveDragSwipe(desc)
     return {
       delta,
@@ -46,6 +49,7 @@ export const dragSolver = {
    * Handle swipeCommit - always commit at current position (no revert)
    */
   swipeCommit(desc) {
+    if (USER_SETTINGS.dragLock === true) return { stateAccepted: false }
     let value = utils.resolveDragCommit(desc)
     const snap = utils.resolveSnapAdjustment(desc, value)
     if (snap != null) { value = snap }
@@ -57,12 +61,3 @@ export const dragSolver = {
     }
   }
 }
-
-// const finalPos = vector.clamp2D(delta, dragPosition, dragConstraints)
-// const {x: fx, y: fy} = finalPos
-// const {x: px, y: py} = dragPosition
-// const direction = vector.resolveDirection({x:fx - px, y:fy - py})
-// return {
-//   direction: direction,
-//   delta: { x: fx, y: fy },
-//   stateAccepted: true }

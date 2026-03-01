@@ -3,7 +3,9 @@
     <div class="app-content">
       <LaneWallpaper/>
       <LanesHorizontal/>
-      <contentLayer/>
+      <InteractiveLayer/>
+      <OverlayLayer/>
+      
     </div>
   <!-- </div> -->
 </template>
@@ -11,7 +13,8 @@
 <script setup>
 import LaneWallpaper from '../layers/WallpaperLayer.vue'
 import LanesHorizontal from '../layers/CarouselLayer.vue'
-import contentLayer from '../layers/InteractiveLayer.vue'
+import InteractiveLayer from '../layers/InteractiveLayer.vue';
+import OverlayLayer from '../layers/OverlayLayer.vue';
 </script>
 
 <style scoped>

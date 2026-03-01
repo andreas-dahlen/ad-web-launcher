@@ -45,9 +45,11 @@ const topScenes = LANES.top
 const midScenes = LANES.mid
 const bottomScenes = LANES.bottom
 
-// const emptyTopScenes = new Array(topScenes.length).fill(EmptyLane)
-// const emptyMidScenes = new Array(midScenes.length).fill(EmptyLane)
-// const emptyBottomScenes = new Array(bottomScenes.length).fill(EmptyLane)
+//       :indexP="indexPrevious"
+//       :indexN="indexNext"
+
+// const indexPrevious = 0
+// const indexNext = topScenes.length - 1
 
 </script>
 

@@ -1,44 +1,42 @@
 <template>
-  <div class="content-layer">
-    <MirrorCarousel 
-    sourceLane="wallpaper" 
-    :scenes="emptyWallpaperScene" 
-    axis="vertical" />
-  </div>
-  <div class="horizontal-layer">
+  <div class="interactive-layer">
     <MirrorCarousel 
     sourceLane="top" 
-    :scenes="emptyTopScenes" 
+    :scenes="topScenes" 
     axis="horizontal" />
-
+    
     <MirrorCarousel 
     sourceLane="mid" 
-    :scenes="emptyMidScenes"
+    :scenes="midScenes"
     axis="horizontal" />
-
+    
     <MirrorCarousel 
     sourceLane="bottom" 
-    :scenes="emptyBottomScenes" 
+    :scenes="bottomScenes" 
     axis="horizontal" />
   </div>
+<div class="content-layer">
+  <MirrorCarousel 
+  sourceLane="wallpaper" 
+  :scenes="wallpaperScene" 
+  axis="vertical" />
+</div>
 </template>
 
 <script setup>
 import MirrorCarousel from '../lanes/MirrorCarousel.vue';
-import { LANES } from '../scenes/laneIndex';
-import EmptyLane  from '../scenes/EmptyLane.vue'
+import { MIRLANES } from '../scenes/laneIndex';
+// import EmptyLane  from '../scenes/EmptyLane.vue'
 
-const wallpaperScene = LANES.wallpaper
-const topScenes = LANES.top
-const midScenes = LANES.mid
-const bottomScenes = LANES.bottom
+const wallpaperScene = MIRLANES.wallpaper
+const topScenes = MIRLANES.top
+const midScenes = MIRLANES.mid
+const bottomScenes = MIRLANES.bottom
 
-const emptyTopScenes = new Array(topScenes.length).fill(EmptyLane)
-const emptyMidScenes = new Array(midScenes.length).fill(EmptyLane)
-const emptyBottomScenes = new Array(bottomScenes.length).fill(EmptyLane)
-const emptyWallpaperScene = new Array(wallpaperScene.length).fill(EmptyLane)
-
-console.log(emptyBottomScenes.length, emptyMidScenes.length, emptyBottomScenes.length, emptyWallpaperScene.length)
+// const emptyTopScenes = new Array(topScenes.length).fill(EmptyLane)
+// const emptyMidScenes = new Array(midScenes.length).fill(EmptyLane)
+// const emptyBottomScenes = new Array(bottomScenes.length).fill(EmptyLane)
+// const emptyWallpaperScene = new Array(wallpaperScene.length).fill(EmptyLane)
 
 </script>
 
@@ -48,22 +46,20 @@ console.log(emptyBottomScenes.length, emptyMidScenes.length, emptyBottomScenes.l
   height: 100%;
   pointer-events: none;
   /* display: none; */
+  opacity: 100;
+  background: none;
 }
-
-.content-layer>* {
-  pointer-events: none;
-}
-
-.horizontal-layer {
+.interactive-layer {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  opacity: 50%;
+  opacity: 100%;
   /* Stack lanes vertically */
   display: flex;
   flex-direction: column;
   pointer-events: none;
 }
+
 </style>

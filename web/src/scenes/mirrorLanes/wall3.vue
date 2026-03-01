@@ -4,12 +4,11 @@
 </template>
 
 <script setup>
-
-defineOptions({ name: 'BottomC' })
-
+defineOptions({ name: 'WallMir3' })
 </script>
+
 <style scoped>
 .c {
-  background: linear-gradient(135deg, #7affb2, #47ff7a);
+    opacity: 100%;
 }
 </style>
