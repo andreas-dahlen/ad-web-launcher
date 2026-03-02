@@ -7,7 +7,10 @@
       axis="both"
       :reactSwipeCommit="true"
       >
-      <div class="drag-content">Drag me</div>
+
+      <template #drag-content>
+        <div class="drag-content">Drag me</div>
+      </template>
     </SwipeLane>
   </div>
 </template>

@@ -59,6 +59,30 @@ export const utils = {
     /* -------------------------
         carousel-specifics
     -------------------------- */
+    // resolveCarouselSwipe(norm, desc) {
+    //     const { prev, next } = desc.lockSwipeAt || {}
+    //     const currentIndex = desc.currentIndex
+    //     //early return sounds good?
+    //     if (prev == null && next == null) {
+    //         return {mainDelta: norm.mainDelta, blocked: false }
+    //     }
+    //     if (prev - 1 === currentIndex && norm.mainDelta > 0) {
+    //         return { blocked: true }
+    //     }
+    //     if (next - 1 === currentIndex && norm.mainDelta < 0) {
+    //         return { blocked: true}
+    //     }
+    //     return {mainDelta: norm.mainDelta, blocked: false }
+    // },
+
+    isCarouselBlocked(delta, index, lock) {
+        const { prev, next } = lock || {}
+        if (prev == null && next == null) return false
+        if (prev != null && prev - 1 === index && delta > 0) return true
+        if (next != null && next - 1 === index && delta < 0) return true
+        return false
+    },
+
     resolveCarouselCommit(norm, axis) {
         const { mainTrackSize, mainDelta } = norm
         if (this.shouldCommit(mainDelta, mainTrackSize, axis)) {

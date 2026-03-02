@@ -25,11 +25,10 @@ export const state = {
     getThumbSize(type, laneId) { return call(type, 'getThumbSize', laneId)},
     getPosition(type, laneId) { return call(type, 'getPosition', laneId) },
     getConstraints(type, laneId) { return call(type, 'getConstraints', laneId) },
+    getCurrentIndex(type, laneId) { return call(type, 'getCurrentIndex', laneId) },
 
     // ----- PURE READ ----- (for vue components and for importing reacting with the registered element)
-    get(type, laneId) {
-        return call(type, 'get', laneId)
-    },
+    get(type, laneId) { return call(type, 'get', laneId) },
 
     // ----- EFFECTFUL WRITES ----- (by vue components)
     ensure(type, laneId) { return call(type, 'ensure', laneId) },

@@ -8,7 +8,10 @@
       :reactSwipeStart="true"
       :reactSwipe="true"
     >
+
+    <template #slider-content>
       <div class="slider-content">..</div>
+    </template>
     </SwipeLane>
   </div>
 </template>

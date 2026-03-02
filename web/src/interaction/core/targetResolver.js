@@ -23,13 +23,15 @@ export const targetResolver = {
     const laneValid = Boolean(laneId && axis && swipeType)
     const snapX = ds.snapX != null ? Number(ds.snapX) : null
     const snapY = ds.snapY != null ? Number(ds.snapY) : null
-    return { el, ds, laneId, axis, swipeType, laneValid, snapX, snapY }
+    const lockPrevAt = ds.lockPrevAt != null ? Number(ds.lockPrevAt) : null
+    const lockNextAt = ds.lockNextAt != null ? Number(ds.lockNextAt) : null
+    return { el, ds, laneId, axis, swipeType, laneValid, snapX, snapY, lockPrevAt, lockNextAt }
   },
 
   buildModifiers(ctx) {
-    if (ctx.snapX == null && ctx.snapY == null) return null
     return {
-      snap: { x: ctx.snapX, y: ctx.snapY }
+      snap: ctx.snapX != null && ctx.snapY != null ? { x: ctx.snapX, y: ctx.snapY } : null,
+      lockSwipeAt: ctx.lockPrevAt != null && ctx.lockNextAt != null ? {prev: ctx.lockPrevAt, next: ctx.lockNextAt} : null
     }
   },
 
@@ -40,8 +42,7 @@ export const targetResolver = {
       axis: ctx.laneValid ? ctx.axis : null,
       swipeType: ctx.laneValid ? ctx.swipeType : null,
       actionId: ctx.ds.action || null,
-      startOffset: null,
-      // snap: ctx.snapValid ? { snapX: ctx.snapX, snapY: ctx.snapY } : null
+      startOffset: null
     }
   },
 
@@ -52,11 +53,13 @@ export const targetResolver = {
     return {
       //ALL
       laneSize: state.getSize(swipeType, laneId),//{x, y}
+
+      // CAROUSEL
+      currentIndex: swipeType === 'carousel'
+       ? state.getCurrentIndex(swipeType, laneId) : null,
       // //SLIDER
       sliderThumbSize: swipeType === 'slider'
         ? state.getThumbSize(swipeType, laneId) : null,
-      // sliderPosition: swipeType === 'slider'
-      //   ? state.getPosition(swipeType, laneId) : null, //number
       sliderConstraints: swipeType === 'slider'
         ? state.getConstraints(swipeType, laneId) : null,//{min, max}
       //DRAG
@@ -105,7 +108,7 @@ export const targetResolver = {
       (laneValid)
     )
     const selectable = !!(ds.reactSelected !== undefined || pressable || swipeable)
-    const modifiable = !!(ds.modifiable !== undefined || ds.snapX !== undefined || ds.snapY !== undefined)
+    const modifiable = !!(ds.modifiable !== undefined || ds.snapX !== undefined || ds.snapY !== undefined || ds.lockPrevAt !== undefined || ds.lockNextAt !== undefined)
 
     return {
       press: pressable,

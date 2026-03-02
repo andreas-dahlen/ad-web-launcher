@@ -16,6 +16,8 @@
       lane="top"
       :scenes="topScenes"
       axis="horizontal"
+      :lockPrevAt="1"
+      :lockNextAt="3"
     />
 
     <SwipeLane
@@ -45,11 +47,8 @@ const topScenes = LANES.top
 const midScenes = LANES.mid
 const bottomScenes = LANES.bottom
 
-//       :indexP="indexPrevious"
-//       :indexN="indexNext"
-
-// const indexPrevious = 0
-// const indexNext = topScenes.length - 1
+// const lockPrevAt = 1
+// const lockNextAt = 3
 
 </script>
 

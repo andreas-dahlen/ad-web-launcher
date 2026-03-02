@@ -20,9 +20,9 @@ export const carouselStateFn = {
     return carouselState.lanes[laneId]?.size ?? 0
   },
 
-  // get(laneId) {
-  //   return carouselState.lanes[laneId] ?? null
-  // },
+  getCurrentIndex(laneId) {
+    return carouselState.lanes[laneId]?.index ?? 0
+  },
 
   get(laneId) {
     const lane = this.ensure(laneId)
@@ -50,7 +50,9 @@ export const carouselStateFn = {
         offset: 0,
         size: 0,
         dragging: false,
-        pendingDir: null
+        pendingDir: null,
+        lockPrevAt: null,
+        lockNextAt: null
       }
     }
     return carouselState.lanes[laneId]
@@ -70,6 +72,7 @@ export const carouselStateFn = {
   setSize(laneId, size) {
     this.ensure(laneId).size = size
   },
+
   /**
    * Finalize transition after CSS animation completes.
    * Called by renderer when transitionend fires.

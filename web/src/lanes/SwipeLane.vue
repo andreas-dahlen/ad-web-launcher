@@ -5,8 +5,8 @@
     :style="carouselStyle" 
     :data-lane="lane" 
     :data-axis="axis"
-    :data-lock-prev="indexP"
-    :data-lock-next="indexN"
+    :data-lock-prev-at="lockPrevAt"
+    :data-lock-next-at="lockNextAt"
     :data-swipe-type="'carousel'" 
     :data-react-swipe-commit="reactSwipeCommit ? true : null">
 
@@ -39,7 +39,7 @@
     :data-react-swipe-commit="reactSwipeCommit ? true : null">
     <div class="slider-track"></div>
     <div ref="thumbEl" class="thumbEl" :style="thumbStyle">
-      <slot />
+      <slot name="slider-content"/>
     </div>
   </div>
 
@@ -55,7 +55,7 @@
       :data-snap-x="snapX"
       :data-snap-y="snapY"
       :data-react-swipe-commit="reactSwipeCommit ? true : null">
-      <slot />
+      <slot name="drag-content"/>
     </div>
   </div>
 </template>
@@ -77,8 +77,8 @@ const props = defineProps({
   // carousel
   scenes: { type: Array, default: () => [] },
   reactSwipeCommit: { type: Boolean, default: false },
-  indexP: {type: Number, required: false}, 
-  indexN: {type: Number, required: false},
+  lockPrevAt: {type: Number, required: false}, 
+  lockNextAt: {type: Number, required: false},
   // slider
   reactSwipe: { type: Boolean, default: false },
   reactSwipeStart: { type: Boolean, default: false },
@@ -99,6 +99,13 @@ let currentStyle, prevStyle, nextStyle, carouselStyle, onTransitionEnd
 if (props.type === 'carousel') {
   const horizontal = computed(() => props.axis === 'horizontal')
   const laneState = state.get('carousel', props.lane)
+
+  // watchEffect(() => {
+  //   state.setLocks('carousel', props.lane, {
+  //     lockPrevAt: props.lockPrevAt,
+  //     lockNextAt: props.lockNextAt
+  //   })
+  // })
 
   watchEffect(() => {
     state.setCount('carousel', props.lane, props.scenes.length)

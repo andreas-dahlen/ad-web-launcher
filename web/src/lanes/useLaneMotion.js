@@ -8,20 +8,9 @@ import { state } from '../interaction/state/stateManager'
    - transition toggle (none during drag, eased otherwise)
    - onTransitionEnd commits index
 -------------------------- */
-export function useCarouselMotion({ laneState, laneSize, horizontal, lane, indexP, indexN }) {
+export function useCarouselMotion({ laneState, laneSize, horizontal, lane }) {
   const delta = computed(() => laneState.offset || 0)
   const isDragging = computed(() => laneState.dragging)
-
-  const minOffset = computed(() => (indexN == null ? -Infinity : -indexN * laneSize.value))
-  const maxOffset = computed(() => (indexP == null ? Infinity : -indexP * laneSize.value))
-
-    const clampedDelta = computed(() => {
-    let val = delta.value
-    if (isDragging.value) {
-      val = Math.min(maxOffset.value, Math.max(minOffset.value, val))
-    }
-    return val
-  })
 
   // CSS transition: none during drag, eased during animation
   const transition = computed(() => {
@@ -43,19 +32,19 @@ export function useCarouselMotion({ laneState, laneSize, horizontal, lane, index
 
   const currentStyle = computed(() => ({
     ...baseStyle,
-    transform: translate(clampedDelta.value),
+    transform: translate(delta.value),
     transition: transition.value
   }))
 
   const prevStyle = computed(() => ({
     ...baseStyle,
-    transform: translate(-laneSize.value + clampedDelta.value),
+    transform: translate(-laneSize.value + delta.value),
     transition: transition.value
   }))
 
   const nextStyle = computed(() => ({
     ...baseStyle,
-    transform: translate(laneSize.value + clampedDelta.value),
+    transform: translate(laneSize.value + delta.value),
     transition: transition.value
   }))
 
