@@ -28,13 +28,6 @@ class LauncherActivity : AppCompatActivity() {
     private var deviceHeightPx = 0f
     private var deviceDensity = 1f
 
-    // Move throttling (~60fps)
-    private var lastMoveTime = 0L
-    private val moveThrottleMs = 16L
-
-    private var gestureSeqId = 0
-    private var isGestureActive = false
-
     // =========================================================================
     // Lifecycle
     // =========================================================================
@@ -114,11 +107,6 @@ class LauncherActivity : AppCompatActivity() {
             loadUrl("file:///android_asset/index.html")
         }
 
-        webView.setOnTouchListener { _, event ->
-            handleTouch(event)
-            true
-        }
-
         val container = FrameLayout(this).apply {
             layoutParams = ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
@@ -131,44 +119,6 @@ class LauncherActivity : AppCompatActivity() {
         }
 
         setContentView(container)
-    }
-
-    // =========================================================================
-    // Touch → JS forwarding
-    // =========================================================================
-
-    private fun handleTouch(event: MotionEvent) {
-        val cssX = event.x / deviceDensity
-        val cssY = event.y / deviceDensity
-
-        when (event.actionMasked) {
-            MotionEvent.ACTION_DOWN -> {
-                gestureSeqId++
-                isGestureActive = true
-                lastMoveTime = 0L
-                sendToJS("down", cssX, cssY)
-            }
-
-            MotionEvent.ACTION_MOVE -> {
-                if (!isGestureActive) return
-                val now = SystemClock.uptimeMillis()
-                if (now - lastMoveTime >= moveThrottleMs) {
-                    lastMoveTime = now
-                    sendToJS("move", cssX, cssY)
-                }
-            }
-
-            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                sendToJS("move", cssX, cssY)
-                sendToJS("up", cssX, cssY)
-                isGestureActive = false
-                lastMoveTime = 0L
-            }
-        }
-    }
-
-    private fun sendToJS(type: String, cssX: Float, cssY: Float) {
-        evalJS("handleTouch('$type',$cssX,$cssY,$gestureSeqId)")
     }
 
     // =========================================================================

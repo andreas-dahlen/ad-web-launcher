@@ -1,9 +1,8 @@
 <template>
-  <div class="scene-root c">
+  <div class="scene-root">
     <SwipeLane
       v-if="!USER_SETTINGS.dragLock"
       type="drag"
-      class="drag-container"
       :lane="lane"
       axis="both"
       :snapX="snappingX"
@@ -37,14 +36,6 @@ const snappingY = computed(() => USER_SETTINGS.defaultSnapY);
 </script>
 
 <style scoped>
-.c {
-  opacity: 100%;
-}
-.drag-container {
-  width: 100%;
-  height: 100%;
-  position: relative;
-}
 </style>
 
 

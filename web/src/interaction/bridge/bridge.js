@@ -23,11 +23,6 @@ export function usePointerForwarding({ elRef, onReaction }) {
       x: e.clientX,
       y: e.clientY,
     })
-
-    // Move & up handled globally during active gesture
-    window.addEventListener('pointermove', handlePointerMove)
-    window.addEventListener('pointerup', handlePointerUp)
-    window.addEventListener('pointercancel', handlePointerUp)
   }
 
   function handlePointerMove(e) {

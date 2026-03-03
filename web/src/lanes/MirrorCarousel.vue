@@ -1,24 +1,24 @@
 <template>
-  <div class="carousel" :style="carouselStyle">
+  <div class="carousel-default" :style="carouselStyle">
     <component
       v-if="totalScenes > 0"
       :key="'p-' + prevIndex"
       :is="prevScene"
-      class="scene"
+      class="scene-default"
       :style="prevStyle" />
 
     <component
       v-if="totalScenes > 0"
       :key="'c-' + index"
       :is="currentScene"
-      class="scene"
+      class="scene-default"
       :style="currentStyle" />
 
     <component
       v-if="totalScenes > 0"
       :key="'n-' + nextIndex"
       :is="nextScene"
-      class="scene"
+      class="scene-default"
       :style="nextStyle" />
   </div>
 </template>

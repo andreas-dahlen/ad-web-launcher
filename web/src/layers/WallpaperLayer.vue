@@ -48,7 +48,7 @@ const scenes = LANES.wallpaper
 }
 
 /* Allow carousel to receive events */
-.wallpaper-layer :deep(.carousel) {
+.wallpaper-layer :deep(.carousel-default) {
   pointer-events: auto;
 }
 </style>

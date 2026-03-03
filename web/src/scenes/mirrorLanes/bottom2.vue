@@ -1,5 +1,5 @@
 <template>
-  <div class="scene-root b">
+  <div class="scene-root">
     <SwipeLane
       type="slider"
       class="swipe-slider"
@@ -9,7 +9,7 @@
       :reactSwipe="true"
     >
     <template #slider-content>
-      <div class="slider-content">..</div>
+      <div class="slider-base slider-col">..</div>
     </template>
     </SwipeLane>
   </div>
@@ -38,7 +38,6 @@ defineOptions({ name: 'BottomMir2' })
   width: 50px;
   color: white;
   font-weight: bold;
-    background: #4285f4;
   border-radius: 10px;
 }
 </style>

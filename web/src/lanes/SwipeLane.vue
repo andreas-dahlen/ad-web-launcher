@@ -1,7 +1,8 @@
 <template>
   <!-- ======================== CAROUSEL ======================== -->
   <div v-if="type === 'carousel'"
-    ref="carouselEl" class="carousel" 
+    ref="carouselEl" 
+    :class="['carousel-default', $attrs.class]"
     :style="carouselStyle" 
     :data-lane="lane" 
     :data-axis="axis"
@@ -13,41 +14,47 @@
     <component 
       v-if="totalScenes > 0" 
       :is="prevScene" 
-      class="scene" 
+      class="scene-default"
       :style="prevStyle" />
 
     <component 
       v-if="totalScenes > 0" 
-      :is="currentScene" class="scene" 
+      :is="currentScene" 
+      class="scene-default"
       :style="currentStyle"
       @transitionend="onTransitionEnd" />
 
     <component v-if="totalScenes > 0" 
-      :is="nextScene" class="scene" 
+      :is="nextScene" 
+      class="scene-default"
       :style="nextStyle" />
   </div>
 
   <!-- ======================== SLIDER ======================== -->
   <div v-else-if="type === 'slider'"
     ref="sliderEl" 
-    v-bind="$attrs" class="slider-container" 
+    v-bind="$attrs" 
+    :class="['slider-container-default', $attrs.class]"
     :data-lane="lane" 
     :data-axis="axis"
     data-swipe-type="slider" 
     :data-react-swipe="reactSwipe ? true : null"
     :data-react-swipe-start="reactSwipeStart ? true : null"
     :data-react-swipe-commit="reactSwipeCommit ? true : null">
-    <div class="slider-track"></div>
-    <div ref="thumbEl" class="thumbEl" :style="thumbStyle">
+    <div class="slider-track-default"></div>
+    <div ref="thumbEl" 
+    class="thumb-default"
+    :style="thumbStyle">
       <slot name="slider-content"/>
     </div>
   </div>
 
   <!-- ======================== DRAG ======================== -->
   <div v-else-if="type === 'drag'"
-    ref="dragEl" class="drag-surface">
+    ref="dragEl" 
+    :class="['drag-surface-default', $attrs.class]">
     <div ref="dragItem" 
-      class="drag-item" 
+      class="drag-item-default"
       :style="itemStyle" 
       :data-lane="lane"
       data-axis="both" 
@@ -250,78 +257,77 @@ if (props.type === 'drag') {
 
 <style scoped>
 /* ======================== CAROUSEL ======================== */
-.carousel {
+.carousel-default {
   touch-action: none;
   transform: translateZ(0);
   -webkit-transform: translateZ(0);
 }
 
-.scene {
+.scene-default {
   user-select: none;
   contain: layout style paint;
 }
 
 /* ======================== SLIDER ======================== */
-.slider-container {
+.slider-container-default {
   position: relative;
   width: 100%;
   height: 100%;
-  background: #eee;
-  touch-action: none;
   pointer-events: auto;
 }
 
-.slider-track {
+.slider-track-default {
   border-radius: 999px;
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.163);
   position: absolute;
 }
-.slider-container[data-axis="horizontal"] .slider-track {
+
+.slider-container-default[data-axis="horizontal"] .slider-track-default {
   height: 10px;
   width: 90%;
   left: 5%;
-  right: 5%;
   top: 50%;
   transform: translateY(-50%);
 }
-.slider-container[data-axis="vertical"] .slider-track {
+
+.slider-container-default[data-axis="vertical"] .slider-track-default {
   width: 10px;
   height: 90%;
   top: 5%;
-  bottom: 5%;
   left: 50%;
   transform: translateX(-50%);
 }
 
-.thumbEl {
+.thumb-default {
   will-change: transform;
 }
-.slider-container[data-axis="horizontal"] .thumbEl {
+
+.slider-container-default[data-axis="horizontal"] .thumb-default {
   display: flex;
   height: 100%;
   align-items: center;
 }
-.slider-container[data-axis="vertical"] .thumbEl {
+
+.slider-container-default[data-axis="vertical"] .thumb-default {
   display: flex;
   width: 100%;
   justify-content: center;
 }
 
 /* ======================== DRAG ======================== */
-.drag-surface {
+.drag-surface-default {
   position: relative;
   width: 100%;
   height: 100%;
   pointer-events: none;
 }
 
-.drag-item {
+.drag-item-default {
   position: absolute;
   user-select: none;
   pointer-events: auto;
-  contain: layout style paint;
-  z-index: 10;
+  /* contain: layout style paint; */
 }
 </style>

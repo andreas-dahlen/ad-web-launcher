@@ -75,7 +75,7 @@ const bottomScenes = LANES.bottom
 }
 
 /* Allow pointer events on carousel children */
-.carousel-layer :deep(.carousel) {
+.carousel-layer :deep(.carousel-default) {
   pointer-events: auto;
 }
 </style>
