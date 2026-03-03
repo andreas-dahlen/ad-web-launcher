@@ -92,9 +92,11 @@ function onMove(x, y) {
             }
             gesture.phase = 'SWIPING'
             gesture.desc = resolved.desc
-            gesture.desc.startOffset = utils.resolveStartOffset(x, y, gesture.desc.element)
+            gesture.desc.startOffset = resolved.offset
+            // gesture.desc.startOffset = utils.resolveStartOffset(x, y, gesture.desc.element)
             gesture.last.x = x
             gesture.last.y = y
+
             return {
                 ...gesture.desc,
                 type: 'swipeStart',
@@ -130,19 +132,25 @@ function onUp(x, y) {
         return null
     }
     if (gesture.phase === 'SWIPING') {
-        return {
+
+        const descriptor = {
             ...gesture.desc,
             type: 'swipeCommit',
             delta: utils.normalizedDelta(gesture.totalDelta),
         }
+        resetGesture()
+        return descriptor
     }
     else if (gesture.phase === 'PENDING') {
         // Pointer up without swipe → release
-        return {
+
+        const descriptor = {
             ...gesture.desc,
             type: 'pressRelease',
             delta: { x: x, y: y }
         }
+        resetGesture()
+        return descriptor
     }
     return null
 }

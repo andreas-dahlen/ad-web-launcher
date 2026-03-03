@@ -8,7 +8,7 @@ export const utils = {
     -------------------------- */
     normalize1D(desc) {
         const { delta, laneSize, sliderThumbSize, axis, startOffset } = desc
-
+        // console.log(desc)
         const track = vector.resolveByAxis1D(laneSize, axis)
         const thumb = vector.resolveByAxis1D(sliderThumbSize, axis)
         const offset = vector.resolveByAxis1D(startOffset, axis)
@@ -59,21 +59,6 @@ export const utils = {
     /* -------------------------
         carousel-specifics
     -------------------------- */
-    // resolveCarouselSwipe(norm, desc) {
-    //     const { prev, next } = desc.lockSwipeAt || {}
-    //     const currentIndex = desc.currentIndex
-    //     //early return sounds good?
-    //     if (prev == null && next == null) {
-    //         return {mainDelta: norm.mainDelta, blocked: false }
-    //     }
-    //     if (prev - 1 === currentIndex && norm.mainDelta > 0) {
-    //         return { blocked: true }
-    //     }
-    //     if (next - 1 === currentIndex && norm.mainDelta < 0) {
-    //         return { blocked: true}
-    //     }
-    //     return {mainDelta: norm.mainDelta, blocked: false }
-    // },
 
     isCarouselBlocked(delta, index, lock) {
         const { prev, next } = lock || {}

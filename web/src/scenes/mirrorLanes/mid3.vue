@@ -1,5 +1,5 @@
 <template>
-    <DragOrSlot lane="mid3-button-1">
+    <DragOrSlot lane="mid3-button-1" class="scene-root">
       <template #drag-content>
         <div class="drag-content">Drag me</div>
       </template>
@@ -16,9 +16,6 @@ defineOptions({ name: 'MidMir3' })
 </script>
 
 <style scoped>
-.c {
-opacity: 100%;
-}
 .drag-content {
   width: 130px;
   height: 130px;

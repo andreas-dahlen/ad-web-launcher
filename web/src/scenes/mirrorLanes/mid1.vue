@@ -26,13 +26,6 @@ defineOptions({ name: 'MidMir1' })
   animation: spin 10s linear infinite;
 }
 
-.label {
-  color: #2d1b00;
-  font-size: 18px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-}
-
 @keyframes spin {
   from {
     transform: rotate(0deg);

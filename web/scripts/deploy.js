@@ -50,6 +50,4 @@ if (fs.existsSync(DEST_INDEX)) {
 
 fs.copyFileSync(SRC_INDEX, DEST_INDEX)
 
-console.log('✅ Asset updated successfully')
-
-console.log(`✅ Asset updated successfully [DEBUG]:${import.meta.env.VITE_DEBUG}`)
+console.log(`✅ Asset updated successfully [DEBUG]:${process.meta.env.VITE_DEBUG}`)

@@ -11,7 +11,6 @@ export const APP_SETTINGS = {
   },
   
   swipeAnimationMs: 250,
-  swipeSpeedMultiplier: 1.2,
 
   swipeThresholdRatio: 0.05,// start of swipe distance
   swipeCommitRatio: 0.2, // commitmant distance on release

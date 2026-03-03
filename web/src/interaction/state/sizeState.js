@@ -68,11 +68,7 @@ export function normalizeParameter(parameter) {
   return parameter / scale.value
 }
 
-function isFiniteNumber(value) {
-  return Number.isFinite(value)
-}
-
 export function clampNumber(value, min = 0, max = 1) {
-  const v = isFiniteNumber(value) ? value : min
+  const v = Number.isFinite(value) ? value : min
   return Math.min(Math.max(v, min), max)
 }

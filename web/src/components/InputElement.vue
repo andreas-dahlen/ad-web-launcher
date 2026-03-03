@@ -63,10 +63,6 @@ const emit = defineEmits([
   'swipe',
   'swipeCommit',
   'swipeRevert',
-  'select',
-  'deselect',
-  'laneCommit',
-  'laneSwipeStart'
 ])
 
 const el = ref(null)

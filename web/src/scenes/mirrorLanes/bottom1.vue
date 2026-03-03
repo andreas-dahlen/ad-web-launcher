@@ -12,8 +12,4 @@ import AppSettingsPanel from '../../config/AppSettingsPanel.vue';
 </script>
 
 <style scoped>
-.a {
-  opacity: 100;
-pointer-events: none;
-}
 </style>

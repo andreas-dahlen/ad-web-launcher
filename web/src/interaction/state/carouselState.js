@@ -9,7 +9,7 @@ This is a passive reactive store. All mutations
 should flow through dispatcher actions.
 ------------------------------------------------- */
 
-export const carouselState = reactive({
+const carouselState = reactive({
   lanes: {}
 })
 

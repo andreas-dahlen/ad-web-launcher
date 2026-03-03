@@ -6,7 +6,7 @@
 
 <script setup>
 
-defineOptions({ name: 'bottomB' })
+defineOptions({ name: 'BottomB' })
 
 </script>
 <style scoped>

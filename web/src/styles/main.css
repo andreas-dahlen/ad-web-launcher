@@ -1,6 +1,5 @@
 /* main.css */
 @import './variables.css';
-@import './touch.css';
 @import './scenes.css';
 
 html {

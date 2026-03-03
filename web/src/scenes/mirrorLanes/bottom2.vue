@@ -18,7 +18,7 @@
 <script setup>
 import SwipeLane from '../../lanes/SwipeLane.vue'
 
-defineOptions({ name: 'bottomMir2' })
+defineOptions({ name: 'BottomMir2' })
 </script>
 
 <style scoped>

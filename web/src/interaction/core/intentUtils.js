@@ -49,15 +49,17 @@ export const utils = {
         return target
     },
 
-    resolveSwipeTarget(x, y, intentAxis, target) {
+    resolveSwipeTarget(x, y, intentAxis, target) { //TODO: rename function to resolveSwipeStart?
         // Priority: target must support swipeStart AND the intent axis
         if (target) {
             const axis = this.resolveAxis(intentAxis, target)
             if (this.resolveSupports('swipeStart', target) && axis) {
+                const offset = this.resolveStartOffset(x, y, target.element)
                 return {
                     desc: target,
                     pressCancel: false,
-                    lockedAxis: target.axis
+                    offset
+                    // lockedAxis: target.axis
                 }
             }
         }
@@ -65,9 +67,11 @@ export const utils = {
         // Fallback: find lane by axis
         const newTarget = targetResolver.resolveLaneByAxis(x, y, intentAxis)
         if (newTarget) {
+            const offset = this.resolveStartOffset(x, y, newTarget.element)
             return {
                 desc: newTarget,
                 pressCancel: this.resolveSupports('pressCancel', target),
+                offset
             }
         }
         return null

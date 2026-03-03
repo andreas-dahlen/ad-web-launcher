@@ -44,22 +44,3 @@ export function drawDots(x, y, color = 'red') {
     setTimeout(() => dot.remove(), 500)
   }
 }
-
-let timeList = []
-
-// Track performance lag between gesture events.
-export function debugLagTime(label) {
-  if (!DEBUG.enabled || !DEBUG.lagTime) return
-
-  if (label === 'log') {
-    for (let i = 0; i < timeList.length - 1; i++) {
-      const a = timeList[i]
-      const b = timeList[i + 1]
-      const delta = (b.t - a.t).toFixed(1)
-      log('lagTime', `${a.label} -> ${b.label}: ${delta}ms`)
-    }
-    timeList = []
-  } else {
-    timeList.push({ label, t: performance.now() })
-  }
-}

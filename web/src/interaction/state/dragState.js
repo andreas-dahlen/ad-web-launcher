@@ -10,7 +10,7 @@ import { readonly } from 'vue'
 
 const ZERO_POINT = { x: 0, y: 0 }
 
-export const dragState = reactive({
+const dragState = reactive({
   lanes: {}
 })
 
@@ -43,7 +43,6 @@ get(laneId) {
       position: computed(() => lane.position),
       offset: computed(() => lane.offset),
       dragging: computed(() => lane.dragging),
-      // size: computed(() => lane.size),
     })
   }
   return laneViews[laneId]
