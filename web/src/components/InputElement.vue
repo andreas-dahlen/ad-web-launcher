@@ -22,8 +22,6 @@
     :data-react-swipe-start="reactSwipeStart ? true : null"
     :data-react-swipe-commit="reactSwipeCommit ? true : null"
     :data-react-swipe-revert="reactSwipeRevert ? true : null"
-    :data-react-selected="reactSelected ? true : null"
-    :data-react-deselected="reactDeselected ? true : null"
 
     v-bind="$attrs"
   >

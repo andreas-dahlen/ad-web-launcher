@@ -8,7 +8,6 @@ export const utils = {
     -------------------------- */
     normalize1D(desc) {
         const { delta, laneSize, sliderThumbSize, axis, startOffset } = desc
-        // console.log(desc)
         const track = vector.resolveByAxis1D(laneSize, axis)
         const thumb = vector.resolveByAxis1D(sliderThumbSize, axis)
         const offset = vector.resolveByAxis1D(startOffset, axis)

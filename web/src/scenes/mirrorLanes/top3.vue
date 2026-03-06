@@ -1,5 +1,5 @@
 <template>
-  <div class="scene-root c">
+  <div class="scene-root">
     TOP · C
   </div>
 </template>
@@ -9,7 +9,4 @@ defineOptions({ name: 'TopMir3' })
 </script>
 
 <style scoped>
-.c {
-    opacity: 100%;
-}
 </style>

@@ -35,7 +35,7 @@ function onPressCancel() {
 
 <style scoped>
 
-.test-button {
+/* .test-button {
     position: absolute;
     display: flex;
     justify-content: center;
@@ -48,14 +48,14 @@ function onPressCancel() {
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
     touch-action: none;
     transition: background 120ms ease, transform 120ms ease;
-}
+} */
 
 .test-button :deep(.input-element) {
-    display: inline-flex;
-    align-items: center;
+    /* display: inline-flex; */
+    /* align-items: center; */
     background-color: black;
     border-radius: 10px;
-    justify-content: center;
+    /* justify-content: center; */
     width: 100%;
     height: 100%;
 }

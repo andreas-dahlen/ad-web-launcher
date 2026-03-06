@@ -107,7 +107,6 @@ export const targetResolver = {
       ds.reactSwipeStart !== undefined ||
       (laneValid)
     )
-    const selectable = !!(ds.reactSelected !== undefined || pressable || swipeable)
     const modifiable = !!(ds.modifiable !== undefined || ds.snapX !== undefined || ds.snapY !== undefined || ds.lockPrevAt !== undefined || ds.lockNextAt !== undefined)
 
     return {
@@ -118,8 +117,6 @@ export const targetResolver = {
       swipe: swipeable,
       swipeCommit: swipeable,
       swipeRevert: swipeable,
-      select: selectable,
-      deselect: selectable,
       snap: modifiable
     }
   }

@@ -1,5 +1,5 @@
 <template>
-  <div class="scene-root b">
+  <div class="scene-root">
   </div>
 </template>
 
@@ -8,7 +8,4 @@ defineOptions({ name: 'WallMir2' })
 </script>
 
 <style scoped>
-.b {
-    opacity: 100%;
-}
 </style>

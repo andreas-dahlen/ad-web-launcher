@@ -52,19 +52,39 @@
   <!-- ======================== DRAG ======================== -->
   <div v-else-if="type === 'drag'"
     ref="dragEl" 
-    :class="['drag-surface-default', $attrs.class]">
+    :class="['non-interactive-default', $attrs.class]">
     <div ref="dragItem" 
-      class="drag-item-default"
+      class="interactive-default"
       :style="itemStyle" 
       :data-lane="lane"
       data-axis="both" 
       data-swipe-type="drag"
+      :data-locked="isLocked ? true : null"
       :data-snap-x="snapX"
       :data-snap-y="snapY"
       :data-react-swipe-commit="reactSwipeCommit ? true : null">
-      <slot name="drag-content"/>
+      <slot name="drag-content" :locked="isLocked"/>
     </div>
   </div>
+
+  <!-- ======================== BUTTON ======================== -->
+  <div v-else-if="type === 'button'"
+    ref="buttonEl" 
+    class="non-interactive-default">
+    <div ref="buttonItem" 
+    class="interactive-default"
+      v-bind="$attrs"
+      :data-lane="lane"
+      :data-press="press ? true : null"
+      :data-action="action || null"
+      :data-react-press="reactPress ? true : null"
+      :data-react-press-release="reactPressRelease ? true : null"
+      :data-react-press-cancel="reactPressCancel ? true : null">
+    </div>
+    <slot name="button-content"/>
+  </div>
+
+  
 </template>
 
 <script setup>
@@ -75,10 +95,16 @@ import { usePointerForwarding } from '../interaction/bridge/bridge'
 import { useCarouselMotion, useSliderMotion, useDragMotion } from './useLaneMotion'
 import { useCarouselScenes } from './useLaneScenes'
 
-const emit = defineEmits(['swipeCommit', 'volumeChange'])
+const emit = defineEmits([
+  'swipeCommit',
+  'volumeChange',
+  'press',
+  'pressRelease',
+  'pressCancel'
+])
 
 const props = defineProps({
-  type: { type: String, required: true }, // 'carousel' | 'slider' | 'drag'
+  type: { type: String, required: true }, // 'carousel' | 'slider' | 'drag' | 'button'
   lane: { type: String, required: true },
   axis: { type: String, default: 'horizontal' },
   // carousel
@@ -91,7 +117,14 @@ const props = defineProps({
   reactSwipeStart: { type: Boolean, default: false },
   // drag
   snapX: { type: Number, required: false },
-  snapY: { type: Number, required: false }
+  snapY: { type: Number, required: false },
+  isLocked: { type: Boolean, default: false},
+  //button
+  action: String,
+  press: { type: Boolean, default: false },
+  reactPress: { type: Boolean, default: false },
+  reactPressRelease: { type: Boolean, default: false },
+  reactPressCancel: { type: Boolean, default: false }
 })
 
 /* ==========================================================
@@ -253,6 +286,31 @@ if (props.type === 'drag') {
     dragging
   }))
 }
+
+/* ==========================================================
+   BUTTON
+   ========================================================== */
+
+const buttonEl = ref(null)
+const buttonItem = ref(null)
+
+if (props.type === 'button') {
+  usePointerForwarding({
+    elRef: buttonItem,
+    onReaction(e) {
+      const type = e.detail?.type
+      if (!type) return
+
+      if (type === 'press' && !props.reactPress) return
+      if (type === 'pressRelease' && !props.reactPressRelease) return
+      if (type === 'pressCancel' && !props.reactPressCancel) return
+
+      if (type === 'press') emit('press', e.detail)
+      if (type === 'pressRelease') emit('pressRelease', e.detail)
+      if (type === 'pressCancel') emit('pressCancel', e.detail)
+    }
+  })
+}
 </script>
 
 <style scoped>
@@ -317,17 +375,16 @@ if (props.type === 'drag') {
 }
 
 /* ======================== DRAG ======================== */
-.drag-surface-default {
+.non-interactive-default {
   position: relative;
-  width: 100%;
-  height: 100%;
   pointer-events: none;
 }
 
-.drag-item-default {
+.interactive-default {
   position: absolute;
   user-select: none;
   pointer-events: auto;
   /* contain: layout style paint; */
 }
+
 </style>

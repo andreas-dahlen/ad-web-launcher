@@ -1,7 +1,6 @@
 <template>
   <div class="scene-root a">
     <div class="spin-box" aria-label="spin test" ></div>
-    <!-- <div class="label">MID · A</div> -->
   </div>
 </template>
 

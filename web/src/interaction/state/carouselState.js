@@ -1,5 +1,5 @@
 import { reactive } from 'vue'
-import { clampNumber } from '../state/sizeState'
+// import { clampNumber } from '../state/sizeState'
 import { computed } from 'vue'
 import { readonly } from 'vue'
 /* -------------------------------------------------
@@ -66,7 +66,8 @@ export const carouselStateFn = {
   setCount(laneId, count) {
     const lane = this.ensure(laneId)
     lane.count = Math.max(0, count)
-    lane.index = clampNumber(lane.index, 0, lane.count - 1)
+    //might need to import vector.clamp to watch lane size dynamically..?
+    // lane.index = clampNumber(lane.index, 0, lane.count - 1)
   },
 
   setSize(laneId, size) {

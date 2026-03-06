@@ -1,5 +1,5 @@
 <template>
-  <div class="scene-root a">
+  <div class="scene-root">
     TOP · A
     <TestButton />
   </div>
@@ -11,7 +11,4 @@ defineOptions({ name: 'TopMir1' })
 </script>
 
 <style scoped>
-.a {
-    opacity: 100%;
-}
 </style>
