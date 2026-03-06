@@ -59,7 +59,7 @@ function onDown(x, y) {
     gesture.totalDelta.y = 0
 
     gesture.desc = utils.resolveTarget(x, y)
-    if (utils.resolveSupports('press', gesture.desc)) {
+    if (utils.resolveSupports('pressable', gesture.desc)) {
         return {
             ...gesture.desc,
             type: 'press',
@@ -96,11 +96,10 @@ function onMove(x, y) {
             // gesture.desc.startOffset = utils.resolveStartOffset(x, y, gesture.desc.element)
             gesture.last.x = x
             gesture.last.y = y
-
             return {
                 ...gesture.desc,
                 type: 'swipeStart',
-                delta: {x: x, y: y }, //this should be same location as press?
+                delta: {x: x, y: y },
                 extra: cancel
             }
         }

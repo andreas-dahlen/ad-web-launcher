@@ -41,9 +41,12 @@
     :data-react-swipe="reactSwipe ? true : null"
     :data-react-swipe-start="reactSwipeStart ? true : null"
     :data-react-swipe-commit="reactSwipeCommit ? true : null">
-    <div class="slider-track-default"></div>
-    <div ref="thumbEl" 
-    class="thumb-default"
+
+    <div class="slider-track-default">
+      <slot name="slider-track"></slot>
+    </div>
+
+    <div ref="thumbEl" class="thumb-default"
     :style="thumbStyle">
       <slot name="slider-content"/>
     </div>
@@ -52,18 +55,18 @@
   <!-- ======================== DRAG ======================== -->
   <div v-else-if="type === 'drag'"
     ref="dragEl" 
-    :class="['non-interactive-default', $attrs.class]">
+    class="non-interactive-default">
     <div ref="dragItem" 
       class="interactive-default"
       :style="itemStyle" 
       :data-lane="lane"
       data-axis="both" 
       data-swipe-type="drag"
-      :data-locked="isLocked ? true : null"
+      :data-locked="locked || null"
       :data-snap-x="snapX"
       :data-snap-y="snapY"
       :data-react-swipe-commit="reactSwipeCommit ? true : null">
-      <slot name="drag-content" :locked="isLocked"/>
+      <slot name="drag-content"/>
     </div>
   </div>
 
@@ -80,8 +83,8 @@
       :data-react-press="reactPress ? true : null"
       :data-react-press-release="reactPressRelease ? true : null"
       :data-react-press-cancel="reactPressCancel ? true : null">
+      <slot name="button-content"/>
     </div>
-    <slot name="button-content"/>
   </div>
 
   
@@ -118,7 +121,7 @@ const props = defineProps({
   // drag
   snapX: { type: Number, required: false },
   snapY: { type: Number, required: false },
-  isLocked: { type: Boolean, default: false},
+  locked: { type: Boolean, default: false},
   //button
   action: String,
   press: { type: Boolean, default: false },
@@ -262,7 +265,6 @@ if (props.type === 'drag') {
   const lanePosition = computed(() => laneState.position ?? { x: 0, y: 0 })
   const offset = computed(() => laneState.offset ?? { x: 0, y: 0 })
   const dragging = computed(() => laneState.dragging ?? false)
-
   watchEffect(() => state.ensure('drag', props.lane))
 
   useDragSizing({
@@ -329,49 +331,31 @@ if (props.type === 'button') {
 /* ======================== SLIDER ======================== */
 .slider-container-default {
   position: relative;
-  width: 100%;
-  height: 100%;
   pointer-events: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .slider-track-default {
-  border-radius: 999px;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.163);
   position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.slider-container-default[data-axis="horizontal"] .slider-track-default {
-  height: 10px;
-  width: 90%;
-  left: 5%;
-  top: 50%;
-  transform: translateY(-50%);
-}
-
-.slider-container-default[data-axis="vertical"] .slider-track-default {
-  width: 10px;
-  height: 90%;
-  top: 5%;
-  left: 50%;
-  transform: translateX(-50%);
-}
 
 .thumb-default {
+  position: absolute;
   will-change: transform;
 }
 
 .slider-container-default[data-axis="horizontal"] .thumb-default {
-  display: flex;
-  height: 100%;
-  align-items: center;
+  left: 0;
 }
 
 .slider-container-default[data-axis="vertical"] .thumb-default {
-  display: flex;
-  width: 100%;
-  justify-content: center;
+  top: 0;
 }
 
 /* ======================== DRAG ======================== */
@@ -384,7 +368,6 @@ if (props.type === 'button') {
   position: absolute;
   user-select: none;
   pointer-events: auto;
-  /* contain: layout style paint; */
 }
 
 </style>

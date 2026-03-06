@@ -20,5 +20,5 @@ export const USER_SETTINGS = reactive({
   dragLock: false,
   DragGridVisual: false,
   defaultSnapX: 8,
-  defaultSnapY: 16 
+  defaultSnapY: 16
 })

@@ -22,6 +22,7 @@ export const utils = {
      */
     resolveAxis(intentAxis, target) {
         if (!target?.axis) return null
+        if (target.locked) return null
         // Target accepts both → use intent axis
         if (target.axis === 'both') {
             return 'both'
@@ -53,13 +54,14 @@ export const utils = {
         // Priority: target must support swipeStart AND the intent axis
         if (target) {
             const axis = this.resolveAxis(intentAxis, target)
-            if (this.resolveSupports('swipeStart', target) && axis) {
+            const canSwipe = this.resolveSupports('swipeable', target) && axis
+            if(canSwipe && !target.locked) {
                 const offset = this.resolveStartOffset(x, y, target.element)
+
                 return {
                     desc: target,
                     pressCancel: false,
                     offset
-                    // lockedAxis: target.axis
                 }
             }
         }
@@ -70,12 +72,13 @@ export const utils = {
             const offset = this.resolveStartOffset(x, y, newTarget.element)
             return {
                 desc: newTarget,
-                pressCancel: this.resolveSupports('pressCancel', target),
+                pressCancel: this.resolveSupports('pressable', target),
                 offset
             }
         }
         return null
     },
+
     resolveStartOffset(x, y, element) {
         //static start poisition inside of element at x, y
         const rect = element.getBoundingClientRect()

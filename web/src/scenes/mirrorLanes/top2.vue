@@ -3,7 +3,7 @@
     TOP · B
     <SwipeLane
     type="button"
-    class="button-base"
+    class="test-button"
     lane="test-button-lane"
     press 
     react-press 
@@ -13,11 +13,10 @@
     @pressRelease="onPressRelease" 
     @pressCancel="onPressCancel"
     :data-state="interaction" 
-    
     >
     
       <template #button-content>
-        <div class="test-button">
+        <div class="button-base">
           Click Me!!!
         </div>
       </template>

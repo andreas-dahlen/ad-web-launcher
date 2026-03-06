@@ -7,11 +7,14 @@ export const targetResolver = {
     const ctx = this.buildContext(el)
     if (!ctx) return null
 
+    const modifiers = this.buildModifiers(ctx)
+    const reactions = this.buildReactions(ctx.ds, ctx.laneValid)
+
     return {
       ...this.buildBase(ctx),
       ...this.buildSwipe(ctx),
-      ...this.buildModifiers(ctx),
-      reactions: this.buildReactions(ctx.ds, ctx.laneValid)
+      ...modifiers,
+      reactions
     }
   },
 
@@ -25,14 +28,8 @@ export const targetResolver = {
     const snapY = ds.snapY != null ? Number(ds.snapY) : null
     const lockPrevAt = ds.lockPrevAt != null ? Number(ds.lockPrevAt) : null
     const lockNextAt = ds.lockNextAt != null ? Number(ds.lockNextAt) : null
-    return { el, ds, laneId, axis, swipeType, laneValid, snapX, snapY, lockPrevAt, lockNextAt }
-  },
-
-  buildModifiers(ctx) {
-    return {
-      snap: ctx.snapX != null && ctx.snapY != null ? { x: ctx.snapX, y: ctx.snapY } : null,
-      lockSwipeAt: ctx.lockPrevAt != null && ctx.lockNextAt != null ? {prev: ctx.lockPrevAt, next: ctx.lockNextAt} : null
-    }
+    const locked = ds.locked === 'true'
+    return { el, ds, laneId, axis, swipeType, laneValid, snapX, snapY, lockPrevAt, lockNextAt, locked }
   },
 
   buildBase(ctx) {
@@ -49,14 +46,12 @@ export const targetResolver = {
   buildSwipe(ctx) {
     if (!ctx.laneValid) return {}
     const { laneId, swipeType } = ctx
-
     return {
       //ALL
       laneSize: state.getSize(swipeType, laneId),//{x, y}
-
       // CAROUSEL
       currentIndex: swipeType === 'carousel'
-       ? state.getCurrentIndex(swipeType, laneId) : null,
+        ? state.getCurrentIndex(swipeType, laneId) : null,
       // //SLIDER
       sliderThumbSize: swipeType === 'slider'
         ? state.getThumbSize(swipeType, laneId) : null,
@@ -70,54 +65,62 @@ export const targetResolver = {
     }
   },
 
-  resolveFromPoint(x, y) {
-    const elements = document.elementsFromPoint(x, y)
-
-    for (const el of elements) {
-      const ds = el.dataset || {}
-
-      const laneValid = ds.lane && ds.axis && ds.swipeType
-      const reactions = this.buildReactions(ds, laneValid)
-
-      const isEligible = Object.values(reactions).some(Boolean)
-
-      if (isEligible) {
-        return this.resolveFromElement(el)
-      }
+  buildModifiers(ctx) {
+    return {
+      snap: ctx.snapX != null && ctx.snapY != null ? { x: ctx.snapX, y: ctx.snapY } : null,
+      lockSwipeAt: ctx.lockPrevAt != null && ctx.lockNextAt != null ? { prev: ctx.lockPrevAt, next: ctx.lockNextAt } : null,
+      locked: ctx.locked
     }
-
-    return null
-  },
-
-  resolveLaneByAxis(x, y, inputAxis) {
-    const el = document.elementsFromPoint(x, y).find(el => {
-      const ds = el.dataset
-      return ds?.lane && ds?.axis && (ds.axis === inputAxis || ds.axis === 'both')
-    })
-
-    return el ? this.resolveFromElement(el) : null
   },
 
   buildReactions(ds, laneValid) {
     const pressable = !!(ds.press !== undefined || ds.reactPress !== undefined || ds.action !== undefined)
 
     const swipeable = !!(
-      ds.swipe !== undefined ||
-      ds.reactSwipe !== undefined ||
-      ds.reactSwipeStart !== undefined ||
-      (laneValid)
-    )
-    const modifiable = !!(ds.modifiable !== undefined || ds.snapX !== undefined || ds.snapY !== undefined || ds.lockPrevAt !== undefined || ds.lockNextAt !== undefined)
+      (ds.swipe !== undefined ||
+        ds.reactSwipe !== undefined ||
+        ds.reactSwipeStart !== undefined ||
+        laneValid)
+    ) && ds.locked !== true
+
+    const modifiable = !!(
+      ds.modifiable !== undefined ||
+      ds.snapX !== undefined ||
+      ds.snapY !== undefined ||
+      ds.lockPrevAt !== undefined ||
+      ds.lockNextAt !== undefined ||
+      ds.locked !== undefined)
 
     return {
-      press: pressable,
-      pressRelease: pressable,
-      pressCancel: pressable || swipeable,
-      swipeStart: swipeable,
-      swipe: swipeable,
-      swipeCommit: swipeable,
-      swipeRevert: swipeable,
-      snap: modifiable
+      pressable: pressable,
+      swipeable: swipeable,
+      modifiable: modifiable,
     }
+  },
+
+  isEligible(reactions) {
+    return reactions.pressable || reactions.swipeable || reactions.modifiable
+  },
+
+  resolveFromPoint(x, y) {
+    const elements = document.elementsFromPoint(x, y)
+    for (const el of elements) {
+      const ctx = this.buildContext(el)
+      if (!ctx) continue
+      const reactions = this.buildReactions(ctx.ds, ctx.laneValid)
+      if (this.isEligible(reactions)) return this.resolveFromElement(el)
+    }
+    return null
+  },
+  resolveLaneByAxis(x, y, inputAxis) {
+    const el = document.elementsFromPoint(x, y).find(el => {
+      const ds = el.dataset || {}
+      const locked = ds.locked === 'true' // read as boolean
+      const laneValid = ds.lane && ds.axis && (ds.axis === inputAxis || ds.axis === 'both')
+      // skip locked lanes for swipe start
+      return laneValid && !locked
+    })
+
+    return el ? this.resolveFromElement(el) : null
   }
 }
