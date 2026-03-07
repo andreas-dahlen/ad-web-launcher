@@ -7,37 +7,45 @@ export const targetResolver = {
     const ctx = this.buildContext(el)
     if (!ctx) return null
 
-    const modifiers = this.buildModifiers(ctx)
     const reactions = this.buildReactions(ctx.ds, ctx.laneValid)
+    const base = this.buildBase(ctx)
+    const swipe = this.buildSwipe(ctx)
+    const modifiers = this.buildModifiers(ctx)
 
-    return {
-      ...this.buildBase(ctx),
-      ...this.buildSwipe(ctx),
-      ...modifiers,
-      reactions
+    // Deep merge sub-objects (modifiers may add to carousel/drag)
+    const result = { ...base, reactions }
+    if (swipe.carousel || modifiers.carousel) {
+      result.carousel = { ...swipe.carousel, ...modifiers.carousel }
     }
+    if (swipe.slider) {
+      result.slider = { ...swipe.slider }
+    }
+    if (swipe.drag || modifiers.drag) {
+      result.drag = { ...swipe.drag, ...modifiers.drag }
+    }
+    return result
   },
 
   buildContext(el) {
     const ds = el.dataset || {}
-    const laneId = ds.lane || null
+    const id = ds.id || null
     const axis = ds.axis || null
-    const swipeType = ds.swipeType || null
-    const laneValid = Boolean(laneId && axis && swipeType)
+    const type = ds.type || null
+    const laneValid = Boolean(id && axis && type)
     const snapX = ds.snapX != null ? Number(ds.snapX) : null
     const snapY = ds.snapY != null ? Number(ds.snapY) : null
     const lockPrevAt = ds.lockPrevAt != null ? Number(ds.lockPrevAt) : null
     const lockNextAt = ds.lockNextAt != null ? Number(ds.lockNextAt) : null
     const locked = ds.locked === 'true'
-    return { el, ds, laneId, axis, swipeType, laneValid, snapX, snapY, lockPrevAt, lockNextAt, locked }
+    return { el, ds, id, axis, type, laneValid, snapX, snapY, lockPrevAt, lockNextAt, locked }
   },
 
   buildBase(ctx) {
     return {
       element: ctx.el,
-      laneId: ctx.laneValid ? ctx.laneId : null,
+      id: ctx.laneValid ? ctx.id : null,
       axis: ctx.laneValid ? ctx.axis : null,
-      swipeType: ctx.laneValid ? ctx.swipeType : null,
+      type: ctx.laneValid ? ctx.type : null,
       actionId: ctx.ds.action || null,
       startOffset: null
     }
@@ -45,32 +53,44 @@ export const targetResolver = {
 
   buildSwipe(ctx) {
     if (!ctx.laneValid) return {}
-    const { laneId, swipeType } = ctx
-    return {
-      //ALL
-      laneSize: state.getSize(swipeType, laneId),//{x, y}
-      // CAROUSEL
-      currentIndex: swipeType === 'carousel'
-        ? state.getCurrentIndex(swipeType, laneId) : null,
-      // //SLIDER
-      sliderThumbSize: swipeType === 'slider'
-        ? state.getThumbSize(swipeType, laneId) : null,
-      sliderConstraints: swipeType === 'slider'
-        ? state.getConstraints(swipeType, laneId) : null,//{min, max}
-      //DRAG
-      dragPosition: swipeType === 'drag'
-        ? state.getPosition(swipeType, laneId) : null,//{x, y}
-      dragConstraints: swipeType === 'drag'
-        ? state.getConstraints(swipeType, laneId) : null//{minX, maxX, minY, maxY}
+    const { id, type } = ctx
+    const result = {}
+
+    if (type === 'carousel') {
+      result.carousel = {
+        index: state.getCurrentIndex(type, id),
+        size: state.getSize(type, id), //{x, y}
+      }
     }
+    if (type === 'slider') {
+      result.slider = {
+        thumbSize: state.getThumbSize(type, id),
+        constraints: state.getConstraints(type, id), //{min, max}
+        size: state.getSize(type, id), //{x, y}
+      }
+    }
+    if (type === 'drag') {
+      result.drag = {
+        position: state.getPosition(type, id), //{x, y}
+        constraints: state.getConstraints(type, id), //{minX, maxX, minY, maxY}
+      }
+    }
+    return result
   },
 
   buildModifiers(ctx) {
-    return {
-      snap: ctx.snapX != null && ctx.snapY != null ? { x: ctx.snapX, y: ctx.snapY } : null,
-      lockSwipeAt: ctx.lockPrevAt != null && ctx.lockNextAt != null ? { prev: ctx.lockPrevAt, next: ctx.lockNextAt } : null,
-      locked: ctx.locked
+    const result = {}
+    const snap = ctx.snapX != null && ctx.snapY != null ? { x: ctx.snapX, y: ctx.snapY } : null
+    const lockSwipeAt = ctx.lockPrevAt != null && ctx.lockNextAt != null ? { prev: ctx.lockPrevAt, next: ctx.lockNextAt } : null
+    const locked = ctx.locked
+
+    if (snap != null || locked) {
+      result.drag = { snap, locked }
     }
+    if (lockSwipeAt != null) {
+      result.carousel = { lockSwipeAt }
+    }
+    return result
   },
 
   buildReactions(ds, laneValid) {
@@ -116,7 +136,7 @@ export const targetResolver = {
     const el = document.elementsFromPoint(x, y).find(el => {
       const ds = el.dataset || {}
       const locked = ds.locked === 'true' // read as boolean
-      const laneValid = ds.lane && ds.axis && (ds.axis === inputAxis || ds.axis === 'both')
+      const laneValid = ds.id && ds.axis && (ds.axis === inputAxis || ds.axis === 'both')
       // skip locked lanes for swipe start
       return laneValid && !locked
     })

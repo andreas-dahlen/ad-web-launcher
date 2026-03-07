@@ -4,11 +4,11 @@
     ref="carouselEl" 
     :class="['carousel-default', $attrs.class]"
     :style="carouselStyle" 
-    :data-lane="lane" 
+    :data-id="id" 
     :data-axis="axis"
     :data-lock-prev-at="lockPrevAt"
     :data-lock-next-at="lockNextAt"
-    :data-swipe-type="'carousel'" 
+    :data-type="'carousel'" 
     :data-react-swipe-commit="reactSwipeCommit ? true : null">
 
     <component 
@@ -35,9 +35,9 @@
     ref="sliderEl" 
     v-bind="$attrs" 
     :class="['slider-container-default', $attrs.class]"
-    :data-lane="lane" 
+    :data-id="id" 
     :data-axis="axis"
-    data-swipe-type="slider" 
+    data-type="slider" 
     :data-react-swipe="reactSwipe ? true : null"
     :data-react-swipe-start="reactSwipeStart ? true : null"
     :data-react-swipe-commit="reactSwipeCommit ? true : null">
@@ -59,9 +59,9 @@
     <div ref="dragItem" 
       class="interactive-default"
       :style="itemStyle" 
-      :data-lane="lane"
+      :data-id="id"
       data-axis="both" 
-      data-swipe-type="drag"
+      data-type="drag"
       :data-locked="locked || null"
       :data-snap-x="snapX"
       :data-snap-y="snapY"
@@ -77,7 +77,7 @@
     <div ref="buttonItem" 
     class="interactive-default"
       v-bind="$attrs"
-      :data-lane="lane"
+      :data-id="id"
       :data-press="press ? true : null"
       :data-action="action || null"
       :data-react-press="reactPress ? true : null"
@@ -108,7 +108,7 @@ const emit = defineEmits([
 
 const props = defineProps({
   type: { type: String, required: true }, // 'carousel' | 'slider' | 'drag' | 'button'
-  lane: { type: String, required: true },
+  id: { type: String, required: true },
   axis: { type: String, default: 'horizontal' },
   // carousel
   scenes: { type: Array, default: () => [] },
@@ -141,31 +141,31 @@ let currentStyle, prevStyle, nextStyle, carouselStyle, onTransitionEnd
 
 if (props.type === 'carousel') {
   const horizontal = computed(() => props.axis === 'horizontal')
-  const laneState = state.get('carousel', props.lane)
+  const laneState = state.get('carousel', props.id)
 
   // watchEffect(() => {
-  //   state.setLocks('carousel', props.lane, {
+  //   state.setLocks('carousel', props.id, {
   //     lockPrevAt: props.lockPrevAt,
   //     lockNextAt: props.lockNextAt
   //   })
   // })
 
   watchEffect(() => {
-    state.setCount('carousel', props.lane, props.scenes.length)
+    state.setCount('carousel', props.id, props.scenes.length)
   })
 
   const { laneSize } = useLaneSizing({
     elRef: carouselEl,
     axisRef: computed(() => props.axis),
-    swipeType: 'carousel',
-    laneId: computed(() => props.lane)
+    type: 'carousel',
+    id: computed(() => props.id)
   })
 
   usePointerForwarding({
     elRef: carouselEl,
     onReaction(e) {
       if (!props.reactSwipeCommit) return
-      if (e.detail?.type !== 'swipeCommit') return
+      if (e.detail?.event !== 'swipeCommit') return
       emit('swipeCommit', e.detail)
     }
   })
@@ -179,7 +179,7 @@ if (props.type === 'carousel') {
     laneState,
     laneSize,
     horizontal,
-    lane: props.lane,
+    id: props.id,
     indexP: props.indexP,
     indexN: props.indexN
   }))
@@ -194,42 +194,42 @@ let thumbStyle
 
 if (props.type === 'slider') {
   const horizontal = computed(() => props.axis === 'horizontal')
-  const laneState = state.get('slider', props.lane)
+  const laneState = state.get('slider', props.id)
   const lastEmitted = ref(null)
 
   const dragging = computed(() => laneState.dragging ?? false)
-  const lanePosition = computed(() => state.getPosition('slider', props.lane) ?? 0)
-  const laneConstraints = computed(() => state.getConstraints('slider', props.lane) ?? { min: 0, max: 100 })
+  const lanePosition = computed(() => state.getPosition('slider', props.id) ?? 0)
+  const laneConstraints = computed(() => state.getConstraints('slider', props.id) ?? { min: 0, max: 100 })
   const laneSize = computed(() => {
-    const size = state.getSize('slider', props.lane)
+    const size = state.getSize('slider', props.id)
     if (!size) return 0
     return horizontal.value ? size.x : size.y
   })
   const laneThumbSize = computed(() => {
-    const size = state.getThumbSize('slider', props.lane)
+    const size = state.getThumbSize('slider', props.id)
     if (!size) return 0
     return horizontal.value ? size.x : size.y
   })
 
-  watchEffect(() => state.ensure('slider', props.lane))
+  watchEffect(() => state.ensure('slider', props.id))
 
   useSliderSizing({
     elRef: sliderEl,
     thumbRef: thumbEl,
-    swipeType: 'slider',
-    laneId: computed(() => props.lane)
+    type: 'slider',
+    id: computed(() => props.id)
   })
 
   usePointerForwarding({
     elRef: sliderEl,
     onReaction(e) {
-      const type = e.detail?.type
-      if (!type) return
+      const event = e.detail?.event
+      if (!event) return
 
       const shouldReact =
-        (type === 'swipe' && props.reactSwipe) ||
-        (type === 'swipeStart' && props.reactSwipeStart) ||
-        (type === 'swipeCommit' && props.reactSwipeCommit)
+        (event === 'swipe' && props.reactSwipe) ||
+        (event === 'swipeStart' && props.reactSwipeStart) ||
+        (event === 'swipeCommit' && props.reactSwipeCommit)
 
       if (!shouldReact) return
       let value = Math.round(lanePosition.value)
@@ -261,23 +261,23 @@ const dragItem = ref(null)
 let itemStyle
 
 if (props.type === 'drag') {
-  const laneState = state.get('drag', props.lane)
+  const laneState = state.get('drag', props.id)
   const lanePosition = computed(() => laneState.position ?? { x: 0, y: 0 })
   const offset = computed(() => laneState.offset ?? { x: 0, y: 0 })
   const dragging = computed(() => laneState.dragging ?? false)
-  watchEffect(() => state.ensure('drag', props.lane))
+  watchEffect(() => state.ensure('drag', props.id))
 
   useDragSizing({
     containerRef: dragEl,
     itemRef: dragItem,
-    laneId: computed(() => props.lane)
+    id: computed(() => props.id)
   })
 
   usePointerForwarding({
     elRef: dragItem,
     onReaction(e) {
       if (!props.reactSwipeCommit) return
-      if (e.detail?.type !== 'swipeCommit') return
+      if (e.detail?.event !== 'swipeCommit') return
       emit('swipeCommit', e.detail)
     }
   })
@@ -300,16 +300,16 @@ if (props.type === 'button') {
   usePointerForwarding({
     elRef: buttonItem,
     onReaction(e) {
-      const type = e.detail?.type
-      if (!type) return
+      const event = e.detail?.event
+      if (!event) return
 
-      if (type === 'press' && !props.reactPress) return
-      if (type === 'pressRelease' && !props.reactPressRelease) return
-      if (type === 'pressCancel' && !props.reactPressCancel) return
+      if (event === 'press' && !props.reactPress) return
+      if (event === 'pressRelease' && !props.reactPressRelease) return
+      if (event === 'pressCancel' && !props.reactPressCancel) return
 
-      if (type === 'press') emit('press', e.detail)
-      if (type === 'pressRelease') emit('pressRelease', e.detail)
-      if (type === 'pressCancel') emit('pressCancel', e.detail)
+      if (event === 'press') emit('press', e.detail)
+      if (event === 'pressRelease') emit('pressRelease', e.detail)
+      if (event === 'pressCancel') emit('pressCancel', e.detail)
     }
   })
 }

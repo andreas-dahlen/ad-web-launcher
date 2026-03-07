@@ -17,12 +17,12 @@ const dragState = reactive({
 const laneViews = {}
 
 export const dragStateFn = {
-  getSize(laneId) {
-    return dragState.lanes[laneId]?.size ?? 0
+  getSize(id) {
+    return dragState.lanes[id]?.size ?? 0
   },
 
-  getConstraints(laneId) {
-    const lane = dragState.lanes[laneId]
+  getConstraints(id) {
+    const lane = dragState.lanes[id]
     return {
       minX: lane.minX ?? 0,
       minY: lane.minY ?? 0,
@@ -31,41 +31,41 @@ export const dragStateFn = {
     }
   },
 
-  getPosition(laneId) {
-    return dragState.lanes[laneId]?.position ?? { x: 0, y: 0 }
+  getPosition(id) {
+    return dragState.lanes[id]?.position ?? { x: 0, y: 0 }
   },
 
-get(laneId) {
-  const lane = this.ensure(laneId)
+get(id) {
+  const lane = this.ensure(id)
 
-  if (!laneViews[laneId]) {
-    laneViews[laneId] = readonly({
+  if (!laneViews[id]) {
+    laneViews[id] = readonly({
       position: computed(() => lane.position),
       offset: computed(() => lane.offset),
       dragging: computed(() => lane.dragging),
     })
   }
-  return laneViews[laneId]
+  return laneViews[id]
 },
 
-  ensure(laneId) {
-    if (!dragState.lanes[laneId]) {
-      dragState.lanes[laneId] = {
+  ensure(id) {
+    if (!dragState.lanes[id]) {
+      dragState.lanes[id] = {
         position: { ...ZERO_POINT },
         offset: { ...ZERO_POINT },
         size: 0,
         dragging: false
       }
     }
-    return dragState.lanes[laneId]
+    return dragState.lanes[id]
   },
-  setSize(laneId, size) {
-    const lane = this.ensure(laneId)
+  setSize(id, size) {
+    const lane = this.ensure(id)
     lane.size = size ?? 0
   },
 
-  setConstraints(laneId, packet) {
-    const drag = this.ensure(laneId)
+  setConstraints(id, packet) {
+    const drag = this.ensure(id)
     const { minX, minY, maxX, maxY } = packet
     drag.minX = minX
     drag.minY = minY
@@ -73,8 +73,8 @@ get(laneId) {
     drag.maxY = maxY
   },
 
-  setPosition(laneId, pos) {
-    const lane = this.ensure(laneId)
+  setPosition(id, pos) {
+    const lane = this.ensure(id)
     lane.position = { x: pos.x ?? 0, y: pos.y ?? 0 }
   },
 
@@ -82,7 +82,7 @@ get(laneId) {
    * Start dragging - called by dispatcher on drag:swipeStart
    */
   swipeStart(desc) {
-    const lane = this.ensure(desc.laneId)
+    const lane = this.ensure(desc.id)
     lane.dragging = true
     lane.offset = { ...ZERO_POINT }
   },
@@ -91,7 +91,7 @@ get(laneId) {
    * Apply live offset during drag - called by dispatcher on drag:swipe
    */
   swipe(desc) {
-    const lane = this.ensure(desc.laneId)
+    const lane = this.ensure(desc.id)
     lane.offset = desc.delta
   },
 
@@ -99,7 +99,7 @@ get(laneId) {
    * Commit drag to new position - called by dispatcher on drag:swipeCommit
    */
   swipeCommit(desc) {
-    const lane = this.ensure(desc.laneId)
+    const lane = this.ensure(desc.id)
     lane.position = {
       x: desc.delta.x,
       y: desc.delta.y

@@ -25,7 +25,7 @@ export const carouselSolver = {
   swipe(desc) {
     const norm = utils.normalize1D(desc)
     const gated = utils.resolveGate(norm)
-    const locked = utils.isCarouselBlocked(norm.mainDelta, desc.currentIndex, desc.lockSwipeAt)
+    const locked = utils.isCarouselBlocked(norm.mainDelta, desc.carousel.index, desc.carousel.lockSwipeAt)
     if (gated || locked) { return {stateAccepted: false } }
     return { delta: norm.mainDelta, stateAccepted: true }
   },
@@ -37,8 +37,8 @@ export const carouselSolver = {
   swipeCommit(desc) {
     const norm = utils.normalize1D(desc)
     const gated = utils.resolveGate(norm)
-    const locked = utils.isCarouselBlocked(norm.mainDelta, desc.currentIndex, desc.lockSwipeAt)
-    if (gated || locked) return {type: 'swipeRevert', stateAccepted: true}
+    const locked = utils.isCarouselBlocked(norm.mainDelta, desc.carousel.index, desc.carousel.lockSwipeAt)
+    if (gated || locked) return {event: 'swipeRevert', stateAccepted: true}
 
     const solution = utils.resolveCarouselCommit(norm, desc.axis)
     if (solution) return {
@@ -46,7 +46,7 @@ export const carouselSolver = {
       delta: solution.delta,
       stateAccepted: true
     }
-    return {type: 'swipeRevert', stateAccepted: true}
+    return {event: 'swipeRevert', stateAccepted: true}
   },
 }
 

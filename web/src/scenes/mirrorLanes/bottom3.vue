@@ -3,7 +3,7 @@
     <SwipeLane
       type="drag"
       class="relative-max-size"
-      lane="bottom-drag"
+      id="bottom-drag"
       axis="both"
       :reactSwipeCommit="true"
       >

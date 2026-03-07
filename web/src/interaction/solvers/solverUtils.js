@@ -7,7 +7,9 @@ export const utils = {
         noramlize
     -------------------------- */
     normalize1D(desc) {
-        const { delta, laneSize, sliderThumbSize, axis, startOffset } = desc
+        const { delta, axis, startOffset } = desc
+        const laneSize = desc.carousel?.size ?? desc.slider?.size ?? null
+        const sliderThumbSize = desc.slider?.thumbSize ?? null
         const track = vector.resolveByAxis1D(laneSize, axis)
         const thumb = vector.resolveByAxis1D(sliderThumbSize, axis)
         const offset = vector.resolveByAxis1D(startOffset, axis)
@@ -50,7 +52,7 @@ export const utils = {
     },
 
     resolveSliderSwipe(norm, desc) {
-        const { min, max } = desc.sliderConstraints
+        const { min, max } = desc.slider.constraints
         const deltaValue = norm.mainDelta * desc.sliderValuePerPixel
         const nextValue = desc.sliderStartOffset + deltaValue
         return vector.clamp(nextValue, min, max)
@@ -94,7 +96,9 @@ export const utils = {
          drag-specifics
     -------------------------- */
     resolveDragSwipe(desc) {
-        const { delta, dragPosition = { x: 0, y: 0 }, dragConstraints = { min: 0, max: 100 } } = desc
+        const { delta } = desc
+        const dragPosition = desc.drag?.position ?? { x: 0, y: 0 }
+        const dragConstraints = desc.drag?.constraints ?? { min: 0, max: 100 }
         const clamped = vector.relativeClamp2D(delta, dragPosition, dragConstraints)
         const dx = clamped.x
         const dy = clamped.y
@@ -102,13 +106,13 @@ export const utils = {
     },
 
     resolveDragCommit(desc) {
-        return vector.clamp2D(desc.delta, desc.dragPosition, desc.dragConstraints)
+        return vector.clamp2D(desc.delta, desc.drag.position, desc.drag.constraints)
     },
 
 resolveSnapAdjustment(desc, value) {
-    if (!desc.snap) return null
-    const { x: snapX, y: snapY } = desc.snap
-    const { dragConstraints } = desc
+    if (!desc.drag?.snap) return null
+    const { x: snapX, y: snapY } = desc.drag.snap
+    const dragConstraints = desc.drag.constraints
 
     const snapAxis = (v, count, min, max) => {
         if (!count || count <= 0) return v

@@ -9,7 +9,7 @@
   <div class="wallpaper-layer">
     <SwipeLane
       type="carousel"
-      lane="wallpaper"
+      id="wallpaper"
       :scenes="scenes"
       axis="vertical"
     />

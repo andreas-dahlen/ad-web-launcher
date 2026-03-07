@@ -4,7 +4,7 @@
           v-if="!USER_SETTINGS.dragLock"
         type="drag"
         class="relative-max-size"
-        lane="wall-drag1"
+        id="wall-drag1"
         axis="both"
         :data-locked="false"
         :snapX="snappingX"

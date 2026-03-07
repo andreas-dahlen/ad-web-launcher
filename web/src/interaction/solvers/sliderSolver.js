@@ -25,7 +25,7 @@ export const sliderSolver = {
   swipeStart(desc) {
     const norm = utils.normalize1D(desc)
     const { value, valuePerPixel }= 
-    utils.resolveSliderStart(norm, desc.sliderConstraints)
+    utils.resolveSliderStart(norm, desc.slider.constraints)
     return { 
       delta: value, 
       stateAccepted: true,
@@ -45,7 +45,7 @@ export const sliderSolver = {
     const gated = utils.resolveGate(norm)
     if (gated) return {stateAccepted: false }
     const value = 
-    utils.resolveSliderSwipe(norm, desc, desc.sliderConstraints)
+    utils.resolveSliderSwipe(norm, desc, desc.slider.constraints)
     return { delta: value, stateAccepted: true }
   },
 

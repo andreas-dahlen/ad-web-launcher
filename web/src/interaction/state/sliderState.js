@@ -27,40 +27,40 @@ Slider creation / access
 ------------------------------------------------- */
 
 export const sliderStateFn = {
-  getSize(laneId) {
-    return sliderState.sliders[laneId]?.size ?? 0
+  getSize(id) {
+    return sliderState.sliders[id]?.size ?? 0
   },
 
-  getThumbSize(laneId) {
-    return sliderState.sliders[laneId]?.thumbSize ?? 0
+  getThumbSize(id) {
+    return sliderState.sliders[id]?.thumbSize ?? 0
   },
 
-  getConstraints(laneId) {
+  getConstraints(id) {
     return {
-      min: sliderState.sliders[laneId]?.min ?? 0,
-      max: sliderState.sliders[laneId]?.max ?? 100
+      min: sliderState.sliders[id]?.min ?? 0,
+      max: sliderState.sliders[id]?.max ?? 100
     }
   },
-  getPosition(laneId) {
-    return sliderState.sliders[laneId]?.value ?? 0
+  getPosition(id) {
+    return sliderState.sliders[id]?.value ?? 0
   },
 
-  get(laneId) {
-    const lane = this.ensure(laneId)
+  get(id) {
+    const lane = this.ensure(id)
 
-    if (!laneViews[laneId]) {
-      laneViews[laneId] = readonly({
+    if (!laneViews[id]) {
+      laneViews[id] = readonly({
         value: computed (() => lane.value),
         offset: computed(() => lane.offset),
         dragging: computed(() => lane.dragging),
       })
     }
-    return laneViews[laneId]
+    return laneViews[id]
   },
 
-  ensure(laneId) {
-    if (!sliderState.sliders[laneId]) {
-      sliderState.sliders[laneId] = {
+  ensure(id) {
+    if (!sliderState.sliders[id]) {
+      sliderState.sliders[id] = {
         value: 0,       // logical position (0–100 or whatever)
         offset: 0,      // optional for live dragging
         min: 0,
@@ -68,19 +68,19 @@ export const sliderStateFn = {
         size: 0,
       }
     }
-    return sliderState.sliders[laneId]
+    return sliderState.sliders[id]
   },
-  setConstraints(laneId, packet) {
-    const slider = this.ensure(laneId)
+  setConstraints(id, packet) {
+    const slider = this.ensure(id)
     slider.min = packet.min
     slider.max = packet.max
   },
-  setSize(laneId, size) {
-    this.ensure(laneId).size = size
+  setSize(id, size) {
+    this.ensure(id).size = size
   },
 
-  setThumbSize(laneId, thumbSize) {
-    this.ensure(laneId).thumbSize = thumbSize },
+  setThumbSize(id, thumbSize) {
+    this.ensure(id).thumbSize = thumbSize },
   /* -------------------------------------------------
      Dispatcher Actions (single choke point for mutations)
      
@@ -92,7 +92,7 @@ export const sliderStateFn = {
    * Start dragging - called by dispatcher on slider:swipeStart
    */
   swipeStart(desc) {
-    const slider = this.ensure(desc.laneId)
+    const slider = this.ensure(desc.id)
     slider.dragging = true
     slider.value = desc.delta
   },
@@ -100,7 +100,7 @@ export const sliderStateFn = {
    * Apply offset during drag - called by dispatcher on slider:swipe
    */
   swipe(desc) {
-    const slider = this.ensure(desc.laneId)
+    const slider = this.ensure(desc.id)
     slider.value = desc.delta
   },
 
@@ -110,7 +110,7 @@ export const sliderStateFn = {
    */
 
   swipeCommit(desc) {
-    const slider = this.ensure(desc.laneId)
+    const slider = this.ensure(desc.id)
     slider.value = desc.delta
     slider.dragging = false
   }

@@ -13,7 +13,7 @@
     :data-swipe="swipe ? true : null"
     :data-action="action || null"
     :data-axis="axis || null"
-    :data-swipe-type="swipeType || null"
+    :data-type="type || null"
 
     :data-react-press="reactPress ? true : null"
     :data-react-press-release="reactPressRelease ? true : null"
@@ -40,7 +40,7 @@ const props = defineProps({
   press: { type: Boolean, default: false },
   swipe: { type: Boolean, default: false },
   axis: { type: String, default: undefined },
-  swipeType: { type: String, default: undefined },
+  type: { type: String, default: undefined },
 
   reactPress: { type: Boolean, default: false },
   reactPressRelease: { type: Boolean, default: false },
@@ -69,20 +69,20 @@ const el = ref(null)
    Gesture forwarding (existing)
 -------------------------- */
 function handleReaction(e) {
-  const type = e.detail?.type
-  if (!type) return
+  const event = e.detail?.event
+  if (!event) return
 
-  if (type === 'press' && !props.reactPress) return
-  if (type === 'pressRelease' && !props.reactPressRelease) return
-  if (type === 'pressCancel' && !props.reactPressCancel) return
-  if (type === 'swipeStart' && !props.reactSwipeStart) return
-  if (type === 'swipe' && !props.reactSwipe) return
-  if (type === 'swipeCommit' && !props.reactSwipeCommit) return
-  if (type === 'swipeRevert' && !props.reactSwipeRevert) return
-  if (type === 'select' && !props.reactSelected) return
-  if (type === 'deselect' && !props.reactDeselected) return
+  if (event === 'press' && !props.reactPress) return
+  if (event === 'pressRelease' && !props.reactPressRelease) return
+  if (event === 'pressCancel' && !props.reactPressCancel) return
+  if (event === 'swipeStart' && !props.reactSwipeStart) return
+  if (event === 'swipe' && !props.reactSwipe) return
+  if (event === 'swipeCommit' && !props.reactSwipeCommit) return
+  if (event === 'swipeRevert' && !props.reactSwipeRevert) return
+  if (event === 'select' && !props.reactSelected) return
+  if (event === 'deselect' && !props.reactDeselected) return
 
-  emit(type, e.detail)
+  emit(event, e.detail)
 }
 
 usePointerForwarding({

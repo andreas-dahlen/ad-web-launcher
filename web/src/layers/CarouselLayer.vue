@@ -7,13 +7,13 @@
   - Each lane is a SwipeLane with its own scenes
   
   The swipe detection zones are handled separately in SwipeZones.vue
-  which overlays invisible touch areas with data-lane attributes.
+  which overlays invisible touch areas with data-id attributes.
 -->
 <template>
   <div class="carousel-layer">
     <SwipeLane
       type="carousel"
-      lane="top"
+      id="top"
       :scenes="topScenes"
       axis="horizontal"
       :lockPrevAt="1"
@@ -22,14 +22,14 @@
 
     <SwipeLane
       type="carousel"
-      lane="mid"
+      id="mid"
       :scenes="midScenes"
       axis="horizontal"
     />
 
     <SwipeLane
       type="carousel"
-      lane="bottom"
+      id="bottom"
       :scenes="bottomScenes"
       axis="horizontal"
 

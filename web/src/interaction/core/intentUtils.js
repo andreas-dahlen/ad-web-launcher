@@ -22,7 +22,7 @@ export const utils = {
      */
     resolveAxis(intentAxis, target) {
         if (!target?.axis) return null
-        if (target.locked) return null
+        if (target.drag?.locked) return null
         // Target accepts both → use intent axis
         if (target.axis === 'both') {
             return 'both'
@@ -55,7 +55,7 @@ export const utils = {
         if (target) {
             const axis = this.resolveAxis(intentAxis, target)
             const canSwipe = this.resolveSupports('swipeable', target) && axis
-            if(canSwipe && !target.locked) {
+            if(canSwipe && !target.drag?.locked) {
                 const offset = this.resolveStartOffset(x, y, target.element)
 
                 return {

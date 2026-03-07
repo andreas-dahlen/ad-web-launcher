@@ -4,7 +4,7 @@
     <SwipeLane
       type="drag"
       class="relative-max-size"
-      lane="mid-drag"
+      id="mid-drag"
       :reactSwipeCommit="true"
       :locked="USER_SETTINGS.dragLock"
       >
@@ -15,7 +15,7 @@
 
         <SwipeLane
           type="button"
-          lane="test-button-lane"
+          id="test-button-lane"
           press 
           react-press 
           react-press-release 

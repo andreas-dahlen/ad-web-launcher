@@ -62,7 +62,7 @@ function onDown(x, y) {
     if (utils.resolveSupports('pressable', gesture.desc)) {
         return {
             ...gesture.desc,
-            type: 'press',
+            event: 'press',
             delta: { x: x, y: y }
         }
     }
@@ -86,7 +86,7 @@ function onMove(x, y) {
             if (resolved.pressCancel) {
                 cancel = {
                     ...gesture.desc,
-                    type: 'pressCancel',
+                    event: 'pressCancel',
                     delta: { x: x, y: y }
                 }
             }
@@ -98,9 +98,9 @@ function onMove(x, y) {
             gesture.last.y = y
             return {
                 ...gesture.desc,
-                type: 'swipeStart',
+                event: 'swipeStart',
                 delta: {x: x, y: y },
-                extra: cancel
+                cancel: cancel
             }
         }
     }
@@ -118,7 +118,7 @@ function onMove(x, y) {
 
         return {
             ...gesture.desc,
-            type: 'swipe',
+            event: 'swipe',
             delta: utils.normalizedDelta(gesture.totalDelta),
         }
     }
@@ -134,7 +134,7 @@ function onUp(x, y) {
 
         const descriptor = {
             ...gesture.desc,
-            type: 'swipeCommit',
+            event: 'swipeCommit',
             delta: utils.normalizedDelta(gesture.totalDelta),
         }
         resetGesture()
@@ -145,7 +145,7 @@ function onUp(x, y) {
 
         const descriptor = {
             ...gesture.desc,
-            type: 'pressRelease',
+            event: 'pressRelease',
             delta: { x: x, y: y }
         }
         resetGesture()

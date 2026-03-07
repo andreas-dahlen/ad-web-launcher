@@ -49,7 +49,7 @@ export const dragSolver = {
     let value = utils.resolveDragCommit(desc)
     const snap = utils.resolveSnapAdjustment(desc, value)
     if (snap != null) { value = snap }
-    const direction = utils.resolveDragDirection(desc.dragPosition, value)
+    const direction = utils.resolveDragDirection(desc.drag.position, value)
     return {
       direction,
       delta: value,

@@ -16,19 +16,19 @@ const carouselState = reactive({
 const laneViews = {}
 
 export const carouselStateFn = {
-  getSize(laneId) {
-    return carouselState.lanes[laneId]?.size ?? 0
+  getSize(id) {
+    return carouselState.lanes[id]?.size ?? 0
   },
 
-  getCurrentIndex(laneId) {
-    return carouselState.lanes[laneId]?.index ?? 0
+  getCurrentIndex(id) {
+    return carouselState.lanes[id]?.index ?? 0
   },
 
-  get(laneId) {
-    const lane = this.ensure(laneId)
+  get(id) {
+    const lane = this.ensure(id)
 
-    if (!laneViews[laneId]) {
-      laneViews[laneId] = readonly({
+    if (!laneViews[id]) {
+      laneViews[id] = readonly({
         offset: computed(() => lane.offset),
         index: computed(() => lane.index),
         dragging: computed(() => lane.dragging),
@@ -39,12 +39,12 @@ export const carouselStateFn = {
         )
       })
     }
-    return laneViews[laneId]
+    return laneViews[id]
   },
 
-  ensure(laneId) {
-    if (!carouselState.lanes[laneId]) {
-      carouselState.lanes[laneId] = {
+  ensure(id) {
+    if (!carouselState.lanes[id]) {
+      carouselState.lanes[id] = {
         index: 0,
         count: 0,
         offset: 0,
@@ -55,7 +55,7 @@ export const carouselStateFn = {
         lockNextAt: null
       }
     }
-    return carouselState.lanes[laneId]
+    return carouselState.lanes[id]
   },
 
 
@@ -63,23 +63,23 @@ export const carouselStateFn = {
      Configuration (called by layout / renderer)
      ------------------------------------------------- */
 
-  setCount(laneId, count) {
-    const lane = this.ensure(laneId)
+  setCount(id, count) {
+    const lane = this.ensure(id)
     lane.count = Math.max(0, count)
     //might need to import vector.clamp to watch lane size dynamically..?
     // lane.index = clampNumber(lane.index, 0, lane.count - 1)
   },
 
-  setSize(laneId, size) {
-    this.ensure(laneId).size = size
+  setSize(id, size) {
+    this.ensure(id).size = size
   },
 
   /**
    * Finalize transition after CSS animation completes.
    * Called by renderer when transitionend fires.
    */
-  setPosition(laneId) {
-    const lane = this.ensure(laneId)
+  setPosition(id) {
+    const lane = this.ensure(id)
     if (!lane || !lane.pendingDir) return false
 
     lane.index = this.getNextIndex(lane.index, lane.pendingDir, lane.count)
@@ -113,7 +113,7 @@ export const carouselStateFn = {
    * Start dragging - called by dispatcher on carousel:dragStart
    */
   swipeStart(desc) {
-    const lane = this.ensure(desc.laneId)
+    const lane = this.ensure(desc.id)
     lane.dragging = true
     lane.pendingDir = null
   },
@@ -121,14 +121,14 @@ export const carouselStateFn = {
    * Apply offset during drag - called by dispatcher on carousel:offset
    */
   swipe(desc) {
-    this.ensure(desc.laneId).offset = desc.delta
+    this.ensure(desc.id).offset = desc.delta
   },
   /**
    * Commit swipe animation - called by dispatcher on carousel:commit
    */
   swipeCommit(desc) {
-    const { direction, delta, laneId } = desc
-    const lane = this.ensure(laneId)
+    const { direction, delta, id } = desc
+    const lane = this.ensure(id)
     lane.pendingDir = direction
     lane.offset = delta
     lane.dragging = false
@@ -137,7 +137,7 @@ export const carouselStateFn = {
    * Revert to original position - called by dispatcher on carousel:revert
    */
   swipeRevert(desc) {
-    const lane = this.ensure(desc.laneId)
+    const lane = this.ensure(desc.id)
     lane.offset = 0
     lane.dragging = false
     lane.pendingDir = null

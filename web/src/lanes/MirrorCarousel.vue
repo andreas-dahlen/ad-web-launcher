@@ -30,13 +30,13 @@ import { useCarouselMotion } from './useLaneMotion'
 import { useCarouselScenes } from './useLaneScenes'
 
 const props = defineProps({
-  sourceLane: { type: String, required: true },
+  sourceId: { type: String, required: true },
   scenes: { type: Array, required: true },
   axis: { type: String, default: 'horizontal' }
 })
 
 const horizontal = computed(() => props.axis === 'horizontal')
-const laneState = state.get('carousel', props.sourceLane)
+const laneState = state.get('carousel', props.sourceId)
 
 const laneSize = computed(() => {
   const size = laneState?.size
@@ -64,6 +64,6 @@ const { currentStyle, prevStyle, nextStyle, carouselStyle } =
     laneState,
     laneSize,
     horizontal,
-    lane: props.sourceLane
+    id: props.sourceId
   })
 </script>

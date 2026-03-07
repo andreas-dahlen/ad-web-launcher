@@ -3,7 +3,7 @@
     <SwipeLane
       type="slider"
       class="swipe-slider"
-      lane="slider2"
+      id="slider2"
       axis="vertical"
       :reactSwipeStart="true"
       :reactSwipe="true"

@@ -8,7 +8,7 @@ import { state } from '../interaction/state/stateManager'
    - transition toggle (none during drag, eased otherwise)
    - onTransitionEnd commits index
 -------------------------- */
-export function useCarouselMotion({ laneState, laneSize, horizontal, lane }) {
+export function useCarouselMotion({ laneState, laneSize, horizontal, id }) {
   const delta = computed(() => laneState.offset || 0)
   const isDragging = computed(() => laneState.dragging)
 
@@ -59,7 +59,7 @@ export function useCarouselMotion({ laneState, laneSize, horizontal, lane }) {
 
   function onTransitionEnd(e) {
     if (e.propertyName !== 'transform') return
-    state.setPosition('carousel', lane)
+    state.setPosition('carousel', id)
   }
 
   return { currentStyle, prevStyle, nextStyle, carouselStyle, onTransitionEnd }

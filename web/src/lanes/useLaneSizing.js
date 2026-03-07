@@ -1,7 +1,7 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { state } from '../interaction/state/stateManager'
 
-export function useLaneSizing({ elRef, axisRef, swipeType, laneId }) {
+export function useLaneSizing({ elRef, axisRef, type, id }) {
   const laneSize = ref(0)
   let observer
 
@@ -20,7 +20,7 @@ export function useLaneSizing({ elRef, axisRef, swipeType, laneId }) {
 
     laneSize.value = sizeValue
 
-    state.setSize(swipeType, laneId.value, trackSize)
+    state.setSize(type, id.value, trackSize)
   }
 
   onMounted(() => {
@@ -43,8 +43,8 @@ export function useLaneSizing({ elRef, axisRef, swipeType, laneId }) {
 export function useSliderSizing({
   elRef,
   thumbRef,
-  laneId,
-  swipeType = 'slider'
+  id,
+  type = 'slider'
 }) {
   let observer
 
@@ -66,8 +66,8 @@ export function useSliderSizing({
       x: thumbEl ? thumbContent.offsetWidth : 0, 
       y: thumbEl ? thumbContent.offsetHeight : 0}
 
-    state.setSize(swipeType, laneId.value, trackSize)
-    state.setThumbSize(swipeType, laneId.value, thumbSize)
+    state.setSize(type, id.value, trackSize)
+    state.setThumbSize(type, id.value, thumbSize)
   }
 
   onMounted(() => {
@@ -83,7 +83,7 @@ export function useSliderSizing({
   })
 }
 
-export function useDragSizing({ containerRef, itemRef, laneId }) {
+export function useDragSizing({ containerRef, itemRef, id }) {
   const laneSize = ref({ width: 0, height: 0 })
   const constraints = ref({ minX: 0, maxX: 0, minY: 0, maxY: 0 })
   let observer
@@ -112,8 +112,8 @@ export function useDragSizing({ containerRef, itemRef, laneId }) {
     constraints.value = constraint
 
     // forward to stateManager
-    state.setSize('drag', laneId.value, size)
-    state.setConstraints('drag', laneId.value, constraint)
+    state.setSize('drag', id.value, size)
+    state.setConstraints('drag', id.value, constraint)
   }
 
   onMounted(() => {

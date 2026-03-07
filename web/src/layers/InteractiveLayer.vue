@@ -1,23 +1,23 @@
 <template>
   <div class="interactive-layer">
     <MirrorCarousel 
-    sourceLane="top" 
+    sourceId="top" 
     :scenes="topScenes" 
     axis="horizontal" />
     
     <MirrorCarousel 
-    sourceLane="mid" 
+    sourceId="mid" 
     :scenes="midScenes"
     axis="horizontal" />
     
     <MirrorCarousel 
-    sourceLane="bottom" 
+    sourceId="bottom" 
     :scenes="bottomScenes" 
     axis="horizontal" />
   </div>
 <div class="content-layer">
   <MirrorCarousel 
-  sourceLane="wallpaper" 
+  sourceId="wallpaper" 
   :scenes="wallpaperScene" 
   axis="vertical" />
 </div>

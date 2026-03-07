@@ -48,7 +48,7 @@ export const render = {
     if (!descriptor || !descriptor.element) return
 
     // 2️⃣ Apply DOM / UI attributes
-    typeHandlers[descriptor.type]?.(descriptor.element)
+    typeHandlers[descriptor.event]?.(descriptor.element)
 
     // 3️⃣ Dispatch custom event
     dispatchEvent(descriptor.element, descriptor)

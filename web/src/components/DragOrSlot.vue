@@ -3,7 +3,7 @@
     <SwipeLane
       v-if="!USER_SETTINGS.dragLock"
       type="drag"
-      :lane="lane"
+      :id="id"
       axis="both"
       :snapX="snappingX"
       :snapY="snappingY"
@@ -28,7 +28,7 @@ import { computed } from 'vue';
 defineOptions({ name: 'DragOrSlot' });
 
 defineProps({
-    lane: { type: String, required: true }
+    id: { type: String, required: true }
 });
 
 const snappingX = computed(() => USER_SETTINGS.defaultSnapX);

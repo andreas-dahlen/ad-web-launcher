@@ -20,15 +20,15 @@ const interpreterMap = {
 
 export const pipeline = {
 
-  orchestrate(event) {
-    if (!event?.eventType) {
-      console.warn('invalid eventPackage for interpreter', event, event.eventType)
+  orchestrate(desc) {
+    if (!desc?.eventType) {
+      console.warn('invalid eventPackage for interpreter', desc, desc.eventType)
       return null
     }
     /* -------------------------
             Interpreter
     -------------------------- */
-    const { eventType, x, y } = event
+    const { eventType, x, y } = desc
     const interpreterFn = interpreterMap[eventType]
     if (!interpreterFn) {
       console.warn('Unknown eventType', eventType)
@@ -39,8 +39,9 @@ export const pipeline = {
     /* -------------------------
     Solvers
     -------------------------- */
-    const { swipeType, type } = descriptor
-    const solverfn = solvers[swipeType]?.[type]
+    console.log(descriptor.event)
+    const { type, event } = descriptor
+    const solverfn = solvers[type]?.[event]
     
     // Apply solver if available, merging with interpreter descriptor
     let solution = descriptor
@@ -54,14 +55,14 @@ export const pipeline = {
             Mutate state files (swipeStart, swipe, swipeCommit, swipeRevert)
     -------------------------- */
     console.log(solution)
-    if (solution.stateAccepted && state[solution.type]) {
-      state[solution.type](solution.swipeType, solution)
+    if (solution.stateAccepted && state[solution.event]) {
+      state[solution.event](solution.type, solution)
     }
     /* -------------------------
         Renderer
 -------------------------- */
-    if (solution.extra) {
-      render.handle(solution.extra)
+    if (solution.cancel) {
+      render.handle(solution.cancel)
     }
     render.handle(solution)
   }

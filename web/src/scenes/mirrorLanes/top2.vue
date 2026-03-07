@@ -4,7 +4,7 @@
     <SwipeLane
     type="button"
     class="test-button"
-    lane="test-button-lane"
+    id="test-button-lane"
     press 
     react-press 
     react-press-release 
