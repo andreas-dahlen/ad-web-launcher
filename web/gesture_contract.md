@@ -325,3 +325,102 @@ Solvers further transform deltas:
 3. **Target fallback on swipeStart.** If the original press target doesn't support the detected swipe axis, `resolveSwipeTarget` will search for a lane element at the pointer position that matches the axis. This can change the target mid-gesture (with a `pressCancel` on the original target).
 4. **Cross-axis gating.** If the pointer moves beyond the element's cross-axis boundary during a swipe, solvers return `stateAccepted: false`, freezing state but still dispatching the render event. The gesture continues but state stops updating until the pointer re-enters bounds.
 5. **Carousel `pendingDir` and rapid gestures.** If a new gesture starts before `transitionend` fires (e.g., user swipes quickly again), `setPosition` for the previous gesture hasn't run yet. The carousel's `index` is stale and `offset` will be overwritten. This could cause visual glitches or skipped scenes.
+
+## Current `src` Structure
+
+```text
+src/
+  App.vue
+  main.js
+  animations/
+  assets/
+    icons/
+    images/
+    sounds/
+  components/
+    DragGridVisual.vue
+    DragOrSlot.vue
+    InputElement.vue
+    buttons/
+      ButtonRoot.vue
+      TestButton.vue
+  config/
+    appSettings.js
+    AppSettingsPanel.vue
+  debug/
+    debugFlags.js
+    DebugPanel.vue
+    DebugWrapper.vue
+    functions.js
+  interaction/
+    bridge/
+      bridge.js
+    core/
+      intentUtils.js
+      interpreter.js
+      pipeline.js
+      targetResolver.js
+    solvers/
+      carouselSolver.js
+      dragSolver.js
+      sliderSolver.js
+      solverUtils.js
+      vectorUtils.js
+    state/
+      carouselState.js
+      dragState.js
+      sizeState.js
+      sliderState.js
+      stateManager.js
+    updater/
+      renderer.js
+  lanes/
+    MirrorCarousel.vue
+    SwipeLane.vue
+    useLaneMotion.js
+    useLaneScenes.js
+    useLaneSizing.js
+  layers/
+    CarouselLayer.vue
+    InteractiveLayer.vue
+    OverlayLayer.vue
+    WallpaperLayer.vue
+  scenes/
+    laneIndex.js
+    Root.vue
+    bottom/
+      3A.vue
+      3B.vue
+      3C.vue
+    mid/
+      2A.vue
+      2B.vue
+      2C.vue
+    mirrorLanes/
+      Bottom1.vue
+      Bottom2.vue
+      Bottom3.vue
+      Mid1.vue
+      Mid2.vue
+      Mid3.vue
+      Top1.vue
+      Top2.vue
+      Top3.vue
+      Wall1.vue
+      Wall2.vue
+      Wall3.vue
+    top/
+      1A.vue
+      1B.vue
+      1C.vue
+    wallpaper/
+      WallA.vue
+      WallB.vue
+      WallC.vue
+  styles/
+    main.css
+    objects.css
+    scenes.css
+    variables.css
+    vue-components.css
+```

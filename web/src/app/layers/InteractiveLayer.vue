@@ -24,7 +24,7 @@
 </template>
 
 <script setup>
-import MirrorCarousel from '../lanes/MirrorCarousel.vue';
+import MirrorCarousel from '../../interaction/z.primitives/MirrorCarousel.vue';
 import { MIRLANES } from '../scenes/laneIndex';
 // import EmptyLane  from '../scenes/EmptyLane.vue'
 

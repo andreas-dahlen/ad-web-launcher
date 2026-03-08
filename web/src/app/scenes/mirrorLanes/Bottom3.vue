@@ -16,7 +16,7 @@
 </template>
 
 <script setup>
-import SwipeLane from '../../lanes/SwipeLane.vue'
+import SwipeLane from '../../../interaction/z.primitives/SwipeLane.vue'
 defineOptions({ name: 'BottomMir3' })
 
 // :snapX="snappingX"

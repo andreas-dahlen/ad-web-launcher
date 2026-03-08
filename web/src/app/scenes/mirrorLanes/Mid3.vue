@@ -38,8 +38,8 @@
 </template>
 
 <script setup>
-import { USER_SETTINGS } from '../../config/appSettings';
-import SwipeLane from '../../lanes/SwipeLane.vue';
+import { USER_SETTINGS } from '../../config/appSettings'
+import SwipeLane from '../../../interaction/z.primitives/SwipeLane.vue'
 import { ref } from 'vue';
 defineOptions({ name: 'MidMir3' })
 

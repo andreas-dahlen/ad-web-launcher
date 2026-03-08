@@ -1,5 +1,5 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue'
-import { state } from '../interaction/state/stateManager'
+import { state } from '../../state/stateManager'
 
 export function useLaneSizing({ elRef, axisRef, type, id }) {
   const laneSize = ref(0)

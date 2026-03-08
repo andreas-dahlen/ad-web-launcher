@@ -3,8 +3,8 @@
     <SwipeLane
       type="slider"
       class="swipe-slider"
-      id="slider2"
-      axis="vertical"
+      id="slider1"
+      axis="horizontal"
       :reactSwipeStart="true"
       :reactSwipe="true"
     >
@@ -14,30 +14,31 @@
     </template>
 
     <template #slider-content>
-      <div class="slider-content">V</div>
+      <div class="slider-content">H</div>
     </template>
     </SwipeLane>
   </div>
 </template>
 
 <script setup>
-import SwipeLane from '../../lanes/SwipeLane.vue'
+import SwipeLane from '../../../interaction/z.primitives/SwipeLane.vue'
 
-defineOptions({ name: 'BottomMir2' })
+defineOptions({ name: 'MidMir2' })
+
 </script>
 
 <style scoped>
 .swipe-slider {
-  height: 240px;
-  width: 17%;
+  height: 21%;
+  width: 300px;
   border-radius: 10px;
   background-color: rgba(255, 105, 180, 0.226);
   border: 1px, solid, black;
 }
 
 .track-content {
-  width: 10px;
-  height: 220px;
+  width: 270px;
+  height: 10px;
   background-color: rgba(0, 0, 0, 0.4);
   border-radius: 999px;
 }

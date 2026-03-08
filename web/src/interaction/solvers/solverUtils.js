@@ -1,5 +1,5 @@
 
-import { APP_SETTINGS } from "../../config/appSettings"
+import { APP_SETTINGS } from "../../app/config/appSettings"
 import { vector } from "./vectorUtils"
 
 export const utils = {

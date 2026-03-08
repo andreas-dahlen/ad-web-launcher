@@ -38,7 +38,7 @@
 </template>
 
 <script setup>
-import SwipeLane from '../lanes/SwipeLane.vue'
+import SwipeLane from '../../interaction/z.primitives/SwipeLane.vue'
 import { LANES } from '../scenes/laneIndex'
 // import EmptyLane  from '../scenes/EmptyLane.vue'
 

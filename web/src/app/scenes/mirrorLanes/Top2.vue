@@ -26,7 +26,7 @@
 
 <script setup>
 import { ref } from 'vue';
-import SwipeLane from '../../lanes/SwipeLane.vue';
+import SwipeLane from '../../../interaction/z.primitives/SwipeLane.vue'
 defineOptions({ name: 'TopMir2' })
 
 const interaction = ref('idle')

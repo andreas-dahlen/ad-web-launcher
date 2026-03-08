@@ -2,9 +2,9 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 
-import './styles/main.css'
-import { APP_SETTINGS } from './config/appSettings'
-import { log } from './debug/functions'
+import './app/styles/main.css'
+import { APP_SETTINGS } from './app/config/appSettings'
+import { log } from './app/debug/functions'
 
 if (APP_SETTINGS.debugPanel) {
 	log('init', 'DEBUG MODE')

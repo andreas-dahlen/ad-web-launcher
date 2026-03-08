@@ -1,4 +1,4 @@
-import { log, drawDots } from '../../debug/functions'
+import { log, drawDots } from '../../app/debug/functions'
 import { utils } from './intentUtils'
 
 /*

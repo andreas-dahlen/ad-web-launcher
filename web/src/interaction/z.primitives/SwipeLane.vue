@@ -92,11 +92,11 @@
 
 <script setup>
 import { ref, computed, watchEffect } from 'vue'
-import { state } from '../interaction/state/stateManager'
-import { useLaneSizing, useSliderSizing, useDragSizing } from './useLaneSizing'
-import { usePointerForwarding } from '../interaction/bridge/bridge'
-import { useCarouselMotion, useSliderMotion, useDragMotion } from './useLaneMotion'
-import { useCarouselScenes } from './useLaneScenes'
+import { state } from '../state/stateManager'
+import { useLaneSizing, useSliderSizing, useDragSizing } from './composables/useLaneSizing'
+import { usePointerForwarding } from '../bridge/bridge'
+import { useCarouselMotion, useSliderMotion, useDragMotion } from './composables/useLaneMotion'
+import { useCarouselScenes } from './composables/useLaneScenes'
 
 const emit = defineEmits([
   'swipeCommit',

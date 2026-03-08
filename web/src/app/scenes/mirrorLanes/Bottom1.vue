@@ -8,7 +8,7 @@
 <script setup>
 defineOptions({ name: 'BottomMir1' })
 
-import AppSettingsPanel from '../../config/AppSettingsPanel.vue';
+import AppSettingsPanel from '../../config/AppSettingsPanel.vue'
 </script>
 
 <style scoped>

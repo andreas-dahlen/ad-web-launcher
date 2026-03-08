@@ -1,5 +1,5 @@
 import { normalizeParameter, getAxisSize } from '../state/sizeState'
-import { APP_SETTINGS } from '../../config/appSettings'
+import { APP_SETTINGS } from '../../app/config/appSettings'
 import { targetResolver } from "./targetResolver"
 
 export const utils = {

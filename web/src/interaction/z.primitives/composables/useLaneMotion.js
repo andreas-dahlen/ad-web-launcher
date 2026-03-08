@@ -1,6 +1,6 @@
 import { computed } from 'vue'
-import { APP_SETTINGS } from '../config/appSettings'
-import { state } from '../interaction/state/stateManager'
+import { APP_SETTINGS } from '../../../app/config/appSettings'
+import { state } from '../../state/stateManager'
 
 /* -------------------------
    Carousel motion

@@ -25,9 +25,9 @@
 
 <script setup>
 import { computed } from 'vue'
-import { state } from '../interaction/state/stateManager'
-import { useCarouselMotion } from './useLaneMotion'
-import { useCarouselScenes } from './useLaneScenes'
+import { state } from '../state/stateManager'
+import { useCarouselMotion } from './composables/useLaneMotion'
+import { useCarouselScenes } from './composables/useLaneScenes'
 
 const props = defineProps({
   sourceId: { type: String, required: true },
