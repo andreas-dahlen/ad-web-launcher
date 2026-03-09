@@ -39,7 +39,6 @@ export const pipeline = {
     /* -------------------------
     Solvers
     -------------------------- */
-    console.log(descriptor.event)
     const { type, event } = descriptor
     const solverfn = solvers[type]?.[event]
     
@@ -54,7 +53,6 @@ export const pipeline = {
     /* -------------------------
             Mutate state files (swipeStart, swipe, swipeCommit, swipeRevert)
     -------------------------- */
-    console.log(solution)
     if (solution.stateAccepted && state[solution.event]) {
       state[solution.event](solution.type, solution)
     }

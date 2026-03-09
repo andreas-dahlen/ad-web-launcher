@@ -22,7 +22,7 @@
 
 <script setup>
 import { USER_SETTINGS } from '../config/appSettings';
-import SwipeLane from '../../interaction/z.primitives/SwipeLane.vue'
+import SwipeLane from '../../interaction/z.primitives/Interaction.vue'
 import { computed } from 'vue';
 
 defineOptions({ name: 'DragOrSlot' });

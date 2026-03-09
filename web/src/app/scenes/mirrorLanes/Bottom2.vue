@@ -21,7 +21,7 @@
 </template>
 
 <script setup>
-import SwipeLane from '../../../interaction/z.primitives/SwipeLane.vue'
+import SwipeLane from '../../../interaction/z.primitives/Interaction.vue'
 
 defineOptions({ name: 'BottomMir2' })
 </script>

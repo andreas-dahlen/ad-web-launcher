@@ -1,22 +1,22 @@
 <template>
   <div class="interactive-layer">
-    <MirrorCarousel 
+    <CarouselHook 
     sourceId="top" 
     :scenes="topScenes" 
     axis="horizontal" />
     
-    <MirrorCarousel 
+    <CarouselHook 
     sourceId="mid" 
     :scenes="midScenes"
     axis="horizontal" />
     
-    <MirrorCarousel 
+    <CarouselHook 
     sourceId="bottom" 
     :scenes="bottomScenes" 
     axis="horizontal" />
   </div>
 <div class="content-layer">
-  <MirrorCarousel 
+  <CarouselHook 
   sourceId="wallpaper" 
   :scenes="wallpaperScene" 
   axis="vertical" />
@@ -24,7 +24,7 @@
 </template>
 
 <script setup>
-import MirrorCarousel from '../../interaction/z.primitives/MirrorCarousel.vue';
+import CarouselHook from '../../interaction/z.primitives/CarouselHook.vue';
 import { MIRLANES } from '../scenes/laneIndex';
 // import EmptyLane  from '../scenes/EmptyLane.vue'
 
