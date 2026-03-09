@@ -4,17 +4,21 @@ import { state } from '../../state/stateManager'
 
 /* -------------------------
    Carousel motion
-   - prev/current/next scene styles
-   - transition toggle (none during drag, eased otherwise)
-   - onTransitionEnd commits index
+   - styleForRole() maps each scene role to a positioned style
+   - transition suppressed during drag AND settling
+   - settling: brief flag set by carouselState.setPosition() that
+     prevents CSS transitions while index/offset snap to new
+     resting positions, avoiding a visible wrap-around flash
+   - onTransitionEnd commits index via state.setPosition
 -------------------------- */
 export function useCarouselMotion({ laneState, laneSize, horizontal, id }) {
   const delta = computed(() => laneState.offset || 0)
   const isDragging = computed(() => laneState.dragging)
+  const isSettling = computed(() => laneState.settling)
 
-  // CSS transition: none during drag, eased during animation
+  // CSS transition: none during drag or settling, eased during animation
   const transition = computed(() => {
-    if (isDragging.value) return 'none'
+    if (isDragging.value || isSettling.value) return 'none'
     return `transform ${APP_SETTINGS.swipeAnimationMs}ms cubic-bezier(0.25, 0.46, 0.45, 0.94)`
   })
 
@@ -30,23 +34,16 @@ export function useCarouselMotion({ laneState, laneSize, horizontal, id }) {
     willChange: 'transform'
   }
 
-  const currentStyle = computed(() => ({
-    ...baseStyle,
-    transform: translate(delta.value),
-    transition: transition.value
-  }))
+  const roleOffsets = { prev: -1, current: 0, next: 1 }
 
-  const prevStyle = computed(() => ({
-    ...baseStyle,
-    transform: translate(-laneSize.value + delta.value),
-    transition: transition.value
-  }))
-
-  const nextStyle = computed(() => ({
-    ...baseStyle,
-    transform: translate(laneSize.value + delta.value),
-    transition: transition.value
-  }))
+  function styleForRole(role) {
+    const multiplier = roleOffsets[role] ?? 0
+    return computed(() => ({
+      ...baseStyle,
+      transform: translate(multiplier * laneSize.value + delta.value),
+      transition: transition.value
+    }))
+  }
 
   const carouselStyle = computed(() => ({
     width: '100%',
@@ -59,10 +56,13 @@ export function useCarouselMotion({ laneState, laneSize, horizontal, id }) {
 
   function onTransitionEnd(e) {
     if (e.propertyName !== 'transform') return
+    // settling guard: if setPosition already fired (multiple transitionend
+    // events from prev/current/next), skip duplicate commits
+    if (isSettling.value) return
     state.setPosition('carousel', id)
   }
 
-  return { currentStyle, prevStyle, nextStyle, carouselStyle, onTransitionEnd }
+  return { styleForRole, carouselStyle, onTransitionEnd }
 }
 
 /* -------------------------

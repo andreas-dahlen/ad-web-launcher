@@ -10,23 +10,17 @@
     :data-type="'carousel'" 
     :data-react-swipe-commit="reactSwipeCommit ? true : null">
 
-    <component 
-      v-if="totalScenes > 0" 
-      :is="prevScene" 
+    <!-- Keyed v-for: Vue matches by sceneIndex so components are
+         reused (not unmounted/remounted) when the lane index changes,
+         preserving internal animations and component state. -->
+    <div
+      v-for="entry in styledScenes"
+      :key="entry.sceneIndex"
       class="scene-default"
-      :style="prevStyle" />
-
-    <component 
-      v-if="totalScenes > 0" 
-      :is="currentScene" 
-      class="scene-default"
-      :style="currentStyle"
-      @transitionend="onTransitionEnd" />
-
-    <component v-if="totalScenes > 0" 
-      :is="nextScene" 
-      class="scene-default"
-      :style="nextStyle" />
+      :style="entry.style"
+      @transitionend="onTransitionEnd">
+      <component :is="entry.component" />
+    </div>
   </div>
 </template>
 
@@ -56,13 +50,6 @@ const carouselEl = ref(null)
 const horizontal = computed(() => props.axis === 'horizontal')
 const laneState = state.get('carousel', props.id)
 
-// watchEffect(() => {
-//   state.setLocks('carousel', props.id, {
-//     lockPrevAt: props.lockPrevAt,
-//     lockNextAt: props.lockNextAt
-//   })
-// })
-
 watchEffect(() => {
   state.setCount('carousel', props.id, props.scenes.length)
 })
@@ -83,19 +70,30 @@ usePointerForwarding({
   }
 })
 
-const { totalScenes, currentScene, prevScene, nextScene } = useCarouselScenes({
+const { visibleScenes } = useCarouselScenes({
   scenes: computed(() => props.scenes),
   laneState
 })
 
-const { currentStyle, prevStyle, nextStyle, carouselStyle, onTransitionEnd } = useCarouselMotion({
+const { styleForRole, carouselStyle, onTransitionEnd } = useCarouselMotion({
   laneState,
   laneSize,
   horizontal,
-  id: props.id,
-  indexP: props.indexP,
-  indexN: props.indexN
+  id: props.id
 })
+
+// Attach computed style to each visible scene entry by role
+const roleStyles = {
+  prev: styleForRole('prev'),
+  current: styleForRole('current'),
+  next: styleForRole('next')
+}
+const styledScenes = computed(() =>
+  visibleScenes.value.map(entry => ({
+    ...entry,
+    style: roleStyles[entry.role].value
+  }))
+)
 </script>
 
 <style scoped>

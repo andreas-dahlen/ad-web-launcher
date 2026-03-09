@@ -1,7 +1,5 @@
-import { reactive } from 'vue'
+import { reactive, computed, readonly, nextTick } from 'vue'
 // import { clampNumber } from '../state/sizeState'
-import { computed } from 'vue'
-import { readonly } from 'vue'
 /* -------------------------------------------------
 Central carousel state
 
@@ -32,6 +30,7 @@ export const carouselStateFn = {
         offset: computed(() => lane.offset),
         index: computed(() => lane.index),
         dragging: computed(() => lane.dragging),
+        settling: computed(() => lane.settling),
         size: computed(() => lane.size),
         count: computed(() => lane.count),
         progress: computed(() =>
@@ -50,6 +49,7 @@ export const carouselStateFn = {
         offset: 0,
         size: 0,
         dragging: false,
+        settling: false,
         pendingDir: null,
         lockPrevAt: null,
         lockNextAt: null
@@ -82,9 +82,13 @@ export const carouselStateFn = {
     const lane = this.ensure(id)
     if (!lane || !lane.pendingDir) return false
 
+    // Suppress CSS transitions while index/offset snap to new resting state.
+    // Without this, the wrapping scene would animate through the viewport.
+    lane.settling = true
     lane.index = this.getNextIndex(lane.index, lane.pendingDir, lane.count)
     lane.offset = 0
     lane.pendingDir = null
+    nextTick(() => { lane.settling = false })
     return true
   },
 

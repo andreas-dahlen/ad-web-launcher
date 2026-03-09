@@ -1,25 +1,13 @@
 <template>
   <div class="carousel-default" :style="carouselStyle">
-    <component
-      v-if="totalScenes > 0"
-      :key="'p-' + prevIndex"
-      :is="prevScene"
+    <!-- Keyed v-for mirrors Carousel.vue: preserves scene instances across index changes -->
+    <div
+      v-for="entry in styledScenes"
+      :key="entry.sceneIndex"
       class="scene-default"
-      :style="prevStyle" />
-
-    <component
-      v-if="totalScenes > 0"
-      :key="'c-' + index"
-      :is="currentScene"
-      class="scene-default"
-      :style="currentStyle" />
-
-    <component
-      v-if="totalScenes > 0"
-      :key="'n-' + nextIndex"
-      :is="nextScene"
-      class="scene-default"
-      :style="nextStyle" />
+      :style="entry.style">
+      <component :is="entry.component" />
+    </div>
   </div>
 </template>
 
@@ -44,26 +32,29 @@ const laneSize = computed(() => {
   return horizontal.value ? size.x : size.y
 })
 
-const { totalScenes, index, currentScene, prevScene, nextScene } =
+const { visibleScenes } =
   useCarouselScenes({
     scenes: computed(() => props.scenes),
     laneState
   })
 
-const prevIndex = computed(() => {
-  const t = totalScenes.value
-  return t > 0 ? (index.value - 1 + t) % t : 0
-})
-const nextIndex = computed(() => {
-  const t = totalScenes.value
-  return t > 0 ? (index.value + 1) % t : 0
-})
-
-const { currentStyle, prevStyle, nextStyle, carouselStyle } =
+const { styleForRole, carouselStyle } =
   useCarouselMotion({
     laneState,
     laneSize,
     horizontal,
     id: props.sourceId
   })
+
+const roleStyles = {
+  prev: styleForRole('prev'),
+  current: styleForRole('current'),
+  next: styleForRole('next')
+}
+const styledScenes = computed(() =>
+  visibleScenes.value.map(entry => ({
+    ...entry,
+    style: roleStyles[entry.role].value
+  }))
+)
 </script>
