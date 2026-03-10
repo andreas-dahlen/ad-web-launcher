@@ -46,7 +46,12 @@ export const pipeline = {
     let solution = descriptor
     if (solverfn) {
       solution = { ...descriptor, ...solverfn(descriptor) }
+
       if(solution.gestureUpdate) {
+        // Solvers may return `gestureUpdate` to augment the interpreter's
+        // gesture descriptor with runtime parameters (e.g. slider scaling).
+        // This is intentional: the descriptor represents both target
+        // resolution and gesture runtime state.
         interpreter.applyGestureUpdate(solution.gestureUpdate)
       }
     }

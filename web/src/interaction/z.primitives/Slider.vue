@@ -6,6 +6,7 @@
     :data-id="id" 
     :data-axis="axis"
     data-type="slider" 
+    data-press="true"
     :data-react-swipe="reactSwipe ? true : null"
     :data-react-swipe-start="reactSwipeStart ? true : null"
     :data-react-swipe-commit="reactSwipeCommit ? true : null">

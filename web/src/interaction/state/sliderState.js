@@ -87,7 +87,10 @@ export const sliderStateFn = {
      These are the only functions that should mutate
      slider state during gesture handling.
   ------------------------------------------------- */
-
+  press(desc) {
+    const slider = this.ensure(desc.id)
+    slider.value = desc.delta
+  },
   /**
    * Start dragging - called by dispatcher on slider:swipeStart
    */

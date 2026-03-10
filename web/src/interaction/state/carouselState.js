@@ -119,6 +119,7 @@ export const carouselStateFn = {
   swipeStart(desc) {
     const lane = this.ensure(desc.id)
     lane.dragging = true
+    if(lane.pendingDir !== null) this.setPosition(desc.id)
     lane.pendingDir = null
   },
   /**

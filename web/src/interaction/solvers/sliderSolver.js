@@ -22,8 +22,21 @@ export const sliderSolver = {
    * Handle swipeStart - returns reaction to enable dragging
    */
 
-  swipeStart(desc) {
+  press(desc) {
+    console.log('press desc', desc)
     const norm = utils.normalize1D(desc)
+    console.log('press norm', norm)
+    const { value } = utils.resolveSliderStart(norm, desc.slider.constraints)
+    return {
+      delta: value,
+      stateAccepted:true
+    }
+  },
+
+  swipeStart(desc) {
+        console.log('swipeStart desc', desc)
+    const norm = utils.normalize1D(desc)
+        console.log('swipeStart norm', norm)
     const { value, valuePerPixel }= 
     utils.resolveSliderStart(norm, desc.slider.constraints)
     return { 

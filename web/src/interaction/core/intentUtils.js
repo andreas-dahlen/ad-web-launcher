@@ -34,7 +34,12 @@ export const utils = {
         // Axis not supported
         return null
     },
-    swipeThresholdCalc(distance) {
+    swipeThresholdCalc(distance, desc) {
+        if (desc?.type === 'slider') return true
+
+        //there is room for adding type specific API for threshold adjustments.
+        //could store different API thresholds in APP_SETTINGS for dif types.
+
         const ratio = APP_SETTINGS.swipeThresholdRatio ?? 0.05
 
         const screenSize = Math.min(
@@ -47,7 +52,8 @@ export const utils = {
 
     resolveTarget(x, y) {
         const target = targetResolver.resolveFromPoint(x, y)
-        return target
+        const offset = this.resolveStartOffset(x, y, target.element)
+        return {desc: target, offset}
     },
 
     resolveSwipeTarget(x, y, intentAxis, target) { //TODO: rename function to resolveSwipeStart?

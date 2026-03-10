@@ -63,6 +63,10 @@ export function usePointerForwarding({ elRef, onReaction }) {
     const el = elRef.value
     if (!el) return
 
+// NOTE: pointercancel events are currently treated as pointerup for simplicity.
+// This ensures no stuck gestures, avoids extra cancel handling logic in every pipeline.
+// Risk is low; UX may slightly differ during OS/system gestures.
+
     el.addEventListener('pointerdown', handlePointerDown)
     el.addEventListener('pointermove', handlePointerMove)
     el.addEventListener('pointerup', handlePointerUp)

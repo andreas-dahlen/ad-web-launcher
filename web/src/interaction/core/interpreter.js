@@ -7,6 +7,8 @@ IntentMapper
 Stateful gesture interpreter.
 Converts raw pointer events into semantic intents:
 press, swipeStart, swipe, swipeCommit, pressRelease.
+Needs to sense Dom at places to build descriptors based on what capabilities.
+Meaning the capabilites the Dom element is registered as and what it declares.
 
 Delta semantics:
 - press / release / swipeStart: raw {x,y}
@@ -58,7 +60,9 @@ function onDown(x, y) {
     gesture.totalDelta.x = 0
     gesture.totalDelta.y = 0
 
-    gesture.desc = utils.resolveTarget(x, y)
+    const resolved = utils.resolveTarget(x, y)
+    gesture.desc = resolved.desc
+    gesture.desc.startOffset = resolved.offset
     if (utils.resolveSupports('pressable', gesture.desc)) {
         return {
             ...gesture.desc,
@@ -78,7 +82,7 @@ function onMove(x, y) {
     const biggest = Math.max(absX, absY)
 
     if (gesture.phase === 'PENDING') {
-        if (!utils.swipeThresholdCalc(biggest)) return null
+        if (!utils.swipeThresholdCalc(biggest, gesture.desc)) return null
         const intentAxis = absX > absY ? 'horizontal' : 'vertical'
         const resolved = utils.resolveSwipeTarget(x, y, intentAxis, gesture.desc)
         if (resolved) {
@@ -93,6 +97,7 @@ function onMove(x, y) {
             gesture.phase = 'SWIPING'
             gesture.desc = resolved.desc
             gesture.desc.startOffset = resolved.offset
+
             // gesture.desc.startOffset = utils.resolveStartOffset(x, y, gesture.desc.element)
             gesture.last.x = x
             gesture.last.y = y

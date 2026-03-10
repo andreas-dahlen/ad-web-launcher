@@ -39,6 +39,7 @@ export const state = {
     setConstraints(type, id, constraints) { return call(type, 'setConstraints', id, constraints) },
 
     // ----- SOLVER MUTATIONS -----
+    press(type, desc) { return call(type, 'press', desc)},
     swipeStart(type, desc) { return call(type, 'swipeStart', desc) },
     swipe(type, desc) { return call(type, 'swipe', desc) },
     swipeCommit(type, desc) { return call(type, 'swipeCommit', desc) },
