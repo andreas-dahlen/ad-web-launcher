@@ -1,20 +1,26 @@
 /* =========================================================
-   Core engine primitives
-   - Axis, Event types
-   ========================================================= */
+Core engine primitives
+- Axis, Event types
+========================================================= */
 
 export type Axis = 'horizontal' | 'vertical' | 'both'
 
 export type EventBridgeType = 'down' | 'move' | 'up'
 
 export type EventType =
-  | 'swipeStart'
-  | 'swipe'
-  | 'swipeCommit'
-  | 'swipeRevert'
-  | 'press'
-  | 'pressRelease'
+| 'swipeStart'
+| 'swipe'
+| 'swipeCommit'
+| 'swipeRevert'
+| 'press'
+| 'pressRelease'
 
+export interface Vec2 {
+  x: number
+  y: number
+}
+
+export type VecOrScalar = Vec2 | number
 
 /* =========================================================
    Gesture data (static data describing gestures)
@@ -23,25 +29,25 @@ export type EventType =
 
 export interface CarouselData {
   index: number
-  size: { x: number; y: number }
+  size: Vec2
   lockSwipeAt?: { prev: number; next: number }
 }
 
 export interface SliderData {
   thumbSize: number
   constraints: { min: number; max: number }
-  size: { x: number; y: number }
+  size: Vec2
 }
 
 export interface DragData {
-  position: { x: number; y: number }
+  position: Vec2
   constraints: {
     minX: number
     maxX: number
     minY: number
     maxY: number
   }
-  snap?: { x: number; y: number }
+  snap?: Vec2
   locked?: boolean
 }
 
@@ -80,7 +86,7 @@ export interface Reactions {
 
 export interface GestureUpdate {
   scale?: number
-  offset?: { x: number; y: number }
+  offset?: Vec2
 
   /* Allow solvers to attach extra runtime params */
   [key: string]: unknown
@@ -92,8 +98,10 @@ export interface RuntimeData {
   reactions?: Reactions
   stateAccepted?: boolean
   gestureUpdate?: GestureUpdate
-  delta?: number | {x: number, y: number}
+  delta?: VecOrScalar
 }
+
+
 
 
 /* =========================================================
@@ -107,7 +115,7 @@ export interface BaseDescriptor {
   axis?: Axis
   type?: GestureType
   actionId?: string
-  startOffset?: number | {x: number, y: number}
+  startOffset?: Vec2
 }
 
 /**

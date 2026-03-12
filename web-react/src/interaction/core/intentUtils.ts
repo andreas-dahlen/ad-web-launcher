@@ -2,25 +2,26 @@ import { normalizeParameter, getAxisSize } from '../state/sizeState'
 import { APP_SETTINGS } from '../../app/config/appSettings'
 import { targetResolver } from "./targetResolver"
 
+import type { Descriptor, Axis, Reactions, Vec2} from '../../types/gestures.ts' // adjust path if needed
+
 export const utils = {
     //intentUtils.js
 
-    resolveSupports(type, target) {
+    resolveSupports(type: keyof Reactions, target?: Descriptor): boolean {
         return !!target?.reactions?.[type]
     },
 
-    normalizedDelta(delta) {
-        if (!delta) return 0
+    normalizedDelta(delta: Vec2): Vec2 { //what about using runtimeData delta shape?
         return {
-            x: 'x' in delta ? normalizeParameter(delta.x) : 0,
-            y: 'y' in delta ? normalizeParameter(delta.y) : 0
+            x: normalizeParameter(delta.x),
+            y: normalizeParameter(delta.y)
         }
     },
 
     /**
      * Returns: 'horizontal' | 'vertical' | 'both' | null
      */
-    resolveAxis(intentAxis, target) {
+    resolveAxis(intentAxis: Axis, target?: Descriptor): Axis | null {
         if (!target?.axis) return null
         if (target.drag?.locked) return null
         // Target accepts both → use intent axis
@@ -34,6 +35,7 @@ export const utils = {
         // Axis not supported
         return null
     },
+    
     swipeThresholdCalc(distance, desc) {
         if (desc?.type === 'slider') return true
 
