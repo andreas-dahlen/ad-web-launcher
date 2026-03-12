@@ -1,6 +1,6 @@
-// bridge.ts
-import { useEffect, RefObject } from 'react'
-import { pipeline } from '../core/pipeline.ts'
+import { useEffect, useRef} from 'react'
+import type { RefObject } from 'react'
+import { pipeline } from '../core/pipeline'
 
 interface PointerForwardingProps {
   elRef: RefObject<HTMLElement>
@@ -8,20 +8,21 @@ interface PointerForwardingProps {
 }
 
 export function usePointerForwarding({ elRef, onReaction }: PointerForwardingProps) {
-  useEffect(() => {
-    let isActive = false
-    let activePointerId: number | null = null
+  const isActive = useRef(false)
+  const activePointerId = useRef<number | null>(null)
 
+  useEffect(() => {
     const el = elRef.current
     if (!el) return
 
     function handlePointerDown(e: PointerEvent) {
       e.stopPropagation()
-      if (isActive) return
+      if (isActive.current) return
 
       el.setPointerCapture(e.pointerId)
-      activePointerId = e.pointerId
-      isActive = true
+
+      activePointerId.current = e.pointerId
+      isActive.current = true
 
       pipeline.orchestrate({
         eventType: 'down',
@@ -31,8 +32,8 @@ export function usePointerForwarding({ elRef, onReaction }: PointerForwardingPro
     }
 
     function handlePointerMove(e: PointerEvent) {
-      if (!isActive) return
-      if (e.pointerId !== activePointerId) return
+      if (!isActive.current) return
+      if (e.pointerId !== activePointerId.current) return
 
       pipeline.orchestrate({
         eventType: 'move',
@@ -42,8 +43,8 @@ export function usePointerForwarding({ elRef, onReaction }: PointerForwardingPro
     }
 
     function handlePointerUp(e: PointerEvent) {
-      if (!isActive) return
-      if (e.pointerId !== activePointerId) return
+      if (!isActive.current) return
+      if (e.pointerId !== activePointerId.current) return
 
       if (el.hasPointerCapture(e.pointerId)) {
         el.releasePointerCapture(e.pointerId)
@@ -55,23 +56,20 @@ export function usePointerForwarding({ elRef, onReaction }: PointerForwardingPro
         y: e.clientY,
       })
 
-      isActive = false
-      activePointerId = null
+      isActive.current = false
+      activePointerId.current = null
     }
 
     function handleReaction(e: Event) {
-      if (!onReaction) return
-      onReaction(e as CustomEvent)
+      onReaction?.(e as CustomEvent)
     }
 
-    // Add listeners
     el.addEventListener('pointerdown', handlePointerDown)
     el.addEventListener('pointermove', handlePointerMove)
     el.addEventListener('pointerup', handlePointerUp)
     el.addEventListener('pointercancel', handlePointerUp)
     el.addEventListener('reaction', handleReaction)
 
-    // Cleanup on unmount
     return () => {
       el.removeEventListener('pointerdown', handlePointerDown)
       el.removeEventListener('pointermove', handlePointerMove)
