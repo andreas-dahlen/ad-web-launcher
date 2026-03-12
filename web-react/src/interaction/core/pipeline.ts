@@ -2,15 +2,17 @@ import type {
   Descriptor,
   GestureType,
   EventType,
-  EventBridgeType
+  EventBridgeType,
+  CancelData,
+  SwipeType
 } from '../../types/gestures'
 
-import { interpreter } from './interpreter'
-import { carouselSolver } from '../solvers/carouselSolver'
-import { sliderSolver } from '../solvers/sliderSolver'
-import { dragSolver } from '../solvers/dragSolver'
-import { state } from '../state/stateManager'
-import { render } from '../updater/renderer'
+import { interpreter } from './interpreter.ts'
+import { carouselSolver } from '../solvers/carouselSolver.ts'
+import { sliderSolver } from '../solvers/sliderSolver.ts'
+import { dragSolver } from '../solvers/dragSolver.ts'
+import { state } from '../state/stateManager.ts'
+import { render } from '../updater/renderer.ts'
 
 /* =========================================================
    Pointer bridge input
@@ -98,7 +100,7 @@ export const pipeline = {
         }
 
         if (solution.gestureUpdate) {
-          interpreter.applyGestureUpdate(solution.gestureUpdate)
+          interpreter.applyGestureUpdate(solution.gestureUpdate, solution.type as SwipeType)
         }
       }
     }
@@ -107,8 +109,16 @@ export const pipeline = {
        State mutations
     -------------------------- */
 
-    if (solution.stateAccepted && solution.event && state[solution.event]) {
-      state[solution.event](solution.type, solution)
+    if (solution.stateAccepted && solution.event && solution.type) {
+
+      // const key = solution.event as keyof typeof state
+      // const fn = state[key]
+      // if (fn) {
+      //   fn(solution.type, solution)
+      // state[solution.event as keyof typeof state](solution.type, solution)
+
+      const fn = state[solution.event as keyof typeof state]
+      fn(solution.type, solution)
     }
 
     /* -------------------------

@@ -7,6 +7,8 @@ export type Axis = 'horizontal' | 'vertical' | 'both'
 
 export type EventBridgeType = 'down' | 'move' | 'up'
 
+export type Direction = 'left' | 'right' | 'up' | 'down'
+
 export type EventType =
 | 'swipeStart'
 | 'swipe'
@@ -14,6 +16,7 @@ export type EventType =
 | 'swipeRevert'
 | 'press'
 | 'pressRelease'
+| 'pressCancel'
 
 export interface Vec2 {
   x: number
@@ -34,9 +37,12 @@ export interface CarouselData {
 }
 
 export interface SliderData {
-  thumbSize: number
+  thumbSize: Vec2
   constraints: { min: number; max: number }
   size: Vec2
+  //added through gestureUpdate
+  sliderStartOffset?: number
+  sliderValuePerPixel?: number
 }
 
 export interface DragData {
@@ -67,7 +73,7 @@ export type SwipeData = Partial<GestureMap>
 
 export type GestureType = keyof GestureMap | 'button'
 
-
+export type SwipeType = Exclude<GestureType, 'button'>
 /* =========================================================
    Runtime data (produced during gesture pipeline)
    - CancelData, Reactions, GestureUpdate, RuntimeData
@@ -85,8 +91,8 @@ export interface Reactions {
 }
 
 export interface GestureUpdate {
-  scale?: number
-  offset?: Vec2
+  sliderStartOffset?: number
+  sliderValuePerPixel?: number
 
   /* Allow solvers to attach extra runtime params */
   [key: string]: unknown
@@ -111,7 +117,7 @@ export interface RuntimeData {
 
 export interface BaseDescriptor {
   element: HTMLElement
-  id?: string
+  id: string
   axis?: Axis
   type?: GestureType
   actionId?: string
@@ -130,7 +136,42 @@ export interface BaseDescriptor {
 export type Descriptor =
   BaseDescriptor &
   SwipeData &
-  RuntimeData & {
+  RuntimeData & 
+  GestureMap & {
     /* Allow solvers / plugins to extend descriptor */
     [key: string]: unknown
   }
+
+/* =========================================================
+   SolverUtils
+   - Normalized1D
+   ========================================================= */
+export interface Normalized1D {
+  mainTrackSize?: number | null
+  crossTrackSize?: number | null
+  mainThumbSize?: number | null
+  crossThumbSize?: number | null
+  mainOffset?: number | null
+  crossOffset?: number | null
+  mainDelta?: number | null
+  crossDelta?: number | null
+}
+
+export type StateFnName = 
+  | 'getSize'
+  | 'getThumbSize'
+  | 'getPosition'
+  | 'getConstraints'
+  | 'getCurrentIndex'
+  | 'get'
+  | 'ensure'
+  | 'setCount'
+  | 'setSize'
+  | 'setThumbSize'
+  | 'setPosition'
+  | 'setConstraints'
+  | 'press'
+  | 'swipeStart'
+  | 'swipe'
+  | 'swipeCommit'
+  | 'swipeRevert'

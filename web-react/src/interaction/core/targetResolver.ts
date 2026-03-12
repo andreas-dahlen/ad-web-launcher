@@ -1,12 +1,12 @@
 import { state } from '../state/stateManager.ts'
-import type { Descriptor, SwipeData, Reactions, GestureType, Axis } from '../../types/gestures.ts'
+import type { Descriptor, SwipeData, Reactions, GestureType, Axis, BaseDescriptor, CarouselData, SliderData, DragData, Vec2 } from '../../types/gestures.ts'
 
 interface Context {
   el: HTMLElement
   ds: DOMStringMap
-  id: string | null
+  id: string
   axis: Axis | null
-  type: GestureType | null
+  type: GestureType
   laneValid: boolean
   snapX: number | null
   snapY: number | null
@@ -39,7 +39,7 @@ export const targetResolver = {
 
   buildContext(el: HTMLElement): Context {
     const ds = el.dataset || {}
-    const id = ds.id || null
+    const id = ds.id != null ? ds.id : ''
     const axis = ds.axis as Axis || null
     const type = ds.type as GestureType || null
     const laneValid = Boolean(id && axis && type)
@@ -51,10 +51,10 @@ export const targetResolver = {
     return { el, ds, id, axis, type, laneValid, snapX, snapY, lockPrevAt, lockNextAt, locked }
   },
 
-  buildBase(ctx: Context): Partial<Descriptor> {
+  buildBase(ctx: Context): BaseDescriptor {
     return {
       element: ctx.el,
-      id: ctx.laneValid && ctx.id != null ? ctx.id : undefined,
+      id: ctx.laneValid && ctx.id != null ? ctx.id : '',
       axis: ctx.laneValid && ctx.axis != null ? ctx.axis : undefined,
       type: ctx.laneValid && ctx.type != null ? ctx.type : undefined,
       actionId: ctx.ds.action ?? undefined,
@@ -63,33 +63,38 @@ export const targetResolver = {
   },
 
   buildSwipe(ctx: Context): SwipeData {
-
     if (!ctx.laneValid) return {}
     const { id, type } = ctx
-    const result: SwipeData = {}
+
+    let result: SwipeData = {}
 
     if (type === 'carousel') {
-      const index = state.getCurrentIndex(type, id)
-      const size = state.getSize(type, id) //{x, y}
-      if (index != null && size) {
-        result.carousel = { index, size }
+      const index = state.getCurrentIndex(type, id) as number
+      const size = state.getSize(type, id) as Vec2 //{x, y}
+      if (index && size) {
+        const myCarousel: CarouselData = {index, size}
+        result = { carousel: myCarousel}
+        // const carouselPayload = {index, size}
+        // result.carousel = carouselPayload
       }
     }
 
     if (type === 'slider') {
-      const thumbSize = state.getThumbSize(type, id)
-      const constraints = state.getConstraints(type, id) //{min, max}
-      const size = state.getSize(type, id) //{x, y}
+      const thumbSize = state.getThumbSize(type, id) as Vec2
+      const constraints = state.getConstraints(type, id) as SliderData["constraints"]
+      const size = state.getSize(type, id) as Vec2//{x, y}
       if (thumbSize && constraints && size) {
-        result.slider = { thumbSize, constraints, size }
+        const mySlider: SliderData = {thumbSize, constraints, size}
+        result = { slider: mySlider }
       }
     }
 
     if (type === 'drag') {
-      const position = state.getPosition(type, id) //{x, y}
-      const constraints = state.getConstraints(type, id) //{minX, maxX, minY, maxY}
+      const position = state.getPosition(type, id) as Vec2//{x, y}
+      const constraints = state.getConstraints(type, id) as DragData["constraints"]//{minX, maxX, minY, maxY}
       if (position && constraints) {
-        result.drag = { position, constraints }
+        const myDrag: DragData = { position, constraints}
+        result = { drag: myDrag }
       }
     }
     return result

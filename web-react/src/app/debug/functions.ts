@@ -1,4 +1,4 @@
-import { DEBUG } from './debugFlags'
+import { DEBUG } from './debugFlags.ts'
 
 type DebugKey = keyof typeof DEBUG.channels
 

@@ -1,6 +1,6 @@
 import { useEffect, useRef} from 'react'
 import type { RefObject } from 'react'
-import { pipeline } from '../core/pipeline'
+import { pipeline } from '../core/pipeline.ts'
 
 interface PointerForwardingProps {
   elRef: RefObject<HTMLElement>

@@ -1,8 +1,8 @@
-import { normalizeParameter, getAxisSize } from '../state/sizeState'
-import { APP_SETTINGS } from '../../app/config/appSettings'
-import { targetResolver } from "./targetResolver"
+import { normalizeParameter, getAxisSize } from '../state/sizeState.ts'
+import { APP_SETTINGS } from '../../app/config/appSettings.ts'
+import { targetResolver } from "./targetResolver.ts"
 
-import type { Descriptor, Axis, Reactions, Vec2} from '../../types/gestures.ts' // adjust path if needed
+import type { Descriptor, Axis, Reactions, Vec2 } from '../../types/gestures.ts' // adjust path if needed
 
 export const utils = {
     //intentUtils.js
@@ -35,8 +35,8 @@ export const utils = {
         // Axis not supported
         return null
     },
-    
-    swipeThresholdCalc(distance, desc) {
+
+    swipeThresholdCalc(distance: number, desc: Descriptor): boolean {
         if (desc?.type === 'slider') return true
 
         //there is room for adding type specific API for threshold adjustments.
@@ -52,18 +52,21 @@ export const utils = {
         return distance >= screenSize * ratio
     },
 
-    resolveTarget(x, y) {
+    resolveTarget(x: number, y: number): {desc: Descriptor; offset: Vec2 } | null {
         const target = targetResolver.resolveFromPoint(x, y)
-        const offset = this.resolveStartOffset(x, y, target.element)
-        return {desc: target, offset}
+        if (target) {
+            const offset = this.resolveStartOffset(x, y, target.element)
+            return { desc: target, offset }
+        }
+        return null
     },
 
-    resolveSwipeTarget(x, y, intentAxis, target) { //TODO: rename function to resolveSwipeStart?
+    resolveSwipeTarget(x: number, y: number, intentAxis: Axis, target: Descriptor): {desc: Descriptor; pressCancel: boolean; offset?: Vec2}| null { //TODO: rename function to resolveSwipeStart?
         // Priority: target must support swipeStart AND the intent axis
         if (target) {
             const axis = this.resolveAxis(intentAxis, target)
             const canSwipe = this.resolveSupports('swipeable', target) && axis
-            if(canSwipe && !target.drag?.locked) {
+            if (canSwipe && !target.drag?.locked) {
                 return {
                     desc: target,
                     pressCancel: false,
@@ -84,7 +87,7 @@ export const utils = {
         return null
     },
 
-    resolveStartOffset(x, y, element) {
+    resolveStartOffset(x: number, y: number, element: Element): Vec2 {
         //static start poisition inside of element at x, y
         const rect = element.getBoundingClientRect()
         const left = (x - rect.left)
