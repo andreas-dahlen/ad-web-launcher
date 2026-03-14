@@ -36,14 +36,14 @@ const typeHandlers: Record<EventType, (el: HTMLElement) => void> = {
 ------------------------------------------------- */
 export const render = {
   handle(descriptor?: Descriptor) {
-    if (!descriptor?.element) return
+    if (!descriptor?.base.element) return
 
     // 2️⃣ Apply DOM / UI attributes
-    if (descriptor.event) {
-      typeHandlers[descriptor.event]?.(descriptor.element)
+    if (descriptor.runtime.event) {
+      typeHandlers[descriptor.runtime.event]?.(descriptor.base.element)
     }
 
     // 3️⃣ Dispatch custom event
-    dispatchEvent(descriptor.element, descriptor)
+    dispatchEvent(descriptor.base.element, descriptor)
   }
 }

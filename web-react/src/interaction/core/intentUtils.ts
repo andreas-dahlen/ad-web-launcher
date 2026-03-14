@@ -11,7 +11,7 @@ export const utils = {
         return !!target?.reactions?.[type]
     },
 
-    normalizedDelta(delta: Vec2): Vec2 { //what about using runtimeData delta shape?
+    normalizedDelta(delta: Vec2): Vec2 {
         return {
             x: normalizeParameter(delta.x),
             y: normalizeParameter(delta.y)
@@ -22,14 +22,14 @@ export const utils = {
      * Returns: 'horizontal' | 'vertical' | 'both' | null
      */
     resolveAxis(intentAxis: Axis, target?: Descriptor): Axis | null {
-        if (!target?.axis) return null
-        if (target.drag?.locked) return null
+        if (!target?.base.axis) return null
+        if (target.data?.locked) return null
         // Target accepts both → use intent axis
-        if (target.axis === 'both') {
+        if (target.base.axis === 'both') {
             return 'both'
         }
         // Target is strict → must match intent
-        if (target.axis === intentAxis) {
+        if (target.base.axis === intentAxis) {
             return intentAxis
         }
         // Axis not supported
@@ -37,7 +37,7 @@ export const utils = {
     },
 
     swipeThresholdCalc(distance: number, desc: Descriptor): boolean {
-        if (desc?.type === 'slider') return true
+        if (desc?.base.type === 'slider') return true
 
         //there is room for adding type specific API for threshold adjustments.
         //could store different API thresholds in APP_SETTINGS for dif types.
@@ -55,21 +55,23 @@ export const utils = {
     resolveTarget(x: number, y: number): {desc: Descriptor; offset: Vec2 } | null {
         const target = targetResolver.resolveFromPoint(x, y)
         if (target) {
-            const offset = this.resolveStartOffset(x, y, target.element)
+            const offset = this.resolveStartOffset(x, y, target.base.element)
             return { desc: target, offset }
         }
         return null
     },
 
-    resolveSwipeTarget(x: number, y: number, intentAxis: Axis, target: Descriptor): {desc: Descriptor; pressCancel: boolean; offset?: Vec2}| null { //TODO: rename function to resolveSwipeStart?
+    resolveSwipeTarget(x: number, y: number, intentAxis: Axis, target: Descriptor): {desc: Descriptor; pressCancel: boolean; offset: Vec2} | null { //TODO: rename function to resolveSwipeStart?
         // Priority: target must support swipeStart AND the intent axis
         if (target) {
             const axis = this.resolveAxis(intentAxis, target)
             const canSwipe = this.resolveSupports('swipeable', target) && axis
-            if (canSwipe && !target.drag?.locked) {
+            const offset = this.resolveStartOffset(x, y, target.base.element)
+            if (canSwipe && !target.data.locked) {
                 return {
                     desc: target,
                     pressCancel: false,
+                    offset: offset
                 }
             }
         }
@@ -77,11 +79,11 @@ export const utils = {
         // Fallback: find lane by axis
         const newTarget = targetResolver.resolveLaneByAxis(x, y, intentAxis)
         if (newTarget) {
-            const offset = this.resolveStartOffset(x, y, newTarget.element)
+            const offset = this.resolveStartOffset(x, y, newTarget.base.element)
             return {
                 desc: newTarget,
                 pressCancel: this.resolveSupports('pressable', target),
-                offset
+                offset: offset
             }
         }
         return null

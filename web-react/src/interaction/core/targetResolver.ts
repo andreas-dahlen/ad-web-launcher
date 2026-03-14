@@ -1,12 +1,13 @@
 import { state } from '../state/stateManager.ts'
-import type { Descriptor, SwipeData, Reactions, GestureType, Axis, BaseDescriptor, CarouselData, SliderData, DragData, Vec2 } from '../../types/gestures.ts'
+import type { Descriptor, Reactions, Axis, BaseDescriptor, SliderData, DragData, Vec2, RuntimeData, InteractionType, SwipeData, Modifiers } from '../../types/gestures.ts'
+import { isGestureType } from '../../utils/gestureTypeGuards.ts'
 
 interface Context {
   el: HTMLElement
   ds: DOMStringMap
   id: string
   axis: Axis | null
-  type: GestureType
+  type: InteractionType
   laneValid: boolean
   snapX: number | null
   snapY: number | null
@@ -25,24 +26,31 @@ export const targetResolver = {
     const reactions = this.buildReactions(ctx.ds, ctx.laneValid)
     const base = this.buildBase(ctx)
     const swipe = this.buildSwipe(ctx)
-    const modifiers = this.buildModifiers(ctx, swipe)
+    const modifiers = this.buildModifiers(ctx)
 
+    const runtime: RuntimeData = {
+      event: "press", // placeholders
+      delta: { x: 0, y: 0 } // placeholders
+    }
+const dataPayload= swipe
+  ? { ...swipe, ...(modifiers ?? {}) }
+  : null
     // Deep merge sub-objects (modifiers may add to carousel/drag)
     const result: Descriptor = {
-      ...base,
-      reactions,
-      ...swipe,
-      ...modifiers
-    } as Descriptor
+      base: base,
+      reactions: reactions,
+      data: dataPayload as SwipeData,
+      runtime: runtime
+    }
     return result
   },
 
   buildContext(el: HTMLElement): Context {
-    const ds = el.dataset || {}
-    const id = ds.id != null ? ds.id : ''
-    const axis = ds.axis as Axis || null
-    const type = ds.type as GestureType || null
-    const laneValid = Boolean(id && axis && type)
+    const ds = el.dataset
+    const id = ds.id ?? ''
+    const axis = (ds.axis as Axis) ?? null
+    const type = (ds.type as InteractionType) ?? null
+    const laneValid = Boolean(id && axis && isGestureType(type))
     const snapX = ds.snapX != null ? Number(ds.snapX) : null
     const snapY = ds.snapY != null ? Number(ds.snapY) : null
     const lockPrevAt = ds.lockPrevAt != null ? Number(ds.lockPrevAt) : null
@@ -54,28 +62,31 @@ export const targetResolver = {
   buildBase(ctx: Context): BaseDescriptor {
     return {
       element: ctx.el,
-      id: ctx.laneValid && ctx.id != null ? ctx.id : '',
-      axis: ctx.laneValid && ctx.axis != null ? ctx.axis : undefined,
-      type: ctx.laneValid && ctx.type != null ? ctx.type : undefined,
-      actionId: ctx.ds.action ?? undefined,
-      startOffset: undefined
+      id: ctx.id,
+      type: ctx.type,
+      axis: ctx.laneValid && ctx.axis != null ? ctx.axis : null,
+      // actionId: ctx.ds.action ?? undefined,
+      baseOffset: { x: 0, y: 0 }
     }
   },
 
-  buildSwipe(ctx: Context): SwipeData {
-    if (!ctx.laneValid) return {}
+  buildSwipe(ctx: Context): SwipeData | null {
+    if (!ctx.laneValid) return null
+
     const { id, type } = ctx
 
-    let result: SwipeData = {}
+  // Helper to merge modifiers into data
+    const applyModifiers = <T extends SwipeData>(data: T): T => {
+    const mods = this.buildModifiers(ctx)
+    return mods ? { ...data, ...mods } as T : data
 
+  }
     if (type === 'carousel') {
       const index = state.getCurrentIndex(type, id) as number
-      const size = state.getSize(type, id) as Vec2 //{x, y}
-      if (index && size) {
-        const myCarousel: CarouselData = {index, size}
-        result = { carousel: myCarousel}
-        // const carouselPayload = {index, size}
-        // result.carousel = carouselPayload
+      const size = state.getSize(type, id) as Vec2//{x, y}
+      if (index != null && size != null) {
+        const data = {index, size}
+        return applyModifiers(data)
       }
     }
 
@@ -83,53 +94,43 @@ export const targetResolver = {
       const thumbSize = state.getThumbSize(type, id) as Vec2
       const constraints = state.getConstraints(type, id) as SliderData["constraints"]
       const size = state.getSize(type, id) as Vec2//{x, y}
-      if (thumbSize && constraints && size) {
-        const mySlider: SliderData = {thumbSize, constraints, size}
-        result = { slider: mySlider }
+      if (thumbSize != null && constraints != null && size != null) {
+        const data = { thumbSize, constraints, size }
+        return applyModifiers(data)
       }
     }
 
     if (type === 'drag') {
       const position = state.getPosition(type, id) as Vec2//{x, y}
       const constraints = state.getConstraints(type, id) as DragData["constraints"]//{minX, maxX, minY, maxY}
-      if (position && constraints) {
-        const myDrag: DragData = { position, constraints}
-        result = { drag: myDrag }
+      if (position != null && constraints != null) {
+        const data = { position, constraints }
+        return applyModifiers(data)
       }
     }
-    return result
+    return null
   },
 
-  buildModifiers(ctx: Context, baseSwipe?: SwipeData): SwipeData {
-    const result: SwipeData = {}
-    const snap = ctx.snapX != null && ctx.snapY != null
-      ? { x: ctx.snapX, y: ctx.snapY }
-      : undefined
-
+  buildModifiers(ctx: Context): Modifiers | null {
+    //CAROUSEL
     const lockSwipeAt = ctx.lockPrevAt != null && ctx.lockNextAt != null
       ? { prev: ctx.lockPrevAt, next: ctx.lockNextAt }
       : undefined
 
-    if (snap || ctx.locked) {
-      if (baseSwipe?.drag) {
-        // Merge into existing drag
-        result.drag = {
-          ...(baseSwipe?.drag ?? {}),
-          snap,
-          locked: ctx.locked
-        }
-      }
+    if (ctx.type === 'carousel' && lockSwipeAt) {
+      return { lockSwipeAt }
+    }
+    //DRAG
+    const snap = ctx.snapX != null && ctx.snapY != null
+      ? { x: ctx.snapX, y: ctx.snapY }
+      : undefined
+    if (ctx.type === 'drag' && (snap || ctx.locked)) {
+      return { snap: snap, locked: ctx.locked }
     }
 
-    if (lockSwipeAt) {
-      if (baseSwipe?.carousel) {
-        result.carousel = {
-          ...(baseSwipe.carousel ?? {}),
-          lockSwipeAt
-        }
-      }
-    }
-    return result
+
+
+    return null
   },
 
   buildReactions(ds: DOMStringMap, laneValid: boolean): Reactions {

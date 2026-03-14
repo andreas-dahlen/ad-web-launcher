@@ -1,5 +1,5 @@
 import { log, drawDots } from '../../app/debug/functions.ts'
-import type { Descriptor, Axis, Vec2, CancelData, GestureUpdate, GestureType } from '../../types/gestures.ts'
+import type { Descriptor, Axis, Vec2, CancelData, GestureUpdate } from '../../types/gestures.ts'
 import { utils } from './intentUtils.ts'
 
 /* =========================================================
@@ -30,22 +30,11 @@ export const interpreter = {
     resetGesture,
     applyGestureUpdate
 }
-function applyGestureUpdate(update: GestureUpdate, type: GestureType) {
+function applyGestureUpdate(update: GestureUpdate) {
     if (!gesture.desc) return
-
-    switch (type) {
-        case "slider": {
-            const sliderPack = {
-                ...gesture.desc.slider,
-                ...update
-            }
-            gesture.desc = {
-                ...gesture.desc,
-                slider: sliderPack
-            }
-            break
-        }
-        //case "whatever comes up"
+    gesture.desc.data = {
+        ...gesture.desc.data,
+        ...update
     }
 }
 /* =========================================================
@@ -85,9 +74,12 @@ function onDown(x: number, y: number): Descriptor | null {
     if (utils.resolveSupports('pressable', gesture.desc)) {
         return gesture.desc ? {
             ...gesture.desc,
-            event: 'press',
-            delta: { x, y },
-            startOffset: resolved.offset
+            base: { ...gesture.desc.base, baseOffset: resolved.offset },
+            runtime: {
+                ...gesture.desc.runtime,
+                event: 'press',
+                delta: { x, y },
+            }
         }
             : null
     }
@@ -109,23 +101,25 @@ function onMove(x: number, y: number): Descriptor | null {
         if (!utils.swipeThresholdCalc(biggest, gesture.desc)) return null
         const intentAxis: Axis = absX > absY ? 'horizontal' : 'vertical'
         const resolved = utils.resolveSwipeTarget(x, y, intentAxis, gesture.desc)
+
         if (!resolved) return null
         const cancel: CancelData | undefined = resolved.pressCancel
-            ? { element: gesture.desc.element, pressCancel: true }
+            ? { element: gesture.desc.base.element, pressCancel: true }
             : undefined
 
-
         gesture.phase = 'SWIPING'
-        gesture.desc = resolved.desc as Descriptor
+        gesture.desc = resolved.desc
         gesture.last.x = x
         gesture.last.y = y
 
         return gesture.desc ? {
             ...gesture.desc,
-            event: 'swipeStart',
-            delta: { x, y },
-            cancel,
-            startOffset: resolved.offset as Vec2
+            base: { ...gesture.desc.base, baseOffset: resolved.offset },
+            runtime: {
+                event: 'swipeStart',
+                delta: { x, y },
+                cancel
+            }
         }
             : null
     }
@@ -145,8 +139,10 @@ function onMove(x: number, y: number): Descriptor | null {
 
         return gesture.desc ? {
             ...gesture.desc,
-            event: 'swipe',
-            delta: utils.normalizedDelta(gesture.totalDelta)
+            runtime: {
+                event: 'swipe',
+                delta: utils.normalizedDelta(gesture.totalDelta)
+            }
         }
             : null
     }
@@ -165,8 +161,10 @@ function onUp(x: number, y: number): Descriptor | null {
     if (gesture.phase === 'SWIPING') {
         const descriptor = {
             ...gesture.desc,
-            event: 'swipeCommit',
-            delta: utils.normalizedDelta(gesture.totalDelta)
+            runtime: {
+                event: 'swipeCommit',
+                delta: utils.normalizedDelta(gesture.totalDelta)
+            }
         }
         resetGesture()
         return descriptor as Descriptor
@@ -178,8 +176,10 @@ function onUp(x: number, y: number): Descriptor | null {
     if (gesture.phase === 'PENDING') {
         const descriptor = {
             ...gesture.desc,
-            event: 'pressRelease',
-            delta: { x, y }
+            runtime: {
+                event: 'pressRelease',
+                delta: { x, y }
+            }
         }
         resetGesture()
         return descriptor as Descriptor

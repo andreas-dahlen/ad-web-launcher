@@ -1,11 +1,10 @@
 import type {
   Descriptor,
-  GestureType,
   EventType,
   EventBridgeType,
-  CancelData,
-  SwipeType
+  DataKeys,
 } from '../../types/gestures'
+import { isGestureType } from '../../utils/gestureTypeGuards.ts'
 
 import { interpreter } from './interpreter.ts'
 import { carouselSolver } from '../solvers/carouselSolver.ts'
@@ -36,7 +35,7 @@ type Solver = Partial<Record<EventType, SolverFn>>
    Solver registry
 ========================================================= */
 
-const solvers: Partial<Record<GestureType, Solver>> = {
+const solvers: Partial<Record<DataKeys, Solver>> = {
   carousel: carouselSolver,
   slider: sliderSolver,
   drag: dragSolver
@@ -82,25 +81,24 @@ export const pipeline = {
     /* -------------------------
        Solvers
     -------------------------- */
+    // const event = descriptor.runtime.event
 
-    const { type, event } = descriptor
+    const { base: { type }, runtime: { event } } = descriptor
 
     let solution: Descriptor = descriptor
 
     if (type && event) {
 
-      const solverFn = solvers[type]?.[event]
-
-      if (solverFn) {
-
-        const solverResult = solverFn(descriptor)
+      if (isGestureType(type)) {
+        const solverFn = solvers[type]?.[event]
+        const solverResult = solverFn?.(descriptor)
 
         if (solverResult) {
           solution = { ...descriptor, ...solverResult }
         }
 
-        if (solution.gestureUpdate) {
-          interpreter.applyGestureUpdate(solution.gestureUpdate, solution.type as SwipeType)
+        if (solution.runtime.gestureUpdate) {
+          interpreter.applyGestureUpdate(solution.runtime.gestureUpdate)
         }
       }
     }
@@ -109,25 +107,15 @@ export const pipeline = {
        State mutations
     -------------------------- */
 
-    if (solution.stateAccepted && solution.event && solution.type) {
+    if (solution.runtime.stateAccepted && solution.runtime.event && solution.base.type) {
 
-      // const key = solution.event as keyof typeof state
-      // const fn = state[key]
-      // if (fn) {
-      //   fn(solution.type, solution)
-      // state[solution.event as keyof typeof state](solution.type, solution)
-
-      const fn = state[solution.event as keyof typeof state]
-      fn(solution.type, solution)
+      const fn = state[solution.runtime.event as keyof typeof state]
+      fn(solution.base.type, solution)
     }
 
     /* -------------------------
        Renderer
     -------------------------- */
-
-    if (solution.cancel) {
-      render.handle(solution.cancel)
-    }
 
     render.handle(solution)
 

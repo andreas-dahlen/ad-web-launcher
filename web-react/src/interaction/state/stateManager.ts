@@ -1,16 +1,19 @@
 import { carouselStateFn } from './carouselState.ts'
 import { sliderStateFn } from './sliderState.ts'
 import { dragStateFn } from './dragState.ts'
-import type { Descriptor, Vec2, SwipeType, StateFnName } from '../../types/gestures.ts'
+import type { Descriptor, Vec2, DataKeys, StateFnName, DragData } from '../../types/gestures.ts'
+import { isGestureType } from '../../utils/gestureTypeGuards.ts'
 
-type StateFn = (type: SwipeType, desc: Descriptor) => unknown
-const stateFiles: Record<SwipeType, Record<string, StateFn>> = {
+type StateFn = (type: DataKeys, desc: Descriptor) => unknown
+
+const stateFiles: Record<DataKeys, Record<string, StateFn>> = {
     carousel: carouselStateFn,
     slider: sliderStateFn,
     drag: dragStateFn,
 }
 
-function call(type: SwipeType, fnName: StateFnName, ...args: unknown[]): unknown {
+function call(type: DataKeys, fnName: StateFnName, ...args: unknown[]): unknown {
+
     return stateFiles[type]?.[fnName]?.(...args) ?? null
 }
 // /**
@@ -24,27 +27,30 @@ function call(type: SwipeType, fnName: StateFnName, ...args: unknown[]): unknown
 //  */
 export const state = {
     // ----- METADATA READS ----- (for buildPayload.js)
-    getSize(type: SwipeType, id: string) { return call(type, 'getSize', id) },
-    getThumbSize(type: SwipeType, id: string) { return call(type, 'getThumbSize', id)},
-    getPosition(type: SwipeType, id: string) { return call(type, 'getPosition', id) },
-    getConstraints(type: SwipeType, id: string) { return call(type, 'getConstraints', id) },
-    getCurrentIndex(type: SwipeType, id: string) { return call(type, 'getCurrentIndex', id) },
+    getSize(type: DataKeys, id: string) { return call(type, 'getSize', id) },
+    getThumbSize(type: DataKeys, id: string) { return call(type, 'getThumbSize', id)},
+    getPosition(type: DataKeys, id: string) { return call(type, 'getPosition', id) },
+    getConstraints(type: DataKeys, id: string) { return call(type, 'getConstraints', id) },
+    getCurrentIndex(type: DataKeys, id: string) { return call(type, 'getCurrentIndex', id) },
 
     // ----- PURE READ ----- (for vue components and for importing reacting with the registered element)
-    get(type: SwipeType, id: string) { return call(type, 'get', id) },
+    get(type: DataKeys, id: string) { return call(type, 'get', id) },
 
     // ----- EFFECTFUL WRITES ----- (by vue components)
-    ensure(type: SwipeType, id: string) { return call(type, 'ensure', id) },
-    setCount(type: SwipeType, id: string, length: number) { return call(type, 'setCount', id, length) },
-    setSize(type: SwipeType, id: string, value: Vec2) { return call(type, 'setSize', id, value) },
-    setThumbSize(type: SwipeType, id: string, value: Vec2) { return call(type, 'setThumbSize', id, value)},
-    setPosition(type: SwipeType, id: string, position: Vec2 | number | null) { return call(type, 'setPosition', id, position) },
-    setConstraints(type: SwipeType, id: string, constraints: unknown) { return call(type, 'setConstraints', id, constraints) },
+    ensure(type: DataKeys, id: string) { return call(type, 'ensure', id) },
+    setCount(type: DataKeys, id: string, length: number) { return call(type, 'setCount', id, length) },
+    setSize(type: DataKeys, id: string, value: Vec2) { return call(type, 'setSize', id, value) },
+    setThumbSize(type: DataKeys, id: string, value: Vec2) { return call(type, 'setThumbSize', id, value)},
+    setPosition(type: DataKeys, id: string, position: Vec2 | number | null) { return call(type, 'setPosition', id, position) },
+    setConstraints(type: DataKeys, id: string, constraints: Vec2 | DragData['constraints']) { return call(type, 'setConstraints', id, constraints) },
 
     // ----- SOLVER MUTATIONS -----
-    press(type: SwipeType, desc: Descriptor) { return call(type, 'press', desc)},
-    swipeStart(type: SwipeType, desc: Descriptor) { return call(type, 'swipeStart', desc) },
-    swipe(type: SwipeType, desc: Descriptor) { return call(type, 'swipe', desc) },
-    swipeCommit(type: SwipeType, desc: Descriptor) { return call(type, 'swipeCommit', desc) },
-    swipeRevert(type: SwipeType, desc: Descriptor) { return call(type, 'swipeRevert', desc) }
+
+    //could seperate into its own thing... since TS is complaining about arguments being 2...
+
+    press(type: DataKeys, desc: Descriptor) { return call(type, 'press', desc)},
+    swipeStart(type: DataKeys, desc: Descriptor) { return call(type, 'swipeStart', desc) },
+    swipe(type: DataKeys, desc: Descriptor) { return call(type, 'swipe', desc) },
+    swipeCommit(type: DataKeys, desc: Descriptor) { return call(type, 'swipeCommit', desc) },
+    swipeRevert(type: DataKeys, desc: Descriptor) { return call(type, 'swipeRevert', desc) }
 }
