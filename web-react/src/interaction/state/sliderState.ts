@@ -1,12 +1,12 @@
 import { reactive, computed, readonly, ComputedRef } from 'vue'
-import type { Descriptor, VecOrScalar } from '../../types/gestures.ts'
+import type { Descriptor } from '../../types/gestures.ts'
 
 /* -------------------------------------------------
 Slider store types
 ------------------------------------------------- */
 interface SliderData {
-  value: VecOrScalar | null          // logical position
-  offset: VecOrScalar | null         // live drag offset
+  value: number         // logical position
+  offset: number        // live drag offset
   min: number
   max: number
   size: number
@@ -17,8 +17,8 @@ interface SliderData {
 type SliderMap = Record<string, SliderData>
 
 interface SliderView {
-  value: ComputedRef<VecOrScalar | null>
-  offset: ComputedRef<VecOrScalar | null>
+  value: ComputedRef<number | null>
+  offset: ComputedRef<number | null>
   dragging: ComputedRef<boolean | undefined>
 }
 
@@ -51,7 +51,7 @@ export const sliderStateFn = {
     }
   },
 
-  getPosition(id: string): VecOrScalar | null {
+  getPosition(id: string): number | null {
     return sliderState.sliders[id]?.value ?? 0
   },
 
@@ -99,24 +99,24 @@ export const sliderStateFn = {
      Dispatcher Actions
   ------------------------------------------------- */
   press(desc: Descriptor): void {
-    const slider = this.ensure(desc.id)
-    slider.value = desc.delta ?? slider.value
+    const slider = this.ensure(desc.base.id)
+    slider.value = desc.runtime.delta1D ?? slider.value
   },
 
   swipeStart(desc: Descriptor): void {
-    const slider = this.ensure(desc.id)
+    const slider = this.ensure(desc.base.id)
     slider.dragging = true
-    slider.value = desc.delta ?? slider.value
+    slider.value = desc.runtime.delta1D ?? slider.value
   },
 
   swipe(desc: Descriptor): void {
-    const slider = this.ensure(desc.id)
-    slider.value = desc.delta ?? slider.value
+    const slider = this.ensure(desc.base.id)
+    slider.value = desc.runtime.delta1D ?? slider.value
   },
 
   swipeCommit(desc: Descriptor): void {
-    const slider = this.ensure(desc.id)
-    slider.value = desc.delta ?? slider.value
+    const slider = this.ensure(desc.base.id)
+    slider.value = desc.runtime.delta1D ?? slider.value
     slider.dragging = false
   }
 }

@@ -57,11 +57,12 @@ export interface DragData {
 export interface Modifiers {
   //carousel
   lockSwipeAt?: { prev: number; next: number }
+
   //slider
   sliderStartOffset?: number
   sliderValuePerPixel?: number
   //drag
-  snap?: Vec2 | number
+  snap?: Vec2
   locked?: boolean
 }
 
@@ -107,7 +108,18 @@ export type RuntimeData = {
   stateAccepted?: boolean 
   cancel?: CancelData
   gestureUpdate?: GestureUpdate
+  direction?: Direction
 }
+
+export type RuntimePatch = Partial<RuntimeData>
+
+type GestureDescriptor<T> = Omit<Descriptor, "data"> & {
+  data: T & Modifiers
+}
+
+export type DragDescriptor = GestureDescriptor<DragData>
+export type CarouselDescriptor = GestureDescriptor<CarouselData>
+export type SliderDescriptor = GestureDescriptor<SliderData>
 
 /* =========================================================
    Descriptor system
@@ -158,7 +170,7 @@ export interface Normalized1D {
   crossDelta?: number | null
 }
 
-export type StateFnName =
+export type StateFn2Arg =
   | 'getSize'
   | 'getThumbSize'
   | 'getPosition'
@@ -166,13 +178,16 @@ export type StateFnName =
   | 'getCurrentIndex'
   | 'get'
   | 'ensure'
-  | 'setCount'
-  | 'setSize'
-  | 'setThumbSize'
-  | 'setPosition'
-  | 'setConstraints'
   | 'press'
   | 'swipeStart'
   | 'swipe'
   | 'swipeCommit'
   | 'swipeRevert'
+
+export type StateFn3Arg =
+  | 'setCount'
+  | 'setSize'
+  | 'setThumbSize'
+  | 'setPosition'
+  | 'setConstraints'
+

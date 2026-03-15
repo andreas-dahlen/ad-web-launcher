@@ -10,9 +10,9 @@
  * - Does NOT access DOM
  */
 import { utils } from './solverUtils.ts'
-import type { Descriptor } from '../../types/gestures.ts'
+import type { Descriptor, EventType, RuntimePatch, CarouselDescriptor} from '../../types/gestures.ts'
 
-export const carouselSolver: Record<'swipeStart' | 'swipe' | 'swipeCommit', (desc: Descriptor) => Partial<Descriptor> | void> = {
+export const carouselSolver: Partial<Record<EventType, (desc: Descriptor) => RuntimePatch | void>> = {
   /**
    * Handle swipeStart - returns reaction to enable dragging
    */
@@ -23,33 +23,35 @@ export const carouselSolver: Record<'swipeStart' | 'swipe' | 'swipeCommit', (des
   /**
    * Handle swipe (drag) - clamp delta and return offset reaction
    */
-  swipe(desc) {
+  swipe(descriptor) {
+    const desc = descriptor as CarouselDescriptor
     const norm = utils.normalize1D(desc)
     const gated = utils.resolveGate(norm)
-    if (norm.mainDelta == null || desc.carousel?.lockSwipeAt == null) return
-    const locked = utils.isCarouselBlocked(norm.mainDelta, desc.carousel?.index, desc.carousel?.lockSwipeAt)
+    if (norm.mainDelta == null || desc.data?.lockSwipeAt == null) return
+    const locked = utils.isCarouselBlocked(norm.mainDelta, desc.data?.index, desc.data?.lockSwipeAt)
     if (gated || locked) { return {stateAccepted: false } }
-    return { delta: norm.mainDelta, stateAccepted: true }
+    return { delta1D: norm.mainDelta, stateAccepted: true }
   },
 
   /**
    * Handle swipeCommit - decide commit vs revert
    */
 
-  swipeCommit(desc) {
+  swipeCommit(descriptor) {
+    const desc = descriptor as CarouselDescriptor
     const norm = utils.normalize1D(desc)
     const gated = utils.resolveGate(norm)
 
-        if (norm.mainDelta == null || desc.carousel?.lockSwipeAt == null) return {event: 'swipeRevert', stateAccepted: true}
+        if (norm.mainDelta == null || desc.data?.lockSwipeAt == null) return {event: 'swipeRevert', stateAccepted: true}
 
-    const locked = utils.isCarouselBlocked(norm.mainDelta, desc.carousel?.index, desc.carousel?.lockSwipeAt)
+    const locked = utils.isCarouselBlocked(norm.mainDelta, desc.data?.index, desc.data?.lockSwipeAt)
 
-    if (gated || locked || !desc.axis) return {event: 'swipeRevert', stateAccepted: true}
+    if (gated || locked || !desc.base.axis) return {event: 'swipeRevert', stateAccepted: true}
 
-    const solution = utils.resolveCarouselCommit(norm, desc.axis)
+    const solution = utils.resolveCarouselCommit(norm, desc.base.axis)
     if (solution) return {
       direction: solution.direction,
-      delta: solution.delta,
+      delta1D: solution.delta,
       stateAccepted: true
     }
     return {event: 'swipeRevert', stateAccepted: true}

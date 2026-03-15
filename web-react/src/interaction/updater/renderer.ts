@@ -38,6 +38,11 @@ export const render = {
   handle(descriptor?: Descriptor) {
     if (!descriptor?.base.element) return
 
+    //1️⃣ Handle optional extra events
+    if (descriptor.runtime.cancel?.pressCancel) {
+      handleExtras(descriptor)
+    }
+
     // 2️⃣ Apply DOM / UI attributes
     if (descriptor.runtime.event) {
       typeHandlers[descriptor.runtime.event]?.(descriptor.base.element)
@@ -46,4 +51,13 @@ export const render = {
     // 3️⃣ Dispatch custom event
     dispatchEvent(descriptor.base.element, descriptor)
   }
+}
+
+function handleExtras(descriptor: Descriptor) {
+  const cancel = descriptor.runtime.cancel
+  if (!cancel?.pressCancel) return
+
+  const event = 'pressCancel'
+  typeHandlers[event]?.(cancel.element)
+  dispatchEvent(cancel.element, descriptor)
 }

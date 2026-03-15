@@ -1,28 +1,34 @@
 
 import { APP_SETTINGS } from "../../app/config/appSettings.ts"
-import type { Descriptor, Normalized1D, Axis, Direction, Vec2 } from "../../types/gestures.ts"
+import type { Descriptor, Normalized1D, Axis, Direction, Vec2, SliderDescriptor, DragDescriptor } from "../../types/gestures.ts"
 import { vector } from "./vectorUtils.ts"
 
 export const utils = {
     /* -------------------------
-        noramlize
+        normalize
     -------------------------- */
     normalize1D(desc: Descriptor): Normalized1D {
-        const { delta, axis, startOffset } = desc
-        const laneSize = desc.carousel?.size ?? desc.slider?.size ?? null
+        const { baseOffset, axis }= desc.base
+        const delta = desc.runtime.delta
 
-        const sliderThumbSize = desc.slider?.thumbSize ?? null
-        if (!axis) return {}
+        const laneSize = 
+        "size" in desc.data? desc.data.size : null
+
+        const sliderThumbSize = 
+        "thumbSize" in desc.data ? desc.data.thumbSize : null
+
+        if (axis == null) return {} as Normalized1D
+
         const track = laneSize 
         ? vector.resolveByAxis1D(laneSize, axis) : null
 
         const thumb = sliderThumbSize 
         ? vector.resolveByAxis1D(sliderThumbSize, axis) : null
 
-        const offset = startOffset ? 
-        vector.resolveByAxis1D(startOffset, axis) : null
-        
-        const movement = typeof delta === "object" 
+        const offset = baseOffset 
+        ? vector.resolveByAxis1D(baseOffset, axis) : null
+
+        const movement = delta
         ? vector.resolveByAxis1D(delta, axis) : null
 
         return {
@@ -41,7 +47,7 @@ export const utils = {
     -------------------------- */
     resolveGate(norm: Normalized1D) {
         const { crossTrackSize, crossOffset, crossDelta } = norm
-        if (!crossTrackSize || !crossOffset || !crossDelta) return
+        if (crossTrackSize == null || crossOffset == null || crossDelta == null) return
         const currentPos = crossOffset + crossDelta
 
         return currentPos < 0 || currentPos > crossTrackSize
@@ -54,7 +60,7 @@ export const utils = {
         { min, max }: { min: number, max: number }) {
 
         const { mainTrackSize, mainOffset, mainThumbSize } = norm
-         if (!mainTrackSize || !mainOffset || !mainThumbSize) return
+         if (mainTrackSize == null || mainOffset == null || mainThumbSize == null) return
         const range = max - min
         const usable = mainTrackSize - mainThumbSize
         const ratio = (mainOffset - mainThumbSize / 2) / usable
@@ -64,10 +70,9 @@ export const utils = {
         }
     },
 
-    resolveSliderSwipe(norm: Normalized1D, desc: Descriptor) {
-        if (!desc.slider) return
+    resolveSliderSwipe(norm: Normalized1D, desc: SliderDescriptor) {
 
-        const { constraints: {min, max}, sliderValuePerPixel, sliderStartOffset } = desc.slider
+        const { constraints: {min, max}, sliderValuePerPixel, sliderStartOffset } = desc.data
         const mainDelta = norm.mainDelta
 
         if (mainDelta == null || 
@@ -105,14 +110,14 @@ export const utils = {
     },
 
     getCommitOffset(direction: Direction, laneSize: number) {
-        if (!laneSize) return 0
+        if (laneSize == null) return 0
         if (direction === 'right' || direction === 'down') return laneSize
         if (direction === 'left' || direction === 'up') return -laneSize
         return 0
     },
 
     shouldCommit(delta: number, laneSize: number, axis: Axis) {
-        if (!laneSize) return false
+        if (laneSize == null) return false
         const axisBias = axis === 'vertical' ? 0.65 : 1
         const threshold = laneSize * APP_SETTINGS.swipeCommitRatio * axisBias
         return Math.abs(delta) >= threshold
@@ -120,11 +125,10 @@ export const utils = {
     /* -------------------------
          drag-specifics
     -------------------------- */
-    resolveDragSwipe(desc: Descriptor) {
-        const { delta } = desc
-        const dragPosition = desc.drag?.position ?? { x: 0, y: 0 }
-        const dragConstraints = desc.drag?.constraints ?? { min: 0, max: 100 }
-        if (typeof delta !== "object") return
+    resolveDragSwipe(desc: DragDescriptor) {
+        const delta = desc.runtime.delta
+        const dragPosition = desc.data.position
+        const dragConstraints = desc.data.constraints
         const clamped = 
         vector.relativeClamp2D(delta, dragPosition, dragConstraints)
         const dx = clamped.x
@@ -132,16 +136,15 @@ export const utils = {
         return { x: dx, y: dy }
     },
 
-    resolveDragCommit(desc: Descriptor) {
-        const delta = desc.delta
-        if (typeof delta !== "object") return
-        return vector.clamp2D(delta, desc.drag.position, desc.drag.constraints)
+    resolveDragCommit(desc: DragDescriptor) {
+        const delta = desc.runtime.delta
+        return vector.clamp2D(delta, desc.data.position, desc.data.constraints)
     },
 
-    resolveSnapAdjustment(desc: Descriptor, value: Vec2) {
-        if (!desc.drag?.snap) return null
-        const { x: snapX, y: snapY } = desc.drag.snap
-        const dragConstraints = desc.drag.constraints
+    resolveSnapAdjustment(desc: DragDescriptor, value: Vec2) {
+        if (!desc.data?.snap) return null
+        const { x: snapX, y: snapY } = desc.data.snap
+        const dragConstraints = desc.data.constraints
 
         const snapAxis = (v: number, count: number, min: number, max: number) => {
             if (!count || count <= 0) return v

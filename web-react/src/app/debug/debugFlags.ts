@@ -5,6 +5,7 @@ export const DEBUG = {
 
   channels: {
     init: 'always',
+    scale: 'always',
 
     drawDots: false, //this could actually be turned into a nice visual heptic feedback thingie majingie
     lagTime: false,

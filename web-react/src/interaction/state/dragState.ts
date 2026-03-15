@@ -103,22 +103,19 @@ export const dragStateFn = {
        Dispatcher / mutations
   -------------------------- */
   swipeStart(desc: Descriptor) {
-    const lane = this.ensure(desc.id)
+    const lane = this.ensure(desc.base.id)
     lane.dragging = true
     lane.offset = { ...ZERO_POINT }
   },
 
   swipe(desc: Descriptor) {
-    const lane = this.ensure(desc.id)
-    lane.offset = desc.delta as Vec2
+    const lane = this.ensure(desc.base.id)
+    lane.offset = desc.runtime.delta
   },
 
   swipeCommit(desc: Descriptor) {
-    const lane = this.ensure(desc.id)
-    lane.position = {
-      x: (desc.delta as Vec2).x,
-      y: (desc.delta as Vec2).y
-    }
+    const lane = this.ensure(desc.base.id)
+      lane.position = desc.runtime.delta
     lane.offset = { ...ZERO_POINT }
     lane.dragging = false
   }

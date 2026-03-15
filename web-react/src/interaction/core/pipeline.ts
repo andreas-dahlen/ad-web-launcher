@@ -3,8 +3,9 @@ import type {
   EventType,
   EventBridgeType,
   DataKeys,
+  RuntimeData
 } from '../../types/gestures'
-import { isGestureType } from '../../utils/gestureTypeGuards.ts'
+import { isGestureType, isStateFn2Arg } from '../../utils/gestureTypeGuards.ts'
 
 import { interpreter } from './interpreter.ts'
 import { carouselSolver } from '../solvers/carouselSolver.ts'
@@ -27,15 +28,15 @@ interface PointerEventPackage {
    Solver typing
 ========================================================= */
 
-type SolverFn = (desc: Descriptor) => Partial<Descriptor> | void
+type SolverFn = (desc: Descriptor) => Partial<RuntimeData> | void
 
-type Solver = Partial<Record<EventType, SolverFn>>
+type SolverMap = Partial<Record<EventType, SolverFn>>
 
 /* =========================================================
    Solver registry
 ========================================================= */
 
-const solvers: Partial<Record<DataKeys, Solver>> = {
+const solverRegistry: Partial<Record<DataKeys, SolverMap>> = {
   carousel: carouselSolver,
   slider: sliderSolver,
   drag: dragSolver
@@ -87,19 +88,22 @@ export const pipeline = {
 
     let solution: Descriptor = descriptor
 
-    if (type && event) {
+    if (event && isGestureType(type)) {
+      const solverFn = solverRegistry[type]?.[event]
+      const solverResult = solverFn?.(descriptor)
 
-      if (isGestureType(type)) {
-        const solverFn = solvers[type]?.[event]
-        const solverResult = solverFn?.(descriptor)
-
-        if (solverResult) {
-          solution = { ...descriptor, ...solverResult }
+      if (solverResult) {
+        solution = {
+          ...descriptor,
+          runtime: {
+            ...descriptor.runtime,
+            ...solverResult
+          }
         }
 
-        if (solution.runtime.gestureUpdate) {
-          interpreter.applyGestureUpdate(solution.runtime.gestureUpdate)
-        }
+      }
+      if (solution.runtime.gestureUpdate) {
+        interpreter.applyGestureUpdate(solution.runtime.gestureUpdate)
       }
     }
 
@@ -109,8 +113,13 @@ export const pipeline = {
 
     if (solution.runtime.stateAccepted && solution.runtime.event && solution.base.type) {
 
-      const fn = state[solution.runtime.event as keyof typeof state]
-      fn(solution.base.type, solution)
+      // const fn = state[solution.runtime.event as keyof typeof state]
+      // fn(solution.base.type, solution)
+
+      if (solution.runtime.event && isStateFn2Arg(solution.runtime.event) && isGestureType(solution.base.type)) {
+        const fn = state[solution.runtime.event] as (type: DataKeys, desc: Descriptor) => unknown
+        fn(solution.base.type, solution)
+      }
     }
 
     /* -------------------------

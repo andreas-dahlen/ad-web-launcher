@@ -281,5 +281,17 @@ useState   → state that triggers rerender
 useRef     → state that does NOT trigger rerender (presistant between renders)
 useEffect  → side effects after render
 
-useMemo    → cache a calculation
+useMemo    → cache a calculation based on change
 useCallback → cache a function
+
+Vue	            React
+ref()	          useState()
+reactive()	    useState()
+computed()	    calculate inside render OR useMemo()
+watch()	        useEffect()
+onMounted()	    useEffect(() => {}, [])
+props	          function arguments
+slots	          children
+v-if	          {cond && <Comp/>}
+v-for	          {array.map()}
+:style	        style={}

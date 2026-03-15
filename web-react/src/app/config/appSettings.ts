@@ -1,5 +1,5 @@
 // appSettings.ts
-import { reactive } from "vue"
+// import { reactive } from "vue"
 
 /* -------------------------------------------------
    App-level constants
@@ -45,7 +45,8 @@ export interface UserSettings {
   defaultSnapY: number
 }
 
-export const USER_SETTINGS = reactive<UserSettings>({
+export const USER_SETTINGS = ({
+// = reactive<UserSettings>({
   dragLock: false,
   DragGridVisual: false,
   defaultSnapX: 8,

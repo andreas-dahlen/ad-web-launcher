@@ -129,26 +129,29 @@ export const carouselStateFn = {
        Dispatcher / mutations
   -------------------------- */
   swipeStart(desc: Descriptor) {
-    const lane = this.ensure(desc.id)
+    const lane = this.ensure(desc.base.id)
     lane.dragging = true
-    if (lane.pendingDir !== null) this.setPosition(desc.id)
+    if (lane.pendingDir !== null) this.setPosition(desc.base.id)
     lane.pendingDir = null
   },
 
   swipe(desc: Descriptor) {
-    this.ensure(desc.id).offset = desc.delta as number
+    const lane = this.ensure(desc.base.id)
+     lane.offset = desc.runtime.delta1D ?? lane.offset
   },
 
   swipeCommit(desc: Descriptor) {
-    const { direction, delta, id } = desc
+    const id = desc.base.id
+    const {direction, delta1D } = desc.runtime
+
     const lane = this.ensure(id)
     lane.pendingDir = direction ?? null
-    lane.offset = delta as number
+    lane.offset = delta1D ?? lane.offset
     lane.dragging = false
   },
 
   swipeRevert(desc: Descriptor) {
-    const lane = this.ensure(desc.id)
+    const lane = this.ensure(desc.base.id)
     lane.offset = 0
     lane.dragging = false
     lane.pendingDir = null

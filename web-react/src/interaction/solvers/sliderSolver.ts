@@ -15,30 +15,32 @@
  * - No swipeRevert reaction
  */
 import { utils } from "./solverUtils.ts"
-import type { Descriptor } from "../../types/gestures.ts"
+import type { Descriptor, EventType, RuntimePatch, SliderDescriptor } from "../../types/gestures.ts"
 
-export const sliderSolver: Record<'press' | 'swipeStart' | 'swipe' | 'swipeCommit', (desc: Descriptor) => Partial<Descriptor> | void> = {
+export const sliderSolver: Partial<Record<EventType, (desc: Descriptor) => RuntimePatch | void>> = {
 
   /**
    * Handle swipeStart - returns reaction to enable dragging
    */
 
-  press(desc) {
-    if (!desc.slider) return { stateAccepted:false }
+  press(descriptor) {
+    const desc = descriptor as SliderDescriptor
+    if (!desc.data) return { stateAccepted:false }
     const norm = utils.normalize1D(desc)
-    const  result  = utils.resolveSliderStart(norm, desc.slider.constraints)
+    const  result  = utils.resolveSliderStart(norm, desc.data.constraints)
     return {
-      delta: result?.value,
-      stateAccepted:true
+      delta1D: result?.value,
+      stateAccepted: true
     }
   },
 
-  swipeStart(desc) {
-    if (!desc.slider) return { stateAccepted:false }
+  swipeStart(descriptor) {
+    const desc = descriptor as SliderDescriptor
+    if (!desc.data) return { stateAccepted:false }
     const norm = utils.normalize1D(desc)
-    const result = utils.resolveSliderStart(norm, desc.slider.constraints)
+    const result = utils.resolveSliderStart(norm, desc.data.constraints)
     return { 
-      delta: result?.value, 
+      delta1D: result?.value, 
       stateAccepted: true,
       gestureUpdate: {
         sliderStartOffset: result?.value,
@@ -51,14 +53,15 @@ export const sliderSolver: Record<'press' | 'swipeStart' | 'swipe' | 'swipeCommi
    * Handle swipe (drag) - clamp delta so thumb stays within [min, max] visually
    */
 
-  swipe(desc) {
-    if (!desc.slider) return { stateAccepted:false }
+  swipe(descriptor) {
+    const desc = descriptor as SliderDescriptor
+    if (!desc.data) return { stateAccepted:false }
     const norm = utils.normalize1D(desc)
     const gated = utils.resolveGate(norm)
     if (gated) return {stateAccepted: false }
     const value = 
     utils.resolveSliderSwipe(norm, desc)
-    return { delta: value, stateAccepted: true }
+    return { delta1D: value, stateAccepted: true }
   },
 
   /**
@@ -66,13 +69,14 @@ export const sliderSolver: Record<'press' | 'swipeStart' | 'swipe' | 'swipeCommi
    * Clamps result so position stays within [min, max]
    */
 
-  swipeCommit(desc) {
+  swipeCommit(descriptor) {
+    const desc = descriptor as SliderDescriptor
     const norm = utils.normalize1D(desc)
     const gated = utils.resolveGate(norm)
     if (gated) return {stateAccepted: false }
 
     const value = 
     utils.resolveSliderSwipe(norm, desc)
-    return { delta: value, stateAccepted: true }
+    return { delta1D: value, stateAccepted: true }
   }
 }

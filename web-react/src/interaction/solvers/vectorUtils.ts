@@ -1,4 +1,4 @@
-import type { DragData, Vec2, Axis, VecOrScalar } from "../../types/gestures"
+import type { DragData, Vec2, Axis, Direction} from "../../types/gestures"
 
 export const vector = {
     clamp(delta: number, min: number, max: number) {
@@ -43,10 +43,10 @@ export const vector = {
         }
     },
 
-    resolveDirection(delta: VecOrScalar, axis?: Axis) {
+    resolveDirection(delta: Vec2 | number, axis?: Axis): Direction | undefined {
         // 1D axis-based
         if (axis) {
-            if (!delta) return null
+            if (!delta) return undefined
             if (typeof delta !== "object") {
                 return axis === 'horizontal'
                     ? (delta > 0 ? 'right' : 'left')
@@ -57,10 +57,11 @@ export const vector = {
         // 2D dominant axis
         if (typeof delta == "object") {
             const { x, y } = delta
-            if (x === 0 && y === 0) return null
+            if (x === 0 && y === 0) return undefined
             return Math.abs(x) >= Math.abs(y)
                 ? (x > 0 ? 'right' : 'left')
                 : (y > 0 ? 'down' : 'up')
         }
+        return undefined
     }
 }

@@ -11,6 +11,12 @@
 		},
 		{
 			"path": "web-react"
+		},
+		{
+			"path": "web/src"
+		},
+		{
+			"path": "web-react/src"
 		}
 	],
 	"settings": {}
