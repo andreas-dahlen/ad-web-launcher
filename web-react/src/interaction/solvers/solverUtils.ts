@@ -1,6 +1,6 @@
 
 import { APP_SETTINGS } from "../../app/config/appSettings.ts"
-import type { Descriptor, Normalized1D, Axis, Direction, Vec2, SliderDescriptor, DragDescriptor } from "../../types/gestures.ts"
+import type { Descriptor, Normalized1D, Axis, Direction, Vec2, SliderDescriptor, CarouselDescriptor, DragDescriptor } from "../../types/gestures.ts"
 import { vector } from "./vectorUtils.ts"
 
 export const utils = {
@@ -8,28 +8,24 @@ export const utils = {
         normalize
     -------------------------- */
     normalize1D(desc: Descriptor): Normalized1D {
-        const { baseOffset, axis }= desc.base
+        const { baseOffset, axis } = desc.base
         const delta = desc.runtime.delta
+        if (!axis) return {}
 
-        const laneSize = 
-        "size" in desc.data? desc.data.size : null
+        // lane/track size only exists on carousel or slider
+        const trackSize = desc.base.type === 'carousel' || desc.base.type === 'slider'
+            ? (desc.data as CarouselDescriptor['data'] | SliderDescriptor['data']).size
+            : null
 
-        const sliderThumbSize = 
-        "thumbSize" in desc.data ? desc.data.thumbSize : null
+        // thumb only exists on slider
+        const thumbSize = desc.base.type === 'slider'
+            ? (desc.data as SliderDescriptor['data']).thumbSize
+            : null
 
-        if (axis == null) return {} as Normalized1D
-
-        const track = laneSize 
-        ? vector.resolveByAxis1D(laneSize, axis) : null
-
-        const thumb = sliderThumbSize 
-        ? vector.resolveByAxis1D(sliderThumbSize, axis) : null
-
-        const offset = baseOffset 
-        ? vector.resolveByAxis1D(baseOffset, axis) : null
-
-        const movement = delta
-        ? vector.resolveByAxis1D(delta, axis) : null
+        const track = trackSize ? vector.resolveByAxis1D(trackSize, axis) : null
+        const thumb = thumbSize ? vector.resolveByAxis1D(thumbSize, axis) : null
+        const offset = baseOffset ? vector.resolveByAxis1D(baseOffset, axis) : null
+        const movement = delta ? vector.resolveByAxis1D(delta, axis) : null
 
         return {
             mainTrackSize: track?.prim,
@@ -46,11 +42,9 @@ export const utils = {
         generic
     -------------------------- */
     resolveGate(norm: Normalized1D) {
-        const { crossTrackSize, crossOffset, crossDelta } = norm
-        if (crossTrackSize == null || crossOffset == null || crossDelta == null) return
-        const currentPos = crossOffset + crossDelta
-
-        return currentPos < 0 || currentPos > crossTrackSize
+        const currentPos = (norm.crossOffset ?? 0) + (norm.crossDelta ?? 0)
+        const crossSize = norm.crossTrackSize ?? 0
+        return currentPos < 0 || currentPos > crossSize
     },
     /* -------------------------
         slider-specifics
@@ -60,7 +54,7 @@ export const utils = {
         { min, max }: { min: number, max: number }) {
 
         const { mainTrackSize, mainOffset, mainThumbSize } = norm
-         if (mainTrackSize == null || mainOffset == null || mainThumbSize == null) return
+        if (mainTrackSize == null || mainOffset == null || mainThumbSize == null) return
         const range = max - min
         const usable = mainTrackSize - mainThumbSize
         const ratio = (mainOffset - mainThumbSize / 2) / usable
@@ -71,12 +65,12 @@ export const utils = {
     },
 
     resolveSliderSwipe(norm: Normalized1D, desc: SliderDescriptor) {
-
-        const { constraints: {min, max}, sliderValuePerPixel, sliderStartOffset } = desc.data
+        const { sliderValuePerPixel, sliderStartOffset } = desc.runtime
+        const { constraints: { min, max } } = desc.data
         const mainDelta = norm.mainDelta
 
-        if (mainDelta == null || 
-            sliderValuePerPixel == null || 
+        if (mainDelta == null ||
+            sliderValuePerPixel == null ||
             sliderStartOffset == null
         ) return
 
@@ -87,7 +81,7 @@ export const utils = {
         carousel-specifics
     -------------------------- */
 
-    isCarouselBlocked(delta: number, index: number, lock: {prev: number, next: number}) {
+    isCarouselBlocked(delta: number, index: number, lock: { prev: number, next: number }) {
         const { prev, next } = lock || {}
         if (prev == null && next == null) return false
         if (prev != null && prev - 1 === index && delta > 0) return true
@@ -101,7 +95,7 @@ export const utils = {
 
         if (this.shouldCommit(mainDelta, mainTrackSize, axis)) {
             const direction = vector.resolveDirection(mainDelta, axis)
-            if(direction) {
+            if (direction) {
                 const delta = this.getCommitOffset(direction, mainTrackSize)
                 return { direction, delta }
             }
@@ -129,8 +123,8 @@ export const utils = {
         const delta = desc.runtime.delta
         const dragPosition = desc.data.position
         const dragConstraints = desc.data.constraints
-        const clamped = 
-        vector.relativeClamp2D(delta, dragPosition, dragConstraints)
+        const clamped =
+            vector.relativeClamp2D(delta, dragPosition, dragConstraints)
         const dx = clamped.x
         const dy = clamped.y
         return { x: dx, y: dy }
@@ -169,4 +163,3 @@ export const utils = {
         return vector.resolveDirection({ x: fx - px, y: fy - py })
     }
 }
-

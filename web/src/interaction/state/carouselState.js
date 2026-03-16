@@ -33,9 +33,9 @@ export const carouselStateFn = {
         settling: computed(() => lane.settling),
         size: computed(() => lane.size),
         count: computed(() => lane.count),
-        progress: computed(() =>
-          lane.size ? lane.offset / lane.size : 0
-        )
+        // progress: computed(() =>
+        //   lane.size ? lane.offset / lane.size : 0
+        // )
       })
     }
     return laneViews[id]
@@ -134,6 +134,7 @@ export const carouselStateFn = {
   swipeCommit(desc) {
     const { direction, delta, id } = desc
     const lane = this.ensure(id)
+        console.log('size: ', this.getSize(desc.id), 'idex: ', this.getCurrentIndex(desc.id))
     lane.pendingDir = direction
     lane.offset = delta
     lane.dragging = false

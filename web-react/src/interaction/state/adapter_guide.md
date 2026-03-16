@@ -2,11 +2,13 @@ createStore(obj) → makes any object reactive
 
 .setState(fn) → mutate safely, triggers all subscribers
 
+<------- three ways to read state ----->
+1.
 .useStore(selector) → React hook, triggers rerender when slice changes
-
-.subscribe(fn) → optional, for plain JS usage
-
-getSnapshot() → optional, read the current state outside React
+2.
+.subscribe(fn) → optional, for plain JS usage. fires when state updates
+3.
+getSnapshot() → optional, read the current state outside React now
 
 
 1️⃣ Create a reactive state (in your state file)

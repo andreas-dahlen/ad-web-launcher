@@ -114,6 +114,7 @@ export const sliderStateFn = {
 
   swipeCommit(desc) {
     const slider = this.ensure(desc.id)
+    console.log('size: ', this.getSize(desc.id), 'thumbSize: ', this.getThumbSize(desc.id), 'constraints: ', this.getConstraints(desc.id), 'position: ', this.getPosition(desc.id))
     slider.value = desc.delta
     slider.dragging = false
   }

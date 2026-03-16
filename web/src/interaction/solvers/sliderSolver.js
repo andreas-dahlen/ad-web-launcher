@@ -23,9 +23,7 @@ export const sliderSolver = {
    */
 
   press(desc) {
-    console.log('press desc', desc)
     const norm = utils.normalize1D(desc)
-    console.log('press norm', norm)
     const { value } = utils.resolveSliderStart(norm, desc.slider.constraints)
     return {
       delta: value,
@@ -34,9 +32,7 @@ export const sliderSolver = {
   },
 
   swipeStart(desc) {
-        console.log('swipeStart desc', desc)
     const norm = utils.normalize1D(desc)
-        console.log('swipeStart norm', norm)
     const { value, valuePerPixel }= 
     utils.resolveSliderStart(norm, desc.slider.constraints)
     return { 

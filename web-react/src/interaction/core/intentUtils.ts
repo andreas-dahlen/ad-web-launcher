@@ -52,26 +52,23 @@ export const utils = {
         return distance >= screenSize * ratio
     },
 
-    resolveTarget(x: number, y: number): {desc: Descriptor; offset: Vec2 } | null {
+    resolveTarget(x: number, y: number): {desc: Descriptor; } | null {
         const target = targetResolver.resolveFromPoint(x, y)
         if (target) {
-            const offset = this.resolveStartOffset(x, y, target.base.element)
-            return { desc: target, offset }
+            return { desc: target }
         }
         return null
     },
 
-    resolveSwipeTarget(x: number, y: number, intentAxis: Axis, target: Descriptor): {desc: Descriptor; pressCancel: boolean; offset: Vec2} | null { //TODO: rename function to resolveSwipeStart?
+    resolveSwipeTarget(x: number, y: number, intentAxis: Axis, target: Descriptor): {desc: Descriptor; pressCancel: boolean} | null { //TODO: rename function to resolveSwipeStart?
         // Priority: target must support swipeStart AND the intent axis
         if (target) {
             const axis = this.resolveAxis(intentAxis, target)
             const canSwipe = this.resolveSupports('swipeable', target) && axis
-            const offset = this.resolveStartOffset(x, y, target.base.element)
             if (canSwipe && !target.data.locked) {
                 return {
                     desc: target,
                     pressCancel: false,
-                    offset: offset
                 }
             }
         }
@@ -79,11 +76,9 @@ export const utils = {
         // Fallback: find lane by axis
         const newTarget = targetResolver.resolveLaneByAxis(x, y, intentAxis)
         if (newTarget) {
-            const offset = this.resolveStartOffset(x, y, newTarget.base.element)
             return {
                 desc: newTarget,
                 pressCancel: this.resolveSupports('pressable', target),
-                offset: offset
             }
         }
         return null

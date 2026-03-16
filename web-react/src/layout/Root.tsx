@@ -1,5 +1,5 @@
-import LaneWallpaper from "./LaneWallpaper"
-import LanesHorizontal from "./LanesHorizontal"
+import LaneWallpaper from "./WallpaperLayer"
+import LanesHorizontal from "./HorizontalLayer"
 import InteractiveLayer from "./InteractiveLayer"
 import OverlayLayer from "./OverlayLayer"
 

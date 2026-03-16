@@ -32,8 +32,8 @@ export const interpreter = {
 }
 function applyGestureUpdate(update: GestureUpdate) {
     if (!gesture.desc) return
-    gesture.desc.data = {
-        ...gesture.desc.data,
+    gesture.desc.runtime = {
+        ...gesture.desc.runtime,
         ...update
     }
 }
@@ -72,16 +72,12 @@ function onDown(x: number, y: number): Descriptor | null {
     gesture.desc = resolved.desc
     // if(gesture.desc?.startOffset) gesture.desc.startOffset = resolved.offset
     if (utils.resolveSupports('pressable', gesture.desc)) {
-        return gesture.desc ? {
-            ...gesture.desc,
-            base: { ...gesture.desc.base, baseOffset: resolved.offset },
-            runtime: {
-                ...gesture.desc.runtime,
-                event: 'press',
-                delta: { x, y },
-            }
+        gesture.desc.runtime = {
+            ...gesture.desc.runtime,
+            event: 'press',
+            delta: { x, y }
         }
-            : null
+        return gesture.desc
     }
     return null
 }
@@ -112,23 +108,20 @@ function onMove(x: number, y: number): Descriptor | null {
         gesture.last.x = x
         gesture.last.y = y
 
-        return gesture.desc ? {
-            ...gesture.desc,
-            base: { ...gesture.desc.base, baseOffset: resolved.offset },
-            runtime: {
-                event: 'swipeStart',
-                delta: { x, y },
-                cancel
-            }
+        gesture.desc.runtime = {
+            ...gesture.desc.runtime,
+            event: 'swipeStart',
+            delta: { x, y },
+            cancel
         }
-            : null
+        return gesture.desc
     }
 
     /* -------------------------------------------------------
        Active swipe
     ------------------------------------------------------- */
 
-    if (gesture.phase === 'SWIPING') {
+    if (gesture.phase === 'SWIPING' && gesture.desc) {
 
         const deltaX = x - gesture.last.x
         const deltaY = y - gesture.last.y
@@ -137,14 +130,12 @@ function onMove(x: number, y: number): Descriptor | null {
         gesture.last.x = x
         gesture.last.y = y
 
-        return gesture.desc ? {
-            ...gesture.desc,
-            runtime: {
-                event: 'swipe',
-                delta: utils.normalizedDelta(gesture.totalDelta)
-            }
+        gesture.desc.runtime = {
+            ...gesture.desc.runtime,
+            event: 'swipe',
+            delta: utils.normalizedDelta(gesture.totalDelta)
         }
-            : null
+        return gesture.desc
     }
     return null
 }
@@ -158,31 +149,31 @@ function onUp(x: number, y: number): Descriptor | null {
        Swipe end
     ------------------------------------------------------- */
 
-    if (gesture.phase === 'SWIPING') {
-        const descriptor = {
-            ...gesture.desc,
-            runtime: {
-                event: 'swipeCommit',
-                delta: utils.normalizedDelta(gesture.totalDelta)
-            }
+    if (gesture.phase === 'SWIPING' && gesture.desc) {
+
+        gesture.desc.runtime = {
+            ...gesture.desc.runtime,
+            event: 'swipeCommit',
+            delta: utils.normalizedDelta(gesture.totalDelta)
         }
+        const descriptor = gesture.desc
         resetGesture()
-        return descriptor as Descriptor
+        return descriptor
     }
 
     /* -------------------------------------------------------
        Press release
     ------------------------------------------------------- */
-    if (gesture.phase === 'PENDING') {
-        const descriptor = {
-            ...gesture.desc,
-            runtime: {
-                event: 'pressRelease',
-                delta: { x, y }
-            }
+    if (gesture.phase === 'PENDING' && gesture.desc) {
+
+        gesture.desc.runtime = {
+            ...gesture.desc?.runtime,
+            event: 'pressRelease',
+            delta: {x, y}
         }
+        const descriptor = gesture.desc
         resetGesture()
-        return descriptor as Descriptor
+        return descriptor
     }
     return null
 }

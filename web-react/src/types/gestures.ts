@@ -1,6 +1,6 @@
 /* =========================================================
 Core engine primitives
-- Axis, Event types
+- Axis, Event types, primitives
 ========================================================= */
 
 export type Axis = 'horizontal' | 'vertical' | 'both'
@@ -18,16 +18,30 @@ export type EventType =
   | 'pressRelease'
   | 'pressCancel'
 
-/* =========================================================
-   Basics (simplifications)
-   ========================================================= */
 export interface Vec2 {
   x: number
   y: number
 }
+
+export type Mutable<T> = {
+  -readonly [K in keyof T]: T[K]
+}
 /* =========================================================
 Gesture data (static data describing gestures)
-- CarouselData, SliderData, DragData
+- Base
+========================================================= */
+
+export interface BaseInteraction {
+  // type: InteractionType Is added later
+  element: HTMLElement
+  id: string
+  axis: Axis | null
+  baseOffset: Vec2
+  actionId?: string
+}
+/* =========================================================
+Gesture data (static data describing gestures)
+- CarouselData, SliderData, DragData & modifiers
 ========================================================= */
 
 export interface CarouselData {
@@ -39,9 +53,6 @@ export interface SliderData {
   thumbSize: Vec2
   constraints: { min: number; max: number }
   size: Vec2
-  //added through gestureUpdate:
-  sliderStartOffset?: number
-  sliderValuePerPixel?: number
 }
 
 export interface DragData {
@@ -55,27 +66,13 @@ export interface DragData {
 }
 
 export interface Modifiers {
+  //added during construction.
   //carousel
   lockSwipeAt?: { prev: number; next: number }
-
-  //slider
-  sliderStartOffset?: number
-  sliderValuePerPixel?: number
   //drag
   snap?: Vec2
   locked?: boolean
 }
-
-/* =========================================================
-   Gesture system mapping
-   - Maps gesture types to their data
-   ========================================================= */
-
-export type InteractionType = 'button' | 'carousel' | 'slider' | 'drag'
-
-export type DataKeys = Exclude<InteractionType, 'button'>
-// Partial used for building descriptors
-export type SwipeData = Descriptor['data']
 
 /* =========================================================
 Runtime data (produced during gesture pipeline)
@@ -96,7 +93,6 @@ export interface Reactions {
 export interface GestureUpdate {
   sliderStartOffset?: number
   sliderValuePerPixel?: number
-
   /* Allow solvers to attach extra runtime params */
   [key: string]: unknown
 }
@@ -105,55 +101,60 @@ export type RuntimeData = {
   event: EventType
   delta: Vec2,
   delta1D?: number,
-  stateAccepted?: boolean 
+  stateAccepted?: boolean
   cancel?: CancelData
   gestureUpdate?: GestureUpdate
   direction?: Direction
+  sliderStartOffset?: number
+  sliderValuePerPixel?: number
 }
-
 export type RuntimePatch = Partial<RuntimeData>
-
-type GestureDescriptor<T> = Omit<Descriptor, "data"> & {
-  data: T & Modifiers
+/* =========================================================
+   Gesture system mapping
+   - Maps gesture types to their data
+   ========================================================= */
+type InteractionDataMap = {
+  button: Record<string, never>
+  carousel: CarouselData
+  slider: SliderData
+  drag: DragData
 }
 
-export type DragDescriptor = GestureDescriptor<DragData>
-export type CarouselDescriptor = GestureDescriptor<CarouselData>
-export type SliderDescriptor = GestureDescriptor<SliderData>
+// All types
+export type InteractionType = keyof InteractionDataMap
+//Swipe types
+export type DataKeys = Exclude<InteractionType, 'button'>
+// Partial used for building descriptors
+export type SwipeData = InteractionDataMap[DataKeys] & Modifiers
 
 /* =========================================================
    Descriptor system
-   - BaseDescriptor + SwipeData + RuntimeData
    ========================================================= */
 
-export interface BaseDescriptor {
-  element: HTMLElement
-  id: string
-  axis: Axis | null
-  type: InteractionType
-  baseOffset: Vec2
-  actionId?: string
-}
-
-/**
- * Descriptor
- *
- * Unified object passed through the interaction engine.
- * Combines:
- * - Base DOM descriptor data
- * - Gesture-specific data
- * - Runtime pipeline state
- */
-export type Descriptor = {
-  base: BaseDescriptor
-  data: (CarouselData | SliderData | DragData) & Modifiers
+type InteractionDescriptor<K extends InteractionType> = {
+  base: BaseInteraction & { type: K }
+  data: InteractionDataMap[K] & Modifiers
   reactions: Reactions
   runtime: RuntimeData
-
-  // {
-  //   /* Allow solvers / plugins to extend descriptor */
-  //   [key: string]: unknown
 }
+
+export type DescriptorOf<K extends InteractionType> =
+  InteractionDescriptor<K>
+
+  export type DescriptorMap = {
+    [K in InteractionType]: InteractionDescriptor<K>
+  }
+
+  export type Descriptor = DescriptorMap[InteractionType]
+  
+  export type DescriptorType<T extends Descriptor> = T["base"]["type"]
+  
+export type DragDescriptor = InteractionDescriptor<'drag'>
+export type CarouselDescriptor = InteractionDescriptor<'carousel'>
+export type SliderDescriptor = InteractionDescriptor<'slider'>
+export type ButtonDescriptor = InteractionDescriptor<'button'>
+export type SwipeDescriptor = DescriptorMap[DataKeys]
+
 
 /* =========================================================
    SolverUtils

@@ -100,6 +100,7 @@ get(id) {
    */
   swipeCommit(desc) {
     const lane = this.ensure(desc.id)
+        console.log('size: ', this.getSize(desc.id), 'constraints: ', this.getConstraints(desc.id), 'position: ', this.getPosition(desc.id))
     lane.position = {
       x: desc.delta.x,
       y: desc.delta.y

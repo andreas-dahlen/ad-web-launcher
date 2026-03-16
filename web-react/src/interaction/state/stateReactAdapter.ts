@@ -1,4 +1,3 @@
-// adapter.ts
 import { useSyncExternalStore } from "react"
 
 export function createStore<T extends object>(initialState: T) {
@@ -19,8 +18,9 @@ export function createStore<T extends object>(initialState: T) {
     return state
   }
 
-  function useStore<U = T>(selector: (s: T) => U = (s) => s as unknown as U): U {
-    return useSyncExternalStore(subscribe, () => selector(state))
+  function useStore<U = T>(selector?: (s: T) => U): U {
+    const snapshot = useSyncExternalStore(subscribe, getSnapshot)
+    return selector ? selector(snapshot) : (snapshot as unknown as U)
   }
 
   return { setState, subscribe, getSnapshot, useStore }

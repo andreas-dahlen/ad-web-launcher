@@ -37,7 +37,7 @@ function callSet(type: DataKeys, fnName: StateFn3Arg, id: string, value: unknown
 //  * | null //carousel
 //  */
 export const state = {
-    // ----- METADATA READS ----- (for buildPayload.ts)
+    // // ----- METADATA READS ----- (for buildPayload.ts)
     getSize(type: DataKeys, id: string) { return callGet(type, 'getSize', id) },
     getThumbSize(type: DataKeys, id: string) { return callGet(type, 'getThumbSize', id) },
     getPosition(type: DataKeys, id: string) { return callGet(type, 'getPosition', id) },
