@@ -1,5 +1,3 @@
-
-
 export const DEBUG = {
   enabled: import.meta.env.VITE_DEBUG === 'true',
 

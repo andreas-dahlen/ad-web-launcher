@@ -1,5 +1,3 @@
-import type { DragData, Vec2, Axis, Direction} from "../../types/gestures"
-
 export const vector = {
     clamp(delta: number, min: number, max: number) {
         if (min === undefined || max === undefined) return delta

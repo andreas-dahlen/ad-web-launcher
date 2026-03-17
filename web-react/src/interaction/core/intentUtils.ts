@@ -1,8 +1,6 @@
 import { normalizeParameter, getAxisSize } from '../state/sizeState.ts'
-import { APP_SETTINGS } from '../../app/config/appSettings.ts'
+import { APP_SETTINGS } from '@config/appSettings.ts'
 import { targetResolver } from "./targetResolver.ts"
-
-import type { Descriptor, Axis, Reactions, Vec2 } from '../../types/gestures.ts' // adjust path if needed
 
 export const utils = {
     //intentUtils.js

@@ -1,5 +1,4 @@
-import { log, drawDots } from '../../app/debug/functions.ts'
-import type { Descriptor, Axis, Vec2, CancelData, GestureUpdate } from '../../types/gestures.ts'
+import { log, drawDots } from '@debug/functions.ts'
 import { utils } from './intentUtils.ts'
 
 /* =========================================================

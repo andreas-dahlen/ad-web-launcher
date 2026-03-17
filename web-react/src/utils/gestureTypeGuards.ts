@@ -1,6 +1,4 @@
 // gestureTypeGuards.ts
-import type { InteractionType, DataKeys, StateFn2Arg } from '../types/gestures'
-
 export function isGestureType(type: InteractionType | null): type is DataKeys {
   return type === "carousel" ||
          type === "slider" ||

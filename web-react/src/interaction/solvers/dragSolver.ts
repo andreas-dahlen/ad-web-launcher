@@ -22,7 +22,6 @@
 // } from './policy/dragPolicy'
 
 import { utils } from "./solverUtils.ts"
-import type { Descriptor, EventType, RuntimePatch, DragDescriptor } from "../../types/gestures.ts"
 
 export const dragSolver: Partial<Record<EventType, (desc: Descriptor) => RuntimePatch | void>> = {
 

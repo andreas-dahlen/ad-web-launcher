@@ -15,7 +15,6 @@
  * - No swipeRevert reaction
  */
 import { utils } from "./solverUtils.ts"
-import type { Descriptor, EventType, RuntimePatch, SliderDescriptor } from "../../types/gestures.ts"
 
 export const sliderSolver: Partial<Record<EventType, (desc: Descriptor) => RuntimePatch | void>> = {
 

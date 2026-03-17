@@ -1,17 +1,15 @@
-import LaneWallpaper from "./WallpaperLayer"
-import LanesHorizontal from "./HorizontalLayer"
-import InteractiveLayer from "./InteractiveLayer"
-import OverlayLayer from "./OverlayLayer"
+import LaneWallpaper from "./WallpaperLayer.tsx"
+import HorizontalLayer from "./HorizontalLayer.tsx"
+import InteractiveLayer from "./InteractiveLayer.tsx"
+import OverlayLayer from "./OverlayLayer.tsx"
 
 export default function Root() {
   return (
     <>
-      <div>hello Root
         <LaneWallpaper />
-        <LanesHorizontal />
+        <HorizontalLayer />
         <InteractiveLayer />
         <OverlayLayer />
-      </div>
     </>
   )
 }

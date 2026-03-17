@@ -276,13 +276,16 @@ The "React is just a giant loop that runs your components again and again" menta
 Once you see that, everything about hooks suddenly makes sense.
 
 
+Normal order!
+useRef     → state that does NOT trigger rerender (presistant between renders)
 
 useState   → state that triggers rerender
-useRef     → state that does NOT trigger rerender (presistant between renders)
+
+useMemo    → cache a calculation based on change in dependencies!
+useCallback → cache a function based on change in dependencies!
+
 useEffect  → side effects after render
 
-useMemo    → cache a calculation based on change
-useCallback → cache a function
 
 Vue	            React
 ref()	          useState()

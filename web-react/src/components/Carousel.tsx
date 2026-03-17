@@ -1,6 +1,6 @@
 import { useRef, useMemo, type Component, type ComponentType } from "react"
-import { useCarouselState } from "../../interaction/state/carouselState.ts"
-import { usePointerForwarding } from "../../interaction/bridge/bridge.ts"
+import { useCarouselState } from "@interaction/state/carouselState.ts"
+import { usePointerForwarding } from "@interaction/bridge/bridge.ts"
 
 interface CarouselProps {
   id: string

@@ -1,5 +1,4 @@
 import { createStore } from './stateReactAdapter.ts'
-import type { Descriptor, Direction, Vec2 } from '../../types/gestures.ts'
 /* -------------------------------
    Types for carousel state
 --------------------------------- */

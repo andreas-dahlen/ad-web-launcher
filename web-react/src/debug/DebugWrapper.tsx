@@ -1,5 +1,4 @@
-import { useSizeState } from "../../interaction/state/sizeState"
-import type { ChildrenProps } from "../../types/reactTS"
+import { useSizeState } from "@interaction/state/sizeState.ts"
 
 export default function DebugWrapper({ children }: ChildrenProps) {
 

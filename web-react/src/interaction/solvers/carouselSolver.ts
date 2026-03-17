@@ -10,7 +10,6 @@
  * - Does NOT access DOM
  */
 import { utils } from './solverUtils.ts'
-import type { Descriptor, EventType, RuntimePatch, CarouselDescriptor} from '../../types/gestures.ts'
 
 export const carouselSolver: Partial<Record<EventType, (desc: Descriptor) => RuntimePatch | void>> = {
   /**

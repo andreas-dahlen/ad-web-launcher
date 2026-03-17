@@ -1,5 +1,5 @@
-import Carousel from "../components/primitives/carousel";
-import { LANES } from "./laneIndex";
+import Carousel from "@components/Carousel.tsx";
+import { LANES } from "./laneIndex.ts";
 
 export default function LaneWallpaper() {
 

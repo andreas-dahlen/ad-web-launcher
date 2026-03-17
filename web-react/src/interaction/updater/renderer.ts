@@ -1,6 +1,4 @@
 // renderer.ts
-import type { Descriptor, EventType } from "../../types/gestures.ts"
-
 /* -------------------------------------------------
    DOM helpers
 ------------------------------------------------- */

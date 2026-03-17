@@ -1,6 +1,5 @@
 import { state } from '../state/stateManager.ts'
-import type { Descriptor, Reactions, Axis, SliderData, DragData, Vec2, RuntimeData, InteractionType, SwipeData, Modifiers, BaseInteraction } from '../../types/gestures.ts'
-import { isGestureType } from '../../utils/gestureTypeGuards.ts'
+import { isGestureType } from '@utils/gestureTypeGuards.ts'
 import { utils } from './intentUtils.ts'
 
 interface Context {

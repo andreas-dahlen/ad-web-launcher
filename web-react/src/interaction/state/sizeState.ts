@@ -1,5 +1,5 @@
-import { log } from '../../app/debug/functions.ts'
-import { APP_SETTINGS } from '../../app/config/appSettings.ts'
+import { log } from '@debug/functions.ts'
+import { APP_SETTINGS } from '@config/appSettings.ts'
 import { createStore } from './stateReactAdapter.ts'
 
 /* -------------------------

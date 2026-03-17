@@ -1,6 +1,5 @@
 
-import { APP_SETTINGS } from "../../app/config/appSettings.ts"
-import type { Descriptor, Normalized1D, Axis, Direction, Vec2, SliderDescriptor, CarouselDescriptor, DragDescriptor } from "../../types/gestures.ts"
+import { APP_SETTINGS } from "@config/appSettings.ts"
 import { vector } from "./vectorUtils.ts"
 
 export const utils = {

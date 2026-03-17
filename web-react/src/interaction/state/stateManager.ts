@@ -1,7 +1,6 @@
 import { carouselStateFn } from './carouselState.ts'
 import { sliderStateFn } from './sliderState.ts'
 import { dragStateFn } from './dragState.ts'
-import type { Descriptor, Vec2, DataKeys, StateFn2Arg, StateFn3Arg, DragData } from '../../types/gestures.ts'
 
 type StateFn2 = (type: DataKeys, descOrId: Descriptor | string) => unknown
 type StateFn3 = (type: DataKeys, id: string, value: unknown) => unknown
@@ -53,7 +52,7 @@ export const state = {
     setCount(type: DataKeys, id: string, length: number) { return callSet(type, 'setCount', id, length) },
     setSize(type: DataKeys, id: string, value: Vec2) { return callSet(type, 'setSize', id, value) },
     setThumbSize(type: DataKeys, id: string, value: Vec2) { return callSet(type, 'setThumbSize', id, value) },
-    setPosition(type: DataKeys, id: string, position: Vec2 | number | null) { return callSet(type, 'setPosition', id, position) },
+    setPosition(type: DataKeys, id: string, position?: Vec2 | number | null) { return callSet(type, 'setPosition', id, position) },
     setConstraints(type: DataKeys, id: string, constraints: Vec2 | DragData['constraints']) { return callSet(type, 'setConstraints', id, constraints) },
 
     // ----- SOLVER MUTATIONS -----

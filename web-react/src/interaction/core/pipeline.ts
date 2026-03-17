@@ -1,11 +1,4 @@
-import type {
-  Descriptor,
-  EventType,
-  EventBridgeType,
-  DataKeys,
-  RuntimeData
-} from '../../types/gestures'
-import { isGestureType, isStateFn2Arg } from '../../utils/gestureTypeGuards.ts'
+import { isGestureType, isStateFn2Arg } from '@utils/gestureTypeGuards.ts'
 
 import { interpreter } from './interpreter.ts'
 import { carouselSolver } from '../solvers/carouselSolver.ts'

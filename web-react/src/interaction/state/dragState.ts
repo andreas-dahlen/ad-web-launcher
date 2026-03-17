@@ -1,6 +1,4 @@
 import { createStore } from './stateReactAdapter.ts'
-import type { Descriptor, Vec2 } from '../../types/gestures.ts'
-
 /* -------------------------------
    Types for drag state
 --------------------------------- */
