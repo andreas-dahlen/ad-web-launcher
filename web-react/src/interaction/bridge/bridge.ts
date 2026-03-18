@@ -23,7 +23,6 @@ export function usePointerForwarding({ elRef, onReaction }: PointerForwardingPro
 
       activePointerId.current = e.pointerId
       isActive.current = true
-      // console.log("bridge event: down")
       pipeline.orchestrate({
         eventType: 'down',
         x: e.clientX,
@@ -34,7 +33,6 @@ export function usePointerForwarding({ elRef, onReaction }: PointerForwardingPro
     function handlePointerMove(e: PointerEvent) {
       if (!isActive.current) return
       if (e.pointerId !== activePointerId.current) return
-      // console.log("bridge event: move")
       pipeline.orchestrate({
         eventType: 'move',
         x: e.clientX,
@@ -49,7 +47,6 @@ export function usePointerForwarding({ elRef, onReaction }: PointerForwardingPro
       if (el?.hasPointerCapture(e.pointerId)) {
         el.releasePointerCapture(e.pointerId)
       }
-      // console.log("bridge event: up")
       pipeline.orchestrate({
         eventType: 'up',
         x: e.clientX,

@@ -75,8 +75,11 @@ export function useCarouselMotion({
 
   const onTransitionEnd = useCallback(
     (e: React.TransitionEvent) => {
+      const target = e.target as HTMLElement
+      if (!target.classList.contains("scene-default")) return
       if (e.propertyName !== "transform") return
       if (isSettling) return
+
       state.setPosition("carousel", id)
     },
     [id, isSettling]

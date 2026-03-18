@@ -29,14 +29,7 @@ if (desc.base.type === 'carousel') {
         const thumb = thumbSize ? vector.resolveByAxis1D(thumbSize, axis) : null
         const offset = baseOffset ? vector.resolveByAxis1D(baseOffset, axis) : null
         const movement = delta ? vector.resolveByAxis1D(delta, axis) : null
-        console.log(track?.prim,
-            track?.sub,
-            thumb?.prim,
-            thumb?.sub,
-            offset?.prim,
-            offset?.sub,
-            movement?.prim,
-            movement?.sub)
+
         return {
             mainTrackSize: track?.prim,
             crossTrackSize: track?.sub,

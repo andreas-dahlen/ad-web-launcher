@@ -152,7 +152,6 @@ get(id: string): CarouselLaneView {
     const lane = this.ensure(desc.base.id)
      lane.offset = desc.runtime.delta1D ?? lane.offset
     })
-    console.log(this.ensure(desc.base.id))
   },
 
   swipeCommit(desc: Descriptor) {

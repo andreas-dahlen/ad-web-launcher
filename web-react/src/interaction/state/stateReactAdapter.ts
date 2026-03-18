@@ -1,11 +1,12 @@
 import { useSyncExternalStore } from "react"
 
 export function createStore<T extends object>(initialState: T) {
-  const state = initialState
+  let state = initialState
   const listeners = new Set<() => void>()
 
   function setState(updater: (draft: T) => void) {
     updater(state)
+    state = { ...state }
     listeners.forEach((cb) => cb())
   }
 

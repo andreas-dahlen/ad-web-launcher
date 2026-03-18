@@ -26,10 +26,13 @@ export const carouselSolver: Partial<Record<EventType, (desc: Descriptor) => Run
     const desc = descriptor as CarouselDescriptor
     const norm = utils.normalize1D(desc)
     const gated = utils.resolveGate(norm)
-    if (norm.mainDelta == null || desc.data?.lockSwipeAt == null) return
-    const locked = utils.isCarouselBlocked(norm.mainDelta, desc.data?.index, desc.data?.lockSwipeAt)
+    if (norm.mainDelta == null) return
+
+    const locked = desc.data.lockSwipeAt 
+    ? utils.isCarouselBlocked(norm.mainDelta, desc.data?.index, desc.data?.lockSwipeAt) 
+    : null
+
     if (gated || locked) { return {stateAccepted: false } }
-    console.log("swipeSolver")
     return { delta1D: norm.mainDelta, stateAccepted: true }
   },
 
@@ -42,9 +45,11 @@ export const carouselSolver: Partial<Record<EventType, (desc: Descriptor) => Run
     const norm = utils.normalize1D(desc)
     const gated = utils.resolveGate(norm)
 
-        if (norm.mainDelta == null || desc.data?.lockSwipeAt == null) return {event: 'swipeRevert', stateAccepted: true}
+        if (norm.mainDelta == null) return {event: 'swipeRevert', stateAccepted: true}
 
-    const locked = utils.isCarouselBlocked(norm.mainDelta, desc.data?.index, desc.data?.lockSwipeAt)
+    const locked = desc.data.lockSwipeAt 
+    ? utils.isCarouselBlocked(norm.mainDelta, desc.data?.index, desc.data?.lockSwipeAt) 
+    : null
 
     if (gated || locked || !desc.base.axis) return {event: 'swipeRevert', stateAccepted: true}
 

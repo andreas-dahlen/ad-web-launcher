@@ -67,15 +67,13 @@ export const pipeline = {
       console.warn('Unknown eventType', eventType)
       return null
     }
-    // (console.log(eventType, interpreterMap[eventType]))
+
     const descriptor = interpreterFn(x, y)
 
-    // console.log("after interpreter: ", descriptor?.runtime.event)
     if (!descriptor) return null
     /* -------------------------
        Solvers
     -------------------------- */
-    // const event = descriptor.runtime.event
 
     const { base: { type }, runtime: { event } } = descriptor
 
@@ -103,17 +101,13 @@ export const pipeline = {
     /* -------------------------
        State mutations
     -------------------------- */
-    console.log(solution.runtime.event)
     if (solution.runtime.stateAccepted && solution.runtime.event && solution.base.type) {
 
       // const fn = state[solution.runtime.event as keyof typeof state]
       // fn(solution.base.type, solution)
       if (solution.runtime.event && isStateFn2Arg(solution.runtime.event) && isGestureType(solution.base.type)) {
-        console.log('accepted', 'event: ', solution.runtime.event)
         const fn = state[solution.runtime.event] as (type: DataKeys, desc: Descriptor) => unknown
-        console.log(fn)
         fn(solution.base.type, solution)
-              console.log('solution: ', solution)
       }
     }
 

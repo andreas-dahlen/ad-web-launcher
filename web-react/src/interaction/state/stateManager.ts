@@ -58,8 +58,7 @@ export const state = {
 
     press(type: DataKeys, desc: Descriptor) { return callMutate(type, 'press', desc) },
     swipeStart(type: DataKeys, desc: Descriptor) { return callMutate(type, 'swipeStart', desc) },
-    swipe(type: DataKeys, desc: Descriptor) { console.log('swiping stateManager') 
-    return callMutate(type, 'swipe', desc) },
+    swipe(type: DataKeys, desc: Descriptor) { return callMutate(type, 'swipe', desc) },
     swipeCommit(type: DataKeys, desc: Descriptor) { return callMutate(type, 'swipeCommit', desc) },
     swipeRevert(type: DataKeys, desc: Descriptor) { return callMutate(type, 'swipeRevert', desc) }
 }
