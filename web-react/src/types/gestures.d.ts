@@ -115,7 +115,8 @@ type RuntimePatch = Partial<RuntimeData>
    - Maps gesture types to their data
    ========================================================= */
 type InteractionDataMap = {
-  button: Record<string, never>
+// source: 'button' |
+  button: null
   carousel: CarouselData
   slider: SliderData
   drag: DragData
@@ -138,6 +139,13 @@ type InteractionDescriptor<K extends InteractionType> = {
   reactions: Reactions
   runtime: RuntimeData
 }
+
+// let xs: Array<number> = [1,2,3]
+// type Exempel<T> = {
+//   x: T
+//   y: T[]
+// }
+// let o: Exempel<boolean> = { x: 5, y: [false,true] }
 
 type DescriptorOf<K extends InteractionType> =
   InteractionDescriptor<K>

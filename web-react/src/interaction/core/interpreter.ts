@@ -157,6 +157,7 @@ function onUp(x: number, y: number): Descriptor | null {
         }
         const descriptor = gesture.desc
         resetGesture()
+        
         return descriptor
     }
 
@@ -171,6 +172,7 @@ function onUp(x: number, y: number): Descriptor | null {
             delta: {x, y}
         }
         const descriptor = gesture.desc
+                console.log('event: ', gesture.desc.runtime.event)
         resetGesture()
         return descriptor
     }

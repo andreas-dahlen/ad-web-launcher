@@ -14,12 +14,12 @@ interface UseCarouselMotionProps {
   horizontal: boolean
   id: string
 }
-const BASE_STYLE = {
+const BASE_STYLE: React.CSSProperties = {
   position: 'absolute',
   inset: 0,
   backfaceVisibility: 'hidden',
   willChange: 'transform'
-} as const
+}
 
 const ROLE_OFFSETS = { prev: -1, current: 0, next: 1 } as const
 
@@ -31,8 +31,8 @@ export function useCarouselMotion({
 }: UseCarouselMotionProps) {
 
   const delta = laneState.offset ?? 0
-  const isDragging = laneState.dragging
-  const isSettling = laneState.settling
+  const isDragging = laneState.dragging ?? false
+  const isSettling = laneState.settling ?? false
 
   const transition = useMemo(() => {
     if (isDragging || isSettling) return "none"
@@ -60,13 +60,14 @@ export function useCarouselMotion({
     [translate, laneSize, delta, transition]
   )
 
-  const carouselStyle = useMemo(
+  const carouselStyle: React.CSSProperties = useMemo(
     () => ({
       width: "100%",
       height: "100%",
-      position: "relative" as const,
+      position: "relative",
       overflow: "hidden",
-      touchAction: "none" as const,
+      touchAction: "none",
+      pointerEvents: "auto",
       transform: "translateZ(0)"
     }),
     []

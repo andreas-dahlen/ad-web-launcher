@@ -1,5 +1,4 @@
 import { state } from '../state/stateManager.ts'
-import { isGestureType } from '@utils/gestureTypeGuards.ts'
 import { utils } from './intentUtils.ts'
 
 interface Context {
@@ -50,7 +49,7 @@ export const targetResolver = {
     const id = ds.id ?? ''
     const axis = (ds.axis as Axis) ?? null
     const type = (ds.type as InteractionType) ?? null
-    const laneValid = Boolean(id && axis && isGestureType(type))
+    const laneValid = Boolean(id && axis && type)
     const snapX = ds.snapX != null ? Number(ds.snapX) : null
     const snapY = ds.snapY != null ? Number(ds.snapY) : null
     const lockPrevAt = ds.lockPrevAt != null ? Number(ds.lockPrevAt) : null
@@ -83,7 +82,7 @@ export const targetResolver = {
 
     if (type === 'carousel') {
       const index = state.getCurrentIndex(type, id) as number
-      const size = state.getSize(type, id) as Vec2//{x, y}
+      const size = state.getSize(type, id) as Vec2
       if (index != null && size != null) {
         const data = { index, size }
         return applyModifiers(data)

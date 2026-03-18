@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import { state } from "@interaction/state/stateManager.ts"
 
 interface UseCarouselSizingProps {
-    elRef: React.RefObject<HTMLElement>
+    elRef: React.RefObject<HTMLElement | null>
     axis: "horizontal" | "vertical"
     id: string
 }
@@ -11,17 +11,17 @@ export function useCarouselSizing({
     elRef,
     axis,
     id
-}: UseCarouselSizingProps) {
+}: UseCarouselSizingProps): number{
 
     const [laneSize, setLaneSize] = useState(0)
 
     useEffect(() => {
 
         const el = elRef.current
-        if (!el) return
-
+        
         function updateLaneSize() {
-
+            if (!el) return
+            
             const trackSize = {
                 x: el.offsetWidth,
                 y: el.offsetHeight
@@ -40,11 +40,12 @@ export function useCarouselSizing({
         updateLaneSize()
 
         const observer = new ResizeObserver(updateLaneSize)
+        if(el)
         observer.observe(el)
 
         return () => observer.disconnect()
 
     }, [elRef, axis, id])
 
-    return { laneSize }
+    return  laneSize 
 }

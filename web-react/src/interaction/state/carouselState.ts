@@ -40,7 +40,8 @@ export const carouselStateFn = {
     /* -------------------------
        Ensure lane exists
   -------------------------- */
-  ensure(id: string, s: CarouselState) {
+  ensure(id: string) {
+  const s = useCarouselState.getSnapshot()
   let lane = s.lanes[id]
   if (!lane) {
     lane = {
@@ -53,7 +54,7 @@ export const carouselStateFn = {
       pendingDir: null,
       lockPrevAt: null,
       lockNextAt: null
-    }
+    }  
     s.lanes[id] = lane // directly mutate the current snapshot
   }
   return lane
@@ -63,7 +64,7 @@ export const carouselStateFn = {
   -------------------------- */
 get(id: string): CarouselLaneView {
   const s = useCarouselState.getSnapshot()
-  const lane = this.ensure(id, s)
+  const lane = this.ensure(id)
   if (!s.views[id]) {
     s.views[id] = {
       offset: lane.offset,
@@ -76,6 +77,7 @@ get(id: string): CarouselLaneView {
       // progress: lane.size ? lane.offset / lane.size : 0
     }
   }
+
   return s.views[id]
 },
 
@@ -102,20 +104,20 @@ get(id: string): CarouselLaneView {
   Configuration / layout
   -------------------------- */
   setCount(id: string, count: number) {
-    useCarouselState.setState((s) => {
-      this.ensure(id, s).count = Math.max(0, count)
+    useCarouselState.setState(() => {
+      this.ensure(id).count = Math.max(0, count)
     })
   },
 
   setSize(id: string, size: Vec2) {
-    useCarouselState.setState((s) => {
-      this.ensure(id, s).size = size
+    useCarouselState.setState(() => {
+      this.ensure(id).size = size
     })
   },
 
   setPosition(id: string): boolean {
-    useCarouselState.setState((s) => {
-      const lane = this.ensure(id, s)
+    useCarouselState.setState(() => {
+      const lane = this.ensure(id)
       if (!lane.pendingDir) return false
       lane.settling = true
       lane.index = this.getNextIndex(lane.index, lane.pendingDir, lane.count)
@@ -124,8 +126,8 @@ get(id: string): CarouselLaneView {
     })
 
     setTimeout(() => {
-      useCarouselState.setState((s) => {
-        const lane = this.ensure(id, s)
+      useCarouselState.setState(() => {
+        const lane = this.ensure(id)
         lane.settling = false
       })
     }, 0)
@@ -137,8 +139,8 @@ get(id: string): CarouselLaneView {
        Dispatcher / mutations
   -------------------------- */
   swipeStart(desc: Descriptor) {
-  useCarouselState.setState((s) => {
-    const lane = this.ensure(desc.base.id, s)
+  useCarouselState.setState(() => {
+    const lane = this.ensure(desc.base.id)
     lane.dragging = true
     if (lane.pendingDir !== null) this.setPosition(desc.base.id)
     lane.pendingDir = null
@@ -146,15 +148,16 @@ get(id: string): CarouselLaneView {
   },
 
   swipe(desc: Descriptor) {
-    useCarouselState.setState((s) => {
-    const lane = this.ensure(desc.base.id, s)
+    useCarouselState.setState(() => {
+    const lane = this.ensure(desc.base.id)
      lane.offset = desc.runtime.delta1D ?? lane.offset
-     })
+    })
+    console.log(this.ensure(desc.base.id))
   },
 
   swipeCommit(desc: Descriptor) {
-    useCarouselState.setState((s) => {
-    const lane = this.ensure(desc.base.id, s)
+    useCarouselState.setState(() => {
+    const lane = this.ensure(desc.base.id)
     lane.pendingDir = desc.runtime.direction ?? null
     lane.offset = desc.runtime.delta1D ?? lane.offset
     lane.dragging = false
@@ -162,8 +165,8 @@ get(id: string): CarouselLaneView {
   },
 
   swipeRevert(desc: Descriptor) {
-    useCarouselState.setState((s) => {
-    const lane = this.ensure(desc.base.id, s)
+    useCarouselState.setState(() => {
+    const lane = this.ensure(desc.base.id)
     lane.offset = 0
     lane.dragging = false
     lane.pendingDir = null

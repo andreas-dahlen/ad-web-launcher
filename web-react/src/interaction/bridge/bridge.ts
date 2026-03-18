@@ -3,7 +3,7 @@ import type { RefObject } from 'react'
 import { pipeline } from '../core/pipeline.ts'
 
 interface PointerForwardingProps {
-  elRef: RefObject<HTMLElement>
+  elRef: RefObject<HTMLElement | null>
   onReaction?: (e: CustomEvent) => void
 }
 
@@ -19,11 +19,11 @@ export function usePointerForwarding({ elRef, onReaction }: PointerForwardingPro
       e.stopPropagation()
       if (isActive.current) return
 
-      el.setPointerCapture(e.pointerId)
+      el?.setPointerCapture(e.pointerId)
 
       activePointerId.current = e.pointerId
       isActive.current = true
-
+      // console.log("bridge event: down")
       pipeline.orchestrate({
         eventType: 'down',
         x: e.clientX,
@@ -34,7 +34,7 @@ export function usePointerForwarding({ elRef, onReaction }: PointerForwardingPro
     function handlePointerMove(e: PointerEvent) {
       if (!isActive.current) return
       if (e.pointerId !== activePointerId.current) return
-
+      // console.log("bridge event: move")
       pipeline.orchestrate({
         eventType: 'move',
         x: e.clientX,
@@ -46,10 +46,10 @@ export function usePointerForwarding({ elRef, onReaction }: PointerForwardingPro
       if (!isActive.current) return
       if (e.pointerId !== activePointerId.current) return
 
-      if (el.hasPointerCapture(e.pointerId)) {
+      if (el?.hasPointerCapture(e.pointerId)) {
         el.releasePointerCapture(e.pointerId)
       }
-
+      // console.log("bridge event: up")
       pipeline.orchestrate({
         eventType: 'up',
         x: e.clientX,

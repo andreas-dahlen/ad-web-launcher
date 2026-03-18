@@ -29,6 +29,7 @@ export const carouselSolver: Partial<Record<EventType, (desc: Descriptor) => Run
     if (norm.mainDelta == null || desc.data?.lockSwipeAt == null) return
     const locked = utils.isCarouselBlocked(norm.mainDelta, desc.data?.index, desc.data?.lockSwipeAt)
     if (gated || locked) { return {stateAccepted: false } }
+    console.log("swipeSolver")
     return { delta1D: norm.mainDelta, stateAccepted: true }
   },
 

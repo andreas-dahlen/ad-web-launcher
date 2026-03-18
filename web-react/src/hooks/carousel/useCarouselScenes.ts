@@ -2,28 +2,28 @@ import { useMemo } from "react"
 
 type SceneRole = "prev" | "current" | "next"
 
-interface VisibleScene {
+interface VisibleScene<TProps> {
   sceneIndex: number
-  component: React.ComponentType
+  component: React.ComponentType<TProps>
   role: SceneRole
 }
 
-interface UseCarouselScenesProps {
-  scenes: React.ComponentType[]
+interface UseCarouselScenesProps<TProps> {
+  scenes: React.ComponentType<TProps>[]
   laneState: {
     index: number
   }
 }
 
-export function useCarouselScenes({
+export function useCarouselScenes<TProps = object>({
   scenes,
   laneState
-}: UseCarouselScenesProps) {
+}: UseCarouselScenesProps<TProps>) {
 
-  const totalScenes = scenes.length
-  const index = laneState.index
+  const totalScenes = scenes.length ?? 3
+  const index = laneState.index ?? 0
 
-  const visibleScenes = useMemo<VisibleScene[]>(() => {
+  const visibleScenes = useMemo<VisibleScene<TProps>[]>(() => {
 
     if (!totalScenes) return []
 

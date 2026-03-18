@@ -2,7 +2,9 @@
 @import './variables.css';
 @import './scenes.css';
 @import './objects.css';
-@import '../layoutStyles/wallpaper.css';
+@import './layoutStyles/wallpaper.css';
+@import './layoutStyles/laneStyles.css';
+
 
 html {
     box-sizing: border-box;

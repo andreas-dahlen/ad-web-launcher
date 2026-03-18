@@ -12,9 +12,13 @@ export const utils = {
         if (!axis) return {}
 
         // lane/track size only exists on carousel or slider
-        const trackSize = desc.base.type === 'carousel' || desc.base.type === 'slider'
-            ? (desc.data as CarouselDescriptor['data'] | SliderDescriptor['data']).size
-            : null
+        let trackSize: Vec2 | null = null
+        
+if (desc.base.type === 'carousel') {
+    trackSize = (desc.data as CarouselDescriptor['data']).size
+} else if (desc.base.type === 'slider') {
+    trackSize = (desc.data as SliderDescriptor['data']).size
+}
 
         // thumb only exists on slider
         const thumbSize = desc.base.type === 'slider'
@@ -25,7 +29,14 @@ export const utils = {
         const thumb = thumbSize ? vector.resolveByAxis1D(thumbSize, axis) : null
         const offset = baseOffset ? vector.resolveByAxis1D(baseOffset, axis) : null
         const movement = delta ? vector.resolveByAxis1D(delta, axis) : null
-
+        console.log(track?.prim,
+            track?.sub,
+            thumb?.prim,
+            thumb?.sub,
+            offset?.prim,
+            offset?.sub,
+            movement?.prim,
+            movement?.sub)
         return {
             mainTrackSize: track?.prim,
             crossTrackSize: track?.sub,

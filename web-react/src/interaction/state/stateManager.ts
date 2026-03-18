@@ -2,8 +2,8 @@ import { carouselStateFn } from './carouselState.ts'
 import { sliderStateFn } from './sliderState.ts'
 import { dragStateFn } from './dragState.ts'
 
-type StateFn2 = (type: DataKeys, descOrId: Descriptor | string) => unknown
-type StateFn3 = (type: DataKeys, id: string, value: unknown) => unknown
+// type StateFn2 = (type: DataKeys, descOrId: Descriptor | string) => unknown
+// type StateFn3 = (type: DataKeys, id: string, value: unknown) => unknown
 
 type StateFnAny = (...args: unknown[]) => unknown
 
@@ -12,19 +12,16 @@ const stateFiles: Record<DataKeys, Record<string, StateFnAny>> = {
     slider: sliderStateFn as Record<string, StateFnAny>,
     drag: dragStateFn as Record<string, StateFnAny>,
 }
-function callMutate(type: DataKeys, fnName: StateFn2Arg, desc: Descriptor) {
-    const fn = stateFiles[type]?.[fnName] as StateFn2 | undefined
-    return fn ? fn(type, desc) : null
+function callMutate(type: DataKeys, fnName: string, desc: Descriptor) {
+    return stateFiles[type]?.[fnName]?.(desc)
 }
 
-function callGet(type: DataKeys, fnName: StateFn2Arg, id: string) {
-    const fn = stateFiles[type]?.[fnName] as StateFn2 | undefined
-    return fn ? fn(type, id) : null
+function callGet(type: DataKeys, fnName: string, id: string) {
+    return stateFiles[type]?.[fnName]?.(id)
 }
 
-function callSet(type: DataKeys, fnName: StateFn3Arg, id: string, value: unknown) {
-    const fn = stateFiles[type]?.[fnName] as StateFn3 | undefined
-    return fn ? fn(type, id, value) : null
+function callSet(type: DataKeys, fnName: string, id: string, value: unknown) {
+    return stateFiles[type]?.[fnName]?.(id, value)
 }
 // /**
 //  * Calculate the target offset for a commit animation
@@ -61,7 +58,8 @@ export const state = {
 
     press(type: DataKeys, desc: Descriptor) { return callMutate(type, 'press', desc) },
     swipeStart(type: DataKeys, desc: Descriptor) { return callMutate(type, 'swipeStart', desc) },
-    swipe(type: DataKeys, desc: Descriptor) { return callMutate(type, 'swipe', desc) },
+    swipe(type: DataKeys, desc: Descriptor) { console.log('swiping stateManager') 
+    return callMutate(type, 'swipe', desc) },
     swipeCommit(type: DataKeys, desc: Descriptor) { return callMutate(type, 'swipeCommit', desc) },
     swipeRevert(type: DataKeys, desc: Descriptor) { return callMutate(type, 'swipeRevert', desc) }
 }
