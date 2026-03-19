@@ -138,7 +138,6 @@ export default function Carousel({
       data-lock-next-at={lockNextAt ?? ''}
       className={className}
     >
-      {/* Slot 0 — stable wrapper, never unmounts */}
       <div
         className="scene-default"
         style={styleForRole(slots[0].role)}
@@ -147,8 +146,6 @@ export default function Carousel({
       >
         <Scene0 />
       </div>
-
-      {/* Slot 1 — stable wrapper, never unmounts */}
       <div
         className="scene-default"
         style={styleForRole(slots[1].role)}
@@ -157,8 +154,6 @@ export default function Carousel({
       >
         <Scene1 />
       </div>
-
-      {/* Slot 2 — stable wrapper, never unmounts */}
       <div
         className="scene-default"
         style={styleForRole(slots[2].role)}
