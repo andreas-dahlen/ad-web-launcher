@@ -67,3 +67,7 @@
   background: #0f172a;
   overflow: hidden;
 }
+
+.mirror-carousel {
+  pointer-events: none;
+}

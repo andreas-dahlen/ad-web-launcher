@@ -23,16 +23,28 @@
     "noUncheckedSideEffectImports": true,
 
     "baseUrl": "./src",
-    "paths": {
+"paths": {
+      "@indexes/*": ["app/indexes/*"],
+      "@layers/*": ["app/layers/*"],
+      "@scenes/*": ["app/scenes/*"],
+
+      "@assets/*": ["assets/*"],
+
       "@components/*": ["components/*"],
+      "@carousel/*": ["components/primitives/carousel/*"],
+      "@button/*": ["components/primitives/button/*"],
+      "@drag/*": ["components/primitives/drag/*"],
+      "@slider/*": ["components/primitives/slider/*"],
+      "@primitives/*": ["components/primitives/*"],
+
       "@config/*": ["config/*"],
+      "@types/*": ["config/types/*"],
+      "@utils/*": ["config/utils/*"],
+
       "@debug/*": ["debug/*"],
-      "@hooks/*": ["hooks/*"],
+
       "@interaction/*": ["interaction/*"],
-      "@layout/*": ["layout/*"],
       "@styles/*": ["styles/*"],
-      "@types/*": ["types/*"],
-      "@utils/*": ["utils/*"]
     }
   },
   "include": ["vite.config.ts"]

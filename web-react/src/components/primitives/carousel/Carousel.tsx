@@ -2,9 +2,9 @@ import { useRef, useEffect } from "react"
 import { state } from "@interaction/state/stateManager"
 import { usePointerForwarding } from "@interaction/bridge/bridge.ts"
 import { useCarouselState } from "@interaction/state/carouselState.ts"
-import { useCarouselMotion } from "@hooks/carousel/useCarouselMotion.ts"
-import { useCarouselSizing } from "@hooks/carousel/useCarouselSizing.ts"
-import type { SceneRole } from "@hooks/carousel/useCarouselScenes.ts"
+import { useCarouselMotion } from "@carousel/hooks/useCarouselMotion.ts"
+import { useCarouselSizing } from "@carousel/hooks/useCarouselSizing.ts"
+import type { SceneRole } from "@carousel/hooks/useCarouselScenes.ts"
 
 interface CarouselProps {
   id: string
@@ -14,6 +14,7 @@ interface CarouselProps {
   lockPrevAt?: number
   lockNextAt?: number
   reactSwipeCommit?: boolean
+  interactive?: boolean
   onSwipeCommit?: (detail: unknown) => void
 }
 
@@ -39,6 +40,7 @@ export default function Carousel({
   lockPrevAt,
   lockNextAt,
   onSwipeCommit,
+  interactive = true
 }: CarouselProps) {
 
   useEffect(() => {
@@ -64,6 +66,7 @@ export default function Carousel({
   usePointerForwarding({
     elRef: carouselRef,
     onReaction: (reaction) => {
+      if (!interactive) return
       if (reaction.type === 'swipeCommit' && onSwipeCommit) {
         onSwipeCommit(reaction.detail)
       }
@@ -80,8 +83,8 @@ export default function Carousel({
   if (!slotsRef.current) {
     slotsRef.current = [
       { sceneIdx: (index - 1 + total) % total, role: "prev" as SceneRole },
-      { sceneIdx: index,                        role: "current" as SceneRole },
-      { sceneIdx: (index + 1) % total,          role: "next" as SceneRole },
+      { sceneIdx: index, role: "current" as SceneRole },
+      { sceneIdx: (index + 1) % total, role: "next" as SceneRole },
     ]
     prevIndexRef.current = index
   }
@@ -131,7 +134,7 @@ export default function Carousel({
     <div
       data-type="carousel"
       ref={carouselRef}
-      style={carouselStyle}
+      style={{...carouselStyle, pointerEvents: interactive ? "auto" : "none"}}
       data-id={id}
       data-axis={axis}
       data-lock-prev-at={lockPrevAt ?? ''}

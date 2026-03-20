@@ -15,15 +15,33 @@ export default defineConfig({
   },
   resolve: {
     alias: {
+      // "@components": path.resolve(__dirname, "src/components"),
+      // "@config": path.resolve(__dirname, "src/config"),
+      // "@debug": path.resolve(__dirname, "src/debug"),
+      // "@hooks": path.resolve(__dirname, "src/hooks"),
+      // "@interaction": path.resolve(__dirname, "src/interaction"),
+      // "@layout": path.resolve(__dirname, "src/layout"),
+      // "@styles": path.resolve(__dirname, "src/styles"),
+      // "@types": path.resolve(__dirname, "src/types"),
+      // "@utils": path.resolve(__dirname, "src/utils")
+
+
+      "@indexes": path.resolve(__dirname, "src/app/indexes"),
+      "@layers": path.resolve(__dirname, "src/app/layers"),
+      "@scenes": path.resolve(__dirname, "src/app/scenes"),
+      "@assets": path.resolve(__dirname, "src/assets"),
       "@components": path.resolve(__dirname, "src/components"),
+      "@carousel": path.resolve(__dirname, "src/components/primitives/carousel"),
+      "@button": path.resolve(__dirname, "src/components/primitives/button"),
+      "@drag": path.resolve(__dirname, "src/components/primitives/drag"),
+      "@slider": path.resolve(__dirname, "src/components/primitives/slider"),
+      "@primitives": path.resolve(__dirname, "src/components/primitives"),
       "@config": path.resolve(__dirname, "src/config"),
-      "@debug": path.resolve(__dirname, "src/debug"),
-      "@hooks": path.resolve(__dirname, "src/hooks"),
-      "@interaction": path.resolve(__dirname, "src/interaction"),
-      "@layout": path.resolve(__dirname, "src/layout"),
-      "@styles": path.resolve(__dirname, "src/styles"),
       "@types": path.resolve(__dirname, "src/types"),
-      "@utils": path.resolve(__dirname, "src/utils")
+      "@utils": path.resolve(__dirname, "src/utils"),
+      "@debug": path.resolve(__dirname, "src/debug"),
+      "@interaction": path.resolve(__dirname, "src/interaction"),
+      "@styles": path.resolve(__dirname, "src/styles")
     }
   }
 })

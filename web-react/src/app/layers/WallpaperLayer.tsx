@@ -1,11 +1,7 @@
-import Carousel from "@components/Carousel.tsx";
-import wp1 from "../lanes/testLanes/wp1"
-import wp2 from "../lanes/testLanes/wp2";
-import wp3 from "../lanes/testLanes/wp3";
-
+import Carousel from "@carousel/Carousel.tsx";
+import { scenes } from "@indexes/laneIndex.tsx"
 export default function LaneWallpaper() {
 
-  const scenes = [wp1, wp2, wp3]
   return (
     <div className="wallpaper-layer">
       <Carousel
@@ -13,6 +9,7 @@ export default function LaneWallpaper() {
         id="wallpaper"
         scenes={scenes}
         axis="vertical"
+        // interactive={false}
       ></Carousel>
     </div>
   )

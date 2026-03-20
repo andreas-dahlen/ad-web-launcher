@@ -67,7 +67,6 @@ export function useCarouselMotion({
       position: "relative",
       overflow: "hidden",
       touchAction: "none",
-      pointerEvents: "auto",
       transform: "translateZ(0)"
     }),
     []
