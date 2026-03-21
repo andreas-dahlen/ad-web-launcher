@@ -12,6 +12,7 @@ interface CarouselLane {
   pendingDir: Direction | null
   lockPrevAt: number | null
   lockNextAt: number | null
+  currentScenes: number[]
 }
 type CarouselLaneView = {
   offset: number
@@ -21,6 +22,7 @@ type CarouselLaneView = {
   size: Vec2
   count: number
   progress: number
+  currentScenes: number[]
 }
 /* -------------------------------
    Central carousel state
@@ -53,7 +55,8 @@ export const carouselStateFn = {
       settling: false,
       pendingDir: null,
       lockPrevAt: null,
-      lockNextAt: null
+      lockNextAt: null,
+      currentScenes: [0, 1, 2]
     }  
     s.lanes[id] = lane // directly mutate the current snapshot
   }
@@ -62,24 +65,25 @@ export const carouselStateFn = {
   /* -------------------------
   Metadata / getters
   -------------------------- */
-get(id: string): CarouselLaneView {
-  const s = useCarouselState.getSnapshot()
-  const lane = this.ensure(id)
-  if (!s.views[id]) {
-    s.views[id] = {
-      offset: lane.offset,
-      index: lane.index,
-      dragging: lane.dragging,
-      settling: lane.settling,
-      size: lane.size,
-      count: lane.count,
-      progress: 0
-      // progress: lane.size ? lane.offset / lane.size : 0
-    }
-  }
+// get(id: string): CarouselLaneView {
+//   const s = useCarouselState.getSnapshot()
+//   const lane = this.ensure(id)
+//   if (!s.views[id]) {
+//     s.views[id] = {
+//       offset: lane.offset,
+//       index: lane.index,
+//       dragging: lane.dragging,
+//       settling: lane.settling,
+//       size: lane.size,
+//       count: lane.count,
+//       progress: 0
+      
+//       // progress: lane.size ? lane.offset / lane.size : 0
+//     }
+//   }
 
-  return s.views[id]
-},
+//   return s.views[id]
+// },
 
   getNextIndex(currentIndex: number, direction: Direction | null, count: number): number {
     if (!count) return 0
@@ -103,6 +107,13 @@ get(id: string): CarouselLaneView {
   /* -------------------------
   Configuration / layout
   -------------------------- */
+
+  setCurrentScenes(id: string, scenes: number[]) {
+    useCarouselState.setState(() => {
+      this.ensure(id).currentScenes = scenes
+    })
+  },
+
   setCount(id: string, count: number) {
     useCarouselState.setState(() => {
       this.ensure(id).count = Math.max(0, count)

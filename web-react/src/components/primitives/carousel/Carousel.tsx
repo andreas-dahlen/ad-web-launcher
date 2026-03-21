@@ -1,5 +1,5 @@
 import { useRef, useEffect } from "react"
-import { state } from "@interaction/state/stateManager"
+import { state } from "@interaction/state/stateManager.ts"
 import { usePointerForwarding } from "@interaction/bridge/bridge.ts"
 import { useCarouselState } from "@interaction/state/carouselState.ts"
 import { useCarouselMotion } from "@carousel/hooks/useCarouselMotion.ts"
@@ -40,7 +40,7 @@ export default function Carousel({
   lockPrevAt,
   lockNextAt,
   onSwipeCommit,
-  interactive = true
+  interactive=true
 }: CarouselProps) {
 
   useEffect(() => {
@@ -52,7 +52,6 @@ export default function Carousel({
   }, [id, scenes.length])
 
   const carouselRef = useRef<HTMLDivElement>(null)
-
   const lane = useCarouselState.useStore(s => s.lanes[id])
   const index = lane?.index ?? 0
   const total = scenes.length
@@ -66,7 +65,6 @@ export default function Carousel({
   usePointerForwarding({
     elRef: carouselRef,
     onReaction: (reaction) => {
-      if (!interactive) return
       if (reaction.type === 'swipeCommit' && onSwipeCommit) {
         onSwipeCommit(reaction.detail)
       }
@@ -89,29 +87,48 @@ export default function Carousel({
     prevIndexRef.current = index
   }
 
-  if (index !== prevIndexRef.current) {
-    const dir = getSwipeDirection(prevIndexRef.current, index, total)
+  const mountedRef = useRef(false);
+  // Rotate slots when index changes
+  useEffect(() => {
 
-    const prevSlot = slotsRef.current.find(s => s.role === "prev")!
-    const currSlot = slotsRef.current.find(s => s.role === "current")!
-    const nextSlot = slotsRef.current.find(s => s.role === "next")!
-
-    if (dir === "forward") {
-      // prev animated off-screen → recycle as next with the new scene
-      prevSlot.role = "next"
-      prevSlot.sceneIdx = (index + 1) % total
-      currSlot.role = "prev"
-      nextSlot.role = "current"
-    } else {
-      // next animated off-screen → recycle as prev with the new scene
-      nextSlot.role = "prev"
-      nextSlot.sceneIdx = (index - 1 + total) % total
-      currSlot.role = "next"
-      prevSlot.role = "current"
+    if (!mountedRef.current) {
+      mountedRef.current = true;
+      return; // skip first effect run
     }
 
-    prevIndexRef.current = index
-  }
+    if (!slotsRef.current) return;
+
+    const dir = getSwipeDirection(prevIndexRef.current, index, total);
+    const prevSlot = slotsRef.current.find(s => s.role === "prev")!;
+    const currSlot = slotsRef.current.find(s => s.role === "current")!;
+    const nextSlot = slotsRef.current.find(s => s.role === "next")!;
+
+    if (dir === "forward") {
+      prevSlot.role = "next";
+      prevSlot.sceneIdx = (index + 1) % total;
+      currSlot.role = "prev";
+      nextSlot.role = "current";
+    } else {
+      nextSlot.role = "prev";
+      nextSlot.sceneIdx = (index - 1 + total) % total;
+      currSlot.role = "next";
+      prevSlot.role = "current";
+    }
+
+    prevIndexRef.current = index;
+  }, [index, total, id]);
+
+  useEffect(() => {
+    if (!slotsRef.current) return;
+
+    const currentScenes = [
+      (index - 1 + total) % total,
+      index,
+      (index + 1) % total
+    ];
+
+    state.setCurrentScenes("carousel", id, currentScenes);
+  }, [index, id, total]);
 
   // Resolve component references — stable for non-recycled slots
   const slots = slotsRef.current
@@ -130,11 +147,41 @@ export default function Carousel({
     id
   })
 
+
+  // const slotMirrors = [
+  //   mirrors?.[0] ? <mirrors[0] /> : null,
+  //   mirrors?.[1] ? <mirrors[1] /> : null,
+  //   mirrors?.[2] ? <mirrors[2] /> : null,
+  // ];
+
+  // const Mirror0 = mirrors?.[0];
+  // const Mirror1 = mirrors?.[1];
+  // const Mirror2 = mirrors?.[2];
+  // const placement = mirrorPlacement ? mirrorPlacement : "interactive"
+
+  // const style0 = styleForRole(slots[0].role)
+  // const style1 = styleForRole(slots[1].role)
+  // const style2 = styleForRole(slots[2].role)
+
+  // useRenderMap(`${id}-mirror-0`,
+  //   placement,
+  //   Mirror0 ? <div style={style0}> <Mirror0 /></div> : null, 100)
+
+  // useRenderMap(`${id}-mirror-1`,
+  //   placement,
+  //   Mirror1 ? <div style={style1}><Mirror1 /></div> : null, 101)
+
+  // useRenderMap(`${id}-mirror-2`,
+  //   placement,
+  //   Mirror2 ? <div style={style2}><Mirror2 /></div> : null, 102)
+
+  // const slotMirrors = [mirrors?.[0], mirrors?.[1], mirrors?.[2]];
+
   return (
     <div
       data-type="carousel"
       ref={carouselRef}
-      style={{...carouselStyle, pointerEvents: interactive ? "auto" : "none"}}
+      style={{ ...carouselStyle, pointerEvents: interactive ? "auto" : "none" }}
       data-id={id}
       data-axis={axis}
       data-lock-prev-at={lockPrevAt ?? ''}

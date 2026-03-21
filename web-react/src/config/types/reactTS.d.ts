@@ -4,6 +4,15 @@ declare global {
   export interface ChildrenProps {
     children: ReactNode; // <- this is the key
   }
-}
 
-// export const __dummy = 0
+  type Layer = "wallpaper" | "horizontal" | "interactive" | "overlay";
+  
+  interface RenderNode {
+    id: string;
+    layer: Layer;
+    element: React.ReactNode;
+    overrideZ?: number;
+  }
+  // export const __dummy = 0
+
+}

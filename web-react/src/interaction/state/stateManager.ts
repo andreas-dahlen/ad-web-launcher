@@ -51,7 +51,7 @@ export const state = {
     setThumbSize(type: DataKeys, id: string, value: Vec2) { return callSet(type, 'setThumbSize', id, value) },
     setPosition(type: DataKeys, id: string, position?: Vec2 | number | null) { return callSet(type, 'setPosition', id, position) },
     setConstraints(type: DataKeys, id: string, constraints: Vec2 | DragData['constraints']) { return callSet(type, 'setConstraints', id, constraints) },
-
+    setCurrentScenes(type: DataKeys, id: string, scenes: number[]) { return callSet(type, 'setCurrentScenes', id, scenes) },
     // ----- SOLVER MUTATIONS -----
 
     //could seperate into its own thing... since TS is complaining about arguments being 2...

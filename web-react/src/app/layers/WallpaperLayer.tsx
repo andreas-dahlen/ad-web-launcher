@@ -1,5 +1,6 @@
 import Carousel from "@carousel/Carousel.tsx";
-import { scenes } from "@indexes/laneIndex.tsx"
+import { scenes } from "@indexes/laneIndex.ts"
+
 export default function LaneWallpaper() {
 
   return (
@@ -9,7 +10,6 @@ export default function LaneWallpaper() {
         id="wallpaper"
         scenes={scenes}
         axis="vertical"
-        // interactive={false}
       ></Carousel>
     </div>
   )

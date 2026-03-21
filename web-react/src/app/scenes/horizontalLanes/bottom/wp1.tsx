@@ -1,4 +1,4 @@
-export default function wp1() {
+export default function bottom1() {
 
     return (
         <div className="scene-root a">
