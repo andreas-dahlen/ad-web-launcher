@@ -1,6 +1,4 @@
-
-
-export default function mid3() {
+export default function Mid3() {
     
     return (
         <div className="scene-root c">

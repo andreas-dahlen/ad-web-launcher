@@ -68,10 +68,6 @@
   overflow: hidden;
 }
 
-.mirror-carousel {
+.non-interactive {
   pointer-events: none;
-  
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }

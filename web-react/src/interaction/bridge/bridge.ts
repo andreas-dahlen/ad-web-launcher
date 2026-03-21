@@ -1,19 +1,49 @@
-import { useEffect, useRef} from 'react'
+import { useEffect, useRef } from 'react'
 import type { RefObject } from 'react'
 import { pipeline } from '../core/pipeline.ts'
 
 interface PointerForwardingProps {
   elRef: RefObject<HTMLElement | null>
+  disabled?: boolean
   onReaction?: (e: CustomEvent) => void
 }
 
-export function usePointerForwarding({ elRef, onReaction }: PointerForwardingProps) {
+export function usePointerForwarding({ elRef, onReaction, disabled }: PointerForwardingProps) {
   const isActive = useRef(false)
   const activePointerId = useRef<number | null>(null)
 
   useEffect(() => {
+    if (!disabled) return
+
     const el = elRef.current
-    if (!el) return
+
+    if (isActive.current && activePointerId.current !== null) {
+      // Finish gesture cleanly in your system
+      pipeline.orchestrate({
+        eventType: 'up',
+        x: 0,
+        y: 0,
+      })
+
+      // Release DOM capture if it exists
+      if (el) {
+        try {
+          if (el.hasPointerCapture(activePointerId.current)) {
+            el.releasePointerCapture(activePointerId.current)
+          }
+        } catch (err) {
+          console.warn('Failed to release pointer capture', err)
+        }
+      }
+    }
+
+    isActive.current = false
+    activePointerId.current = null
+  }, [elRef, disabled])
+
+  useEffect(() => {
+    const el = elRef.current
+    if (!el || disabled) return
 
     function handlePointerDown(e: PointerEvent) {
       e.stopPropagation()
@@ -74,5 +104,5 @@ export function usePointerForwarding({ elRef, onReaction }: PointerForwardingPro
       el.removeEventListener('pointercancel', handlePointerUp)
       el.removeEventListener('reaction', handleReaction)
     }
-  }, [elRef, onReaction])
+  }, [elRef, onReaction, disabled])
 }

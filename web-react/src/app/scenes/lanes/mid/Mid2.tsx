@@ -1,6 +1,4 @@
-
-
-export default function bottom2() {
+export default function Mid2() {
     
     return (
         <div className="scene-root b">

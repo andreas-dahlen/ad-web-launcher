@@ -2,9 +2,10 @@ import { useRef, useEffect } from "react"
 import { state } from "@interaction/state/stateManager.ts"
 import { usePointerForwarding } from "@interaction/bridge/bridge.ts"
 import { useCarouselState } from "@interaction/state/carouselState.ts"
-import { useCarouselMotion } from "@carousel/hooks/useCarouselMotion.ts"
-import { useCarouselSizing } from "@carousel/hooks/useCarouselSizing.ts"
-import type { SceneRole } from "@carousel/hooks/useCarouselScenes.ts"
+import { useCarouselMotion } from "./hooks/useCarouselMotion.ts"
+import { useCarouselSizing } from "./hooks/useCarouselSizing.ts"
+import { useAugmentedScenes } from "./hooks/useAugmentedScenes.ts"
+import type { SceneRole } from "./hooks/useCarouselScenes.ts"
 
 interface CarouselProps {
   id: string
@@ -48,13 +49,16 @@ export default function Carousel({
   }, [id])
 
   useEffect(() => {
+    if (interactive)
     state.setCount('carousel', id, scenes.length)
-  }, [id, scenes.length])
+  }, [id, scenes.length, interactive])
 
+  
   const carouselRef = useRef<HTMLDivElement>(null)
   const lane = useCarouselState.useStore(s => s.lanes[id])
+  const augmentedScenes = useAugmentedScenes(scenes, interactive, lane?.count)
   const index = lane?.index ?? 0
-  const total = scenes.length
+  const total = augmentedScenes.length
 
   const laneSize = useCarouselSizing({
     elRef: carouselRef,
@@ -64,6 +68,7 @@ export default function Carousel({
 
   usePointerForwarding({
     elRef: carouselRef,
+    disabled: !interactive,
     onReaction: (reaction) => {
       if (reaction.type === 'swipeCommit' && onSwipeCommit) {
         onSwipeCommit(reaction.detail)
@@ -132,9 +137,9 @@ export default function Carousel({
 
   // Resolve component references — stable for non-recycled slots
   const slots = slotsRef.current
-  const Scene0 = scenes[slots[0].sceneIdx]
-  const Scene1 = scenes[slots[1].sceneIdx]
-  const Scene2 = scenes[slots[2].sceneIdx]
+  const Scene0 = augmentedScenes[slots[0].sceneIdx]
+  const Scene1 = augmentedScenes[slots[1].sceneIdx]
+  const Scene2 = augmentedScenes[slots[2].sceneIdx]
 
   const {
     carouselStyle,
@@ -146,36 +151,6 @@ export default function Carousel({
     horizontal: axis === "horizontal",
     id
   })
-
-
-  // const slotMirrors = [
-  //   mirrors?.[0] ? <mirrors[0] /> : null,
-  //   mirrors?.[1] ? <mirrors[1] /> : null,
-  //   mirrors?.[2] ? <mirrors[2] /> : null,
-  // ];
-
-  // const Mirror0 = mirrors?.[0];
-  // const Mirror1 = mirrors?.[1];
-  // const Mirror2 = mirrors?.[2];
-  // const placement = mirrorPlacement ? mirrorPlacement : "interactive"
-
-  // const style0 = styleForRole(slots[0].role)
-  // const style1 = styleForRole(slots[1].role)
-  // const style2 = styleForRole(slots[2].role)
-
-  // useRenderMap(`${id}-mirror-0`,
-  //   placement,
-  //   Mirror0 ? <div style={style0}> <Mirror0 /></div> : null, 100)
-
-  // useRenderMap(`${id}-mirror-1`,
-  //   placement,
-  //   Mirror1 ? <div style={style1}><Mirror1 /></div> : null, 101)
-
-  // useRenderMap(`${id}-mirror-2`,
-  //   placement,
-  //   Mirror2 ? <div style={style2}><Mirror2 /></div> : null, 102)
-
-  // const slotMirrors = [mirrors?.[0], mirrors?.[1], mirrors?.[2]];
 
   return (
     <div

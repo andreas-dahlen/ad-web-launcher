@@ -1,5 +1,5 @@
 import Carousel from "@carousel/Carousel.tsx";
-import { scenes } from "@indexes/laneIndex.ts"
+import { wpScenes } from "@indexes/laneIndex.ts"
 
 export default function LaneWallpaper() {
 
@@ -8,7 +8,7 @@ export default function LaneWallpaper() {
       <Carousel
         className="interactive"
         id="wallpaper"
-        scenes={scenes}
+        scenes={wpScenes}
         axis="vertical"
       ></Carousel>
     </div>

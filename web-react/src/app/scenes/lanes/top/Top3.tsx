@@ -1,6 +1,4 @@
-
-
-export default function top3() {
+export default function Top3() {
     
     return (
         <div className="scene-root c">

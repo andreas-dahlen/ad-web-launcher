@@ -1,53 +1,41 @@
 // import MirrorCarousel from "@carousel/MirrorWrapper.tsx"
-import Carousel from "@components/primitives/carousel/Carousel"
-import { wpMirror } from "@indexes/laneIndex"
+import Carousel from "@components/primitives/carousel/Carousel.tsx"
+import {wpMirror, topMirror, midMirror, bottomMirror} from "@indexes/laneIndex"
 
 export default function InteractiveLayer() {
 
   return (
     <div className="interactive-layer">
-
-
-            <Carousel
-              className="interactive"
-              id="wallpaper"
-              scenes={wpMirror}
-              axis="vertical"
-              interactive={false}
-            ></Carousel>
-
-      {/* <MirrorCarousel
+      <Carousel
         id="top-horizontal"
+        scenes={topMirror}
         axis="horizontal"
-        renderLanes={[0]}
-      >
-        <div className='red-box'></div>
-      </MirrorCarousel>
+        interactive={false}
+      ></Carousel>
 
-      <MirrorCarousel
+      <Carousel
         id="middle-horizontal"
+        scenes={midMirror}
         axis="horizontal"
-        renderLanes={[1]}
-      >
-        <div className='blue-box'></div>
-      </MirrorCarousel>
+        interactive={false}
+      ></Carousel>
 
-      <MirrorCarousel
+      <Carousel
         id="bottom-horizontal"
+        scenes={bottomMirror}
         axis="horizontal"
-        renderLanes={[2]}
-      >
-        <div className='green-box'></div>
-      </MirrorCarousel>
+        interactive={false}
+      ></Carousel>
 
-
-      <MirrorCarousel
+    <div className="interactive-layer"> 
+      <Carousel
         id="wallpaper"
+        scenes={wpMirror}
         axis="vertical"
-        renderLanes={[2]}
-      >
-        <div className='spin-box'></div>
-      </MirrorCarousel> */}
+        interactive={false}
+      ></Carousel>
+    </div>
+
 
     </div>
   )

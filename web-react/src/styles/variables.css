@@ -11,4 +11,17 @@
   /* Motion - slightly faster for snappier feel on Android */
   --touch-transition-fast: 120ms;
   --touch-transition-normal: 200ms;
+
+  --gradient-a-1: #f1e271;
+  --gradient-a-2: #be8316;
+
+  --gradient-b-1: #82cfff;
+  --gradient-b-2: #830599;
+
+  --gradient-c-1: #07ff2c;
+  --gradient-c-2: #080eaf;
+
+  --gradient-wall-1: #ffffff;
+  --gradient-wall-2: #000000;
+  --gradient-wall-3: #780000;
 }
