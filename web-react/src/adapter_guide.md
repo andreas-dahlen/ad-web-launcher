@@ -1,55 +1,48 @@
-createStore(obj) → makes any object reactive
 
-.setState(fn) → mutate safely, triggers all subscribers
+Subscribe to a Reactive
+const test = store((s) => s.get('carousel', 'carousel1'))
+const index = store((s) => s.get('carousel', 'carousel1')?.data.index)
 
-<------- three ways to read state ----->
-1.
-.useStore(selector) → React hook, triggers rerender when slice changes
-2.
-.subscribe(fn) → optional, for plain JS usage. fires when state updates
-3.
-getSnapshot() → optional, read the current state outside React now
-
-
-1️⃣ Create a reactive state (in your state file)
-import { createStore } from "./adapter"
-
-// Base state object
-const sizeObject = { device: { width: 360, height: 640 }, scale: 1 }
-
-// Create reactive store
-export const reactiveSize = createStore(sizeObject)
-
-2️⃣ Update state (anywhere, e.g., in response to events)
-reactiveSize.setState((s) => {
-  s.device.width = window.innerWidth
-  s.device.height = window.innerHeight
-  s.scale = Math.min(window.innerWidth / 360, window.innerHeight / 640)
+Add Reactive
+store.getState().add({
+  type: 'carousel',
+  id: 'carousel1',
+  data: {
+    index: 0,
+    count: 5,
+    offset: 0,
+    size: { x: 300, y: 200 },
+    dragging: false,
+    settling: false,
+    pendingDir: null,
+    lockPrevAt: null,
+    lockNextAt: null,
+    currentScenes: [0, 1, 2],
+  }
 })
 
-3️⃣ Use state in React components
-import { reactiveSize } from "./state files"
+Read Snapshot (without subscribing)
+const snapshot = store.getState().get('carousel', 'carousel1')
 
-function DebugWrapper() {
-  // Pick only what you need
-  const { device, scale } = reactiveSize.useStore((s) => ({
-    device: s.device,
-    scale: s.scale
-  }))
+snapshot contains { type, id, data }.
 
-  const frameStyle = {
-    width: `${device.width}px`,
-    height: `${device.height}px`,
-    transform: `scale(${scale})`,
-    transformOrigin: "center center",
-  }
+Remove Reactive
+store.getState().remove('carousel', 'carousel1')
 
-  return <div style={frameStyle}></div>
+Update State Directly
+const test = store.getState().get('carousel', 'carousel1')
+test.data.dragging = true
+
+Or via a helper function:
+
+function updateCarousel(id: string, fn: (data: CarouselState) => void) {
+  const reactive = store.getState().get('carousel', id)
+  if (reactive) fn(reactive.data)
 }
 
-4️⃣ Optional: subscribe outside React
-
-// For non-React parts of your engine
-reactiveSize.subscribe((snapshot) => {
-  console.log("New size:", snapshot.device, snapshot.scale)
+updateCarousel('carousel1', (data) => {
+  data.dragging = true
 })
+
+✅ Usage is flat: test.data is the full carousel object.
+✅ No nested store inside data — everything lives under data.

@@ -1,6 +1,6 @@
 import { log } from '@debug/functions.ts'
 import { APP_SETTINGS } from '@config/appSettings.ts'
-import { createStore } from './stateReactAdapter.ts'
+import { useStore } from './stateReactAdapter.ts'
 
 /* -------------------------
    Device info (works for web and APK)

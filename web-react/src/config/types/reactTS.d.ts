@@ -14,5 +14,5 @@ declare global {
     overrideZ?: number;
   }
   // export const __dummy = 0
-
 }
+export {}

@@ -1,28 +1,30 @@
-import { useSyncExternalStore } from "react"
+// src/state/interactionStore.ts
+import { create } from 'zustand'
+import { immer } from 'zustand/middleware/immer'
 
-export function createStore<T extends object>(initialState: T) {
-  let state = initialState
-  const listeners = new Set<() => void>()
-
-  function setState(updater: (draft: T) => void) {
-    updater(state)
-    state = { ...state }
-    listeners.forEach((cb) => cb())
-  }
-
-  function subscribe(callback: () => void) {
-    listeners.add(callback)
-    return () => listeners.delete(callback)
-  }
-
-  function getSnapshot() {
-    return state
-  }
-
-  function useStore<U = T>(selector?: (s: T) => U): U {
-    const snapshot = useSyncExternalStore(subscribe, getSnapshot)
-    return selector ? selector(snapshot) : (snapshot as unknown as U)
-  }
-
-  return { setState, subscribe, getSnapshot, useStore }
+export function getReactiveType<T extends ReactiveType>(type: T, id: string): Reactive<ReactiveDataMap[T]> {
+  return Store.getState().get(type, id)
 }
+
+export const Store = create<ReactiveStore>()(
+  immer((set, get) => ({
+    reactives: {},
+
+    add: (reactive) =>
+      set((state) => {
+        const key = `${reactive.type}:${reactive.id}`
+        state.reactives[key] = reactive
+      }),
+
+    remove: (type, id) =>
+      set((state) => {
+        const key = `${type}:${id}`
+        delete state.reactives[key]
+      }),
+
+    get: (type, id) => {
+        const key = `${type}:${id}`
+        return get().reactives[key]
+    }
+  }))
+)
