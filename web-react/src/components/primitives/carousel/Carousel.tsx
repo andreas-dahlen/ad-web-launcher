@@ -35,18 +35,32 @@ export default function Carousel({
   interactive = true
 }: CarouselProps) {
 
-subscribe.useFull('carousel', id)
+  //causes rerender on commit
+//   subscribe.usePartial('carousel', id, s => s.index  )
 
-  useEffect(() => {
-    if (interactive)
-      carouselStateFn.setCount(id, scenes.length)
-  }, [id, scenes.length, interactive])
+//causes rerender infinity loop and breakage
+// subscribe.usePartial('carousel', id, s => ({index: s.index }) )
+
+//doesn't do anything... Nothing happens... 
+// const i = subscribe.usePartial('carousel', id, s => s.index)
+// const d = subscribe.usePartial('carousel', id, s => s.index)
+// const c = subscribe.usePartial('carousel', id, s => s.count)
+// const o = subscribe.usePartial('carousel', id, s => s.offset)
+
+// useMemo(() => {
+//   subscribe.usePartial('carousel', id, s => ({index: s.index }) )
+// }, [id])
+
+  // useEffect(() => {
+  //   if (interactive)
+  //     carouselStateFn.setCount(id, scenes.length)
+  // }, [id, scenes.length, interactive])
 
 
   const carouselRef = useRef<HTMLDivElement>(null)
   const lane = carouselStateFn.ensure(id)
 
-  const augmentedScenes = useAugmentedScenes(scenes, interactive, lane?.count)
+  const augmentedScenes = useAugmentedScenes(scenes, interactive, lane.count)
   const index = lane?.index ?? 0
   const total = augmentedScenes.length
 

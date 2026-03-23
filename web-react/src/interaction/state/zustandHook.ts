@@ -31,7 +31,7 @@ useFull<T extends keyof ReactiveDataMap>(type: DataKeys, id: string): ReactiveDa
   /**
    * Subscribe to partial reactive object
    */
-usePartial<T extends keyof ReactiveDataMap, S>(type: DataKeys, id: string, selector: (data: ReactiveDataMap[T]) => S): S {
+usePartial<T extends DataKeys, S>(type: T, id: string, selector: (data: ReactiveDataMap[T]) => S): S {
     const stateFile = stateFiles[type]
     if (!stateFile) throw new Error(`No state file found for type "${type}"`)
 
