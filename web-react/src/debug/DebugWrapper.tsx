@@ -1,11 +1,8 @@
-import { useSizeState } from "@interaction/state/sizeState.ts"
+import { ensure } from "@interaction/state/sizeState.ts"
 
 export default function DebugWrapper({ children }: ChildrenProps) {
 
-  const { device, scale } = useSizeState.useStore((s) => ({
-    device: s.device,
-    scale: s.scale
-  }))
+  const { device, scale } = ensure()
 
   const frameStyle = {
     width: `${device.width}px`,

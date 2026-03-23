@@ -1,39 +1,31 @@
 import { log } from '@debug/functions.ts'
 import { APP_SETTINGS } from '@config/appSettings.ts'
-import { useStore } from './stateReactAdapter.ts'
+import { store } from './zustandStore.ts'
 
 /* -------------------------
-   Device info (works for web and APK)
+Device info (works for web and APK)
 -------------------------- */
-
 interface Device {
   width: number
   height: number
   density: number
 }
-
-interface SizeState {
-  device: Device
-  scale: number
-  scaledWidth: number
-  scaledHeight: number
-}
-
 // -------------------------
-// Defaults
+// consts
 // -------------------------
-
 const defaultDeviceRaw = APP_SETTINGS.rawPhoneValues
-
 const defaultDevice: Device = {
   width: defaultDeviceRaw.width / defaultDeviceRaw.density,
   height: defaultDeviceRaw.height / defaultDeviceRaw.density,
   density: defaultDeviceRaw.density
 }
-
+const device = sanitizeDevice(window.__DEVICE || defaultDevice)
 /**
  * Validate that a device payload has numeric, finite dimensions/density.
- */
+*/
+// -------------------------
+// Internal helpers
+// -------------------------
 function sanitizeDevice(payload?: Partial<Device>): Device {
   if (!payload) return defaultDevice
 
@@ -45,26 +37,11 @@ function sanitizeDevice(payload?: Partial<Device>): Device {
     log('scale', '[sizeState] Invalid __DEVICE payload, falling back to defaults', payload)
     return defaultDevice
   }
-
   return Object.freeze({ width, height, density })
 }
-
-// Use injected window.__DEVICE if available
-declare global {
-  interface Window {
-    __DEVICE?: Partial<Device>
-  }
-}
-
-const device = sanitizeDevice(window.__DEVICE || defaultDevice)
-
-// -------------------------
-// Internal helpers
-// -------------------------
-
 /**
  * Compute scale and scaled dimensions from a given device and viewport
- */
+*/
 function computeScale(dev: Device, vw: number, vh: number) {
   let scale = dev.height ? vh / dev.height : 1
   if (dev.width * scale > vw) scale = dev.width ? vw / dev.width : scale
@@ -79,50 +56,46 @@ function computeScale(dev: Device, vw: number, vh: number) {
   }
 }
 
-// -------------------------
-// Initial store
-// -------------------------
-
-const initial = computeScale(device, window.innerWidth, window.innerHeight)
-
-export const useSizeState = createStore<SizeState>({
-  device,
-  ...initial
-})
-
+export function ensure(): SizeState {
+  return store.ensure('sizeState', 'device', { device, 
+    ...computeScale(device, window.innerWidth, window.innerHeight) }
+  )
+}
 // -------------------------
 // Public API
 // -------------------------
-
 /**
  * Update the scale based on current viewport
  */
 export function updateSize() {
-  useSizeState.setState((s) => {
-    const { scale, scaledWidth, scaledHeight } = computeScale(
-      s.device,
-      window.innerWidth,
-      window.innerHeight
-    )
-
-    s.scale = scale
-    s.scaledWidth = scaledWidth
-    s.scaledHeight = scaledHeight
-  })
+  const sizeState = ensure()
+  const { scale, scaledWidth, scaledHeight } = computeScale(
+    sizeState.device,
+    window.innerWidth,
+    window.innerHeight
+  )
+     store.mutate('sizeState', 'device', (s) => {
+       s.scale = scale
+       s.scaledWidth = scaledWidth
+       s.scaledHeight = scaledHeight
+    })
 }
 
 /**
  * Return the size along a given axis
  */
 export function getAxisSize(axis: "horizontal" | "vertical") {
-  const { scaledWidth, scaledHeight } = useSizeState.getSnapshot()
-  return axis === "horizontal" ? scaledWidth : scaledHeight
+  const sizeState = ensure()
+  //no need to mutate state?
+  return axis === 'horizontal' ? sizeState.scaledWidth : sizeState.scaledHeight
 }
 
 /**
  * Normalize a parameter from CSS pixels to device pixels
  */
 export function normalizeParameter(parameter: number) {
-  const s = useSizeState.getSnapshot()
-  return parameter / s.scale
+  const sizeState = ensure()
+  //no need to mutate state?
+  return parameter / sizeState.scale
 }
+

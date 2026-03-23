@@ -13,6 +13,8 @@ declare global {
     element: React.ReactNode;
     overrideZ?: number;
   }
-  // export const __dummy = 0
+    interface Window {
+    __DEVICE?: Partial<Device>
+  }
 }
 export {}

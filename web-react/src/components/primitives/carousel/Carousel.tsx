@@ -1,11 +1,11 @@
 import { useRef, useEffect, useMemo } from "react"
-import { Store } from "@interaction/state/stateReactAdapter.ts"
-import { state } from "@interaction/state/stateManager.ts"
+import { carouselStateFn } from "@interaction/state/carouselState.ts"
 import { usePointerForwarding } from "@interaction/bridge/bridge.ts"
 import { useCarouselMotion } from "./hooks/useCarouselMotion.ts"
 import { useCarouselSizing } from "./hooks/useCarouselSizing.ts"
 import { useAugmentedScenes } from "./hooks/useAugmentedScenes.ts"
 import type { SceneRole } from "./hooks/useCarouselScenes.ts"
+import { subscribe } from "@interaction/state/zustandHook.ts"
 
 interface CarouselProps {
   id: string
@@ -24,15 +24,6 @@ interface Slot {
   role: SceneRole
 }
 
-/** Determine swipe direction from old→new index (single-step wraparound). */
-// function getSwipeDirection(
-//   oldIdx: number,
-//   newIdx: number,
-//   count: number
-// ): "forward" | "backward" {
-//   return newIdx === (oldIdx + 1) % count ? "forward" : "backward"
-// }
-
 export default function Carousel({
   id,
   axis,
@@ -44,20 +35,16 @@ export default function Carousel({
   interactive = true
 }: CarouselProps) {
 
-
-  //possibly stop using stateManager and reach for store straight away... or rather... carouselStateFn.ensure(id) idk...
-  useEffect(() => {
-    state.ensure('carousel', id)
-  }, [id])
+subscribe.useFull('carousel', id)
 
   useEffect(() => {
     if (interactive)
-      state.setCount('carousel', id, scenes.length)
+      carouselStateFn.setCount(id, scenes.length)
   }, [id, scenes.length, interactive])
 
 
   const carouselRef = useRef<HTMLDivElement>(null)
-  const lane = Store((state) => state.get('carousel', id)?.data)
+  const lane = carouselStateFn.ensure(id)
 
   const augmentedScenes = useAugmentedScenes(scenes, interactive, lane?.count)
   const index = lane?.index ?? 0
@@ -97,7 +84,7 @@ export default function Carousel({
   useEffect(() => { prevIndexRef.current = index }, [index])
 
   useEffect(() => {
-    state.setCurrentScenes("carousel", id, slots.map(s => s.sceneIdx))
+    carouselStateFn.setCurrentScenes(id, slots.map(s => s.sceneIdx))
   }, [index, id, total, slots])
 
   const Scene0 = augmentedScenes[slots[0].sceneIdx]
@@ -109,7 +96,7 @@ export default function Carousel({
     styleForRole,
     onTransitionEnd
   } = useCarouselMotion({
-    laneState: lane ?? { offset: 0, dragging: false, settling: false },
+    laneState: lane,
     laneSize,
     horizontal: axis === "horizontal",
     id

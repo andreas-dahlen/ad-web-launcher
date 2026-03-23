@@ -1,56 +1,26 @@
-import { createStore } from './stateReactAdapter.ts'
-/* -------------------------------
-   Types for drag state
---------------------------------- */
-interface DragLane {
-  position: Vec2      // committed position
-  offset: Vec2        // live offset during drag
-  dragging: boolean
-  minX?: number
-  maxX?: number
-  minY?: number
-  maxY?: number
-}
-
-interface DragLaneView {
-  position: Vec2
-  offset: Vec2
-  dragging: boolean
-}
-
-interface DragState {
-  lanes: Record<string, DragLane>
-  views: Record<string, DragLaneView>
-}
-
-/* -------------------------------
-   Initial store
---------------------------------- */
-const ZERO_POINT: Vec2 = { x: 0, y: 0 }
-
-export const useDragState = createStore<DragState>({
-  lanes: {},
-  views: {}
-})
-
-/* -------------------------------
-   Drag state functions
---------------------------------- */
+import { store } from './zustandStore.ts'
 export const dragStateFn = {
   /* -------------------------
-       Ensure lane exists
+       Ensure state exists
   -------------------------- */
-  ensure(id: string, s: DragState): DragLane {
-    let lane = s.lanes[id]
-    if (!lane) {
-      lane = {
-        position: { ...ZERO_POINT },
-        offset: { ...ZERO_POINT },
-        dragging: false
-      }
-      s.lanes[id] = lane
-    }
-    return lane
+  ensure(id: string): DragState {
+    return store.ensure('drag', id, {
+      position: {x: 0, y: 0},
+      offset: {x: 0, y: 0},
+      dragging: false
+      //minX, maxX, minY, maxY are all optional...
+    })
+
+    // let lane = s.lanes[id]
+    // if (!lane) {
+    //   lane = {
+    //     position: { ...ZERO_POINT },
+    //     offset: { ...ZERO_POINT },
+    //     dragging: false
+    //   }
+    //   s.lanes[id] = lane
+    // }
+    // return lane
   },
 
   /* -------------------------
@@ -61,32 +31,32 @@ export const dragStateFn = {
   // },
 
   getConstraints(id: string) {
-    const s = useDragState.getSnapshot()
-    const lane = s.lanes[id]
+    const state = this.ensure(id)
     return {
-      minX: lane?.minX ?? 0,
-      minY: lane?.minY ?? 0,
-      maxX: lane?.maxX ?? 0,
-      maxY: lane?.maxY ?? 0
+      minX: state.minX,
+      minY: state.minY,
+      maxX: state.maxX,
+      maxY: state.maxY
     }
   },
 
   getPosition(id: string): Vec2 {
-    return useDragState.getSnapshot().lanes[id]?.position ?? { ...ZERO_POINT }
+    return this.ensure(id).position
+    // return useDragState.getSnapshot().lanes[id]?.position ?? { ...ZERO_POINT }
   },
 
-  get(id: string): DragLaneView {
-    const s = useDragState.getSnapshot()
-    const lane = this.ensure(id, s)
-    if (!s.views[id]) {
-      s.views[id] = {
-        position: { ...lane.position },
-        offset: { ...lane.offset },
-        dragging: lane.dragging
-      }
-    }
-    return s.views[id]
-  },
+  // get(id: string): DragLaneView {
+  //   const s = useDragState.getSnapshot()
+  //   const lane = this.ensure(id, s)
+  //   if (!s.views[id]) {
+  //     s.views[id] = {
+  //       position: { ...lane.position },
+  //       offset: { ...lane.offset },
+  //       dragging: lane.dragging
+  //     }
+  //   }
+  //   return s.views[id]
+  // },
 
   /* -------------------------
        Setters / configuration
@@ -99,46 +69,82 @@ export const dragStateFn = {
 
   setConstraints( id: string, packet: { minX?: number; minY?: number; maxX?: number; maxY?: number }
   ) {
-    useDragState.setState((s) => {
-      const lane = this.ensure(id, s)
-      lane.minX = packet.minX
-      lane.minY = packet.minY
-      lane.maxX = packet.maxX
-      lane.maxY = packet.maxY
+    this.ensure(id)
+    // useDragState.setState((s) => {
+    //   const lane = this.ensure(id, s)
+    store.mutate('drag', id, (s) => {
+      s.minX = packet.minX
+      s.maxX = packet.maxX
+      s.minY = packet.minY
+      s.maxY = packet.maxY
     })
+      // state.minX = packet.minX
+      // state.minY = packet.minY
+      // state.maxX = packet.maxX
+      // state.maxY = packet.maxY
+    // })
   },
 
   setPosition(id: string, pos: Vec2) {
-    useDragState.setState((s) => {
-      const lane = this.ensure(id, s)
-      lane.position = { x: pos.x ?? 0, y: pos.y ?? 0 }
+    this.ensure(id)
+    // useDragState.setState((s) => {
+    //   const lane = this.ensure(id, s)
+    store.mutate('drag', id, (s) => {
+      s.position = {x: pos.x, y: pos.y}
     })
+      // state.position = { x: pos.x, y: pos.y }
+    // })
   },
 
   /* -------------------------
        Dispatcher / mutations
   -------------------------- */
   swipeStart(desc: Descriptor) {
-    useDragState.setState((s) => {
-      const lane = this.ensure(desc.base.id, s)
-      lane.dragging = true
-      lane.offset = { ...ZERO_POINT }
+    this.ensure(desc.base.id)
+    // state.dragging = true
+    // state.offset = { x: 0, y: 0 }
+    store.mutate('drag', desc.base.id, (s) => {
+      s.dragging = true
+      s.offset = {x: 0, y: 0}
     })
+
+    // useDragState.setState((s) => {
+    //   const lane = this.ensure(desc.base.id, s)
+    //   lane.dragging = true
+    //   lane.offset = { ...ZERO_POINT }
+    // })
   },
 
   swipe(desc: Descriptor) {
-    useDragState.setState((s) => {
-      const lane = this.ensure(desc.base.id, s)
-      lane.offset = desc.runtime.delta
+    this.ensure(desc.base.id)
+    // state.offset = desc.runtime.delta
+    store.mutate('drag', desc.base.id, (s) => {
+    s.offset = desc.runtime.delta
     })
+
+    // useDragState.setState((s) => {
+    //   const lane = this.ensure(desc.base.id, s)
+    //   lane.offset = desc.runtime.delta
+    // })
   },
 
   swipeCommit(desc: Descriptor) {
-    useDragState.setState((s) => {
-      const lane = this.ensure(desc.base.id, s)
-      lane.position = desc.runtime.delta
-      lane.offset = { ...ZERO_POINT }
-      lane.dragging = false
+    this.ensure(desc.base.id)
+
+        store.mutate('drag', desc.base.id, (s) => {
+    s.position = desc.runtime.delta
+    s.offset = {x: 0, y: 0}
+    s.dragging = false
     })
+    // state.position = desc.runtime.delta
+    // state.offset = {x: 0, y: 0}
+    // state.dragging = false
+
+    // useDragState.setState((s) => {
+    //   const lane = this.ensure(desc.base.id, s)
+    //   lane.position = desc.runtime.delta
+    //   lane.offset = { ...ZERO_POINT }
+    //   lane.dragging = false
+    // })
   }
 }
