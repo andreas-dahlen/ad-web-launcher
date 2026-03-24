@@ -47,7 +47,7 @@ getters
   setCurrentScenes(id: string, scenes: number[]) {
     this.ensure(id)
     store.mutate('carousel', id, (s) => {
-      s.currentScenes = scenes
+      s.currentScenes = [...scenes]
     })
   },
 
@@ -58,30 +58,33 @@ getters
     })
   },
 
-  setSize(id: string, size: Vec2) {
+  setSize(id: string, trackSize: Vec2) {
     this.ensure(id)
     store.mutate('carousel', id, (s) => {
-      s.size = size
+      if (s.size.x === trackSize.x && s.size.y === trackSize.y) return
+      s.size = trackSize
     })
   },
 
-  setPosition(id: string): boolean {
-    this.ensure(id)
-    store.mutate('carousel', id, (s) => {
-      if (!s.pendingDir) return false
-      s.settling = true
-      s.index = this.getNextIndex(s.index, s.pendingDir, s.count)
-      s.offset = 0
-      s.pendingDir = null
-    })
+setPosition(id: string): boolean {
+  const lane = this.ensure(id)
+  if (!lane.pendingDir) return false
 
-    requestAnimationFrame(() => {
-      store.mutate('carousel', id, (s) => {
-        s.settling = false
+  store.mutate('carousel', id, (s) => {
+    s.settling = true
+    s.index = this.getNextIndex(s.index, s.pendingDir, s.count)
+    s.offset = 0
+    s.pendingDir = null
+  })
+
+  requestAnimationFrame(() => {
+    store.mutate('carousel', id, (s) => {
+      s.settling = false
     })
-    })
-    return true
-  },
+  })
+
+  return true
+},
   /* -------------------------
        Dispatcher / mutations
   -------------------------- */
@@ -89,15 +92,12 @@ getters
     this.ensure(desc.base.id)
     store.mutate('carousel', desc.base.id, (s) => {
       s.dragging = true
+      s.settling = false
       if (s.pendingDir !== null) {
-        s.settling = true
         s.index = this.getNextIndex(s.index, s.pendingDir, s.count)
         s.offset = 0
         s.pendingDir = null
-        return
       }
-      s.pendingDir = null
-
     })
   },
 
@@ -110,7 +110,10 @@ getters
 
   swipeCommit(desc: Descriptor) {
     this.ensure(desc.base.id)
+
     store.mutate('carousel', desc.base.id, (s) => {
+      if (s.settling) return
+
       s.pendingDir = desc.runtime.direction ?? null
       s.offset = desc.runtime.delta1D ?? s.offset
       s.dragging = false

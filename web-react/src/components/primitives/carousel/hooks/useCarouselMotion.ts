@@ -1,6 +1,6 @@
 import { useMemo, useCallback } from "react"
 import { APP_SETTINGS } from "@config/appSettings.ts"
-import { state } from "@interaction/state/stateManager.ts"
+import { carouselStateFn } from "@interaction/state/carouselState"
 
 type Role = "prev" | "current" | "next"
 
@@ -77,11 +77,13 @@ export function useCarouselMotion({
       const target = e.target as HTMLElement
       if (!target.classList.contains("scene-default")) return
       if (e.propertyName !== "transform") return
-      if (isSettling) return
 
-      state.setPosition("carousel", id)
+      // only commit index if not dragging and not already settling
+      if (!isDragging && !isSettling) {
+        carouselStateFn.setPosition(id)
+      }
     },
-    [id, isSettling]
+    [id, isDragging, isSettling]
   )
 
   return { styleForRole, carouselStyle, onTransitionEnd }

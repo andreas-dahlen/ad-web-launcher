@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { state } from "@interaction/state/stateManager.ts"
 
 interface UseCarouselSizingProps {
@@ -11,28 +11,26 @@ export function useCarouselSizing({
     elRef,
     axis,
     id
-}: UseCarouselSizingProps): number{
-
-    const [laneSize, setLaneSize] = useState(0)
+}: UseCarouselSizingProps): void {
+    // const [laneSize, setLaneSize] = useState(0)
 
     useEffect(() => {
-
         const el = elRef.current
-        
+        if (!el) return
         function updateLaneSize() {
             if (!el) return
-            
+
             const trackSize = {
                 x: el.offsetWidth,
                 y: el.offsetHeight
             }
 
-            const sizeValue =
-                axis === "horizontal"
-                    ? el.offsetWidth
-                    : el.offsetHeight
+            // const sizeValue =
+            //     axis === "horizontal"
+            //         ? el.offsetWidth
+            //         : el.offsetHeight
 
-            setLaneSize(sizeValue)
+            // setLaneSize(sizeValue)
 
             state.setSize("carousel", id, trackSize)
         }
@@ -40,12 +38,10 @@ export function useCarouselSizing({
         updateLaneSize()
 
         const observer = new ResizeObserver(updateLaneSize)
-        if(el)
-        observer.observe(el)
+        if (el)
+            observer.observe(el)
 
         return () => observer.disconnect()
-
-    }, [elRef, axis, id])
-
-    return  laneSize 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [axis, id])
 }

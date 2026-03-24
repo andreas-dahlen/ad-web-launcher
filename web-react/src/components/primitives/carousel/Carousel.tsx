@@ -35,41 +35,23 @@ export default function Carousel({
   interactive = true
 }: CarouselProps) {
 
-  //causes rerender on commit
-//   subscribe.usePartial('carousel', id, s => s.index  )
+  // ── Fully subscribe to the carousel state ─────────────────────────────
+  const lane = subscribe.useFull('carousel', id) as CarouselState
 
-//causes rerender infinity loop and breakage
-// subscribe.usePartial('carousel', id, s => ({index: s.index }) )
+  // ── Initialize count for mirror scenes ─────────────────────────────
+  useEffect(() => {
+    if (interactive)
+      carouselStateFn.setCount(id, scenes.length)
+  }, [id, scenes.length, interactive])
 
-//doesn't do anything... Nothing happens... 
-// const i = subscribe.usePartial('carousel', id, s => s.index)
-// const d = subscribe.usePartial('carousel', id, s => s.index)
-// const c = subscribe.usePartial('carousel', id, s => s.count)
-// const o = subscribe.usePartial('carousel', id, s => s.offset)
-
-// useMemo(() => {
-//   subscribe.usePartial('carousel', id, s => ({index: s.index }) )
-// }, [id])
-
-  // useEffect(() => {
-  //   if (interactive)
-  //     carouselStateFn.setCount(id, scenes.length)
-  // }, [id, scenes.length, interactive])
-
-
+  // ── DOM reference & lane size ─────────────────────────────
   const carouselRef = useRef<HTMLDivElement>(null)
-  const lane = carouselStateFn.ensure(id)
+  useCarouselSizing({ elRef: carouselRef, axis, id })
 
-  const augmentedScenes = useAugmentedScenes(scenes, interactive, lane.count)
-  const index = lane?.index ?? 0
-  const total = augmentedScenes.length
+  const laneSize = axis === "horizontal" ? lane.size.x : lane.size.y
 
-  const laneSize = useCarouselSizing({
-    elRef: carouselRef,
-    axis,
-    id
-  })
 
+  // ── Pointer forwarding for gestures ─────────────────────────────
   usePointerForwarding({
     elRef: carouselRef,
     disabled: !interactive,
@@ -80,9 +62,10 @@ export default function Carousel({
     }
   })
 
-  // ── Stable slot management ──────────────────────────────────
-
-  const prevIndexRef = useRef(index)
+  // ── Augmented scenes & stable slot management ─────────────────────────────
+  const augmentedScenes = useAugmentedScenes(scenes, interactive, lane.count)
+  const index = lane?.index ?? 0
+  const total = augmentedScenes.length
 
   const slots: Slot[] = useMemo(() => {
     const prevIdx = (index - 1 + total) % total
@@ -94,27 +77,27 @@ export default function Carousel({
     ]
   }, [index, total])
 
-  // prevIndexRef.current = index
-  useEffect(() => { prevIndexRef.current = index }, [index])
+  // Sort by sceneIdx so React keys stay in stable DOM order.
+  // Prevents DOM reordering which resets CSS animations on moved nodes.
+  const renderSlots = useMemo(
+    () => [...slots].sort((a, b) => a.sceneIdx - b.sceneIdx),
+    [slots]
+  )
 
   useEffect(() => {
     carouselStateFn.setCurrentScenes(id, slots.map(s => s.sceneIdx))
-  }, [index, id, total, slots])
+  }, [id, slots])
 
-  const Scene0 = augmentedScenes[slots[0].sceneIdx]
-  const Scene1 = augmentedScenes[slots[1].sceneIdx]
-  const Scene2 = augmentedScenes[slots[2].sceneIdx]
-
+  // ── Carousel motion / styling ─────────────────────────────
   const {
     carouselStyle,
     styleForRole,
-    onTransitionEnd
-  } = useCarouselMotion({
-    laneState: lane,
-    laneSize,
-    horizontal: axis === "horizontal",
-    id
-  })
+    onTransitionEnd } = useCarouselMotion({
+      laneState: lane,
+      horizontal: axis === "horizontal",
+      id,
+      laneSize
+    })
 
   return (
     <div
@@ -127,30 +110,21 @@ export default function Carousel({
       data-lock-next-at={lockNextAt ?? ''}
       className={className}
     >
-      <div
-        className="scene-default"
-        style={styleForRole(slots[0].role)}
-        data-role={slots[0].role}
-        onTransitionEnd={onTransitionEnd}
-      >
-        <Scene0 />
-      </div>
-      <div
-        className="scene-default"
-        style={styleForRole(slots[1].role)}
-        data-role={slots[1].role}
-        onTransitionEnd={onTransitionEnd}
-      >
-        <Scene1 />
-      </div>
-      <div
-        className="scene-default"
-        style={styleForRole(slots[2].role)}
-        data-role={slots[2].role}
-        onTransitionEnd={onTransitionEnd}
-      >
-        <Scene2 />
-      </div>
+      {renderSlots.map((slot) => {
+        const Scene = augmentedScenes[slot.sceneIdx]
+
+        return (
+          <div
+            key={slot.sceneIdx}
+            className="scene-default"
+            style={styleForRole(slot.role)}
+            data-role={slot.role}
+            onTransitionEnd={onTransitionEnd}
+          >
+            <Scene />
+          </div>
+        )
+      })}
     </div>
   )
 }

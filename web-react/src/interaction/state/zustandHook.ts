@@ -41,7 +41,7 @@ usePartial<T extends DataKeys, S>(type: T, id: string, selector: (data: Reactive
     return useStore((state) => {
       const reactive = state.reactives[`${type}:${id}`]
       if (!reactive) throw new Error(`Reactive ${type}:${id} not found`)
-      return selector(reactive.data as ReactiveDataMap[T])
-    })
+      return selector(reactive.data as ReactiveDataMap[T]) 
+    }) as Readonly<S>
   },
 }

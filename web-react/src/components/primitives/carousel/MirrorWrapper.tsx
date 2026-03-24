@@ -42,7 +42,7 @@ export default function MirrorCarousel({
   const total = lane?.count ?? 3
 
   // same sizing system
-  const laneSize = useCarouselSizing({
+  useCarouselSizing({
     elRef: carouselRef,
     axis,
     id
@@ -109,7 +109,8 @@ export default function MirrorCarousel({
     const childArray = Children.toArray(children)
     return childArray[childIdx] ?? null
   }
-
+  //use memo?
+  const laneSize = axis === "horizontal" ? lane.size.x : lane.size.y
   // same motion system
   const {
     carouselStyle,
