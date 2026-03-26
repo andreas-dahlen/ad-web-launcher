@@ -1,7 +1,7 @@
 # Carousel System Audit — React + TypeScript Codebase
 
 **Scope:** `web-react/src`  
-**Date:** March 21, 2026  
+**Date:** March 21, 2026 (Updated: March 25, 2026)  
 **Auditor:** Systems Review (Automated Deep Audit)
 
 ---
@@ -9,17 +9,18 @@
 ## Table of Contents
 
 1. [Executive Summary](#1-executive-summary)
-2. [Issues by Severity](#2-issues-by-severity)
+2. [Fixed Since Last Audit](#2-fixed-since-last-audit)
+3. [Remaining Issues by Severity](#3-remaining-issues-by-severity)
    - [🔴 Critical](#-critical)
    - [🟠 High](#-high)
    - [🟡 Medium](#-medium)
    - [🟢 Low](#-low)
-3. [Performance Review](#3-performance-review)
-4. [TypeScript & API Design Review](#4-typescript--api-design-review)
-5. [Gesture System Deep Dive](#5-gesture-system-deep-dive)
-6. [React-Specific Review](#6-react-specific-review)
-7. [Suggested Improvements](#7-suggested-improvements)
-8. [Actionable Checklist](#8-actionable-checklist)
+4. [Performance Review](#4-performance-review)
+5. [TypeScript & API Design Review](#5-typescript--api-design-review)
+6. [Gesture System Deep Dive](#6-gesture-system-deep-dive)
+7. [React-Specific Review](#7-react-specific-review)
+8. [Suggested Improvements](#8-suggested-improvements)
+9. [Actionable Checklist](#9-actionable-checklist)
 
 ---
 
@@ -27,184 +28,53 @@
 
 | Metric | Rating |
 |--------|--------|
-| **Overall System Health** | **4 / 10** |
-| **Architecture** | Promising but undermined by implementation bugs |
-| **Type Safety** | Weak — heavy use of type assertions, global ambient types |
-| **React Integration** | Several anti-patterns and performance traps |
-| **State Management** | Custom store with fundamental correctness issues |
-| **Gesture Pipeline** | Well-structured, but singleton design breaks under real-world use |
+| **Overall System Health** | **7 / 10** |
+| **Architecture** | Solid — Zustand+Immer store, keyed carousel, pointerId-based interpreter |
+| **Type Safety** | Improved but still has global ambient types and type assertions |
+| **React Integration** | Good — most anti-patterns resolved; some performance optimizations remain |
+| **State Management** | Zustand+Immer — correct immutable updates, proper selector support |
+| **Gesture Pipeline** | Well-structured, multi-gesture capable via pointerId-keyed map |
 
-### Top 5 Risks
+### Remaining Top Risks
 
-1. **Custom state store (`createStore`) mutates-in-place then shallow-copies** — breaks snapshot guarantees, causes stale/corrupted reads, and makes every selector re-render all subscribers on every write.
-2. **`carouselState.ensure()` mutates the snapshot directly outside `setState`** — state changes with no re-render notification, silent data corruption.
-3. **Interpreter is a global singleton** — two interactive carousels active simultaneously will corrupt each other's gesture.
-4. **Carousel slot rotation happens in a `useEffect` but slot data is read during render** — one-frame glitch where wrong scenes are shown after an index change.
-5. **`onTransitionEnd` fires on all 3 slot divs** — causes the commit handler (`setPosition`) to execute 3 times, triggering 6+ unnecessary re-renders plus 3 orphan `setTimeout` callbacks.
+1. **`MirrorWrapper.tsx` imports a non-existent `useCarouselState` API** — the component is completely broken and will crash if rendered.
+2. **`subscribe.useFull` re-renders on any field change** — during 60fps gestures, all carousel subscribers re-render on every `offset` update, even if they only need `index`.
+3. **Scene components not memoized** — unnecessary child re-renders during gesture drag.
+4. **Global type pollution via `declare global`** — ~40 types in global scope with no import tracking.
 
 ### General Recommendation
 
-**Needs refactor before scaling.** The descriptor-pipeline architecture is sound and scalable in design, but the state store, interpreter singleton, and carousel state management have correctness bugs that will compound as features are added. Fix the state store and interpreter before building slider/drag on top of this foundation.
+**Good foundation for scaling.** The critical state management, interpreter, and carousel rendering bugs from the original audit have been resolved. Remaining work is primarily performance optimization (`usePartial` subscriptions, `React.memo` on scenes) and cleanup (dead code, MirrorWrapper migration, type exports).
 
 ---
 
-## 2. Issues by Severity
+<!-- ## 2. Fixed Since Last Audit
 
----
+The following issues from the original audit (March 21) have been resolved:
 
-### 🔴 Critical
+| ID | Issue | How Fixed |
+|----|-------|-----------|
+| **C1** | Custom state store mutates-in-place, shallow-copies | Replaced with Zustand + Immer middleware (`zustandStore.ts`) — proper immutable updates |
+| **C2** | `ensure()` mutates state outside `setState` | `store.ensure()` uses Zustand's `set()` API properly |
+| **C3** | Nested `setState` in `swipeStart` → `setPosition` | `swipeStart` does all mutations in a single `store.mutate` call, no delegation |
+| **C4** | Slot rotation in `useEffect`, stale during render | Slots computed via `useMemo` during render; `renderSlots` sorted for stable DOM key order |
+| **C5** | Global singleton interpreter | Interpreter now uses `Record<number, GestureState>` keyed by `pointerId` |
+| **H2** | `getSize()` returns `0` instead of `Vec2` | Returns `this.ensure(id).size` — `ensure` guarantees `{x:0, y:0}` default |
+| **H3** | `onTransitionEnd` fires 3x, 6+ wasted re-renders | `setPosition` guards with `if (!lane.pendingDir) return false` before any mutation |
+| **H5** | `onReaction` callback identity causes effect teardown | Uses `useRef(onReaction)` pattern; main effect depends only on `[elRef, disabled]` |
+| **H6** | `setPosition` always returns `true` | Guard before `store.mutate` — returns `false` when no `pendingDir` |
+| **H7** | Null crash on `target.data.locked` | Uses optional chaining: `target.data?.locked` |
+| **M1** | `setTimeout(0)` for settling transition | Replaced with `requestAnimationFrame` |
+| **M2** | No runtime validation in carousel solver | `carouselSolver` now throws on wrong descriptor type |
+| **M5** | Disabled gesture cleanup sends `(0,0)` coordinates | Uses `pipeline.abortGesture(pointerId)` + pointer capture release |
+| **M7** | StrictMode double-mount breaks initialization | `store.ensure()` is idempotent via Zustand — safe under StrictMode |
+| **L2** | Inconsistent `ensure()` signatures | All state files now use `ensure(id)` → `store.ensure(type, id, defaults)` |
+| **L3** | No `getServerSnapshot` | N/A — using Zustand (handles this internally) |
+| **L4** | Ref mutation during render (slotsRef) | Slots are `useMemo`, no ref mutation during render |
 
----
+--- -->
 
-#### C1 — State store mutates in-place, then shallow-copies top level
-
-**File:** `interaction/state/stateReactAdapter.ts`  
-**Location:** `setState` function
-
-```ts
-function setState(updater: (draft: T) => void) {
-    updater(state)          // mutates the CURRENT state object
-    state = { ...state }    // shallow-copies top-level only
-    listeners.forEach((cb) => cb())
-}
-```
-
-**Explanation:**  
-The updater function receives the live `state` object and mutates it directly. Then `state = { ...state }` creates a new top-level reference but all nested objects (`lanes`, individual lane records, `views`) are **shared** between the old and new snapshots. Any code that captured a previous snapshot reference now sees mutated data.
-
-**Why it's dangerous:**
-- `useSyncExternalStore` guarantees are violated — React assumes `getSnapshot()` returns an immutable snapshot. Here, previous snapshots are retroactively mutated.
-- In Concurrent Mode / React 18+ transitions, tearing is possible because the same object is both "old snapshot" and "new snapshot."
-- Debugging is extremely difficult because state appears to "change in the past."
-
-**Suggested fix:**  
-Either use a proper immutable update pattern (structuredClone or manual deep-copy before mutation), or adopt a proven library (Zustand, which uses the exact same `useSyncExternalStore` pattern but with proper immutable semantics via Immer or spread).
-
-**Fix difficulty:** Medium (touches all state files)
-
----
-
-#### C2 — `carouselState.ensure()` mutates state outside `setState`
-
-**File:** `interaction/state/carouselState.ts`  
-**Location:** `ensure()` method
-
-```ts
-ensure(id: string) {
-    const s = useCarouselState.getSnapshot()
-    let lane = s.lanes[id]
-    if (!lane) {
-        lane = { ... }
-        s.lanes[id] = lane   // direct mutation, no setState, no listener notify
-    }
-    return lane
-}
-```
-
-**Explanation:**  
-This grabs the current snapshot and writes to it directly. No `setState` is called, so no listeners fire and no re-render occurs. The mutation is invisible to React.
-
-**Why it's dangerous:**
-- New lanes are silently created with no UI update.
-- If `ensure` creates a lane and later code reads it via `useStore`, React may or may not see it depending on whether an unrelated `setState` call happened in between.
-- Inconsistent with `dragStateFn.ensure(id, s)` and `sliderStateFn.ensure(id, s)` which take the state draft as a parameter and are designed to be called inside `setState`.
-
-**Suggested fix:**  
-Refactor to match the drag/slider pattern — accept a state draft parameter, call only from inside `setState`.
-
-**Fix difficulty:** Easy
-
----
-
-#### C3 — Nested `setState` in `swipeStart` → `setPosition`
-
-**File:** `interaction/state/carouselState.ts`  
-**Location:** `swipeStart()` → `setPosition()`
-
-```ts
-swipeStart(desc: Descriptor) {
-    useCarouselState.setState(() => {          // OUTER setState
-        const lane = this.ensure(desc.base.id)
-        lane.dragging = true
-        if (lane.pendingDir !== null)
-            this.setPosition(desc.base.id)     // calls setState AGAIN inside
-        lane.pendingDir = null
-    })
-}
-```
-
-**Explanation:**  
-`setPosition` calls `useCarouselState.setState(...)` internally. The store implementation doesn't batch or guard against re-entrancy. The inner `setState` mutates state, shallow-copies, and notifies listeners **while the outer `setState` is still executing**. After the inner call returns, the outer `setState` does its own `state = { ...state }` and notifies listeners again.
-
-**Why it's dangerous:**
-- Listeners are notified with an intermediate state between inner and outer writes.
-- React components may render with half-applied mutations.
-- The inner `setPosition` also schedules a `setTimeout` that fires a third `setState`, compounding the issue.
-
-**Suggested fix:**  
-Add batching to the store (defer listener notification until the outermost `setState` completes), or flatten the logic so `swipeStart` performs all mutations in a single `setState` call without delegating to `setPosition`.
-
-**Fix difficulty:** Medium
-
----
-
-#### C4 — Carousel slot rotation happens in `useEffect` but slots are read during render
-
-**File:** `components/primitives/carousel/Carousel.tsx`  
-**Location:** Slot rotation effect & render body
-
-```tsx
-// During render — reads OLD slot data
-const slots = slotsRef.current
-const Scene0 = augmentedScenes[slots[0].sceneIdx]
-
-// After render — updates slots to match new index
-useEffect(() => {
-    // ... rotates slotsRef.current based on new index
-}, [index, total, id])
-```
-
-**Explanation:**  
-When the carousel index changes (via `setPosition`), the component re-renders. During that render, `slotsRef.current` still holds the **old** slot assignments because the rotation effect hasn't fired yet. React renders the DOM with stale scene->slot mappings. The effect then updates the ref, but ref mutations don't trigger a re-render, so the fix only arrives on the **next** unrelated render.
-
-**Why it's dangerous:**
-- For one frame, the wrong scene components are rendered in the wrong positions.
-- On slow devices, this manifests as a visible flicker/flash of incorrect content.
-- The `setTimeout(0)` in `setPosition` that flips `settling=false` often provides the "next render," masking the bug on fast hardware — but not reliably.
-
-**Suggested fix:**  
-Move slot rotation into the render phase (compute slots directly from `index` and `prevIndexRef` during render, not in an effect). Alternatively, use state instead of a ref for slots so the rotation triggers its own re-render.
-
-**Fix difficulty:** Medium
-
----
-
-#### C5 — Global singleton interpreter breaks multi-carousel interaction
-
-**File:** `interaction/core/interpreter.ts`  
-**Location:** Module-level `gesture` object
-
-```ts
-const gesture: GestureState = {
-    phase: 'IDLE',
-    start: { x: 0, y: 0 },
-    last: { x: 0, y: 0 },
-    totalDelta: { x: 0, y: 0 }
-}
-```
-
-**Explanation:**  
-There is exactly one `gesture` object for the entire application. Every `usePointerForwarding` hook calls `pipeline.orchestrate`, which uses this single interpreter. If carousel A is being swiped and the user's other finger touches carousel B, carousel B's `pointerdown` handler fires (its own `isActive.current` is false), calls `pipeline.orchestrate({ eventType: 'down', ... })`, which resets `gesture.phase` to `PENDING` and overwrites `gesture.desc` — destroying carousel A's in-progress gesture.
-
-**Why it's dangerous:**
-- Only one gesture can exist at a time, globally.
-- Multi-touch or overlapping interactions corrupt each other silently.
-- As the system adds drag/slider/button components, all sharing the same singleton, conflicts become inevitable.
-
-**Suggested fix:**  
-Either scope the interpreter per interactive element (instance-based rather than singleton), or track multiple concurrent gestures keyed by pointerId.
-
-**Fix difficulty:** Hard
+## 3. Remaining Issues by Severity
 
 ---
 
@@ -212,244 +82,68 @@ Either scope the interpreter per interactive element (instance-based rather than
 
 ---
 
-#### H1 — `resolveByAxis1D` doesn't handle `axis === 'both'`
+#### H1 — `resolveByAxis1D` throws on `axis === 'both'` (no functional support)
 
 **File:** `interaction/solvers/vectorUtils.ts`  
 **Location:** `resolveByAxis1D()`
 
 ```ts
-resolveByAxis1D(value: Vec2, axis: Axis) {
-    if (!axis || !value) return { prim: undefined, sub: undefined }
-    if (axis === 'horizontal') return { prim: value.x, sub: value.y }
-    if (axis === 'vertical') return { prim: value.y, sub: value.x }
-    // 'both' falls through → returns undefined
-}
+case 'both':
+    throw new Error("resolveByAxis1D called with axis === 'both', which is unsupported")
 ```
 
 **Explanation:**  
-`Axis` includes `'both'` but the function has no branch for it. When axis is `'both'`, the function returns `undefined` (implicit). Any caller doing `result.prim` or `result?.prim` will crash or get `undefined`. The `normalize1D` function in `solverUtils.ts` calls this and accesses `.prim` and `.sub` on the result.
+The original silent-undefined bug was fixed with an explicit `throw`. However, `axis: 'both'` still has no functional support in the 1D normalize pipeline. Drag components that use `axis: 'both'` will crash in the solver if they reach `normalize1D`.
 
-**Why it's dangerous:**  
-Drag components can have `axis: 'both'`. Using drag with this axis will cause a runtime crash in the solver pipeline.
-
-**Suggested fix:**  
-Add a `'both'` branch (e.g., return `{ prim: value.x, sub: value.y }` or define 2D behavior explicitly), or prevent `'both'` from reaching 1D normalize functions.
-
-**Fix difficulty:** Easy
-
----
-
-#### H2 — `carouselState.getSize` returns `0` instead of `Vec2`
-
-**File:** `interaction/state/carouselState.ts`  
-**Location:** `getSize()`
-
-```ts
-getSize(id: string): Vec2 {
-    return useCarouselState.getSnapshot().lanes[id]?.size ?? 0
-    //                             type is Vec2    fallback is number ^^
-}
-```
-
-**Explanation:**  
-Return type annotation says `Vec2` but the nullish coalescing fallback is `0` (a `number`). When lane doesn't exist, callers expecting `{ x, y }` will get `0` and crash when accessing `.x` or `.y`.
-
-**Why it's dangerous:**  
-Any code path that calls `state.getSize('carousel', id)` before the lane is initialized will receive a number instead of a Vec2, causing runtime errors in the solver pipeline.
+**Current status:** Silent crash → loud crash (improved). Functional gap remains.
 
 **Suggested fix:**  
-Change fallback to `{ x: 0, y: 0 }`.
-
-**Fix difficulty:** Easy
-
----
-
-#### H3 — `onTransitionEnd` fires once per slot (3 times)
-
-**File:** `components/primitives/carousel/Carousel.tsx` + `hooks/useCarouselMotion.ts`  
-**Location:** `onTransitionEnd` callback
-
-**Explanation:**  
-All 3 slot `<div>`s have CSS transitions and `onTransitionEnd={onTransitionEnd}`. When a swipe commit changes the offset, all 3 undergo a transform transition simultaneously. Each fires `onTransitionEnd`, calling `state.setPosition("carousel", id)` three times.
-
-First call: `pendingDir` is set → full mutation (index change, settling, etc.).  
-Second & third calls: `pendingDir` is now `null` → the updater bails out with `return false`, BUT `setState` **still** creates a new state reference and notifies listeners → 2 wasted re-renders. Each also schedules a `setTimeout(0)` for `settling=false` → 3 more wasted re-renders.
-
-**Total:** 6 unnecessary re-renders per swipe commit (3 no-op setStates + 3 setTimeout setStates).
-
-**Suggested fix:**  
-Guard `setPosition` to be a no-op outside `setState` when `pendingDir` is null (return before calling setState). Or attach `onTransitionEnd` to only the "current" role slot.
-
-**Fix difficulty:** Easy
-
----
-
-#### H4 — `useStore` selector doesn't prevent re-renders
-
-**File:** `interaction/state/stateReactAdapter.ts`
-
-```ts
-function useStore<U = T>(selector?: (s: T) => U): U {
-    const snapshot = useSyncExternalStore(subscribe, getSnapshot)
-    return selector ? selector(snapshot) : (snapshot as unknown as U)
-}
-```
-
-**Explanation:**  
-`useSyncExternalStore` compares `getSnapshot()` results by reference. Since `setState` always does `state = { ...state }` (new reference), the component re-renders on **every** `setState` call, regardless of whether the selected slice changed. The selector only extracts data *after* the re-render decision has already been made.
-
-**Why it's dangerous:**  
-During a drag gesture at 60fps, every `pointermove` triggers `setState`, re-rendering **all** components subscribed to that store — not just the active carousel.
-
-**Suggested fix:**  
-Integrate the selector into `useSyncExternalStore` by passing a memoized `getSnapshot` that returns the selected value:
-
-```ts
-function useStore<U = T>(selector?: (s: T) => U): U {
-    const sel = selector ?? ((s: T) => s as unknown as U)
-    const snap = useSyncExternalStore(
-        subscribe,
-        () => sel(state)  // reference-stable per selected value
-    )
-    return snap
-}
-```
-
-This still requires the selected value to be referentially stable (or use a custom equality comparator). For object selectors like `s => s.lanes[id]`, the top-level shallow copy doesn't change nested references, so it would actually prevent unnecessary re-renders. But for primitive selectors like `s => s.lanes[id]?.index`, it works perfectly since primitives are compared by value.
+Route `axis: 'both'` through a 2D normalize path, or prevent 1D functions from being called for `'both'` axes.
 
 **Fix difficulty:** Medium
 
 ---
 
-#### H5 — `onReaction` callback identity causes effect teardown on every render
+#### H4 — `subscribe.useFull` re-renders on any field change
 
-**File:** `interaction/bridge/bridge.ts`  
-**Location:** `usePointerForwarding` effect dependencies
+**File:** `interaction/state/zustandHook.ts`  
+**Location:** `useFull()`
 
-```ts
-useEffect(() => {
-    // ... sets up pointerdown/move/up listeners
-    el.addEventListener('reaction', handleReaction)
-    return () => {
-        el.removeEventListener('pointerdown', handlePointerDown)
-        // ...
-    }
-}, [elRef, onReaction, disabled])  // onReaction changes every render
-```
+**Explanation:**  
+`useFull` selects the entire `reactive.data` object. Zustand compares selector results by reference (`===`). Since Immer produces a new `data` object on every `store.mutate`, **every mutation to any field** triggers a re-render of all components subscribed via `useFull`.
 
-The Carousel passes an inline arrow function:
-```tsx
-usePointerForwarding({
-    onReaction: (reaction) => { ... }   // new reference every render
-})
-```
+During a 60fps drag gesture, `swipe()` mutates `offset` on every frame → every Carousel using `useFull` re-renders 60 times/sec, even non-interactive mirrors that only need `index`.
 
-**Why it's dangerous:**  
-On every render, all pointer event listeners are torn down and re-attached. During a gesture, this can cause missed events or broken pointer capture.
+**Why it matters:**  
+The store infrastructure (Zustand+Immer) now supports efficient partial subscriptions via `usePartial`, but `Carousel.tsx` still uses `useFull`. This is the primary remaining performance bottleneck.
 
 **Suggested fix:**  
-Use a ref to hold the latest `onReaction` callback and remove it from the effect dependency array:
+Split `Carousel.tsx` into two subscriptions using `subscribe.usePartial` — one for motion fields (offset, dragging, settling) and one for scene fields (index, count, size). Add `shallow` from `zustand/shallow` as equality function in `usePartial` (see H8).
 
-```ts
-const onReactionRef = useRef(onReaction)
-onReactionRef.current = onReaction
-// inside effect: onReactionRef.current?.(e as CustomEvent)
-```
-
-**Fix difficulty:** Easy
+**Fix difficulty:** Easy–Medium
 
 ---
 
-#### H6 — `setPosition` always returns `true` regardless of whether it did anything
+#### H8 — `subscribe.usePartial` lacks shallow equality for object selectors
 
-**File:** `interaction/state/carouselState.ts`  
-**Location:** `setPosition()`
-
-```ts
-setPosition(id: string): boolean {
-    useCarouselState.setState(() => {
-        const lane = this.ensure(id)
-        if (!lane.pendingDir) return false  // ← this is the UPDATER's return, not setPosition's
-        // ...
-    })
-    setTimeout(() => { ... }, 0)
-    return true   // ← always true, even if the updater bailed out
-}
-```
+**File:** `interaction/state/zustandHook.ts`  
+**Location:** `usePartial()`
 
 **Explanation:**  
-The `return false` inside the `setState` updater is swallowed by `setState` (which has return type `void`). The outer function always returns `true` and always schedules the `setTimeout`. Callers cannot know whether the position actually changed.
-
-**Fix difficulty:** Easy
-
----
-
-#### H7 — Latent null crash on `target.data.locked`
-
-**File:** `interaction/core/intentUtils.ts`  
-**Location:** `resolveSwipeTarget()`
-
-```ts
-if (canSwipe && !target.data.locked) {
-```
-
-**Explanation:**  
-`target.data` can be `null` for button descriptors (since `InteractionDataMap['button'] = null`). Currently protected by `canSwipe` being false for buttons (because buttons aren't `laneValid`). But if any button element gains `data-swipe` or `data-react-swipe` attributes, `canSwipe` becomes true and `target.data.locked` crashes with `TypeError: Cannot read properties of null`.
+When `usePartial` is called with an object-returning selector (e.g., `d => ({ offset: d.offset, dragging: d.dragging })`), a new object is created on every Zustand notification. Zustand compares by `===` reference, so it always triggers a re-render — the partial selector provides no benefit over `useFull`.
 
 **Suggested fix:**  
-Add a null guard: `!target.data?.locked`
+Add Zustand's `shallow` equality comparator:
+```ts
+import { useShallow } from 'zustand/shallow'
+// or pass shallow as second arg to useStore
+```
 
 **Fix difficulty:** Easy
 
 ---
 
 ### 🟡 Medium
-
----
-
-#### M1 — `setTimeout(0)` for settling transition is a fragile timing hack
-
-**File:** `interaction/state/carouselState.ts`  
-**Location:** `setPosition()`
-
-```ts
-setTimeout(() => {
-    useCarouselState.setState(() => {
-        const lane = this.ensure(id)
-        lane.settling = false
-    })
-}, 0)
-```
-
-**Explanation:**  
-The intent is: set `settling=true` (disabling CSS transition), apply the index change and reset offset, then immediately re-enable transitions. The `setTimeout(0)` defers `settling=false` to the next macrotask, allowing the DOM to paint the instantaneous jump before transitions resume.
-
-**Why it's risky:**
-- No guarantee that the browser has painted before `setTimeout(0)` fires. On fast machines, both mutations (settling=true and settling=false) may batch into one paint, re-enabling transitions before the jump is painted, causing a visible animation artifact.
-- The `setTimeout` is never cleaned up — if the component unmounts, it fires against stale or dismounted state.
-
-**Suggested fix:**  
-Use `requestAnimationFrame` (or double-rAF) for paint-accurate timing, and clear it on unmount.
-
-**Fix difficulty:** Easy
-
----
-
-#### M2 — Type assertions without runtime validation in solvers
-
-**File:** `interaction/solvers/carouselSolver.ts`, `sliderSolver.ts`, `dragSolver.ts`
-
-```ts
-const desc = descriptor as CarouselDescriptor
-```
-
-**Explanation:**  
-Solvers cast the generic `Descriptor` to a specific type without any runtime check. If the solver registry is misconfigured or the pipeline routes a wrong descriptor type, the solver silently operates on incorrect data. No crash, just wrong behavior.
-
-**Suggested fix:**  
-Add a runtime assertion at solver entry: `if (desc.base.type !== 'carousel') throw new Error(...)`.
-
-**Fix difficulty:** Easy
 
 ---
 
@@ -475,77 +169,29 @@ Export types from a central module and import them explicitly.
 **File:** All scene files (`Top1.tsx`, `Mid1.tsx`, etc.)
 
 **Explanation:**  
-During a gesture, the carousel re-renders on every `pointermove` (because the store emits on every `setState`). Each re-render re-invokes `<Scene0 />`, `<Scene1 />`, `<Scene2 />`. Since these are function components without `React.memo`, React re-renders them even though they have no props.
+During a gesture, the carousel re-renders on every `pointermove` (via `subscribe.useFull`). Each re-render re-invokes `<Scene />` for all 3 slots. Since these are function components without `React.memo` and receive no props, React re-renders them unnecessarily.
 
 **Suggested fix:**  
-Wrap scene components in `React.memo()` or extract them to prevent unnecessary child re-renders.
+Wrap scene components in `React.memo()`.
 
 **Fix difficulty:** Easy
 
 ---
 
-#### M5 — Disabled gesture cleanup sends `(0, 0)` coordinates
-
-**File:** `interaction/bridge/bridge.ts`  
-**Location:** Disabled cleanup effect
-
-```ts
-if (isActive.current && activePointerId.current !== null) {
-    pipeline.orchestrate({
-        eventType: 'up',
-        x: 0,      // fabricated coordinates
-        y: 0,
-    })
-}
-```
-
-**Explanation:**  
-When `disabled` flips to true during an active gesture, a synthetic 'up' event is dispatched at coordinates (0, 0). The pipeline processes this as a real gesture end. The descriptor's delta will be wildly wrong (relative to (0,0) instead of actual finger position). For carousels, the commit/revert logic will see a massive delta and likely commit in an unintended direction.
-
-**Suggested fix:**  
-Use `interpreter.resetGesture()` directly to abort the gesture without running through the solver/state pipeline. Alternatively, track the last known position.
-
-**Fix difficulty:** Easy
-
----
-
-#### M6 — `resolveGate` can oscillate during a single gesture
+#### M6 — `resolveGate` still re-evaluates per frame
 
 **File:** `interaction/solvers/solverUtils.ts`  
 **Location:** `resolveGate()`
 
-```ts
-resolveGate(norm: Normalized1D) {
-    const currentPos = (norm.crossOffset ?? 0) + (norm.crossDelta ?? 0)
-    const crossSize = norm.crossTrackSize ?? 0
-    return currentPos < 0 || currentPos > crossSize
-}
-```
+**Current status:** Hysteresis margin was added via `APP_SETTINGS.hysteresis` (improvement over raw bounds check). The gate no longer flickers at the exact boundary. However, it still evaluates on every frame and can oscillate if the finger moves significantly across the cross axis.
 
-**Explanation:**  
-`crossOffset` is the initial touch offset in the cross axis (set once at `onDown`). `crossDelta` is the cumulative gesture delta. As the user drags their finger back and forth across the cross axis, the gate toggles between true/false each frame. When gated, the swipe solver returns `{ stateAccepted: false }`, causing the carousel to freeze mid-drag. When ungated, it resumes. This creates visible jitter.
+**Remaining risk:**  
+If a user's finger drifts far past the hysteresis margin, the gate activates and the carousel freezes. Moving back within hysteresis un-freezes it. Acceptable if hysteresis is generous, but fragile with small values.
 
 **Suggested fix:**  
-Once a gesture starts (swipeStart), latch the gate decision and don't re-evaluate on every frame. Or apply a hysteresis margin.
+Latch the gate decision once per gesture. After `swipeStart`, don't re-evaluate.
 
 **Fix difficulty:** Medium
-
----
-
-#### M7 — StrictMode double-mount breaks carousel initialization
-
-**File:** `components/primitives/carousel/Carousel.tsx`
-
-```tsx
-useEffect(() => {
-    state.ensure('carousel', id)
-}, [id])
-```
-
-**Explanation:**  
-In React StrictMode (used in `main.tsx`), effects run twice. The first invocation of `ensure()` creates the lane via direct mutation. The cleanup (none) runs. The second invocation calls `ensure()` again, which finds the lane already exists (from the first mutation) and returns it. This happens to work, but only because `ensure` mutates outside `setState`. If `ensure` is fixed per issue C2, StrictMode behavior must be considered.
-
-**Fix difficulty:** Easy (part of C2 fix)
 
 ---
 
@@ -562,7 +208,23 @@ In React StrictMode (used in `main.tsx`), effects run twice. The first invocatio
 ```
 
 **Explanation:**  
-The `.scene-root` CSS class applies `position: absolute; width: 100%; height: 100%`. When used on the Root component's container, this can cause the root to collapse or overlap, depending on parent layout.
+`.scene-root` applies `position: absolute; width: 100%; height: 100%`. When used on Root's container, this can cause layout collapse or overlap depending on parent.
+
+**Fix difficulty:** Easy
+
+---
+
+#### M9 — `ensure()` called redundantly on every state mutation in hot path
+
+**File:** `interaction/state/carouselState.ts` (and `sliderState.ts`, `dragState.ts`)
+
+**Explanation:**  
+Every `swipe()`, `swipeCommit()`, `swipeRevert()`, etc. calls `this.ensure(desc.base.id)` before mutating. `ensure` calls `store.ensure()` which does `useStore.getState()` lookup. During a 60fps gesture, this is 60 redundant existence checks per second. The reactive is guaranteed to exist — it was ensured at component mount.
+
+**Impact:** Low per-call cost, but adds up at 60fps across multiple carousels.
+
+**Suggested fix:**  
+Trust that the reactive exists in mutation functions (it was ensured at mount). Move ensure to initialization only.
 
 **Fix difficulty:** Easy
 
@@ -572,53 +234,19 @@ The `.scene-root` CSS class applies `position: absolute; width: 100%; height: 10
 
 ---
 
-#### L1 — Dead and commented-out code
+#### L1 — Dead and commented-out code (partially cleaned)
 
-**Files:**
-- `components/primitives/metaHooks/metaHooks.ts` — entirely commented out
+**Files still affected:**
 - `app/Root.tsx` — commented import `OverlayLayer`
-- `interaction/state/carouselState.ts` — commented `get()` method
-- `interaction/solvers/dragSolver.ts` — commented imports
+- `interaction/solvers/dragSolver.ts` — commented policy imports
+- `interaction/state/sliderState.ts` — large blocks of commented-out old store code
+- `interaction/state/dragState.ts` — commented-out old store code
+
+**Previously fixed:**
+- ~~`components/primitives/metaHooks/metaHooks.ts`~~ — file deleted
+- ~~`interaction/state/carouselState.ts`~~ — commented `get()` removed
 
 **Fix difficulty:** Easy
-
----
-
-#### L2 — Inconsistent `ensure()` signatures across state files
-
-- `carouselStateFn.ensure(id)` — takes only `id`, reads snapshot internally
-- `dragStateFn.ensure(id, s)` — takes `id` + state draft
-- `sliderStateFn.ensure(id, s)` — takes `id` + state draft
-
-**Fix difficulty:** Easy (standardize to the drag/slider pattern)
-
----
-
-#### L3 — No `getServerSnapshot` in `useSyncExternalStore`
-
-**File:** `interaction/state/stateReactAdapter.ts`
-
-Not a concern for a mobile launcher, but would break SSR if ever needed.
-
-**Fix difficulty:** Easy
-
----
-
-#### L4 — Concurrent Mode hazard: ref mutation during render
-
-**File:** `components/primitives/carousel/Carousel.tsx`
-
-```tsx
-if (!slotsRef.current) {
-    slotsRef.current = [...]  // mutation during render phase
-    prevIndexRef.current = index
-}
-```
-
-**Explanation:**  
-In React Concurrent Mode, the render function may be called multiple times before committing. Mutating a ref during render means if React discards this render and retries, the ref is already mutated. This particular case (initialization guard) is unlikely to cause issues in practice, but it's formally incorrect.
-
-**Fix difficulty:** Easy (use `useState` lazy initializer or `useMemo`)
 
 ---
 
@@ -642,63 +270,76 @@ export function isStateFn2Arg(fnName: string): fnName is StateFn2Arg {
 
 **File:** `components/primitives/carousel/hooks/useCarouselScenes.ts`
 
-This hook is defined and exported but never imported anywhere. The slot management logic lives directly in `Carousel.tsx`.
+The hook function is defined and exported but never called. Only the `SceneRole` type export is imported (by `Carousel.tsx`).
 
-**Fix difficulty:** Easy (delete or integrate)
+**Suggested fix:**  
+Move the `SceneRole` type to a shared types file and delete the hook file.
+
+**Fix difficulty:** Easy
+
+---
+
+#### L7 — `GestureUpdate` has `[key: string]: unknown` index signature
+
+**File:** `config/types/gestures.d.ts`
+
+**Explanation:**  
+The index signature obliterates type safety — any property can be set on a `GestureUpdate` without type errors. This makes `applyGestureUpdate` accept anything.
+
+**Fix difficulty:** Easy
 
 ---
 
 ---
 
-## 3. Performance Review
+## 4. Performance Review
 
 ### Re-render Risks
 
-| Issue | Impact | File |
-|-------|--------|------|
-| Every `setState` re-renders ALL subscribers to that store | **High** — during a 60fps gesture, every `pointermove` re-renders every carousel/mirror that subscribes to `useCarouselState` | `stateReactAdapter.ts` |
-| `onTransitionEnd` fires 3x per commit | **Medium** — 6+ extra re-renders per swipe | `Carousel.tsx` |
-| `onReaction` inline callback causes effect teardown every render | **High** — pointer listeners are torn down and re-created on every render | `bridge.ts` |
-| Scene components not memoized | **Medium** — unnecessary child re-renders during gesture | All scene files |
-| `DebugWrapper` selector creates new object every render | **Low** — `(s) => ({ device: s.device, scale: s.scale })` returns new ref every call | `DebugWrapper.tsx` |
+| Issue | Impact | File | Status |
+|-------|--------|------|--------|
+| `subscribe.useFull` re-renders on any field mutation | **High** — 60fps re-renders during drag | `zustandHook.ts`, `Carousel.tsx` | Remaining (H4) |
+| `subscribe.usePartial` lacks shallow equality | **High** — object selectors always re-render | `zustandHook.ts` | Remaining (H8) |
+| Scene components not memoized | **Medium** — unnecessary child re-renders | All scene files | Remaining (M4) |
+| ~~Every `setState` re-renders ALL subscribers~~ | ~~High~~ | ~~`stateReactAdapter.ts`~~ | **Fixed** — Zustand with selectors |
+| ~~`onTransitionEnd` fires 3x per commit~~ | ~~Medium~~ | ~~`Carousel.tsx`~~ | **Fixed** — `setPosition` guards before mutate |
+| ~~`onReaction` identity causes effect teardown~~ | ~~High~~ | ~~`bridge.ts`~~ | **Fixed** — uses ref pattern |
 
-### Event Listener Inefficiencies
+### Event Listener Efficiency
 
-- `usePointerForwarding` tears down and re-attaches all 5 event listeners (pointerdown, pointermove, pointerup, pointercancel, reaction) on every render due to the `onReaction` dependency.
-- `ResizeObserver` in `useCarouselSizing` depends on `[elRef, axis, id]`. If `elRef` is a new object on re-mount, the observer is re-created unnecessarily. (Currently `elRef` is from `useRef`, so stable.)
+- ~~`usePointerForwarding` tears down all listeners on every render~~ — **Fixed.** Effect depends on `[elRef, disabled]` only; `onReaction` uses ref pattern.
+- `ResizeObserver` in `useCarouselSizing` depends on `[axis, id]`. Both are typically static props. If they change, observer is briefly torn down. Acceptable.
 
 ### Memory Leaks
 
-- `setTimeout(0)` in `setPosition` is never cleared. If the carousel unmounts before it fires, the callback runs against orphaned state.
-- `drawDots` in debug mode creates DOM elements with a 500ms `setTimeout` for removal. Under rapid gestures, hundreds of dot elements can accumulate.
+- ~~`setTimeout(0)` in `setPosition` is never cleared~~ — **Fixed.** Uses `requestAnimationFrame` now. (Note: rAF is also not explicitly cleared on unmount, but the mutation is harmless against Zustand store.)
+- `drawDots` in debug mode creates DOM elements with a 500ms `setTimeout` for removal. Under rapid gestures, dot elements can accumulate.
 
-### Expensive Calculations
+### Expensive Calculations (unchanged)
 
-- `normalize1D` is called on every `swipe` event, allocating a new object each time. This is unavoidable but could benefit from object pooling in a 60fps path.
-- `document.elementsFromPoint(x, y)` in `targetResolver.resolveFromPoint` queries the DOM on every pointer event. This is a relatively expensive DOM API.
+- `normalize1D` allocates a new object on every `swipe` event. Could benefit from object pooling.
+- `document.elementsFromPoint(x, y)` in `targetResolver.resolveFromPoint` queries DOM on every pointer event.
 
-### Optimization Suggestions
+### Optimization Suggestions (remaining)
 
-1. **Add selector support to `useSyncExternalStore`** — pass selector into `getSnapshot` to avoid unnecessary re-renders (see H4).
-2. **Stabilize `onReaction` callback** — use a ref pattern to prevent effect teardown (see H5).
-3. **Debounce or throttle `elementsFromPoint`** — during active swipes, the target is already known and doesn't need to be re-resolved.
-4. **Use `React.memo`** on scene components.
-5. **Guard `setPosition`** before calling `setState` to avoid no-op state notifications.
+1. **Use `subscribe.usePartial` with `shallow` equality** in `Carousel.tsx` to split motion vs scene subscriptions (H4, H8).
+2. **Use `React.memo`** on scene components (M4).
+3. **Debounce or throttle `elementsFromPoint`** — during active swipes, the target is already known.
+4. **Remove `ensure()` from hot-path mutations** — trust mount-time initialization (M9).
 
 ---
 
-## 4. TypeScript & API Design Review
+## 5. TypeScript & API Design Review
 
-### Unsafe Types
+### Unsafe Types (remaining)
 
-| Issue | Location |
-|-------|----------|
-| `Descriptor` is a union but always accessed as if it's generic | `pipeline.ts`, all solvers |
-| `desc.data` can be `null` (button type) but accessed without null checks | `intentUtils.ts` → `resolveSwipeTarget` |
-| `carouselState.getSize` returns `number` at runtime but declares `Vec2` | `carouselState.ts` |
-| `GestureUpdate` has `[key: string]: unknown` index signature | `gestures.d.ts` — obliterates type safety |
-| `RuntimeData.delta` is `Vec2` but carousel solver writes `delta1D: number` — parallel conflicting delta representations | `gestures.d.ts` |
-| `SolverFn` returns `Partial<RuntimeData> | void` but alias `RuntimePatch` exists and isn't consistently used | `pipeline.ts` vs solvers |
+| Issue | Location | Status |
+|-------|----------|--------|
+| `GestureUpdate` has `[key: string]: unknown` index signature | `gestures.d.ts` | Remaining (L7) |
+| `RuntimeData.delta` is `Vec2` but carousel solver writes `delta1D: number` | `gestures.d.ts` | Remaining |
+| `SolverFn` returns `Partial<RuntimeData> \| void` but alias `RuntimePatch` isn't consistently used | `pipeline.ts` vs solvers | Remaining |
+| ~~`desc.data` can be `null` but accessed without null checks~~ | ~~`intentUtils.ts`~~ | **Fixed** — uses `?.` |
+| ~~`carouselState.getSize` returns `number` at runtime but declares `Vec2`~~ | ~~`carouselState.ts`~~ | **Fixed** — returns via `ensure()` |
 
 ### Leaky Abstractions
 
@@ -708,7 +349,7 @@ This hook is defined and exported but never imported anywhere. The slot manageme
 ### Missing Constraints
 
 - No branded types or nominal typing — an `id` is just a `string`, nothing prevents passing a carousel id where a slider id is expected.
-- `Axis` includes `'both'` but no solver or utility function correctly handles it.
+- `Axis` includes `'both'` but 1D solver functions throw on it (H1 — crash instead of functional support).
 - `DataKeys` excludes `'button'` but the exclusion is implicit (`Exclude<InteractionType, 'button'>`) — if new types are added they are silently included in `DataKeys`.
 
 ### Suggestions for Stronger Typing
@@ -726,191 +367,141 @@ This hook is defined and exported but never imported anywhere. The slot manageme
 
 ---
 
-## 5. Gesture System Deep Dive
+## 6. Gesture System Deep Dive
 
-### Descriptor Lifecycle
+### Descriptor Lifecycle (unchanged)
 
-1. **Construction** (`targetResolver.resolveFromElement`) — Builds a descriptor from DOM data-attributes. This is where element, id, axis, type, data, and reactions are resolved.
-2. **Enrichment** (`interpreter.ts`) — Attaches runtime data (event type, delta). Stores the descriptor on the singleton `gesture` object.
-3. **Solving** (`pipeline.ts` → solver) — Solver reads descriptor, computes a `RuntimePatch`, merges it back.
+1. **Construction** (`targetResolver.resolveFromElement`) — Builds descriptor from DOM data-attributes.
+2. **Enrichment** (`interpreter.ts`) — Attaches runtime data (event type, delta). Stores on per-pointerId gesture object.
+3. **Solving** (`pipeline.ts` → solver) — Solver computes `RuntimePatch`, merges into descriptor.
 4. **State mutation** (`stateManager` → per-type state) — If `stateAccepted`, state is mutated.
 5. **Rendering** (`renderer.ts`) — DOM attributes set, custom event dispatched.
 
-**Gap:** There is no formal descriptor validation between steps. A corrupted descriptor propagates silently through the entire pipeline.
+**Gap:** No formal descriptor validation between steps. A corrupted descriptor propagates silently.
 
 ### Runtime Mutation Safety
 
-**Unsafe.** The gesture object's `desc` is mutated in-place throughout the flow:
+The gesture object's `desc` is mutated in-place throughout the flow:
 ```ts
-gesture.desc.runtime = { ...gesture.desc.runtime, event: 'swipe', delta: ... }
+g.desc.runtime = { ...g.desc.runtime, event: 'swipe', delta: ... }
 ```
-Since the same object reference is stored in `gesture.desc`, passed to the pipeline, and potentially captured by event handlers, mutations are visible to all holders of that reference. This is intentional for performance but makes debugging extremely difficult and prevents any concurrent gesture processing.
+Since gestures are now keyed by `pointerId`, this is safe for single-touch. Multi-touch on the same element could still see issues if two pointerIds share a descriptor reference. Runtime spreads (`{ ...runtime, ...patch }`) create shallow copies, preventing cross-frame mutations from leaking.
 
 ### Event → State Mapping Correctness
 
-The mapping is generally correct for the happy path:
-- `press` → state write (slider only)
-- `swipeStart` → `dragging: true`, reset offset
-- `swipe` → update offset
-- `swipeCommit` → compute direction, set `pendingDir`
-- `swipeRevert` → reset offset, `dragging: false`
+The mapping is correct for the happy path. One non-obvious pattern remains:
 
-**Issues found:**
-1. `swipeCommit` in `carouselSolver` may return `{ event: 'swipeRevert', stateAccepted: true }`. This modifies `event` field after the solver, which then routes to `state.swipeRevert()` via the pipeline's `state[solution.runtime.event]` call. This is clever but non-obvious — the solver can change which state function is called.
-2. When the solver returns `event: 'swipeRevert'`, the renderer sees `swipeRevert` and clears `data-swiping`. But the original DOM event that triggered this was `swipeCommit`. This mismatch means `data-swiping` is removed twice on revert (once from swipeCommit handler, never — wait, `typeHandlers['swipeCommit']` already removes `data-swiping`). Actually, since the event is *overwritten* to `swipeRevert`, the renderer uses `swipeRevert`'s handler, not `swipeCommit`'s. Both remove `data-swiping`, so there's no visible bug here — but the intent is fragile.
+`swipeCommit` in `carouselSolver` may return `{ event: 'swipeRevert', stateAccepted: true }`. This overwrites the event type, routing to `state.swipeRevert()` instead of `state.swipeCommit()`. The behavior is correct (revert when threshold not met) but the indirection is non-obvious and hard to trace.
 
 ### Multi-Gesture Conflicts
 
-**Critical failure mode.** Two gestures cannot coexist:
-- Only one `gesture` object (C5)
-- Only one `gesture.desc`
-- No gesture queue or priority system
-- No gesture arbitration when overlapping elements support different interaction types
+~~**Critical failure mode.**~~ **Fixed.** Gestures are now tracked in a `Record<number, GestureState>` keyed by `pointerId`. Each pointer's lifecycle is independent. `pipeline.abortGesture(pointerId)` cleanly removes a specific gesture. `usePointerForwarding` tracks `activePointerId` per element and ignores events from other pointers.
 
-### Axis Handling Correctness
+**Remaining gap:** No gesture arbitration system. If two pointerIds start gestures on overlapping elements simultaneously, both gestures proceed independently. For a mobile launcher (single-touch typical), this is acceptable.
+
+### Axis Handling Correctness (updated)
 
 - `resolveAxis` correctly handles `horizontal`, `vertical`, `both`
-- `resolveByAxis1D` **does not handle `both`** (H1)
-- `resolveGate` assumes single-axis movement model — breaks for `axis: 'both'`
+- `resolveByAxis1D` now **throws** on `'both'` — prevents silent corruption (H1)
+- `resolveGate` has hysteresis margin — improved stability (M6)
 - Carousel correctly constrains swipe to its declared axis
-- `normalizedDelta` normalizes both axes regardless of which is primary
 
-### Modifier Interactions
+### Modifier Interactions (unchanged)
 
-- `lockSwipeAt` works correctly for carousel — blocks swipe past specified indices
-- `snap` works correctly for drag — snaps to grid on commit
-- `locked` prevents swiping (checked in `resolveSwipeTarget` and `buildReactions`)
-- **Missing:** No modifier for carousel snap-to-index override, no velocity-based commit
-
----
-
-## 6. React-Specific Review
-
-### Hook Misuse
-
-| Issue | Severity | Location |
-|-------|----------|----------|
-| `useEffect` for slot rotation that should be computed during render | 🔴 | `Carousel.tsx` |
-| `onReaction` callback not stabilized with `useCallback` or ref | 🟠 | `Carousel.tsx` → `usePointerForwarding` |
-| `useEffect` with mutation-only body (no cleanup needed) for `state.ensure` | 🟡 | `Carousel.tsx` |
-
-### State vs Ref Misuse
-
-- `slotsRef` should be state (or derived during render) since changes to it affect rendered output.
-- `mountedRef` is used to skip the first effect run — this is a workaround for not having initial state logic in the render phase.
-- `prevIndexRef` is correctly used as a ref (previous-value tracking).
-- `isActive` and `activePointerId` in `bridge.ts` are correctly refs (event handler state, not render-affecting).
-
-### Unnecessary Renders
-
-- Every call to any store's `setState` re-renders ALL subscribers (see H4).
-- `DebugWrapper` creates a new selector return object every render: `(s) => ({ device: s.device, scale: s.scale })`.
-- Inline `onReaction` arrow function in `Carousel.tsx` causes effect re-runs.
-
-### Effects That May Cause Bugs
-
-1. **Carousel slot rotation effect** — runs after render, leaves one frame with stale slots (C4).
-2. **`setCount` effect** has `interactive` in deps but only conditionally calls `setCount`:
-   ```tsx
-   useEffect(() => {
-       if (interactive)
-           state.setCount('carousel', id, scenes.length)
-   }, [id, scenes.length, interactive])
-   ```
-   When `interactive` changes from true to false, the effect runs but does nothing. Count is not reset. This is likely intentional but worth documenting.
-3. **`useCarouselSizing` ResizeObserver** — depends on `[elRef, axis, id]`. `elRef` is a RefObject (stable), but if `axis` or `id` change, the observer is torn down and re-created. Axis and id are typically static props, but if they aren't, the observer would briefly miss resize events.
-
-### Component Structure Issues
-
-- `Carousel.tsx` is ~150 lines with mixed concerns: state subscription, sizing, slot management, motion, pointer forwarding, scene resolution, and rendering. Consider splitting into smaller components or custom hooks.
-- `MirrorWrapper.tsx` duplicates the slot rotation logic from `Carousel.tsx`. If the algorithm changes, both must be updated.
+- `lockSwipeAt` works correctly for carousel
+- `snap` works correctly for drag
+- `locked` prevents swiping
+- **Missing:** No velocity-based commit for carousel
 
 ---
 
-## 7. Suggested Improvements
+## 7. React-Specific Review
 
-### Architectural Upgrades
+### Hook Usage (updated)
 
-1. **Replace `createStore` with Zustand.** Zustand uses the same `useSyncExternalStore` pattern but correctly handles immutable updates, selector-based subscriptions, and batching. The migration API surface is nearly identical.
+| Issue | Severity | Location | Status |
+|-------|----------|----------|--------|
+| ~~`useEffect` for slot rotation~~ | ~~🔴~~ | ~~`Carousel.tsx`~~ | **Fixed** — `useMemo` |
+| ~~`onReaction` not stabilized~~ | ~~🟠~~ | ~~`bridge.ts`~~ | **Fixed** — ref pattern |
+| `subscribe.useFull` causes over-rendering | 🟠 | `Carousel.tsx` | Remaining (H4) |
 
-2. **Instance-based interpreter.** Create a `GestureInterpreter` class that is instantiated per interactive element. Each instance tracks its own gesture state. The `usePointerForwarding` hook creates and manages its own interpreter instance.
+### State vs Ref Usage (updated)
 
-3. **Move slot rotation into the render phase.** Compute `slots` as derived state from `index` and `prevIndex` during render, not in an effect. Use `useMemo` or a pure function:
-   ```ts
-   const slots = useMemo(() => computeSlots(index, prevIndexRef.current, total), [index, total])
-   ```
+- ~~`slotsRef` should be state or derived~~ — **Fixed.** Slots are `useMemo`.
+- `isActive` and `activePointerId` in `bridge.ts` — correctly refs (event handler state).
 
-4. **Add re-entrancy guard to `setState`.** Track whether `setState` is currently executing. If called re-entrantly, queue the updater instead of executing immediately. Flush the queue and notify listeners once after all updaters run.
+### Unnecessary Renders (updated)
+
+- `subscribe.useFull` in `Carousel.tsx` re-renders on every field change (H4)
+- `subscribe.usePartial` without shallow equality re-renders on object selectors (H8)
+- Scene components not memoized (M4)
+
+### Effects That May Cause Bugs (remaining)
+
+1. **`setCount` effect** — when `interactive` changes from true to false, count is not reset. Likely intentional but worth documenting.
+2. **`useCarouselSizing` ResizeObserver** — depends on `[axis, id]`. If these change, observer briefly torn down. Acceptable for static props.
+
+### Component Structure
+
+- `Carousel.tsx` is ~120 lines with mixed concerns. Could benefit from further hook extraction.
+- `MirrorWrapper.tsx` is broken (C6) and duplicates logic that no longer matches `Carousel.tsx`.
+
+---
+
+## 8. Suggested Improvements
+
+### Remaining Architectural Work
+
+1. **Migrate `MirrorWrapper.tsx` to Zustand patterns** — currently broken (C6). Align with `Carousel.tsx`: `subscribe.useFull`, `useMemo` slots, sorted `renderSlots`.
+
+2. **Add `shallow` equality to `subscribe.usePartial`** — enables efficient object selectors without re-renders (H8).
+
+3. **Split Carousel subscriptions** — use `usePartial` for motion (offset/dragging/settling) vs scene (index/count/size) to reduce re-renders during drag (H4).
 
 ### Simplifications
 
-1. **Remove `views` from state.** The `views` records in carousel/drag/slider state are never read in the current codebase (commented out or unused). They add complexity without value.
+1. **Remove redundant `ensure()` calls from mutation hot paths** — trust mount-time initialization (M9).
 
-2. **Eliminate `ensure()` from the hot path.** Call `ensure` once during component mount (via `useEffect`). In solver/state mutation code, trust that the lane exists (it was ensured at mount). This converts `ensure` from a per-event check to a one-time setup.
+2. **Delete `useCarouselScenes.ts`** — unused hook, only `SceneRole` type is imported (L6).
 
-3. **Delete `useCarouselScenes.ts`** — it's unused and superseded by `useAugmentedScenes` + inline slot logic.
-
-4. **Delete `metaHooks.ts`** — entirely commented out.
+3. **Clean up commented-out code** in `sliderState.ts`, `dragState.ts`, `dragSolver.ts`, `Root.tsx` (L1).
 
 ### Patterns to Adopt
 
-1. **Discriminated union for Descriptor** — use `type` field as discriminator for automatic narrowing.
-2. **Stable callback refs** — use the `useRef` pattern for event callbacks passed to effects.
-3. **`React.memo`** on all scene/content components.
-4. **`requestAnimationFrame` for settling transition** instead of `setTimeout(0)`.
-5. **Early exit in `setPosition`** before calling `setState` if `pendingDir` is null.
-
-### Things to Remove
-
-- `views` records in all state files
-- `metaHooks.ts`
-- `useCarouselScenes.ts`
-- Commented-out code in `carouselState.ts`, `dragSolver.ts`, `Root.tsx`
-- The `[key: string]: unknown` index signature on `GestureUpdate`
-- The `scene-root` class from Root.tsx (rename to avoid collision)
+1. **`React.memo`** on all scene/content components (M4).
+2. **Discriminated union for Descriptor** — use `type` field for automatic narrowing.
+3. **Remove `[key: string]: unknown` from `GestureUpdate`** (L7).
+4. **Rename Root's `scene-root` class** to avoid collision with scene components (M8).
 
 ---
 
-## 8. Actionable Checklist
+## 9. Actionable Checklist
 
 ### 🔴 Must Fix (Blocks reliable operation)
 
-- [ ] **C1** — Fix `createStore` to use proper immutable updates (or adopt Zustand)
-- [ ] **C2** — Refactor `carouselState.ensure()` to work inside `setState` only
-- [ ] **C3** — Eliminate nested `setState` in `swipeStart` → `setPosition`
-- [ ] **C4** — Move slot rotation from `useEffect` into render phase
-- [ ] **C5** — Make interpreter instance-based or support concurrent gestures
+- [ ] **C6** — Migrate `MirrorWrapper.tsx` from dead `useCarouselState` API to Zustand patterns
 
-### 🟠 Should Fix (Likely bugs / significant performance)
+### 🟠 Should Fix (Performance / latent bugs)
 
-- [ ] **H1** — Handle `axis: 'both'` in `resolveByAxis1D`
-- [ ] **H2** — Fix `getSize()` fallback to return `{ x: 0, y: 0 }`
-- [ ] **H3** — Guard `onTransitionEnd` / `setPosition` from firing multiple times
-- [ ] **H4** — Add selector support to `useSyncExternalStore` to prevent unnecessary re-renders
-- [ ] **H5** — Stabilize `onReaction` callback with ref pattern
-- [ ] **H6** — Fix `setPosition` return value / guard before calling `setState`
-- [ ] **H7** — Add null guard for `target.data?.locked`
+- [ ] **H1** — Add functional support for `axis: 'both'` in solver pipeline (currently throws)
+- [ ] **H4** — Split `Carousel.tsx` subscriptions using `subscribe.usePartial` for motion vs scene state
+- [ ] **H8** — Add `shallow` equality comparator to `subscribe.usePartial` for object selectors
 
 ### 🟡 Should Address (Code quality / edge cases)
 
-- [ ] **M1** — Replace `setTimeout(0)` with `requestAnimationFrame` for settling
-- [ ] **M2** — Add runtime type assertions in solver entry points
 - [ ] **M3** — Migrate ambient global types to explicit imports
 - [ ] **M4** — Wrap scene components in `React.memo`
-- [ ] **M5** — Fix disabled gesture cleanup to not use fabricated coordinates
-- [ ] **M6** — Latch gate decision per gesture to prevent oscillation
-- [ ] **M7** — Verify StrictMode compatibility after `ensure` fix
+- [ ] **M6** — Latch gate decision once per gesture (currently re-evaluates per frame with hysteresis)
 - [ ] **M8** — Rename Root's container class to avoid `scene-root` collision
+- [ ] **M9** — Remove redundant `ensure()` calls from hot-path mutation functions
 
 ### 🟢 Nice to Have (Cleanup)
 
-- [ ] **L1** — Remove dead/commented-out code
-- [ ] **L2** — Standardize `ensure()` signatures
-- [ ] **L3** — Add `getServerSnapshot` to `createStore`
-- [ ] **L4** — Fix ref mutation during render (use `useMemo` or `useState`)
-- [ ] **L5** — Fix `isStateFn2Arg` name and scope
-- [ ] **L6** — Delete unused `useCarouselScenes.ts`
+- [ ] **L1** — Remove remaining dead/commented-out code (`Root.tsx`, `dragSolver.ts`, `sliderState.ts`, `dragState.ts`)
+- [ ] **L5** — Rename `isStateFn2Arg` to `isMutationFn` (reflects actual behavior)
+- [ ] **L6** — Delete unused `useCarouselScenes.ts` (move `SceneRole` type elsewhere)
+- [ ] **L7** — Remove `[key: string]: unknown` index signature from `GestureUpdate`
 
 ---
 
-*End of audit.*
+*End of audit. Updated March 25, 2026.*

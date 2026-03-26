@@ -1,6 +1,10 @@
 import { normalizeParameter, getAxisSize } from '../state/sizeState.ts'
 import { APP_SETTINGS } from '@config/appSettings.ts'
 import { targetResolver } from "./targetResolver.ts"
+import type { Reactions } from '@interaction/types/base.ts'
+import type { Descriptor } from '@interaction/types/descriptor.ts'
+import type { Vec2 } from '@interaction/types/primitives.ts'
+import type { Axis } from '@interaction/types/primitives.ts'
 
 export const utils = {
     //intentUtils.js
@@ -50,8 +54,8 @@ export const utils = {
         return distance >= screenSize * ratio
     },
 
-    resolveTarget(x: number, y: number): {desc: Descriptor; } | null {
-        const target = targetResolver.resolveFromPoint(x, y)
+    resolveTarget(x: number, y: number, pointerId: number): {desc: Descriptor; } | null {
+        const target = targetResolver.resolveFromPoint(x, y, pointerId)
         if (target) {
             return { desc: target }
         }
@@ -63,7 +67,7 @@ export const utils = {
         if (target) {
             const axis = this.resolveAxis(intentAxis, target)
             const canSwipe = this.resolveSupports('swipeable', target) && axis
-            if (canSwipe && !target.data.locked) {
+            if (canSwipe && !target.data?.locked) {
                 return {
                     desc: target,
                     pressCancel: false,
@@ -72,7 +76,7 @@ export const utils = {
         }
 
         // Fallback: find lane by axis
-        const newTarget = targetResolver.resolveLaneByAxis(x, y, intentAxis)
+        const newTarget = targetResolver.resolveLaneByAxis(x, y, intentAxis, target.base.pointerId)
         if (newTarget) {
             return {
                 desc: newTarget,

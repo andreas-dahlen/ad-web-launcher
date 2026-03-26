@@ -2,6 +2,17 @@
 import { APP_SETTINGS } from "@config/appSettings.ts"
 import { vector } from "./vectorUtils.ts"
 
+interface Normalized1D {
+  mainTrackSize?: number | null
+  crossTrackSize?: number | null
+  mainThumbSize?: number | null
+  crossThumbSize?: number | null
+  mainOffset?: number | null
+  crossOffset?: number | null
+  mainDelta?: number | null
+  crossDelta?: number | null
+}
+
 export const utils = {
     /* -------------------------
         normalize
@@ -47,7 +58,7 @@ if (desc.base.type === 'carousel') {
     resolveGate(norm: Normalized1D) {
         const currentPos = (norm.crossOffset ?? 0) + (norm.crossDelta ?? 0)
         const crossSize = norm.crossTrackSize ?? 0
-        return currentPos < 0 || currentPos > crossSize
+        return currentPos < APP_SETTINGS.hysteresis || currentPos > crossSize + APP_SETTINGS.hysteresis
     },
     /* -------------------------
         slider-specifics

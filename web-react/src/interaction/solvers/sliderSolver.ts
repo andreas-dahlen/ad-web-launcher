@@ -42,6 +42,7 @@ export const sliderSolver: Partial<Record<EventType, (desc: Descriptor) => Runti
       delta1D: result?.value, 
       stateAccepted: true,
       gestureUpdate: {
+        pointerId: desc.base.pointerId,
         sliderStartOffset: result?.value,
         sliderValuePerPixel: result?.valuePerPixel
       }

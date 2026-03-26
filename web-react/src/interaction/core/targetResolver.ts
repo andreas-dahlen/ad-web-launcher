@@ -1,5 +1,9 @@
+import type { Axis, EventType, InteractionType } from '@interaction/types/primitives.ts'
 import { state } from '../state/stateManager.ts'
 import { utils } from './intentUtils.ts'
+import type { Descriptor } from '@interaction/types/descriptor.ts'
+import type { SwipeData } from '@interaction/types/data.ts'
+import type { BaseInteraction, Reactions } from '@interaction/types/base.ts'
 
 interface Context {
   el: HTMLElement
@@ -16,32 +20,32 @@ interface Context {
 }
 
 export const targetResolver = {
-  resolveFromElement(el: HTMLElement | null, x: number, y: number): Descriptor | null {
+  resolveFromElement(el: HTMLElement | null, x: number, y: number, pointerId: number, event: EventType): Descriptor | null {
     if (!el) return null
 
     const ctx = this.buildContext(el)
     if (!ctx) return null
 
     const reactions = this.buildReactions(ctx.ds, ctx.laneValid)
-    const base = this.buildBase(ctx, x, y)
-    const swipe = this.buildSwipe(ctx)
-    const modifiers = this.buildModifiers(ctx)
+    const base = this.buildBase(ctx, x, y, pointerId, event)
+    const data = this.buildSwipe(ctx)
+    // const modifiers = this.buildModifiers(ctx)
 
-    const runtime: RuntimeData = {
-      event: "press", // placeholders
-      delta: { x: 0, y: 0 } // placeholders
-    }
-    const dataPayload = swipe
-      ? { ...swipe, ...(modifiers ?? {}) }
-      : null
-    // Deep merge sub-objects (modifiers may add to carousel/drag)
+    // // const runtime: RuntimeData = {
+    // //   event: "press", // placeholders
+    // //   delta: { x: 0, y: 0 } // placeholders
+    // // }
+    // const dataPayload = swipe
+    //   ? { ...swipe, ...(modifiers ?? {}) }
+    //   : null
+    // // Deep merge sub-objects (modifiers may add to carousel/drag)
 
     return {
       base: base,
       reactions: reactions,
-      data: dataPayload,
-      runtime: runtime
-    } as Descriptor
+      data: data,
+      runtime: {}
+    }
   },
 
   buildContext(el: HTMLElement): Context {
@@ -58,75 +62,57 @@ export const targetResolver = {
     return { el, ds, id, axis, type, laneValid, snapX, snapY, lockPrevAt, lockNextAt, locked }
   },
 
-  buildBase(ctx: Context, x: number, y: number): BaseInteraction & { type: InteractionType}{
+  buildBase(ctx: Context, x: number, y: number, pointerId: number, event: EventType): BaseInteraction & { type: InteractionType } {
     return {
+      type: ctx.type,
+      event: event,
+      delta: { x: x, y: y },
+      pointerId: pointerId,
       element: ctx.el,
       id: ctx.id,
-      type: ctx.type,
       axis: ctx.laneValid && ctx.axis != null ? ctx.axis : null,
-      // actionId: ctx.ds.action ?? undefined,
       baseOffset: utils.resolveStartOffset(x, y, ctx.el)
+      // actionId: ctx.ds.action ?? undefined,
     }
   },
 
   buildSwipe(ctx: Context): SwipeData | null {
     if (!ctx.laneValid) return null
 
-    const { id, type } = ctx
+    // const { id, type } = ctx
+
 
     // Helper to merge modifiers into data
-    const applyModifiers = <T extends SwipeData>(data: T): T => {
-      const mods = this.buildModifiers(ctx)
-      return mods ? { ...data, ...mods } as T : data
-    }
+    // const applyModifiers = <T extends SwipeData>(data: T): T => {
+    //   const mods = this.buildModifiers(ctx)
+    //   return mods ? { ...data, ...mods } as T : data
+    // }
 
-    if (type === 'carousel') {
-      const index = state.getCurrentIndex(type, id) as number
-      const size = state.getSize(type, id) as Vec2
-      if (index != null && size != null) {
-        const data = { index, size }
-        return applyModifiers(data)
+    switch (ctx.type) {
+      case 'carousel': {
+        const index = state.getCurrentIndex(ctx.type, ctx.id)
+        const size = state.getSize(ctx.type, ctx.id)
+        // const data = {index, size}
+        if (index == null || size == null) return null
+        const lockSwipeAt = { prev: ctx.lockPrevAt, next: ctx.lockNextAt }
+        return { index, size, lockSwipeAt }
       }
-    }
-
-    if (type === 'slider') {
-      const thumbSize = state.getThumbSize(type, id) as Vec2
-      const constraints = state.getConstraints(type, id) as SliderData["constraints"]
-      const size = state.getSize(type, id) as Vec2//{x, y}
-      if (thumbSize != null && constraints != null && size != null) {
-        const data = { thumbSize, constraints, size }
-        return applyModifiers(data)
+      case 'slider': {
+        const thumbSize = state.getThumbSize(ctx.type, ctx.id)
+        const constraints = state.getConstraints(ctx.type, ctx.id)
+        const size = state.getSize(ctx.type, ctx.id)
+        if (!thumbSize || !constraints || !size) return null
+        return { thumbSize, constraints, size }
       }
-    }
-
-    if (type === 'drag') {
-      const position = state.getPosition(type, id) as Vec2//{x, y}
-      const constraints = state.getConstraints(type, id) as DragData["constraints"]//{minX, maxX, minY, maxY}
-      if (position != null && constraints != null) {
-        const data = { position, constraints }
-        return applyModifiers(data)
+      case 'drag': {
+        const position = state.getPosition(ctx.type, ctx.id)
+        const constraints = state.getConstraints(ctx.type, ctx.id)
+        if (!position || !constraints) return null
+        const snap = { x: ctx.snapX, y: ctx.snapY }
+        return { position, constraints, snap, locked }
       }
+      default: return null
     }
-    return null
-  },
-
-  buildModifiers(ctx: Context): Modifiers | null {
-    //CAROUSEL
-    const lockSwipeAt = ctx.lockPrevAt != null && ctx.lockNextAt != null
-      ? { prev: ctx.lockPrevAt, next: ctx.lockNextAt }
-      : undefined
-
-    if (ctx.type === 'carousel' && lockSwipeAt) {
-      return { lockSwipeAt }
-    }
-    //DRAG
-    const snap = ctx.snapX != null && ctx.snapY != null
-      ? { x: ctx.snapX, y: ctx.snapY }
-      : undefined
-    if (ctx.type === 'drag' && (snap || ctx.locked)) {
-      return { snap: snap, locked: ctx.locked }
-    }
-    return null
   },
 
   buildReactions(ds: DOMStringMap, laneValid: boolean): Reactions {
@@ -158,18 +144,18 @@ export const targetResolver = {
     return reactions.pressable || reactions.swipeable || reactions.modifiable
   },
 
-  resolveFromPoint(x: number, y: number): Descriptor | null {
+  resolveFromPoint(x: number, y: number, pointerId: number): Descriptor | null {
     const elements = document.elementsFromPoint(x, y)
     for (const el of elements) {
       if (!(el instanceof HTMLElement)) continue
       const ctx = this.buildContext(el)
       if (!ctx) continue
       const reactions = this.buildReactions(ctx.ds, ctx.laneValid)
-      if (this.isEligible(reactions)) return this.resolveFromElement(el, x, y)
+      if (this.isEligible(reactions)) return this.resolveFromElement(el, x, y, pointerId, 'press')
     }
     return null
   },
-  resolveLaneByAxis(x: number, y: number, inputAxis: Axis): Descriptor | null {
+  resolveLaneByAxis(x: number, y: number, inputAxis: Axis, pointerId: number): Descriptor | null {
     const el = document.elementsFromPoint(x, y).find((
       el): el is HTMLElement => {
       if (!(el instanceof HTMLElement)) return false
@@ -182,6 +168,6 @@ export const targetResolver = {
       return laneValid && !locked
     })
 
-    return el ? this.resolveFromElement(el, x, y) : null
+    return el ? this.resolveFromElement(el, x, y, pointerId, 'swipeStart') : null
   }
 }

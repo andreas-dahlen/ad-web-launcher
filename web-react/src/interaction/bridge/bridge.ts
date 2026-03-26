@@ -11,6 +11,10 @@ interface PointerForwardingProps {
 export function usePointerForwarding({ elRef, onReaction, disabled }: PointerForwardingProps) {
   const isActive = useRef(false)
   const activePointerId = useRef<number | null>(null)
+  const onReactionRef = useRef(onReaction)
+  useEffect(() => {
+    onReactionRef.current = onReaction
+  }, [onReaction])
 
   useEffect(() => {
     if (!disabled) return
@@ -18,13 +22,7 @@ export function usePointerForwarding({ elRef, onReaction, disabled }: PointerFor
     const el = elRef.current
 
     if (isActive.current && activePointerId.current !== null) {
-      // Finish gesture cleanly in your system
-      pipeline.orchestrate({
-        eventType: 'up',
-        x: 0,
-        y: 0,
-      })
-
+      pipeline.abortGesture(activePointerId.current) // cleanly abort
       // Release DOM capture if it exists
       if (el) {
         try {
@@ -40,6 +38,7 @@ export function usePointerForwarding({ elRef, onReaction, disabled }: PointerFor
     isActive.current = false
     activePointerId.current = null
   }, [elRef, disabled])
+
 
   useEffect(() => {
     const el = elRef.current
@@ -57,6 +56,7 @@ export function usePointerForwarding({ elRef, onReaction, disabled }: PointerFor
         eventType: 'down',
         x: e.clientX,
         y: e.clientY,
+        pointerId: e.pointerId
       })
     }
 
@@ -67,6 +67,7 @@ export function usePointerForwarding({ elRef, onReaction, disabled }: PointerFor
         eventType: 'move',
         x: e.clientX,
         y: e.clientY,
+        pointerId: e.pointerId
       })
     }
 
@@ -81,6 +82,7 @@ export function usePointerForwarding({ elRef, onReaction, disabled }: PointerFor
         eventType: 'up',
         x: e.clientX,
         y: e.clientY,
+        pointerId: e.pointerId
       })
 
       isActive.current = false
@@ -88,7 +90,9 @@ export function usePointerForwarding({ elRef, onReaction, disabled }: PointerFor
     }
 
     function handleReaction(e: Event) {
-      onReaction?.(e as CustomEvent)
+      if (onReactionRef.current && e instanceof CustomEvent) {
+        onReactionRef.current(e)
+      }
     }
 
     el.addEventListener('pointerdown', handlePointerDown)
@@ -104,5 +108,5 @@ export function usePointerForwarding({ elRef, onReaction, disabled }: PointerFor
       el.removeEventListener('pointercancel', handlePointerUp)
       el.removeEventListener('reaction', handleReaction)
     }
-  }, [elRef, onReaction, disabled])
+  }, [elRef, disabled])
 }

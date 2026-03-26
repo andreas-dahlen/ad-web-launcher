@@ -24,15 +24,16 @@ export const carouselSolver: Partial<Record<EventType, (desc: Descriptor) => Run
    */
   swipe(descriptor) {
     const desc = descriptor as CarouselDescriptor
+    if (desc.base.type !== 'carousel') throw new Error('suppose to be swipe carousel descriptor but got: ')
     const norm = utils.normalize1D(desc)
     const gated = utils.resolveGate(norm)
     if (norm.mainDelta == null) return
 
-    const locked = desc.data.lockSwipeAt 
-    ? utils.isCarouselBlocked(norm.mainDelta, desc.data?.index, desc.data?.lockSwipeAt) 
-    : null
+    const locked = desc.data.lockSwipeAt
+      ? utils.isCarouselBlocked(norm.mainDelta, desc.data?.index, desc.data?.lockSwipeAt)
+      : null
 
-    if (gated || locked) { return {stateAccepted: false } }
+    if (gated || locked) { return { stateAccepted: false } }
     return { delta1D: norm.mainDelta, stateAccepted: true }
   },
 
@@ -42,16 +43,17 @@ export const carouselSolver: Partial<Record<EventType, (desc: Descriptor) => Run
 
   swipeCommit(descriptor) {
     const desc = descriptor as CarouselDescriptor
+    if (desc.base.type !== 'carousel') throw new Error('suppose to be swipe carousel descriptor but got: ')
     const norm = utils.normalize1D(desc)
     const gated = utils.resolveGate(norm)
 
-        if (norm.mainDelta == null) return {event: 'swipeRevert', stateAccepted: true}
+    if (norm.mainDelta == null) return { event: 'swipeRevert', stateAccepted: true }
 
-    const locked = desc.data.lockSwipeAt 
-    ? utils.isCarouselBlocked(norm.mainDelta, desc.data?.index, desc.data?.lockSwipeAt) 
-    : null
+    const locked = desc.data.lockSwipeAt
+      ? utils.isCarouselBlocked(norm.mainDelta, desc.data?.index, desc.data?.lockSwipeAt)
+      : null
 
-    if (gated || locked || !desc.base.axis) return {event: 'swipeRevert', stateAccepted: true}
+    if (gated || locked || !desc.base.axis) return { event: 'swipeRevert', stateAccepted: true }
 
     const solution = utils.resolveCarouselCommit(norm, desc.base.axis)
     if (solution) return {
@@ -59,7 +61,7 @@ export const carouselSolver: Partial<Record<EventType, (desc: Descriptor) => Run
       delta1D: solution.delta,
       stateAccepted: true
     }
-    return {event: 'swipeRevert', stateAccepted: true}
+    return { event: 'swipeRevert', stateAccepted: true }
   },
 }
 

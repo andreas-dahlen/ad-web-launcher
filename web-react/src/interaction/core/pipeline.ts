@@ -1,4 +1,4 @@
-import { isGestureType, isStateFn2Arg } from '@config/utils/gestureTypeGuards.ts'
+// import { isGestureType, isStateFn2Arg } from '@interaction/types/gestureTypeGuards.ts'
 
 import { interpreter } from './interpreter.ts'
 import { carouselSolver } from '../solvers/carouselSolver.ts'
@@ -6,6 +6,8 @@ import { sliderSolver } from '../solvers/sliderSolver.ts'
 import { dragSolver } from '../solvers/dragSolver.ts'
 import { state } from '../state/stateManager.ts'
 import { render } from '../updater/renderer.ts'
+import type { EventBridgeType, EventType, DataKeys } from '@interaction/types/primitives.ts'
+import type { Descriptor } from '@interaction/types/descriptor.ts'
 
 /* =========================================================
    Pointer bridge input
@@ -15,6 +17,7 @@ interface PointerEventPackage {
   eventType: EventBridgeType
   x: number
   y: number
+  pointerId: number
 }
 
 /* =========================================================
@@ -39,7 +42,7 @@ const solverRegistry: Partial<Record<DataKeys, SolverMap>> = {
    Interpreter bridge
 ========================================================= */
 
-type InterpreterFn = (x: number, y: number) => Descriptor | null
+type InterpreterFn = (x: number, y: number, pointerId: number) => Descriptor | null
 
 const interpreterMap: Record<EventBridgeType, InterpreterFn> = {
   down: interpreter.onDown,
@@ -52,14 +55,21 @@ const interpreterMap: Record<EventBridgeType, InterpreterFn> = {
 ========================================================= */
 
 export const pipeline = {
+  /* -------------------------
+     Abort!
+  -------------------------- */
+
+  abortGesture(pointerId: number) {
+    interpreter.deleteGesture(pointerId)
+  },
 
   orchestrate(desc: PointerEventPackage) {
-
+    
     /* -------------------------
        Interpreter
     -------------------------- */
 
-    const { eventType, x, y } = desc
+    const { eventType, x, y, pointerId} = desc
 
     const interpreterFn = interpreterMap[eventType]
 
@@ -68,7 +78,7 @@ export const pipeline = {
       return null
     }
 
-    const descriptor = interpreterFn(x, y)
+    const descriptor = interpreterFn(x, y, pointerId)
 
     if (!descriptor) return null
     /* -------------------------

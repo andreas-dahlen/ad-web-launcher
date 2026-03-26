@@ -15,6 +15,7 @@ export interface AppSettings {
   swipeAnimationMs: number
   swipeThresholdRatio: number
   swipeCommitRatio: number
+  hysteresis: number
 }
 
 export const APP_SETTINGS: AppSettings = {
@@ -30,7 +31,8 @@ export const APP_SETTINGS: AppSettings = {
   swipeAnimationMs: 250,
 
   swipeThresholdRatio: 0.05, // start of swipe distance
-  swipeCommitRatio: 0.2      // commitment distance on release
+  swipeCommitRatio: 0.2,      // commitment distance on release
+  hysteresis: 5  // gitter removal for gating to remove gitters
 }
 
 /* -------------------------------------------------

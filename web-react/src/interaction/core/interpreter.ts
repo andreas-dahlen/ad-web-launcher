@@ -1,24 +1,26 @@
-import { log, drawDots } from '@debug/functions.ts'
+import { log } from '@debug/functions.ts'
 import { utils } from './intentUtils.ts'
+
+import type { Axis, Vec2 } from '@interaction/types/primitives.ts'
+import type { Descriptor } from '@interaction/types/descriptor.ts'
+import type { GestureUpdate } from '@interaction/types/data.ts'
+import type { CancelData } from '@interaction/types/base.ts'
 
 /* =========================================================
    Gesture state
 ========================================================= */
 
+type GestureMap = Record<number, GestureState>
+const gestures: GestureMap = {}
+
 interface GestureState {
-    phase: 'IDLE' | 'PENDING' | 'SWIPING'
+    pointerId: number
+    phase: 'PENDING' | 'SWIPING'
     start: Vec2
     last: Vec2
     totalDelta: Vec2
-    desc?: Descriptor
+    desc: Descriptor
 }
-const gesture: GestureState = {
-    phase: 'IDLE',
-    start: { x: 0, y: 0 },
-    last: { x: 0, y: 0 },
-    totalDelta: { x: 0, y: 0 }
-}
-
 /* =========================================================
    Public API
 ========================================================= */
@@ -26,153 +28,151 @@ export const interpreter = {
     onDown,
     onMove,
     onUp,
-    resetGesture,
-    applyGestureUpdate
+    applyGestureUpdate,
+    deleteGesture
 }
+
 function applyGestureUpdate(update: GestureUpdate) {
-    if (!gesture.desc) return
-    gesture.desc.runtime = {
-        ...gesture.desc.runtime,
-        ...update
+    const { pointerId, ...runtimeUpdate } = update
+    const g = gestures[pointerId]
+
+    if (!g || !g.desc) return
+    g.desc.runtime.gestureUpdate = {
+        ...g.desc.runtime.gestureUpdate,
+        ...runtimeUpdate
     }
 }
-/* =========================================================
-   Helpers
-========================================================= */
 
-function resetGesture() {
-    gesture.phase = 'IDLE'
-    gesture.start.x = 0
-    gesture.start.y = 0
-    gesture.last.x = 0
-    gesture.last.y = 0
-    gesture.totalDelta.x = 0
-    gesture.totalDelta.y = 0
-    gesture.desc = undefined
+function deleteGesture(pointerId: number) {
+    delete gestures[pointerId]
 }
 
 /* =========================================================
    Event handlers
 ========================================================= */
 
-function onDown(x: number, y: number): Descriptor | null {
-    drawDots(x, y, 'green')
-    gesture.phase = 'PENDING'
-    gesture.start.x = x
-    gesture.start.y = y
-    gesture.last.x = x
-    gesture.last.y = y
-    gesture.totalDelta.x = 0
-    gesture.totalDelta.y = 0
-    gesture.desc = undefined
-
-    const resolved = utils.resolveTarget(x, y)
+function onDown(x: number, y: number, pointerId: number): Descriptor | null {
+    const resolved = utils.resolveTarget(x, y, pointerId)
     if (!resolved) return null
-    gesture.desc = resolved.desc
-    // if(gesture.desc?.startOffset) gesture.desc.startOffset = resolved.offset
-    if (utils.resolveSupports('pressable', gesture.desc)) {
-        gesture.desc.runtime = {
-            ...gesture.desc.runtime,
-            event: 'press',
-            delta: { x, y }
-        }
-        return gesture.desc
+    gestures[pointerId] = {
+        pointerId: pointerId,
+        phase: 'PENDING',
+        start: { x: x, y: y },
+        last: { x: x, y: y },
+        totalDelta: { x: 0, y: 0 },
+        desc: resolved.desc
+    }
+
+    // const resolved = utils.resolveTarget(x, y, pointerId)
+    if (!resolved) return null
+    const g = gestures[pointerId]
+
+    if (utils.resolveSupports('pressable', g.desc)) {
+        // g.desc.runtime = {
+        //     ...g.desc.runtime,
+        //     // event: 'press',
+        //     delta: { x, y }
+        // }
+        return g.desc
     }
     return null
 }
 
-function onMove(x: number, y: number): Descriptor | null {
-    if (gesture.phase === 'IDLE') return null
-    drawDots(x, y, 'yellow')
-    const absX = Math.abs(x - gesture.start.x)
-    const absY = Math.abs(y - gesture.start.y)
+function onMove(x: number, y: number, pointerId: number): Descriptor | null {
+    const g = gestures[pointerId]
+    if (!g) return null
+    const absX = Math.abs(x - g.start.x)
+    const absY = Math.abs(y - g.start.y)
     const biggest = Math.max(absX, absY)
     /* -------------------------------------------------------
        Pending → swipe start
     ------------------------------------------------------- */
 
-    if (gesture.phase === 'PENDING') {
-        if (!gesture.desc) return null
-        if (!utils.swipeThresholdCalc(biggest, gesture.desc)) return null
+    if (g.phase === 'PENDING') {
+        if (!g.desc) return null
+        if (!utils.swipeThresholdCalc(biggest, g.desc)) return null
         const intentAxis: Axis = absX > absY ? 'horizontal' : 'vertical'
-        const resolved = utils.resolveSwipeTarget(x, y, intentAxis, gesture.desc)
+        const resolved = utils.resolveSwipeTarget(x, y, intentAxis, g.desc)
 
         if (!resolved) return null
         const cancel: CancelData | undefined = resolved.pressCancel
-            ? { element: gesture.desc.base.element, pressCancel: true }
+            ? { element: g.desc.base.element, pressCancel: true }
             : undefined
 
-        gesture.phase = 'SWIPING'
-        gesture.desc = resolved.desc
-        gesture.last.x = x
-        gesture.last.y = y
+        g.phase = 'SWIPING'
+        g.desc = resolved.desc
+        g.last.x = x
+        g.last.y = y
 
-        gesture.desc.runtime = {
-            ...gesture.desc.runtime,
-            event: 'swipeStart',
-            delta: { x, y },
+        g.desc.runtime = {
+            ...g.desc.runtime,
+            // event: 'swipeStart',
+            // delta: { x, y },
             cancel
         }
-        return gesture.desc
+        return g.desc
     }
 
     /* -------------------------------------------------------
        Active swipe
     ------------------------------------------------------- */
 
-    if (gesture.phase === 'SWIPING' && gesture.desc) {
+    if (g.phase === 'SWIPING' && g.desc) {
 
-        const deltaX = x - gesture.last.x
-        const deltaY = y - gesture.last.y
-        gesture.totalDelta.x += deltaX
-        gesture.totalDelta.y += deltaY
-        gesture.last.x = x
-        gesture.last.y = y
+        const deltaX = x - g.last.x
+        const deltaY = y - g.last.y
 
-        gesture.desc.runtime = {
-            ...gesture.desc.runtime,
-            event: 'swipe',
-            delta: utils.normalizedDelta(gesture.totalDelta)
-        }
-        return gesture.desc
+        g.totalDelta.x += deltaX
+        g.totalDelta.y += deltaY
+
+        g.last.x = x
+        g.last.y = y
+
+        // g.desc.runtime = {
+        //     ...g.desc.runtime,
+        //     // event: 'swipe',
+        //     // delta: utils.normalizedDelta(g.totalDelta)
+        // }
+        return g.desc
     }
     return null
 }
 
-function onUp(x: number, y: number): Descriptor | null {
-    if (gesture.phase !== 'SWIPING' && gesture.phase !== 'PENDING') {
-        log('init', 'gesture.phase error:', gesture.phase)
+function onUp(x: number, y: number, pointerId: number): Descriptor | null {
+    const g = gestures[pointerId]
+    if (!g) return null
+    if (g.phase !== 'SWIPING' && g.phase !== 'PENDING') {
+        log('init', 'gesture.phase error:', g.phase)
         return null
     }
     /* -------------------------------------------------------
        Swipe end
     ------------------------------------------------------- */
 
-    if (gesture.phase === 'SWIPING' && gesture.desc) {
+    if (g.phase === 'SWIPING' && g.desc) {
 
-        gesture.desc.runtime = {
-            ...gesture.desc.runtime,
-            event: 'swipeCommit',
-            delta: utils.normalizedDelta(gesture.totalDelta)
-        }
-        const descriptor = gesture.desc
-        resetGesture()
-        
+        // g.desc.runtime = {
+        //     ...g.desc.runtime,
+        //     // event: 'swipeCommit',
+        //     // delta: utils.normalizedDelta(g.totalDelta)
+        // }
+        const descriptor = g.desc
+        delete gestures[pointerId]
         return descriptor
     }
 
     /* -------------------------------------------------------
        Press release
     ------------------------------------------------------- */
-    if (gesture.phase === 'PENDING' && gesture.desc) {
+    if (g.phase === 'PENDING' && g.desc) {
 
-        gesture.desc.runtime = {
-            ...gesture.desc?.runtime,
-            event: 'pressRelease',
-            delta: {x, y}
-        }
-        const descriptor = gesture.desc
-        resetGesture()
+        // g.desc.runtime = {
+            // ...g.desc?.runtime,
+            // event: 'pressRelease',
+            // delta: { x, y }
+        // }
+        const descriptor = g.desc
+        delete gestures[pointerId]
         return descriptor
     }
     return null

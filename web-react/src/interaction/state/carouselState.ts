@@ -1,4 +1,6 @@
 import { store } from './zustandStore.ts'
+import type { Direction, Vec2 } from '@interaction/types/primitives.ts'
+import type { Descriptor } from '@interaction/types/descriptor.ts'
 export const carouselStateFn = {
   /* -------------------------
      Ensure lane exists
@@ -66,7 +68,7 @@ getters
     })
   },
 
-setPosition(id: string): boolean {
+setPosition(id: string) {
   const lane = this.ensure(id)
   if (!lane.pendingDir) return false
 
@@ -83,7 +85,7 @@ setPosition(id: string): boolean {
     })
   })
 
-  return true
+  // return true
 },
   /* -------------------------
        Dispatcher / mutations
