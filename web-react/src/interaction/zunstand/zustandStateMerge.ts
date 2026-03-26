@@ -2,8 +2,8 @@
 import { immer } from "zustand/middleware/immer"
 // import { shallow } from "zustand/shallow"
 import { createWithEqualityFn } from 'zustand/traditional'
-import type { Direction, Vec2 } from "@interaction/types/primitives"
-import type { Descriptor } from "@interaction/types/descriptor"
+import type { Direction, Vec2 } from "@interaction/types/primitives.ts"
+import type { CarouselDescriptor } from "@interaction/types/descriptor.ts"
 
 type Carousel = {
   //react motion
@@ -31,9 +31,10 @@ export type Store = {
   setTrackSize: (id: string, trackSize: Vec2) => void
   setPosition: (id: string) => void
 
-  swipe: (desc: Descriptor) => void
-  swipeRevert: (desc: Descriptor) => void
-  swipeCommit: (desc: Descriptor) => void
+  swipeStart: (desc: CarouselDescriptor) => void
+  swipe: (desc: CarouselDescriptor) => void
+  swipeRevert: (desc: CarouselDescriptor) => void
+  swipeCommit: (desc: CarouselDescriptor) => void
 }
 
 export const carouselStore = createWithEqualityFn<Store>()(
@@ -97,26 +98,26 @@ export const carouselStore = createWithEqualityFn<Store>()(
       })
     },
 
-    swipeStart: (desc: Descriptor) => {
+    swipeStart: (desc) => {
       set(state => {
         const s = state.carouselStore[desc.base.id]
         s.dragging = true
         s.settling = false
         if (s.pendingDir !== null) {
-          s.index = this.getNextIndex(s.index, s.pendingDir, s.count)
+          s.index = getNextIndex(s.index, s.pendingDir, s.count)
           s.offset = 0
           s.pendingDir = null
         }
       })
     },
 
-    swipe: (desc: Descriptor) => {
+    swipe: (desc) => {
       set(state => {
         const offset = desc.runtime.delta1D
         if (offset) state.carouselStore[desc.base.id].offset = offset
       })
     },
-    swipeCommit: (desc: Descriptor) => {
+    swipeCommit: (desc) => {
       set(state => {
         const s = state.carouselStore[desc.base.id]
         if (s.settling) return
@@ -125,7 +126,7 @@ export const carouselStore = createWithEqualityFn<Store>()(
         s.dragging = false
       })
     },
-    swipeRevert: (desc: Descriptor) => {
+    swipeRevert: (desc) => {
       set(state => {
         const s = state.carouselStore[desc.base.id]
         s.offset = 0
@@ -152,19 +153,19 @@ function getNextIndex(currentIndex: number, direction: Direction | null, count: 
 }
 
 
-export const getCarousel = (id: string) => {
-  const c = useStore.getState().carouselStore[id]
-  if (!c) throw new Error(`Carousel ${id} not initialized`)
-  return c
-}
+// export const getCarousel = (id: string) => {
+//   const c = useStore.getState().carouselStore[id]
+//   if (!c) throw new Error(`Carousel ${id} not initialized`)
+//   return c
+// }
 
-export const mutateCarousel = (id: string, fn: (c: Carousel) => void) => {
-  useStore.setState(state => {
-    const c = state.carouselStore[id]
-    if (!c) throw new Error(`Carousel ${id} not initialized`)
-    fn(c)
-  })
-}
+// export const mutateCarousel = (id: string, fn: (c: Carousel) => void) => {
+//   useStore.setState(state => {
+//     const c = state.carouselStore[id]
+//     if (!c) throw new Error(`Carousel ${id} not initialized`)
+//     fn(c)
+//   })
+// }
 
 
 /* =========================================================

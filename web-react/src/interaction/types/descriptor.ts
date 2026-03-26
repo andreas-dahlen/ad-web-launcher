@@ -4,28 +4,72 @@ import type { CarouselRuntime, SliderRuntime, DragRuntime } from "./runtime.ts"
 import type { Reactions } from "./base.ts"
 
 
-export type Descriptor = 
-| {
-  base: BaseInteraction
+// export type Descriptor = 
+// | {
+//   base: BaseInteraction& { type: 'carousel' }
+//   data: CarouselData & CarouselModifiers
+//   runtime: CarouselRuntime
+//   reactions: Reactions
+// }
+// | {
+//   base: BaseInteraction& { type: 'slider' }
+//   data: SliderData
+//   runtime: SliderRuntime
+//   reactions: Reactions
+// }
+// | {
+//   base: BaseInteraction& { type: 'drag' }
+//   data: DragData & DragModifiers
+//   runtime: DragRuntime
+//   reactions: Reactions
+// }
+// | {
+//   base: BaseInteraction& { type: 'button' }
+//   reactions: Reactions
+// }
+
+export type CarouselDescriptor = {
+  base: BaseInteraction & { type: 'carousel' }
   data: CarouselData & CarouselModifiers
   runtime: CarouselRuntime
   reactions: Reactions
 }
-| {
-  base: BaseInteraction
+
+export type SliderDescriptor = {
+  base: BaseInteraction & { type: 'slider' }
   data: SliderData
   runtime: SliderRuntime
   reactions: Reactions
 }
-| {
-  base: BaseInteraction
+
+export type DragDescriptor = {
+  base: BaseInteraction & { type: 'drag' }
   data: DragData & DragModifiers
   runtime: DragRuntime
   reactions: Reactions
 }
-| {
-  base: BaseInteraction
+
+export type ButtonDescriptor = {
+  base: BaseInteraction & { type: 'button' }
   reactions: Reactions
+}
+
+export type Descriptor =
+  | CarouselDescriptor
+  | SliderDescriptor
+  | DragDescriptor
+  | ButtonDescriptor
+
+  export function isCarouselDesc(desc: Descriptor): desc is CarouselDescriptor {
+  return desc.base.type === 'carousel'
+}
+
+export function isSliderDesc(desc: Descriptor): desc is SliderDescriptor {
+  return desc.base.type === 'slider'
+}
+
+export function isDragDesc(desc: Descriptor): desc is DragDescriptor {
+  return desc.base.type === 'drag'
 }
 // export type InteractionDataMap = {
 // carousel: CarouselData & CarouselModifiers

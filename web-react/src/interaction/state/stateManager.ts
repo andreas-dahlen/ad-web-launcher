@@ -1,11 +1,50 @@
-import { carouselStateFn } from './carouselState.ts'
-import { sliderStateFn } from './sliderState.ts'
-import { dragStateFn } from './dragState.ts'
-import type { DataKeys } from '@interaction/types/primitives.ts'
-import type { Descriptor } from '@interaction/types/descriptor.ts'
+import type { CarouselDescriptor, DragDescriptor, SliderDescriptor } from '@interaction/types/descriptor.ts'
 import { carouselStore } from '@interaction/zunstand/zustandStateMerge.ts'
-import type { Store } from '@interaction/zunstand/zustandStateMerge.ts'
-import type { WritableDraft } from 'immer'
+import { dragStore } from '@interaction/zunstand/zustandDrag.ts'
+import { sliderStore } from '@interaction/zunstand/zustandSlider.ts'
+
+
+// type CallStoreAction = {
+//     press: (desc: Descriptor) => void
+//     swipeStart: (desc: Descriptor) => void
+//     swipe: (desc: Descriptor) => void
+//     swipeCommit: (desc: Descriptor) => void
+//     swipeRevert: (desc: Descriptor) => void
+// }
+type AllowedEvents<T extends keyof EventMap> = EventMap[T][number]
+
+type EventMap = {
+  carousel: ['swipeStart', 'swipe', 'swipeCommit', 'swipeRevert']
+  slider: ['swipeStart', 'swipe', 'swipeCommit', 'swipeRevert']
+  drag: ['swipeStart', 'swipe', 'swipeCommit', 'swipeRevert']
+}
+
+type DescriptorOfStore<T extends keyof StoreMap> =
+  T extends 'carousel' ? CarouselDescriptor :
+  T extends 'slider'   ? SliderDescriptor :
+  T extends 'drag'     ? DragDescriptor :
+  never
+
+type StoreMap = {
+  [K in keyof EventMap]: {
+    [E in AllowedEvents<K>]?: (desc: DescriptorOfStore<K>) => void
+  }
+}
+
+const stores: StoreMap = {
+  carousel: carouselStore.getState(),
+  slider: sliderStore.getState(),
+  drag: dragStore.getState(),
+}
+
+export function callStoreAction<
+  T extends keyof StoreMap,
+  E extends AllowedEvents<T>
+>(type: T, event: E, desc: DescriptorOfStore<T>) {
+  const store = stores[type]
+  const handler = store[event] as ((desc: DescriptorOfStore<T>) => void) | undefined
+    handler?.(desc)
+}
 
 // assuming these are Zustand stores with immer
 // const stores = {
