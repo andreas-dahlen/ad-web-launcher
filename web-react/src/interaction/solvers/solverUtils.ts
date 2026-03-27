@@ -3,14 +3,14 @@ import { APP_SETTINGS } from "@config/appSettings.ts"
 import { vector } from "./vectorUtils.ts"
 
 interface Normalized1D {
-  mainTrackSize?: number | null
-  crossTrackSize?: number | null
-  mainThumbSize?: number | null
-  crossThumbSize?: number | null
-  mainOffset?: number | null
-  crossOffset?: number | null
-  mainDelta?: number | null
-  crossDelta?: number | null
+    mainTrackSize?: number | null
+    crossTrackSize?: number | null
+    mainThumbSize?: number | null
+    crossThumbSize?: number | null
+    mainOffset?: number | null
+    crossOffset?: number | null
+    mainDelta?: number | null
+    crossDelta?: number | null
 }
 
 export const utils = {
@@ -24,12 +24,12 @@ export const utils = {
 
         // lane/track size only exists on carousel or slider
         let trackSize: Vec2 | null = null
-        
-if (desc.base.type === 'carousel') {
-    trackSize = (desc.data as CarouselDescriptor['data']).size
-} else if (desc.base.type === 'slider') {
-    trackSize = (desc.data as SliderDescriptor['data']).size
-}
+
+        if (desc.base.type === 'carousel') {
+            trackSize = (desc.data as CarouselDescriptor['data']).size
+        } else if (desc.base.type === 'slider') {
+            trackSize = (desc.data as SliderDescriptor['data']).size
+        }
 
         // thumb only exists on slider
         const thumbSize = desc.base.type === 'slider'

@@ -28,3 +28,7 @@ body {
 html, body, #app {
   height: 100%;
 }
+
+.test {
+    background-color: #632898;
+}

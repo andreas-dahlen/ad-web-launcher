@@ -167,9 +167,9 @@ function onUp(x: number, y: number, pointerId: number): Descriptor | null {
     if (g.phase === 'PENDING' && g.desc) {
 
         // g.desc.runtime = {
-            // ...g.desc?.runtime,
-            // event: 'pressRelease',
-            // delta: { x, y }
+        // ...g.desc?.runtime,
+        // event: 'pressRelease',
+        // delta: { x, y }
         // }
         const descriptor = g.desc
         delete gestures[pointerId]

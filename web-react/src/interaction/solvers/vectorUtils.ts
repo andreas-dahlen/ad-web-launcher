@@ -23,20 +23,20 @@ export const vector = {
         }
     },
 
-resolveByAxis1D(value: Vec2, axis: Exclude<Axis, 'both'>) {
-    if (!value) return { prim: undefined, sub: undefined }
+    resolveByAxis1D(value: Vec2, axis: Exclude<Axis, 'both'>) {
+        if (!value) return { prim: undefined, sub: undefined }
 
-    switch (axis) {
-        case 'horizontal': return { prim: value.x, sub: value.y }
-        case 'vertical':   return { prim: value.y, sub: value.x }
-        // case 'both':
-        //     throw new Error(
-        //         "resolveByAxis1D called with axis === 'both', which is unsupported"
-        //     )
-        default:
-            throw new Error(`resolveByAxis1D called with unknown axis: ${axis}`)
-    }
-},
+        switch (axis) {
+            case 'horizontal': return { prim: value.x, sub: value.y }
+            case 'vertical': return { prim: value.y, sub: value.x }
+            // case 'both':
+            //     throw new Error(
+            //         "resolveByAxis1D called with axis === 'both', which is unsupported"
+            //     )
+            default:
+                throw new Error(`resolveByAxis1D called with unknown axis: ${axis}`)
+        }
+    },
 
     resolveDirection(delta: Vec2 | number, axis?: Axis): Direction | undefined {
         // 1D axis-based

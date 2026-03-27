@@ -80,7 +80,6 @@ export function updateSize() {
        s.scaledHeight = scaledHeight
     })
 }
-
 /**
  * Return the size along a given axis
  */

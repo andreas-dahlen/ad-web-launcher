@@ -54,7 +54,7 @@ export const utils = {
         return distance >= screenSize * ratio
     },
 
-    resolveTarget(x: number, y: number, pointerId: number): {desc: Descriptor; } | null {
+    resolveTarget(x: number, y: number, pointerId: number): { desc: Descriptor; } | null {
         const target = targetResolver.resolveFromPoint(x, y, pointerId)
         if (target) {
             return { desc: target }
@@ -62,7 +62,7 @@ export const utils = {
         return null
     },
 
-    resolveSwipeTarget(x: number, y: number, intentAxis: Axis, target: Descriptor): {desc: Descriptor; pressCancel: boolean} | null { //TODO: rename function to resolveSwipeStart?
+    resolveSwipeTarget(x: number, y: number, intentAxis: Axis, target: Descriptor): { desc: Descriptor; pressCancel: boolean } | null { //TODO: rename function to resolveSwipeStart?
         // Priority: target must support swipeStart AND the intent axis
         if (target) {
             const axis = this.resolveAxis(intentAxis, target)

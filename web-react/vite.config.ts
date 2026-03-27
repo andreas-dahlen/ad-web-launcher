@@ -15,16 +15,6 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      // "@components": path.resolve(__dirname, "src/components"),
-      // "@config": path.resolve(__dirname, "src/config"),
-      // "@debug": path.resolve(__dirname, "src/debug"),
-      // "@hooks": path.resolve(__dirname, "src/hooks"),
-      // "@interaction": path.resolve(__dirname, "src/interaction"),
-      // "@layout": path.resolve(__dirname, "src/layout"),
-      // "@styles": path.resolve(__dirname, "src/styles"),
-      // "@types": path.resolve(__dirname, "src/types"),
-      // "@utils": path.resolve(__dirname, "src/utils")
-
 
       "@indexes": path.resolve(__dirname, "src/app/indexes"),
       "@layers": path.resolve(__dirname, "src/app/layers"),

@@ -1,4 +1,4 @@
-.relative-max-size{
+.relative-max-size {
   width: 100%;
   height: 100%;
   position: relative;
@@ -44,10 +44,12 @@
   height: 90%;
   width: 30%;
 }
+
 .horizontal-slider {
   height: 30%;
   width: 90%;
 }
+
 .debug-shell {
   width: 100vw;
   height: 100vh;
