@@ -68,25 +68,25 @@ getters
     })
   },
 
-setPosition(id: string) {
-  const lane = this.ensure(id)
-  if (!lane.pendingDir) return false
+  setPosition(id: string) {
+    const lane = this.ensure(id)
+    if (!lane.pendingDir) return false
 
-  store.mutate('carousel', id, (s) => {
-    s.settling = true
-    s.index = this.getNextIndex(s.index, s.pendingDir, s.count)
-    s.offset = 0
-    s.pendingDir = null
-  })
-
-  requestAnimationFrame(() => {
     store.mutate('carousel', id, (s) => {
-      s.settling = false
+      s.settling = true
+      s.index = this.getNextIndex(s.index, s.pendingDir, s.count)
+      s.offset = 0
+      s.pendingDir = null
     })
-  })
 
-  // return true
-},
+    requestAnimationFrame(() => {
+      store.mutate('carousel', id, (s) => {
+        s.settling = false
+      })
+    })
+
+    // return true
+  },
   /* -------------------------
        Dispatcher / mutations
   -------------------------- */

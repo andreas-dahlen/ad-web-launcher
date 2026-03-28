@@ -1,7 +1,7 @@
 import type { CarouselDescriptor, DragDescriptor, SliderDescriptor } from '@interaction/types/descriptor.ts'
-import { carouselStore } from '@interaction/zunstand/carouselState'
-import { dragStore } from '@interaction/zunstand/dragState'
-import { sliderStore } from '@interaction/zunstand/sliderState.ts'
+import { carouselStore } from './carouselState'
+import { dragStore } from './dragState.ts'
+import { sliderStore } from './sliderState.ts'
 
 
 // type CallStoreAction = {
@@ -15,7 +15,7 @@ export type AllowedEvents<T extends keyof EventMap> = EventMap[T][number]
 
 type EventMap = {
   carousel: ['swipeStart', 'swipe', 'swipeCommit', 'swipeRevert']
-  slider: ['swipeStart', 'swipe', 'swipeCommit', 'swipeRevert']
+  slider: ['press', 'swipeStart', 'swipe', 'swipeCommit', 'swipeRevert']
   drag: ['swipeStart', 'swipe', 'swipeCommit', 'swipeRevert']
 }
 

@@ -4,10 +4,11 @@ import { interpreter } from './interpreter.ts'
 import { carouselSolver } from '../solvers/carouselSolver.ts'
 import { sliderSolver } from '../solvers/sliderSolver.ts'
 import { dragSolver } from '../solvers/dragSolver.ts'
-import { state } from '../state/stateManager.ts'
+import { callStoreAction, type AllowedEvents } from '@interaction/zunstand/stateManager.ts'
 import { render } from '../updater/renderer.ts'
 import type { EventBridgeType, EventType, DataKeys } from '@interaction/types/primitives.ts'
-import type { Descriptor } from '@interaction/types/descriptor.ts'
+import { isButtonDesc, isGestureType, isSliderDesc, type Descriptor } from '@interaction/types/descriptor.ts'
+import type { Solutions } from '@interaction/types/solutions.ts'
 
 /* =========================================================
    Pointer bridge input
@@ -24,7 +25,7 @@ interface PointerEventPackage {
    Solver typing
 ========================================================= */
 
-type SolverFn = (desc: Descriptor) => Partial<RuntimeData> | void
+type SolverFn = (desc: Descriptor) => Solutions | void
 
 type SolverMap = Partial<Record<EventType, SolverFn>>
 
@@ -64,12 +65,12 @@ export const pipeline = {
   },
 
   orchestrate(desc: PointerEventPackage) {
-    
+
     /* -------------------------
        Interpreter
     -------------------------- */
 
-    const { eventType, x, y, pointerId} = desc
+    const { eventType, x, y, pointerId } = desc
 
     const interpreterFn = interpreterMap[eventType]
 
@@ -85,41 +86,50 @@ export const pipeline = {
        Solvers
     -------------------------- */
 
-    const { base: { type }, runtime: { event } } = descriptor
+    const { base: { type, event } } = descriptor
 
     let solution: Descriptor = descriptor
 
-    if (event && isGestureType(type)) {
+    if (event && isGestureType(type) && !isButtonDesc(descriptor)) {
       const solverFn = solverRegistry[type]?.[event]
       const solverResult = solverFn?.(descriptor)
 
       if (solverResult) {
         solution = {
           ...descriptor,
-          runtime: {
-            ...descriptor.runtime,
+          solutions: {
+            ...descriptor.solutions,
             ...solverResult
           }
         }
+        if (isSliderDesc(solution) && solution.solutions.gestureUpdate)
+          interpreter.applyGestureUpdate(solution.solutions.gestureUpdate)
 
       }
-      if (solution.runtime.gestureUpdate) {
-        interpreter.applyGestureUpdate(solution.runtime.gestureUpdate)
-      }
+      /* -------------------------
+         State mutations
+      -------------------------- */
+      // if (!isButtonDesc(solution) && solution.solutions.stateAccepted && solution.base.event && solution.base.type) {
+
+      //   if (solution.base.event && isGestureType(solution.base.type)) {
+
     }
+    if (!isButtonDesc(solution) && solution.solutions.stateAccepted) {
+      const { type, event } = solution.base
+      if (isGestureType(type) && ['press', 'swipeStart', 'swipe', 'swipeCommit', 'swipeRevert'].includes(event)) {
+        callStoreAction(type, event as AllowedEvents<typeof type>, solution)
+      }
+      // callStoreAction(solution.base.type, solution.base.event as Parameters<typeof callStoreAction<typeof solution.base.type, AllowedEvents<typeof solution.base.type>>>[1], solution)
 
-    /* -------------------------
-       State mutations
-    -------------------------- */
-    if (solution.runtime.stateAccepted && solution.runtime.event && solution.base.type) {
+      // const fn = callStoreAction[solution.base.event] as (type: DataKeys, desc: Descriptor) => unknown
+      // fn(solution.base.type, solution.base.event, solution)
+
 
       // const fn = state[solution.runtime.event as keyof typeof state]
       // fn(solution.base.type, solution)
-      if (solution.runtime.event && isStateFn2Arg(solution.runtime.event) && isGestureType(solution.base.type)) {
-        const fn = state[solution.runtime.event] as (type: DataKeys, desc: Descriptor) => unknown
-        fn(solution.base.type, solution)
-      }
     }
+
+
 
     /* -------------------------
        Renderer

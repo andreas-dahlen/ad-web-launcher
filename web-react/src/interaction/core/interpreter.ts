@@ -1,8 +1,8 @@
 import { log } from '@debug/functions.ts'
 import { utils } from './intentUtils.ts'
 
-import type { Axis, Vec2 } from '@interaction/types/primitives.ts'
-import type { Descriptor } from '@interaction/types/descriptor.ts'
+import type { Axis, EventType, Vec2 } from '@interaction/types/primitives.ts'
+import { isButtonDesc, isSliderDesc, type Descriptor } from '@interaction/types/descriptor.ts'
 import type { GestureUpdate } from '@interaction/types/data.ts'
 import type { CancelData } from '@interaction/types/base.ts'
 
@@ -33,13 +33,12 @@ export const interpreter = {
 }
 
 function applyGestureUpdate(update: GestureUpdate) {
-    const { pointerId, ...runtimeUpdate } = update
-    const g = gestures[pointerId]
-
-    if (!g || !g.desc) return
-    g.desc.runtime.gestureUpdate = {
-        ...g.desc.runtime.gestureUpdate,
-        ...runtimeUpdate
+    const g = gestures[update.pointerId]
+    if (isSliderDesc(g.desc)) {
+        g.desc.solutions.gestureUpdate = {
+            ...g.desc.solutions.gestureUpdate,
+            ...update,
+        }
     }
 }
 
@@ -62,17 +61,9 @@ function onDown(x: number, y: number, pointerId: number): Descriptor | null {
         totalDelta: { x: 0, y: 0 },
         desc: resolved.desc
     }
-
-    // const resolved = utils.resolveTarget(x, y, pointerId)
-    if (!resolved) return null
     const g = gestures[pointerId]
 
     if (utils.resolveSupports('pressable', g.desc)) {
-        // g.desc.runtime = {
-        //     ...g.desc.runtime,
-        //     // event: 'press',
-        //     delta: { x, y }
-        // }
         return g.desc
     }
     return null
@@ -94,7 +85,7 @@ function onMove(x: number, y: number, pointerId: number): Descriptor | null {
         const intentAxis: Axis = absX > absY ? 'horizontal' : 'vertical'
         const resolved = utils.resolveSwipeTarget(x, y, intentAxis, g.desc)
 
-        if (!resolved) return null
+        if (!resolved || isButtonDesc(resolved.desc)) return null
         const cancel: CancelData | undefined = resolved.pressCancel
             ? { element: g.desc.base.element, pressCancel: true }
             : undefined
@@ -104,10 +95,8 @@ function onMove(x: number, y: number, pointerId: number): Descriptor | null {
         g.last.x = x
         g.last.y = y
 
-        g.desc.runtime = {
-            ...g.desc.runtime,
-            // event: 'swipeStart',
-            // delta: { x, y },
+        g.desc = {
+            ...g.desc,
             cancel
         }
         return g.desc
@@ -128,52 +117,33 @@ function onMove(x: number, y: number, pointerId: number): Descriptor | null {
         g.last.x = x
         g.last.y = y
 
-        // g.desc.runtime = {
-        //     ...g.desc.runtime,
-        //     // event: 'swipe',
-        //     // delta: utils.normalizedDelta(g.totalDelta)
-        // }
+        if (!isButtonDesc(g.desc)) {
+            const delta = utils.normalizedDelta(g.totalDelta)
+            g.desc.base.delta = delta ? delta : g.desc.base.delta
+            g.desc.base.event = 'swipe'
+            return g.desc
+        }
         return g.desc
     }
     return null
 }
 
-function onUp(x: number, y: number, pointerId: number): Descriptor | null {
+function finalizeGesture(g: GestureState, event: EventType): Descriptor {
+    if ('delta' in g.desc.base) {
+        g.desc.base.event = event
+    }
+    const descriptor = g.desc
+    delete gestures[g.pointerId]
+    return descriptor
+}
+
+function onUp(_x: number, _y: number, pointerId: number): Descriptor | null {
     const g = gestures[pointerId]
     if (!g) return null
-    if (g.phase !== 'SWIPING' && g.phase !== 'PENDING') {
-        log('init', 'gesture.phase error:', g.phase)
-        return null
-    }
-    /* -------------------------------------------------------
-       Swipe end
-    ------------------------------------------------------- */
 
-    if (g.phase === 'SWIPING' && g.desc) {
+    if (g.phase === 'SWIPING') return finalizeGesture(g, 'swipeCommit')
+    if (g.phase === 'PENDING') return finalizeGesture(g, 'pressRelease')
 
-        // g.desc.runtime = {
-        //     ...g.desc.runtime,
-        //     // event: 'swipeCommit',
-        //     // delta: utils.normalizedDelta(g.totalDelta)
-        // }
-        const descriptor = g.desc
-        delete gestures[pointerId]
-        return descriptor
-    }
-
-    /* -------------------------------------------------------
-       Press release
-    ------------------------------------------------------- */
-    if (g.phase === 'PENDING' && g.desc) {
-
-        // g.desc.runtime = {
-        // ...g.desc?.runtime,
-        // event: 'pressRelease',
-        // delta: { x, y }
-        // }
-        const descriptor = g.desc
-        delete gestures[pointerId]
-        return descriptor
-    }
+    log('init', 'gesture.phase error:', g.phase)
     return null
 }

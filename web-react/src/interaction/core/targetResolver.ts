@@ -1,50 +1,59 @@
-import type { Axis, EventType, InteractionType } from '@interaction/types/primitives.ts'
-import { state } from '../state/stateManager.ts'
+import type { Axis, DataKeys, EventType, InteractionType } from '@interaction/types/primitives.ts'
 import { utils } from './intentUtils.ts'
-import type { Descriptor } from '@interaction/types/descriptor.ts'
-import type { SwipeData } from '@interaction/types/data.ts'
-import type { BaseInteraction, Reactions } from '@interaction/types/base.ts'
+import { type ButtonDescriptor, type CarouselDescriptor, type Descriptor, type DragDescriptor, type SliderDescriptor } from '@interaction/types/descriptor.ts'
+import type { BaseInteraction, BaseWithSwipe, Builder, ButtonContext, CarouselContext, Context, DragContext, Reactions, SliderContext } from '@interaction/types/base.ts'
+import type { CarouselData, CarouselModifiers, DragData, DragModifiers, SliderData } from '@interaction/types/data.ts'
+import { carouselStore } from '@interaction/zunstand/carouselState.ts'
+import { sliderStore } from '@interaction/zunstand/sliderState.ts'
+import { dragStore } from '@interaction/zunstand/dragState.ts'
 
-interface Context {
-  el: HTMLElement
-  ds: DOMStringMap
-  id: string
-  axis: Axis | null
-  type: InteractionType
-  laneValid: boolean
-  snapX: number | null
-  snapY: number | null
-  lockPrevAt: number | null
-  lockNextAt: number | null
-  locked: boolean
-}
 
 export const targetResolver = {
-  resolveFromElement(el: HTMLElement | null, x: number, y: number, pointerId: number, event: EventType): Descriptor | null {
-    if (!el) return null
-
+  resolveFromElement(el: HTMLElement, x: number, y: number, pointerId: number, event: EventType): Descriptor | null {
     const ctx = this.buildContext(el)
-    if (!ctx) return null
-
     const reactions = this.buildReactions(ctx.ds, ctx.laneValid)
-    const base = this.buildBase(ctx, x, y, pointerId, event)
-    const data = this.buildSwipe(ctx)
-    // const modifiers = this.buildModifiers(ctx)
-
-    // // const runtime: RuntimeData = {
-    // //   event: "press", // placeholders
-    // //   delta: { x: 0, y: 0 } // placeholders
-    // // }
-    // const dataPayload = swipe
-    //   ? { ...swipe, ...(modifiers ?? {}) }
-    //   : null
-    // // Deep merge sub-objects (modifiers may add to carousel/drag)
-
+    const r = { reactions, x, y, pointerId, event }
+    switch (ctx.type) {
+      case 'carousel':
+        return this.buildCarousel(ctx, r)
+      case 'slider':
+        return this.buildSlider(ctx, r)
+      case 'drag':
+        return this.buildDrag(ctx, r)
+      case 'button':
+        return this.buildButton(ctx, r)
+      default:
+        return null
+    }
+  },
+  buildCarousel(ctx: CarouselContext, r: Builder): CarouselDescriptor {
     return {
-      base: base,
-      reactions: reactions,
-      data: data,
-      runtime: {}
+      base: this.buildSwipeBase<'carousel'>(ctx, r),
+      data: this.buildCarouselData(ctx),
+      reactions: r.reactions,
+      solutions: { stateAccepted: false }
+    }
+  },
+  buildSlider(ctx: SliderContext, r: Builder): SliderDescriptor {
+    return {
+      base: this.buildSwipeBase<'slider'>(ctx, r),
+      data: this.buildSliderData(ctx),
+      reactions: r.reactions,
+      solutions: { stateAccepted: false }
+    }
+  },
+  buildDrag(ctx: DragContext, r: Builder): DragDescriptor {
+    return {
+      base: this.buildSwipeBase<'drag'>(ctx, r),
+      data: this.buildDragData(ctx),
+      reactions: r.reactions,
+      solutions: { stateAccepted: false }
+    }
+  },
+  buildButton(ctx: ButtonContext, r: Builder): ButtonDescriptor {
+    return {
+      base: this.buildBase<'button'>(ctx, r.pointerId, r.event, ctx.type),
+      reactions: r.reactions,
     }
   },
 
@@ -62,57 +71,45 @@ export const targetResolver = {
     return { el, ds, id, axis, type, laneValid, snapX, snapY, lockPrevAt, lockNextAt, locked }
   },
 
-  buildBase(ctx: Context, x: number, y: number, pointerId: number, event: EventType): BaseInteraction & { type: InteractionType } {
+  buildBase<T extends InteractionType>(ctx: Context, pointerId: number, event: EventType, type: T): BaseInteraction & { type: T } {
     return {
-      type: ctx.type,
+      type: type,
       event: event,
-      delta: { x: x, y: y },
       pointerId: pointerId,
       element: ctx.el,
       id: ctx.id,
-      axis: ctx.laneValid && ctx.axis != null ? ctx.axis : null,
-      baseOffset: utils.resolveStartOffset(x, y, ctx.el)
-      // actionId: ctx.ds.action ?? undefined,
+      actionId: ctx.ds.action ?? undefined,
+
     }
   },
 
-  buildSwipe(ctx: Context): SwipeData | null {
-    if (!ctx.laneValid) return null
-
-    // const { id, type } = ctx
-
-
-    // Helper to merge modifiers into data
-    // const applyModifiers = <T extends SwipeData>(data: T): T => {
-    //   const mods = this.buildModifiers(ctx)
-    //   return mods ? { ...data, ...mods } as T : data
-    // }
-
-    switch (ctx.type) {
-      case 'carousel': {
-        const index = state.getCurrentIndex(ctx.type, ctx.id)
-        const size = state.getSize(ctx.type, ctx.id)
-        // const data = {index, size}
-        if (index == null || size == null) return null
-        const lockSwipeAt = { prev: ctx.lockPrevAt, next: ctx.lockNextAt }
-        return { index, size, lockSwipeAt }
-      }
-      case 'slider': {
-        const thumbSize = state.getThumbSize(ctx.type, ctx.id)
-        const constraints = state.getConstraints(ctx.type, ctx.id)
-        const size = state.getSize(ctx.type, ctx.id)
-        if (!thumbSize || !constraints || !size) return null
-        return { thumbSize, constraints, size }
-      }
-      case 'drag': {
-        const position = state.getPosition(ctx.type, ctx.id)
-        const constraints = state.getConstraints(ctx.type, ctx.id)
-        if (!position || !constraints) return null
-        const snap = { x: ctx.snapX, y: ctx.snapY }
-        return { position, constraints, snap, locked }
-      }
-      default: return null
+  buildSwipe<T extends DataKeys>(base: BaseInteraction & { type: T }, ctx: Context, x: number, y: number): BaseWithSwipe<T> {
+    return {
+      ...base,
+      delta: { x: x, y: y },
+      axis: ctx.laneValid && ctx.axis != null ? ctx.axis : null,
+      baseOffset: utils.resolveStartOffset(x, y, ctx.el)
     }
+  },
+  buildSwipeBase<T extends DataKeys>(ctx: Context, r: Builder): BaseWithSwipe<T> {
+    const base = this.buildBase<T>(ctx, r.pointerId, r.event, ctx.type as T)
+    return this.buildSwipe<T>(base, ctx, r.x, r.y)
+  },
+
+  buildCarouselData(ctx: Context): CarouselData & CarouselModifiers {
+    const s = carouselStore.getState().get(ctx.id)
+    const lockSwipeAt = { prev: ctx.lockPrevAt, next: ctx.lockNextAt }
+    return { index: s.index, size: s.size, lockSwipeAt }
+  },
+  buildSliderData(ctx: Context): SliderData {
+    const s = sliderStore.getState().get(ctx.id)
+    return { thumbSize: s.thumbSize, constraints: { min: s.min, max: s.max }, size: s.size }
+  },
+  buildDragData(ctx: Context): DragData & DragModifiers {
+    const s = dragStore.getState().get(ctx.id)
+    const snap = (ctx.snapX != null && ctx.snapY != null) ? { x: ctx.snapX, y: ctx.snapY } : undefined
+    const c = { minX: s.minX, maxX: s.maxX, minY: s.minY, maxY: s.maxY }
+    return { position: s.position, constraints: c, snap: snap, locked: ctx.locked }
   },
 
   buildReactions(ds: DOMStringMap, laneValid: boolean): Reactions {

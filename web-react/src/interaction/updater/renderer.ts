@@ -1,4 +1,6 @@
 // renderer.ts
+import type { Descriptor } from '@interaction/types/descriptor.ts'
+import type { EventType } from '@interaction/types/primitives'
 /* -------------------------------------------------
    DOM helpers
 ------------------------------------------------- */

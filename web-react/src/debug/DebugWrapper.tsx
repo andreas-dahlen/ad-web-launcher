@@ -1,6 +1,7 @@
 import { ensure } from "@interaction/state/sizeState.ts"
+import type { PropsWithChildren } from 'react'
 
-export default function DebugWrapper({ children }: ChildrenProps) {
+export default function DebugWrapper({ children }: PropsWithChildren) {
 
   const { device, scale } = ensure()
 

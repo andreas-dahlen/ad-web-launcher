@@ -2,7 +2,7 @@ import { normalizeParameter, getAxisSize } from '../state/sizeState.ts'
 import { APP_SETTINGS } from '@config/appSettings.ts'
 import { targetResolver } from "./targetResolver.ts"
 import type { Reactions } from '@interaction/types/base.ts'
-import type { Descriptor } from '@interaction/types/descriptor.ts'
+import { isButtonDesc, isDragDesc, type Descriptor } from '@interaction/types/descriptor.ts'
 import type { Vec2 } from '@interaction/types/primitives.ts'
 import type { Axis } from '@interaction/types/primitives.ts'
 
@@ -23,9 +23,9 @@ export const utils = {
     /**
      * Returns: 'horizontal' | 'vertical' | 'both' | null
      */
-    resolveAxis(intentAxis: Axis, target?: Descriptor): Axis | null {
-        if (!target?.base.axis) return null
-        if (target.data?.locked) return null
+    resolveAxis(intentAxis: Axis, target: Descriptor): Axis | null {
+        if (isButtonDesc(target)) return null
+        if (isDragDesc(target) && target.data.locked) return null
         // Target accepts both → use intent axis
         if (target.base.axis === 'both') {
             return 'both'
@@ -64,14 +64,13 @@ export const utils = {
 
     resolveSwipeTarget(x: number, y: number, intentAxis: Axis, target: Descriptor): { desc: Descriptor; pressCancel: boolean } | null { //TODO: rename function to resolveSwipeStart?
         // Priority: target must support swipeStart AND the intent axis
-        if (target) {
-            const axis = this.resolveAxis(intentAxis, target)
-            const canSwipe = this.resolveSupports('swipeable', target) && axis
-            if (canSwipe && !target.data?.locked) {
-                return {
-                    desc: target,
-                    pressCancel: false,
-                }
+        const axis = this.resolveAxis(intentAxis, target)
+        const canSwipe = this.resolveSupports('swipeable', target)
+        const isLocked = isDragDesc(target) && target.data.locked
+        if (canSwipe && !isLocked && axis) {
+            return {
+                desc: target,
+                pressCancel: false,
             }
         }
 

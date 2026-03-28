@@ -1,7 +1,8 @@
-import type { BaseInteraction } from "./base.ts"
+import type { BaseInteraction, BaseWithSwipe, CancelData } from "./base.ts"
 import type { CarouselData, CarouselModifiers, SliderData, DragData, DragModifiers } from "./data.ts"
-import type { CarouselRuntime, SliderRuntime, DragRuntime } from "./runtime.ts"
+import type { CarouselSolutions, SliderSolutions, DragSolutions } from "./solutions.ts"
 import type { Reactions } from "./base.ts"
+import type { DataKeys, InteractionType } from '@interaction/types/primitives.ts'
 
 
 // export type Descriptor = 
@@ -29,24 +30,27 @@ import type { Reactions } from "./base.ts"
 // }
 
 export type CarouselDescriptor = {
-  base: BaseInteraction & { type: 'carousel' }
+  base: BaseWithSwipe<'carousel'>
   data: CarouselData & CarouselModifiers
-  runtime: CarouselRuntime
+  solutions: CarouselSolutions
   reactions: Reactions
+  cancel?: CancelData
 }
 
 export type SliderDescriptor = {
-  base: BaseInteraction & { type: 'slider' }
+  base: BaseWithSwipe<'slider'>
   data: SliderData
-  runtime: SliderRuntime
+  solutions: SliderSolutions
   reactions: Reactions
+  cancel?: CancelData
 }
 
 export type DragDescriptor = {
-  base: BaseInteraction & { type: 'drag' }
+  base: BaseWithSwipe<'drag'>
   data: DragData & DragModifiers
-  runtime: DragRuntime
+  solutions: DragSolutions
   reactions: Reactions
+  cancel?: CancelData
 }
 
 export type ButtonDescriptor = {
@@ -70,6 +74,16 @@ export function isSliderDesc(desc: Descriptor): desc is SliderDescriptor {
 
 export function isDragDesc(desc: Descriptor): desc is DragDescriptor {
   return desc.base.type === 'drag'
+}
+
+export function isButtonDesc(desc: Descriptor): desc is ButtonDescriptor {
+  return desc.base.type === 'button'
+}
+
+export function isGestureType(type: InteractionType | null): type is DataKeys {
+  return type === "carousel" ||
+         type === "slider" ||
+         type === "drag"
 }
 // export type InteractionDataMap = {
 // carousel: CarouselData & CarouselModifiers

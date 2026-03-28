@@ -1,7 +1,7 @@
 // import { state } from "@interaction/state/stateManager"
 import { immer } from "zustand/middleware/immer"
 // import { shallow } from "zustand/shallow"
-import { createWithEqualityFn } from 'zustand/traditional'
+import { create } from 'zustand'
 import type { Direction, Vec2 } from "@interaction/types/primitives.ts"
 import type { CarouselDescriptor } from "@interaction/types/descriptor.ts"
 
@@ -12,7 +12,7 @@ type Carousel = {
 
   //reactScenes
   count: number
-  trackSize: Vec2 //renamed from size... should be reactive...??
+  size: Vec2
   dragging: boolean
 
   //read only... not used by react..?:
@@ -28,7 +28,7 @@ export type Store = {
 
   setCount: (id: string, count: number) => void
   // setScenes: (id: string, scenes: number[]) => void
-  setTrackSize: (id: string, trackSize: Vec2) => void
+  setSize: (id: string, trackSize: Vec2) => void
   setPosition: (id: string) => void
 
   swipeStart: (desc: CarouselDescriptor) => void
@@ -37,7 +37,7 @@ export type Store = {
   swipeCommit: (desc: CarouselDescriptor) => void
 }
 
-export const carouselStore = createWithEqualityFn<Store>()(
+export const carouselStore = create<Store>()(
   immer((set, get) => ({
 
     carouselStore: {},
@@ -52,7 +52,7 @@ export const carouselStore = createWithEqualityFn<Store>()(
           offset: 0,
 
           count: 0,
-          trackSize: { x: 0, y: 0 },
+          size: { x: 0, y: 0 },
           dragging: false,
 
           // scenes: [0,1,2],
@@ -78,9 +78,9 @@ export const carouselStore = createWithEqualityFn<Store>()(
         state.carouselStore[id].count = count
       })
     },
-    setTrackSize: (id, trackSize) => {
+    setSize: (id, trackSize) => {
       set(state => {
-        state.carouselStore[id].trackSize = trackSize
+        state.carouselStore[id].size = trackSize
       })
     },
     setPosition: (id) => {
@@ -182,20 +182,23 @@ API
 HOOKS
 ========================================================= */
 
-// export const subscribeToCarouselMotion = (id: string) =>
-//   useStore(
-//     s => {
+// export const useCarouselMotion = (id: string) =>
+//   carouselStore(
+//     useShallow(s => {
 //       const c = s.carouselStore[id]
+//       // Important: Guard against undefined if the component renders before init()
+//       if (!c) return { offset: 0, dragging: false } 
+      
 //       return { offset: c.offset, dragging: c.dragging }
-//     },
-//     shallow
+//     })
 //   )
 
-// export const subscribeToCarouselScene = (id: string) =>
-//   useStore(
-//     s => {
+// export const useCarouselScene = (id: string) =>
+//   carouselStore(
+//     useShallow(s => {
 //       const c = s.carouselStore[id]
+//       if (!c) return { index: 0, count: 0 }
+      
 //       return { index: c.index, count: c.count }
-//     },
-//     shallow
+//     })
 //   )

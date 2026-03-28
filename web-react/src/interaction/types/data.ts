@@ -32,14 +32,8 @@ export interface SliderData {
   size: Vec2
 }
 
-export type SwipeData =
-  | (CarouselData & CarouselModifiers)
-  | SliderData
-  | (DragData & DragModifiers)
-
 export interface GestureUpdate {
-  //update goes where?
-  //pointerId will not be transfared but used as key.. also slider is the only one right now... could be for... dragData..?
+  //Updates stay as its own part of descriptor and is never merged into other parts. Currently only used for slider
   pointerId: number
   sliderStartOffset?: number
   sliderValuePerPixel?: number

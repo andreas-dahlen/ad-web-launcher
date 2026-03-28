@@ -1,33 +1,31 @@
-import type { GestureUpdate,  } from "./data.ts"
-import type { CancelData } from "./base.ts"
+import type { GestureUpdate, } from "./data.ts"
 import type { Vec2 } from "./primitives.ts"
 import type { Direction } from "./primitives.ts"
 
-export type CarouselRuntime = {
+export type CarouselSolutions = {
   stateAccepted?: boolean
   delta1D?: number
   eventChange?: string
   direction?: Direction
-  cancel?: CancelData
-  
 }
 
-export type SliderRuntime = {
+export type SliderSolutions = {
   stateAccepted?: boolean
   delta1D?: number
   gestureUpdate?: GestureUpdate
-  
-  // sliderStartOffset?: number //should be in data only optional i believe.. 
-  // sliderValuePerPixel?: same placement as above
-  cancel?: CancelData
 }
 
-export type DragRuntime = {
+export type DragSolutions = {
   stateAccepted?: boolean
   // direction?: Direction not sure why this is needed :S it is solved in dragSolver ... but no idea why it would be needed...
   delta?: Vec2
-  cancel?: CancelData
 }
+
+export type Solutions =
+  | CarouselSolutions
+  | SliderSolutions
+  | DragSolutions
+
 // export type RuntimeData = {
 //   event: EventType
 //   delta: Vec2,
