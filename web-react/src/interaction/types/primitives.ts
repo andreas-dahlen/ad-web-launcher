@@ -6,6 +6,7 @@ export type EventBridgeType = 'down' | 'move' | 'up'
 export type Direction =
   | { axis: 'horizontal'; dir: 'left' | 'right' }
   | { axis: 'vertical'; dir: 'up' | 'down' }
+  | { axis: 'both'; dir: 'left' | 'right' | 'up' | 'down' }
 
 export type InteractionType = 'button' | 'carousel' | 'slider' | 'drag'
 export type DataKeys = Exclude<InteractionType, 'button'>;

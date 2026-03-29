@@ -1,11 +1,11 @@
 import { useRef, useEffect, useMemo } from "react"
-import { carouselStateFn } from "@interaction/state/carouselState.ts"
 import { usePointerForwarding } from "@interaction/bridge/bridge.ts"
 import { useCarouselMotion } from "./hooks/useCarouselMotion.ts"
 import { useCarouselSizing } from "./hooks/useCarouselSizing.ts"
 import { useAugmentedScenes } from "./hooks/useAugmentedScenes.ts"
 import type { SceneRole } from "./hooks/useCarouselScenes.ts"
-import { subscribe } from "@interaction/state/zustandHook.ts"
+import { useCarouselZustand } from '@components/primitives/carousel/hooks/useCarouselZustand.ts'
+import { carouselStore } from '@interaction/zunstand/carouselState.ts'
 
 interface CarouselProps {
   id: string
@@ -36,20 +36,27 @@ export default function Carousel({
 }: CarouselProps) {
 
   // ── Fully subscribe to the carousel state ─────────────────────────────
-  const lane = subscribe.useFull('carousel', id) as CarouselState
+  // const lane = subscribe.useFull('carousel', id) as CarouselState
+  const { settling, index, offset, count, dragging, size } = useCarouselZustand(id)
 
   // ── Initialize count for mirror scenes ─────────────────────────────
+  // useEffect(() => {
+  //   if (interactive)
+  //     carouselStateFn.setCount(id, scenes.length)
+  // }, [id, scenes.length, interactive])
   useEffect(() => {
     if (interactive)
-      carouselStateFn.setCount(id, scenes.length)
+      carouselStore.getState().setCount(id, scenes.length)
   }, [id, scenes.length, interactive])
 
   // ── DOM reference & lane size ─────────────────────────────
   const carouselRef = useRef<HTMLDivElement>(null)
   useCarouselSizing({ elRef: carouselRef, axis, id })
 
-  const laneSize = axis === "horizontal" ? lane.size.x : lane.size.y
 
+  // const laneSize = axis === "horizontal" ? lane.size.x : lane.size.y
+  // const read = carouselStore.getState().get(id)
+  const laneSize = axis === "horizontal" ? size.x : size.y
 
   // ── Pointer forwarding for gestures ─────────────────────────────
   usePointerForwarding({
@@ -63,8 +70,7 @@ export default function Carousel({
   })
 
   // ── Augmented scenes & stable slot management ─────────────────────────────
-  const augmentedScenes = useAugmentedScenes(scenes, interactive, lane.count)
-  const index = lane?.index ?? 0
+  const augmentedScenes = useAugmentedScenes(scenes, interactive, count)
   const total = augmentedScenes.length
 
   const slots: Slot[] = useMemo(() => {
@@ -84,16 +90,16 @@ export default function Carousel({
     [slots]
   )
 
-  useEffect(() => {
-    carouselStateFn.setCurrentScenes(id, slots.map(s => s.sceneIdx))
-  }, [id, slots])
+  // useEffect(() => {
+  //   carouselStateFn.setCurrentScenes(id, slots.map(s => s.sceneIdx))
+  // }, [id, slots])
 
   // ── Carousel motion / styling ─────────────────────────────
   const {
     carouselStyle,
     styleForRole,
     onTransitionEnd } = useCarouselMotion({
-      laneState: lane,
+      laneState: { offset, dragging, settling },
       horizontal: axis === "horizontal",
       id,
       laneSize

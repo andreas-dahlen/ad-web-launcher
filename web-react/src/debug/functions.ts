@@ -7,9 +7,9 @@ export function log(key: DebugKey, ...args: unknown[]): void {
 
   //critical channels
   if (DEBUG.channels[key] === 'always') {
-      console.log(format(key), ...args)
-      return
-}
+    console.log(format(key), ...args)
+    return
+  }
 
   // Normal debug-gated logging
   if (!DEBUG.enabled) return
@@ -47,3 +47,63 @@ export function drawDots(x: number, y: number, color: string = 'red'): void {
     setTimeout(() => dot.remove(), 500)
   }
 }
+
+//example of no fallback
+// export function assertType(
+//   condition: boolean,
+//   message?: string
+// ): asserts condition {
+//   if (!condition) {
+//     const msg = message ?? 'Assertion failed'
+//     if (import.meta.env.VITE_DEBUG === 'true') {
+//       console.warn(msg)
+//     } else {
+//       throw new Error(msg)
+//     }
+//   }
+// }
+
+// Pure assertion, never returns anything, narrows type in TS
+export function assertType(
+  condition: boolean,
+  message?: string
+): asserts condition {
+  if (!condition) {
+    const msg = message ?? 'Assertion failed'
+    if (import.meta.env.VITE_DEBUG === 'true') {
+      throw new Error(msg)
+    } else {
+      console.warn(msg)
+    }
+  }
+}
+
+// Returns value or fallback depending on debug / prod
+export function ensure<T>(
+  value: T | null | undefined,
+  fallback?: T,
+  msg?: string
+): T {
+  // value is valid → just return
+  if (value != null) return value
+
+  const message = msg ?? 'Assertion failed'
+  // debug → warn, return fallback if provided
+  if (import.meta.env.VITE_DEBUG === 'true') {
+    assertType(value != null, msg)
+  }
+  // prod → crash
+  console.warn(message)
+  if (fallback !== undefined) return fallback
+  // fallback missing → just return value (still nullish)
+  return value as T
+}
+// debug → return fallback
+
+//   console.warn(msg ?? 'Assertion failed, using fallback')
+//   if (fallback !== undefined) return fallback
+
+//   return value as T
+// }
+// // prod → throw error
+// throw new Error(msg ?? 'Assertion failed')

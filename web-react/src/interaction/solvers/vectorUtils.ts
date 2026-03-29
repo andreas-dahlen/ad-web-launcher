@@ -1,3 +1,6 @@
+import type { DragData } from '@interaction/types/data'
+import type { Axis, Direction, Vec2 } from '@interaction/types/primitives'
+
 export const vector = {
     clamp(delta: number, min: number, max: number) {
         if (min === undefined || max === undefined) return delta
@@ -38,25 +41,19 @@ export const vector = {
         }
     },
 
-    resolveDirection(delta: Vec2 | number, axis?: Axis): Direction | undefined {
+    resolveDirection(delta: Vec2 | number, axis: Axis): Direction | undefined {
         // 1D axis-based
-        if (axis) {
-            if (!delta) return undefined
-            if (typeof delta !== "object") {
-                return axis === 'horizontal'
-                    ? (delta > 0 ? 'right' : 'left')
-                    : (delta > 0 ? 'down' : 'up')
-            }
+        if (typeof delta !== "object" && axis !== 'both') {
+            return axis === 'horizontal'
+                ? ({ axis, dir: delta > 0 ? 'right' : 'left' })
+                : ({ axis, dir: delta > 0 ? 'down' : 'up' })
         }
-
         // 2D dominant axis
-        if (typeof delta == "object") {
+        if (typeof delta == "object" && axis == 'both') {
             const { x, y } = delta
-            if (x === 0 && y === 0) return undefined
             return Math.abs(x) >= Math.abs(y)
-                ? (x > 0 ? 'right' : 'left')
-                : (y > 0 ? 'down' : 'up')
+                ? ({ axis, dir: x > 0 ? 'right' : 'left' })
+                : ({ axis, dir: y > 0 ? 'down' : 'up' })
         }
-        return undefined
     }
 }

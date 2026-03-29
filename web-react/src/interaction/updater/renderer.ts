@@ -1,11 +1,10 @@
 // renderer.ts
-import type { Descriptor } from '@interaction/types/descriptor.ts'
+import type { ButtonDescriptor, Descriptor } from '@interaction/types/descriptor.ts'
 import type { EventType } from '@interaction/types/primitives'
 /* -------------------------------------------------
    DOM helpers
 ------------------------------------------------- */
-function setAttr(element: HTMLElement | null | undefined, key: string, value: unknown) {
-  if (!element) return
+function setAttr(element: HTMLElement, key: string, value: unknown) {
   if (value === null || value === undefined || value === false) {
     element.removeAttribute(key)
   } else {
@@ -13,8 +12,7 @@ function setAttr(element: HTMLElement | null | undefined, key: string, value: un
   }
 }
 
-function dispatchEvent(element: HTMLElement | null | undefined, descriptor: Descriptor) {
-  if (!element) return
+function dispatchEvent(element: HTMLElement, descriptor: Descriptor) {
   element.dispatchEvent(new CustomEvent('reaction', { detail: descriptor }))
 }
 
@@ -35,29 +33,30 @@ const typeHandlers: Record<EventType, (el: HTMLElement) => void> = {
    Render
 ------------------------------------------------- */
 export const render = {
-  handle(descriptor?: Descriptor) {
-    if (!descriptor?.base.element) return
+  handle(desc: Descriptor) {
+    if (!desc.base.element) return
 
     //1️⃣ Handle optional extra events
-    if (descriptor.runtime.cancel?.pressCancel) {
-      handleExtras(descriptor)
+    if (desc.type !== 'button') {
+      handleExtras(desc)
     }
 
     // 2️⃣ Apply DOM / UI attributes
-    if (descriptor.runtime.event) {
-      typeHandlers[descriptor.runtime.event]?.(descriptor.base.element)
+    if (desc.base.event) {
+      typeHandlers[desc.base.event]?.(desc.base.element)
     }
 
     // 3️⃣ Dispatch custom event
-    dispatchEvent(descriptor.base.element, descriptor)
+    dispatchEvent(desc.base.element, desc)
   }
 }
 
-function handleExtras(descriptor: Descriptor) {
-  const cancel = descriptor.runtime.cancel
+function handleExtras(desc: Exclude<Descriptor, ButtonDescriptor>) {
+  const cancel = desc.cancel
   if (!cancel?.pressCancel) return
+  if (desc.base.event !== 'swipeStart') return
 
   const event = 'pressCancel'
   typeHandlers[event]?.(cancel.element)
-  dispatchEvent(cancel.element, descriptor)
+  dispatchEvent(cancel.element, desc)
 }

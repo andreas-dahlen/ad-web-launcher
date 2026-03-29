@@ -9,9 +9,13 @@
  * - Does NOT mutate state directly
  * - Does NOT access DOM
  */
+import type { Descriptor } from '@interaction/types/descriptor.ts'
 import { utils } from './solverUtils.ts'
+import type { CarouselSolutions } from '@interaction/types/solutions.ts'
+import type { EventType } from '@interaction/types/primitives.ts'
+import { isCarousel } from '@interaction/types/gestureTypeGuards.ts'
 
-export const carouselSolver: Partial<Record<EventType, (desc: Descriptor) => RuntimePatch | void>> = {
+export const carouselSolver: Partial<Record<EventType, (desc: Descriptor) => CarouselSolutions | void>> = {
   /**
    * Handle swipeStart - returns reaction to enable dragging
    */
@@ -22,9 +26,8 @@ export const carouselSolver: Partial<Record<EventType, (desc: Descriptor) => Run
   /**
    * Handle swipe (drag) - clamp delta and return offset reaction
    */
-  swipe(descriptor) {
-    const desc = descriptor as CarouselDescriptor
-    if (desc.base.type !== 'carousel') throw new Error('suppose to be swipe carousel descriptor but got: ')
+  swipe(desc) {
+    isCarousel(desc)
     const norm = utils.normalize1D(desc)
     const gated = utils.resolveGate(norm)
     if (norm.mainDelta == null) return
@@ -33,7 +36,7 @@ export const carouselSolver: Partial<Record<EventType, (desc: Descriptor) => Run
       ? utils.isCarouselBlocked(norm.mainDelta, desc.data?.index, desc.data?.lockSwipeAt)
       : null
 
-    if (gated || locked) { return { stateAccepted: false } }
+    if (gated || locked) return
     return { delta1D: norm.mainDelta, stateAccepted: true }
   },
 
@@ -41,9 +44,8 @@ export const carouselSolver: Partial<Record<EventType, (desc: Descriptor) => Run
    * Handle swipeCommit - decide commit vs revert
    */
 
-  swipeCommit(descriptor) {
-    const desc = descriptor as CarouselDescriptor
-    if (desc.base.type !== 'carousel') throw new Error('suppose to be swipe carousel descriptor but got: ')
+  swipeCommit(desc) {
+    isCarousel(desc)
     const norm = utils.normalize1D(desc)
     const gated = utils.resolveGate(norm)
 
@@ -53,7 +55,7 @@ export const carouselSolver: Partial<Record<EventType, (desc: Descriptor) => Run
       ? utils.isCarouselBlocked(norm.mainDelta, desc.data?.index, desc.data?.lockSwipeAt)
       : null
 
-    if (gated || locked || !desc.base.axis) return { event: 'swipeRevert', stateAccepted: true }
+    if (gated || locked) return { event: 'swipeRevert', stateAccepted: true }
 
     const solution = utils.resolveCarouselCommit(norm, desc.base.axis)
     if (solution) return {

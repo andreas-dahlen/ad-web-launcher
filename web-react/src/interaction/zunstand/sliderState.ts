@@ -19,7 +19,7 @@ type Slider = {
 
 }
 
-export type Store = {
+export type SliderStore = {
   sliderStore: Record<string, Slider>
   init: (id: string) => void
   get: (id: string) => Readonly<Slider>
@@ -34,7 +34,7 @@ export type Store = {
 /* -------------------------------
    Slider state functions
 --------------------------------- */
-export const sliderStore = create<Store>()(
+export const sliderStore = create<SliderStore>()(
   immer((set, get) => ({
 
     sliderStore: {},
@@ -48,7 +48,8 @@ export const sliderStore = create<Store>()(
           offset: 0,
           min: 0,
           max: 100,
-          size: { x: 0, y: 0 }
+          size: { x: 0, y: 0 },
+          thumbSize: { x: 0, y: 0 }
         }
       })
     },
@@ -79,27 +80,27 @@ export const sliderStore = create<Store>()(
     press: (desc) => {
       set(state => {
         const s = state.sliderStore[desc.base.id]
-        s.value = desc.runtime.delta1D ?? s.value
+        s.value = desc.solutions.delta1D ?? s.value
       })
     },
     swipeStart: (desc) => {
       set(state => {
         const s = state.sliderStore[desc.base.id]
         s.dragging = true
-        s.value = desc.runtime.delta1D ?? s.value
+        s.value = desc.solutions.delta1D ?? s.value
       })
     },
     swipe: (desc) => {
       set(state => {
         const s = state.sliderStore[desc.base.id]
-        s.value = desc.runtime.delta1D ?? s.value
+        s.value = desc.solutions.delta1D ?? s.value
       })
     },
     swipeCommit: (desc) => {
       set(state => {
         const s = state.sliderStore[desc.base.id]
         s.dragging = false
-        s.value = desc.runtime.delta1D ?? s.value
+        s.value = desc.solutions.delta1D ?? s.value
       })
     },
   })

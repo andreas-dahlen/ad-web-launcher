@@ -21,9 +21,13 @@
 //   clampCommitPosition
 // } from './policy/dragPolicy'
 
+import type { EventType } from '@interaction/types/primitives.ts'
 import { utils } from "./solverUtils.ts"
+import type { Descriptor } from '@interaction/types/descriptor.ts'
+import type { DragSolutions } from '@interaction/types/solutions.ts'
+import { isDrag } from '@interaction/types/gestureTypeGuards.ts'
 
-export const dragSolver: Partial<Record<EventType, (desc: Descriptor) => RuntimePatch | void>> = {
+export const dragSolver: Partial<Record<EventType, (desc: Descriptor) => DragSolutions | void>> = {
 
   /**
    * Handle swipeStart - returns reaction to enable dragging
@@ -35,8 +39,8 @@ export const dragSolver: Partial<Record<EventType, (desc: Descriptor) => Runtime
   /**
    * Handle swipe (drag) - clamp deltas and return offset reaction
    */
-  swipe(descriptor) {
-    const desc = descriptor as DragDescriptor
+  swipe(desc) {
+    isDrag(desc)
     const delta = utils.resolveDragSwipe(desc)
     if (typeof delta !== "object") return
     return {
@@ -48,13 +52,13 @@ export const dragSolver: Partial<Record<EventType, (desc: Descriptor) => Runtime
   /**
    * Handle swipeCommit - always commit at current position (no revert)
    */
-  swipeCommit(descriptor) {
-    const desc = descriptor as DragDescriptor
+  swipeCommit(desc) {
+    isDrag(desc)
     let value = utils.resolveDragCommit(desc)
     if (!value) return
     const snap = utils.resolveSnapAdjustment(desc, value)
     if (snap != null) { value = snap }
-    const direction = utils.resolveDragDirection(desc.data.position, value)
+    const direction = utils.resolveDragDirection(desc.base.axis, desc.data.position, value)
     return {
       delta: value,
       stateAccepted: true,

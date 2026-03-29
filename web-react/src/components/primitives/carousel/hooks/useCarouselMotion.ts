@@ -1,6 +1,6 @@
 import { useMemo, useCallback } from "react"
 import { APP_SETTINGS } from "@config/appSettings.ts"
-import { carouselStateFn } from "@interaction/state/carouselState"
+import { carouselStore } from '@interaction/zunstand/carouselState'
 
 type Role = "prev" | "current" | "next"
 
@@ -80,7 +80,7 @@ export function useCarouselMotion({
 
       // only commit index if not dragging and not already settling
       if (!isDragging && !isSettling) {
-        carouselStateFn.setPosition(id)
+        carouselStore.getState().setPosition(id)
       }
     },
     [id, isDragging, isSettling]

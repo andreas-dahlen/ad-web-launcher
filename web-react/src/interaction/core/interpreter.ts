@@ -2,7 +2,7 @@ import { log } from '@debug/functions.ts'
 import { utils } from './intentUtils.ts'
 
 import type { Axis, EventType, Vec2 } from '@interaction/types/primitives.ts'
-import { isButtonDesc, isSliderDesc, type Descriptor } from '@interaction/types/descriptor.ts'
+import type { Descriptor } from '@interaction/types/descriptor.ts'
 import type { GestureUpdate } from '@interaction/types/data.ts'
 import type { CancelData } from '@interaction/types/base.ts'
 
@@ -34,10 +34,12 @@ export const interpreter = {
 
 function applyGestureUpdate(update: GestureUpdate) {
     const g = gestures[update.pointerId]
-    if (isSliderDesc(g.desc)) {
-        g.desc.solutions.gestureUpdate = {
-            ...g.desc.solutions.gestureUpdate,
-            ...update,
+    switch (g.desc.type) {
+        case 'slider': {
+            g.desc.solutions.gestureUpdate = {
+                ...g.desc.solutions.gestureUpdate,
+                ...update,
+            }
         }
     }
 }
@@ -85,7 +87,10 @@ function onMove(x: number, y: number, pointerId: number): Descriptor | null {
         const intentAxis: Axis = absX > absY ? 'horizontal' : 'vertical'
         const resolved = utils.resolveSwipeTarget(x, y, intentAxis, g.desc)
 
-        if (!resolved || isButtonDesc(resolved.desc)) return null
+        //future me -> probablt return pressCancel if resolved is false...
+        if (!resolved) return null
+        if (resolved.desc.type == 'button') return null
+
         const cancel: CancelData | undefined = resolved.pressCancel
             ? { element: g.desc.base.element, pressCancel: true }
             : undefined
@@ -95,11 +100,10 @@ function onMove(x: number, y: number, pointerId: number): Descriptor | null {
         g.last.x = x
         g.last.y = y
 
-        g.desc = {
-            ...g.desc,
+        return {
+            ...resolved.desc,
             cancel
         }
-        return g.desc
     }
 
     /* -------------------------------------------------------
@@ -117,25 +121,15 @@ function onMove(x: number, y: number, pointerId: number): Descriptor | null {
         g.last.x = x
         g.last.y = y
 
-        if (!isButtonDesc(g.desc)) {
-            const delta = utils.normalizedDelta(g.totalDelta)
-            g.desc.base.delta = delta ? delta : g.desc.base.delta
+        if (g.desc.type !== 'button') {
+            g.desc.base.delta = utils.normalizedDelta(g.totalDelta) ?? g.desc.base.delta
             g.desc.base.event = 'swipe'
             return g.desc
         }
-        return g.desc
     }
     return null
 }
 
-function finalizeGesture(g: GestureState, event: EventType): Descriptor {
-    if ('delta' in g.desc.base) {
-        g.desc.base.event = event
-    }
-    const descriptor = g.desc
-    delete gestures[g.pointerId]
-    return descriptor
-}
 
 function onUp(_x: number, _y: number, pointerId: number): Descriptor | null {
     const g = gestures[pointerId]
@@ -146,4 +140,13 @@ function onUp(_x: number, _y: number, pointerId: number): Descriptor | null {
 
     log('init', 'gesture.phase error:', g.phase)
     return null
+}
+
+function finalizeGesture(g: GestureState, event: EventType): Descriptor {
+    if ('base' in g.desc && 'delta' in g.desc.base) {
+        g.desc.base.event = event
+    }
+    const descriptor = g.desc
+    delete gestures[g.pointerId]
+    return descriptor
 }

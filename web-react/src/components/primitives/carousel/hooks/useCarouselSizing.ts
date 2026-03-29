@@ -1,5 +1,5 @@
+import { carouselStore } from '@interaction/zunstand/carouselState'
 import { useEffect } from "react"
-import { state } from "@interaction/state/stateManager.ts"
 
 interface UseCarouselSizingProps {
     elRef: React.RefObject<HTMLElement | null>
@@ -32,7 +32,7 @@ export function useCarouselSizing({
 
             // setLaneSize(sizeValue)
 
-            state.setSize("carousel", id, trackSize)
+            carouselStore.getState().setSize(id, trackSize)
         }
 
         updateLaneSize()

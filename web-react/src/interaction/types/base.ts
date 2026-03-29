@@ -1,17 +1,16 @@
 import type { Vec2, Axis, EventType, InteractionType } from "./primitives.ts"
 
 export interface BaseInteraction {
-  type: InteractionType
   event: EventType
   pointerId: number
   element: HTMLElement
   id: string
   actionId?: string
 }
-export type BaseWithSwipe<T extends 'carousel' | 'slider' | 'drag'> =
-  (BaseInteraction & { type: T }) & {
+export type BaseWithSwipe =
+  BaseInteraction & {
     delta: Vec2
-    axis: Axis | null
+    axis: Axis
     baseOffset: Vec2
   }
 
@@ -25,7 +24,7 @@ export interface Reactions {
   swipeable: boolean
   modifiable: boolean
 }
-export interface BaseContext {
+export interface Context {
   el: HTMLElement
   ds: DOMStringMap
   id: string
@@ -38,27 +37,6 @@ export interface BaseContext {
   lockNextAt: number | null
   locked: boolean
 }
-export type CarouselContext = BaseContext & {
-  type: 'carousel'
-}
-
-export type SliderContext = BaseContext & {
-  type: 'slider'
-}
-
-export type DragContext = BaseContext & {
-  type: 'drag'
-}
-
-export type ButtonContext = BaseContext & {
-  type: 'button'
-}
-
-export type Context =
-  | CarouselContext
-  | SliderContext
-  | DragContext
-  | ButtonContext
 
 export interface Builder {
   reactions: Reactions

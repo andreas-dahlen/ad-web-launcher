@@ -17,7 +17,7 @@ type Drag = {
 
 }
 
-export type Store = {
+export type DragStore = {
   dragStore: Record<string, Drag>
   init: (id: string) => void
   get: (id: string) => Readonly<Drag>
@@ -28,7 +28,7 @@ export type Store = {
   swipeCommit: (desc: DragDescriptor) => void
 }
 
-export const dragStore = create<Store>()(
+export const dragStore = create<DragStore>()(
   immer((set, get) => ({
 
     dragStore: {},
@@ -41,9 +41,11 @@ export const dragStore = create<Store>()(
         state.dragStore[id] = {
           position: { x: 0, y: 0 },
           offset: { x: 0, y: 0 },
-          dragging: false
-          constraints:
-          //minX, maxX, minY, maxY are all optional...
+          dragging: false,
+          minX: -Infinity,
+          maxX: Infinity,
+          minY: -Infinity,
+          maxY: Infinity
         }
       })
     },
@@ -79,14 +81,14 @@ export const dragStore = create<Store>()(
 
     swipe: (desc) => {
       set(state => {
-        state.dragStore[desc.base.id].offset = desc.runtime.delta ?? state.dragStore[desc.base.id].offset
+        state.dragStore[desc.base.id].offset = desc.solutions.delta ?? state.dragStore[desc.base.id].offset
       })
     },
 
     swipeCommit: (desc) => {
       set(state => {
         const s = state.dragStore[desc.base.id]
-        s.position = desc.runtime.delta ?? s.position
+        s.position = desc.solutions.delta ?? s.position
         s.offset = { x: 0, y: 0 }
         s.dragging = false
       })

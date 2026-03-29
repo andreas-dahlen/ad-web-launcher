@@ -1,6 +1,6 @@
 import WallpaperLayer from "./layers/WallpaperLayer.tsx"
-import HorizontalLayer from "./layers/HorizontalLayer.tsx"
-import InteractiveLayer from "./layers/InteractiveLayer.tsx"
+// import HorizontalLayer from "./layers/HorizontalLayer.tsx"
+// import InteractiveLayer from "./layers/InteractiveLayer.tsx"
 // import OverlayLayer from ".layers/OverlayLayer.tsx"
 
 export default function Root() {
@@ -14,8 +14,8 @@ export default function Root() {
     <>
       <div className="scene-root">
         <WallpaperLayer />
-        <HorizontalLayer />
-        <InteractiveLayer />
+        {/* <HorizontalLayer /> */}
+        {/* <InteractiveLayer /> */}
         {/* <OverlayLayer /> */}
         {/* //   <div id="interactiveLayer" style={{ position: "relative", zIndex: 200 }} />
     //   <div id="overlayLayer" style={{ position: "relative", zIndex: 300 }} /> */}

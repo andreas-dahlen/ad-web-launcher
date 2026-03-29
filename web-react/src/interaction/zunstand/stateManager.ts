@@ -1,52 +1,52 @@
-import type { CarouselDescriptor, DragDescriptor, SliderDescriptor } from '@interaction/types/descriptor.ts'
-import { carouselStore } from './carouselState'
-import { dragStore } from './dragState.ts'
-import { sliderStore } from './sliderState.ts'
+// import type { CarouselDescriptor, DragDescriptor, SliderDescriptor } from '@interaction/types/descriptor.ts'
+// import { carouselStore } from './carouselState'
+// import { dragStore } from './dragState.ts'
+// import { sliderStore } from './sliderState.ts'
 
 
-// type CallStoreAction = {
-//     press: (desc: Descriptor) => void
-//     swipeStart: (desc: Descriptor) => void
-//     swipe: (desc: Descriptor) => void
-//     swipeCommit: (desc: Descriptor) => void
-//     swipeRevert: (desc: Descriptor) => void
+// // type CallStoreAction = {
+// //     press: (desc: Descriptor) => void
+// //     swipeStart: (desc: Descriptor) => void
+// //     swipe: (desc: Descriptor) => void
+// //     swipeCommit: (desc: Descriptor) => void
+// //     swipeRevert: (desc: Descriptor) => void
+// // }
+// export type AllowedEvents<T extends keyof EventMap> = EventMap[T][number]
+
+// type EventMap = {
+//   carousel: ['swipeStart', 'swipe', 'swipeCommit', 'swipeRevert']
+//   slider: ['press', 'swipeStart', 'swipe', 'swipeCommit', 'swipeRevert']
+//   drag: ['swipeStart', 'swipe', 'swipeCommit', 'swipeRevert']
 // }
-export type AllowedEvents<T extends keyof EventMap> = EventMap[T][number]
 
-type EventMap = {
-  carousel: ['swipeStart', 'swipe', 'swipeCommit', 'swipeRevert']
-  slider: ['press', 'swipeStart', 'swipe', 'swipeCommit', 'swipeRevert']
-  drag: ['swipeStart', 'swipe', 'swipeCommit', 'swipeRevert']
-}
+// type DescriptorOfStore<T extends keyof StoreMap> =
+//   T extends 'carousel' ? CarouselDescriptor :
+//   T extends 'slider' ? SliderDescriptor :
+//   T extends 'drag' ? DragDescriptor :
+//   never
 
-type DescriptorOfStore<T extends keyof StoreMap> =
-  T extends 'carousel' ? CarouselDescriptor :
-  T extends 'slider' ? SliderDescriptor :
-  T extends 'drag' ? DragDescriptor :
-  never
+// type StoreMap = {
+//   [K in keyof EventMap]: {
+//     [E in AllowedEvents<K>]?: (desc: DescriptorOfStore<K>) => void
+//   }
+// }
 
-type StoreMap = {
-  [K in keyof EventMap]: {
-    [E in AllowedEvents<K>]?: (desc: DescriptorOfStore<K>) => void
-  }
-}
+// const stores: StoreMap = {
+//   carousel: carouselStore.getState(),
+//   slider: sliderStore.getState(),
+//   drag: dragStore.getState(),
+// }
 
-const stores: StoreMap = {
-  carousel: carouselStore.getState(),
-  slider: sliderStore.getState(),
-  drag: dragStore.getState(),
-}
+// export function callStoreAction<
+//   T extends keyof StoreMap,
+//   E extends AllowedEvents<T>
+// >(type: T, event: E, desc: DescriptorOfStore<T>) {
+//   const store = stores[type]
+//   const handler = store[event] as ((desc: DescriptorOfStore<T>) => void) | undefined
+//   handler?.(desc)
+// }
 
-export function callStoreAction<
-  T extends keyof StoreMap,
-  E extends AllowedEvents<T>
->(type: T, event: E, desc: DescriptorOfStore<T>) {
-  const store = stores[type]
-  const handler = store[event] as ((desc: DescriptorOfStore<T>) => void) | undefined
-  handler?.(desc)
-}
-
-// assuming these are Zustand stores with immer
+// // assuming these are Zustand stores with immer
 // const stores = {
 //   carousel: carouselStore,
 //   slider: sliderStore,

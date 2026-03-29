@@ -2,21 +2,23 @@ import type { GestureUpdate, } from "./data.ts"
 import type { Vec2 } from "./primitives.ts"
 import type { Direction } from "./primitives.ts"
 
+export type stateAccepted = boolean
+
 export type CarouselSolutions = {
-  stateAccepted?: boolean
+  stateAccepted: boolean
   delta1D?: number
   eventChange?: string
   direction?: Direction
 }
 
 export type SliderSolutions = {
-  stateAccepted?: boolean
+  stateAccepted: boolean
   delta1D?: number
   gestureUpdate?: GestureUpdate
 }
 
 export type DragSolutions = {
-  stateAccepted?: boolean
+  stateAccepted: boolean
   // direction?: Direction not sure why this is needed :S it is solved in dragSolver ... but no idea why it would be needed...
   delta?: Vec2
 }

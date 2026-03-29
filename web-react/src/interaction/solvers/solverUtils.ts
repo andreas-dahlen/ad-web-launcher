@@ -1,6 +1,8 @@
 
 import { APP_SETTINGS } from "@config/appSettings.ts"
 import { vector } from "./vectorUtils.ts"
+import type { Descriptor, DragDescriptor } from '@interaction/types/descriptor.ts'
+import type { Axis, Direction, Vec2 } from '@interaction/types/primitives.ts'
 
 interface Normalized1D {
     mainTrackSize?: number | null
@@ -18,22 +20,23 @@ export const utils = {
         normalize
     -------------------------- */
     normalize1D(desc: Descriptor): Normalized1D {
+        if (desc.type == 'button') return {}
         const { baseOffset, axis } = desc.base
-        const delta = desc.runtime.delta
-        if (!axis) return {}
+        const delta = desc.base.delta
+        if (axis == 'both') return {}
 
         // lane/track size only exists on carousel or slider
         let trackSize: Vec2 | null = null
 
-        if (desc.base.type === 'carousel') {
-            trackSize = (desc.data as CarouselDescriptor['data']).size
-        } else if (desc.base.type === 'slider') {
-            trackSize = (desc.data as SliderDescriptor['data']).size
+        if (desc.type === 'carousel') {
+            trackSize = desc.data.size
+        } else if (desc.type === 'slider') {
+            trackSize = desc.data.size
         }
 
         // thumb only exists on slider
-        const thumbSize = desc.base.type === 'slider'
-            ? (desc.data as SliderDescriptor['data']).thumbSize
+        const thumbSize = desc.type === 'slider'
+            ? desc.data.thumbSize
             : null
 
         const track = trackSize ? vector.resolveByAxis1D(trackSize, axis) : null
@@ -78,24 +81,29 @@ export const utils = {
         }
     },
 
-    resolveSliderSwipe(norm: Normalized1D, desc: SliderDescriptor) {
-        const { sliderValuePerPixel, sliderStartOffset } = desc.runtime
+    resolveSliderSwipe(norm: Normalized1D, desc: Descriptor) {
+        if (desc.type !== 'slider') return
+        const update = desc.solutions?.gestureUpdate
+        if (!update) return
+        const pixel = update.sliderValuePerPixel
+        const offset = update.sliderStartOffset
+
         const { constraints: { min, max } } = desc.data
         const mainDelta = norm.mainDelta
 
         if (mainDelta == null ||
-            sliderValuePerPixel == null ||
-            sliderStartOffset == null
+            pixel == null ||
+            offset == null
         ) return
 
-        const nextValue = sliderStartOffset + mainDelta * sliderValuePerPixel
+        const nextValue = offset + mainDelta * pixel
         return vector.clamp(nextValue, min, max)
     },
     /* -------------------------
         carousel-specifics
     -------------------------- */
 
-    isCarouselBlocked(delta: number, index: number, lock: { prev: number, next: number }) {
+    isCarouselBlocked(delta: number, index: number, lock: { prev: number | null, next: number | null }) {
         const { prev, next } = lock || {}
         if (prev == null && next == null) return false
         if (prev != null && prev - 1 === index && delta > 0) return true
@@ -119,8 +127,9 @@ export const utils = {
 
     getCommitOffset(direction: Direction, laneSize: number) {
         if (laneSize == null) return 0
-        if (direction === 'right' || direction === 'down') return laneSize
-        if (direction === 'left' || direction === 'up') return -laneSize
+
+        if (direction.dir === 'right' || direction.dir === 'down') return laneSize
+        if (direction.dir === 'left' || direction.dir === 'up') return -laneSize
         return 0
     },
 
@@ -134,7 +143,7 @@ export const utils = {
          drag-specifics
     -------------------------- */
     resolveDragSwipe(desc: DragDescriptor) {
-        const delta = desc.runtime.delta
+        const delta = desc.base.delta
         const dragPosition = desc.data.position
         const dragConstraints = desc.data.constraints
         const clamped =
@@ -145,7 +154,7 @@ export const utils = {
     },
 
     resolveDragCommit(desc: DragDescriptor) {
-        const delta = desc.runtime.delta
+        const delta = desc.base.delta
         return vector.clamp2D(delta, desc.data.position, desc.data.constraints)
     },
 
@@ -171,9 +180,9 @@ export const utils = {
         }
     },
 
-    resolveDragDirection(oldPosition: Vec2, value: Vec2) {
+    resolveDragDirection(axis: Axis, oldPosition: Vec2, value: Vec2) {
         const { x: fx, y: fy } = value
         const { x: px, y: py } = oldPosition
-        return vector.resolveDirection({ x: fx - px, y: fy - py })
+        return vector.resolveDirection({ x: fx - px, y: fy - py }, axis)
     }
 }

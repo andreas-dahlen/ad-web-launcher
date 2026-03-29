@@ -1,9 +1,9 @@
-import { ensure } from "@interaction/state/sizeState.ts"
+import { useSize } from '@interaction/zunstand/sizeState'
 import type { PropsWithChildren } from 'react'
 
 export default function DebugWrapper({ children }: PropsWithChildren) {
 
-  const { device, scale } = ensure()
+  const { device, scale } = useSize()
 
   const frameStyle = {
     width: `${device.width}px`,

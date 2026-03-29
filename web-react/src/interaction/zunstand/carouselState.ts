@@ -21,7 +21,7 @@ type Carousel = {
   pendingDir: Direction | null
 }
 
-export type Store = {
+export type CarouselStore = {
   carouselStore: Record<string, Carousel>
   init: (id: string) => void
   get: (id: string) => Readonly<Carousel>
@@ -33,11 +33,11 @@ export type Store = {
 
   swipeStart: (desc: CarouselDescriptor) => void
   swipe: (desc: CarouselDescriptor) => void
-  swipeRevert: (desc: CarouselDescriptor) => void
   swipeCommit: (desc: CarouselDescriptor) => void
+  swipeRevert: (desc: CarouselDescriptor) => void
 }
 
-export const carouselStore = create<Store>()(
+export const carouselStore = create<CarouselStore>()(
   immer((set, get) => ({
 
     carouselStore: {},
@@ -113,7 +113,7 @@ export const carouselStore = create<Store>()(
 
     swipe: (desc) => {
       set(state => {
-        const offset = desc.runtime.delta1D
+        const offset = desc.solutions.delta1D
         if (offset) state.carouselStore[desc.base.id].offset = offset
       })
     },
@@ -121,8 +121,8 @@ export const carouselStore = create<Store>()(
       set(state => {
         const s = state.carouselStore[desc.base.id]
         if (s.settling) return
-        s.pendingDir = desc.runtime.direction ?? null
-        s.offset = desc.runtime.delta1D ?? s.offset
+        s.pendingDir = desc.solutions.direction ?? null
+        s.offset = desc.solutions.delta1D ?? s.offset
         s.dragging = false
       })
     },
@@ -139,8 +139,8 @@ export const carouselStore = create<Store>()(
 )
 
 function getNextIndex(currentIndex: number, direction: Direction | null, count: number): number {
-  if (!count) return 0
-  switch (direction) {
+  if (!count ||!direction) return currentIndex
+  switch (direction.dir) {
     case 'right':
     case 'down':
       return (currentIndex - 1 + count) % count
