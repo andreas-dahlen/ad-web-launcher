@@ -1,7 +1,7 @@
-import type { Vec2, Axis, EventType, InteractionType } from "./primitives.ts"
+import type { Vec2, Axis, InteractionType } from "./primitives.ts"
 
 export interface BaseInteraction {
-  event: EventType
+  // event: EventType
   pointerId: number
   element: HTMLElement
   id: string
@@ -9,15 +9,9 @@ export interface BaseInteraction {
 }
 export type BaseWithSwipe =
   BaseInteraction & {
-    delta: Vec2
     axis: Axis
     baseOffset: Vec2
   }
-
-export interface CancelData {
-  element: HTMLElement
-  pressCancel: boolean
-}
 
 export interface Reactions {
   pressable: boolean
@@ -36,12 +30,4 @@ export interface Context {
   lockPrevAt: number | null
   lockNextAt: number | null
   locked: boolean
-}
-
-export interface Builder {
-  reactions: Reactions
-  x: number
-  y: number
-  pointerId: number
-  event: EventType
 }

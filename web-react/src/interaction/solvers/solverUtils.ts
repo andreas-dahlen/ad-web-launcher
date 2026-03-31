@@ -1,7 +1,7 @@
 
 import { APP_SETTINGS } from "@config/appSettings.ts"
 import { vector } from "./vectorUtils.ts"
-import type { Descriptor, DragDescriptor } from '@interaction/types/descriptor.ts'
+import type { Descriptor, DragDescriptor } from '@interaction/types/meta.ts'
 import type { Axis, Direction, Vec2 } from '@interaction/types/primitives.ts'
 
 interface Normalized1D {

@@ -13,7 +13,7 @@ export const useCarouselZustand = (id: string) => {
       count: 0,
       offset: 0,
       dragging: false,
-      size: 0,
+      size: { x: 0, y: 0 },
       settling: false
     })
   )

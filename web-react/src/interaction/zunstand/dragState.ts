@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
-import type { DragDescriptor } from "@interaction/types/descriptor.ts"
+import type { DragDescriptor } from "@interaction/types/meta"
 import type { Vec2 } from '@interaction/types/primitives'
 
 type Drag = {

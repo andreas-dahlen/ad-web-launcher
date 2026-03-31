@@ -97,11 +97,12 @@ export const pipeline = {
 
     const baseDesc = interpreterFn(x, y, pointerId)
     if (!baseDesc) return null
+
     /* -------------------------
        Solvers
     -------------------------- */
 
-    const { type, base: { event } } = baseDesc
+    const { type, ctx: { event } } = baseDesc
 
     let modDesc: Descriptor = baseDesc
 
@@ -109,7 +110,11 @@ export const pipeline = {
       const solverFn = solverRegistry[type]?.[event]
       const solverResult = solverFn?.(baseDesc)
 
+      /* -------------------------
+       Construct final Descriptor
+    -------------------------- */
       if (solverResult) {
+
         modDesc = {
           ...baseDesc,
           solutions: {
@@ -119,6 +124,7 @@ export const pipeline = {
         }
       }
     }
+
     const { type: modType, base: { event: modEvent } } = modDesc
     if (modType === 'slider' && modDesc.solutions.gestureUpdate) {
       interpreter.applyGestureUpdate(modDesc.solutions.gestureUpdate)

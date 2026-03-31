@@ -3,7 +3,7 @@ import { immer } from "zustand/middleware/immer"
 // import { shallow } from "zustand/shallow"
 import { create } from 'zustand'
 import type { Direction, Vec2 } from "@interaction/types/primitives.ts"
-import type { CarouselDescriptor } from "@interaction/types/descriptor.ts"
+import type { CarouselDescriptor } from "@interaction/types/meta"
 
 type Carousel = {
   //react motion
@@ -42,7 +42,6 @@ export const carouselStore = create<CarouselStore>()(
 
     carouselStore: {},
 
-    //tsx only!
     init: (id) => {
       if (get().carouselStore[id]) return
 
@@ -65,7 +64,7 @@ export const carouselStore = create<CarouselStore>()(
 
     //ensure should not be needed... should be init for a fact because of react component...
     get: (id) => {
-      return Object.freeze(get().carouselStore[id])
+      return get().carouselStore[id]
     },
 
     // setScenes: (id, scenes) => {
@@ -74,18 +73,24 @@ export const carouselStore = create<CarouselStore>()(
     //   })
     // },
     setCount: (id, count) => {
+      const { init } = carouselStore.getState(); init(id)
       set(state => {
-        state.carouselStore[id].count = count
+        state.carouselStore[id].count = Math.max(0, count)
       })
     },
     setSize: (id, trackSize) => {
+      const { init } = carouselStore.getState(); init(id)
       set(state => {
-        state.carouselStore[id].size = trackSize
+        const s = state.carouselStore[id]
+        if (s.size.x === trackSize.x && s.size.y === trackSize.y) return
+        s.size = trackSize
       })
     },
     setPosition: (id) => {
+      const { init } = carouselStore.getState(); init(id)
       set(state => {
         const s = state.carouselStore[id]
+        if (!s.pendingDir) return
         s.settling = true
         s.index = getNextIndex(s.index, s.pendingDir, s.count)
         s.offset = 0
@@ -99,6 +104,7 @@ export const carouselStore = create<CarouselStore>()(
     },
 
     swipeStart: (desc) => {
+      const { init } = carouselStore.getState(); init(desc.base.id)
       set(state => {
         const s = state.carouselStore[desc.base.id]
         s.dragging = true
@@ -112,12 +118,14 @@ export const carouselStore = create<CarouselStore>()(
     },
 
     swipe: (desc) => {
+      const { init } = carouselStore.getState(); init(desc.base.id)
       set(state => {
-        const offset = desc.solutions.delta1D
-        if (offset) state.carouselStore[desc.base.id].offset = offset
+        const s = state.carouselStore[desc.base.id]
+        s.offset = desc.solutions.delta1D ?? s.offset
       })
     },
     swipeCommit: (desc) => {
+      const { init } = carouselStore.getState(); init(desc.base.id)
       set(state => {
         const s = state.carouselStore[desc.base.id]
         if (s.settling) return
@@ -127,6 +135,7 @@ export const carouselStore = create<CarouselStore>()(
       })
     },
     swipeRevert: (desc) => {
+      const { init } = carouselStore.getState(); init(desc.base.id)
       set(state => {
         const s = state.carouselStore[desc.base.id]
         s.offset = 0
@@ -139,7 +148,7 @@ export const carouselStore = create<CarouselStore>()(
 )
 
 function getNextIndex(currentIndex: number, direction: Direction | null, count: number): number {
-  if (!count ||!direction) return currentIndex
+  if (!count || !direction) return currentIndex
   switch (direction.dir) {
     case 'right':
     case 'down':
@@ -151,54 +160,3 @@ function getNextIndex(currentIndex: number, direction: Direction | null, count: 
       return currentIndex
   }
 }
-
-
-// export const getCarousel = (id: string) => {
-//   const c = useStore.getState().carouselStore[id]
-//   if (!c) throw new Error(`Carousel ${id} not initialized`)
-//   return c
-// }
-
-// export const mutateCarousel = (id: string, fn: (c: Carousel) => void) => {
-//   useStore.setState(state => {
-//     const c = state.carouselStore[id]
-//     if (!c) throw new Error(`Carousel ${id} not initialized`)
-//     fn(c)
-//   })
-// }
-
-
-/* =========================================================
-API
-========================================================= */
-// const c = getCarousel(id)
-
-// mutateCarousel(id, c => {
-// c.offset = newOffset
-// c.dragging = true
-// })
-
-/* =========================================================
-HOOKS
-========================================================= */
-
-// export const useCarouselMotion = (id: string) =>
-//   carouselStore(
-//     useShallow(s => {
-//       const c = s.carouselStore[id]
-//       // Important: Guard against undefined if the component renders before init()
-//       if (!c) return { offset: 0, dragging: false } 
-      
-//       return { offset: c.offset, dragging: c.dragging }
-//     })
-//   )
-
-// export const useCarouselScene = (id: string) =>
-//   carouselStore(
-//     useShallow(s => {
-//       const c = s.carouselStore[id]
-//       if (!c) return { index: 0, count: 0 }
-      
-//       return { index: c.index, count: c.count }
-//     })
-//   )

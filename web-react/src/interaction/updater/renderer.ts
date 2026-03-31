@@ -1,5 +1,5 @@
 // renderer.ts
-import type { ButtonDescriptor, Descriptor } from '@interaction/types/descriptor.ts'
+import type { ButtonDescriptor, Descriptor } from '@interaction/types/meta'
 import type { EventType } from '@interaction/types/primitives'
 /* -------------------------------------------------
    DOM helpers

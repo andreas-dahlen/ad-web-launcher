@@ -9,7 +9,7 @@
  * - Does NOT mutate state directly
  * - Does NOT access DOM
  */
-import type { Descriptor } from '@interaction/types/descriptor.ts'
+import type { Descriptor } from '@interaction/types/meta.ts'
 import { utils } from './solverUtils.ts'
 import type { CarouselSolutions } from '@interaction/types/solutions.ts'
 import type { EventType } from '@interaction/types/primitives.ts'

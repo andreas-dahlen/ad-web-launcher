@@ -1,99 +1,133 @@
 import { normalizeParameter, getAxisSize } from '../zunstand/sizeState.ts'
 import { APP_SETTINGS } from '@config/appSettings.ts'
-import { targetResolver } from "./targetResolver.ts"
-import type { Reactions } from '@interaction/types/base.ts'
-import type { Descriptor } from '@interaction/types/descriptor.ts'
-import type { Vec2 } from '@interaction/types/primitives.ts'
+import { domQuery } from "./domQuery.ts"
+import type { Context, Reactions } from '@interaction/types/base.ts'
+import type { MetaType } from '@interaction/types/meta.ts'
+import type { InteractionType, Vec2 } from '@interaction/types/primitives.ts'
 import type { Axis } from '@interaction/types/primitives.ts'
+import type { Descriptor } from '@interaction/types/descriptor.ts'
+import type { CancelData } from '@interaction/types/ctx.ts'
 
+//intentUtils.js
 export const utils = {
-    //intentUtils.js
 
-    resolveSupports(type: keyof Reactions, target?: Descriptor): boolean {
-        return !!target?.reactions?.[type]
-    },
+	/* =========================
+	Context Builder
+	========================= */
+	buildContext(el: HTMLElement): Context {
+		const ds = el.dataset
+		const id = ds.id ?? ''
+		const axis = (ds.axis as Axis) ?? null
+		const type = (ds.type as InteractionType) ?? null
+		const laneValid = Boolean(id && axis && type)
+		const snapX = ds.snapX != null ? Number(ds.snapX) : null
+		const snapY = ds.snapY != null ? Number(ds.snapY) : null
+		const lockPrevAt = ds.lockPrevAt != null ? Number(ds.lockPrevAt) : null
+		const lockNextAt = ds.lockNextAt != null ? Number(ds.lockNextAt) : null
+		const locked = ds.locked === 'true'
+		return { el, ds, id, axis, type, laneValid, snapX, snapY, lockPrevAt, lockNextAt, locked }
+	},
+	resolveSupports(type: keyof Reactions, meta?: MetaType): boolean {
+		return !!meta?.reactions?.[type]
+	},
 
-    normalizedDelta(delta: Vec2): Vec2 {
-        return {
-            x: normalizeParameter(delta.x),
-            y: normalizeParameter(delta.y)
-        }
-    },
+	normalizedDelta(delta: Vec2): Vec2 {
+		return {
+			x: normalizeParameter(delta.x),
+			y: normalizeParameter(delta.y)
+		}
+	},
 
-    /**
-     * Returns: 'horizontal' | 'vertical' | 'both' | null
-     */
-    resolveAxis(intentAxis: Axis, target: Descriptor): Axis | null {
-        if (target.type == 'button') return null
-        if (target.type == 'drag' && target.data.locked) return null
-        // Target accepts both → use intent axis
-        if (target.base.axis === 'both') {
-            return 'both'
-        }
-        // Target is strict → must match intent
-        if (target.base.axis === intentAxis) {
-            return intentAxis
-        }
-        // Axis not supported
-        return null
-    },
+	/* =========================
+	Utils
+	========================= */
+	/**
+	* Returns: 'horizontal' | 'vertical' | 'both' | null
+	*/
+	resolveAxis(intentAxis: Axis, desc: Descriptor): Axis | null {
+		if (desc.type == 'button') return null
+		if (desc.type == 'drag' && desc.meta.data.locked) return null
+		// meta accepts both → use intent axis
+		if (desc.meta.base.axis === 'both') {
+			return 'both'
+		}
+		// meta is strict → must match intent
+		if (desc.meta.base.axis === intentAxis) {
+			return intentAxis
+		}
+		// Axis not supported
+		return null
+	},
 
-    swipeThresholdCalc(distance: number, desc: Descriptor): boolean {
-        if (desc.type === 'slider') return true
+	swipeThresholdCalc(distance: number, desc: Descriptor): boolean {
+		if (desc.type === 'slider') return true
 
-        //there is room for adding type specific API for threshold adjustments.
-        //could store different API thresholds in APP_SETTINGS for dif types.
+		//there is room for adding type specific API for threshold adjustments.
+		//could store different API thresholds in APP_SETTINGS for dif types.
 
-        const ratio = APP_SETTINGS.swipeThresholdRatio ?? 0.05
+		const ratio = APP_SETTINGS.swipeThresholdRatio ?? 0.05
 
-        const screenSize = Math.min(
-            getAxisSize('horizontal'),
-            getAxisSize('vertical')
-        )
+		const screenSize = Math.min(
+			getAxisSize('horizontal'),
+			getAxisSize('vertical')
+		)
 
-        return distance >= screenSize * ratio
-    },
+		return distance >= screenSize * ratio
+	},
 
-    resolveTarget(x: number, y: number, pointerId: number): { desc: Descriptor; } | null {
-        const target = targetResolver.findTargetInDom(x, y, pointerId)
-        if (target) {
-            return { desc: target }
-        }
-        return null
-    },
+	/* =========================
+	meta utils
+	========================= */
 
-    resolveSwipeTarget(x: number, y: number, intentAxis: Axis, target: Descriptor): { desc: Descriptor; pressCancel: boolean } | null { //TODO: rename function to resolveSwipeStart?
-        // Priority: target must support swipeStart AND the intent axis
-        const axis = this.resolveAxis(intentAxis, target)
-        const canSwipe = this.resolveSupports('swipeable', target)
-        const isLocked = target.type == 'drag' && target.data.locked
-        if (canSwipe && !isLocked && axis) {
-            return {
-                desc: target,
-                pressCancel: false,
-            }
-        }
+	resolveTarget(x: number, y: number, pointerId: number): Descriptor | null {
+		const resolved = domQuery.findTargetInDom(x, y, pointerId)
+		if (resolved) {
+			return resolved
+		}
+		return null
+	},
 
-        // Fallback: find lane by axis
-        const newTarget = targetResolver.findLaneInDom(x, y, intentAxis, target.base.pointerId)
-        if (newTarget) {
-            return {
-                desc: newTarget,
-                pressCancel: this.resolveSupports('pressable', target),
-            }
-        }
-        return null
-    },
+	resolveSwipeStart(x: number, y: number, intentAxis: Axis, desc: Descriptor): { desc: Descriptor; pressCancel: boolean } | null {
+		// Priority: meta must support swipeStart AND the intent axis
+		const axis = this.resolveAxis(intentAxis, desc)
+		const canSwipe = this.resolveSupports('swipeable', desc.meta)
+		const isLocked = desc.type == 'drag' && desc.meta.data.locked
+		if (canSwipe && !isLocked && axis) {
+			return {
+				desc: desc,
+				pressCancel: false,
+			}
+		}
 
-    resolveStartOffset(x: number, y: number, element: Element): Vec2 {
-        //static start poisition inside of element at x, y
-        const rect = element.getBoundingClientRect()
-        const left = (x - rect.left)
-        const top = (y - rect.top)
-        return {
-            x: normalizeParameter(left),
-            y: normalizeParameter(top)
-        }
-    }
+		// Fallback: find lane by axis
+		const newMeta = domQuery.findLaneInDom(x, y, intentAxis, desc.meta.base.pointerId)
+		if (newMeta) {
+			return {
+				desc: newMeta,
+				pressCancel: this.resolveSupports('pressable', desc.meta),
+			}
+		}
+		return null
+	},
+
+	/* =========================
+	Descriptor modifiers
+	========================= */
+
+	resolveCancel(element: HTMLElement, desc: Descriptor, pressCancel: boolean): Descriptor {
+		if (desc.type == 'button') return desc
+
+		const cancel: CancelData | undefined = pressCancel
+			? { element: element, pressCancel: true }
+			: undefined
+		if (desc.ctx.event !== 'swipeStart') return desc
+		return {
+			...desc,
+			ctx: {
+				...desc.ctx,
+				cancel
+			}
+		}
+	}
 }
 

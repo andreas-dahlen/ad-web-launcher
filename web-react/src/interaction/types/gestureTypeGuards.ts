@@ -1,4 +1,5 @@
-import type { ButtonDescriptor, CarouselDescriptor, Descriptor, DragDescriptor, SliderDescriptor } from '@interaction/types/descriptor'
+import type { Descriptor } from '@interaction/types/descriptor'
+import type { DataKeys, InteractionType } from '@interaction/types/primitives'
 // // gestureTypeGuards.ts
 export function descIs<T extends Descriptor['type']>(
   value: Descriptor,
@@ -11,20 +12,34 @@ export function descIs<T extends Descriptor['type']>(
   }
 }
 
-export function isCarousel(value: Descriptor): asserts value is CarouselDescriptor {
+export function isCarousel(value: Descriptor): asserts value is Extract<Descriptor, { type: 'carousel' }> {
   descIs(value, 'carousel')
 }
 
-export function isDrag(value: Descriptor): asserts value is DragDescriptor {
+export function isDrag(value: Descriptor): asserts value is Extract<Descriptor, { type: 'drag' }> {
   descIs(value, 'drag')
 }
 
-export function isSlider(value: Descriptor): asserts value is SliderDescriptor {
+export function isSlider(value: Descriptor): asserts value is Extract<Descriptor, { type: 'slider' }> {
   descIs(value, 'slider')
 }
 
-export function isButton(value: Descriptor): asserts value is ButtonDescriptor {
+export function isButton(value: Descriptor): asserts value is Extract<Descriptor, { type: 'button' }> {
   descIs(value, 'button')
+}
+
+// export function isGestureType(type: InteractionType | null): type is DataKeys {
+//   return type === "carousel" ||
+//     type === "slider" ||
+//     type === "drag"
+// }
+
+export function isGestureType(type: InteractionType): asserts type is 'carousel' | 'slider' | 'drag' | 'button' {
+  if (type !== 'carousel' && type !== 'slider' && type !== 'drag' && type !== 'button') {
+    const msg = `Unexpected type: ${type}`
+    if (import.meta.env.VITE_DEBUG === 'true') throw new Error(msg)
+    console.warn(msg)
+  }
 }
 // export function isGestureType(type: InteractionType | null): type is DataKeys {
 //   return type === "carousel" ||

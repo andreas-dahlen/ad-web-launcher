@@ -14,11 +14,11 @@ interface Device {
   density: number
 }
 
-// declare global {
-//   interface Window {
-//     __DEVICE?: Partial<Device>
-//   }
-// }
+declare global {
+  interface Window {
+    __DEVICE?: Partial<Device>
+  }
+}
 
 export type SizeStore = {
   device: Device,

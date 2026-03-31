@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
-import type { SliderDescriptor } from "@interaction/types/descriptor.ts"
+import type { SliderDescriptor } from "@interaction/types/meta"
 import type { Vec2 } from '@interaction/types/primitives'
 
 type Slider = {
