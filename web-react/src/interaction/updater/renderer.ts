@@ -1,6 +1,7 @@
 // renderer.ts
-import type { ButtonDescriptor, Descriptor } from '@interaction/types/meta'
-import type { EventType } from '@interaction/types/primitives'
+
+import type { CtxType } from '@interaction/types/ctxType'
+import type { EventType } from '@interaction/types/primitiveType'
 /* -------------------------------------------------
    DOM helpers
 ------------------------------------------------- */
@@ -12,8 +13,8 @@ function setAttr(element: HTMLElement, key: string, value: unknown) {
   }
 }
 
-function dispatchEvent(element: HTMLElement, descriptor: Descriptor) {
-  element.dispatchEvent(new CustomEvent('reaction', { detail: descriptor }))
+function dispatchEvent(element: HTMLElement, ctx: CtxType) {
+  element.dispatchEvent(new CustomEvent('reaction', { detail: ctx }))
 }
 
 /* -------------------------------------------------
@@ -33,30 +34,27 @@ const typeHandlers: Record<EventType, (el: HTMLElement) => void> = {
    Render
 ------------------------------------------------- */
 export const render = {
-  handle(desc: Descriptor) {
-    if (!desc.base.element) return
+  handle(ctx: CtxType) {
+    if (!ctx.element) return
 
     //1️⃣ Handle optional extra events
-    if (desc.type !== 'button') {
-      handleExtras(desc)
-    }
+    handleExtras(ctx)
+
 
     // 2️⃣ Apply DOM / UI attributes
-    if (desc.base.event) {
-      typeHandlers[desc.base.event]?.(desc.base.element)
-    }
+    typeHandlers[ctx.event]?.(ctx.element)
 
     // 3️⃣ Dispatch custom event
-    dispatchEvent(desc.base.element, desc)
+    dispatchEvent(ctx.element, ctx)
   }
 }
 
-function handleExtras(desc: Exclude<Descriptor, ButtonDescriptor>) {
-  const cancel = desc.cancel
+function handleExtras(ctx: CtxType) {
+  if (ctx.type === 'button') return
+  const cancel = ctx.cancel
   if (!cancel?.pressCancel) return
-  if (desc.base.event !== 'swipeStart') return
 
   const event = 'pressCancel'
   typeHandlers[event]?.(cancel.element)
-  dispatchEvent(cancel.element, desc)
+  dispatchEvent(cancel.element, ctx)
 }

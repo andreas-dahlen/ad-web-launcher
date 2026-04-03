@@ -1,8 +1,8 @@
 
 import { APP_SETTINGS } from "@config/appSettings.ts"
 import { vector } from "./vectorUtils.ts"
-import type { Descriptor, DragDescriptor } from '@interaction/types/meta.ts'
-import type { Axis, Direction, Vec2 } from '@interaction/types/primitives.ts'
+import type { Descriptor, DragDesc } from '@interaction/types/descriptor/descriptor.ts'
+import type { Axis, Direction, Vec2 } from '@interaction/types/primitiveType.ts'
 
 interface Normalized1D {
     mainTrackSize?: number | null
@@ -22,7 +22,7 @@ export const utils = {
     normalize1D(desc: Descriptor): Normalized1D {
         if (desc.type == 'button') return {}
         const { baseOffset, axis } = desc.base
-        const delta = desc.base.delta
+        const delta = desc.ctx.delta
         if (axis == 'both') return {}
 
         // lane/track size only exists on carousel or slider
@@ -61,7 +61,7 @@ export const utils = {
     resolveGate(norm: Normalized1D) {
         const currentPos = (norm.crossOffset ?? 0) + (norm.crossDelta ?? 0)
         const crossSize = norm.crossTrackSize ?? 0
-        return currentPos < APP_SETTINGS.hysteresis || currentPos > crossSize + APP_SETTINGS.hysteresis
+        return currentPos < -APP_SETTINGS.hysteresis || currentPos > crossSize + APP_SETTINGS.hysteresis
     },
     /* -------------------------
         slider-specifics
@@ -83,7 +83,7 @@ export const utils = {
 
     resolveSliderSwipe(norm: Normalized1D, desc: Descriptor) {
         if (desc.type !== 'slider') return
-        const update = desc.solutions?.gestureUpdate
+        const update = desc.ctx.gestureUpdate
         if (!update) return
         const pixel = update.sliderValuePerPixel
         const offset = update.sliderStartOffset
@@ -142,8 +142,8 @@ export const utils = {
     /* -------------------------
          drag-specifics
     -------------------------- */
-    resolveDragSwipe(desc: DragDescriptor) {
-        const delta = desc.base.delta
+    resolveDragSwipe(desc: DragDesc) {
+        const delta = desc.ctx.delta
         const dragPosition = desc.data.position
         const dragConstraints = desc.data.constraints
         const clamped =
@@ -153,12 +153,12 @@ export const utils = {
         return { x: dx, y: dy }
     },
 
-    resolveDragCommit(desc: DragDescriptor) {
-        const delta = desc.base.delta
+    resolveDragCommit(desc: DragDesc) {
+        const delta = desc.ctx.delta
         return vector.clamp2D(delta, desc.data.position, desc.data.constraints)
     },
 
-    resolveSnapAdjustment(desc: DragDescriptor, value: Vec2) {
+    resolveSnapAdjustment(desc: DragDesc, value: Vec2) {
         if (!desc.data?.snap) return null
         const { x: snapX, y: snapY } = desc.data.snap
         const dragConstraints = desc.data.constraints

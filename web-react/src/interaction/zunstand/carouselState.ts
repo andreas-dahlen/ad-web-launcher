@@ -2,8 +2,8 @@
 import { immer } from "zustand/middleware/immer"
 // import { shallow } from "zustand/shallow"
 import { create } from 'zustand'
-import type { Direction, Vec2 } from "@interaction/types/primitives.ts"
-import type { CarouselDescriptor } from "@interaction/types/meta"
+import type { Direction, Vec2 } from "@interaction/types/primitiveType"
+import type { CtxCarousel } from '@interaction/types/ctxType'
 
 type Carousel = {
   //react motion
@@ -31,10 +31,10 @@ export type CarouselStore = {
   setSize: (id: string, trackSize: Vec2) => void
   setPosition: (id: string) => void
 
-  swipeStart: (desc: CarouselDescriptor) => void
-  swipe: (desc: CarouselDescriptor) => void
-  swipeCommit: (desc: CarouselDescriptor) => void
-  swipeRevert: (desc: CarouselDescriptor) => void
+  swipeStart: (ctx: CtxCarousel) => void
+  swipe: (ctx: CtxCarousel) => void
+  swipeCommit: (ctx: CtxCarousel) => void
+  swipeRevert: (ctx: CtxCarousel) => void
 }
 
 export const carouselStore = create<CarouselStore>()(
@@ -64,7 +64,7 @@ export const carouselStore = create<CarouselStore>()(
 
     //ensure should not be needed... should be init for a fact because of react component...
     get: (id) => {
-      return get().carouselStore[id]
+      return get().carouselStore[id] ?? null
     },
 
     // setScenes: (id, scenes) => {
@@ -73,24 +73,25 @@ export const carouselStore = create<CarouselStore>()(
     //   })
     // },
     setCount: (id, count) => {
-      const { init } = carouselStore.getState(); init(id)
       set(state => {
-        state.carouselStore[id].count = Math.max(0, count)
+        const s = state.carouselStore[id]
+        if (!s) return
+        s.count = Math.max(0, count)
       })
     },
     setSize: (id, trackSize) => {
-      const { init } = carouselStore.getState(); init(id)
       set(state => {
         const s = state.carouselStore[id]
+        if (!s) return
         if (s.size.x === trackSize.x && s.size.y === trackSize.y) return
         s.size = trackSize
       })
     },
     setPosition: (id) => {
-      const { init } = carouselStore.getState(); init(id)
+      const s = get().carouselStore[id]
+      if (!s?.pendingDir) return
       set(state => {
         const s = state.carouselStore[id]
-        if (!s.pendingDir) return
         s.settling = true
         s.index = getNextIndex(s.index, s.pendingDir, s.count)
         s.offset = 0
@@ -98,15 +99,17 @@ export const carouselStore = create<CarouselStore>()(
       })
       requestAnimationFrame(() => {
         set(state => {
-          state.carouselStore[id].settling = false
+          const s = state.carouselStore[id]
+          if (!s) return
+          s.settling = false
         })
       })
     },
 
-    swipeStart: (desc) => {
-      const { init } = carouselStore.getState(); init(desc.base.id)
+    swipeStart: (ctx) => {
       set(state => {
-        const s = state.carouselStore[desc.base.id]
+        const s = state.carouselStore[ctx.id]
+        if (!s) return
         s.dragging = true
         s.settling = false
         if (s.pendingDir !== null) {
@@ -117,27 +120,27 @@ export const carouselStore = create<CarouselStore>()(
       })
     },
 
-    swipe: (desc) => {
-      const { init } = carouselStore.getState(); init(desc.base.id)
+    swipe: (ctx) => {
       set(state => {
-        const s = state.carouselStore[desc.base.id]
-        s.offset = desc.solutions.delta1D ?? s.offset
+        const s = state.carouselStore[ctx.id]
+        if (!s) return
+        s.offset = ctx.delta1D ?? s.offset
       })
     },
-    swipeCommit: (desc) => {
-      const { init } = carouselStore.getState(); init(desc.base.id)
+    swipeCommit: (ctx) => {
       set(state => {
-        const s = state.carouselStore[desc.base.id]
+        const s = state.carouselStore[ctx.id]
+        if (!s) return
         if (s.settling) return
-        s.pendingDir = desc.solutions.direction ?? null
-        s.offset = desc.solutions.delta1D ?? s.offset
+        s.pendingDir = ctx.direction ?? null
+        s.offset = ctx.delta1D ?? s.offset
         s.dragging = false
       })
     },
-    swipeRevert: (desc) => {
-      const { init } = carouselStore.getState(); init(desc.base.id)
+    swipeRevert: (ctx) => {
       set(state => {
-        const s = state.carouselStore[desc.base.id]
+        const s = state.carouselStore[ctx.id]
+        if (!s) return
         s.offset = 0
         s.dragging = false
         s.pendingDir = null

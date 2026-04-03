@@ -25,6 +25,6 @@ export interface Vec2 {
   y: number
 }
 
-export type Mutable<T> = {
-  -readonly [K in keyof T]: T[K]
-}
+// export type Mutable<T> = {
+//   -readonly [K in keyof T]: T[K]
+// }

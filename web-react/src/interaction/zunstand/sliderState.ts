@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
-import type { SliderDescriptor } from "@interaction/types/meta"
-import type { Vec2 } from '@interaction/types/primitives'
+import type { Vec2 } from '@interaction/types/primitiveType'
+import type { CtxSlider } from '@interaction/types/ctxType'
 
 type Slider = {
   //react motion
@@ -26,10 +26,10 @@ export type SliderStore = {
   setConstraints: (id: string, constraints: { min: number, max: number }) => void
   setSize: (id: string, size: Vec2) => void
   setThumbSize: (id: string, thumbSize: Vec2) => void
-  press: (desc: SliderDescriptor) => void
-  swipeStart: (desc: SliderDescriptor) => void
-  swipe: (desc: SliderDescriptor) => void
-  swipeCommit: (desc: SliderDescriptor) => void
+  press: (ctx: CtxSlider) => void
+  swipeStart: (ctx: CtxSlider) => void
+  swipe: (ctx: CtxSlider) => void
+  swipeCommit: (ctx: CtxSlider) => void
 }
 /* -------------------------------
    Slider state functions
@@ -54,53 +54,61 @@ export const sliderStore = create<SliderStore>()(
       })
     },
     get: (id) => {
-      return Object.freeze(get().sliderStore[id])
+      return get().sliderStore[id] ?? null
     },
 
-    setConstraints: (id, packet) => {
+    setConstraints: (id, constraints) => {
       set(state => {
         const s = state.sliderStore[id]
-        s.min = packet.min;
-        s.max = packet.max;
+        if (!s) return
+        s.min = constraints.min;
+        s.max = constraints.max;
       })
     },
 
     setSize: (id, size) => {
       set(state => {
-        state.sliderStore[id].size = size
+        const s = state.sliderStore[id]
+        if (!s) return
+        s.size = size
 
       })
     },
     setThumbSize: (id, thumbSize) => {
       set(state => {
         const s = state.sliderStore[id]
+        if (!s) return
         if (thumbSize !== undefined) s.thumbSize = thumbSize;
       })
     },
-    press: (desc) => {
+    press: (ctx) => {
       set(state => {
-        const s = state.sliderStore[desc.base.id]
-        s.value = desc.solutions.delta1D ?? s.value
+        const s = state.sliderStore[ctx.id]
+        if (!s) return
+        s.value = ctx.delta1D ?? s.value
       })
     },
-    swipeStart: (desc) => {
+    swipeStart: (ctx) => {
       set(state => {
-        const s = state.sliderStore[desc.base.id]
+        const s = state.sliderStore[ctx.id]
+        if (!s) return
         s.dragging = true
-        s.value = desc.solutions.delta1D ?? s.value
+        s.value = ctx.delta1D ?? s.value
       })
     },
-    swipe: (desc) => {
+    swipe: (ctx) => {
       set(state => {
-        const s = state.sliderStore[desc.base.id]
-        s.value = desc.solutions.delta1D ?? s.value
+        const s = state.sliderStore[ctx.id]
+        if (!s) return
+        s.value = ctx.delta1D ?? s.value
       })
     },
-    swipeCommit: (desc) => {
+    swipeCommit: (ctx) => {
       set(state => {
-        const s = state.sliderStore[desc.base.id]
+        const s = state.sliderStore[ctx.id]
+        if (!s) return
         s.dragging = false
-        s.value = desc.solutions.delta1D ?? s.value
+        s.value = ctx.delta1D ?? s.value
       })
     },
   })

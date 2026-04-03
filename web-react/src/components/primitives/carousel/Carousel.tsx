@@ -36,14 +36,10 @@ export default function Carousel({
 }: CarouselProps) {
 
   // ── Fully subscribe to the carousel state ─────────────────────────────
-  // const lane = subscribe.useFull('carousel', id) as CarouselState
   const { settling, index, offset, count, dragging, size } = useCarouselZustand(id)
 
   // ── Initialize count for mirror scenes ─────────────────────────────
-  // useEffect(() => {
-  //   if (interactive)
-  //     carouselStateFn.setCount(id, scenes.length)
-  // }, [id, scenes.length, interactive])
+
   useEffect(() => {
     if (interactive)
       carouselStore.getState().setCount(id, scenes.length)
@@ -53,9 +49,6 @@ export default function Carousel({
   const carouselRef = useRef<HTMLDivElement>(null)
   useCarouselSizing({ elRef: carouselRef, axis, id })
 
-
-  // const laneSize = axis === "horizontal" ? lane.size.x : lane.size.y
-  // const read = carouselStore.getState().get(id)
   const laneSize = axis === "horizontal" ? size.x : size.y
 
   // ── Pointer forwarding for gestures ─────────────────────────────
@@ -89,10 +82,6 @@ export default function Carousel({
     () => [...slots].sort((a, b) => a.sceneIdx - b.sceneIdx),
     [slots]
   )
-
-  // useEffect(() => {
-  //   carouselStateFn.setCurrentScenes(id, slots.map(s => s.sceneIdx))
-  // }, [id, slots])
 
   // ── Carousel motion / styling ─────────────────────────────
   const {

@@ -1,8 +1,8 @@
-import type { Axis, Vec2 } from '@interaction/types/primitives.ts'
-import type { Reactions } from '@interaction/types/base.ts'
+import type { Axis, Vec2 } from '@interaction/types/primitiveType'
+import type { Reactions } from '@interaction/types/descriptor/baseType'
 import { utils } from '@interaction/core/intentUtils'
-import { buildMeta } from '@interaction/core/buildMeta'
-import type { Descriptor } from '@interaction/types/descriptor'
+import { buildDesc } from '@interaction/core/buildDesc'
+import type { Descriptor } from '@interaction/types/descriptor/descriptor'
 
 export const domQuery = {
 
@@ -20,10 +20,10 @@ export const domQuery = {
       if (!(el instanceof HTMLElement)) continue
       const ctx = utils.buildContext(el)
       if (!ctx) continue
-      const reactions = buildMeta.buildReactions(ctx.ds, ctx.laneValid)
-      const meta = buildMeta.resolveFromElement(el, x, y, pointerId)
-      if (this.isEligible(reactions) && meta) {
-        return meta
+      const reactions = buildDesc.buildReactions(ctx.ds, ctx.laneValid)
+      const desc = buildDesc.resolveFromElement(el, x, y, pointerId)
+      if (this.isEligible(reactions) && desc) {
+        return desc
       }
     }
     return null
@@ -40,7 +40,7 @@ export const domQuery = {
       // skip locked lanes for swipe start
       return laneValid && !locked
     })
-    return el ? buildMeta.resolveFromElement(el, x, y, pointerId) : null
+    return el ? buildDesc.resolveFromElement(el, x, y, pointerId) : null
   },
 
   /* =========================================================

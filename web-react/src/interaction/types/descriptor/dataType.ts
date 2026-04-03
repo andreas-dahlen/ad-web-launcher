@@ -1,4 +1,4 @@
-import type { Vec2 } from "./primitives.ts"
+import type { Vec2 } from "../primitiveType.ts"
 
 export interface CarouselData {
   index: number

@@ -1,5 +1,5 @@
-import type { DragData } from '@interaction/types/data'
-import type { Axis, Direction, Vec2 } from '@interaction/types/primitives'
+import type { DragData } from '@interaction/types/descriptor/dataType'
+import type { Axis, Direction, Vec2 } from '@interaction/types/primitiveType'
 
 export const vector = {
     clamp(delta: number, min: number, max: number) {
@@ -51,9 +51,11 @@ export const vector = {
         // 2D dominant axis
         if (typeof delta == "object" && axis == 'both') {
             const { x, y } = delta
+            if (x === 0 && y === 0) return undefined
             return Math.abs(x) >= Math.abs(y)
                 ? ({ axis, dir: x > 0 ? 'right' : 'left' })
                 : ({ axis, dir: y > 0 ? 'down' : 'up' })
         }
+        return undefined
     }
 }

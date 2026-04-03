@@ -21,13 +21,13 @@
 //   clampCommitPosition
 // } from './policy/dragPolicy'
 
-import type { EventType } from '@interaction/types/primitives.ts'
+import type { EventType } from '@interaction/types/primitiveType.ts'
 import { utils } from "./solverUtils.ts"
-import type { Descriptor } from '@interaction/types/meta.ts'
-import type { DragSolutions } from '@interaction/types/solutions.ts'
+import type { Descriptor } from '@interaction/types/descriptor/descriptor.ts'
 import { isDrag } from '@interaction/types/gestureTypeGuards.ts'
+import type { CtxPartial } from '@interaction/types/pipelineType.ts'
 
-export const dragSolver: Partial<Record<EventType, (desc: Descriptor) => DragSolutions | void>> = {
+export const dragSolver: Partial<Record<EventType, (desc: Descriptor) => CtxPartial>> = {
 
   /**
    * Handle swipeStart - returns reaction to enable dragging
@@ -42,7 +42,7 @@ export const dragSolver: Partial<Record<EventType, (desc: Descriptor) => DragSol
   swipe(desc) {
     isDrag(desc)
     const delta = utils.resolveDragSwipe(desc)
-    if (typeof delta !== "object") return
+    if (typeof delta !== "object") return { stateAccepted: false }
     return {
       delta,
       stateAccepted: true
@@ -55,7 +55,7 @@ export const dragSolver: Partial<Record<EventType, (desc: Descriptor) => DragSol
   swipeCommit(desc) {
     isDrag(desc)
     let value = utils.resolveDragCommit(desc)
-    if (!value) return
+    if (!value) return { stateAccepted: false }
     const snap = utils.resolveSnapAdjustment(desc, value)
     if (snap != null) { value = snap }
     const direction = utils.resolveDragDirection(desc.base.axis, desc.data.position, value)

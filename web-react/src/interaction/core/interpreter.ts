@@ -1,9 +1,9 @@
 import { log } from '@debug/functions.ts'
 import { utils } from './intentUtils.ts'
 
-import type { Axis, EventType, Vec2 } from '@interaction/types/primitives.ts'
-import type { Descriptor } from '@interaction/types/descriptor.ts'
-import type { GestureUpdate } from '@interaction/types/data.ts'
+import type { Axis, EventType, Vec2 } from '@interaction/types/primitiveType.ts'
+import type { Descriptor } from '@interaction/types/descriptor/descriptor.ts'
+import type { GestureUpdate } from '@interaction/types/descriptor/dataType.ts'
 
 /* =========================================================
    Gesture state
@@ -34,12 +34,14 @@ export const interpreter = {
 
 function applyGestureUpdate(update: GestureUpdate) {
     const g = gestures[update.pointerId]
+    if (!g) return
     switch (g.desc.type) {
         case 'slider': {
             g.desc.ctx.gestureUpdate = {
                 ...g.desc.ctx.gestureUpdate,
                 ...update,
             }
+            break
         }
     }
 }
@@ -67,7 +69,7 @@ function onDown(x: number, y: number, pointerId: number): Descriptor | null {
     }
     const g = gestures[pointerId]
 
-    if (utils.resolveSupports('pressable', g.desc.meta)) {
+    if (utils.resolveSupports('pressable', g.desc)) {
         return g.desc
     }
     return null
@@ -95,7 +97,8 @@ function onMove(x: number, y: number, pointerId: number): Descriptor | null {
         g.phase = 'SWIPING'
         g.last.x = x
         g.last.y = y
-        g.desc = utils.resolveCancel(g.desc.meta.base.element, resolved.desc, resolved.pressCancel)
+        g.desc = utils.resolveCancel(g.desc.base.element, resolved.desc, resolved.pressCancel)
+        g.desc.ctx.event = 'swipeStart'
         return g.desc
         // if (resolved.desc.type == 'button') return null
 
@@ -151,7 +154,7 @@ function onUp(_x: number, _y: number, pointerId: number): Descriptor | null {
 }
 
 function finalizeGesture(g: GestureState, event: EventType): Descriptor {
-    if ('base' in g.desc.meta && 'delta' in g.desc.ctx) {
+    if ('base' in g.desc && 'delta' in g.desc.ctx) {
         g.desc.ctx.event = event
     }
     const descriptor = g.desc

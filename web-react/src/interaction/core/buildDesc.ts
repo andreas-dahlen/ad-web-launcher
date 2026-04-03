@@ -1,13 +1,13 @@
 import { utils } from '@interaction/core/intentUtils'
-import type { BaseInteraction, BaseWithSwipe, Context, Reactions } from '@interaction/types/base'
-import type { CarouselData, CarouselModifiers, DragData, DragModifiers, SliderData } from '@interaction/types/data'
+import type { BaseInteraction, BaseWithSwipe, Context, Reactions } from '@interaction/types/descriptor/baseType'
+import type { CarouselData, CarouselModifiers, DragData, DragModifiers, SliderData } from '@interaction/types/descriptor/dataType'
 import { carouselStore } from '@interaction/zunstand/carouselState'
 import { dragStore } from '@interaction/zunstand/dragState'
 import { sliderStore } from '@interaction/zunstand/sliderState'
 import { domQuery } from '@interaction/core/domQuery'
-import type { ButtonMeta, CarouselMeta, DragMeta, SliderMeta } from '@interaction/types/meta'
-import type { Descriptor } from '@interaction/types/descriptor'
-import type { RuntimeBase, RuntimeCarousel, RuntimeDrag, RuntimeSlider } from '@interaction/types/ctx'
+import type { CarouselDesc, SliderDesc, DragDesc, ButtonDesc } from '@interaction/types/descriptor/descriptor'
+import type { Descriptor } from '@interaction/types/descriptor/descriptor'
+import type { CtxButton, CtxCarousel, CtxDrag, CtxSlider } from '@interaction/types/ctxType'
 
 export interface Builder {
   reactions: Reactions
@@ -16,7 +16,7 @@ export interface Builder {
   pointerId: number
 }
 
-export const buildMeta = {
+export const buildDesc = {
 
   /* =========================
     Entry point and Type descrimination
@@ -28,52 +28,52 @@ export const buildMeta = {
     switch (ctx.type) {
       case 'carousel': return {
         type: "carousel",
-        meta: this.buildCarousel(ctx, r),
-        ctx: this.buildCarouselCtx()
+        ...this.buildCarousel(ctx, r)
       }
       case 'slider': return {
         type: "slider",
-        meta: this.buildSlider(ctx, r),
-        ctx: this.buildSliderCtx()
+        ...this.buildSlider(ctx, r)
       }
       case 'drag': return {
         type: "drag",
-        meta: this.buildDrag(ctx, r),
-        ctx: this.buildDragCtx()
+        ...this.buildDrag(ctx, r)
       }
       case 'button': return {
         type: "button",
-        meta: this.buildButton(ctx, r),
-        ctx: this.buildBtnCtx()
+        ...this.buildButton(ctx, r)
       }
       default: return null
     }
   },
-  buildCarousel(ctx: Context, r: Builder): CarouselMeta {
+  buildCarousel(ctx: Context, r: Builder): CarouselDesc {
     return {
       base: this.buildSwipeBase(ctx, r),
       data: this.buildCarouselData(ctx),
-      reactions: r.reactions
+      reactions: r.reactions,
+      ctx: this.buildCarouselCtx(ctx)
     }
   },
-  buildSlider(ctx: Context, r: Builder): SliderMeta {
+  buildSlider(ctx: Context, r: Builder): SliderDesc {
     return {
       base: this.buildSwipeBase(ctx, r),
       data: this.buildSliderData(ctx),
-      reactions: r.reactions
+      reactions: r.reactions,
+      ctx: this.buildSliderCtx(ctx)
     }
   },
-  buildDrag(ctx: Context, r: Builder): DragMeta {
+  buildDrag(ctx: Context, r: Builder): DragDesc {
     return {
       base: this.buildSwipeBase(ctx, r),
       data: this.buildDragData(ctx),
-      reactions: r.reactions
+      reactions: r.reactions,
+      ctx: this.buildDragCtx(ctx)
     }
   },
-  buildButton(ctx: Context, r: Builder): ButtonMeta {
+  buildButton(ctx: Context, r: Builder): ButtonDesc {
     return {
       base: this.buildBase(ctx, r.pointerId),
-      reactions: r.reactions
+      reactions: r.reactions,
+      ctx: this.buildBtnCtx(ctx)
     }
   },
 
@@ -122,17 +122,17 @@ export const buildMeta = {
   /* =========================
     ctx placeholders
   ========================= */
-  buildCarouselCtx(): RuntimeCarousel {
-    return { event: 'press', stateAccepted: false, delta: { x: 0, y: 0 } }
+  buildCarouselCtx(ctx: Context): CtxCarousel {
+    return { type: 'carousel', event: 'press', id: ctx.id, element: ctx.el, delta: { x: 0, y: 0 }, stateAccepted: false }
   },
-  buildSliderCtx(): RuntimeSlider {
-    return { event: 'press', stateAccepted: false, delta: { x: 0, y: 0 } }
+  buildSliderCtx(ctx: Context): CtxSlider {
+    return { type: 'slider', event: 'press', id: ctx.id, element: ctx.el, delta: { x: 0, y: 0 }, stateAccepted: false }
   },
-  buildDragCtx(): RuntimeDrag {
-    return { event: 'press', stateAccepted: false, delta: { x: 0, y: 0 } }
+  buildDragCtx(ctx: Context): CtxDrag {
+    return { type: 'drag', event: 'press', id: ctx.id, element: ctx.el, delta: { x: 0, y: 0 }, stateAccepted: false }
   },
-  buildBtnCtx(): RuntimeBase {
-    return { event: 'press', stateAccepted: false }
+  buildBtnCtx(ctx: Context): CtxButton {
+    return { type: 'button', event: 'press', id: ctx.id, element: ctx.el, stateAccepted: false }
   },
 
   /* =========================

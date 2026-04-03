@@ -1,4 +1,4 @@
-import type { Vec2, Axis, InteractionType } from "./primitives.ts"
+import type { Vec2, Axis, InteractionType } from "../primitiveType.ts"
 
 export interface BaseInteraction {
   // event: EventType

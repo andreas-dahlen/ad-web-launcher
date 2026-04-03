@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
-import type { DragDescriptor } from "@interaction/types/meta"
-import type { Vec2 } from '@interaction/types/primitives'
+import type { Vec2 } from '@interaction/types/primitiveType'
+import type { CtxDrag } from '@interaction/types/ctxType'
 
 type Drag = {
   //react motion
@@ -23,9 +23,9 @@ export type DragStore = {
   get: (id: string) => Readonly<Drag>
   setConstraints: (id: string, constraints: { minX?: number, maxX?: number, minY?: number, maxY?: number }) => void
   setPosition: (id: string, pos: Vec2) => void
-  swipeStart: (desc: DragDescriptor) => void
-  swipe: (desc: DragDescriptor) => void
-  swipeCommit: (desc: DragDescriptor) => void
+  swipeStart: (ctx: CtxDrag) => void
+  swipe: (ctx: CtxDrag) => void
+  swipeCommit: (ctx: CtxDrag) => void
 }
 
 export const dragStore = create<DragStore>()(
@@ -50,45 +50,51 @@ export const dragStore = create<DragStore>()(
       })
     },
     get: (id) => {
-      return Object.freeze(get().dragStore[id])
+      return get().dragStore[id] ?? null
     },
 
     setConstraints: (id, packet) => {
-
       set(state => {
         const s = state.dragStore[id]
+        if (!s) return
         if (packet.minX !== undefined) s.minX = packet.minX;
         if (packet.maxX !== undefined) s.maxX = packet.maxX;
-        if (packet.minX !== undefined) s.minX = packet.minX;
-        if (packet.maxX !== undefined) s.maxX = packet.maxX;
+        if (packet.minY !== undefined) s.minY = packet.minY;
+        if (packet.maxY !== undefined) s.maxY = packet.maxY;
       })
     },
 
 
     setPosition: (id, pos) => {
       set(state => {
-        state.dragStore[id].position = { x: pos.x, y: pos.y }
+        const s = state.dragStore[id]
+        if (!s) return
+        s.position = { x: pos.x, y: pos.y }
       })
     },
 
-    swipeStart: (desc) => {
+    swipeStart: (ctx) => {
       set(state => {
-        const s = state.dragStore[desc.base.id]
-        s.dragging = false
+        const s = state.dragStore[ctx.id]
+        if (!s) return
+        s.dragging = true
         s.offset = { x: 0, y: 0 }
       })
     },
 
-    swipe: (desc) => {
+    swipe: (ctx) => {
       set(state => {
-        state.dragStore[desc.base.id].offset = desc.solutions.delta ?? state.dragStore[desc.base.id].offset
+        const s = state.dragStore[ctx.id]
+        if (!s) return
+        s.offset = ctx.delta ?? s.offset
       })
     },
 
-    swipeCommit: (desc) => {
+    swipeCommit: (ctx) => {
       set(state => {
-        const s = state.dragStore[desc.base.id]
-        s.position = desc.solutions.delta ?? s.position
+        const s = state.dragStore[ctx.id]
+        if (!s) return
+        s.position = ctx.delta ?? s.position
         s.offset = { x: 0, y: 0 }
         s.dragging = false
       })

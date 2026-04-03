@@ -1,33 +1,18 @@
-// import { isGestureType, isStateFn2Arg } from '@interaction/types/gestureTypeGuards.ts'
-
 import { interpreter } from './interpreter.ts'
 import { carouselSolver } from '../solvers/carouselSolver.ts'
 import { sliderSolver } from '../solvers/sliderSolver.ts'
 import { dragSolver } from '../solvers/dragSolver.ts'
 import { render } from '../updater/renderer.ts'
-import type { EventBridgeType, EventType, DataKeys } from '@interaction/types/primitives.ts'
-import type { Descriptor } from '@interaction/types/descriptor.ts'
-import type { Solutions } from '@interaction/types/solutions.ts'
-import { dragStore, type DragStore } from '@interaction/zunstand/dragState.ts'
-import { sliderStore, type SliderStore } from '@interaction/zunstand/sliderState.ts'
-import { carouselStore, type CarouselStore } from '@interaction/zunstand/carouselState.ts'
+import type { EventBridgeType } from '@interaction/types/primitiveType.ts'
+import { dragStore } from '@interaction/zunstand/dragState.ts'
+import { sliderStore } from '@interaction/zunstand/sliderState.ts'
+import { carouselStore } from '@interaction/zunstand/carouselState.ts'
+import type { CarouselFunctions, DragFunctions, InterpreterFn, PointerEventPackage, SliderFunctions, SolverMap } from '@interaction/types/pipelineType.ts'
+import type { CtxType } from '@interaction/types/ctxType.ts'
 
-/* =========================================================
-   Pointer bridge input
-========================================================= */
-
-interface PointerEventPackage {
-  eventType: EventBridgeType
-  x: number
-  y: number
-  pointerId: number
-}
-
-/* =========================================================
-   Interpreter bridge
-========================================================= */
-
-type InterpreterFn = (x: number, y: number, pointerId: number) => Descriptor | null
+/* =====================
+        Maping
+======================= */
 
 const interpreterMap: Record<EventBridgeType, InterpreterFn> = {
   down: interpreter.onDown,
@@ -35,49 +20,18 @@ const interpreterMap: Record<EventBridgeType, InterpreterFn> = {
   up: interpreter.onUp
 }
 
-/* =========================================================
-   Solver typing
-========================================================= */
-
-type SolverFn = (desc: Descriptor) => Solutions | void
-type SolverMap = Partial<Record<EventType, SolverFn>>
-
-const solverRegistry: Partial<Record<DataKeys, SolverMap>> = {
+const solverRegistry: SolverMap = {
   carousel: carouselSolver,
   slider: sliderSolver,
   drag: dragSolver
 }
-
-/* =========================================================
-   State mutation typing
-========================================================= */
-
-type EventMap = {
-  carousel: ['swipe', 'swipeStart', 'swipeCommit', 'swipeRevert']
-  slider: ['press', 'swipeStart', 'swipe', 'swipeCommit']
-  drag: ['swipeStart', 'swipe', 'swipeCommit']
-}
-type CarouselFunctions = Pick<
-  CarouselStore,
-  EventMap['carousel'][number]>
-
-type SliderFunctions = Pick<
-  SliderStore,
-  EventMap['slider'][number]>
-
-type DragFunctions = Pick<
-  DragStore,
-  EventMap['drag'][number]>
-
-/* =========================================================
-   Pipeline
-========================================================= */
 
 export const pipeline = {
   /* -------------------------
      Abort!
   -------------------------- */
   abortGesture(pointerId: number) {
+    //for safty could possibly think about how to setup a abort for zustand stores to abort and reset state values.
     interpreter.deleteGesture(pointerId)
   },
 
@@ -97,70 +51,60 @@ export const pipeline = {
 
     const baseDesc = interpreterFn(x, y, pointerId)
     if (!baseDesc) return null
-
     /* -------------------------
        Solvers
     -------------------------- */
 
     const { type, ctx: { event } } = baseDesc
-
-    let modDesc: Descriptor = baseDesc
-
-    if (event && type !== 'button') {
+    let ctx: CtxType
+    if (type !== 'button') {
+      ctx = baseDesc.ctx
       const solverFn = solverRegistry[type]?.[event]
-      const solverResult = solverFn?.(baseDesc)
+      // const solverResult = solverFn?.(baseDesc)
+      const sr = solverFn?.(baseDesc)
+      if (sr) ctx = { ...ctx, ...sr }
 
-      /* -------------------------
-       Construct final Descriptor
-    -------------------------- */
-      if (solverResult) {
+      if (ctx.type === 'slider' && ctx.gestureUpdate != null) {
+        interpreter.applyGestureUpdate(ctx.gestureUpdate)
+      }
+    } else {
+      ctx = baseDesc.ctx
+    }
+    const { type: ctxType, event: modEvent } = ctx
 
-        modDesc = {
-          ...baseDesc,
-          solutions: {
-            ...baseDesc.solutions,
-            ...solverResult
-          }
+    if (ctx.stateAccepted) {
+      switch (ctxType) {
+        case 'carousel': {
+          const state = carouselStore.getState()
+          const fn = state[modEvent as keyof CarouselFunctions]
+          fn?.(ctx)
+          break
         }
+        case 'slider': {
+          const state = sliderStore.getState()
+          const fn = state[modEvent as keyof SliderFunctions]
+          fn?.(ctx)
+          break
+        }
+        case 'drag': {
+          const state = dragStore.getState()
+          const fn = state[modEvent as keyof DragFunctions]
+          fn?.(ctx)
+          break
+        }
+        case 'button': {
+          break
+        }
+        default: { throw new Error(`Unknown descriptor type: ${type}`) }
       }
-    }
-
-    const { type: modType, base: { event: modEvent } } = modDesc
-    if (modType === 'slider' && modDesc.solutions.gestureUpdate) {
-      interpreter.applyGestureUpdate(modDesc.solutions.gestureUpdate)
-    }
-
-    switch (modType) {
-      case 'carousel': {
-        const state = carouselStore.getState()
-        const fn = state[modEvent as keyof CarouselFunctions]
-        fn?.(modDesc)
-        break
-      }
-      case 'slider': {
-        const state = sliderStore.getState()
-        const fn = state[modEvent as keyof SliderFunctions]
-        fn?.(modDesc)
-        break
-      }
-      case 'drag': {
-        const state = dragStore.getState()
-        const fn = state[modEvent as keyof DragFunctions]
-        fn?.(modDesc)
-        break
-      }
-      case 'button': {
-        break
-      }
-      default: { throw new Error(`Unknown descriptor type: ${modType}`) }
     }
 
     /* -------------------------
        Renderer
     -------------------------- */
 
-    render.handle(modDesc)
+    render.handle(ctx)
 
-    return modDesc
+    return ctx
   }
 }

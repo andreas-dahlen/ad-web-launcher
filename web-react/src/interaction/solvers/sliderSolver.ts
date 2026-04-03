@@ -14,13 +14,13 @@
  * - Quantizes delta to step boundaries on commit
  * - No swipeRevert reaction
  */
-import type { EventType } from '@interaction/types/primitives.ts'
+import type { EventType } from '@interaction/types/primitiveType.ts'
 import { utils } from "./solverUtils.ts"
-import type { Descriptor } from '@interaction/types/meta.ts'
-import type { SliderSolutions } from '@interaction/types/solutions.ts'
+import type { Descriptor } from '@interaction/types/descriptor/descriptor.ts'
 import { isSlider } from '@interaction/types/gestureTypeGuards.ts'
+import type { CtxPartial } from '@interaction/types/pipelineType.ts'
 
-export const sliderSolver: Partial<Record<EventType, (desc: Descriptor) => SliderSolutions | void>> = {
+export const sliderSolver: Partial<Record<EventType, (desc: Descriptor) => CtxPartial>> = {
 
   /**
    * Handle swipeStart - returns reaction to enable dragging

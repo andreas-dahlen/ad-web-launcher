@@ -1,5 +1,5 @@
-import type { Descriptor } from '@interaction/types/descriptor'
-import type { DataKeys, InteractionType } from '@interaction/types/primitives'
+import type { Descriptor } from '@interaction/types/descriptor/descriptor'
+import type { InteractionType } from '@interaction/types/primitiveType'
 // // gestureTypeGuards.ts
 export function descIs<T extends Descriptor['type']>(
   value: Descriptor,
@@ -28,12 +28,6 @@ export function isButton(value: Descriptor): asserts value is Extract<Descriptor
   descIs(value, 'button')
 }
 
-// export function isGestureType(type: InteractionType | null): type is DataKeys {
-//   return type === "carousel" ||
-//     type === "slider" ||
-//     type === "drag"
-// }
-
 export function isGestureType(type: InteractionType): asserts type is 'carousel' | 'slider' | 'drag' | 'button' {
   if (type !== 'carousel' && type !== 'slider' && type !== 'drag' && type !== 'button') {
     const msg = `Unexpected type: ${type}`
@@ -41,16 +35,6 @@ export function isGestureType(type: InteractionType): asserts type is 'carousel'
     console.warn(msg)
   }
 }
-// export function isGestureType(type: InteractionType | null): type is DataKeys {
-//   return type === "carousel" ||
-//          type === "slider" ||
-//          type === "drag"
-// }
-
-
-// export function isStateFn2Arg(fnName: string): fnName is StateFn2Arg {
-//   return ['press', 'swipeStart', 'swipe', 'swipeCommit', 'swipeRevert'].includes(fnName)
-// }¨
 
 // export function isOfType<T extends Descriptor['type']>(
 //   desc: Descriptor,

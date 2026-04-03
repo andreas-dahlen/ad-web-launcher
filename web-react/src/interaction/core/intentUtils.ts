@@ -1,12 +1,12 @@
 import { normalizeParameter, getAxisSize } from '../zunstand/sizeState.ts'
 import { APP_SETTINGS } from '@config/appSettings.ts'
 import { domQuery } from "./domQuery.ts"
-import type { Context, Reactions } from '@interaction/types/base.ts'
-import type { MetaType } from '@interaction/types/meta.ts'
-import type { InteractionType, Vec2 } from '@interaction/types/primitives.ts'
-import type { Axis } from '@interaction/types/primitives.ts'
-import type { Descriptor } from '@interaction/types/descriptor.ts'
-import type { CancelData } from '@interaction/types/ctx.ts'
+import type { Context, Reactions } from '@interaction/types/descriptor/baseType.ts'
+// import type { MetaType } from '@interaction/types/descriptor/descriptor.ts'
+import type { InteractionType, Vec2 } from '@interaction/types/primitiveType.ts'
+import type { Axis } from '@interaction/types/primitiveType.ts'
+import type { Descriptor } from '@interaction/types/descriptor/descriptor.ts'
+import type { CancelData } from '@interaction/types/ctxType.ts'
 
 //intentUtils.js
 export const utils = {
@@ -27,8 +27,8 @@ export const utils = {
 		const locked = ds.locked === 'true'
 		return { el, ds, id, axis, type, laneValid, snapX, snapY, lockPrevAt, lockNextAt, locked }
 	},
-	resolveSupports(type: keyof Reactions, meta?: MetaType): boolean {
-		return !!meta?.reactions?.[type]
+	resolveSupports(type: keyof Reactions, desc: Descriptor): boolean {
+		return !!desc?.reactions?.[type]
 	},
 
 	normalizedDelta(delta: Vec2): Vec2 {
@@ -46,13 +46,13 @@ export const utils = {
 	*/
 	resolveAxis(intentAxis: Axis, desc: Descriptor): Axis | null {
 		if (desc.type == 'button') return null
-		if (desc.type == 'drag' && desc.meta.data.locked) return null
+		if (desc.type == 'drag' && desc.data.locked) return null
 		// meta accepts both → use intent axis
-		if (desc.meta.base.axis === 'both') {
+		if (desc.base.axis === 'both') {
 			return 'both'
 		}
 		// meta is strict → must match intent
-		if (desc.meta.base.axis === intentAxis) {
+		if (desc.base.axis === intentAxis) {
 			return intentAxis
 		}
 		// Axis not supported
@@ -90,8 +90,8 @@ export const utils = {
 	resolveSwipeStart(x: number, y: number, intentAxis: Axis, desc: Descriptor): { desc: Descriptor; pressCancel: boolean } | null {
 		// Priority: meta must support swipeStart AND the intent axis
 		const axis = this.resolveAxis(intentAxis, desc)
-		const canSwipe = this.resolveSupports('swipeable', desc.meta)
-		const isLocked = desc.type == 'drag' && desc.meta.data.locked
+		const canSwipe = this.resolveSupports('swipeable', desc)
+		const isLocked = desc.type == 'drag' && desc.data.locked
 		if (canSwipe && !isLocked && axis) {
 			return {
 				desc: desc,
@@ -100,11 +100,11 @@ export const utils = {
 		}
 
 		// Fallback: find lane by axis
-		const newMeta = domQuery.findLaneInDom(x, y, intentAxis, desc.meta.base.pointerId)
+		const newMeta = domQuery.findLaneInDom(x, y, intentAxis, desc.base.pointerId)
 		if (newMeta) {
 			return {
 				desc: newMeta,
-				pressCancel: this.resolveSupports('pressable', desc.meta),
+				pressCancel: this.resolveSupports('pressable', desc),
 			}
 		}
 		return null
@@ -121,13 +121,7 @@ export const utils = {
 			? { element: element, pressCancel: true }
 			: undefined
 		if (desc.ctx.event !== 'swipeStart') return desc
-		return {
-			...desc,
-			ctx: {
-				...desc.ctx,
-				cancel
-			}
-		}
+		desc.ctx.cancel = cancel
+		return desc
 	}
 }
-

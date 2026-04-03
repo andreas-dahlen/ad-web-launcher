@@ -2,8 +2,8 @@ import { log } from '@debug/functions.ts'
 import { APP_SETTINGS } from '@config/appSettings.ts'
 import { immer } from 'zustand/middleware/immer'
 import { create } from 'zustand'
-import { useEffect } from 'react'
 import { useShallow } from 'zustand/shallow'
+import type { Axis } from '@interaction/types/primitiveType'
 
 /* -------------------------
 Device info (works for web and APK)
@@ -25,8 +25,10 @@ export type SizeStore = {
   scale: number,
   scaledWidth: number,
   scaledHeight: number,
-  init: () => void,
-  update: () => void
+  // init: () => void,
+  update: () => void,
+  normalizeParameter: (parameter: number) => number,
+  getAxisSize: (axis: Exclude<Axis, 'both'>) => number
 
 }
 // -------------------------
@@ -56,23 +58,23 @@ export const sizeStore = create<SizeStore>()(
       scaledHeight,
 
       // initialize / reset
-      init: () => {
-        const s = get()
-        if (s.device) return  // guard: already initialized
+      // init: () => {
+      //   const s = get()
+      //   if (s.device) return  // guard: already initialized
 
-        const device = sanitizeDevice(window.__DEVICE || defaultDevice)
-        const { scale, scaledWidth, scaledHeight } = computeScale(
-          device,
-          window.innerWidth,
-          window.innerHeight
-        )
-        set(state => {
-          state.device = device
-          state.scale = scale
-          state.scaledWidth = scaledWidth
-          state.scaledHeight = scaledHeight
-        })
-      },
+      //   const device = sanitizeDevice(window.__DEVICE || defaultDevice)
+      //   const { scale, scaledWidth, scaledHeight } = computeScale(
+      //     device,
+      //     window.innerWidth,
+      //     window.innerHeight
+      //   )
+      //   set(state => {
+      //     state.device = device
+      //     state.scale = scale
+      //     state.scaledWidth = scaledWidth
+      //     state.scaledHeight = scaledHeight
+      //   })
+      // },
 
       // update on resize
       update: () => {
@@ -86,7 +88,17 @@ export const sizeStore = create<SizeStore>()(
           s.scaledWidth = scaledWidth
           s.scaledHeight = scaledHeight
         })
+      },
+
+      getAxisSize: (axis: Exclude<Axis, 'both'>) => {
+        const s = get()
+        return axis === 'horizontal' ? s.scaledWidth : s.scaledHeight
+      },
+
+      normalizeParameter: (parameter: number) => {
+        return parameter / get().scale
       }
+
     }
   })
 )
@@ -131,27 +143,19 @@ function computeScale(dev: Device, vw: number, vh: number) {
 /**
  * Return the size along a given axis
  */
-export function getAxisSize(axis: "horizontal" | "vertical") {
-  const s = sizeStore.getState()
-  //no need to mutate state?
-  return axis === 'horizontal' ? s.scaledWidth : s.scaledHeight
+export function getAxisSize(axis: Exclude<Axis, 'both'>) {
+  return sizeStore.getState().getAxisSize(axis)
 }
 
 /**
  * Normalize a parameter from CSS pixels to device pixels
  */
 export function normalizeParameter(parameter: number) {
-  const s = sizeStore.getState()
-  return parameter / s.scale
+  return sizeStore.getState().normalizeParameter(parameter)
 }
 
 //for react components
 export const useSize = () => {
-  // run init only once on mount
-  useEffect(() => {
-    sizeStore.getState().init()
-  }, [])
-
   return sizeStore(
     useShallow(s => ({
       scale: s.scale,
@@ -161,27 +165,3 @@ export const useSize = () => {
     }))
   )
 }
-
-
-
-//     {
-//     scale: sizeStore(s => s.scale),
-//     scaledWidth: sizeStore(s => s.scaledWidth),
-//     scaledHeight: sizeStore(s => s.scaledHeight),
-//     device: sizeStore(s => s.device)
-//   }
-// }
-
-//   return carouselStore(
-//     useShallow(s => {
-//       const c = s.carouselStore[id]
-//       return {
-//         index: c.index,
-//         count: c.count,
-//         offset: c.offset,
-//         dragging: c.dragging,
-//         size: c.size
-//       }
-//     })
-//   )
-// }
