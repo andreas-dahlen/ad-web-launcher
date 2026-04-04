@@ -1,5 +1,79 @@
-export default function Drag() {
+import { useRef } from "react"
+import { usePointerForwarding } from "@interaction/bridge/bridge.ts"
+import { useDragSizing } from "./hooks/useDragSizing.ts"
+import { useDragMotion } from "./hooks/useDragMotion.ts"
+import { useDragZustand } from "./hooks/useDragZustand.ts"
+
+interface DragProps {
+  id: string
+  className?: string
+  snapX?: number
+  snapY?: number
+  locked?: boolean
+  reactSwipeCommit?: boolean
+  onSwipeCommit?: (detail: unknown) => void
+  children?: React.ReactNode
+}
+
+export default function Drag({
+  id,
+  className,
+  snapX,
+  snapY,
+  locked = false,
+  reactSwipeCommit = false,
+  onSwipeCommit,
+  children
+}: DragProps) {
+
+  // ── Fully subscribe to the drag state ─────────────────────────────
+  const { position, offset, dragging } = useDragZustand(id)
+
+  // ── DOM references & sizing ─────────────────────────────
+  const containerRef = useRef<HTMLDivElement>(null)
+  const dragItemRef = useRef<HTMLDivElement>(null)
+  useDragSizing({ elRef: dragItemRef, containerRef: containerRef, id })
+
+  // ── Pointer forwarding for gestures ─────────────────────────────
+  usePointerForwarding({
+    elRef: dragItemRef,
+    disabled: locked,
+    onReaction: (reaction) => {
+      if (!reactSwipeCommit) return
+      if (reaction.detail?.event === 'swipeCommit' && onSwipeCommit) {
+        onSwipeCommit(reaction.detail)
+      }
+    }
+  })
+
+  // ── Drag motion / styling ─────────────────────────────
+  const { itemStyle } = useDragMotion({
+    lanePosition: position,
+    offset,
+    dragging
+  })
+
   return (
-    <div>hello im an empty Drag</div>
+    <div
+      data-type='drag'
+      ref={containerRef}
+      className='relative-max-size non-interactive'
+
+    >
+      <div
+        ref={dragItemRef}
+        style={itemStyle}
+        className={`${className} drag-item`}
+        data-id={id}
+        data-axis="both"
+        data-type="drag"
+        data-locked={locked || undefined}
+        data-snap-x={snapX}
+        data-snap-y={snapY}
+        data-react-swipe-commit={reactSwipeCommit ? true : undefined}
+      >
+        {children}
+      </div>
+    </div>
   )
 }

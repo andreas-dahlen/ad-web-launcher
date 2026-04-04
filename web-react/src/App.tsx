@@ -5,7 +5,7 @@ import Root from './app/Root.tsx';
 import '@styles/main.css'
 
 export default function App() {
-  if (APP_SETTINGS.DebugWrapper) {
+  if (APP_SETTINGS.debugWrapper) {
     return (
       <DebugWrapper>
         <DebugPanel />

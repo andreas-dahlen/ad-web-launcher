@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react"
-import { state } from "@interaction/state/stateManager.ts"
+import { useEffect } from "react"
+import { dragStore } from '@interaction/zunstand/dragState'
 
 interface UseDragSizingProps {
-  elRef: React.RefObject<HTMLElement>
-  containerRef: React.RefObject<HTMLElement>
+  elRef: React.RefObject<HTMLElement | null>
+  containerRef: React.RefObject<HTMLElement | null>
   id: string
 }
 
@@ -13,9 +13,9 @@ export function useDragSizing({
   id
 }: UseDragSizingProps) {
 
-  const [laneSize, setLaneSize] = useState({ x: 0, y: 0 })
-  const [constraints, setConstraints] = useState(
-    { minX: 0, minY: 0, maxX: 0, maxY: 0 })
+  // const [laneSize, setLaneSize] = useState({ x: 0, y: 0 })
+  // const [constraints, setConstraints] = useState(
+  //   { minX: 0, minY: 0, maxX: 0, maxY: 0 })
 
   useEffect(() => {
     const el = elRef.current
@@ -24,6 +24,7 @@ export function useDragSizing({
     if (!el || !containerEl) return
 
     function updateLaneSize() {
+      if (!el || !containerEl) return
 
       const itemWidth = el.offsetWidth
       const itemHeight = el.offsetHeight
@@ -43,11 +44,11 @@ export function useDragSizing({
         maxY: size.y
       }
 
-      setLaneSize(size)
-      setConstraints(constraints)
+      // setLaneSize(size)
+      // setConstraints(constraints)
 
-      state.setSize('drag', id, size)
-      state.setConstraints('drag', id, constraints)
+      // dragStore.getState().setSize(id, size)
+      dragStore.getState().setConstraints(id, constraints)
     }
     updateLaneSize()
 
@@ -59,5 +60,5 @@ export function useDragSizing({
 
   }, [elRef, containerRef, id])
 
-  return { laneSize, constraints }
+  // return { laneSize, constraints }
 }

@@ -64,7 +64,6 @@ export const dragStore = create<DragStore>()(
       })
     },
 
-
     setPosition: (id, pos) => {
       set(state => {
         const s = state.dragStore[id]

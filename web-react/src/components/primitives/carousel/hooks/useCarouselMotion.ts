@@ -14,12 +14,6 @@ interface UseCarouselMotionProps {
   horizontal: boolean
   id: string
 }
-const BASE_STYLE: React.CSSProperties = {
-  position: 'absolute',
-  inset: 0,
-  backfaceVisibility: 'hidden',
-  willChange: 'transform'
-}
 
 const ROLE_OFFSETS = { prev: -1, current: 0, next: 1 } as const
 
@@ -52,24 +46,12 @@ export function useCarouselMotion({
       const multiplier = ROLE_OFFSETS[role] ?? 0
 
       return {
-        ...BASE_STYLE,
+        // ...BASE_STYLE,
         transform: translate(multiplier * laneSize + delta),
         transition
       }
     },
     [translate, laneSize, delta, transition]
-  )
-
-  const carouselStyle: React.CSSProperties = useMemo(
-    () => ({
-      width: "100%",
-      height: "100%",
-      position: "relative",
-      overflow: "hidden",
-      touchAction: "none",
-      transform: "translateZ(0)"
-    }),
-    []
   )
 
   const onTransitionEnd = useCallback(
@@ -86,5 +68,5 @@ export function useCarouselMotion({
     [id, isDragging, isSettling]
   )
 
-  return { styleForRole, carouselStyle, onTransitionEnd }
+  return { styleForRole, onTransitionEnd }
 }

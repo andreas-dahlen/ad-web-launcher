@@ -24,6 +24,6 @@ export default function DebugWrapper({ children }: PropsWithChildren) {
       <div className="device-frame" style={frameStyle}>
         {children}
       </div>
-    </div>
+    </div >
   )
 }

@@ -10,7 +10,7 @@ export interface RawPhoneValues {
 
 export interface AppSettings {
   debugPanel: boolean
-  DebugWrapper: boolean
+  debugWrapper: boolean
   rawPhoneValues: RawPhoneValues
   swipeAnimationMs: number
   swipeThresholdRatio: number
@@ -20,7 +20,7 @@ export interface AppSettings {
 
 export const APP_SETTINGS: AppSettings = {
   debugPanel: import.meta.env.VITE_DEBUG === 'true',
-  DebugWrapper: import.meta.env.VITE_DEBUG === 'true',
+  debugWrapper: import.meta.env.VITE_DEBUG === 'true',
 
   rawPhoneValues: {
     width: 1272,
@@ -46,7 +46,7 @@ export interface UserSettings {
 }
 
 export const USER_SETTINGS = ({
-// = reactive<UserSettings>({
+  // = reactive<UserSettings>({
   dragLock: false,
   DragGridVisual: false,
   defaultSnapX: 8,

@@ -1,9 +1,3 @@
-.basic-lanes {
-    height: 100%;
-    width: 100%;
-    background-color: hotpink;
-}
-
 .spin-box {
   width: 265px;
   height: 265px;
@@ -17,6 +11,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }

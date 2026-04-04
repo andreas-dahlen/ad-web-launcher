@@ -28,7 +28,6 @@ export default function Carousel({
   id,
   axis,
   scenes,
-  className,
   lockPrevAt,
   lockNextAt,
   onSwipeCommit,
@@ -56,7 +55,7 @@ export default function Carousel({
     elRef: carouselRef,
     disabled: !interactive,
     onReaction: (reaction) => {
-      if (reaction.type === 'swipeCommit' && onSwipeCommit) {
+      if (reaction.detail?.event === 'swipeCommit' && onSwipeCommit) {
         onSwipeCommit(reaction.detail)
       }
     }
@@ -85,7 +84,6 @@ export default function Carousel({
 
   // ── Carousel motion / styling ─────────────────────────────
   const {
-    carouselStyle,
     styleForRole,
     onTransitionEnd } = useCarouselMotion({
       laneState: { offset, dragging, settling },
@@ -98,12 +96,12 @@ export default function Carousel({
     <div
       data-type="carousel"
       ref={carouselRef}
-      style={{ ...carouselStyle, pointerEvents: interactive ? "auto" : "none" }}
+      className='carousel-base'
+      style={{ pointerEvents: interactive ? "auto" : "none" }}
       data-id={id}
       data-axis={axis}
       data-lock-prev-at={lockPrevAt ?? ''}
       data-lock-next-at={lockNextAt ?? ''}
-      className={className}
     >
       {renderSlots.map((slot) => {
         const Scene = augmentedScenes[slot.sceneIdx]
@@ -111,7 +109,6 @@ export default function Carousel({
         return (
           <div
             key={slot.sceneIdx}
-            className="scene-default"
             style={styleForRole(slot.role)}
             data-role={slot.role}
             onTransitionEnd={onTransitionEnd}
