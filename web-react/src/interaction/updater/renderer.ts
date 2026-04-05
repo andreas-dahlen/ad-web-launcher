@@ -40,7 +40,6 @@ export const render = {
     //1️⃣ Handle optional extra events
     handleExtras(ctx)
 
-
     // 2️⃣ Apply DOM / UI attributes
     typeHandlers[ctx.event]?.(ctx.element)
 
@@ -56,5 +55,5 @@ function handleExtras(ctx: CtxType) {
 
   const event = 'pressCancel'
   typeHandlers[event]?.(cancel.element)
-  dispatchEvent(cancel.element, ctx)
+  dispatchEvent(cancel.element, { ...ctx, event })
 }

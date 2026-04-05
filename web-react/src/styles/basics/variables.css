@@ -24,4 +24,10 @@
   --gradient-wall-1: #ffffff;
   --gradient-wall-2: #000000;
   --gradient-wall-3: #780000;
+
+  --gradient-slider-1: #00b6cb;
+  --gradient-slider-2: #003686;
+
+  --gradient-slider-knob-1: #afbf00;
+  --gradient-slider-knob-2: #00a6a0;
 }

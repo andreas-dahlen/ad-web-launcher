@@ -4,7 +4,7 @@ import { useDragSizing } from "./hooks/useDragSizing.ts"
 import { useDragMotion } from "./hooks/useDragMotion.ts"
 import { useDragZustand } from "./hooks/useDragZustand.ts"
 
-interface DragProps {
+export interface DragProps {
   id: string
   className?: string
   snapX?: number
@@ -63,7 +63,7 @@ export default function Drag({
       <div
         ref={dragItemRef}
         style={itemStyle}
-        className={`${className} drag-item`}
+        className={`drag-item ${className}`}
         data-id={id}
         data-axis="both"
         data-type="drag"

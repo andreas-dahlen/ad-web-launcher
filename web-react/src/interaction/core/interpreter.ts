@@ -100,21 +100,6 @@ function onMove(x: number, y: number, pointerId: number): Descriptor | null {
         g.desc = utils.resolveCancel(g.desc.base.element, resolved.desc, resolved.pressCancel)
         g.desc.ctx.event = 'swipeStart'
         return g.desc
-        // if (resolved.desc.type == 'button') return null
-
-        // const cancel: CancelData | undefined = resolved.pressCancel
-        //     ? { element: g.desc.base.element, pressCancel: true }
-        //     : undefined
-
-        // g.phase = 'SWIPING'
-        // g.desc = resolved.desc
-        // g.last.x = x
-        // g.last.y = y
-
-        // return {
-        //     ...resolved.desc,
-        //     cancel
-        // }
     }
 
     /* -------------------------------------------------------
@@ -134,6 +119,7 @@ function onMove(x: number, y: number, pointerId: number): Descriptor | null {
 
         if (g.desc.type !== 'button') {
             g.desc.ctx.delta = utils.normalizedDelta(g.totalDelta) ?? g.desc.ctx.delta
+            g.desc.ctx.cancel = undefined
             g.desc.ctx.event = 'swipe'
             return g.desc
         }
@@ -154,9 +140,7 @@ function onUp(_x: number, _y: number, pointerId: number): Descriptor | null {
 }
 
 function finalizeGesture(g: GestureState, event: EventType): Descriptor {
-    if ('base' in g.desc && 'delta' in g.desc.ctx) {
-        g.desc.ctx.event = event
-    }
+    g.desc.ctx.event = event
     const descriptor = g.desc
     delete gestures[g.pointerId]
     return descriptor

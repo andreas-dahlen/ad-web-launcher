@@ -4,7 +4,7 @@ import { useSliderSizing } from "./hooks/useSliderSizing.ts"
 import { useSliderMotion } from "./hooks/useSliderMotion.ts"
 import { useSliderZustand } from "./hooks/useSliderZustand.ts"
 
-interface SliderProps {
+export interface SliderProps {
   id: string
   axis: 'horizontal' | 'vertical'
   className?: string
@@ -12,7 +12,7 @@ interface SliderProps {
   reactSwipeStart?: boolean
   reactSwipeCommit?: boolean
   onVolumeChange?: (value: number) => void
-  trackContent?: React.ReactNode
+  trackStyling?: string
   children?: React.ReactNode
 }
 
@@ -24,7 +24,7 @@ export default function Slider({
   reactSwipeStart = false,
   reactSwipeCommit = false,
   onVolumeChange,
-  trackContent,
+  trackStyling,
   children
 }: SliderProps) {
 
@@ -83,34 +83,26 @@ export default function Slider({
       data-type="slider"
       data-press="true"
       ref={sliderRef}
-      className={className}
-      style={{
-        position: "relative",
-        pointerEvents: "auto",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center"
-      }}
+      className={horizontal ?
+        `default-slider horizontal-slider ${className}`
+        : `default-slider vertical-slider ${className}`}
       data-id={id}
       data-axis={axis}
       data-react-swipe={reactSwipe ? true : undefined}
       data-react-swipe-start={reactSwipeStart ? true : undefined}
       data-react-swipe-commit={reactSwipeCommit ? true : undefined}
     >
-      <div style={{
-        position: "absolute",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center"
-      }}>
-        {trackContent}
+      <div
+        className={horizontal ?
+          `default-track horizontal-track ${trackStyling}`
+          : `default-track vertical-track ${trackStyling}`}>
       </div>
 
       <div
         ref={thumbRef}
+        className='slider-thumb'
         style={{
           ...thumbStyle,
-          position: "absolute",
           ...(horizontal ? { left: 0 } : { top: 0 })
         }}
       >

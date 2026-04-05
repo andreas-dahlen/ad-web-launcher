@@ -7,7 +7,7 @@ import type { SceneRole } from "./hooks/useCarouselScenes.ts"
 import { useCarouselZustand } from '@components/primitives/carousel/hooks/useCarouselZustand.ts'
 import { carouselStore } from '@interaction/zunstand/carouselState.ts'
 
-interface CarouselProps {
+export interface CarouselProps {
   id: string
   axis: 'horizontal' | 'vertical'
   scenes: React.ComponentType[]

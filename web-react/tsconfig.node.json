@@ -22,29 +22,28 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
 
-    "baseUrl": "./src",
 "paths": {
-      "@indexes/*": ["app/indexes/*"],
-      "@layers/*": ["app/layers/*"],
-      "@scenes/*": ["app/scenes/*"],
+      "@indexes/*": ["./src/app/indexes/*"],
+      "@layers/*": ["./src/app/layers/*"],
+      "@scenes/*": ["./src/app/scenes/*"],
 
-      "@assets/*": ["assets/*"],
+      "@assets/*": ["./src/assets/*"],
 
-      "@components/*": ["components/*"],
-      "@carousel/*": ["components/primitives/carousel/*"],
-      "@button/*": ["components/primitives/button/*"],
-      "@drag/*": ["components/primitives/drag/*"],
-      "@slider/*": ["components/primitives/slider/*"],
-      "@primitives/*": ["components/primitives/*"],
+      "@components/*": ["./src/components/*"],
+      "@carousel/*": ["./src/components/primitives/carousel/*"],
+      "@button/*": ["./src/components/primitives/button/*"],
+      "@drag/*": ["./src/components/primitives/drag/*"],
+      "@slider/*": ["./src/components/primitives/slider/*"],
+      "@primitives/*": ["./src/components/primitives/*"],
 
-      "@config/*": ["config/*"],
-      "@types/*": ["config/types/*"],
-      "@utils/*": ["config/utils/*"],
+      "@config/*": ["./src/config/*"],
+      "@types/*": ["./src/config/types/*"],
+      "@utils/*": ["./src/config/utils/*"],
 
-      "@debug/*": ["debug/*"],
+      "@debug/*": ["./src/debug/*"],
 
-      "@interaction/*": ["interaction/*"],
-      "@styles/*": ["styles/*"],
+      "@interaction/*": ["./src/interaction/*"],
+      "@styles/*": ["./src/styles/*"],
     }
   },
   "include": ["vite.config.ts"]

@@ -1,10 +1,11 @@
 /* main.css */
-@import './variables.css';
-@import './scenes.css';
-@import './layers.css';
-@import './components.css';
-@import './primitives.css';
+@import './basics/variables.css';
+@import './basics/scenes.css';
+@import './basics/layers.css';
+@import './basics/components.css';
+@import './basics/primitives.css';
 @import './testing.css';
+@import './objects.css';
 
 
 html {

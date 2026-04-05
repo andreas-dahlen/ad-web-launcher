@@ -98,10 +98,18 @@ export const utils = {
 				pressCancel: false,
 			}
 		}
+		//added slider passthrough to handel accidental wrong axis swipe on sliders.
+		if (canSwipe && !isLocked && desc.ctx.type == 'slider') {
+			return {
+				desc: desc,
+				pressCancel: false
+			}
+		}
 
 		// Fallback: find lane by axis
 		const newMeta = domQuery.findLaneInDom(x, y, intentAxis, desc.base.pointerId)
 		if (newMeta) {
+			// console.log('pressCancel:', this.resolveSupports('pressable', desc))
 			return {
 				desc: newMeta,
 				pressCancel: this.resolveSupports('pressable', desc),
@@ -114,13 +122,14 @@ export const utils = {
 	Descriptor modifiers
 	========================= */
 
-	resolveCancel(element: HTMLElement, desc: Descriptor, pressCancel: boolean): Descriptor {
+	resolveCancel(element: HTMLElement, desc: Descriptor, willCancel: boolean): Descriptor {
 		if (desc.type == 'button') return desc
 
-		const cancel: CancelData | undefined = pressCancel
+		const cancel: CancelData | undefined = willCancel
 			? { element: element, pressCancel: true }
 			: undefined
-		if (desc.ctx.event !== 'swipeStart') return desc
+		// if (desc.ctx.event !== 'swipeStart') return desc
+		// console.log(cancel)
 		desc.ctx.cancel = cancel
 		return desc
 	}

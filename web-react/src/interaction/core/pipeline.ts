@@ -102,7 +102,6 @@ export const pipeline = {
     /* -------------------------
        Renderer
     -------------------------- */
-
     render.handle(ctx)
 
     return ctx
