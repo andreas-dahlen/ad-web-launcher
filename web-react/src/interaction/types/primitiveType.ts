@@ -25,6 +25,9 @@ export interface Vec2 {
   y: number
 }
 
+export const VALID_AXES = new Set<string>(['horizontal', 'vertical', 'both'])
+export const VALID_TYPES = new Set<string>(['button', 'carousel', 'slider', 'drag'])
+
 // export type Mutable<T> = {
 //   -readonly [K in keyof T]: T[K]
 // }

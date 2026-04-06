@@ -1,8 +1,9 @@
 
 import { APP_SETTINGS } from "@config/appSettings.ts"
 import { vector } from "./vectorUtils.ts"
-import type { Descriptor, DragDesc } from '@interaction/types/descriptor/descriptor.ts'
+import type { CarouselDesc, DragDesc, SliderDesc } from '@interaction/types/descriptor/descriptor.ts'
 import type { Axis, Direction, Vec2 } from '@interaction/types/primitiveType.ts'
+import type { BaseWithSwipe } from '@interaction/types/descriptor/baseType.ts'
 
 interface Normalized1D {
     mainTrackSize?: number | null
@@ -16,48 +17,51 @@ interface Normalized1D {
 }
 
 export const utils = {
+
     /* -------------------------
-        normalize
+        generic
     -------------------------- */
-    normalize1D(desc: Descriptor): Normalized1D {
-        if (desc.type == 'button') return {}
-        const { baseOffset, axis } = desc.base
-        const delta = desc.ctx.delta
-        if (axis == 'both') return {}
 
-        // lane/track size only exists on carousel or slider
-        let trackSize: Vec2 | null = null
-
-        if (desc.type === 'carousel') {
-            trackSize = desc.data.size
-        } else if (desc.type === 'slider') {
-            trackSize = desc.data.size
-        }
-
-        // thumb only exists on slider
-        const thumbSize = desc.type === 'slider'
-            ? desc.data.thumbSize
-            : null
-
-        const track = trackSize ? vector.resolveByAxis1D(trackSize, axis) : null
-        const thumb = thumbSize ? vector.resolveByAxis1D(thumbSize, axis) : null
-        const offset = baseOffset ? vector.resolveByAxis1D(baseOffset, axis) : null
-        const movement = delta ? vector.resolveByAxis1D(delta, axis) : null
-
+    normalizeBase(base: BaseWithSwipe, delta: Vec2): Normalized1D {
+        const { baseOffset, axis } = base
+        if (axis === 'both') return {}
+        const offset = vector.resolveByAxis1D(baseOffset, axis)
+        const movement = vector.resolveByAxis1D(delta, axis)
         return {
-            mainTrackSize: track?.prim,
-            crossTrackSize: track?.sub,
-            mainThumbSize: thumb?.prim,
-            crossThumbSize: thumb?.sub,
             mainOffset: offset?.prim,
             crossOffset: offset?.sub,
             mainDelta: movement?.prim,
             crossDelta: movement?.sub
         }
     },
-    /* -------------------------
-        generic
-    -------------------------- */
+
+    normalizeCarousel(desc: CarouselDesc): Normalized1D {
+        const { axis } = desc.base
+        if (axis === 'both') return {}
+        const base = this.normalizeBase(desc.base, desc.ctx.delta)
+        const track = vector.resolveByAxis1D(desc.data.size, axis)
+        return {
+            ...base,
+            mainTrackSize: track?.prim,
+            crossTrackSize: track?.sub
+        }
+    },
+
+    normalizeSlider(desc: SliderDesc): Normalized1D {
+        const { axis } = desc.base
+        if (axis === 'both') return {}
+        const base = this.normalizeBase(desc.base, desc.ctx.delta)
+        const track = vector.resolveByAxis1D(desc.data.size, axis)
+        const thumb = vector.resolveByAxis1D(desc.data.thumbSize, axis)
+        return {
+            ...base,
+            mainTrackSize: track?.prim,
+            crossTrackSize: track?.sub,
+            mainThumbSize: thumb?.prim,
+            crossThumbSize: thumb?.sub
+        }
+    },
+
     resolveGate(norm: Normalized1D) {
         const currentPos = (norm.crossOffset ?? 0) + (norm.crossDelta ?? 0)
         const crossSize = norm.crossTrackSize ?? 0
@@ -81,8 +85,7 @@ export const utils = {
         }
     },
 
-    resolveSliderSwipe(norm: Normalized1D, desc: Descriptor) {
-        if (desc.type !== 'slider') return
+    resolveSliderSwipe(norm: Normalized1D, desc: SliderDesc) {
         const update = desc.ctx.gestureUpdate
         if (!update) return
         const pixel = update.sliderValuePerPixel

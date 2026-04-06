@@ -1,4 +1,4 @@
-import { carouselStore } from '@interaction/zunstand/carouselState'
+import { carouselStore } from '@interaction/stores/carouselState'
 import { useEffect } from "react"
 
 interface UseCarouselSizingProps {
@@ -12,7 +12,6 @@ export function useCarouselSizing({
     axis,
     id
 }: UseCarouselSizingProps): void {
-    // const [laneSize, setLaneSize] = useState(0)
 
     useEffect(() => {
         const el = elRef.current
@@ -24,13 +23,6 @@ export function useCarouselSizing({
                 x: el.offsetWidth,
                 y: el.offsetHeight
             }
-
-            // const sizeValue =
-            //     axis === "horizontal"
-            //         ? el.offsetWidth
-            //         : el.offsetHeight
-
-            // setLaneSize(sizeValue)
 
             carouselStore.getState().setSize(id, trackSize)
         }

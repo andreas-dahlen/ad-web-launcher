@@ -1,11 +1,11 @@
 import { useRef, useEffect, useMemo } from "react"
-import { usePointerForwarding } from "@interaction/bridge/bridge.ts"
+import { usePointerForwarding } from "@components/hooks/bridge.ts"
 import { useCarouselMotion } from "./hooks/useCarouselMotion.ts"
 import { useCarouselSizing } from "./hooks/useCarouselSizing.ts"
 import { useAugmentedScenes } from "./hooks/useAugmentedScenes.ts"
 import type { SceneRole } from "./hooks/useCarouselScenes.ts"
 import { useCarouselZustand } from '@components/primitives/carousel/hooks/useCarouselZustand.ts'
-import { carouselStore } from '@interaction/zunstand/carouselState.ts'
+import { carouselStore } from '@interaction/stores/carouselState.ts'
 
 export interface CarouselProps {
   id: string

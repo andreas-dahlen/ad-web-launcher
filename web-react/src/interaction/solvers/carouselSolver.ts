@@ -9,13 +9,12 @@
  * - Does NOT mutate state directly
  * - Does NOT access DOM
  */
-import type { Descriptor } from '@interaction/types/descriptor/descriptor.ts'
+import type { CarouselDesc } from '@interaction/types/descriptor/descriptor.ts'
 import { utils } from './solverUtils.ts'
 import type { EventType } from '@interaction/types/primitiveType.ts'
-import { isCarousel } from '@interaction/types/gestureTypeGuards.ts'
-import type { CtxPartial } from '@interaction/types/pipelineType.ts'
+import type { CarouselCtxPartial } from '@interaction/types/ctxType.ts'
 
-export const carouselSolver: Partial<Record<EventType, (desc: Descriptor) => CtxPartial>> = {
+export const carouselSolver: Partial<Record<EventType, (desc: CarouselDesc) => CarouselCtxPartial>> = {
   /**
    * Handle swipeStart - returns reaction to enable dragging
    */
@@ -27,8 +26,7 @@ export const carouselSolver: Partial<Record<EventType, (desc: Descriptor) => Ctx
    * Handle swipe (drag) - clamp delta and return offset reaction
    */
   swipe(desc) {
-    isCarousel(desc)
-    const norm = utils.normalize1D(desc)
+    const norm = utils.normalizeCarousel(desc)
     const gated = utils.resolveGate(norm)
     if (norm.mainDelta == null) return { stateAccepted: false }
 
@@ -45,8 +43,7 @@ export const carouselSolver: Partial<Record<EventType, (desc: Descriptor) => Ctx
    */
 
   swipeCommit(desc) {
-    isCarousel(desc)
-    const norm = utils.normalize1D(desc)
+    const norm = utils.normalizeCarousel(desc)
     const gated = utils.resolveGate(norm)
 
     if (norm.mainDelta == null) return { event: 'swipeRevert', stateAccepted: true }

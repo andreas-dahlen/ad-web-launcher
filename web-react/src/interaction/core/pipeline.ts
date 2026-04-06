@@ -2,12 +2,12 @@ import { interpreter } from './interpreter.ts'
 import { carouselSolver } from '../solvers/carouselSolver.ts'
 import { sliderSolver } from '../solvers/sliderSolver.ts'
 import { dragSolver } from '../solvers/dragSolver.ts'
-import { render } from '../updater/renderer.ts'
+import { render } from '../updater/domUpdater.ts'
+import { dragStore } from '@interaction/stores/dragState.ts'
+import { sliderStore } from '@interaction/stores/sliderState.ts'
+import { carouselStore } from '@interaction/stores/carouselState.ts'
 import type { EventBridgeType } from '@interaction/types/primitiveType.ts'
-import { dragStore } from '@interaction/zunstand/dragState.ts'
-import { sliderStore } from '@interaction/zunstand/sliderState.ts'
-import { carouselStore } from '@interaction/zunstand/carouselState.ts'
-import type { CarouselFunctions, DragFunctions, InterpreterFn, PointerEventPackage, SliderFunctions, SolverMap } from '@interaction/types/pipelineType.ts'
+import type { CarouselFunctions, DragFunctions, InterpreterFn, PointerEventPackage, SliderFunctions } from '@interaction/types/pipelineType.ts'
 import type { CtxType } from '@interaction/types/ctxType.ts'
 
 /* =====================
@@ -20,12 +20,6 @@ const interpreterMap: Record<EventBridgeType, InterpreterFn> = {
   up: interpreter.onUp
 }
 
-const solverRegistry: SolverMap = {
-  carousel: carouselSolver,
-  slider: sliderSolver,
-  drag: dragSolver
-}
-
 export const pipeline = {
   /* -------------------------
      Abort!
@@ -35,13 +29,13 @@ export const pipeline = {
     interpreter.deleteGesture(pointerId)
   },
 
-  orchestrate(desc: PointerEventPackage) {
+  orchestrate(eventPackage: PointerEventPackage) {
 
     /* -------------------------
        Interpreter
     -------------------------- */
 
-    const { eventType, x, y, pointerId } = desc
+    const { eventType, x, y, pointerId } = eventPackage
     const interpreterFn = interpreterMap[eventType]
 
     if (!interpreterFn) {
@@ -49,54 +43,55 @@ export const pipeline = {
       return null
     }
 
-    const baseDesc = interpreterFn(x, y, pointerId)
-    if (!baseDesc) return null
+    const desc = interpreterFn(x, y, pointerId)
+    if (!desc) return null
     /* -------------------------
-       Solvers
+       Solvers and State Mutations narrowed
     -------------------------- */
 
-    const { type, ctx: { event } } = baseDesc
+    const { type, ctx: { event } } = desc
     let ctx: CtxType
-    if (type !== 'button') {
-      ctx = baseDesc.ctx
-      const solverFn = solverRegistry[type]?.[event]
-      // const solverResult = solverFn?.(baseDesc)
-      const sr = solverFn?.(baseDesc)
-      if (sr) ctx = { ...ctx, ...sr }
 
-      if (ctx.type === 'slider' && ctx.gestureUpdate != null) {
-        interpreter.applyGestureUpdate(ctx.gestureUpdate)
+    switch (type) {
+      case 'carousel': {
+        ctx = desc.ctx
+        const sr = carouselSolver?.[event]?.(desc)
+        if (sr) ctx = { ...ctx, ...sr }
+        if (ctx.stateAccepted) {
+          // if (ctx.gestureUpdate != null) interpreter.applyGestureUpdate(ctx.gestureUpdate)
+          const fn = carouselStore.getState()[ctx.event as keyof CarouselFunctions]
+          fn?.(ctx)
+        }
+        break
       }
-    } else {
-      ctx = baseDesc.ctx
-    }
-    const { type: ctxType, event: modEvent } = ctx
+      case 'slider': {
+        ctx = desc.ctx
+        const sr = sliderSolver?.[event]?.(desc)
+        if (sr) ctx = { ...ctx, ...sr }
+        if (ctx.gestureUpdate != null) interpreter.applyGestureUpdate(ctx.gestureUpdate)
+        if (ctx.stateAccepted) {
+          const fn = sliderStore.getState()[ctx.event as keyof SliderFunctions]
+          fn?.(ctx)
+        }
+        break
+      }
 
-    if (ctx.stateAccepted) {
-      switch (ctxType) {
-        case 'carousel': {
-          const state = carouselStore.getState()
-          const fn = state[modEvent as keyof CarouselFunctions]
+      case 'drag': {
+        ctx = desc.ctx
+        const sr = dragSolver?.[event]?.(desc)
+        if (sr) ctx = { ...ctx, ...sr }
+        if (ctx.stateAccepted) {
+          // if (ctx.gestureUpdate != null) interpreter.applyGestureUpdate(ctx.gestureUpdate)
+          const fn = dragStore.getState()[ctx.event as keyof DragFunctions]
           fn?.(ctx)
-          break
         }
-        case 'slider': {
-          const state = sliderStore.getState()
-          const fn = state[modEvent as keyof SliderFunctions]
-          fn?.(ctx)
-          break
-        }
-        case 'drag': {
-          const state = dragStore.getState()
-          const fn = state[modEvent as keyof DragFunctions]
-          fn?.(ctx)
-          break
-        }
-        case 'button': {
-          break
-        }
-        default: { throw new Error(`Unknown descriptor type: ${type}`) }
+        break
       }
+      case 'button': {
+        ctx = desc.ctx
+        break
+      }
+      default: { throw new Error(`Unknown descriptor type: ${type}`) }
     }
 
     /* -------------------------

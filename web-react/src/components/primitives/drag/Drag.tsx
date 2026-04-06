@@ -1,5 +1,5 @@
 import { useRef } from "react"
-import { usePointerForwarding } from "@interaction/bridge/bridge.ts"
+import { usePointerForwarding } from "@components/hooks/bridge.ts"
 import { useDragSizing } from "./hooks/useDragSizing.ts"
 import { useDragMotion } from "./hooks/useDragMotion.ts"
 import { useDragZustand } from "./hooks/useDragZustand.ts"

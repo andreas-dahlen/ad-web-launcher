@@ -1,4 +1,4 @@
-import { sizeStore, useSize } from '@interaction/zunstand/sizeState'
+import { sizeStore, useSize } from '@interaction/stores/sizeState'
 import type { PropsWithChildren } from 'react'
 import { useEffect } from 'react'
 

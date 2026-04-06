@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import type { RefObject } from 'react'
-import { pipeline } from '../core/pipeline.ts'
+import { pipeline } from '@interaction/core/pipeline'
 
 interface PointerForwardingProps {
   elRef: RefObject<HTMLElement | null>
@@ -107,6 +107,12 @@ export function usePointerForwarding({ elRef, onReaction, disabled }: PointerFor
       el.removeEventListener('pointerup', handlePointerUp)
       el.removeEventListener('pointercancel', handlePointerUp)
       el.removeEventListener('reaction', handleReaction)
+
+      if (isActive.current && activePointerId.current !== null) {
+        pipeline.abortGesture(activePointerId.current)
+        isActive.current = false
+        activePointerId.current = null
+      }
     }
   }, [elRef, disabled])
 }

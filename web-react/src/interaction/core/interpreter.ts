@@ -4,16 +4,16 @@ import { utils } from './intentUtils.ts'
 import type { Axis, EventType, Vec2 } from '@interaction/types/primitiveType.ts'
 import type { Descriptor } from '@interaction/types/descriptor/descriptor.ts'
 import type { GestureUpdate } from '@interaction/types/descriptor/dataType.ts'
+import { domQuery } from '@interaction/core/domQuery.ts'
 
-/* =========================================================
+/* ========================
    Gesture state
-========================================================= */
+=========================== */
 
 type GestureMap = Record<number, GestureState>
 const gestures: GestureMap = {}
 
 interface GestureState {
-    type: string
     pointerId: number
     phase: 'PENDING' | 'SWIPING'
     start: Vec2
@@ -21,9 +21,9 @@ interface GestureState {
     totalDelta: Vec2
     desc: Descriptor
 }
-/* =========================================================
+/* ========================
    Public API
-========================================================= */
+=========================== */
 export const interpreter = {
     onDown,
     onMove,
@@ -48,17 +48,17 @@ function applyGestureUpdate(update: GestureUpdate) {
 
 function deleteGesture(pointerId: number) {
     delete gestures[pointerId]
+    return null
 }
 
-/* =========================================================
+/* =====================
    Event handlers
-========================================================= */
+======================== */
 
 function onDown(x: number, y: number, pointerId: number): Descriptor | null {
-    const resolved = utils.resolveTarget(x, y, pointerId)
+    const resolved = domQuery.findTargetInDom(x, y, pointerId)
     if (!resolved) return null
     gestures[pointerId] = {
-        type: resolved.type,
         pointerId: pointerId,
         phase: 'PENDING',
         start: { x: x, y: y },
@@ -81,9 +81,9 @@ function onMove(x: number, y: number, pointerId: number): Descriptor | null {
     const absX = Math.abs(x - g.start.x)
     const absY = Math.abs(y - g.start.y)
     const biggest = Math.max(absX, absY)
-    /* -------------------------------------------------------
+    /* -----------------------------------
        Pending → swipe start
-    ------------------------------------------------------- */
+    ------------------------------------- */
 
     if (g.phase === 'PENDING') {
         if (!g.desc) return null
@@ -91,7 +91,7 @@ function onMove(x: number, y: number, pointerId: number): Descriptor | null {
         const intentAxis: Axis = absX > absY ? 'horizontal' : 'vertical'
         const resolved = utils.resolveSwipeStart(x, y, intentAxis, g.desc)
 
-        //future me -> probably return pressCancel if resolved is false...
+        //future me -> probably return pressCancel if resolved is false... and possibly delete gesture... 
         if (!resolved) return null
 
         g.phase = 'SWIPING'
@@ -102,9 +102,9 @@ function onMove(x: number, y: number, pointerId: number): Descriptor | null {
         return g.desc
     }
 
-    /* -------------------------------------------------------
+    /* ---------------------------
        Active swipe
-    ------------------------------------------------------- */
+    ----------------------------- */
 
     if (g.phase === 'SWIPING' && g.desc) {
 
@@ -127,7 +127,6 @@ function onMove(x: number, y: number, pointerId: number): Descriptor | null {
     return null
 }
 
-
 function onUp(_x: number, _y: number, pointerId: number): Descriptor | null {
     const g = gestures[pointerId]
     if (!g) return null
@@ -135,11 +134,21 @@ function onUp(_x: number, _y: number, pointerId: number): Descriptor | null {
     if (g.phase === 'SWIPING') return finalizeGesture(g, 'swipeCommit')
     if (g.phase === 'PENDING') return finalizeGesture(g, 'pressRelease')
 
+    delete gestures[g.pointerId]
     log('init', 'gesture.phase error:', g.phase)
     return null
 }
 
-function finalizeGesture(g: GestureState, event: EventType): Descriptor {
+function finalizeGesture(g: GestureState, event: EventType): Descriptor | null {
+    if (event === 'pressRelease' && !utils.resolveSupports('pressable', g.desc)) {
+        delete gestures[g.pointerId]
+        return null
+    }
+    if (event === 'swipeCommit' && !utils.resolveSupports('swipeable', g.desc)) {
+        delete gestures[g.pointerId]
+        return null
+    }
+
     g.desc.ctx.event = event
     const descriptor = g.desc
     delete gestures[g.pointerId]

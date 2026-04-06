@@ -35,28 +35,3 @@ export function isGestureType(type: InteractionType): asserts type is 'carousel'
     console.warn(msg)
   }
 }
-
-// export function isOfType<T extends Descriptor['type']>(
-//   desc: Descriptor,
-//   type: T
-// ): desc is Extract<Descriptor, { type: T }> {
-//   return desc.type === type
-// }
-
-
-// export function isOfType<T extends value['type']>(
-//   value: boolean,
-//   type: T
-// ): desc is Extract<value, { type: T }> {
-//   return desc.type === type
-// }
-
-// T = the union type
-// K = the key to discriminate on
-// V = the value you want to check
-
-// export function ensure<
-//   T,
-//   K extends keyof T,
-//   V extends T[K]
-

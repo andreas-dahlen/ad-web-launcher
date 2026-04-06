@@ -1,4 +1,5 @@
-import { carouselStore, type CarouselStore } from '@interaction/zunstand/carouselState'
+import { carouselStore, type CarouselStore } from '@interaction/stores/carouselState'
+import { useEffect } from 'react'
 
 const DEFAULTS = {
   index: 0,
@@ -12,7 +13,10 @@ const DEFAULTS = {
 
 export const useCarouselZustand = (id: string) => {
 
-  carouselStore.getState().init(id)
+  useEffect(() => {
+    carouselStore.getState().init(id)
+  }, [id])
+
   return carouselStore(
     (s: CarouselStore) => s.carouselStore[id] ?? DEFAULTS
   )

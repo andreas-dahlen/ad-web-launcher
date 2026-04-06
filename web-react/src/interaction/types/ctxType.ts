@@ -51,3 +51,8 @@ export type CtxType =
   | CtxButton
 
 export type CtxSwipeType = Exclude<CtxType, CtxButton>
+
+
+export type CarouselCtxPartial = Partial<Pick<CtxCarousel, 'delta1D' | 'direction' | 'stateAccepted'>>
+export type SliderCtxPartial = Partial<Pick<CtxSlider, 'delta1D' | 'gestureUpdate' | 'stateAccepted'>>
+export type DragCtxPartial = Partial<Pick<CtxDrag, 'stateAccepted'>> 

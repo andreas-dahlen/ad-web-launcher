@@ -2,10 +2,6 @@
 	"folders": [
 		{
 			"name": "src",
-			"path": "../deleteDif/ad-web-launcher/web-react/src"
-		},
-		{
-			"name": "src",
 			"path": "web/src"
 		},
 		{

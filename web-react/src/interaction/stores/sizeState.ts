@@ -25,7 +25,6 @@ export type SizeStore = {
   scale: number,
   scaledWidth: number,
   scaledHeight: number,
-  // init: () => void,
   update: () => void,
   normalizeParameter: (parameter: number) => number,
   getAxisSize: (axis: Exclude<Axis, 'both'>) => number
@@ -56,25 +55,6 @@ export const sizeStore = create<SizeStore>()(
       scale,
       scaledWidth,
       scaledHeight,
-
-      // initialize / reset
-      // init: () => {
-      //   const s = get()
-      //   if (s.device) return  // guard: already initialized
-
-      //   const device = sanitizeDevice(window.__DEVICE || defaultDevice)
-      //   const { scale, scaledWidth, scaledHeight } = computeScale(
-      //     device,
-      //     window.innerWidth,
-      //     window.innerHeight
-      //   )
-      //   set(state => {
-      //     state.device = device
-      //     state.scale = scale
-      //     state.scaledWidth = scaledWidth
-      //     state.scaledHeight = scaledHeight
-      //   })
-      // },
 
       // update on resize
       update: () => {

@@ -1,10 +1,10 @@
-import { utils } from '@interaction/core/intentUtils'
+import { domQuery } from '@interaction/core/domQuery'
+import { buildContext } from '@interaction/core/buildContext'
+import { carouselStore } from '@interaction/stores/carouselState'
+import { dragStore } from '@interaction/stores/dragState'
+import { sliderStore } from '@interaction/stores/sliderState'
 import type { BaseInteraction, BaseWithSwipe, Context, Reactions } from '@interaction/types/descriptor/baseType'
 import type { CarouselData, CarouselModifiers, DragData, DragModifiers, SliderData } from '@interaction/types/descriptor/dataType'
-import { carouselStore } from '@interaction/zunstand/carouselState'
-import { dragStore } from '@interaction/zunstand/dragState'
-import { sliderStore } from '@interaction/zunstand/sliderState'
-import { domQuery } from '@interaction/core/domQuery'
 import type { CarouselDesc, SliderDesc, DragDesc, ButtonDesc } from '@interaction/types/descriptor/descriptor'
 import type { Descriptor } from '@interaction/types/descriptor/descriptor'
 import type { CtxButton, CtxCarousel, CtxDrag, CtxSlider } from '@interaction/types/ctxType'
@@ -22,7 +22,8 @@ export const buildDesc = {
     Entry point and Type descrimination
   ========================= */
   resolveFromElement(el: HTMLElement, x: number, y: number, pointerId: number): Descriptor | null {
-    const ctx = utils.buildContext(el)
+    const ctx = buildContext(el)
+    if (!ctx) return null
     const reactions = this.buildReactions(ctx.ds, ctx.laneValid)
     const r = { reactions, x, y, pointerId }
     switch (ctx.type) {

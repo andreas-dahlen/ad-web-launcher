@@ -15,19 +15,12 @@
  * - No swipeRevert reaction
  */
 
-// import {
-//   clampDelta2D,
-//   resolveDirection,
-//   clampCommitPosition
-// } from './policy/dragPolicy'
-
 import type { EventType } from '@interaction/types/primitiveType.ts'
 import { utils } from "./solverUtils.ts"
-import type { Descriptor } from '@interaction/types/descriptor/descriptor.ts'
-import { isDrag } from '@interaction/types/gestureTypeGuards.ts'
-import type { CtxPartial } from '@interaction/types/pipelineType.ts'
+import type { DragDesc } from '@interaction/types/descriptor/descriptor.ts'
+import type { DragCtxPartial } from '@interaction/types/ctxType.ts'
 
-export const dragSolver: Partial<Record<EventType, (desc: Descriptor) => CtxPartial>> = {
+export const dragSolver: Partial<Record<EventType, (desc: DragDesc) => DragCtxPartial>> = {
 
   /**
    * Handle swipeStart - returns reaction to enable dragging
@@ -40,7 +33,6 @@ export const dragSolver: Partial<Record<EventType, (desc: Descriptor) => CtxPart
    * Handle swipe (drag) - clamp deltas and return offset reaction
    */
   swipe(desc) {
-    isDrag(desc)
     const delta = utils.resolveDragSwipe(desc)
     if (typeof delta !== "object") return { stateAccepted: false }
     return {
@@ -53,7 +45,6 @@ export const dragSolver: Partial<Record<EventType, (desc: Descriptor) => CtxPart
    * Handle swipeCommit - always commit at current position (no revert)
    */
   swipeCommit(desc) {
-    isDrag(desc)
     let value = utils.resolveDragCommit(desc)
     if (!value) return { stateAccepted: false }
     const snap = utils.resolveSnapAdjustment(desc, value)

@@ -3,6 +3,7 @@ import type { Reactions } from '@interaction/types/descriptor/baseType'
 import { utils } from '@interaction/core/intentUtils'
 import { buildDesc } from '@interaction/core/buildDesc'
 import type { Descriptor } from '@interaction/types/descriptor/descriptor'
+import { buildContext } from '@interaction/core/buildContext'
 
 export const domQuery = {
 
@@ -18,7 +19,7 @@ export const domQuery = {
     const elements = document.elementsFromPoint(x, y)
     for (const el of elements) {
       if (!(el instanceof HTMLElement)) continue
-      const ctx = utils.buildContext(el)
+      const ctx = buildContext(el)
       if (!ctx) continue
       const reactions = buildDesc.buildReactions(ctx.ds, ctx.laneValid)
       const desc = buildDesc.resolveFromElement(el, x, y, pointerId)

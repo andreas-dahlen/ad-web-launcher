@@ -16,20 +16,19 @@
  */
 import type { EventType } from '@interaction/types/primitiveType.ts'
 import { utils } from "./solverUtils.ts"
-import type { Descriptor } from '@interaction/types/descriptor/descriptor.ts'
-import { isSlider } from '@interaction/types/gestureTypeGuards.ts'
-import type { CtxPartial } from '@interaction/types/pipelineType.ts'
+import type { SliderDesc } from '@interaction/types/descriptor/descriptor.ts'
+import type { SliderCtxPartial } from '@interaction/types/ctxType.ts'
 
-export const sliderSolver: Partial<Record<EventType, (desc: Descriptor) => CtxPartial>> = {
+export const sliderSolver: Partial<Record<EventType, (desc: SliderDesc) => SliderCtxPartial>> = {
 
   /**
    * Handle swipeStart - returns reaction to enable dragging
    */
 
   press(desc) {
-    isSlider(desc)
+    // isSlider(desc)
     if (!desc.data) return { stateAccepted: false }
-    const norm = utils.normalize1D(desc)
+    const norm = utils.normalizeSlider(desc)
     const result = utils.resolveSliderStart(norm, desc.data.constraints)
     return {
       delta1D: result?.value,
@@ -38,9 +37,8 @@ export const sliderSolver: Partial<Record<EventType, (desc: Descriptor) => CtxPa
   },
 
   swipeStart(desc) {
-    isSlider(desc)
     if (!desc.data) return { stateAccepted: false }
-    const norm = utils.normalize1D(desc)
+    const norm = utils.normalizeSlider(desc)
     const result = utils.resolveSliderStart(norm, desc.data.constraints)
     return {
       delta1D: result?.value,
@@ -58,9 +56,8 @@ export const sliderSolver: Partial<Record<EventType, (desc: Descriptor) => CtxPa
    */
 
   swipe(desc) {
-    isSlider(desc)
     if (!desc.data) return { stateAccepted: false }
-    const norm = utils.normalize1D(desc)
+    const norm = utils.normalizeSlider(desc)
     const gated = utils.resolveGate(norm)
     if (gated) return { stateAccepted: false }
     const value =
@@ -74,8 +71,7 @@ export const sliderSolver: Partial<Record<EventType, (desc: Descriptor) => CtxPa
    */
 
   swipeCommit(desc) {
-    isSlider(desc)
-    const norm = utils.normalize1D(desc)
+    const norm = utils.normalizeSlider(desc)
     const gated = utils.resolveGate(norm)
     if (gated) return { stateAccepted: false }
 

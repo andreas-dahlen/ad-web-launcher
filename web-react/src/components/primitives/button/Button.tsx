@@ -1,5 +1,5 @@
 import { useRef } from "react"
-import { usePointerForwarding } from "@interaction/bridge/bridge.ts"
+import { usePointerForwarding } from "@components/hooks/bridge.ts"
 
 export interface ButtonProps {
   id: string
@@ -13,7 +13,6 @@ export interface ButtonProps {
   onPressRelease?: (detail: unknown) => void
   onPressCancel?: (detail: unknown) => void
   children?: React.ReactNode
-  [key: string]: unknown
 }
 
 export default function Button({
@@ -29,7 +28,7 @@ export default function Button({
   onPressCancel,
   children,
   ...rest
-}: ButtonProps) {
+}: ButtonProps & React.HTMLAttributes<HTMLDivElement>) {
 
   const buttonRef = useRef<HTMLDivElement>(null)
 
@@ -56,6 +55,7 @@ export default function Button({
     <div className="non-interactive-default">
       <div
         ref={buttonRef}
+        {...rest}
         className={`interactive-default ${className ?? ''}`}
         style={{ pointerEvents: interactive ? "auto" : "none" }}
         data-type="button"
@@ -65,7 +65,6 @@ export default function Button({
         data-react-press={reactPress || undefined}
         data-react-press-release={reactPressRelease || undefined}
         data-react-press-cancel={reactPressCancel || undefined}
-        {...rest}
       >
         {children}
       </div>

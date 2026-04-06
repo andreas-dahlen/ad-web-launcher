@@ -1,5 +1,5 @@
 import { useRef } from "react"
-import { usePointerForwarding } from "@interaction/bridge/bridge.ts"
+import { usePointerForwarding } from "@components/hooks/bridge.ts"
 import { useSliderSizing } from "./hooks/useSliderSizing.ts"
 import { useSliderMotion } from "./hooks/useSliderMotion.ts"
 import { useSliderZustand } from "./hooks/useSliderZustand.ts"

@@ -7,7 +7,7 @@ import type { CarouselProps } from '@components/primitives/carousel/Carousel'
 import type { DragProps } from '@components/primitives/drag/Drag'
 import type { SliderProps } from '@components/primitives/slider/Slider'
 
-type InteractiveProps =
+export type InteractiveProps =
   | ({ type: 'button' } & ButtonProps)
   | ({ type: 'carousel' } & CarouselProps)
   | ({ type: 'drag' } & DragProps)
@@ -16,20 +16,16 @@ type InteractiveProps =
 export default function Interactive(props: InteractiveProps) {
   switch (props.type) {
     case 'button': {
-      const { ...rest } = props
-      return <Button {...rest} />
+      return <Button {...props} />
     }
     case 'carousel': {
-      const { ...rest } = props
-      return <Carousel {...rest} />
+      return <Carousel {...props} />
     }
     case 'drag': {
-      const { ...rest } = props
-      return <Drag {...rest} />
+      return <Drag {...props} />
     }
     case 'slider': {
-      const { ...rest } = props
-      return <Slider {...rest} />
+      return <Slider {...props} />
     }
   }
 }
