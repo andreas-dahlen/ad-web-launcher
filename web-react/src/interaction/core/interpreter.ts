@@ -97,7 +97,9 @@ function onMove(x: number, y: number, pointerId: number): Descriptor | null {
         g.phase = 'SWIPING'
         g.last.x = x
         g.last.y = y
-        g.desc = utils.resolveCancel(g.desc.base.element, resolved.desc, resolved.pressCancel)
+        g.desc.ctx.cancel = resolved.pressCancel
+            ? { element: g.desc.base.element, pressCancel: true }
+            : undefined
         g.desc.ctx.event = 'swipeStart'
         return g.desc
     }

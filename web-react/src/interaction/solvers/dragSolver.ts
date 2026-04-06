@@ -2,23 +2,15 @@
 /**
  * Drag solver: handles continuous 2D drag movement.
  * 
- * Contract:
- * - Receives descriptor from reactionManager
- * - Uses dragPolicy for pure decision logic
- * - Returns minimal reaction payload for dispatcher
- * - Does NOT mutate state directly
- * - Does NOT access DOM
- * 
  * This is exactly like carousel, except:
  * - 2D deltas (x, y) instead of single axis
  * - No commit threshold check (always commits)
  * - No swipeRevert reaction
  */
-
 import type { EventType } from '@interaction/types/primitiveType.ts'
-import { utils } from "./solverUtils.ts"
 import type { DragDesc } from '@interaction/types/descriptor/descriptor.ts'
 import type { DragCtxPartial } from '@interaction/types/ctxType.ts'
+import { dragUtils } from '@interaction/solvers/solverUtils/dragUtils.ts'
 
 export const dragSolver: Partial<Record<EventType, (desc: DragDesc) => DragCtxPartial>> = {
 
@@ -33,7 +25,7 @@ export const dragSolver: Partial<Record<EventType, (desc: DragDesc) => DragCtxPa
    * Handle swipe (drag) - clamp deltas and return offset reaction
    */
   swipe(desc) {
-    const delta = utils.resolveDragSwipe(desc)
+    const delta = dragUtils.resolveSwipe(desc)
     if (typeof delta !== "object") return { stateAccepted: false }
     return {
       delta,
@@ -45,11 +37,11 @@ export const dragSolver: Partial<Record<EventType, (desc: DragDesc) => DragCtxPa
    * Handle swipeCommit - always commit at current position (no revert)
    */
   swipeCommit(desc) {
-    let value = utils.resolveDragCommit(desc)
+    let value = dragUtils.resolveCommit(desc)
     if (!value) return { stateAccepted: false }
-    const snap = utils.resolveSnapAdjustment(desc, value)
+    const snap = dragUtils.resolveSnapAdjustment(desc, value)
     if (snap != null) { value = snap }
-    const direction = utils.resolveDragDirection(desc.base.axis, desc.data.position, value)
+    const direction = dragUtils.resolveDirection(desc.base.axis, desc.data.position, value)
     return {
       delta: value,
       stateAccepted: true,

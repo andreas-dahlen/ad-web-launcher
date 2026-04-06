@@ -52,7 +52,21 @@ export type CtxType =
 
 export type CtxSwipeType = Exclude<CtxType, CtxButton>
 
+/* -------------------------
+        Solvers
+    -------------------------- */
 
 export type CarouselCtxPartial = Partial<Pick<CtxCarousel, 'delta1D' | 'direction' | 'stateAccepted'>>
 export type SliderCtxPartial = Partial<Pick<CtxSlider, 'delta1D' | 'gestureUpdate' | 'stateAccepted'>>
-export type DragCtxPartial = Partial<Pick<CtxDrag, 'stateAccepted'>> 
+export type DragCtxPartial = Partial<Pick<CtxDrag, 'stateAccepted'>>
+
+export interface Normalized1D {
+  mainTrackSize?: number | null
+  crossTrackSize?: number | null
+  mainThumbSize?: number | null
+  crossThumbSize?: number | null
+  mainOffset?: number | null
+  crossOffset?: number | null
+  mainDelta?: number | null
+  crossDelta?: number | null
+}

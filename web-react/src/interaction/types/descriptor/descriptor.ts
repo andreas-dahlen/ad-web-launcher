@@ -36,3 +36,5 @@ export type Descriptor =
   | ({ type: 'slider' } & SliderDesc)
   | ({ type: 'drag' } & DragDesc)
   | ({ type: 'button' } & ButtonDesc)
+
+export type SwipeableDescriptor = Exclude<Descriptor, { type: 'button' }>

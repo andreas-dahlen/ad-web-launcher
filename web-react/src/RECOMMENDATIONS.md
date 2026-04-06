@@ -85,7 +85,7 @@
 **Effort:** Medium
 **Details:** `useCarouselZustand`, `useDragZustand`, and `useSliderZustand` each call `store.getState().init(id)` at the top of the hook body — during render. This triggers a Zustand `set()` (even if guarded) inside a render pass, violating React's purity expectation. Move the `init` call into a `useEffect` or a `useRef`-based one-time guard so it runs outside the render phase.
 
-//TODO
+//DONE 
 ### Split `solverUtils.ts` into per-primitive solver utility files
 **Category:** Separation of Concerns / Scalability
 **Impact:** High

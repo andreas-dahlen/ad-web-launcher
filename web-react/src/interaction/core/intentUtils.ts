@@ -4,7 +4,7 @@ import { domQuery } from "./domQuery.ts"
 import type { Reactions } from '@interaction/types/descriptor/baseType.ts'
 import type { Vec2 } from '@interaction/types/primitiveType.ts'
 import type { Axis } from '@interaction/types/primitiveType.ts'
-import type { Descriptor } from '@interaction/types/descriptor/descriptor.ts'
+import type { Descriptor, SwipeableDescriptor } from '@interaction/types/descriptor/descriptor.ts'
 import type { CancelData } from '@interaction/types/ctxType.ts'
 
 //intentUtils.js
@@ -24,9 +24,6 @@ export const utils = {
 	/* =========================
 	Utils
 	========================= */
-	/**
-	* Returns: 'horizontal' | 'vertical' | 'both' | null
-	*/
 	resolveAxis(intentAxis: Axis, desc: Descriptor): Axis | null {
 		if (desc.type == 'button') return null
 		if (desc.type == 'drag' && desc.data.locked) return null
@@ -62,38 +59,29 @@ export const utils = {
 	meta utils
 	========================= */
 
-	// resolveTarget(x: number, y: number, pointerId: number): Descriptor | null {
-	// 	const resolved = domQuery.findTargetInDom(x, y, pointerId)
-	// 	if (resolved) {
-	// 		return resolved
-	// 	}
-	// 	return null
-	// },
-
-	resolveSwipeStart(x: number, y: number, intentAxis: Axis, desc: Descriptor): { desc: Descriptor; pressCancel: boolean } | null {
+	resolveSwipeStart(x: number, y: number, intentAxis: Axis, desc: Descriptor): { desc: SwipeableDescriptor; pressCancel: boolean } | null {
 		// Priority: meta must support swipeStart AND the intent axis
 		const axis = this.resolveAxis(intentAxis, desc)
 		const canSwipe = this.resolveSupports('swipeable', desc)
 		const isLocked = desc.type == 'drag' && desc.data.locked
-		if (canSwipe && !isLocked && axis) {
+		if (canSwipe && !isLocked && axis && desc.type !== 'button') {
 			return {
 				desc: desc,
 				pressCancel: false,
 			}
 		}
 		//added slider passthrough to handel accidental wrong axis swipe on sliders.
-		if (canSwipe && !isLocked && desc.ctx.type == 'slider') {
+		if (canSwipe && !isLocked && desc.type == 'slider') {
 			return {
 				desc: desc,
 				pressCancel: false
 			}
 		}
-
 		// Fallback: find lane by axis
-		const newMeta = domQuery.findLaneInDom(x, y, intentAxis, desc.base.pointerId)
-		if (newMeta) {
+		const newDesc = domQuery.findLaneInDom(x, y, intentAxis, desc.base.pointerId)
+		if (newDesc) {
 			return {
-				desc: newMeta,
+				desc: newDesc,
 				pressCancel: this.resolveSupports('pressable', desc),
 			}
 		}

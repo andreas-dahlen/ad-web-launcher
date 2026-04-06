@@ -2,7 +2,7 @@ import type { Axis, Vec2 } from '@interaction/types/primitiveType'
 import type { Reactions } from '@interaction/types/descriptor/baseType'
 import { utils } from '@interaction/core/intentUtils'
 import { buildDesc } from '@interaction/core/buildDesc'
-import type { Descriptor } from '@interaction/types/descriptor/descriptor'
+import type { Descriptor, SwipeableDescriptor } from '@interaction/types/descriptor/descriptor'
 import { buildContext } from '@interaction/core/buildContext'
 
 export const domQuery = {
@@ -30,7 +30,7 @@ export const domQuery = {
     return null
   },
 
-  findLaneInDom(x: number, y: number, inputAxis: Axis, pointerId: number): Descriptor | null {
+  findLaneInDom(x: number, y: number, inputAxis: Axis, pointerId: number): SwipeableDescriptor | null {
     const el = document.elementsFromPoint(x, y).find((
       el): el is HTMLElement => {
       if (!(el instanceof HTMLElement)) return false
@@ -41,7 +41,11 @@ export const domQuery = {
       // skip locked lanes for swipe start
       return laneValid && !locked
     })
-    return el ? buildDesc.resolveFromElement(el, x, y, pointerId) : null
+    const desc = el ? buildDesc.resolveFromElement(el, x, y, pointerId) : null
+    if (desc && desc.type !== 'button') {
+      return desc
+    }
+    return null
   },
 
   /* =========================================================
