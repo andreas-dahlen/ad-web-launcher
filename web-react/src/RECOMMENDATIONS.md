@@ -92,8 +92,10 @@
 **Effort:** Medium
 **Details:** `solverUtils.ts` contains carousel-specific functions (`isCarouselBlocked`, `resolveCarouselCommit`, `shouldCommit`, `getCommitOffset`), slider-specific functions (`resolveSliderStart`, `resolveSliderSwipe`), and drag-specific functions (`resolveDragSwipe`, `resolveDragCommit`, `resolveSnapAdjustment`, `resolveDragDirection`), plus shared utilities (`normalize1D`, `resolveGate`). Split into `carouselSolverUtils.ts`, `sliderSolverUtils.ts`, `dragSolverUtils.ts`, and keep shared functions in `solverUtils.ts`. This reduces merge conflict surface and keeps each solver's logic co-located.
 
-//TODO
+
+//SKIPPED becasue `intentUtils` is already quite focused on gesture interpretation and the individual functions are small. The proposed split would create many tiny files with only one or two functions each, increasing indirection without a clear organizational benefit. If the file grows significantly in the future, we can revisit this recommendation with a clearer sense of how to group the functions meaningfully.
 ### Split `intentUtils.ts` into focused modules
+
 **Category:** Separation of Concerns
 **Impact:** Medium
 **Effort:** Medium
@@ -154,18 +156,14 @@
 **Effort:** Low
 **Details:** Each `use*Zustand` hook subscribes to the entire state object for a given `id`. Use `useShallow` (already imported in `sizeState.ts`) or field-level selectors in `useCarouselZustand`, `useDragZustand`, and `useSliderZustand` to subscribe only to fields the component actually reads. For example, `useCarouselZustand` could select `{ index, offset, count, dragging, size, settling }` via `useShallow`, preventing re-renders when `pendingDir` changes.
 
-//NOTE i agree.. need to decide on a consistent set of terms for the core concepts (size, position, state) and apply them across both halves of the system. The issue is that `lane` terminology is more intuitive within the carousel/slider domain, while `track` and `delta` are more common in gesture interpretation. Need to decide on a single vocabulary that can be applied consistently without feeling out of place in either context.
-//TODO
+DONE hopefully this is good
 ### Unify "lane" vocabulary between `components/` and `interaction/`
 **Category:** Naming & Discoverability
 **Impact:** Low
 **Effort:** Low
 **Details:** Components use `laneSize`, `laneState`, `lanePosition` extensively. `interaction/` uses `trackSize`, `size`, `delta`. The two halves of the system have different names for the same concepts. Pick one vocabulary and apply it consistently (or at least document the mapping).
 
-
-
-
-//HELP this is a bit tricky since the `type` field on the descriptor is what allows us to discriminate the union and narrow to the correct solver, while the `ctx.type` is what the solvers use to determine which fields are valid. If you look at the code in buildDesc.ts the `ctx.type` is derived from the descriptor's `type` at the point of building the descriptor by narrowing but context `ctx.type` and then added to ctx. The potential fix would be to manually add ctx.type before dispatching to the stateFiles/updater... but that might make it harder to narrow ctx.
+//SKIPPED this is a bit tricky since the `type` field on the descriptor is what allows us to discriminate the union and narrow to the correct solver, while the `ctx.type` is what the solvers use to determine which fields are valid. If you look at the code in buildDesc.ts the `ctx.type` is derived from the descriptor's `type` at the point of building the descriptor by narrowing but context `ctx.type` and then added to ctx. The potential fix would be to manually add ctx.type before dispatching to the stateFiles/updater... but that might make it harder to narrow ctx.
 ### Eliminate the duplicated `type` field between `Descriptor` and `ctx`
 **Category:** Dead Code / Consistency
 **Impact:** Low
@@ -179,7 +177,7 @@
 **Effort:** Low
 **Details:** `buildBase` in `buildDesc.ts` attaches `actionId` to all descriptor types, but it's only meaningful for buttons (read from `data-action`). Move `actionId` into `buildButton` only, or make it button-specific in the `BaseInteraction` type via a conditional type or separate interface.
 
-//TODO
+//DONE
 ### Add store cleanup on primitive unmount
 **Category:** State Management
 **Impact:** Low

@@ -1,17 +1,17 @@
 import type { Descriptor } from '@interaction/types/descriptor/descriptor'
 import type { EventBridgeType } from '@interaction/types/primitiveType'
-import type { CarouselStore } from '@interaction/stores/carouselState'
-import type { DragStore } from '@interaction/stores/dragState'
-import type { SliderStore } from '@interaction/stores/sliderState'
+import type { CarouselStore } from '@interaction/stores/carouselStore'
+import type { DragStore } from '@interaction/stores/dragStore'
+import type { SliderStore } from '@interaction/stores/sliderStore'
 
 /* =====================
    Pointer bridge input
 ======================== */
 export interface PointerEventPackage {
-  eventType: EventBridgeType
-  x: number
-  y: number
-  pointerId: number
+  readonly eventType: EventBridgeType
+  readonly x: number
+  readonly y: number
+  readonly pointerId: number
 }
 
 /* =========================================================
@@ -22,7 +22,7 @@ export type InterpreterFn = (x: number, y: number, pointerId: number) => Descrip
 
 
 /* =========================================================
-   State mutation typing
+   Store mutation typing
 ========================================================= */
 
 export type EventMap = {

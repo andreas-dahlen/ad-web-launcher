@@ -1,5 +1,5 @@
 import { useEffect } from "react"
-import { sliderStore } from '@interaction/stores/sliderState'
+import { sliderStore } from '@interaction/stores/sliderStore'
 
 interface UseSliderSizingProps {
     elRef: React.RefObject<HTMLElement | null>
@@ -13,9 +13,6 @@ export function useSliderSizing({
     id,
 }: UseSliderSizingProps) {
 
-    // const [laneSize, setLaneSize] = useState({ x: 0, y: 0 })
-    // const [thumbSize, setThumbSize] = useState({ x: 0, y: 0 })
-
     useEffect(() => {
 
         const el = elRef.current
@@ -26,7 +23,7 @@ export function useSliderSizing({
         function updateLaneSize() {
             if (!el || !thumbEl) return
 
-            const trackSize = {
+            const size = {
                 x: el.offsetWidth,
                 y: el.offsetHeight
             }
@@ -38,10 +35,7 @@ export function useSliderSizing({
                 y: thumbContent?.offsetHeight ?? 0
             }
 
-            // setLaneSize(trackSize)
-            // setThumbSize(thumbSize)
-
-            sliderStore.getState().setSize(id, trackSize)
+            sliderStore.getState().setSize(id, size)
             sliderStore.getState().setThumbSize(id, thumbSize)
         }
 
@@ -54,6 +48,4 @@ export function useSliderSizing({
         return () => observer.disconnect()
 
     }, [elRef, thumbRef, id])
-
-    // return { laneSize, thumbSize }
 }

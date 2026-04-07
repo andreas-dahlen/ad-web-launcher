@@ -1,7 +1,8 @@
 export type Axis = 'horizontal' | 'vertical' | 'both'
 export type Axis1D = 'horizontal' | 'vertical'
 export type EventBridgeType = 'down' | 'move' | 'up'
-// export type Direction = 'left' | 'right' | 'up' | 'down'
+
+export type SceneRole = "prev" | "current" | "next"
 
 export type Direction =
   | { axis: 'horizontal'; dir: 'left' | 'right' }

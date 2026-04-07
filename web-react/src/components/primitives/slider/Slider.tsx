@@ -2,7 +2,7 @@ import { useRef } from "react"
 import { usePointerForwarding } from "@components/hooks/bridge.ts"
 import { useSliderSizing } from "./hooks/useSliderSizing.ts"
 import { useSliderMotion } from "./hooks/useSliderMotion.ts"
-import { useSliderZustand } from "./hooks/useSliderZustand.ts"
+import { useSliderZustand } from "./hooks/useSliderStore.ts"
 
 export interface SliderProps {
   id: string
@@ -28,13 +28,13 @@ export default function Slider({
   children
 }: SliderProps) {
 
-  // ── Fully subscribe to the slider state ─────────────────────────────
+  // ── Fully subscribe to the slider store ─────────────────────────────
   const { value, min, max, size, thumbSize, dragging } = useSliderZustand(id)
 
   const horizontal = axis === 'horizontal'
-  const laneSize = horizontal ? size.x : size.y
-  const laneThumbSize = horizontal ? thumbSize.x : thumbSize.y
-  const laneConstraints = { min, max }
+  const axisSize = horizontal ? size.x : size.y
+  const axisThumbSize = horizontal ? thumbSize.x : thumbSize.y
+  const constraints = { min, max }
 
   // ── DOM references & sizing ─────────────────────────────
   const sliderRef = useRef<HTMLDivElement>(null)
@@ -70,10 +70,10 @@ export default function Slider({
 
   // ── Slider motion / styling ─────────────────────────────
   const { thumbStyle } = useSliderMotion({
-    lanePosition: value,
-    laneConstraints,
-    laneSize,
-    laneThumbSize,
+    position: value,
+    constraints,
+    axisSize,
+    axisThumbSize,
     dragging: dragging ?? false,
     horizontal
   })

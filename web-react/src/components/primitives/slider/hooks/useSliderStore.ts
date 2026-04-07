@@ -1,4 +1,4 @@
-import { sliderStore, type SliderStore } from '@interaction/stores/sliderState'
+import { sliderStore, type SliderStore } from '@interaction/stores/sliderStore'
 import { useEffect } from 'react'
 
 const DEFAULTS = {
@@ -15,6 +15,7 @@ export const useSliderZustand = (id: string) => {
 
   useEffect(() => {
     sliderStore.getState().init(id)
+    return () => sliderStore.getState().delete(id)
   }, [id])
 
   return sliderStore(

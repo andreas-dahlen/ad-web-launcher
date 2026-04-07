@@ -2,7 +2,7 @@ import { useRef } from "react"
 import { usePointerForwarding } from "@components/hooks/bridge.ts"
 import { useDragSizing } from "./hooks/useDragSizing.ts"
 import { useDragMotion } from "./hooks/useDragMotion.ts"
-import { useDragZustand } from "./hooks/useDragZustand.ts"
+import { useDragZustand } from "./hooks/useDragStore.ts"
 
 export interface DragProps {
   id: string
@@ -26,7 +26,7 @@ export default function Drag({
   children
 }: DragProps) {
 
-  // ── Fully subscribe to the drag state ─────────────────────────────
+  // ── Fully subscribe to the drag store─────────────────────────────
   const { position, offset, dragging } = useDragZustand(id)
 
   // ── DOM references & sizing ─────────────────────────────
@@ -48,7 +48,7 @@ export default function Drag({
 
   // ── Drag motion / styling ─────────────────────────────
   const { itemStyle } = useDragMotion({
-    lanePosition: position,
+    position,
     offset,
     dragging
   })

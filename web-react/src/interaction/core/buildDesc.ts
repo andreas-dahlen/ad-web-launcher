@@ -1,8 +1,8 @@
 import { domQuery } from '@interaction/core/domQuery'
 import { buildContext } from '@interaction/core/buildContext'
-import { carouselStore } from '@interaction/stores/carouselState'
-import { dragStore } from '@interaction/stores/dragState'
-import { sliderStore } from '@interaction/stores/sliderState'
+import { carouselStore } from '@interaction/stores/carouselStore'
+import { dragStore } from '@interaction/stores/dragStore'
+import { sliderStore } from '@interaction/stores/sliderStore'
 import type { BaseInteraction, BaseWithSwipe, Context, Reactions } from '@interaction/types/descriptor/baseType'
 import type { CarouselData, CarouselModifiers, DragData, DragModifiers, SliderData } from '@interaction/types/descriptor/dataType'
 import type { CarouselDesc, SliderDesc, DragDesc, ButtonDesc } from '@interaction/types/descriptor/descriptor'
@@ -124,16 +124,16 @@ export const buildDesc = {
     ctx placeholders
   ========================= */
   buildCarouselCtx(ctx: Context): CtxCarousel {
-    return { type: 'carousel', event: 'press', id: ctx.id, element: ctx.el, delta: { x: 0, y: 0 }, stateAccepted: false }
+    return { type: 'carousel', event: 'press', id: ctx.id, element: ctx.el, delta: { x: 0, y: 0 }, storeAccepted: false }
   },
   buildSliderCtx(ctx: Context): CtxSlider {
-    return { type: 'slider', event: 'press', id: ctx.id, element: ctx.el, delta: { x: 0, y: 0 }, stateAccepted: false }
+    return { type: 'slider', event: 'press', id: ctx.id, element: ctx.el, delta: { x: 0, y: 0 }, storeAccepted: false }
   },
   buildDragCtx(ctx: Context): CtxDrag {
-    return { type: 'drag', event: 'press', id: ctx.id, element: ctx.el, delta: { x: 0, y: 0 }, stateAccepted: false }
+    return { type: 'drag', event: 'press', id: ctx.id, element: ctx.el, delta: { x: 0, y: 0 }, storeAccepted: false }
   },
   buildBtnCtx(ctx: Context): CtxButton {
-    return { type: 'button', event: 'press', id: ctx.id, element: ctx.el, stateAccepted: false }
+    return { type: 'button', event: 'press', id: ctx.id, element: ctx.el, storeAccepted: false }
   },
 
   /* =========================

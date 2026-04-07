@@ -1,10 +1,10 @@
 import { useMemo } from "react"
 
 interface UseSliderMotionProps {
-  lanePosition: number
-  laneConstraints: { min: number; max: number }
-  laneSize: number
-  laneThumbSize: number
+  position: number
+  constraints: { min: number; max: number }
+  axisSize: number
+  axisThumbSize: number
   dragging: boolean
   horizontal: boolean
 }
@@ -14,22 +14,22 @@ const BASE_STYLE = {
 }
 
 export function useSliderMotion({
-  lanePosition,
-  laneConstraints,
-  laneSize,
-  laneThumbSize,
+  position,
+  constraints,
+  axisSize,
+  axisThumbSize,
   dragging,
   horizontal
 }: UseSliderMotionProps) {
   const thumbStyle = useMemo(() => {
-    const { min, max } = laneConstraints
-    const value = lanePosition
+    const { min, max } = constraints
+    const value = position
 
     const range = max - min || 1
     const ratio = (value - min) / range
 
     // usable space for thumb
-    const usable = Math.max(laneSize - laneThumbSize, 0)
+    const usable = Math.max(axisSize - axisThumbSize, 0)
     const pos = ratio * usable
 
     return {
@@ -39,7 +39,7 @@ export function useSliderMotion({
         : `translate3d(0,${pos}px,0)`,
       transition: dragging ? "none" : "transform 150ms ease-out"
     }
-  }, [lanePosition, laneConstraints, laneSize, laneThumbSize, dragging, horizontal])
+  }, [position, constraints, axisSize, axisThumbSize, dragging, horizontal])
 
   return { thumbStyle }
 }

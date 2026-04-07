@@ -13,8 +13,8 @@ export const sliderUtils = {
     const thumb = vector.resolveByAxis1D(desc.data.thumbSize, axis)
     return {
       ...base,
-      mainTrackSize: track?.prim,
-      crossTrackSize: track?.sub,
+      mainSize: track?.prim,
+      crossSize: track?.sub,
       mainThumbSize: thumb?.prim,
       crossThumbSize: thumb?.sub
     }
@@ -23,10 +23,10 @@ export const sliderUtils = {
   resolveStart(norm: Normalized1D,
     { min, max }: { min: number, max: number }) {
 
-    const { mainTrackSize, mainOffset, mainThumbSize } = norm
-    if (mainTrackSize == null || mainOffset == null || mainThumbSize == null) return
+    const { mainSize, mainOffset, mainThumbSize } = norm
+    if (mainSize == null || mainOffset == null || mainThumbSize == null) return
     const range = max - min
-    const usable = mainTrackSize - mainThumbSize
+    const usable = mainSize - mainThumbSize
     const ratio = (mainOffset - mainThumbSize / 2) / usable
     const value = min + vector.clamp(ratio, 0, 1) * range
     return {

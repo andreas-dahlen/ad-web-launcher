@@ -8,9 +8,9 @@ export interface CancelData {
 
 export type CtxBase = {
   event: EventType
-  id: string
-  element: HTMLElement
-  stateAccepted: boolean
+  readonly id: string
+  readonly element: HTMLElement
+  storeAccepted: boolean
 }
 
 export type CtxButton = CtxBase & {
@@ -56,13 +56,13 @@ export type CtxSwipeType = Exclude<CtxType, CtxButton>
         Solvers
     -------------------------- */
 
-export type CarouselCtxPartial = Partial<Pick<CtxCarousel, 'delta1D' | 'direction' | 'stateAccepted'>>
-export type SliderCtxPartial = Partial<Pick<CtxSlider, 'delta1D' | 'gestureUpdate' | 'stateAccepted'>>
-export type DragCtxPartial = Partial<Pick<CtxDrag, 'stateAccepted'>>
+export type CarouselCtxPartial = Partial<Pick<CtxCarousel, 'delta1D' | 'direction' | 'storeAccepted'>>
+export type SliderCtxPartial = Partial<Pick<CtxSlider, 'delta1D' | 'gestureUpdate' | 'storeAccepted'>>
+export type DragCtxPartial = Partial<Pick<CtxDrag, 'storeAccepted'>>
 
 export interface Normalized1D {
-  mainTrackSize?: number | null
-  crossTrackSize?: number | null
+  mainSize?: number | null
+  crossSize?: number | null
   mainThumbSize?: number | null
   crossThumbSize?: number | null
   mainOffset?: number | null

@@ -1,4 +1,4 @@
-import { dragStore, type DragStore } from '@interaction/stores/dragState'
+import { dragStore, type DragStore } from '@interaction/stores/dragStore'
 import { useEffect } from 'react'
 
 const DEFAULTS = {
@@ -15,6 +15,7 @@ export const useDragZustand = (id: string) => {
 
   useEffect(() => {
     dragStore.getState().init(id)
+    return () => dragStore.getState().delete(id)
   }, [id])
 
   return dragStore(

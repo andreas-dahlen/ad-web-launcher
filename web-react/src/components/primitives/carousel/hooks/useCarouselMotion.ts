@@ -1,16 +1,16 @@
 import { useMemo, useCallback } from "react"
 import { APP_SETTINGS } from "@config/appSettings.ts"
-import { carouselStore } from '@interaction/stores/carouselState'
+import { carouselStore } from '@interaction/stores/carouselStore'
 
 type Role = "prev" | "current" | "next"
 
 interface UseCarouselMotionProps {
-  laneState: {
+  store: {
     offset: number
     dragging: boolean
     settling: boolean
   }
-  laneSize: number
+  axisSize: number
   horizontal: boolean
   id: string
 }
@@ -18,15 +18,15 @@ interface UseCarouselMotionProps {
 const ROLE_OFFSETS = { prev: -1, current: 0, next: 1 } as const
 
 export function useCarouselMotion({
-  laneState,
-  laneSize,
+  store,
+  axisSize,
   horizontal,
   id
 }: UseCarouselMotionProps) {
 
-  const delta = laneState.offset ?? 0
-  const isDragging = laneState.dragging ?? false
-  const isSettling = laneState.settling ?? false
+  const delta = store.offset ?? 0
+  const isDragging = store.dragging ?? false
+  const isSettling = store.settling ?? false
 
   const transition = useMemo(() => {
     if (isDragging || isSettling) return "none"
@@ -47,11 +47,11 @@ export function useCarouselMotion({
 
       return {
         // ...BASE_STYLE,
-        transform: translate(multiplier * laneSize + delta),
+        transform: translate(multiplier * axisSize + delta),
         transition
       }
     },
-    [translate, laneSize, delta, transition]
+    [translate, axisSize, delta, transition]
   )
 
   const onTransitionEnd = useCallback(

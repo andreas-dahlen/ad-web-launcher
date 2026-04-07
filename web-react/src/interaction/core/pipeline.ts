@@ -2,10 +2,10 @@ import { interpreter } from './interpreter.ts'
 import { carouselSolver } from '../solvers/carouselSolver.ts'
 import { sliderSolver } from '../solvers/sliderSolver.ts'
 import { dragSolver } from '../solvers/dragSolver.ts'
-import { render } from '../updater/domUpdater.ts'
-import { dragStore } from '@interaction/stores/dragState.ts'
-import { sliderStore } from '@interaction/stores/sliderState.ts'
-import { carouselStore } from '@interaction/stores/carouselState.ts'
+import { domUpdater } from '../updater/domUpdater.ts'
+import { dragStore } from '@interaction/stores/dragStore.ts'
+import { sliderStore } from '@interaction/stores/sliderStore.ts'
+import { carouselStore } from '@interaction/stores/carouselStore.ts'
 import type { EventBridgeType } from '@interaction/types/primitiveType.ts'
 import type { CarouselFunctions, DragFunctions, InterpreterFn, PointerEventPackage, SliderFunctions } from '@interaction/types/pipelineType.ts'
 import type { CtxType } from '@interaction/types/ctxType.ts'
@@ -46,7 +46,7 @@ export const pipeline = {
     const desc = interpreterFn(x, y, pointerId)
     if (!desc) return null
     /* -------------------------
-       Solvers and State Mutations narrowed
+       Solvers and Store Mutations narrowed
     -------------------------- */
 
     const { type, ctx: { event } } = desc
@@ -57,7 +57,7 @@ export const pipeline = {
         ctx = desc.ctx
         const sr = carouselSolver?.[event]?.(desc)
         if (sr) ctx = { ...ctx, ...sr }
-        if (ctx.stateAccepted) {
+        if (ctx.storeAccepted) {
           // if (ctx.gestureUpdate != null) interpreter.applyGestureUpdate(ctx.gestureUpdate)
           const fn = carouselStore.getState()[ctx.event as keyof CarouselFunctions]
           fn?.(ctx)
@@ -69,7 +69,7 @@ export const pipeline = {
         const sr = sliderSolver?.[event]?.(desc)
         if (sr) ctx = { ...ctx, ...sr }
         if (ctx.gestureUpdate != null) interpreter.applyGestureUpdate(ctx.gestureUpdate)
-        if (ctx.stateAccepted) {
+        if (ctx.storeAccepted) {
           const fn = sliderStore.getState()[ctx.event as keyof SliderFunctions]
           fn?.(ctx)
         }
@@ -80,7 +80,7 @@ export const pipeline = {
         ctx = desc.ctx
         const sr = dragSolver?.[event]?.(desc)
         if (sr) ctx = { ...ctx, ...sr }
-        if (ctx.stateAccepted) {
+        if (ctx.storeAccepted) {
           // if (ctx.gestureUpdate != null) interpreter.applyGestureUpdate(ctx.gestureUpdate)
           const fn = dragStore.getState()[ctx.event as keyof DragFunctions]
           fn?.(ctx)
@@ -97,7 +97,7 @@ export const pipeline = {
     /* -------------------------
        Renderer
     -------------------------- */
-    render.handle(ctx)
+    domUpdater.handle(ctx)
 
     return ctx
   }

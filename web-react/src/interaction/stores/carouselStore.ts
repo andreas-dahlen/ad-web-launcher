@@ -1,6 +1,4 @@
-// import { state } from "@interaction/state/stateManager"
 import { immer } from "zustand/middleware/immer"
-// import { shallow } from "zustand/shallow"
 import { create } from 'zustand'
 import type { Direction, Vec2 } from "@interaction/types/primitiveType"
 import type { CtxCarousel } from '@interaction/types/ctxType'
@@ -25,6 +23,7 @@ export type CarouselStore = {
   carouselStore: Record<string, Carousel>
   init: (id: string) => void
   get: (id: string) => Readonly<Carousel>
+  delete: (id: string) => void
 
   setCount: (id: string, count: number) => void
   // setScenes: (id: string, scenes: number[]) => void
@@ -62,11 +61,15 @@ export const carouselStore = create<CarouselStore>()(
       })
     },
 
-    //ensure should not be needed... should be init for a fact because of react component...
     get: (id) => {
       return get().carouselStore[id] ?? null
     },
 
+    delete: (id: string) => {
+      set(state => {
+        delete state.carouselStore[id]
+      })
+    },
     // setScenes: (id, scenes) => {
     //   set(state => {
     //     state.carouselStore[id].scenes = scenes
@@ -145,7 +148,7 @@ export const carouselStore = create<CarouselStore>()(
         s.dragging = false
         s.pendingDir = null
       })
-    }
+    },
   })
   )
 )

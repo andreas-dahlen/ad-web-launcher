@@ -5,29 +5,29 @@ import type { CtxButton, CtxCarousel, CtxDrag, CtxSlider } from '@interaction/ty
 
 
 export type CarouselDesc = {
-  base: BaseWithSwipe
-  data: CarouselData & CarouselModifiers
-  reactions: Reactions
+  readonly base: BaseWithSwipe
+  readonly data: CarouselData & CarouselModifiers
+  readonly reactions: Reactions
   ctx: CtxCarousel
 }
 
 export type SliderDesc = {
-  base: BaseWithSwipe
-  data: SliderData
-  reactions: Reactions
+  readonly base: BaseWithSwipe
+  readonly data: SliderData
+  readonly reactions: Reactions
   ctx: CtxSlider
 }
 
 export type DragDesc = {
-  base: BaseWithSwipe
-  data: DragData & DragModifiers
-  reactions: Reactions
+  readonly base: BaseWithSwipe
+  readonly data: DragData & DragModifiers
+  readonly reactions: Reactions
   ctx: CtxDrag
 }
 
 export type ButtonDesc = {
-  base: BaseInteraction
-  reactions: Reactions
+  readonly base: BaseInteraction
+  readonly reactions: Reactions
   ctx: CtxButton
 }
 

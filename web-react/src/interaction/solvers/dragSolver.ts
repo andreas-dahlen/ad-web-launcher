@@ -18,7 +18,7 @@ export const dragSolver: Partial<Record<EventType, (desc: DragDesc) => DragCtxPa
    * Handle swipeStart - returns reaction to enable dragging
    */
   swipeStart() {
-    return { stateAccepted: true }
+    return { storeAccepted: true }
   },
 
   /**
@@ -26,10 +26,10 @@ export const dragSolver: Partial<Record<EventType, (desc: DragDesc) => DragCtxPa
    */
   swipe(desc) {
     const delta = dragUtils.resolveSwipe(desc)
-    if (typeof delta !== "object") return { stateAccepted: false }
+    if (typeof delta !== "object") return { storeAccepted: false }
     return {
       delta,
-      stateAccepted: true
+      storeAccepted: true
     }
   },
 
@@ -38,13 +38,13 @@ export const dragSolver: Partial<Record<EventType, (desc: DragDesc) => DragCtxPa
    */
   swipeCommit(desc) {
     let value = dragUtils.resolveCommit(desc)
-    if (!value) return { stateAccepted: false }
+    if (!value) return { storeAccepted: false }
     const snap = dragUtils.resolveSnapAdjustment(desc, value)
     if (snap != null) { value = snap }
     const direction = dragUtils.resolveDirection(desc.base.axis, desc.data.position, value)
     return {
       delta: value,
-      stateAccepted: true,
+      storeAccepted: true,
       direction: direction
     }
   }

@@ -21,6 +21,8 @@ export type DragStore = {
   dragStore: Record<string, Drag>
   init: (id: string) => void
   get: (id: string) => Readonly<Drag>
+  delete: (id: string) => void
+
   setConstraints: (id: string, constraints: { minX?: number, maxX?: number, minY?: number, maxY?: number }) => void
   setPosition: (id: string, pos: Vec2) => void
   swipeStart: (ctx: CtxDrag) => void
@@ -32,7 +34,6 @@ export const dragStore = create<DragStore>()(
   immer((set, get) => ({
 
     dragStore: {},
-
     //tsx only!
     init: (id) => {
       if (get().dragStore[id]) return
@@ -49,8 +50,15 @@ export const dragStore = create<DragStore>()(
         }
       })
     },
+
     get: (id) => {
       return get().dragStore[id] ?? null
+    },
+
+    delete: (id: string) => {
+      set(state => {
+        delete state.dragStore[id]
+      })
     },
 
     setConstraints: (id, packet) => {

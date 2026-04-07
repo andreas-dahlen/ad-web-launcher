@@ -1,4 +1,4 @@
-import { carouselStore } from '@interaction/stores/carouselState'
+import { carouselStore } from '@interaction/stores/carouselStore'
 import { useEffect } from "react"
 
 interface UseCarouselSizingProps {
@@ -19,12 +19,12 @@ export function useCarouselSizing({
         function updateLaneSize() {
             if (!el) return
 
-            const trackSize = {
+            const size = {
                 x: el.offsetWidth,
                 y: el.offsetHeight
             }
 
-            carouselStore.getState().setSize(id, trackSize)
+            carouselStore.getState().setSize(id, size)
         }
 
         updateLaneSize()

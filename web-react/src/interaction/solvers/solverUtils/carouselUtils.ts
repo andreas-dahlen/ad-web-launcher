@@ -14,8 +14,8 @@ export const carouselUtils = {
     const track = vector.resolveByAxis1D(desc.data.size, axis)
     return {
       ...base,
-      mainTrackSize: track?.prim,
-      crossTrackSize: track?.sub
+      mainSize: track?.prim,
+      crossSize: track?.sub
     }
   },
 
@@ -28,13 +28,13 @@ export const carouselUtils = {
   },
 
   resolveCommit(norm: Normalized1D, axis: Axis) {
-    const { mainTrackSize, mainDelta } = norm
-    if (mainDelta == null || mainTrackSize == null) return
+    const { mainSize, mainDelta } = norm
+    if (mainDelta == null || mainSize == null) return
 
-    if (this.shouldCommit(mainDelta, mainTrackSize, axis)) {
+    if (this.shouldCommit(mainDelta, mainSize, axis)) {
       const direction = vector.resolveDirection(mainDelta, axis)
       if (direction) {
-        const delta = this.getCommitOffset(direction, mainTrackSize)
+        const delta = this.getCommitOffset(direction, mainSize)
         return { direction, delta }
       }
     }

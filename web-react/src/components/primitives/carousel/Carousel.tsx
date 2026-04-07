@@ -3,9 +3,9 @@ import { usePointerForwarding } from "@components/hooks/bridge.ts"
 import { useCarouselMotion } from "./hooks/useCarouselMotion.ts"
 import { useCarouselSizing } from "./hooks/useCarouselSizing.ts"
 import { useAugmentedScenes } from "./hooks/useAugmentedScenes.ts"
-import type { SceneRole } from "./hooks/useCarouselScenes.ts"
-import { useCarouselZustand } from '@components/primitives/carousel/hooks/useCarouselZustand.ts'
-import { carouselStore } from '@interaction/stores/carouselState.ts'
+import type { SceneRole } from '@interaction/types/primitiveType.ts'
+import { useCarouselZustand } from '@components/primitives/carousel/hooks/useCarouselStore.ts'
+import { carouselStore } from '@interaction/stores/carouselStore.ts'
 
 export interface CarouselProps {
   id: string
@@ -34,7 +34,7 @@ export default function Carousel({
   interactive = true
 }: CarouselProps) {
 
-  // ── Fully subscribe to the carousel state ─────────────────────────────
+  // ── Fully subscribe to the carousel store ─────────────────────────────
   const { settling, index, offset, count, dragging, size } = useCarouselZustand(id)
 
   // ── Initialize count for mirror scenes ─────────────────────────────
@@ -48,7 +48,7 @@ export default function Carousel({
   const carouselRef = useRef<HTMLDivElement>(null)
   useCarouselSizing({ elRef: carouselRef, axis, id })
 
-  const laneSize = axis === "horizontal" ? size.x : size.y
+  const axisSize = axis === "horizontal" ? size.x : size.y
 
   // ── Pointer forwarding for gestures ─────────────────────────────
   usePointerForwarding({
@@ -86,10 +86,10 @@ export default function Carousel({
   const {
     styleForRole,
     onTransitionEnd } = useCarouselMotion({
-      laneState: { offset, dragging, settling },
+      store: { offset, dragging, settling },
       horizontal: axis === "horizontal",
       id,
-      laneSize
+      axisSize
     })
 
   return (

@@ -1,4 +1,4 @@
-import { normalizeParameter, getAxisSize } from '../stores/sizeState.ts'
+import { normalizeParameter, getAxisSize } from '../stores/sizeStore.ts'
 import { APP_SETTINGS } from '@config/appSettings.ts'
 import { domQuery } from "./domQuery.ts"
 import type { Reactions } from '@interaction/types/descriptor/baseType.ts'

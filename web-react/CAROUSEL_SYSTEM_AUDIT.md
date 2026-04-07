@@ -32,19 +32,19 @@
 | **Architecture** | Solid — Zustand+Immer store, keyed carousel, pointerId-based interpreter |
 | **Type Safety** | Improved but still has global ambient types and type assertions |
 | **React Integration** | Good — most anti-patterns resolved; some performance optimizations remain |
-| **State Management** | Zustand+Immer — correct immutable updates, proper selector support |
+| ** Management** | Zustand+Immer — correct immutable updates, proper selector support |
 | **Gesture Pipeline** | Well-structured, multi-gesture capable via pointerId-keyed map |
 
 ### Remaining Top Risks
 
-1. **`MirrorWrapper.tsx` imports a non-existent `useCarouselState` API** — the component is completely broken and will crash if rendered.
+1. **`MirrorWrapper.tsx` imports a non-existent `useCarousel` API** — the component is completely broken and will crash if rendered.
 2. **`subscribe.useFull` re-renders on any field change** — during 60fps gestures, all carousel subscribers re-render on every `offset` update, even if they only need `index`.
 3. **Scene components not memoized** — unnecessary child re-renders during gesture drag.
 4. **Global type pollution via `declare global`** — ~40 types in global scope with no import tracking.
 
 ### General Recommendation
 
-**Good foundation for scaling.** The critical state management, interpreter, and carousel rendering bugs from the original audit have been resolved. Remaining work is primarily performance optimization (`usePartial` subscriptions, `React.memo` on scenes) and cleanup (dead code, MirrorWrapper migration, type exports).
+**Good foundation for scaling.** The critical  management, interpreter, and carousel rendering bugs from the original audit have been resolved. Remaining work is primarily performance optimization (`usePartial` subscriptions, `React.memo` on scenes) and cleanup (dead code, MirrorWrapper migration, type exports).
 
 ---
 
@@ -54,11 +54,11 @@ The following issues from the original audit (March 21) have been resolved:
 
 | ID | Issue | How Fixed |
 |----|-------|-----------|
-| **C1** | Custom state store mutates-in-place, shallow-copies | Replaced with Zustand + Immer middleware (`zustandStore.ts`) — proper immutable updates |
-| **C2** | `ensure()` mutates state outside `setState` | `store.ensure()` uses Zustand's `set()` API properly |
-| **C3** | Nested `setState` in `swipeStart` → `setPosition` | `swipeStart` does all mutations in a single `store.mutate` call, no delegation |
+| **C1** | Custom  store mutates-in-place, shallow-copies | Replaced with Zustand + Immer middleware (`zustandStore.ts`) — proper immutable updates |
+| **C2** | `ensure()` mutates  outside `set` | `store.ensure()` uses Zustand's `set()` API properly |
+| **C3** | Nested `set` in `swipeStart` → `setPosition` | `swipeStart` does all mutations in a single `store.mutate` call, no delegation |
 | **C4** | Slot rotation in `useEffect`, stale during render | Slots computed via `useMemo` during render; `renderSlots` sorted for stable DOM key order |
-| **C5** | Global singleton interpreter | Interpreter now uses `Record<number, GestureState>` keyed by `pointerId` |
+| **C5** | Global singleton interpreter | Interpreter now uses `Record<number, Gesture>` keyed by `pointerId` |
 | **H2** | `getSize()` returns `0` instead of `Vec2` | Returns `this.ensure(id).size` — `ensure` guarantees `{x:0, y:0}` default |
 | **H3** | `onTransitionEnd` fires 3x, 6+ wasted re-renders | `setPosition` guards with `if (!lane.pendingDir) return false` before any mutation |
 | **H5** | `onReaction` callback identity causes effect teardown | Uses `useRef(onReaction)` pattern; main effect depends only on `[elRef, disabled]` |
@@ -68,7 +68,7 @@ The following issues from the original audit (March 21) have been resolved:
 | **M2** | No runtime validation in carousel solver | `carouselSolver` now throws on wrong descriptor type |
 | **M5** | Disabled gesture cleanup sends `(0,0)` coordinates | Uses `pipeline.abortGesture(pointerId)` + pointer capture release |
 | **M7** | StrictMode double-mount breaks initialization | `store.ensure()` is idempotent via Zustand — safe under StrictMode |
-| **L2** | Inconsistent `ensure()` signatures | All state files now use `ensure(id)` → `store.ensure(type, id, defaults)` |
+| **L2** | Inconsistent `ensure()` signatures | All  files now use `ensure(id)` → `store.ensure(type, id, defaults)` |
 | **L3** | No `getServerSnapshot` | N/A — using Zustand (handles this internally) |
 | **L4** | Ref mutation during render (slotsRef) | Slots are `useMemo`, no ref mutation during render |
 
@@ -106,7 +106,7 @@ Route `axis: 'both'` through a 2D normalize path, or prevent 1D functions from b
 
 #### H4 — `subscribe.useFull` re-renders on any field change
 
-**File:** `interaction/state/zustandHook.ts`  
+**File:** `interaction//zustandHook.ts`  
 **Location:** `useFull()`
 
 **Explanation:**  
@@ -126,7 +126,7 @@ Split `Carousel.tsx` into two subscriptions using `subscribe.usePartial` — one
 
 #### H8 — `subscribe.usePartial` lacks shallow equality for object selectors
 
-**File:** `interaction/state/zustandHook.ts`  
+**File:** `interaction//zustandHook.ts`  
 **Location:** `usePartial()`
 
 **Explanation:**  
@@ -214,12 +214,12 @@ Latch the gate decision once per gesture. After `swipeStart`, don't re-evaluate.
 
 ---
 
-#### M9 — `ensure()` called redundantly on every state mutation in hot path
+#### M9 — `ensure()` called redundantly on every  mutation in hot path
 
-**File:** `interaction/state/carouselState.ts` (and `sliderState.ts`, `dragState.ts`)
+**File:** `interaction//carousel.ts` (and `slider.ts`, `drag.ts`)
 
 **Explanation:**  
-Every `swipe()`, `swipeCommit()`, `swipeRevert()`, etc. calls `this.ensure(desc.base.id)` before mutating. `ensure` calls `store.ensure()` which does `useStore.getState()` lookup. During a 60fps gesture, this is 60 redundant existence checks per second. The reactive is guaranteed to exist — it was ensured at component mount.
+Every `swipe()`, `swipeCommit()`, `swipeRevert()`, etc. calls `this.ensure(desc.base.id)` before mutating. `ensure` calls `store.ensure()` which does `useStore.get()` lookup. During a 60fps gesture, this is 60 redundant existence checks per second. The reactive is guaranteed to exist — it was ensured at component mount.
 
 **Impact:** Low per-call cost, but adds up at 60fps across multiple carousels.
 
@@ -239,28 +239,28 @@ Trust that the reactive exists in mutation functions (it was ensured at mount). 
 **Files still affected:**
 - `app/Root.tsx` — commented import `OverlayLayer`
 - `interaction/solvers/dragSolver.ts` — commented policy imports
-- `interaction/state/sliderState.ts` — large blocks of commented-out old store code
-- `interaction/state/dragState.ts` — commented-out old store code
+- `interaction//slider.ts` — large blocks of commented-out old store code
+- `interaction//drag.ts` — commented-out old store code
 
 **Previously fixed:**
 - ~~`components/primitives/metaHooks/metaHooks.ts`~~ — file deleted
-- ~~`interaction/state/carouselState.ts`~~ — commented `get()` removed
+- ~~`interaction//carousel.ts`~~ — commented `get()` removed
 
 **Fix difficulty:** Easy
 
 ---
 
-#### L5 — `isStateFn2Arg` guard doesn't match `StateFn2Arg` type
+#### L5 — `isFn2Arg` guard doesn't match `Fn2Arg` type
 
 **File:** `config/utils/gestureTypeGuards.ts`
 
 ```ts
-export function isStateFn2Arg(fnName: string): fnName is StateFn2Arg {
+export function isFn2Arg(fnName: string): fnName is Fn2Arg {
     return ['press', 'swipeStart', 'swipe', 'swipeCommit', 'swipeRevert'].includes(fnName)
 }
 ```
 
-`StateFn2Arg` includes getters like `'getSize'`, `'get'`, `'ensure'`, etc. The guard only checks the mutation functions. The name and narrowing type are technically incorrect (the guard is actually `isMutationFn`).
+`Fn2Arg` includes getters like `'getSize'`, `'get'`, `'ensure'`, etc. The guard only checks the mutation functions. The name and narrowing type are technically incorrect (the guard is actually `isMutationFn`).
 
 **Fix difficulty:** Easy
 
@@ -301,7 +301,7 @@ The index signature obliterates type safety — any property can be set on a `Ge
 | `subscribe.useFull` re-renders on any field mutation | **High** — 60fps re-renders during drag | `zustandHook.ts`, `Carousel.tsx` | Remaining (H4) |
 | `subscribe.usePartial` lacks shallow equality | **High** — object selectors always re-render | `zustandHook.ts` | Remaining (H8) |
 | Scene components not memoized | **Medium** — unnecessary child re-renders | All scene files | Remaining (M4) |
-| ~~Every `setState` re-renders ALL subscribers~~ | ~~High~~ | ~~`stateReactAdapter.ts`~~ | **Fixed** — Zustand with selectors |
+| ~~Every `set` re-renders ALL subscribers~~ | ~~High~~ | ~~`ReactAdapter.ts`~~ | **Fixed** — Zustand with selectors |
 | ~~`onTransitionEnd` fires 3x per commit~~ | ~~Medium~~ | ~~`Carousel.tsx`~~ | **Fixed** — `setPosition` guards before mutate |
 | ~~`onReaction` identity causes effect teardown~~ | ~~High~~ | ~~`bridge.ts`~~ | **Fixed** — uses ref pattern |
 
@@ -339,7 +339,7 @@ The index signature obliterates type safety — any property can be set on a `Ge
 | `RuntimeData.delta` is `Vec2` but carousel solver writes `delta1D: number` | `gestures.d.ts` | Remaining |
 | `SolverFn` returns `Partial<RuntimeData> \| void` but alias `RuntimePatch` isn't consistently used | `pipeline.ts` vs solvers | Remaining |
 | ~~`desc.data` can be `null` but accessed without null checks~~ | ~~`intentUtils.ts`~~ | **Fixed** — uses `?.` |
-| ~~`carouselState.getSize` returns `number` at runtime but declares `Vec2`~~ | ~~`carouselState.ts`~~ | **Fixed** — returns via `ensure()` |
+| ~~`carousel.getSize` returns `number` at runtime but declares `Vec2`~~ | ~~`carousel.ts`~~ | **Fixed** — returns via `ensure()` |
 
 ### Leaky Abstractions
 
@@ -374,7 +374,7 @@ The index signature obliterates type safety — any property can be set on a `Ge
 1. **Construction** (`targetResolver.resolveFromElement`) — Builds descriptor from DOM data-attributes.
 2. **Enrichment** (`interpreter.ts`) — Attaches runtime data (event type, delta). Stores on per-pointerId gesture object.
 3. **Solving** (`pipeline.ts` → solver) — Solver computes `RuntimePatch`, merges into descriptor.
-4. **State mutation** (`stateManager` → per-type state) — If `stateAccepted`, state is mutated.
+4. ** mutation** (`Manager` → per-type ) — If `Accepted`,  is mutated.
 5. **Rendering** (`renderer.ts`) — DOM attributes set, custom event dispatched.
 
 **Gap:** No formal descriptor validation between steps. A corrupted descriptor propagates silently.
@@ -387,15 +387,15 @@ g.desc.runtime = { ...g.desc.runtime, event: 'swipe', delta: ... }
 ```
 Since gestures are now keyed by `pointerId`, this is safe for single-touch. Multi-touch on the same element could still see issues if two pointerIds share a descriptor reference. Runtime spreads (`{ ...runtime, ...patch }`) create shallow copies, preventing cross-frame mutations from leaking.
 
-### Event → State Mapping Correctness
+### Event →  Mapping Correctness
 
 The mapping is correct for the happy path. One non-obvious pattern remains:
 
-`swipeCommit` in `carouselSolver` may return `{ event: 'swipeRevert', stateAccepted: true }`. This overwrites the event type, routing to `state.swipeRevert()` instead of `state.swipeCommit()`. The behavior is correct (revert when threshold not met) but the indirection is non-obvious and hard to trace.
+`swipeCommit` in `carouselSolver` may return `{ event: 'swipeRevert', Accepted: true }`. This overwrites the event type, routing to `.swipeRevert()` instead of `.swipeCommit()`. The behavior is correct (revert when threshold not met) but the indirection is non-obvious and hard to trace.
 
 ### Multi-Gesture Conflicts
 
-~~**Critical failure mode.**~~ **Fixed.** Gestures are now tracked in a `Record<number, GestureState>` keyed by `pointerId`. Each pointer's lifecycle is independent. `pipeline.abortGesture(pointerId)` cleanly removes a specific gesture. `usePointerForwarding` tracks `activePointerId` per element and ignores events from other pointers.
+~~**Critical failure mode.**~~ **Fixed.** Gestures are now tracked in a `Record<number, Gesture>` keyed by `pointerId`. Each pointer's lifecycle is independent. `pipeline.abortGesture(pointerId)` cleanly removes a specific gesture. `usePointerForwarding` tracks `activePointerId` per element and ignores events from other pointers.
 
 **Remaining gap:** No gesture arbitration system. If two pointerIds start gestures on overlapping elements simultaneously, both gestures proceed independently. For a mobile launcher (single-touch typical), this is acceptable.
 
@@ -425,10 +425,10 @@ The mapping is correct for the happy path. One non-obvious pattern remains:
 | ~~`onReaction` not stabilized~~ | ~~🟠~~ | ~~`bridge.ts`~~ | **Fixed** — ref pattern |
 | `subscribe.useFull` causes over-rendering | 🟠 | `Carousel.tsx` | Remaining (H4) |
 
-### State vs Ref Usage (updated)
+###  vs Ref Usage (updated)
 
-- ~~`slotsRef` should be state or derived~~ — **Fixed.** Slots are `useMemo`.
-- `isActive` and `activePointerId` in `bridge.ts` — correctly refs (event handler state).
+- ~~`slotsRef` should be  or derived~~ — **Fixed.** Slots are `useMemo`.
+- `isActive` and `activePointerId` in `bridge.ts` — correctly refs (event handler ).
 
 ### Unnecessary Renders (updated)
 
@@ -464,7 +464,7 @@ The mapping is correct for the happy path. One non-obvious pattern remains:
 
 2. **Delete `useCarouselScenes.ts`** — unused hook, only `SceneRole` type is imported (L6).
 
-3. **Clean up commented-out code** in `sliderState.ts`, `dragState.ts`, `dragSolver.ts`, `Root.tsx` (L1).
+3. **Clean up commented-out code** in `slider.ts`, `drag.ts`, `dragSolver.ts`, `Root.tsx` (L1).
 
 ### Patterns to Adopt
 
@@ -479,12 +479,12 @@ The mapping is correct for the happy path. One non-obvious pattern remains:
 
 ### 🔴 Must Fix (Blocks reliable operation)
 
-- [ ] **C6** — Migrate `MirrorWrapper.tsx` from dead `useCarouselState` API to Zustand patterns
+- [ ] **C6** — Migrate `MirrorWrapper.tsx` from dead `useCarousel` API to Zustand patterns
 
 ### 🟠 Should Fix (Performance / latent bugs)
 
 - [ ] **H1** — Add functional support for `axis: 'both'` in solver pipeline (currently throws)
-- [ ] **H4** — Split `Carousel.tsx` subscriptions using `subscribe.usePartial` for motion vs scene state
+- [ ] **H4** — Split `Carousel.tsx` subscriptions using `subscribe.usePartial` for motion vs scene 
 - [ ] **H8** — Add `shallow` equality comparator to `subscribe.usePartial` for object selectors
 
 ### 🟡 Should Address (Code quality / edge cases)
@@ -497,8 +497,8 @@ The mapping is correct for the happy path. One non-obvious pattern remains:
 
 ### 🟢 Nice to Have (Cleanup)
 
-- [ ] **L1** — Remove remaining dead/commented-out code (`Root.tsx`, `dragSolver.ts`, `sliderState.ts`, `dragState.ts`)
-- [ ] **L5** — Rename `isStateFn2Arg` to `isMutationFn` (reflects actual behavior)
+- [ ] **L1** — Remove remaining dead/commented-out code (`Root.tsx`, `dragSolver.ts`, `slider.ts`, `drag.ts`)
+- [ ] **L5** — Rename `isFn2Arg` to `isMutationFn` (reflects actual behavior)
 - [ ] **L6** — Delete unused `useCarouselScenes.ts` (move `SceneRole` type elsewhere)
 - [ ] **L7** — Remove `[key: string]: unknown` index signature from `GestureUpdate`
 

@@ -1,4 +1,4 @@
-// renderer.ts
+// domUpdater.ts
 
 import type { CtxType } from '@interaction/types/ctxType'
 import type { EventType } from '@interaction/types/primitiveType'
@@ -33,7 +33,7 @@ const typeHandlers: Record<EventType, (el: HTMLElement) => void> = {
 /* -------------------------------------------------
    Render
 ------------------------------------------------- */
-export const render = {
+export const domUpdater = {
   handle(ctx: CtxType) {
     if (!ctx.element) return
 

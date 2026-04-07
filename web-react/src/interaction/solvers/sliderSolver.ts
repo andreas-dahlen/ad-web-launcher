@@ -18,22 +18,22 @@ export const sliderSolver: Partial<Record<EventType, (desc: SliderDesc) => Slide
    */
   press(desc) {
     // isSlider(desc)
-    if (!desc.data) return { stateAccepted: false }
+    if (!desc.data) return { storeAccepted: false }
     const norm = sliderUtils.normalize(desc)
     const result = sliderUtils.resolveStart(norm, desc.data.constraints)
     return {
       delta1D: result?.value,
-      stateAccepted: true
+      storeAccepted: true
     }
   },
 
   swipeStart(desc) {
-    if (!desc.data) return { stateAccepted: false }
+    if (!desc.data) return { storeAccepted: false }
     const norm = sliderUtils.normalize(desc)
     const result = sliderUtils.resolveStart(norm, desc.data.constraints)
     return {
       delta1D: result?.value,
-      stateAccepted: true,
+      storeAccepted: true,
       gestureUpdate: {
         pointerId: desc.base.pointerId,
         sliderStartOffset: result?.value,
@@ -46,13 +46,13 @@ export const sliderSolver: Partial<Record<EventType, (desc: SliderDesc) => Slide
    * Handle swipe (drag) - clamp delta so thumb stays within [min, max] visually
    */
   swipe(desc) {
-    if (!desc.data) return { stateAccepted: false }
+    if (!desc.data) return { storeAccepted: false }
     const norm = sliderUtils.normalize(desc)
     const gated = resolveGate(norm)
-    if (gated) return { stateAccepted: false }
+    if (gated) return { storeAccepted: false }
     const value =
       sliderUtils.resolveSwipe(norm, desc)
-    return { delta1D: value, stateAccepted: true }
+    return { delta1D: value, storeAccepted: true }
   },
 
   /**
@@ -62,10 +62,10 @@ export const sliderSolver: Partial<Record<EventType, (desc: SliderDesc) => Slide
   swipeCommit(desc) {
     const norm = sliderUtils.normalize(desc)
     const gated = resolveGate(norm)
-    if (gated) return { stateAccepted: false }
+    if (gated) return { storeAccepted: false }
 
     const value =
       sliderUtils.resolveSwipe(norm, desc)
-    return { delta1D: value, stateAccepted: true }
+    return { delta1D: value, storeAccepted: true }
   }
 }

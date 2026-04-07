@@ -23,6 +23,8 @@ export type SliderStore = {
   sliderStore: Record<string, Slider>
   init: (id: string) => void
   get: (id: string) => Readonly<Slider>
+  delete: (id: string) => void
+
   setConstraints: (id: string, constraints: { min: number, max: number }) => void
   setSize: (id: string, size: Vec2) => void
   setThumbSize: (id: string, thumbSize: Vec2) => void
@@ -55,6 +57,12 @@ export const sliderStore = create<SliderStore>()(
     },
     get: (id) => {
       return get().sliderStore[id] ?? null
+    },
+
+    delete: (id: string) => {
+      set(state => {
+        delete state.sliderStore[id]
+      })
     },
 
     setConstraints: (id, constraints) => {

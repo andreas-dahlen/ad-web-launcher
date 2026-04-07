@@ -1,42 +1,42 @@
 import type { Vec2 } from "../primitiveType.ts"
 
 export interface CarouselData {
-  index: number
-  size: Vec2
+  readonly index: number
+  readonly size: Vec2
 }
 
 export interface CarouselModifiers {
-  lockSwipeAt?: {
-    prev: number | null
-    next: number | null
+  readonly lockSwipeAt?: {
+    readonly prev: number | null
+    readonly next: number | null
   }
 }
 
 export interface DragData {
-  position: Vec2
-  constraints: {
-    minX: number
-    maxX: number
-    minY: number
-    maxY: number
+  readonly position: Vec2
+  readonly constraints: {
+    readonly minX: number
+    readonly maxX: number
+    readonly minY: number
+    readonly maxY: number
   }
 }
 
 export interface DragModifiers {
-  snap?: Vec2; locked?: boolean
+  readonly snap?: Vec2; readonly locked?: boolean
 }
 
 export interface SliderData {
-  thumbSize: Vec2
-  constraints: { min: number; max: number }
-  size: Vec2
+  readonly thumbSize: Vec2
+  readonly constraints: { min: number; max: number }
+  readonly size: Vec2
 }
 
 export interface GestureUpdate {
   //Updates stay as its own part of descriptor and is never merged into other parts. Currently only used for slider
-  pointerId: number
-  sliderStartOffset?: number
-  sliderValuePerPixel?: number
+  readonly pointerId: number
+  readonly sliderStartOffset?: number
+  readonly sliderValuePerPixel?: number
 }
 
 

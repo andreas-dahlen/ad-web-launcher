@@ -20,6 +20,6 @@ export function normalizeBase(base: BaseWithSwipe, delta: Vec2): Normalized1D {
 
 export function resolveGate(norm: Normalized1D) {
     const currentPos = (norm.crossOffset ?? 0) + (norm.crossDelta ?? 0)
-    const crossSize = norm.crossTrackSize ?? 0
+    const crossSize = norm.crossSize ?? 0
     return currentPos < -APP_SETTINGS.hysteresis || currentPos > crossSize + APP_SETTINGS.hysteresis
 }
