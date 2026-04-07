@@ -23,7 +23,6 @@ export type CtxCarousel = CtxBase & {
   cancel?: CancelData
 
   delta1D?: number
-  // eventChange?: string
   direction?: Direction
 }
 
@@ -40,8 +39,6 @@ export type CtxDrag = CtxBase & {
   type: 'drag'
   delta: Vec2
   cancel?: CancelData
-
-  // direction?: Direction not sure why this is needed :S it is solved in dragSolver ... but no idea why it would be needed...
 }
 
 export type CtxType =
@@ -58,7 +55,7 @@ export type CtxSwipeType = Exclude<CtxType, CtxButton>
 
 export type CarouselCtxPartial = Partial<Pick<CtxCarousel, 'delta1D' | 'direction' | 'storeAccepted'>>
 export type SliderCtxPartial = Partial<Pick<CtxSlider, 'delta1D' | 'gestureUpdate' | 'storeAccepted'>>
-export type DragCtxPartial = Partial<Pick<CtxDrag, 'storeAccepted'>>
+export type DragCtxPartial = Partial<Pick<CtxDrag, 'storeAccepted' | 'delta'>>
 
 export interface Normalized1D {
   mainSize?: number | null
@@ -70,3 +67,8 @@ export interface Normalized1D {
   mainDelta?: number | null
   crossDelta?: number | null
 }
+
+/* -------------------------
+        Custom Event typing
+    -------------------------- */
+export type ReactionEvent = CustomEvent<CtxType>

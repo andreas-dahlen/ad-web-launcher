@@ -1,18 +1,11 @@
 import { normalizeParameter, getAxisSize } from '../stores/sizeStore.ts'
 import { APP_SETTINGS } from '@config/appSettings.ts'
-import { domQuery } from "./domQuery.ts"
-import type { Reactions } from '@interaction/types/descriptor/baseType.ts'
-import type { Vec2 } from '@interaction/types/primitiveType.ts'
+import type { InteractionType, Vec2 } from '@interaction/types/primitiveType.ts'
 import type { Axis } from '@interaction/types/primitiveType.ts'
 import type { Descriptor, SwipeableDescriptor } from '@interaction/types/descriptor/descriptor.ts'
-import type { CancelData } from '@interaction/types/ctxType.ts'
 
 //intentUtils.js
 export const utils = {
-
-	resolveSupports(type: keyof Reactions, desc: Descriptor): boolean {
-		return !!desc?.reactions?.[type]
-	},
 
 	normalizedDelta(delta: Vec2): Vec2 {
 		return {
@@ -21,17 +14,14 @@ export const utils = {
 		}
 	},
 
-	/* =========================
-	Utils
-	========================= */
 	resolveAxis(intentAxis: Axis, desc: Descriptor): Axis | null {
 		if (desc.type == 'button') return null
 		if (desc.type == 'drag' && desc.data.locked) return null
-		// meta accepts both → use intent axis
+		// desc accepts both → use intent axis
 		if (desc.base.axis === 'both') {
 			return 'both'
 		}
-		// meta is strict → must match intent
+		// desc is strict → must match intent
 		if (desc.base.axis === intentAxis) {
 			return intentAxis
 		}
@@ -39,8 +29,8 @@ export const utils = {
 		return null
 	},
 
-	swipeThresholdCalc(distance: number, desc: Descriptor): boolean {
-		if (desc.type === 'slider') return true
+	swipeThresholdCalc(distance: number, type: InteractionType): boolean {
+		if (type === 'slider') return true
 
 		//there is room for adding type specific API for threshold adjustments.
 		//could store different API thresholds in APP_SETTINGS for dif types.
@@ -56,49 +46,16 @@ export const utils = {
 	},
 
 	/* =========================
-	meta utils
+	Descriptor utils
 	========================= */
 
-	resolveSwipeStart(x: number, y: number, intentAxis: Axis, desc: Descriptor): { desc: SwipeableDescriptor; pressCancel: boolean } | null {
-		// Priority: meta must support swipeStart AND the intent axis
-		const axis = this.resolveAxis(intentAxis, desc)
-		const canSwipe = this.resolveSupports('swipeable', desc)
-		const isLocked = desc.type == 'drag' && desc.data.locked
-		if (canSwipe && !isLocked && axis && desc.type !== 'button') {
-			return {
-				desc: desc,
-				pressCancel: false,
-			}
-		}
-		//added slider passthrough to handel accidental wrong axis swipe on sliders.
-		if (canSwipe && !isLocked && desc.type == 'slider') {
-			return {
-				desc: desc,
-				pressCancel: false
-			}
-		}
-		// Fallback: find lane by axis
-		const newDesc = domQuery.findLaneInDom(x, y, intentAxis, desc.base.pointerId)
-		if (newDesc) {
-			return {
-				desc: newDesc,
-				pressCancel: this.resolveSupports('pressable', desc),
-			}
-		}
-		return null
-	},
-
-	/* =========================
-	Descriptor modifiers
-	========================= */
-
-	resolveCancel(element: HTMLElement, desc: Descriptor, willCancel: boolean): Descriptor {
-		if (desc.type == 'button') return desc
-
-		const cancel: CancelData | undefined = willCancel
-			? { element: element, pressCancel: true }
-			: undefined
-		desc.ctx.cancel = cancel
-		return desc
+	isSwipeableDescriptor(desc: Descriptor, intentAxis: Axis): desc is SwipeableDescriptor {
+		if (desc.type == 'button') return false
+		const swipeable = desc.reactions.swipeable
+		const isLocked = desc.type === 'drag' && desc.data.locked
+		if (!swipeable || isLocked) return false
+		if (desc.type == 'slider') return true
+		const axis = utils.resolveAxis(intentAxis, desc)
+		return !!axis
 	}
 }

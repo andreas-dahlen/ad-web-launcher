@@ -25,7 +25,7 @@ export const pipeline = {
      Abort!
   -------------------------- */
   abortGesture(pointerId: number) {
-    //for safty could possibly think about how to setup a abort for zustand stores to abort and reset state values.
+    //for safty could possibly think about how to setup a abort for zustand stores to abort and reset store values.
     interpreter.deleteGesture(pointerId)
   },
 
@@ -58,7 +58,6 @@ export const pipeline = {
         const sr = carouselSolver?.[event]?.(desc)
         if (sr) ctx = { ...ctx, ...sr }
         if (ctx.storeAccepted) {
-          // if (ctx.gestureUpdate != null) interpreter.applyGestureUpdate(ctx.gestureUpdate)
           const fn = carouselStore.getState()[ctx.event as keyof CarouselFunctions]
           fn?.(ctx)
         }
@@ -81,7 +80,6 @@ export const pipeline = {
         const sr = dragSolver?.[event]?.(desc)
         if (sr) ctx = { ...ctx, ...sr }
         if (ctx.storeAccepted) {
-          // if (ctx.gestureUpdate != null) interpreter.applyGestureUpdate(ctx.gestureUpdate)
           const fn = dragStore.getState()[ctx.event as keyof DragFunctions]
           fn?.(ctx)
         }
@@ -93,12 +91,9 @@ export const pipeline = {
       }
       default: { throw new Error(`Unknown descriptor type: ${type}`) }
     }
-
     /* -------------------------
        Renderer
     -------------------------- */
     domUpdater.handle(ctx)
-
-    return ctx
   }
 }

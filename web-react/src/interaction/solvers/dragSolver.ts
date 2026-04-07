@@ -41,11 +41,9 @@ export const dragSolver: Partial<Record<EventType, (desc: DragDesc) => DragCtxPa
     if (!value) return { storeAccepted: false }
     const snap = dragUtils.resolveSnapAdjustment(desc, value)
     if (snap != null) { value = snap }
-    const direction = dragUtils.resolveDirection(desc.base.axis, desc.data.position, value)
     return {
       delta: value,
       storeAccepted: true,
-      direction: direction
     }
   }
 }

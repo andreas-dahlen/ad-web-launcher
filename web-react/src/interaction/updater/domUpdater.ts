@@ -14,7 +14,7 @@ function setAttr(element: HTMLElement, key: string, value: unknown) {
 }
 
 function dispatchEvent(element: HTMLElement, ctx: CtxType) {
-  element.dispatchEvent(new CustomEvent('reaction', { detail: ctx }))
+  element.dispatchEvent(new CustomEvent<CtxType>('reaction', { detail: ctx }))
 }
 
 /* -------------------------------------------------

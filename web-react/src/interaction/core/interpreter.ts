@@ -56,6 +56,14 @@ function deleteGesture(pointerId: number) {
 ======================== */
 
 function onDown(x: number, y: number, pointerId: number): Descriptor | null {
+
+  if (Object.keys(gestures).length > 10) {
+    console.warn('Gesture map overflow, clearing')
+    for (const key in gestures) {
+      delete gestures[key]
+    }
+  }
+
   const resolved = domQuery.findTargetInDom(x, y, pointerId)
   if (!resolved) return null
   gestures[pointerId] = {
@@ -69,7 +77,7 @@ function onDown(x: number, y: number, pointerId: number): Descriptor | null {
   }
   const g = gestures[pointerId]
 
-  if (utils.resolveSupports('pressable', g.desc)) {
+  if (g.desc.reactions.pressable) {
     return g.desc
   }
   return null
@@ -87,9 +95,12 @@ function onMove(x: number, y: number, pointerId: number): Descriptor | null {
 
   if (g.phase === 'PENDING') {
     if (!g.desc) return null
-    if (!utils.swipeThresholdCalc(biggest, g.desc)) return null
+    if (!utils.swipeThresholdCalc(biggest, g.desc.type)) return null
     const intentAxis: Axis = absX > absY ? 'horizontal' : 'vertical'
-    const resolved = utils.resolveSwipeStart(x, y, intentAxis, g.desc)
+
+    const resolved = utils.isSwipeableDescriptor(g.desc, intentAxis)
+      ? g.desc
+      : domQuery.findLaneInDom(x, y, intentAxis, g.desc.base.pointerId)
 
     //future me -> probably return pressCancel if resolved is false... and possibly delete gesture... 
     if (!resolved) return null
@@ -98,12 +109,13 @@ function onMove(x: number, y: number, pointerId: number): Descriptor | null {
     g.last.x = x
     g.last.y = y
 
-    const cancelEl = g.desc.base.element
-    g.desc = resolved.desc
-
-    g.desc.ctx.cancel = resolved.pressCancel
-      ? { element: cancelEl, pressCancel: true }
+    const cancel = g.desc.reactions.pressable
+      && resolved !== g.desc
+      ? { element: g.desc.base.element, pressCancel: true }
       : undefined
+
+    g.desc = resolved
+    g.desc.ctx.cancel = cancel
     g.desc.ctx.event = 'swipeStart'
     return g.desc
   }
@@ -146,11 +158,11 @@ function onUp(_x: number, _y: number, pointerId: number): Descriptor | null {
 }
 
 function finalizeGesture(g: GestureState, event: EventType): Descriptor | null {
-  if (event === 'pressRelease' && !utils.resolveSupports('pressable', g.desc)) {
+  if (event === 'pressRelease' && !g.desc.reactions.pressable) {
     delete gestures[g.pointerId]
     return null
   }
-  if (event === 'swipeCommit' && !utils.resolveSupports('swipeable', g.desc)) {
+  if (event === 'swipeCommit' && !g.desc.reactions.swipeable) {
     delete gestures[g.pointerId]
     return null
   }

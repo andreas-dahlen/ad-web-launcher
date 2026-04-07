@@ -1,11 +1,12 @@
 import { useEffect, useRef } from 'react'
 import type { RefObject } from 'react'
 import { pipeline } from '@interaction/core/pipeline'
+import type { ReactionEvent } from '@interaction/types/ctxType'
 
 interface PointerForwardingProps {
   elRef: RefObject<HTMLElement | null>
   disabled?: boolean
-  onReaction?: (e: CustomEvent) => void
+  onReaction?: (e: ReactionEvent) => void
 }
 
 export function usePointerForwarding({ elRef, onReaction, disabled }: PointerForwardingProps) {
@@ -48,7 +49,11 @@ export function usePointerForwarding({ elRef, onReaction, disabled }: PointerFor
       e.stopPropagation()
       if (isActive.current) return
 
-      el?.setPointerCapture(e.pointerId)
+      try {
+        el?.setPointerCapture(e.pointerId)
+      } catch (err) {
+        console.warn('Failed to set pointer capture', err)
+      }
 
       activePointerId.current = e.pointerId
       isActive.current = true
@@ -91,7 +96,7 @@ export function usePointerForwarding({ elRef, onReaction, disabled }: PointerFor
 
     function handleReaction(e: Event) {
       if (onReactionRef.current && e instanceof CustomEvent) {
-        onReactionRef.current(e)
+        onReactionRef.current(e as ReactionEvent)
       }
     }
 

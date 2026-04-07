@@ -1,6 +1,6 @@
 import { vector } from '@interaction/solvers/solverUtils/vectorUtils'
 import type { DragDesc } from '@interaction/types/descriptor/descriptor'
-import type { Axis, Vec2 } from '@interaction/types/primitiveType'
+import type { Vec2 } from '@interaction/types/primitiveType'
 
 export const dragUtils = {
 
@@ -40,11 +40,5 @@ export const dragUtils = {
       x: snapAxis(value.x, snapX, dragConstraints.minX, dragConstraints.maxX),
       y: snapAxis(value.y, snapY, dragConstraints.minY, dragConstraints.maxY)
     }
-  },
-
-  resolveDirection(axis: Axis, oldPosition: Vec2, value: Vec2) {
-    const { x: fx, y: fy } = value
-    const { x: px, y: py } = oldPosition
-    return vector.resolveDirection({ x: fx - px, y: fy - py }, axis)
   }
 }

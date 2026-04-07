@@ -13,8 +13,7 @@ type Carousel = {
   size: Vec2
   dragging: boolean
 
-  //read only... not used by react..?:
-  // scenes: number[]
+  //read only... not used by react
   settling: boolean
   pendingDir: Direction | null
 }
@@ -26,7 +25,6 @@ export type CarouselStore = {
   delete: (id: string) => void
 
   setCount: (id: string, count: number) => void
-  // setScenes: (id: string, scenes: number[]) => void
   setSize: (id: string, trackSize: Vec2) => void
   setPosition: (id: string) => void
 
@@ -53,10 +51,9 @@ export const carouselStore = create<CarouselStore>()(
           size: { x: 0, y: 0 },
           dragging: false,
 
-          // scenes: [0,1,2],
           settling: false,
           pendingDir: null,
-          //lockPrev/lockNextAt feels unneeded..
+          //lockPrev/lockNextAt TODO could have null values as defaults
         }
       })
     },
@@ -70,11 +67,7 @@ export const carouselStore = create<CarouselStore>()(
         delete state.carouselStore[id]
       })
     },
-    // setScenes: (id, scenes) => {
-    //   set(state => {
-    //     state.carouselStore[id].scenes = scenes
-    //   })
-    // },
+
     setCount: (id, count) => {
       set(state => {
         const s = state.carouselStore[id]

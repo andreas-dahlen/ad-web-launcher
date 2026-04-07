@@ -27,17 +27,20 @@ export const buildDesc = {
     const reactions = this.buildReactions(ctx.ds, ctx.laneValid)
     const r = { reactions, x, y, pointerId }
     switch (ctx.type) {
-      case 'carousel': return {
-        type: "carousel",
-        ...this.buildCarousel(ctx, r)
+      case 'carousel': {
+        const desc = this.buildCarousel(ctx, r)
+        if (desc) return { type: "carousel", ...desc }
+        return null
       }
-      case 'slider': return {
-        type: "slider",
-        ...this.buildSlider(ctx, r)
+      case 'slider': {
+        const desc = this.buildSlider(ctx, r)
+        if (desc) return { type: "slider", ...desc }
+        return null
       }
-      case 'drag': return {
-        type: "drag",
-        ...this.buildDrag(ctx, r)
+      case 'drag': {
+        const desc = this.buildDrag(ctx, r)
+        if (desc) return { type: "drag", ...desc }
+        return null
       }
       case 'button': return {
         type: "button",
@@ -46,29 +49,35 @@ export const buildDesc = {
       default: return null
     }
   },
-  buildCarousel(ctx: Context, r: Builder): CarouselDesc {
-    return {
+  buildCarousel(ctx: Context, r: Builder): CarouselDesc | null {
+    const data = this.buildCarouselData(ctx)
+    if (data) return {
       base: this.buildSwipeBase(ctx, r),
-      data: this.buildCarouselData(ctx),
+      data: data,
       reactions: r.reactions,
       ctx: this.buildCarouselCtx(ctx)
     }
+    return null
   },
-  buildSlider(ctx: Context, r: Builder): SliderDesc {
-    return {
+  buildSlider(ctx: Context, r: Builder): SliderDesc | null {
+    const data = this.buildSliderData(ctx)
+    if (data) return {
       base: this.buildSwipeBase(ctx, r),
-      data: this.buildSliderData(ctx),
+      data: data,
       reactions: r.reactions,
       ctx: this.buildSliderCtx(ctx)
     }
+    return null
   },
-  buildDrag(ctx: Context, r: Builder): DragDesc {
-    return {
+  buildDrag(ctx: Context, r: Builder): DragDesc | null {
+    const data = this.buildDragData(ctx)
+    if (data) return {
       base: this.buildSwipeBase(ctx, r),
-      data: this.buildDragData(ctx),
+      data: data,
       reactions: r.reactions,
       ctx: this.buildDragCtx(ctx)
     }
+    return null
   },
   buildButton(ctx: Context, r: Builder): ButtonDesc {
     return {
@@ -104,17 +113,20 @@ export const buildDesc = {
     Build Data
   ========================= */
 
-  buildCarouselData(ctx: Context): CarouselData & CarouselModifiers {
-    const s = carouselStore.getState().get(ctx.id)!
+  buildCarouselData(ctx: Context): (CarouselData & CarouselModifiers) | null {
+    const s = carouselStore.getState().get(ctx.id)
+    if (!s) return null
     const lockSwipeAt = { prev: ctx.lockPrevAt, next: ctx.lockNextAt }
     return { index: s.index, size: s.size, lockSwipeAt }
   },
-  buildSliderData(ctx: Context): SliderData {
-    const s = sliderStore.getState().get(ctx.id)!
+  buildSliderData(ctx: Context): SliderData | null {
+    const s = sliderStore.getState().get(ctx.id)
+    if (!s) return null
     return { thumbSize: s.thumbSize, constraints: { min: s.min, max: s.max }, size: s.size }
   },
-  buildDragData(ctx: Context): DragData & DragModifiers {
-    const s = dragStore.getState().get(ctx.id)!
+  buildDragData(ctx: Context): DragData & DragModifiers | null {
+    const s = dragStore.getState().get(ctx.id)
+    if (!s) return null
     const snap = (ctx.snapX != null && ctx.snapY != null) ? { x: ctx.snapX, y: ctx.snapY } : undefined
     const c = { minX: s.minX, maxX: s.maxX, minY: s.minY, maxY: s.maxY }
     return { position: s.position, constraints: c, snap: snap, locked: ctx.locked }
