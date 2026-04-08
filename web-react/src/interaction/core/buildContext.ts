@@ -3,17 +3,18 @@ Context Builder
 ========================= */
 
 import type { Context } from '@interaction/types/descriptor/baseType'
-import { VALID_AXES, VALID_TYPES, type Axis, type InteractionType } from '@interaction/types/primitiveType'
+import { toAxis, toType } from '@interaction/types/primitiveType'
 
 export function buildContext(el: HTMLElement): Context | null {
   const ds = el.dataset
   const id = ds.id ?? ''
 
-  if (!ds.type || !VALID_TYPES.has(ds.type)) return null
-  if (ds.type !== 'button' && (!ds.axis || !VALID_AXES.has(ds.axis))) return null
+  const axis = toAxis(ds.axis)
+  const type = toType(ds.type)
 
-  const axis = (ds.axis as Axis) ?? null
-  const type = (ds.type as InteractionType) ?? null
+  if (!type) return null
+  if (type !== 'button' && !axis) return null
+
   const laneValid = Boolean(id && axis && type)
   const snapX = ds.snapX != null ? Number(ds.snapX) : null
   const snapY = ds.snapY != null ? Number(ds.snapY) : null

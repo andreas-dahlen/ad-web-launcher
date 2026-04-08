@@ -7,8 +7,9 @@ import { dragStore } from '@interaction/stores/dragStore.ts'
 import { sliderStore } from '@interaction/stores/sliderStore.ts'
 import { carouselStore } from '@interaction/stores/carouselStore.ts'
 import type { EventBridgeType } from '@interaction/types/primitiveType.ts'
-import type { CarouselFunctions, DragFunctions, InterpreterFn, PointerEventPackage, SliderFunctions } from '@interaction/types/pipelineType.ts'
+import type { CarouselFunctions, DragFunctions, InterpreterFn, SliderFunctions } from '@interaction/types/pipelineType.ts'
 import type { CtxType } from '@interaction/types/ctxType.ts'
+import type { PointerEventPackage } from '@components/hooks/pointerBridge.ts'
 
 /* =====================
         Maping
@@ -74,7 +75,6 @@ export const pipeline = {
         }
         break
       }
-
       case 'drag': {
         ctx = desc.ctx
         const sr = dragSolver?.[event]?.(desc)

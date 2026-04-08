@@ -6,7 +6,7 @@
  * - No swipeRevert reaction
  */
 import type { EventType } from '@interaction/types/primitiveType.ts'
-import { resolveGate } from "./solverUtils/utilsShared.ts"
+import { exceedsCrossRange } from "./solverUtils/utilsShared.ts"
 import type { SliderDesc } from '@interaction/types/descriptor/descriptor.ts'
 import type { SliderCtxPartial } from '@interaction/types/ctxType.ts'
 import { sliderUtils } from '@interaction/solvers/solverUtils/sliderUtils.ts'
@@ -48,7 +48,7 @@ export const sliderSolver: Partial<Record<EventType, (desc: SliderDesc) => Slide
   swipe(desc) {
     if (!desc.data) return { storeAccepted: false }
     const norm = sliderUtils.normalize(desc)
-    const gated = resolveGate(norm)
+    const gated = exceedsCrossRange(norm)
     if (gated) return { storeAccepted: false }
     const value =
       sliderUtils.resolveSwipe(norm, desc)
@@ -61,7 +61,7 @@ export const sliderSolver: Partial<Record<EventType, (desc: SliderDesc) => Slide
    */
   swipeCommit(desc) {
     const norm = sliderUtils.normalize(desc)
-    const gated = resolveGate(norm)
+    const gated = exceedsCrossRange(norm)
     if (gated) return { storeAccepted: false }
 
     const value =

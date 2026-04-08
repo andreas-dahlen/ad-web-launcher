@@ -7,7 +7,7 @@ import type { CarouselDesc } from '@interaction/types/descriptor/descriptor.ts'
 import type { EventType } from '@interaction/types/primitiveType.ts'
 import type { CarouselCtxPartial } from '@interaction/types/ctxType.ts'
 import { carouselUtils } from '@interaction/solvers/solverUtils/carouselUtils'
-import { resolveGate } from '@interaction/solvers/solverUtils/utilsShared'
+import { exceedsCrossRange } from '@interaction/solvers/solverUtils/utilsShared'
 
 export const carouselSolver: Partial<Record<EventType, (desc: CarouselDesc) => CarouselCtxPartial>> = {
   /**
@@ -22,11 +22,11 @@ export const carouselSolver: Partial<Record<EventType, (desc: CarouselDesc) => C
    */
   swipe(desc) {
     const norm = carouselUtils.normalize(desc)
-    const gated = resolveGate(norm)
+    const gated = exceedsCrossRange(norm)
     if (norm.mainDelta == null) return { storeAccepted: false }
 
     const locked = desc.data.lockSwipeAt
-      ? carouselUtils.isBlocked(norm.mainDelta, desc.data?.index, desc.data?.lockSwipeAt)
+      ? carouselUtils.isLocked(norm.mainDelta, desc.data?.index, desc.data?.lockSwipeAt)
       : null
 
     if (gated || locked) return { storeAccepted: false }
@@ -38,12 +38,12 @@ export const carouselSolver: Partial<Record<EventType, (desc: CarouselDesc) => C
    */
   swipeCommit(desc) {
     const norm = carouselUtils.normalize(desc)
-    const gated = resolveGate(norm)
+    const gated = exceedsCrossRange(norm)
 
     if (norm.mainDelta == null) return { event: 'swipeRevert', storeAccepted: true }
 
     const locked = desc.data.lockSwipeAt
-      ? carouselUtils.isBlocked(norm.mainDelta, desc.data?.index, desc.data?.lockSwipeAt)
+      ? carouselUtils.isLocked(norm.mainDelta, desc.data?.index, desc.data?.lockSwipeAt)
       : null
 
     if (gated || locked) return { event: 'swipeRevert', storeAccepted: true }

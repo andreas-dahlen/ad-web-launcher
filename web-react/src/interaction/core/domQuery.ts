@@ -1,5 +1,5 @@
 import type { Axis, Vec2 } from '@interaction/types/primitiveType'
-import { utils } from '@interaction/core/intentUtils'
+import { utils } from '@interaction/core/gestureUtils'
 import { buildDesc } from '@interaction/core/buildDesc'
 import type { Descriptor, SwipeableDescriptor } from '@interaction/types/descriptor/descriptor'
 import { buildContext } from '@interaction/core/buildContext'

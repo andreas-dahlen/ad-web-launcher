@@ -1,5 +1,6 @@
 import { carouselStore, type CarouselStore } from '@interaction/stores/carouselStore'
 import { useEffect } from 'react'
+import { useShallow } from 'zustand/shallow'
 
 const DEFAULTS = {
   index: 0,
@@ -19,6 +20,6 @@ export const useCarouselStore = (id: string) => {
   }, [id])
 
   return carouselStore(
-    (s: CarouselStore) => s.bindings[id] ?? DEFAULTS
+    useShallow((s: CarouselStore) => s.bindings[id] ?? DEFAULTS)
   )
 }

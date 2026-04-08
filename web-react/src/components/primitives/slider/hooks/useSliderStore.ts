@@ -1,5 +1,6 @@
 import { sliderStore, type SliderStore } from '@interaction/stores/sliderStore'
 import { useEffect } from 'react'
+import { useShallow } from 'zustand/shallow'
 
 const DEFAULTS = {
   value: 0,
@@ -19,6 +20,6 @@ export const useSliderStore = (id: string) => {
   }, [id])
 
   return sliderStore(
-    (s: SliderStore) => s.bindings[id] ?? DEFAULTS
+    useShallow((s: SliderStore) => s.bindings[id] ?? DEFAULTS)
   )
 }

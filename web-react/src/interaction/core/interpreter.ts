@@ -1,5 +1,5 @@
 import { log } from '@debug/functions.ts'
-import { utils } from './intentUtils.ts'
+import { utils } from './gestureUtils.ts'
 
 import type { Axis, EventType, Vec2 } from '@interaction/types/primitiveType.ts'
 import type { Descriptor } from '@interaction/types/descriptor/descriptor.ts'

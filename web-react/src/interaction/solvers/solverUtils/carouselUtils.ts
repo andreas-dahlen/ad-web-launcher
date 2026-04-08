@@ -19,7 +19,7 @@ export const carouselUtils = {
     }
   },
 
-  isBlocked(delta: number, index: number, lock: { prev: number | null, next: number | null }) {
+  isLocked(delta: number, index: number, lock: { prev: number | null, next: number | null }) {
     const { prev, next } = lock || {}
     if (prev == null && next == null) return false
     if (prev != null && prev - 1 === index && delta > 0) return true

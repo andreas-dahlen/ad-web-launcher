@@ -2,6 +2,14 @@ import { useEffect, useRef } from 'react'
 import type { RefObject } from 'react'
 import { pipeline } from '@interaction/core/pipeline'
 import type { ReactionEvent } from '@interaction/types/ctxType'
+import type { EventBridgeType } from '@interaction/types/primitiveType'
+
+export interface PointerEventPackage {
+  readonly eventType: EventBridgeType
+  readonly x: number
+  readonly y: number
+  readonly pointerId: number
+}
 
 interface PointerForwardingProps {
   elRef: RefObject<HTMLElement | null>
