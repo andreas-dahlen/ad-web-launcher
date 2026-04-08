@@ -1,0 +1,61 @@
+import { normalizeParameter, getAxisSize } from '../stores/sizeStore.ts'
+import { APP_SETTINGS } from '@config/appSettings.ts'
+import type { InteractionType, Vec2 } from '@interaction/types/primitiveType.ts'
+import type { Axis } from '@interaction/types/primitiveType.ts'
+import type { Descriptor, SwipeableDescriptor } from '@interaction/types/descriptor/descriptor.ts'
+
+//intentUtils.js
+export const utils = {
+
+	normalizedDelta(delta: Vec2): Vec2 {
+		return {
+			x: normalizeParameter(delta.x),
+			y: normalizeParameter(delta.y)
+		}
+	},
+
+	resolveAxis(intentAxis: Axis, desc: Descriptor): Axis | null {
+		if (desc.type == 'button') return null
+		if (desc.type == 'drag' && desc.data.locked) return null
+		// desc accepts both → use intent axis
+		if (desc.base.axis === 'both') {
+			return 'both'
+		}
+		// desc is strict → must match intent
+		if (desc.base.axis === intentAxis) {
+			return intentAxis
+		}
+		// Axis not supported
+		return null
+	},
+
+	swipeThresholdCalc(distance: number, type: InteractionType): boolean {
+		if (type === 'slider') return true
+
+		//there is room for adding type specific API for threshold adjustments.
+		//could store different API thresholds in APP_SETTINGS for dif types.
+
+		const ratio = APP_SETTINGS.swipeThresholdRatio ?? 0.05
+
+		const screenSize = Math.min(
+			getAxisSize('horizontal'),
+			getAxisSize('vertical')
+		)
+
+		return distance >= screenSize * ratio
+	},
+
+	/* =========================
+	Descriptor utils
+	========================= */
+
+	isSwipeableDescriptor(desc: Descriptor, intentAxis: Axis): desc is SwipeableDescriptor {
+		if (desc.type == 'button') return false
+		const swipeable = desc.reactions.swipeable
+		const isLocked = desc.type === 'drag' && desc.data.locked
+		if (!swipeable || isLocked) return false
+		if (desc.type == 'slider') return true
+		const axis = utils.resolveAxis(intentAxis, desc)
+		return !!axis
+	}
+}

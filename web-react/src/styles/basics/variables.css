@@ -1,0 +1,33 @@
+:root {
+  /* Touch areas */
+  --touch-idle: rgba(0, 0, 0, 0.442);
+  --touch-pressed: #2ecc71;
+  --touch-release: #e74c3c;
+  --touch-swipe-left: #9b59b6;
+  --touch-swipe-right: #e67e22;
+  --touch-swipe-up: #9cb659;
+  --touch-swipe-down: #e622ae;
+
+  /* Motion - slightly faster for snappier feel on Android */
+  --touch-transition-fast: 120ms;
+  --touch-transition-normal: 200ms;
+
+  --gradient-a-1: #ffe100;
+  --gradient-a-2: #ff7300;
+
+  --gradient-b-1: #82cfff;
+  --gradient-b-2: #830599;
+
+  --gradient-c-1: #07ff2c;
+  --gradient-c-2: #080eaf;
+
+  --gradient-wall-1: #ffffff;
+  --gradient-wall-2: #000000;
+  --gradient-wall-3: #780000;
+
+  --gradient-slider-1: #00b6cb;
+  --gradient-slider-2: #003686;
+
+  --gradient-slider-knob-1: #afbf00;
+  --gradient-slider-knob-2: #00a6a0;
+}

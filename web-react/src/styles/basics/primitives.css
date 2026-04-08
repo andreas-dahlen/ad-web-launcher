@@ -1,0 +1,25 @@
+.relative-max-size {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.non-interactive {
+  pointer-events: none;
+}
+
+.absolute {
+  position: absolute;
+}
+
+/* ── Button primitive ── */
+.non-interactive-default {
+  position: relative;
+  pointer-events: none;
+}
+
+.interactive-default {
+  position: relative;
+  user-select: none;
+  pointer-events: auto;
+}

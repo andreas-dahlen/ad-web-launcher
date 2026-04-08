@@ -1,18 +1,15 @@
+<!-- App.vue -->
 <template>
-  <div id="app">
-    <WallpaperRoot />
-  </div>
+    <DebugWrapper v-if="APP_SETTINGS.DebugWrapper">
+          <DebugPanel v-if="APP_SETTINGS.DebugWrapper"/>
+      <Root />
+    </DebugWrapper>
+    <Root v-else />
 </template>
 
 <script setup>
-import WallpaperRoot from './scenes/WallpaperRoot.vue'
-import { useScale } from './composables/useScale'
-
-useScale()
+import DebugPanel from './app/debug/DebugPanel.vue'
+import { APP_SETTINGS } from './app/config/appSettings'
+import DebugWrapper from './app/debug/DebugWrapper.vue'
+import Root from './app/scenes/Root.vue'
 </script>
-
-<style>
-#app {
-  transform-origin: center center;
-}
-</style>

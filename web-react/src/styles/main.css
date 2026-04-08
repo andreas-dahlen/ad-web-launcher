@@ -1,0 +1,37 @@
+/* main.css */
+@import './basics/variables.css';
+@import './basics/scenes.css';
+@import './basics/layers.css';
+@import './basics/components.css';
+@import './basics/primitives.css';
+@import './testing.css';
+@import './objects.css';
+
+
+html {
+    box-sizing: border-box;
+    -webkit-text-size-adjust: 100%;
+    font-size: var(--font-size-base, 16px);
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+    user-select: none;
+    touch-action: none;
+}
+
+body {
+    margin: 0;
+    background: #000000;
+    color: #e2e8f0;
+    font-family: 'Space Grotesk', 'DM Sans', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+html,
+body,
+#app {
+    height: 100%;
+    width: 100%;
+}

@@ -1,0 +1,81 @@
+/* 
+////////////////
+Carousel
+///////////////
+*/
+.carousel-base {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  touch-action: none;
+  transform: translateZ(0);
+}
+
+[data-role] {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
+/* 
+////////////////
+Slider
+///////////////
+*/
+.default-slider {
+  position: relative;
+  pointer-events: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, var(--gradient-slider-1), var(--gradient-slider-2));
+  border-radius: 10px;
+}
+
+.default-track {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 100em;
+  background-color: rgba(0, 0, 0, 0.348);
+}
+
+.horizontal-slider {
+  height: 15%;
+  width: 90%;
+}
+
+.vertical-slider {
+  height: 90%;
+  width: 12%;
+}
+
+.horizontal-track {
+  height: 15%;
+  width: 90%;
+}
+
+.vertical-track {
+  height: 90%;
+  width: 12%;
+}
+
+.slider-thumb {
+  will-change: tranform;
+  position: absolute;
+}
+
+/* 
+////////////////
+Drag
+///////////////
+*/
+.drag-item {
+  position: absolute;
+  user-select: none;
+  pointer-events: auto;
+  will-change: transform;
+}

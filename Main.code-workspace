@@ -1,0 +1,29 @@
+{
+	"folders": [
+		{
+			"name": "src",
+			"path": "web/src"
+		},
+		{
+			"name": "launcher",
+			"path": "android/app/src/main/java/com/ad/launcher"
+		},
+		{
+			"name": "scripts",
+			"path": "web/scripts"
+		},
+		{
+			"name": "web",
+			"path": "web"
+		},
+		{
+			"name": "web-react",
+			"path": "web-react"
+		},
+		{
+			"name": "src",
+			"path": "web-react/src"
+		}
+	],
+	"settings": {}
+}
