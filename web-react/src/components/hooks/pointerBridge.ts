@@ -9,7 +9,7 @@ interface PointerForwardingProps {
   onReaction?: (e: ReactionEvent) => void
 }
 
-export function usePointerForwarding({ elRef, onReaction, disabled }: PointerForwardingProps) {
+export function usePointerBridge({ elRef, onReaction, disabled }: PointerForwardingProps) {
   const isActive = useRef(false)
   const activePointerId = useRef<number | null>(null)
   const onReactionRef = useRef(onReaction)

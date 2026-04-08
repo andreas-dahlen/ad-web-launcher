@@ -1,8 +1,8 @@
 import { useRef } from "react"
-import { usePointerForwarding } from "@components/hooks/bridge.ts"
+import { usePointerBridge } from "@components/hooks/pointerBridge.ts"
 import { useSliderSizing } from "./hooks/useSliderSizing.ts"
 import { useSliderMotion } from "./hooks/useSliderMotion.ts"
-import { useSliderZustand } from "./hooks/useSliderStore.ts"
+import { useSliderStore } from "./hooks/useSliderStore.ts"
 
 export interface SliderProps {
   id: string
@@ -29,7 +29,7 @@ export default function Slider({
 }: SliderProps) {
 
   // ── Fully subscribe to the slider store ─────────────────────────────
-  const { value, min, max, size, thumbSize, dragging } = useSliderZustand(id)
+  const { value, min, max, size, thumbSize, dragging } = useSliderStore(id)
 
   const horizontal = axis === 'horizontal'
   const axisSize = horizontal ? size.x : size.y
@@ -45,7 +45,7 @@ export default function Slider({
   const lastEmitted = useRef<number | null>(null)
 
   // ── Pointer forwarding for gestures ─────────────────────────────
-  usePointerForwarding({
+  usePointerBridge({
     elRef: sliderRef,
     onReaction: (reaction) => {
       const event = reaction.detail?.event

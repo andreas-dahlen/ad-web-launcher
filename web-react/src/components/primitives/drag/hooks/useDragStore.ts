@@ -11,7 +11,7 @@ const DEFAULTS = {
   maxY: Infinity
 } as const
 
-export const useDragZustand = (id: string) => {
+export const useDragStore = (id: string) => {
 
   useEffect(() => {
     dragStore.getState().init(id)
@@ -19,6 +19,6 @@ export const useDragZustand = (id: string) => {
   }, [id])
 
   return dragStore(
-    (s: DragStore) => s.dragStore[id] ?? DEFAULTS
+    (s: DragStore) => s.bindings[id] ?? DEFAULTS
   )
 }

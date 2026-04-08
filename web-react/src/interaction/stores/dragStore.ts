@@ -18,9 +18,9 @@ type Drag = {
 }
 
 export type DragStore = {
-  dragStore: Record<string, Drag>
+  bindings: Record<string, Drag>
   init: (id: string) => void
-  get: (id: string) => Readonly<Drag>
+  get: (id: string) => Readonly<Drag> | null
   delete: (id: string) => void
 
   setConstraints: (id: string, constraints: { minX?: number, maxX?: number, minY?: number, maxY?: number }) => void
@@ -33,13 +33,13 @@ export type DragStore = {
 export const dragStore = create<DragStore>()(
   immer((set, get) => ({
 
-    dragStore: {},
+    bindings: {},
     //tsx only!
     init: (id) => {
-      if (get().dragStore[id]) return
+      if (get().bindings[id]) return
 
       set(state => {
-        state.dragStore[id] = {
+        state.bindings[id] = {
           position: { x: 0, y: 0 },
           offset: { x: 0, y: 0 },
           dragging: false,
@@ -52,18 +52,18 @@ export const dragStore = create<DragStore>()(
     },
 
     get: (id) => {
-      return get().dragStore[id] ?? null
+      return get().bindings[id] ?? null
     },
 
     delete: (id: string) => {
       set(state => {
-        delete state.dragStore[id]
+        delete state.bindings[id]
       })
     },
 
     setConstraints: (id, packet) => {
       set(state => {
-        const s = state.dragStore[id]
+        const s = state.bindings[id]
         if (!s) return
         if (packet.minX !== undefined) s.minX = packet.minX;
         if (packet.maxX !== undefined) s.maxX = packet.maxX;
@@ -74,7 +74,7 @@ export const dragStore = create<DragStore>()(
 
     setPosition: (id, pos) => {
       set(state => {
-        const s = state.dragStore[id]
+        const s = state.bindings[id]
         if (!s) return
         s.position = { x: pos.x, y: pos.y }
       })
@@ -82,7 +82,7 @@ export const dragStore = create<DragStore>()(
 
     swipeStart: (ctx) => {
       set(state => {
-        const s = state.dragStore[ctx.id]
+        const s = state.bindings[ctx.id]
         if (!s) return
         s.dragging = true
         s.offset = { x: 0, y: 0 }
@@ -91,7 +91,7 @@ export const dragStore = create<DragStore>()(
 
     swipe: (ctx) => {
       set(state => {
-        const s = state.dragStore[ctx.id]
+        const s = state.bindings[ctx.id]
         if (!s) return
         s.offset = ctx.delta ?? s.offset
       })
@@ -99,7 +99,7 @@ export const dragStore = create<DragStore>()(
 
     swipeCommit: (ctx) => {
       set(state => {
-        const s = state.dragStore[ctx.id]
+        const s = state.bindings[ctx.id]
         if (!s) return
         s.position = ctx.delta ?? s.position
         s.offset = { x: 0, y: 0 }

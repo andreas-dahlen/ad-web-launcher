@@ -1,10 +1,10 @@
 import { useRef, useEffect, useMemo } from "react"
-import { usePointerForwarding } from "@components/hooks/bridge.ts"
+import { usePointerBridge } from '@components/hooks/pointerBridge.ts'
 import { useCarouselMotion } from "./hooks/useCarouselMotion.ts"
 import { useCarouselSizing } from "./hooks/useCarouselSizing.ts"
 import { useAugmentedScenes } from "./hooks/useAugmentedScenes.ts"
 import type { SceneRole } from '@interaction/types/primitiveType.ts'
-import { useCarouselZustand } from '@components/primitives/carousel/hooks/useCarouselStore.ts'
+import { useCarouselStore } from '@components/primitives/carousel/hooks/useCarouselStore.ts'
 import { carouselStore } from '@interaction/stores/carouselStore.ts'
 
 export interface CarouselProps {
@@ -35,7 +35,7 @@ export default function Carousel({
 }: CarouselProps) {
 
   // ── Fully subscribe to the carousel store ─────────────────────────────
-  const { settling, index, offset, count, dragging, size } = useCarouselZustand(id)
+  const { settling, index, offset, count, dragging, size } = useCarouselStore(id)
 
   // ── Initialize count for mirror scenes ─────────────────────────────
 
@@ -51,7 +51,7 @@ export default function Carousel({
   const axisSize = axis === "horizontal" ? size.x : size.y
 
   // ── Pointer forwarding for gestures ─────────────────────────────
-  usePointerForwarding({
+  usePointerBridge({
     elRef: carouselRef,
     disabled: !interactive,
     onReaction: (reaction) => {

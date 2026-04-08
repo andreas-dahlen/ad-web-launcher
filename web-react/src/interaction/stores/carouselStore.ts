@@ -19,7 +19,7 @@ type Carousel = {
 }
 
 export type CarouselStore = {
-  carouselStore: Record<string, Carousel>
+  bindings: Record<string, Carousel>
   init: (id: string) => void
   get: (id: string) => Readonly<Carousel>
   delete: (id: string) => void
@@ -37,13 +37,13 @@ export type CarouselStore = {
 export const carouselStore = create<CarouselStore>()(
   immer((set, get) => ({
 
-    carouselStore: {},
+    bindings: {},
 
     init: (id) => {
-      if (get().carouselStore[id]) return
+      if (get().bindings[id]) return
 
       set(state => {
-        state.carouselStore[id] = {
+        state.bindings[id] = {
           index: 0,
           offset: 0,
 
@@ -59,35 +59,35 @@ export const carouselStore = create<CarouselStore>()(
     },
 
     get: (id) => {
-      return get().carouselStore[id] ?? null
+      return get().bindings[id] ?? null
     },
 
     delete: (id: string) => {
       set(state => {
-        delete state.carouselStore[id]
+        delete state.bindings[id]
       })
     },
 
     setCount: (id, count) => {
       set(state => {
-        const s = state.carouselStore[id]
+        const s = state.bindings[id]
         if (!s) return
         s.count = Math.max(0, count)
       })
     },
     setSize: (id, trackSize) => {
       set(state => {
-        const s = state.carouselStore[id]
+        const s = state.bindings[id]
         if (!s) return
         if (s.size.x === trackSize.x && s.size.y === trackSize.y) return
         s.size = trackSize
       })
     },
     setPosition: (id) => {
-      const s = get().carouselStore[id]
+      const s = get().bindings[id]
       if (!s?.pendingDir) return
       set(state => {
-        const s = state.carouselStore[id]
+        const s = state.bindings[id]
         s.settling = true
         s.index = getNextIndex(s.index, s.pendingDir, s.count)
         s.offset = 0
@@ -95,7 +95,7 @@ export const carouselStore = create<CarouselStore>()(
       })
       requestAnimationFrame(() => {
         set(state => {
-          const s = state.carouselStore[id]
+          const s = state.bindings[id]
           if (!s) return
           s.settling = false
         })
@@ -104,7 +104,7 @@ export const carouselStore = create<CarouselStore>()(
 
     swipeStart: (ctx) => {
       set(state => {
-        const s = state.carouselStore[ctx.id]
+        const s = state.bindings[ctx.id]
         if (!s) return
         s.dragging = true
         s.settling = false
@@ -118,14 +118,14 @@ export const carouselStore = create<CarouselStore>()(
 
     swipe: (ctx) => {
       set(state => {
-        const s = state.carouselStore[ctx.id]
+        const s = state.bindings[ctx.id]
         if (!s) return
         s.offset = ctx.delta1D ?? s.offset
       })
     },
     swipeCommit: (ctx) => {
       set(state => {
-        const s = state.carouselStore[ctx.id]
+        const s = state.bindings[ctx.id]
         if (!s) return
         if (s.settling) return
         s.pendingDir = ctx.direction ?? null
@@ -135,7 +135,7 @@ export const carouselStore = create<CarouselStore>()(
     },
     swipeRevert: (ctx) => {
       set(state => {
-        const s = state.carouselStore[ctx.id]
+        const s = state.bindings[ctx.id]
         if (!s) return
         s.offset = 0
         s.dragging = false

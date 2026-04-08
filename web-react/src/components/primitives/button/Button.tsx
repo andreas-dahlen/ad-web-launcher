@@ -1,5 +1,5 @@
 import { useRef } from "react"
-import { usePointerForwarding } from "@components/hooks/bridge.ts"
+import { usePointerBridge } from '@components/hooks/pointerBridge'
 
 export interface ButtonProps {
   id: string
@@ -32,7 +32,7 @@ export default function Button({
 
   const buttonRef = useRef<HTMLDivElement>(null)
 
-  usePointerForwarding({
+  usePointerBridge({
     elRef: buttonRef,
     disabled: !interactive,
     onReaction: (reaction) => {

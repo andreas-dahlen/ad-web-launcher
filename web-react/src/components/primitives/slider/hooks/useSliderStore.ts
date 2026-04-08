@@ -11,7 +11,7 @@ const DEFAULTS = {
   dragging: false
 } as const
 
-export const useSliderZustand = (id: string) => {
+export const useSliderStore = (id: string) => {
 
   useEffect(() => {
     sliderStore.getState().init(id)
@@ -19,6 +19,6 @@ export const useSliderZustand = (id: string) => {
   }, [id])
 
   return sliderStore(
-    (s: SliderStore) => s.sliderStore[id] ?? DEFAULTS
+    (s: SliderStore) => s.bindings[id] ?? DEFAULTS
   )
 }

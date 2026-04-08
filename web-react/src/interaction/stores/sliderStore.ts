@@ -20,7 +20,7 @@ type Slider = {
 }
 
 export type SliderStore = {
-  sliderStore: Record<string, Slider>
+  bindings: Record<string, Slider>
   init: (id: string) => void
   get: (id: string) => Readonly<Slider>
   delete: (id: string) => void
@@ -39,13 +39,13 @@ export type SliderStore = {
 export const sliderStore = create<SliderStore>()(
   immer((set, get) => ({
 
-    sliderStore: {},
+    bindings: {},
 
     init: (id) => {
-      if (get().sliderStore[id]) return
+      if (get().bindings[id]) return
 
       set(state => {
-        state.sliderStore[id] = {
+        state.bindings[id] = {
           value: 0,
           offset: 0,
           min: 0,
@@ -56,18 +56,18 @@ export const sliderStore = create<SliderStore>()(
       })
     },
     get: (id) => {
-      return get().sliderStore[id] ?? null
+      return get().bindings[id] ?? null
     },
 
     delete: (id: string) => {
       set(state => {
-        delete state.sliderStore[id]
+        delete state.bindings[id]
       })
     },
 
     setConstraints: (id, constraints) => {
       set(state => {
-        const s = state.sliderStore[id]
+        const s = state.bindings[id]
         if (!s) return
         s.min = constraints.min;
         s.max = constraints.max;
@@ -76,7 +76,7 @@ export const sliderStore = create<SliderStore>()(
 
     setSize: (id, size) => {
       set(state => {
-        const s = state.sliderStore[id]
+        const s = state.bindings[id]
         if (!s) return
         s.size = size
 
@@ -84,21 +84,21 @@ export const sliderStore = create<SliderStore>()(
     },
     setThumbSize: (id, thumbSize) => {
       set(state => {
-        const s = state.sliderStore[id]
+        const s = state.bindings[id]
         if (!s) return
         if (thumbSize !== undefined) s.thumbSize = thumbSize;
       })
     },
     press: (ctx) => {
       set(state => {
-        const s = state.sliderStore[ctx.id]
+        const s = state.bindings[ctx.id]
         if (!s) return
         s.value = ctx.delta1D ?? s.value
       })
     },
     swipeStart: (ctx) => {
       set(state => {
-        const s = state.sliderStore[ctx.id]
+        const s = state.bindings[ctx.id]
         if (!s) return
         s.dragging = true
         s.value = ctx.delta1D ?? s.value
@@ -106,14 +106,14 @@ export const sliderStore = create<SliderStore>()(
     },
     swipe: (ctx) => {
       set(state => {
-        const s = state.sliderStore[ctx.id]
+        const s = state.bindings[ctx.id]
         if (!s) return
         s.value = ctx.delta1D ?? s.value
       })
     },
     swipeCommit: (ctx) => {
       set(state => {
-        const s = state.sliderStore[ctx.id]
+        const s = state.bindings[ctx.id]
         if (!s) return
         s.dragging = false
         s.value = ctx.delta1D ?? s.value

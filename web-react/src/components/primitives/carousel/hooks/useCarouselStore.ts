@@ -11,7 +11,7 @@ const DEFAULTS = {
   pendingDir: null
 } as const
 
-export const useCarouselZustand = (id: string) => {
+export const useCarouselStore = (id: string) => {
 
   useEffect(() => {
     carouselStore.getState().init(id)
@@ -19,6 +19,6 @@ export const useCarouselZustand = (id: string) => {
   }, [id])
 
   return carouselStore(
-    (s: CarouselStore) => s.carouselStore[id] ?? DEFAULTS
+    (s: CarouselStore) => s.bindings[id] ?? DEFAULTS
   )
 }

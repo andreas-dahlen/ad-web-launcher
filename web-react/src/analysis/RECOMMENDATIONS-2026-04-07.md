@@ -103,12 +103,14 @@
 ## Low Priority
 *Low impact or purely cosmetic — tackle when time allows*
 
+//DONE pointerBridge and usePointerBridge is the export
 ### Rename `bridge.ts` to match its export
 **Category:** Naming
 **Impact:** Medium
 **Effort:** Low
 **Details:** The file is `bridge.ts` but the export is `usePointerForwarding`. Rename the file to `usePointerForwarding.ts` (matching the React hook naming convention), or rename the hook to `useBridge` so the file and export align. The rest of the codebase imports from `@components/hooks/bridge.ts` so update the import paths accordingly.
 
+//DONE after consideration went with bindings. The store exports are already named `carouselStore`, `sliderStore`, and `dragStore` so the inner keys need to be different to avoid `carouselStore.getState().carouselStore` confusion. bindings felt more intuitive than `items` or `instances` since they represent the active primitive instances bound to the DOM, not just arbitrary items.
 ### Rename inner store keys to avoid shadowing
 **Category:** Naming
 **Impact:** Medium

@@ -1,8 +1,8 @@
 import { useRef } from "react"
-import { usePointerForwarding } from "@components/hooks/bridge.ts"
+import { usePointerBridge } from "@components/hooks/pointerBridge.ts"
 import { useDragSizing } from "./hooks/useDragSizing.ts"
 import { useDragMotion } from "./hooks/useDragMotion.ts"
-import { useDragZustand } from "./hooks/useDragStore.ts"
+import { useDragStore } from "./hooks/useDragStore.ts"
 
 export interface DragProps {
   id: string
@@ -27,7 +27,7 @@ export default function Drag({
 }: DragProps) {
 
   // ── Fully subscribe to the drag store─────────────────────────────
-  const { position, offset, dragging } = useDragZustand(id)
+  const { position, offset, dragging } = useDragStore(id)
 
   // ── DOM references & sizing ─────────────────────────────
   const containerRef = useRef<HTMLDivElement>(null)
@@ -35,7 +35,7 @@ export default function Drag({
   useDragSizing({ elRef: dragItemRef, containerRef: containerRef, id })
 
   // ── Pointer forwarding for gestures ─────────────────────────────
-  usePointerForwarding({
+  usePointerBridge({
     elRef: dragItemRef,
     disabled: locked,
     onReaction: (reaction) => {
