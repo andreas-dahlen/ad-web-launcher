@@ -1,5 +1,6 @@
 import { useRef } from "react"
-import { usePointerBridge } from '@components/hooks/pointerBridge'
+import { usePointerBridge } from '../../hooks/pointerBridge.ts'
+import type { CtxType } from '@interaction/types/ctxType.ts'
 
 export interface ButtonProps {
   id: string
@@ -9,9 +10,9 @@ export interface ButtonProps {
   reactPressRelease?: boolean
   reactPressCancel?: boolean
   interactive?: boolean
-  onPress?: (detail: unknown) => void
-  onPressRelease?: (detail: unknown) => void
-  onPressCancel?: (detail: unknown) => void
+  onPress?: (detail: CtxType) => void
+  onPressRelease?: (detail: CtxType) => void
+  onPressCancel?: (detail: CtxType) => void
   children?: React.ReactNode
 }
 

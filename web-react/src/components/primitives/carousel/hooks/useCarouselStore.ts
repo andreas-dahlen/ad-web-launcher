@@ -1,6 +1,6 @@
-import { carouselStore, type CarouselStore } from '@interaction/stores/carouselStore'
 import { useEffect } from 'react'
 import { useShallow } from 'zustand/shallow'
+import { carouselStore, type CarouselStore } from '@interaction/stores/carouselStore.ts'
 
 const DEFAULTS = {
   index: 0,

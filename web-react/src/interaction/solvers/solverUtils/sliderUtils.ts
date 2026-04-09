@@ -1,7 +1,7 @@
-import { normalizeBase } from '@interaction/solvers/solverUtils/utilsShared'
-import { vector } from '@interaction/solvers/solverUtils/vectorUtils'
-import type { Normalized1D } from '@interaction/types/ctxType'
-import type { SliderDesc } from '@interaction/types/descriptor/descriptor'
+import { normalizeBase } from '../../solvers/solverUtils/axisUtils.ts'
+import { vector } from '../../solvers/solverUtils/vectorUtils.ts'
+import type { Normalized1D } from '../../types/ctxType.ts'
+import type { SliderDesc } from '../../types/descriptor/descriptor.ts'
 
 export const sliderUtils = {
 
@@ -13,10 +13,10 @@ export const sliderUtils = {
     const thumb = vector.resolveByAxis1D(desc.data.thumbSize, axis)
     return {
       ...base,
-      mainSize: track?.prim,
-      crossSize: track?.sub,
-      mainThumbSize: thumb?.prim,
-      crossThumbSize: thumb?.sub
+      mainSize: track?.main,
+      crossSize: track?.cross,
+      mainThumbSize: thumb?.main,
+      crossThumbSize: thumb?.cross
     }
   },
 

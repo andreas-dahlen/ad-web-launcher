@@ -3,12 +3,12 @@ import { carouselSolver } from '../solvers/carouselSolver.ts'
 import { sliderSolver } from '../solvers/sliderSolver.ts'
 import { dragSolver } from '../solvers/dragSolver.ts'
 import { domUpdater } from '../updater/domUpdater.ts'
-import { dragStore } from '@interaction/stores/dragStore.ts'
-import { sliderStore } from '@interaction/stores/sliderStore.ts'
-import { carouselStore } from '@interaction/stores/carouselStore.ts'
-import type { EventBridgeType } from '@interaction/types/primitiveType.ts'
-import type { CarouselFunctions, DragFunctions, InterpreterFn, SliderFunctions } from '@interaction/types/pipelineType.ts'
-import type { CtxType } from '@interaction/types/ctxType.ts'
+import { dragStore } from '../stores/dragStore.ts'
+import { sliderStore } from '../stores/sliderStore.ts'
+import { carouselStore } from '../stores/carouselStore.ts'
+import { CAROUSEL_EVENTS, DRAG_EVENTS, SLIDER_EVENTS, type CarouselFunctions, type DragFunctions, type InterpreterFn, type SliderFunctions } from '../types/pipelineType.ts'
+import type { EventBridgeType } from '../types/primitiveType.ts'
+import type { CtxType } from '../types/ctxType.ts'
 import type { PointerEventPackage } from '@components/hooks/pointerBridge.ts'
 
 /* =====================
@@ -26,7 +26,7 @@ export const pipeline = {
      Abort!
   -------------------------- */
   abortGesture(pointerId: number) {
-    //for safty could possibly think about how to setup a abort for zustand stores to abort and reset store values.
+    //FUTURE for safty could possibly think about how to setup a abort for zustand stores to abort and reset store values.
     interpreter.deleteGesture(pointerId)
   },
 
@@ -58,7 +58,7 @@ export const pipeline = {
         ctx = desc.ctx
         const sr = carouselSolver?.[event]?.(desc)
         if (sr) ctx = { ...ctx, ...sr }
-        if (ctx.storeAccepted) {
+        if (ctx.storeAccepted && CAROUSEL_EVENTS.has(ctx.event)) {
           const fn = carouselStore.getState()[ctx.event as keyof CarouselFunctions]
           fn?.(ctx)
         }
@@ -69,7 +69,7 @@ export const pipeline = {
         const sr = sliderSolver?.[event]?.(desc)
         if (sr) ctx = { ...ctx, ...sr }
         if (ctx.gestureUpdate != null) interpreter.applyGestureUpdate(ctx.gestureUpdate)
-        if (ctx.storeAccepted) {
+        if (ctx.storeAccepted && SLIDER_EVENTS.has(ctx.event)) {
           const fn = sliderStore.getState()[ctx.event as keyof SliderFunctions]
           fn?.(ctx)
         }
@@ -79,7 +79,7 @@ export const pipeline = {
         ctx = desc.ctx
         const sr = dragSolver?.[event]?.(desc)
         if (sr) ctx = { ...ctx, ...sr }
-        if (ctx.storeAccepted) {
+        if (ctx.storeAccepted && DRAG_EVENTS.has(ctx.event)) {
           const fn = dragStore.getState()[ctx.event as keyof DragFunctions]
           fn?.(ctx)
         }

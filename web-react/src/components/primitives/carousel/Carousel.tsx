@@ -1,11 +1,12 @@
 import { useRef, useEffect, useMemo } from "react"
-import { usePointerBridge } from '@components/hooks/pointerBridge.ts'
+import { usePointerBridge } from '../../hooks/pointerBridge.ts'
 import { useCarouselMotion } from "./hooks/useCarouselMotion.ts"
 import { useCarouselSizing } from "./hooks/useCarouselSizing.ts"
 import { useAugmentedScenes } from "./hooks/useAugmentedScenes.ts"
-import type { SceneRole } from '@interaction/types/primitiveType.ts'
-import { useCarouselStore } from '@components/primitives/carousel/hooks/useCarouselStore.ts'
+import { useCarouselStore } from './hooks/useCarouselStore.ts'
 import { carouselStore } from '@interaction/stores/carouselStore.ts'
+import type { SceneRole } from '@interaction/types/primitiveType.ts'
+import type { CtxType } from '@interaction/types/ctxType.ts'
 
 export interface CarouselProps {
   id: string
@@ -16,7 +17,7 @@ export interface CarouselProps {
   lockNextAt?: number
   reactSwipeCommit?: boolean
   interactive?: boolean
-  onSwipeCommit?: (detail: unknown) => void
+  onSwipeCommit?: (detail: CtxType) => void
 }
 
 interface Slot {

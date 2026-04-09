@@ -1,12 +1,11 @@
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
-import type { Vec2 } from '@interaction/types/primitiveType'
-import type { CtxSlider } from '@interaction/types/ctxType'
+import type { Vec2 } from '../types/primitiveType.ts'
+import type { CtxSlider } from '../types/ctxType.ts'
 
 type Slider = {
   //react motion
   value: number         // logical position
-  offset: number        // live drag offset
 
   //react sizing
   min: number
@@ -15,14 +14,13 @@ type Slider = {
 
   // the optional section non reactive
   thumbSize: Vec2
-  dragging?: boolean
-
+  dragging: boolean
 }
 
 export type SliderStore = {
   bindings: Record<string, Slider>
   init: (id: string) => void
-  get: (id: string) => Readonly<Slider>
+  get: (id: string) => Readonly<Slider> | null
   delete: (id: string) => void
 
   setConstraints: (id: string, constraints: { min: number, max: number }) => void
@@ -47,11 +45,11 @@ export const sliderStore = create<SliderStore>()(
       set(state => {
         state.bindings[id] = {
           value: 0,
-          offset: 0,
           min: 0,
           max: 100,
           size: { x: 0, y: 0 },
-          thumbSize: { x: 0, y: 0 }
+          thumbSize: { x: 0, y: 0 },
+          dragging: false
         }
       })
     },
@@ -86,9 +84,11 @@ export const sliderStore = create<SliderStore>()(
       set(state => {
         const s = state.bindings[id]
         if (!s) return
-        if (thumbSize !== undefined) s.thumbSize = thumbSize;
+        if (s.thumbSize.x === thumbSize.x && s.thumbSize.y === thumbSize.y) return
+        s.thumbSize = thumbSize
       })
     },
+    // if (s.thumbSize === thumbSize)
     press: (ctx) => {
       set(state => {
         const s = state.bindings[ctx.id]

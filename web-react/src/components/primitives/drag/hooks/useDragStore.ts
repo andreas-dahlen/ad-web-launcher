@@ -1,6 +1,6 @@
-import { dragStore, type DragStore } from '@interaction/stores/dragStore'
 import { useEffect } from 'react'
 import { useShallow } from 'zustand/shallow'
+import { dragStore, type DragStore } from '@interaction/stores/dragStore.ts'
 
 const DEFAULTS = {
   position: { x: 0, y: 0 },

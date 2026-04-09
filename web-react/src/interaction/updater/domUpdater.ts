@@ -1,7 +1,6 @@
+import type { CtxType } from '../types/ctxType.ts'
+import type { EventType } from '../types/primitiveType.ts'
 // domUpdater.ts
-
-import type { CtxType } from '@interaction/types/ctxType'
-import type { EventType } from '@interaction/types/primitiveType'
 /* -------------------------------------------------
    DOM helpers
 ------------------------------------------------- */

@@ -1,7 +1,7 @@
 import { immer } from "zustand/middleware/immer"
 import { create } from 'zustand'
-import type { Direction, Vec2 } from "@interaction/types/primitiveType"
-import type { CtxCarousel } from '@interaction/types/ctxType'
+import type { Direction, Vec2 } from "../types/primitiveType.ts"
+import type { CtxCarousel } from '../types/ctxType.ts'
 
 type Carousel = {
   //react motion
@@ -21,7 +21,7 @@ type Carousel = {
 export type CarouselStore = {
   bindings: Record<string, Carousel>
   init: (id: string) => void
-  get: (id: string) => Readonly<Carousel>
+  get: (id: string) => Readonly<Carousel> | null
   delete: (id: string) => void
 
   setCount: (id: string, count: number) => void

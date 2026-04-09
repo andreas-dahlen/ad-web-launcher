@@ -1,8 +1,8 @@
-import type { Axis, Vec2 } from '@interaction/types/primitiveType'
-import { utils } from '@interaction/core/gestureUtils'
-import { buildDesc } from '@interaction/core/buildDesc'
-import type { Descriptor, SwipeableDescriptor } from '@interaction/types/descriptor/descriptor'
-import { buildContext } from '@interaction/core/buildContext'
+import type { Axis, Vec2 } from '../types/primitiveType.ts'
+import { gestureUtils } from '../core/gestureUtils.ts'
+import { buildDesc } from '../core/buildDesc.ts'
+import type { Descriptor, SwipeableDescriptor } from '../types/descriptor/descriptor.ts'
+import { buildContext } from '../core/buildContext.ts'
 
 export const domQuery = {
 
@@ -42,11 +42,9 @@ export const domQuery = {
     const rect = element.getBoundingClientRect()
     const left = (x - rect.left)
     const top = (y - rect.top)
-    const startOffset = utils.normalizedDelta({ x: left, y: top })
+    const startOffset = gestureUtils.normalizedDelta({ x: left, y: top })
     return {
       ...startOffset
     }
   }
 }
-
-

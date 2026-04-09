@@ -1,6 +1,6 @@
 import { useMemo, useCallback } from "react"
 import { APP_SETTINGS } from "@config/appSettings.ts"
-import { carouselStore } from '@interaction/stores/carouselStore'
+import { carouselStore } from '@interaction/stores/carouselStore.ts'
 
 type Role = "prev" | "current" | "next"
 

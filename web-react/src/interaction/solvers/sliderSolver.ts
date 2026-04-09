@@ -5,11 +5,11 @@
  * - Quantizes delta to step boundaries on commit
  * - No swipeRevert reaction
  */
-import type { EventType } from '@interaction/types/primitiveType.ts'
-import { exceedsCrossRange } from "./solverUtils/utilsShared.ts"
-import type { SliderDesc } from '@interaction/types/descriptor/descriptor.ts'
-import type { SliderCtxPartial } from '@interaction/types/ctxType.ts'
-import { sliderUtils } from '@interaction/solvers/solverUtils/sliderUtils.ts'
+import { exceedsCrossRange } from "./solverUtils/axisUtils.ts"
+import type { EventType } from '../types/primitiveType.ts'
+import type { SliderDesc } from '../types/descriptor/descriptor.ts'
+import type { SliderCtxPartial } from '../types/ctxType.ts'
+import { sliderUtils } from '../solvers/solverUtils/sliderUtils.ts'
 
 export const sliderSolver: Partial<Record<EventType, (desc: SliderDesc) => SliderCtxPartial>> = {
 

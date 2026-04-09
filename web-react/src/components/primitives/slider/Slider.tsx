@@ -1,5 +1,5 @@
 import { useRef } from "react"
-import { usePointerBridge } from "@components/hooks/pointerBridge.ts"
+import { usePointerBridge } from "../../hooks/pointerBridge.ts"
 import { useSliderSizing } from "./hooks/useSliderSizing.ts"
 import { useSliderMotion } from "./hooks/useSliderMotion.ts"
 import { useSliderStore } from "./hooks/useSliderStore.ts"
@@ -74,7 +74,7 @@ export default function Slider({
     constraints,
     axisSize,
     axisThumbSize,
-    dragging: dragging ?? false,
+    dragging: dragging,
     horizontal
   })
 

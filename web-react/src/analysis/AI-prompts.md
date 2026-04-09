@@ -144,3 +144,55 @@ it accordingly using your own judgement. If you are unsure whether something is
 resolved, keep it in. Do not remove tickets based on guesswork.
 
 When done, save the updated RECOMMENDATIONS_[DATE].md to src/analysis/.
+
+# Prompt 6 — Cleanup Pass
+
+Read the most recent RECOMMENDATIONS file from src/analysis/.
+
+Then read the current codebase thoroughly — focus on the files referenced in each ticket.
+
+Your job is cross-referencing only. For each ticket:
+- If the code clearly resolves the ticket → mark //DONE and briefly note what you observed
+- If the code partially addresses it → mark //PARTIAL and note what remains
+- If you cannot confirm it is resolved → leave it unchanged
+
+Rules:
+- Do NOT add new tickets
+- Do NOT modify ticket details or recommendations
+- Do NOT make judgement calls on skipped/noted tickets — leave //SKIPPED, //NOTE, //HELP as-is
+- Only mark //DONE if the fix is clearly visible in the code, not inferred
+- When in doubt, leave it unchanged
+
+Save the updated file back to src/analysis/.
+
+# Prompt 7 — Progress Analysis
+
+Read ALL analysis reports from src/analysis/ ordered by date.
+
+Produce a markdown file named PROGRESS_REPORT_[DATE].md saved to src/analysis/.
+
+Structure:
+# Progress Report
+
+## Trajectory
+One paragraph: is the system improving, plateauing, or regressing? Be honest.
+
+## Score History
+| Date | Score | Delta |
+|------|-------|-------|
+| ...  | ...   | ...   |
+
+## Category Trends
+For each of the 10 categories, show the score history and whether it's trending up, flat, or down.
+
+## What's Actually Improving
+Specific findings that have been resolved between reports. Reference file names.
+
+## What's Stuck
+Categories or specific findings that have not moved across multiple reports. Be direct about why.
+
+## What's Getting Worse
+Any regressions — scores that dropped or new findings that didn't exist in earlier reports.
+
+## Verdict
+One honest paragraph. Is the 7/10 ceiling a measurement problem, a complexity ceiling, or unfinished work?

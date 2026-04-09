@@ -3,11 +3,11 @@
  * Carousel solver: decides commit vs revert, returns ctx payloads.
  * 
  */
-import type { CarouselDesc } from '@interaction/types/descriptor/descriptor.ts'
-import type { EventType } from '@interaction/types/primitiveType.ts'
-import type { CarouselCtxPartial } from '@interaction/types/ctxType.ts'
-import { carouselUtils } from '@interaction/solvers/solverUtils/carouselUtils'
-import { exceedsCrossRange } from '@interaction/solvers/solverUtils/utilsShared'
+import type { CarouselDesc } from '../types/descriptor/descriptor.ts'
+import type { EventType } from '../types/primitiveType.ts'
+import type { CarouselCtxPartial } from '../types/ctxType.ts'
+import { carouselUtils } from '../solvers/solverUtils/carouselUtils.ts'
+import { exceedsCrossRange } from '../solvers/solverUtils/axisUtils.ts'
 
 export const carouselSolver: Partial<Record<EventType, (desc: CarouselDesc) => CarouselCtxPartial>> = {
   /**

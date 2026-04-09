@@ -18,7 +18,7 @@ export interface Reactions {
   readonly swipeable: boolean
   readonly modifiable: boolean
 }
-export interface Context {
+export interface DomContext {
   readonly el: HTMLElement
   readonly ds: DOMStringMap
   readonly id: string

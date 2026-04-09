@@ -2,10 +2,10 @@
 Context Builder
 ========================= */
 
-import type { Context } from '@interaction/types/descriptor/baseType'
-import { toAxis, toType } from '@interaction/types/primitiveType'
+import type { DomContext } from '../types/descriptor/baseType.ts'
+import { toAxis, toType } from '../types/primitiveType.ts'
 
-export function buildContext(el: HTMLElement): Context | null {
+export function buildContext(el: HTMLElement): DomContext | null {
   const ds = el.dataset
   const id = ds.id ?? ''
 

@@ -1,8 +1,9 @@
 import { useRef } from "react"
-import { usePointerBridge } from "@components/hooks/pointerBridge.ts"
+import { usePointerBridge } from "../../hooks/pointerBridge.ts"
 import { useDragSizing } from "./hooks/useDragSizing.ts"
 import { useDragMotion } from "./hooks/useDragMotion.ts"
 import { useDragStore } from "./hooks/useDragStore.ts"
+import type { CtxType } from '@interaction/types/ctxType.ts'
 
 export interface DragProps {
   id: string
@@ -11,7 +12,7 @@ export interface DragProps {
   snapY?: number
   locked?: boolean
   reactSwipeCommit?: boolean
-  onSwipeCommit?: (detail: unknown) => void
+  onSwipeCommit?: (detail: CtxType) => void
   children?: React.ReactNode
 }
 

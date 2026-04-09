@@ -1,10 +1,9 @@
 import { log } from '@debug/functions.ts'
-import { utils } from './gestureUtils.ts'
-
-import type { Axis, EventType, Vec2 } from '@interaction/types/primitiveType.ts'
-import type { Descriptor } from '@interaction/types/descriptor/descriptor.ts'
-import type { GestureUpdate } from '@interaction/types/descriptor/dataType.ts'
-import { domQuery } from '@interaction/core/domQuery.ts'
+import { gestureUtils } from './gestureUtils.ts'
+import { domQuery } from './domQuery.ts'
+import type { Axis, EventType, Vec2 } from '../types/primitiveType.ts'
+import type { Descriptor } from '../types/descriptor/descriptor.ts'
+import type { GestureUpdate } from '../types/descriptor/dataType.ts'
 
 /* ========================
    Gesture state
@@ -58,9 +57,11 @@ function deleteGesture(pointerId: number) {
 function onDown(x: number, y: number, pointerId: number): Descriptor | null {
 
   if (Object.keys(gestures).length > 10) {
-    console.warn('Gesture map overflow, clearing')
-    for (const key in gestures) {
-      delete gestures[key]
+    const entries = Object.entries(gestures)
+    const oldest = entries.find(([, g]) => g.phase === 'PENDING') ?? entries[0]
+    if (oldest) {
+      console.warn('Gesture map overflow, evicting oldest gesture')
+      delete gestures[Number(oldest[0])]
     }
   }
 
@@ -95,14 +96,14 @@ function onMove(x: number, y: number, pointerId: number): Descriptor | null {
 
   if (g.phase === 'PENDING') {
     if (!g.desc) return null
-    if (!utils.swipeThresholdCalc(biggest, g.desc.type)) return null
+    if (!gestureUtils.swipeThresholdCalc(biggest, g.desc.type)) return null
     const intentAxis: Axis = absX > absY ? 'horizontal' : 'vertical'
 
-    const resolved = utils.isSwipeableDescriptor(g.desc, intentAxis)
+    const resolved = gestureUtils.isSwipeableDescriptor(g.desc, intentAxis)
       ? g.desc
       : domQuery.findLaneInDom(x, y, intentAxis, g.desc.base.pointerId)
 
-    //future me -> probably return pressCancel if resolved is false... and possibly delete gesture... 
+    //FUTURE return pressCancel if unresolved 
     if (!resolved) return null
 
     g.phase = 'SWIPING'
@@ -136,7 +137,7 @@ function onMove(x: number, y: number, pointerId: number): Descriptor | null {
     g.last.y = y
 
     if (g.desc.type !== 'button') {
-      g.desc.ctx.delta = utils.normalizedDelta(g.totalDelta) ?? g.desc.ctx.delta
+      g.desc.ctx.delta = gestureUtils.normalizedDelta(g.totalDelta) ?? g.desc.ctx.delta
       g.desc.ctx.cancel = undefined
       g.desc.ctx.event = 'swipe'
       return g.desc

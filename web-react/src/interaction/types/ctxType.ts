@@ -1,5 +1,5 @@
-import type { GestureUpdate } from '@interaction/types/descriptor/dataType'
-import type { Direction, EventType, Vec2 } from '@interaction/types/primitiveType'
+import type { GestureUpdate } from './descriptor/dataType.ts'
+import type { Direction, EventType, Vec2 } from './primitiveType.ts'
 
 export interface CancelData {
   element: HTMLElement
@@ -47,25 +47,23 @@ export type CtxType =
   | CtxDrag
   | CtxButton
 
-export type CtxSwipeType = Exclude<CtxType, CtxButton>
-
 /* -------------------------
         Solvers
     -------------------------- */
 
-export type CarouselCtxPartial = Partial<Pick<CtxCarousel, 'delta1D' | 'direction' | 'storeAccepted'>>
+export type CarouselCtxPartial = Partial<Pick<CtxCarousel, 'delta1D' | 'direction' | 'storeAccepted' | 'event'>>
 export type SliderCtxPartial = Partial<Pick<CtxSlider, 'delta1D' | 'gestureUpdate' | 'storeAccepted'>>
 export type DragCtxPartial = Partial<Pick<CtxDrag, 'storeAccepted' | 'delta'>>
 
 export interface Normalized1D {
-  mainSize?: number | null
-  crossSize?: number | null
-  mainThumbSize?: number | null
-  crossThumbSize?: number | null
-  mainOffset?: number | null
-  crossOffset?: number | null
-  mainDelta?: number | null
-  crossDelta?: number | null
+  mainSize?: number
+  crossSize?: number
+  mainThumbSize?: number
+  crossThumbSize?: number
+  mainOffset?: number
+  crossOffset?: number
+  mainDelta?: number
+  crossDelta?: number
 }
 
 /* -------------------------

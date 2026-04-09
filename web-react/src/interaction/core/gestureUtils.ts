@@ -1,11 +1,11 @@
-import { normalizeParameter, getAxisSize } from '../stores/sizeStore.ts'
 import { APP_SETTINGS } from '@config/appSettings.ts'
-import type { InteractionType, Vec2 } from '@interaction/types/primitiveType.ts'
-import type { Axis } from '@interaction/types/primitiveType.ts'
-import type { Descriptor, SwipeableDescriptor } from '@interaction/types/descriptor/descriptor.ts'
+import { normalizeParameter, getAxisSize } from '../stores/sizeStore.ts'
+import type { InteractionType, Vec2 } from '../types/primitiveType.ts'
+import type { Axis } from '../types/primitiveType.ts'
+import type { Descriptor, SwipeableDescriptor } from '../types/descriptor/descriptor.ts'
 
-//intentUtils.js
-export const utils = {
+//gestureUtils.js
+export const gestureUtils = {
 
 	normalizedDelta(delta: Vec2): Vec2 {
 		return {
@@ -29,11 +29,9 @@ export const utils = {
 		return null
 	},
 
+	//FUTURE possible swipeThreshold dif for every type
 	swipeThresholdCalc(distance: number, type: InteractionType): boolean {
 		if (type === 'slider') return true
-
-		//there is room for adding type specific API for threshold adjustments.
-		//could store different API thresholds in APP_SETTINGS for dif types.
 
 		const ratio = APP_SETTINGS.swipeThresholdRatio ?? 0.05
 
@@ -55,7 +53,7 @@ export const utils = {
 		const isLocked = desc.type === 'drag' && desc.data.locked
 		if (!swipeable || isLocked) return false
 		if (desc.type == 'slider') return true
-		const axis = utils.resolveAxis(intentAxis, desc)
+		const axis = this.resolveAxis(intentAxis, desc)
 		return !!axis
 	}
 }

@@ -1,9 +1,9 @@
 import { log } from '@debug/functions.ts'
-import { APP_SETTINGS } from '@config/appSettings.ts'
 import { immer } from 'zustand/middleware/immer'
 import { create } from 'zustand'
 import { useShallow } from 'zustand/shallow'
-import type { Axis } from '@interaction/types/primitiveType.ts'
+import { APP_SETTINGS } from '@config/appSettings.ts'
+import type { Axis1D } from '../types/primitiveType.ts'
 
 /* -------------------------
 Device info (works for web and APK)
@@ -27,7 +27,7 @@ export type SizeStore = {
   scaledHeight: number,
   update: () => void,
   normalizeParameter: (parameter: number) => number,
-  getAxisSize: (axis: Exclude<Axis, 'both'>) => number
+  getAxisSize: (axis: Axis1D) => number
 
 }
 // -------------------------
@@ -70,7 +70,7 @@ export const sizeStore = create<SizeStore>()(
         })
       },
 
-      getAxisSize: (axis: Exclude<Axis, 'both'>) => {
+      getAxisSize: (axis: Axis1D) => {
         const s = get()
         return axis === 'horizontal' ? s.scaledWidth : s.scaledHeight
       },
@@ -123,7 +123,7 @@ function computeScale(dev: Device, vw: number, vh: number) {
 /**
  * Return the size along a given axis
  */
-export function getAxisSize(axis: Exclude<Axis, 'both'>) {
+export function getAxisSize(axis: Axis1D) {
   return sizeStore.getState().getAxisSize(axis)
 }
 

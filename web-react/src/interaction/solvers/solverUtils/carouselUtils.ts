@@ -1,9 +1,9 @@
-import { APP_SETTINGS } from '@config/appSettings'
-import { normalizeBase } from '@interaction/solvers/solverUtils/utilsShared'
-import { vector } from '@interaction/solvers/solverUtils/vectorUtils'
-import type { Normalized1D } from '@interaction/types/ctxType'
-import type { CarouselDesc } from '@interaction/types/descriptor/descriptor'
-import type { Axis, Direction } from '@interaction/types/primitiveType'
+import { APP_SETTINGS } from '@config/appSettings.ts'
+import { normalizeBase } from '../../solvers/solverUtils/axisUtils.ts'
+import { vector } from '../../solvers/solverUtils/vectorUtils.ts'
+import type { Normalized1D } from '../../types/ctxType.ts'
+import type { CarouselDesc } from '../../types/descriptor/descriptor.ts'
+import type { Axis, Direction } from '../../types/primitiveType.ts'
 
 export const carouselUtils = {
 
@@ -14,8 +14,8 @@ export const carouselUtils = {
     const track = vector.resolveByAxis1D(desc.data.size, axis)
     return {
       ...base,
-      mainSize: track?.prim,
-      crossSize: track?.sub
+      mainSize: track?.main,
+      crossSize: track?.cross
     }
   },
 
@@ -32,7 +32,7 @@ export const carouselUtils = {
     if (mainDelta == null || mainSize == null) return
 
     if (this.shouldCommit(mainDelta, mainSize, axis)) {
-      const direction = vector.resolveDirection(mainDelta, axis)
+      const direction = vector.resolveDirection1D(mainDelta, axis)
       if (direction) {
         const delta = this.getCommitOffset(direction, mainSize)
         return { direction, delta }

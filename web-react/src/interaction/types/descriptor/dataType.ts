@@ -28,7 +28,7 @@ export interface DragModifiers {
 
 export interface SliderData {
   readonly thumbSize: Vec2
-  readonly constraints: { min: number; max: number }
+  readonly constraints: { readonly min: number; readonly max: number }
   readonly size: Vec2
 }
 

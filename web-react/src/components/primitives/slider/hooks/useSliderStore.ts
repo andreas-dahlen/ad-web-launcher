@@ -1,10 +1,9 @@
-import { sliderStore, type SliderStore } from '@interaction/stores/sliderStore'
 import { useEffect } from 'react'
 import { useShallow } from 'zustand/shallow'
+import { sliderStore, type SliderStore } from '@interaction/stores/sliderStore.ts'
 
 const DEFAULTS = {
   value: 0,
-  offset: 0,
   min: 0,
   max: 100,
   size: { x: 0, y: 0 },

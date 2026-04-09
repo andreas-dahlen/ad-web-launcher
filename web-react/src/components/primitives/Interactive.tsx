@@ -1,11 +1,11 @@
-import Button from '@components/primitives/button/Button'
-import Carousel from '@components/primitives/carousel/Carousel'
-import Drag from '@components/primitives/drag/Drag'
-import Slider from '@components/primitives/slider/Slider'
-import type { ButtonProps } from '@components/primitives/button/Button'
-import type { CarouselProps } from '@components/primitives/carousel/Carousel'
-import type { DragProps } from '@components/primitives/drag/Drag'
-import type { SliderProps } from '@components/primitives/slider/Slider'
+import Button from '../primitives/button/Button.ts'
+import Carousel from '../primitives/carousel/Carousel.ts'
+import Drag from '../primitives/drag/Drag.ts'
+import Slider from '../primitives/slider/Slider.ts'
+import type { ButtonProps } from '../primitives/button/Button.ts'
+import type { CarouselProps } from '../primitives/carousel/Carousel.ts'
+import type { DragProps } from '../primitives/drag/Drag.ts'
+import type { SliderProps } from '../primitives/slider/Slider.ts'
 
 export type InteractiveProps =
   | ({ type: 'button' } & ButtonProps)

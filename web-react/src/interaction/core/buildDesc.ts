@@ -1,15 +1,15 @@
-import { domQuery } from '@interaction/core/domQuery'
-import { buildContext } from '@interaction/core/buildContext'
-import { carouselStore } from '@interaction/stores/carouselStore'
-import { dragStore } from '@interaction/stores/dragStore'
-import { sliderStore } from '@interaction/stores/sliderStore'
-import type { BaseInteraction, BaseWithSwipe, Context, Reactions } from '@interaction/types/descriptor/baseType'
-import type { CarouselData, CarouselModifiers, DragData, DragModifiers, SliderData } from '@interaction/types/descriptor/dataType'
-import type { CarouselDesc, SliderDesc, DragDesc, ButtonDesc } from '@interaction/types/descriptor/descriptor'
-import type { Descriptor } from '@interaction/types/descriptor/descriptor'
-import type { CtxButton, CtxCarousel, CtxDrag, CtxSlider } from '@interaction/types/ctxType'
+import { domQuery } from './domQuery.ts'
+import { buildContext } from './buildContext.ts'
+import { carouselStore } from '../stores/carouselStore.ts'
+import { dragStore } from '../stores/dragStore.ts'
+import { sliderStore } from '../stores/sliderStore.ts'
+import type { BaseInteraction, BaseWithSwipe, DomContext, Reactions } from '../types/descriptor/baseType.ts'
+import type { CarouselData, CarouselModifiers, DragData, DragModifiers, SliderData } from '../types/descriptor/dataType.ts'
+import type { CarouselDesc, SliderDesc, DragDesc, ButtonDesc } from '../types/descriptor/descriptor.ts'
+import type { Descriptor } from '../types/descriptor/descriptor.ts'
+import type { CtxButton, CtxCarousel, CtxDrag, CtxSlider } from '../types/ctxType.ts'
 
-export interface Builder {
+interface Builder {
   reactions: Reactions
   x: number
   y: number
@@ -49,7 +49,7 @@ export const buildDesc = {
       default: return null
     }
   },
-  buildCarousel(ctx: Context, r: Builder): CarouselDesc | null {
+  buildCarousel(ctx: DomContext, r: Builder): CarouselDesc | null {
     const data = this.buildCarouselData(ctx)
     if (data) return {
       base: this.buildSwipeBase(ctx, r),
@@ -59,7 +59,7 @@ export const buildDesc = {
     }
     return null
   },
-  buildSlider(ctx: Context, r: Builder): SliderDesc | null {
+  buildSlider(ctx: DomContext, r: Builder): SliderDesc | null {
     const data = this.buildSliderData(ctx)
     if (data) return {
       base: this.buildSwipeBase(ctx, r),
@@ -69,7 +69,7 @@ export const buildDesc = {
     }
     return null
   },
-  buildDrag(ctx: Context, r: Builder): DragDesc | null {
+  buildDrag(ctx: DomContext, r: Builder): DragDesc | null {
     const data = this.buildDragData(ctx)
     if (data) return {
       base: this.buildSwipeBase(ctx, r),
@@ -79,7 +79,7 @@ export const buildDesc = {
     }
     return null
   },
-  buildButton(ctx: Context, r: Builder): ButtonDesc {
+  buildButton(ctx: DomContext, r: Builder): ButtonDesc {
     return {
       base: this.buildBase(ctx, r.pointerId),
       reactions: r.reactions,
@@ -91,7 +91,7 @@ export const buildDesc = {
       Build Base
     ========================= */
 
-  buildBase(ctx: Context, pointerId: number): BaseInteraction {
+  buildBase(ctx: DomContext, pointerId: number): BaseInteraction {
     return {
       pointerId: pointerId,
       element: ctx.el,
@@ -100,7 +100,7 @@ export const buildDesc = {
     }
   },
 
-  buildSwipeBase(ctx: Context, r: Builder): BaseWithSwipe {
+  buildSwipeBase(ctx: DomContext, r: Builder): BaseWithSwipe {
     const base = this.buildBase(ctx, r.pointerId)
     return {
       ...base,
@@ -113,18 +113,18 @@ export const buildDesc = {
     Build Data
   ========================= */
 
-  buildCarouselData(ctx: Context): (CarouselData & CarouselModifiers) | null {
+  buildCarouselData(ctx: DomContext): (CarouselData & CarouselModifiers) | null {
     const s = carouselStore.getState().get(ctx.id)
     if (!s) return null
     const lockSwipeAt = { prev: ctx.lockPrevAt, next: ctx.lockNextAt }
     return { index: s.index, size: s.size, lockSwipeAt }
   },
-  buildSliderData(ctx: Context): SliderData | null {
+  buildSliderData(ctx: DomContext): SliderData | null {
     const s = sliderStore.getState().get(ctx.id)
     if (!s) return null
     return { thumbSize: s.thumbSize, constraints: { min: s.min, max: s.max }, size: s.size }
   },
-  buildDragData(ctx: Context): DragData & DragModifiers | null {
+  buildDragData(ctx: DomContext): DragData & DragModifiers | null {
     const s = dragStore.getState().get(ctx.id)
     if (!s) return null
     const snap = (ctx.snapX != null && ctx.snapY != null) ? { x: ctx.snapX, y: ctx.snapY } : undefined
@@ -135,16 +135,16 @@ export const buildDesc = {
   /* =========================
     ctx placeholders
   ========================= */
-  buildCarouselCtx(ctx: Context): CtxCarousel {
+  buildCarouselCtx(ctx: DomContext): CtxCarousel {
     return { type: 'carousel', event: 'press', id: ctx.id, element: ctx.el, delta: { x: 0, y: 0 }, storeAccepted: false }
   },
-  buildSliderCtx(ctx: Context): CtxSlider {
+  buildSliderCtx(ctx: DomContext): CtxSlider {
     return { type: 'slider', event: 'press', id: ctx.id, element: ctx.el, delta: { x: 0, y: 0 }, storeAccepted: false }
   },
-  buildDragCtx(ctx: Context): CtxDrag {
+  buildDragCtx(ctx: DomContext): CtxDrag {
     return { type: 'drag', event: 'press', id: ctx.id, element: ctx.el, delta: { x: 0, y: 0 }, storeAccepted: false }
   },
-  buildBtnCtx(ctx: Context): CtxButton {
+  buildBtnCtx(ctx: DomContext): CtxButton {
     return { type: 'button', event: 'press', id: ctx.id, element: ctx.el, storeAccepted: false }
   },
 
