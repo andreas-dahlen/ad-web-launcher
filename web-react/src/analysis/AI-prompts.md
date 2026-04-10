@@ -189,6 +189,9 @@ For each of the 10 categories, show the score history and whether it's trending 
 Specific findings that have been resolved between reports. Reference file names.
 
 ## What's Stuck
+When assessing "What's Stuck", cross-reference the RECOMMENDATIONS file. 
+If a ticket is marked //SKIPPED, do not count it as stuck — 
+it is a conscious decision.
 Categories or specific findings that have not moved across multiple reports. Be direct about why.
 
 ## What's Getting Worse

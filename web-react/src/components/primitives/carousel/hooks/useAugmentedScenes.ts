@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import EmptyPlaceholder from '@scenes/EmptyPlaceholder.ts'
+import EmptyPlaceholder from '@scenes/EmptyPlaceholder.jsx'
 
 export function useAugmentedScenes(
   scenes: React.ComponentType[],
