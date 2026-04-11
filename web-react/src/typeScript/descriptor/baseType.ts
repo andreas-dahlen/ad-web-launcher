@@ -13,12 +13,11 @@ export type BaseWithSwipe =
     readonly baseOffset: Vec2
   }
 
-export interface Reactions {
+export interface Capabilities {
   readonly pressable: boolean
   readonly swipeable: boolean
-  readonly modifiable: boolean
 }
-export interface DomContext {
+export interface DomMeta {
   readonly el: HTMLElement
   readonly ds: DOMStringMap
   readonly id: string

@@ -7,9 +7,9 @@
  * - No commit threshold check (always commits)
  * - No swipeRevert reaction
  */
-import type { EventType } from '../types/primitiveType.ts'
-import type { DragDesc } from '../types/descriptor/descriptor.ts'
-import type { DragCtxPartial } from '../types/ctxType.ts'
+import type { EventType } from '../../typeScript/primitiveType.ts'
+import type { DragDesc } from '../../typeScript/descriptor/descriptor.ts'
+import type { DragCtxPartial } from '../../typeScript/ctxType.ts'
 import { dragUtils } from '../solvers/solverUtils/dragUtils.ts'
 
 export const dragSolver: Partial<Record<EventType, (desc: DragDesc) => DragCtxPartial>> = {

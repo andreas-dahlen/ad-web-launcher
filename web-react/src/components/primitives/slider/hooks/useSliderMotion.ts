@@ -9,9 +9,9 @@ interface UseSliderMotionProps {
   horizontal: boolean
 }
 
-const BASE_STYLE = {
-  willChange: "transform" as const
-}
+// const BASE_STYLE = {
+//   willChange: "transform" as const
+// }
 
 export function useSliderMotion({
   position,
@@ -33,7 +33,6 @@ export function useSliderMotion({
     const pos = ratio * usable
 
     return {
-      ...BASE_STYLE,
       transform: horizontal
         ? `translate3d(${pos}px,0,0)`
         : `translate3d(0,${pos}px,0)`,

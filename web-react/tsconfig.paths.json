@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "@scenes/*": ["./src/app/scenes/*"],
+      "@assets/*": ["./src/assets/*"],
+      "@components/*": ["./src/components/*"],
+      "@hooks/*": ["./src/components/hooks/*"],
+      "@carousel/*": ["./src/components/primitives/carousel/*"],
+      "@button/*": ["./src/components/primitives/button/*"],
+      "@drag/*": ["./src/components/primitives/drag/*"],
+      "@slider/*": ["./src/components/primitives/slider/*"],
+      "@primitives/*": ["./src/components/primitives/*"],
+      "@config/*": ["./src/config/*"],
+      "@utils/*": ["./src/config/utils/*"],
+      "@typeScript/*": ["./src/typeScript/*"],
+      "@debug/*": ["./src/debug/*"],
+      "@interaction/*": ["./src/interaction/*"],
+      "@stores/*": ["./src/interaction/stores/*"],
+      "@styles/*": ["./src/styles/*"]
+    }
+  }
+}

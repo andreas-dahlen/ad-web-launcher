@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useShallow } from 'zustand/shallow'
-import { sliderStore, type SliderStore } from '@interaction/stores/sliderStore.ts'
+import { sliderStore, type SliderStore } from '@stores/sliderStore.ts'
 
 const DEFAULTS = {
   value: 0,

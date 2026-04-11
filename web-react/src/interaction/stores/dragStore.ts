@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
-import type { Vec2 } from '../types/primitiveType.ts'
-import type { CtxDrag } from '../types/ctxType.ts'
+import type { Vec2 } from '../../typeScript/primitiveType.ts'
+import type { CtxDrag } from '../../typeScript/ctxType.ts'
 
 type Drag = {
   //react motion

@@ -4,21 +4,9 @@ import { useCarouselMotion } from "./hooks/useCarouselMotion.ts"
 import { useCarouselSizing } from "./hooks/useCarouselSizing.ts"
 import { useAugmentedScenes } from "./hooks/useAugmentedScenes.ts"
 import { useCarouselStore } from './hooks/useCarouselStore.ts'
-import { carouselStore } from '@interaction/stores/carouselStore.ts'
-import type { SceneRole } from '@interaction/types/primitiveType.ts'
-import type { CtxType } from '@interaction/types/ctxType.ts'
-
-export interface CarouselProps {
-  id: string
-  axis: 'horizontal' | 'vertical'
-  scenes: React.ComponentType[]
-  className?: string
-  lockPrevAt?: number
-  lockNextAt?: number
-  reactSwipeCommit?: boolean
-  interactive?: boolean
-  onSwipeCommit?: (detail: CtxType) => void
-}
+import { carouselStore } from '@stores/carouselStore.ts'
+import type { SceneRole } from '@typeScript/primitiveType.ts'
+import type { CarouselProps } from '@typeScript/propsType.ts'
 
 interface Slot {
   sceneIdx: number
@@ -85,11 +73,9 @@ export default function Carousel({
 
   // ── Carousel motion / styling ─────────────────────────────
   const {
-    styleForRole,
-    onTransitionEnd } = useCarouselMotion({
+    styleForRole } = useCarouselMotion({
       store: { offset, dragging, settling },
       horizontal: axis === "horizontal",
-      id,
       axisSize
     })
 
@@ -112,7 +98,6 @@ export default function Carousel({
             key={slot.sceneIdx}
             style={styleForRole(slot.role)}
             data-role={slot.role}
-            onTransitionEnd={onTransitionEnd}
           >
             <Scene />
           </div>

@@ -1,5 +1,5 @@
-import type { DragData } from '../../types/descriptor/dataType.ts'
-import type { Axis, Axis1D, Direction, Vec2 } from '../../types/primitiveType.ts'
+import type { DragData } from '../../../typeScript/descriptor/dataType.ts'
+import type { Axis, Axis1D, Direction, Vec2 } from '../../../typeScript/primitiveType.ts'
 
 export const vector = {
   clamp(delta: number, min: number, max: number) {

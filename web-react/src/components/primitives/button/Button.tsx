@@ -1,6 +1,6 @@
 import { useRef } from "react"
 import { usePointerBridge } from '../../hooks/pointerBridge.ts'
-import type { CtxType } from '@interaction/types/ctxType.ts'
+import type { CtxType } from '@typeScript/ctxType.ts'
 
 export interface ButtonProps {
   id: string

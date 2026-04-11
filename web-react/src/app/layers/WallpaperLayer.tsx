@@ -1,5 +1,5 @@
 import Carousel from "@carousel/Carousel.tsx";
-import { wpScenes } from "@indexes/laneIndex.ts"
+import { wpScenes } from "../indexes/laneIndex.ts"
 
 export default function WallpaperLayer() {
 

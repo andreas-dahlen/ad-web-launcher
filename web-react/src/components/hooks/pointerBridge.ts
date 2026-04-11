@@ -1,8 +1,8 @@
 import { useEffect, useRef } from 'react'
 import type { RefObject } from 'react'
 import { pipeline } from '@interaction/core/pipeline.ts'
-import type { ReactionEvent } from '@interaction/types/ctxType.ts'
-import type { EventBridgeType } from '@interaction/types/primitiveType.ts'
+import type { ReactionEvent } from '@typeScript/ctxType.ts'
+import type { EventBridgeType } from '@typeScript/primitiveType.ts'
 
 export interface PointerEventPackage {
   readonly eventType: EventBridgeType

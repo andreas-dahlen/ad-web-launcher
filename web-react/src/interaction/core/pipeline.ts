@@ -6,15 +6,14 @@ import { domUpdater } from '../updater/domUpdater.ts'
 import { dragStore } from '../stores/dragStore.ts'
 import { sliderStore } from '../stores/sliderStore.ts'
 import { carouselStore } from '../stores/carouselStore.ts'
-import { CAROUSEL_EVENTS, DRAG_EVENTS, SLIDER_EVENTS, type CarouselFunctions, type DragFunctions, type InterpreterFn, type SliderFunctions } from '../types/pipelineType.ts'
-import type { EventBridgeType } from '../types/primitiveType.ts'
-import type { CtxType } from '../types/ctxType.ts'
-import type { PointerEventPackage } from '@components/hooks/pointerBridge.ts'
+import { CAROUSEL_EVENTS, DRAG_EVENTS, SLIDER_EVENTS, type CarouselFunctions, type DragFunctions, type InterpreterFn, type SliderFunctions } from '../../typeScript/pipelineType.ts'
+import type { EventBridgeType } from '../../typeScript/primitiveType.ts'
+import type { CtxType } from '../../typeScript/ctxType.ts'
+import type { PointerEventPackage } from '@hooks/pointerBridge.ts'
 
 /* =====================
         Maping
 ======================= */
-
 const interpreterMap: Record<EventBridgeType, InterpreterFn> = {
   down: interpreter.onDown,
   move: interpreter.onMove,

@@ -3,9 +3,9 @@
  * Carousel solver: decides commit vs revert, returns ctx payloads.
  * 
  */
-import type { CarouselDesc } from '../types/descriptor/descriptor.ts'
-import type { EventType } from '../types/primitiveType.ts'
-import type { CarouselCtxPartial } from '../types/ctxType.ts'
+import type { CarouselDesc } from '../../typeScript/descriptor/descriptor.ts'
+import type { EventType } from '../../typeScript/primitiveType.ts'
+import type { CarouselCtxPartial } from '../../typeScript/ctxType.ts'
 import { carouselUtils } from '../solvers/solverUtils/carouselUtils.ts'
 import { exceedsCrossRange } from '../solvers/solverUtils/axisUtils.ts'
 

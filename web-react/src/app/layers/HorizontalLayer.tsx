@@ -1,5 +1,5 @@
-import Carousel from "@components/primitives/carousel/Carousel.tsx"
-import { topScenes, midScenes, bottomScenes } from "@indexes/laneIndex.ts"
+import Carousel from "@carousel/Carousel.tsx"
+import { topScenes, midScenes, bottomScenes } from "../indexes/laneIndex.ts"
 
 export default function HorizontalLayer() {
   return (

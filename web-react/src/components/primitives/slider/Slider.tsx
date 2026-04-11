@@ -3,18 +3,7 @@ import { usePointerBridge } from "../../hooks/pointerBridge.ts"
 import { useSliderSizing } from "./hooks/useSliderSizing.ts"
 import { useSliderMotion } from "./hooks/useSliderMotion.ts"
 import { useSliderStore } from "./hooks/useSliderStore.ts"
-
-export interface SliderProps {
-  id: string
-  axis: 'horizontal' | 'vertical'
-  className?: string
-  reactSwipe?: boolean
-  reactSwipeStart?: boolean
-  reactSwipeCommit?: boolean
-  onVolumeChange?: (value: number) => void
-  trackStyling?: string
-  children?: React.ReactNode
-}
+import type { SliderProps } from '@typeScript/propsType.ts'
 
 export default function Slider({
   id,
@@ -23,7 +12,7 @@ export default function Slider({
   reactSwipe = false,
   reactSwipeStart = false,
   reactSwipeCommit = false,
-  onVolumeChange,
+  onValueChange,
   trackStyling,
   children
 }: SliderProps) {
@@ -64,7 +53,7 @@ export default function Slider({
       }
       if (emitValue === lastEmitted.current) return
       lastEmitted.current = emitValue
-      onVolumeChange?.(emitValue)
+      onValueChange?.(emitValue)
     }
   })
 

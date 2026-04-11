@@ -1,7 +1,7 @@
 import type { Descriptor } from './descriptor/descriptor.ts'
-import type { CarouselStore } from '../stores/carouselStore.ts'
-import type { DragStore } from '../stores/dragStore.ts'
-import type { SliderStore } from '../stores/sliderStore.ts'
+import type { CarouselStore } from '../interaction/stores/carouselStore.ts'
+import type { DragStore } from '../interaction/stores/dragStore.ts'
+import type { SliderStore } from '../interaction/stores/sliderStore.ts'
 import type { DataKeys, EventType } from './primitiveType.ts'
 
 /* =========================================================

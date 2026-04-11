@@ -149,18 +149,19 @@ When done, save the updated RECOMMENDATIONS_[DATE].md to src/analysis/.
 
 Read the most recent RECOMMENDATIONS file from src/analysis/.
 
-Then read the current codebase thoroughly — focus on the files referenced in each ticket.
+For each ticket, identify the files it references. Read those files directly.
 
-Your job is cross-referencing only. For each ticket:
-- If the code clearly resolves the ticket → mark //DONE and briefly note what you observed
-- If the code partially addresses it → mark //PARTIAL and note what remains
-- If you cannot confirm it is resolved → leave it unchanged
+Your job is cross-referencing. For each ticket:
+- If the referenced code clearly and fully resolves the ticket → delete the ticket
+- If the code partially addresses it → add //PARTIAL and note exactly what remains unresolved, referencing specific file/line
+- If a //SKIPPED or //NOTE ticket has justification visible in the code that confirms the skip → add //DEPRECATED with a one-line note citing the specific code
+- If the ticket is unresolved → leave it completely unchanged
 
 Rules:
 - Do NOT add new tickets
-- Do NOT modify ticket details or recommendations
-- Do NOT make judgement calls on skipped/noted tickets — leave //SKIPPED, //NOTE, //HELP as-is
-- Only mark //DONE if the fix is clearly visible in the code, not inferred
+- Do NOT modify ticket text or recommendations
+- Do NOT touch //SKIPPED, //NOTE, or //HELP tags — leave them as-is
+- Only act on what is visible in the code, never infer or assume
 - When in doubt, leave it unchanged
 
 Save the updated file back to src/analysis/.

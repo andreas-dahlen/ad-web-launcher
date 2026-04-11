@@ -1,51 +1,32 @@
 {
+  "extends": "./tsconfig.paths.json",
+  "baseUrl": ".",
   "compilerOptions": {
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
     "target": "ES2023",
-    "lib": ["ES2023"],
+    "lib": [
+      "ES2023"
+    ],
     "module": "ESNext",
-    "types": ["node"],
+    "types": [
+      "node"
+    ],
     "skipLibCheck": true,
-
     /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
     "moduleDetection": "force",
     "noEmit": true,
-
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true,
-
-"paths": {
-      "@indexes/*": ["./src/app/indexes/*"],
-      "@layers/*": ["./src/app/layers/*"],
-      "@scenes/*": ["./src/app/scenes/*"],
-
-      "@assets/*": ["./src/assets/*"],
-
-      "@components/*": ["./src/components/*"],
-      "@carousel/*": ["./src/components/primitives/carousel/*"],
-      "@button/*": ["./src/components/primitives/button/*"],
-      "@drag/*": ["./src/components/primitives/drag/*"],
-      "@slider/*": ["./src/components/primitives/slider/*"],
-      "@primitives/*": ["./src/components/primitives/*"],
-
-      "@config/*": ["./src/config/*"],
-      "@types/*": ["./src/config/types/*"],
-      "@utils/*": ["./src/config/utils/*"],
-
-      "@debug/*": ["./src/debug/*"],
-
-      "@interaction/*": ["./src/interaction/*"],
-      "@styles/*": ["./src/styles/*"],
-    }
+    "noUncheckedSideEffectImports": true
   },
-  "include": ["vite.config.ts"]
+  "include": [
+    "vite.config.ts"
+  ]
 }
-

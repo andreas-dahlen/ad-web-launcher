@@ -3,11 +3,11 @@ import Carousel from '../primitives/carousel/Carousel.ts'
 import Drag from '../primitives/drag/Drag.ts'
 import Slider from '../primitives/slider/Slider.ts'
 import type { ButtonProps } from '../primitives/button/Button.ts'
-import type { CarouselProps } from '../primitives/carousel/Carousel.ts'
-import type { DragProps } from '../primitives/drag/Drag.ts'
-import type { SliderProps } from '../primitives/slider/Slider.ts'
+import type { CarouselProps } from '@typeScript/propsType.ts'
+import type { DragProps } from '@typeScript/propsType.ts'
+import type { SliderProps } from '@typeScript/propsType.ts'
 
-export type InteractiveProps =
+type InteractiveProps =
   | ({ type: 'button' } & ButtonProps)
   | ({ type: 'carousel' } & CarouselProps)
   | ({ type: 'drag' } & DragProps)

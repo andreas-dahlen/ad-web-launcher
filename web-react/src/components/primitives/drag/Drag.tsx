@@ -3,18 +3,7 @@ import { usePointerBridge } from "../../hooks/pointerBridge.ts"
 import { useDragSizing } from "./hooks/useDragSizing.ts"
 import { useDragMotion } from "./hooks/useDragMotion.ts"
 import { useDragStore } from "./hooks/useDragStore.ts"
-import type { CtxType } from '@interaction/types/ctxType.ts'
-
-export interface DragProps {
-  id: string
-  className?: string
-  snapX?: number
-  snapY?: number
-  locked?: boolean
-  reactSwipeCommit?: boolean
-  onSwipeCommit?: (detail: CtxType) => void
-  children?: React.ReactNode
-}
+import type { DragProps } from '@typeScript/propsType.ts'
 
 export default function Drag({
   id,

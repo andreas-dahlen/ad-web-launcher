@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
-import type { Vec2 } from '../types/primitiveType.ts'
-import type { CtxSlider } from '../types/ctxType.ts'
+import type { Vec2 } from '../../typeScript/primitiveType.ts'
+import type { CtxSlider } from '../../typeScript/ctxType.ts'
 
 type Slider = {
   //react motion
@@ -76,6 +76,7 @@ export const sliderStore = create<SliderStore>()(
       set(state => {
         const s = state.bindings[id]
         if (!s) return
+        if (s.size.x === size.x && s.size.y === size.y) return
         s.size = size
 
       })

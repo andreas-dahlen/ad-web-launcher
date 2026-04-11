@@ -1,7 +1,7 @@
 import { immer } from "zustand/middleware/immer"
 import { create } from 'zustand'
-import type { Direction, Vec2 } from "../types/primitiveType.ts"
-import type { CtxCarousel } from '../types/ctxType.ts'
+import type { Direction, Vec2 } from "../../typeScript/primitiveType.ts"
+import type { CtxCarousel } from '../../typeScript/ctxType.ts'
 
 type Carousel = {
   //react motion
@@ -26,7 +26,7 @@ export type CarouselStore = {
 
   setCount: (id: string, count: number) => void
   setSize: (id: string, trackSize: Vec2) => void
-  setPosition: (id: string) => void
+  // setPosition: (id: string) => void
 
   swipeStart: (ctx: CtxCarousel) => void
   swipe: (ctx: CtxCarousel) => void
@@ -83,24 +83,24 @@ export const carouselStore = create<CarouselStore>()(
         s.size = trackSize
       })
     },
-    setPosition: (id) => {
-      const s = get().bindings[id]
-      if (!s?.pendingDir) return
-      set(state => {
-        const s = state.bindings[id]
-        s.settling = true
-        s.index = getNextIndex(s.index, s.pendingDir, s.count)
-        s.offset = 0
-        s.pendingDir = null
-      })
-      requestAnimationFrame(() => {
-        set(state => {
-          const s = state.bindings[id]
-          if (!s) return
-          s.settling = false
-        })
-      })
-    },
+    // setPosition: (id) => {
+    //   const s = get().bindings[id]
+    //   if (!s?.pendingDir) return
+    //   set(state => {
+    //     const s = state.bindings[id]
+    //     s.settling = true
+    //     s.index = getNextIndex(s.index, s.pendingDir, s.count)
+    //     s.offset = 0
+    //     s.pendingDir = null
+    //   })
+    //   requestAnimationFrame(() => {
+    //     set(state => {
+    //       const s = state.bindings[id]
+    //       if (!s) return
+    //       s.settling = false
+    //     })
+    //   })
+    // },
 
     swipeStart: (ctx) => {
       set(state => {

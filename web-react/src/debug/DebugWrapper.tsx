@@ -1,4 +1,4 @@
-import { sizeStore, useSize } from '@interaction/stores/sizeStore'
+import { sizeStore, useSize } from '@stores/sizeStore.ts'
 import type { PropsWithChildren } from 'react'
 import { useEffect } from 'react'
 

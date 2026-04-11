@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Button from '@components/primitives/button/Button';
+import Button from '@button/Button.tsx';
 
 export default function MirTop1() {
   const [interaction, setInteraction] = useState('idle')

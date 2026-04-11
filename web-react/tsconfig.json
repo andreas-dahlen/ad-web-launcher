@@ -3,31 +3,5 @@
   "references": [
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }
-  ],
-  "compilerOptions": {
-    // "baseUrl": "./src",
-"paths": {
-      "@indexes/*": ["./src/app/indexes/*"],
-      "@layers/*": ["./src/app/layers/*"],
-      "@scenes/*": ["./src/app/scenes/*"],
-
-      "@assets/*": ["./src/assets/*"],
-
-      "@components/*": ["./src/components/*"],
-      "@carousel/*": ["./src/components/primitives/carousel/*"],
-      "@button/*": ["./src/components/primitives/button/*"],
-      "@drag/*": ["./src/components/primitives/drag/*"],
-      "@slider/*": ["./src/components/primitives/slider/*"],
-      "@primitives/*": ["./src/components/primitives/*"],
-
-      "@config/*": ["./src/config/*"],
-      "@types/*": ["./src/config/types/*"],
-      "@utils/*": ["./src/config/utils/*"],
-
-      "@debug/*": ["./src/debug/*"],
-
-      "@interaction/*": ["./src/interaction/*"],
-      "@styles/*": ["./src/styles/*"],
-    }
-  }
+  ]
 }

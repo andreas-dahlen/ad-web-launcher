@@ -3,7 +3,7 @@ import { immer } from 'zustand/middleware/immer'
 import { create } from 'zustand'
 import { useShallow } from 'zustand/shallow'
 import { APP_SETTINGS } from '@config/appSettings.ts'
-import type { Axis1D } from '../types/primitiveType.ts'
+import type { Axis1D } from '../../typeScript/primitiveType.ts'
 
 /* -------------------------
 Device info (works for web and APK)

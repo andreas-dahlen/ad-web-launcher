@@ -64,7 +64,7 @@ Slider
 }
 
 .slider-thumb {
-  will-change: tranform;
+  will-change: transform;
   position: absolute;
 }
 

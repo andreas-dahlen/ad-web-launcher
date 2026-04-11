@@ -6,9 +6,9 @@
  * - No swipeRevert reaction
  */
 import { exceedsCrossRange } from "./solverUtils/axisUtils.ts"
-import type { EventType } from '../types/primitiveType.ts'
-import type { SliderDesc } from '../types/descriptor/descriptor.ts'
-import type { SliderCtxPartial } from '../types/ctxType.ts'
+import type { EventType } from '../../typeScript/primitiveType.ts'
+import type { SliderDesc } from '../../typeScript/descriptor/descriptor.ts'
+import type { SliderCtxPartial } from '../../typeScript/ctxType.ts'
 import { sliderUtils } from '../solvers/solverUtils/sliderUtils.ts'
 
 export const sliderSolver: Partial<Record<EventType, (desc: SliderDesc) => SliderCtxPartial>> = {

@@ -1,33 +1,33 @@
 import type { BaseInteraction, BaseWithSwipe } from "./baseType.ts"
 import type { CarouselData, CarouselModifiers, SliderData, DragData, DragModifiers } from "./dataType.ts"
-import type { Reactions } from "./baseType.ts"
+import type { Capabilities } from "./baseType.ts"
 import type { CtxButton, CtxCarousel, CtxDrag, CtxSlider } from '../ctxType.ts'
 
 
 export type CarouselDesc = {
   readonly base: BaseWithSwipe
   readonly data: CarouselData & CarouselModifiers
-  readonly reactions: Reactions
+  readonly capabilities: Capabilities
   ctx: CtxCarousel
 }
 
 export type SliderDesc = {
   readonly base: BaseWithSwipe
   readonly data: SliderData
-  readonly reactions: Reactions
+  readonly capabilities: Capabilities
   ctx: CtxSlider
 }
 
 export type DragDesc = {
   readonly base: BaseWithSwipe
   readonly data: DragData & DragModifiers
-  readonly reactions: Reactions
+  readonly capabilities: Capabilities
   ctx: CtxDrag
 }
 
 export type ButtonDesc = {
   readonly base: BaseInteraction
-  readonly reactions: Reactions
+  readonly capabilities: Capabilities
   ctx: CtxButton
 }
 

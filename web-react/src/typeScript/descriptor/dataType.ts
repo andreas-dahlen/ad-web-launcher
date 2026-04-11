@@ -38,5 +38,3 @@ export interface GestureUpdate {
   readonly sliderStartOffset?: number
   readonly sliderValuePerPixel?: number
 }
-
-

@@ -1,6 +1,5 @@
 import { useMemo, useCallback } from "react"
 import { APP_SETTINGS } from "@config/appSettings.ts"
-import { carouselStore } from '@interaction/stores/carouselStore.ts'
 
 type Role = "prev" | "current" | "next"
 
@@ -12,7 +11,6 @@ interface UseCarouselMotionProps {
   }
   axisSize: number
   horizontal: boolean
-  id: string
 }
 
 const ROLE_OFFSETS = { prev: -1, current: 0, next: 1 } as const
@@ -21,7 +19,6 @@ export function useCarouselMotion({
   store,
   axisSize,
   horizontal,
-  id
 }: UseCarouselMotionProps) {
 
   const delta = store.offset ?? 0
@@ -46,7 +43,6 @@ export function useCarouselMotion({
       const multiplier = ROLE_OFFSETS[role] ?? 0
 
       return {
-        // ...BASE_STYLE,
         transform: translate(multiplier * axisSize + delta),
         transition
       }
@@ -54,19 +50,5 @@ export function useCarouselMotion({
     [translate, axisSize, delta, transition]
   )
 
-  const onTransitionEnd = useCallback(
-    (e: React.TransitionEvent) => {
-      const target = e.target as HTMLElement
-      if (!target.classList.contains("scene-default")) return
-      if (e.propertyName !== "transform") return
-
-      // only commit index if not dragging and not already settling
-      if (!isDragging && !isSettling) {
-        carouselStore.getState().setPosition(id)
-      }
-    },
-    [id, isDragging, isSettling]
-  )
-
-  return { styleForRole, onTransitionEnd }
+  return { styleForRole }
 }

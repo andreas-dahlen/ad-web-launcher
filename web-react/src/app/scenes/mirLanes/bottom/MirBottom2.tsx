@@ -1,4 +1,4 @@
-import Slider from '@components/primitives/slider/Slider';
+import Slider from '@slider/Slider.tsx';
 
 
 export default function MirBottom2() {

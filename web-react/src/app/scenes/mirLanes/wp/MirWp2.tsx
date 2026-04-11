@@ -1,4 +1,4 @@
-import Drag from '@components/primitives/drag/Drag';
+import Drag from '@drag/Drag.tsx';
 
 export default function MirWp2() {
 

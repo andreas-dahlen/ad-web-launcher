@@ -1,5 +1,5 @@
-import Carousel from "@components/primitives/carousel/Carousel.tsx"
-import { wpMirror, topMirror, midMirror, bottomMirror } from "@indexes/laneIndex"
+import Carousel from "@carousel/Carousel.tsx"
+import { wpMirror, topMirror, midMirror, bottomMirror } from "../indexes/laneIndex.ts"
 
 export default function ContentLayer() {
 

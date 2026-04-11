@@ -1,10 +1,9 @@
 import { APP_SETTINGS } from '@config/appSettings.ts'
 import { normalizeParameter, getAxisSize } from '../stores/sizeStore.ts'
-import type { InteractionType, Vec2 } from '../types/primitiveType.ts'
-import type { Axis } from '../types/primitiveType.ts'
-import type { Descriptor, SwipeableDescriptor } from '../types/descriptor/descriptor.ts'
+import type { InteractionType, Vec2 } from '../../typeScript/primitiveType.ts'
+import type { Axis } from '../../typeScript/primitiveType.ts'
+import type { Descriptor, SwipeableDescriptor } from '../../typeScript/descriptor/descriptor.ts'
 
-//gestureUtils.js
 export const gestureUtils = {
 
 	normalizedDelta(delta: Vec2): Vec2 {
@@ -49,7 +48,7 @@ export const gestureUtils = {
 
 	isSwipeableDescriptor(desc: Descriptor, intentAxis: Axis): desc is SwipeableDescriptor {
 		if (desc.type == 'button') return false
-		const swipeable = desc.reactions.swipeable
+		const swipeable = desc.capabilities.swipeable
 		const isLocked = desc.type === 'drag' && desc.data.locked
 		if (!swipeable || isLocked) return false
 		if (desc.type == 'slider') return true

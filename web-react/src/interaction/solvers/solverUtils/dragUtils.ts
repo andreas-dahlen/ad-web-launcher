@@ -1,6 +1,6 @@
 import { vector } from '../../solvers/solverUtils/vectorUtils.ts'
-import type { DragDesc } from '../../types/descriptor/descriptor.ts'
-import type { Vec2 } from '../../types/primitiveType.ts'
+import type { DragDesc } from '../../../typeScript/descriptor/descriptor.ts'
+import type { Vec2 } from '../../../typeScript/primitiveType.ts'
 
 export const dragUtils = {
 

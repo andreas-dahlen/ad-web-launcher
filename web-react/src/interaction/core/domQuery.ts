@@ -1,8 +1,8 @@
-import type { Axis, Vec2 } from '../types/primitiveType.ts'
+import type { Axis, Vec2 } from '../../typeScript/primitiveType.ts'
 import { gestureUtils } from '../core/gestureUtils.ts'
 import { buildDesc } from '../core/buildDesc.ts'
-import type { Descriptor, SwipeableDescriptor } from '../types/descriptor/descriptor.ts'
-import { buildContext } from '../core/buildContext.ts'
+import type { Descriptor, SwipeableDescriptor } from '../../typeScript/descriptor/descriptor.ts'
+import { extractDomMeta } from './domMeta.ts'
 
 export const domQuery = {
 
@@ -24,9 +24,9 @@ export const domQuery = {
     const el = document.elementsFromPoint(x, y).find((
       el): el is HTMLElement => {
       if (!(el instanceof HTMLElement)) return false
-      const ctx = buildContext(el)
-      if (!ctx || ctx.locked) return false
-      return ctx.axis === inputAxis || ctx.axis === 'both'
+      const metaData = extractDomMeta(el)
+      if (!metaData || metaData.locked) return false
+      return metaData.axis === inputAxis || metaData.axis === 'both'
     })
     const desc = el ? buildDesc.resolveFromElement(el, x, y, pointerId) : null
     if (desc && desc.type !== 'button') return desc

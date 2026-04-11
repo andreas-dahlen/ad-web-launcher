@@ -1,7 +1,7 @@
 import { normalizeBase } from '../../solvers/solverUtils/axisUtils.ts'
 import { vector } from '../../solvers/solverUtils/vectorUtils.ts'
-import type { Normalized1D } from '../../types/ctxType.ts'
-import type { SliderDesc } from '../../types/descriptor/descriptor.ts'
+import type { Normalized1D } from '../../../typeScript/ctxType.ts'
+import type { SliderDesc } from '../../../typeScript/descriptor/descriptor.ts'
 
 export const sliderUtils = {
 
@@ -25,8 +25,9 @@ export const sliderUtils = {
 
     const { mainSize, mainOffset, mainThumbSize } = norm
     if (mainSize == null || mainOffset == null || mainThumbSize == null) return
-    const range = max - min
+    const range = max - min || 1
     const usable = mainSize - mainThumbSize
+    if (!usable) return
     const ratio = (mainOffset - mainThumbSize / 2) / usable
     const value = min + vector.clamp(ratio, 0, 1) * range
     return {

@@ -1,15 +1,14 @@
 import { log } from '@debug/functions.ts'
 import { gestureUtils } from './gestureUtils.ts'
 import { domQuery } from './domQuery.ts'
-import type { Axis, EventType, Vec2 } from '../types/primitiveType.ts'
-import type { Descriptor } from '../types/descriptor/descriptor.ts'
-import type { GestureUpdate } from '../types/descriptor/dataType.ts'
+import type { Axis, EventType, Vec2 } from '../../typeScript/primitiveType.ts'
+import type { Descriptor } from '../../typeScript/descriptor/descriptor.ts'
+import type { GestureUpdate } from '../../typeScript/descriptor/dataType.ts'
 
 /* ========================
    Gesture state
 =========================== */
-
-type GestureMap = Record<number, GestureState>
+type GestureMap = Partial<Record<number, GestureState>>
 const gestures: GestureMap = {}
 
 interface GestureState {
@@ -53,16 +52,12 @@ function deleteGesture(pointerId: number) {
 /* =====================
    Event handlers
 ======================== */
-
 function onDown(x: number, y: number, pointerId: number): Descriptor | null {
-
   if (Object.keys(gestures).length > 10) {
     const entries = Object.entries(gestures)
-    const oldest = entries.find(([, g]) => g.phase === 'PENDING') ?? entries[0]
-    if (oldest) {
-      console.warn('Gesture map overflow, evicting oldest gesture')
-      delete gestures[Number(oldest[0])]
-    }
+    const [key] = entries.find(([, g]) => g?.phase === 'PENDING') ?? entries[0]
+    console.warn('Gesture map overflow, evicting oldest gesture')
+    delete gestures[Number(key)]
   }
 
   const resolved = domQuery.findTargetInDom(x, y, pointerId)
@@ -78,7 +73,7 @@ function onDown(x: number, y: number, pointerId: number): Descriptor | null {
   }
   const g = gestures[pointerId]
 
-  if (g.desc.reactions.pressable) {
+  if (g.desc.capabilities.pressable) {
     return g.desc
   }
   return null
@@ -110,7 +105,7 @@ function onMove(x: number, y: number, pointerId: number): Descriptor | null {
     g.last.x = x
     g.last.y = y
 
-    const cancel = g.desc.reactions.pressable
+    const cancel = g.desc.capabilities.pressable
       && resolved !== g.desc
       ? { element: g.desc.base.element, pressCancel: true }
       : undefined
@@ -124,7 +119,6 @@ function onMove(x: number, y: number, pointerId: number): Descriptor | null {
   /* ---------------------------
      Active swipe
   ----------------------------- */
-
   if (g.phase === 'SWIPING' && g.desc) {
 
     const deltaX = x - g.last.x
@@ -159,11 +153,11 @@ function onUp(_x: number, _y: number, pointerId: number): Descriptor | null {
 }
 
 function finalizeGesture(g: GestureState, event: EventType): Descriptor | null {
-  if (event === 'pressRelease' && !g.desc.reactions.pressable) {
+  if (event === 'pressRelease' && !g.desc.capabilities.pressable) {
     delete gestures[g.pointerId]
     return null
   }
-  if (event === 'swipeCommit' && !g.desc.reactions.swipeable) {
+  if (event === 'swipeCommit' && !g.desc.capabilities.swipeable) {
     delete gestures[g.pointerId]
     return null
   }
