@@ -9,10 +9,6 @@ interface UseSliderMotionProps {
   horizontal: boolean
 }
 
-// const BASE_STYLE = {
-//   willChange: "transform" as const
-// }
-
 export function useSliderMotion({
   position,
   constraints,

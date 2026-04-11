@@ -3,12 +3,14 @@
 ## Quick Wins
 *High impact, low effort — do these first*
 
+//DONE
 ### Remove commented-out dead code in `carouselStore` and `useSliderMotion`
 **Category:** Dead Code
 **Impact:** Medium
 **Effort:** Low
 **Details:** `carouselStore.ts` lines 75–91 contain a commented-out `setPosition` method. The active `swipeStart` method now handles index advancement when `pendingDir !== null`, making the commented method a historical artifact. Similarly, `useSliderMotion.ts` lines 14–16 contain a commented-out `BASE_STYLE` const with `willChange: "transform"`. Both should be removed to reduce noise.
 
+//DONE
 ### Guard `usable === 0` in `sliderUtils.resolveStart`
 **Category:** Error Handling
 **Impact:** Medium

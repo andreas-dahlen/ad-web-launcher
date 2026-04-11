@@ -83,24 +83,6 @@ export const carouselStore = create<CarouselStore>()(
         s.size = trackSize
       })
     },
-    // setPosition: (id) => {
-    //   const s = get().bindings[id]
-    //   if (!s?.pendingDir) return
-    //   set(state => {
-    //     const s = state.bindings[id]
-    //     s.settling = true
-    //     s.index = getNextIndex(s.index, s.pendingDir, s.count)
-    //     s.offset = 0
-    //     s.pendingDir = null
-    //   })
-    //   requestAnimationFrame(() => {
-    //     set(state => {
-    //       const s = state.bindings[id]
-    //       if (!s) return
-    //       s.settling = false
-    //     })
-    //   })
-    // },
 
     swipeStart: (ctx) => {
       set(state => {
