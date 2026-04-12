@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useShallow } from 'zustand/shallow'
 import { sliderStore, type SliderStore } from '@stores/sliderStore.ts'
+import { debugRegisterBinding, debugUnregisterBinding } from '@debug/functions'
 
 const DEFAULTS = {
   value: 0,
@@ -14,8 +15,12 @@ const DEFAULTS = {
 export const useSliderStore = (id: string) => {
 
   useEffect(() => {
+    debugRegisterBinding(id, 'useSliderStore')
     sliderStore.getState().init(id)
-    return () => sliderStore.getState().delete(id)
+    return () => {
+      debugUnregisterBinding(id, 'useSliderStore')
+      sliderStore.getState().delete(id)
+    }
   }, [id])
 
   return sliderStore(

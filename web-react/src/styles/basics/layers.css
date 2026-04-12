@@ -58,18 +58,8 @@
   pointer-events: none;
 }
 
-.debug-shell {
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #323232;
-  overflow: hidden;
-}
-
 .device-frame {
-  position: relative;
+  /* position: relative; */
   border-radius: 28px;
   box-shadow:
     0 18px 48px rgba(0, 0, 0, 0.35),

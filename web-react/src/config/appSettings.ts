@@ -1,3 +1,6 @@
+import { create } from 'zustand'
+import { immer } from 'zustand/middleware/immer'
+
 // appSettings.ts
 /* -------------------------------------------------
    App-level constants
@@ -16,6 +19,7 @@ export interface AppSettings {
   swipeThresholdRatio: number
   swipeCommitRatio: number
   hysteresis: number
+  buttonLock: boolean
 }
 
 export const APP_SETTINGS: AppSettings = {
@@ -32,7 +36,8 @@ export const APP_SETTINGS: AppSettings = {
 
   swipeThresholdRatio: 0.05, // start of swipe distance
   swipeCommitRatio: 0.2,      // commitment distance on release
-  hysteresis: 5  // gitter removal for gating to remove gitters
+  hysteresis: 5,  //pixel threshold that gates out cross-axis drift during swipes.
+  buttonLock: false
 }
 
 /* -------------------------------------------------
@@ -52,3 +57,33 @@ export const USER_SETTINGS = ({
   defaultSnapX: 8,
   defaultSnapY: 16
 })
+
+type ReactiveSettings = {
+  dragLock: boolean
+}
+
+export type SettingsStore = {
+  settings: ReactiveSettings
+  setDragLock: (value: boolean) => void
+  get: () => unknown
+}
+
+export const settingsStore = create<SettingsStore>()(
+  immer((set, get) => ({
+
+    settings: {
+      dragLock: false
+    },
+
+    setDragLock: (value) => {
+      set(s => {
+        s.settings.dragLock = value
+      })
+    },
+
+    get: () => {
+      return get().settings
+    }
+  })
+  )
+)

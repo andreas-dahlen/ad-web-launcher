@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useShallow } from 'zustand/shallow'
 import { carouselStore, type CarouselStore } from '@stores/carouselStore.ts'
+import { debugRegisterBinding, debugUnregisterBinding } from '@debug/functions'
 
 const DEFAULTS = {
   index: 0,
@@ -15,8 +16,12 @@ const DEFAULTS = {
 export const useCarouselStore = (id: string) => {
 
   useEffect(() => {
+    debugRegisterBinding(id, 'useCarouselStore')
     carouselStore.getState().init(id)
-    return () => carouselStore.getState().delete(id)
+    return () => {
+      debugUnregisterBinding(id, 'useCarouselStore')
+      carouselStore.getState().delete(id)
+    }
   }, [id])
 
   return carouselStore(

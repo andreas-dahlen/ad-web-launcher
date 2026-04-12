@@ -6,9 +6,6 @@ export interface ButtonProps {
   id: string
   className?: string
   action?: string
-  reactPress?: boolean
-  reactPressRelease?: boolean
-  reactPressCancel?: boolean
   interactive?: boolean
   onPress?: (detail: CtxType) => void
   onPressRelease?: (detail: CtxType) => void
@@ -20,9 +17,6 @@ export default function Button({
   id,
   className,
   action,
-  reactPress,
-  reactPressRelease,
-  reactPressCancel,
   interactive = true,
   onPress,
   onPressRelease,
@@ -40,13 +34,13 @@ export default function Button({
       const event = reaction.detail?.event
       if (!event) return
 
-      if (event === 'press' && reactPress && onPress) {
+      if (event === 'press' && onPress) {
         onPress(reaction.detail)
       }
-      if (event === 'pressRelease' && reactPressRelease && onPressRelease) {
+      if (event === 'pressRelease' && onPressRelease) {
         onPressRelease(reaction.detail)
       }
-      if (event === 'pressCancel' && reactPressCancel && onPressCancel) {
+      if (event === 'pressCancel' && onPressCancel) {
         onPressCancel(reaction.detail)
       }
     }
@@ -61,11 +55,8 @@ export default function Button({
         style={{ pointerEvents: interactive ? "auto" : "none" }}
         data-type="button"
         data-id={id}
-        data-press={true}
+        // data-press={true}
         data-action={action || undefined}
-        data-react-press={reactPress || undefined}
-        data-react-press-release={reactPressRelease || undefined}
-        data-react-press-cancel={reactPressCancel || undefined}
       >
         {children}
       </div>

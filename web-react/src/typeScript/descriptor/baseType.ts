@@ -23,7 +23,8 @@ export interface DomMeta {
   readonly id: string
   readonly axis: Axis | null
   readonly type: InteractionType
-  readonly laneValid: boolean
+  readonly pressValid: boolean
+  readonly swipeValid: boolean
   readonly snapX: number | null
   readonly snapY: number | null
   readonly lockPrevAt: number | null

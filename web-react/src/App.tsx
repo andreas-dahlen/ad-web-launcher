@@ -8,9 +8,9 @@ export default function App() {
   if (APP_SETTINGS.debugWrapper) {
     return (
       <DebugWrapper>
-        <DebugPanel />
         <Root />
-      </DebugWrapper>
+        <DebugPanel />
+      </DebugWrapper >
     )
   }
   return <Root />;

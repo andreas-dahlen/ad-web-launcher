@@ -24,7 +24,7 @@ export const buildDesc = {
   resolveFromElement(el: HTMLElement, x: number, y: number, pointerId: number): Descriptor | null {
     const metaData = extractDomMeta(el)
     if (!metaData) return null
-    const capabilities = this.buildCapabilities(metaData.ds, metaData.laneValid)
+    const capabilities = this.buildCapabilities(metaData)
     const r = { capabilities, x, y, pointerId }
     switch (metaData.type) {
       case 'carousel': {
@@ -150,15 +150,16 @@ export const buildDesc = {
   /* =========================
       Build capabilities
     ========================= */
-  buildCapabilities(ds: DOMStringMap, laneValid: boolean): Capabilities {
-    const pressable = !!(ds.press !== undefined || ds.reactPress !== undefined || ds.action !== undefined)
+  buildCapabilities(metaData: DomMeta): Capabilities {
+    const { ds, pressValid, swipeValid } = metaData
 
-    const swipeable = !!(
-      (ds.swipe !== undefined ||
-        ds.reactSwipe !== undefined ||
-        ds.reactSwipeStart !== undefined ||
-        laneValid)
-    ) && ds.locked !== 'true'
+    const pressable = !!(
+      pressValid ||
+      ds.action !== undefined)
+
+    const swipeable =
+      swipeValid &&
+      ds.locked !== 'true'
 
     return {
       pressable: pressable,

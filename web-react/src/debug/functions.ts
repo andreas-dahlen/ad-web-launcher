@@ -48,20 +48,20 @@ export function drawDots(x: number, y: number, color: string = 'red'): void {
   }
 }
 
-//example of no fallback
-// export function assertType(
-//   condition: boolean,
-//   message?: string
-// ): asserts condition {
-//   if (!condition) {
-//     const msg = message ?? 'Assertion failed'
-//     if (import.meta.env.VITE_DEBUG === 'true') {
-//       console.warn(msg)
-//     } else {
-//       throw new Error(msg)
-//     }
-//   }
-// }
+////////////////////////
+//debug registration
+///////////////////////
+
+export function debugRegisterBinding(id: string, storeName: string): void {
+  if (!DEBUG.enabled) return
+  log('init', `[${storeName}] Registered "${id}"`)
+}
+
+export function debugUnregisterBinding(id: string, storeName: string): void {
+  if (!DEBUG.enabled) return
+  log('init', `[${storeName}] Unregistered "${id}"`)
+}
+
 
 // Pure assertion, never returns anything, narrows type in TS
 export function assertType(
@@ -98,12 +98,3 @@ export function ensure<T>(
   // fallback missing → just return value (still nullish)
   return value as T
 }
-// debug → return fallback
-
-//   console.warn(msg ?? 'Assertion failed, using fallback')
-//   if (fallback !== undefined) return fallback
-
-//   return value as T
-// }
-// // prod → throw error
-// throw new Error(msg ?? 'Assertion failed')

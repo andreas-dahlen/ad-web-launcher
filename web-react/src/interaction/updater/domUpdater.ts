@@ -20,12 +20,26 @@ function dispatchEvent(element: HTMLElement, ctx: CtxType) {
    DOM / UI attribute handlers
 ------------------------------------------------- */
 const typeHandlers: Record<EventType, (el: HTMLElement) => void> = {
-  press: (el) => setAttr(el, 'data-pressed', true),
-  pressRelease: (el) => setAttr(el, 'data-pressed', null),
-  pressCancel: (el) => setAttr(el, 'data-pressed', null),
-  swipeStart: (el) => setAttr(el, 'data-swiping', true),
-  swipeCommit: (el) => setAttr(el, 'data-swiping', null),
-  swipeRevert: (el) => setAttr(el, 'data-swiping', null),
+  press: (el) => {
+    setAttr(el, 'data-swiping', null);
+    setAttr(el, 'data-pressed', 'pressed')
+  },
+  pressRelease: (el) => {
+    setAttr(el, 'data-pressed', 'released')
+  },
+  pressCancel: (el) => {
+    setAttr(el, 'data-pressed', 'cancelled')
+  },
+  swipeStart: (el) => {
+    setAttr(el, 'data-pressed', null);
+    setAttr(el, 'data-swiping', 'swiping')
+  },
+  swipeCommit: (el) => {
+    setAttr(el, 'data-swiping', 'committed')
+  },
+  swipeRevert: (el) => {
+    setAttr(el, 'data-swiping', 'reverted')
+  },
   swipe: () => { }
 }
 

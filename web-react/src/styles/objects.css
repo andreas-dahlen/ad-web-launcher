@@ -1,6 +1,6 @@
 .button-base {
-  width: 110px;
-  height: 110px;
+  width: 90px;
+  height: 90px;
   border-radius: 10px;
   font-weight: 700;
   display: flex;
@@ -8,10 +8,11 @@
   align-items: center;
   color: #0b1b2b;
   border: 1px solid black;
+  overflow: hidden;
 }
 
 /* ── Button interaction states (driven by data-state via callbacks) ── */
-.test-button {
+.button-default {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -20,28 +21,30 @@
   background-color: rgba(247, 247, 247, 0.416);
   width: 100%;
   height: 100%;
-  transition: background-color var(--touch-transition-fast) ease;
+  transition: transform var(--touch-transition-fast) ease, box-shadow var(--touch-transition-normal) ease;
 }
 
-.test-button[data-state='pressed'] {
-  background-color: chocolate;
+.button-default[data-pressed='pressed'] {
+  transform: scale(0.99);
+  box-shadow: inset 0 0 4px 2px rgba(0, 0, 0, 0.505);
 }
 
-.test-button[data-state='released'] {
-  background-color: rgb(13, 42, 228);
+.button-default[data-pressed='released'] {
+  transform: scale(1);
+  box-shadow: 0 0 3px 2px rgba(0, 0, 0, 0.505);
 }
 
-.test-button[data-state='cancel'] {
-  background-color: rgb(11, 218, 11);
+.button-default[data-pressed='cancelled'] {
+  transform: scale(1);
+  box-shadow: 0 0 4px 2px rgba(0, 0, 0, 0.505);
 }
-
 
 .locked-col {
-  background: linear-gradient(135deg, #4c2cff, #ffff00);
+  background: linear-gradient(135deg, #904feb, #c72b52);
 }
 
 .move-col {
-  background: linear-gradient(135deg, hsl(61, 100%, 50%), #9b0000);
+  background: linear-gradient(135deg, hsl(61, 100%, 50%), #df3c3c);
 }
 
 .slider-base {

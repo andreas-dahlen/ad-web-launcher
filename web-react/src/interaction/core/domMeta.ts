@@ -15,7 +15,8 @@ export function extractDomMeta(el: HTMLElement): DomMeta | null {
   if (!type) return null
   if (type !== 'button' && !axis) return null
 
-  const laneValid = Boolean(id && axis && type)
+  const pressValid = Boolean(id && type)
+  const swipeValid = Boolean(id && axis && type)
 
   const snapX = parseNumber(ds.snapX)
   const snapY = parseNumber(ds.snapY)
@@ -24,7 +25,7 @@ export function extractDomMeta(el: HTMLElement): DomMeta | null {
 
   const locked = ds.locked === 'true'
 
-  return { el, ds, id, axis, type, laneValid, snapX, snapY, lockPrevAt, lockNextAt, locked }
+  return { el, ds, id, axis, type, swipeValid, pressValid, snapX, snapY, lockPrevAt, lockNextAt, locked }
 }
 
 function parseNumber(value: string | undefined): number | null {

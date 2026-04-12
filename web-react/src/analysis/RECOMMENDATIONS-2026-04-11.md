@@ -17,7 +17,7 @@
 **Effort:** Low
 **Details:** `sliderUtils.resolveStart` in `solverUtils/sliderUtils.ts` computes `(mainOffset - mainThumbSize / 2) / usable`. When `usable` is 0 (track size equals thumb size), this division produces `Infinity`. The subsequent `vector.clamp(ratio, 0, 1)` clamps it to `1`, yielding `max` as the value — technically safe but semantically wrong. A zero-usable slider should return early (e.g., return `undefined` or `{ value: min, valuePerPixel: 0 }`). The existing `if (!usable) return` guard on the line above checks for falsy, but `0` is falsy so this actually already guards the case — verify this is the intended behavior and document it, or change to an explicit `usable === 0` check.
 
-//HELP data-swipe and data-press are on elements through domUpdater. data-modifiable is not on any element and is removed. However might be worth to do a thorough search for data-swipe and data-press to see if they are actually used anywhere in the system. If they are not used, we can remove them as well. If they are used, we should consider if they are necessary or if there is a better way to handle those interactions without relying on data attributes that may not be consistently applied.
+//DONE
 ### Resolve `data-swipe` check in `buildCapabilities`
 **Category:** Dead Code
 **Impact:** Medium
@@ -64,6 +64,7 @@
 ## Low Priority
 *Low impact or purely cosmetic — tackle when time allows*
 
+//DONE. added checker functions inside of debugFunctions and called them inside of hooks. Worth mentioning that contentLayer does double registration with interactive: false in order to mirror behavior without having double writes to the store. Also strict mode makes the init calls mount and unmount twice. Right now it is more of a cosmetic console.log but it is a good safety check to have in place. — Developer (2026-04-11)
 ### Add `id` uniqueness validation in `use[X]Store` hooks
 **Category:** Error Handling
 **Impact:** Low
@@ -114,6 +115,7 @@
 
 > **Carried from 2026-04-09 (//TODO //FUTURE):** Acknowledged as future work. Not urgent at current scale.
 
+//DONE
 ### Fix `APP_SETTINGS.hysteresis` comment
 **Category:** Naming
 **Impact:** Low

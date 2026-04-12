@@ -70,7 +70,7 @@ export default function Slider({
   return (
     <div
       data-type="slider"
-      data-press="true"
+      // data-press="true"
       ref={sliderRef}
       className={horizontal ?
         `default-slider horizontal-slider ${className}`

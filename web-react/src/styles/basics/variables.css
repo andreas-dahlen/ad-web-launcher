@@ -30,4 +30,7 @@
 
   --gradient-slider-knob-1: #afbf00;
   --gradient-slider-knob-2: #00a6a0;
+
+  --gradient-debug-frame-1: rgb(51, 51, 51);
+  --gradient-debug-frame-2: rgb(209, 209, 209);
 }

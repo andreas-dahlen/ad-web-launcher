@@ -1,0 +1,41 @@
+.debug-shell {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #323232;
+  overflow: hidden;
+}
+
+.debug-pannel-layer {
+  /* position: absolute; */
+  /* inset: 0; */
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+  padding: 15px;
+}
+
+.debug-pannel-style {
+  /* display: flex;
+  justify-content: center;
+  align-items: center; */
+  position: absolute;
+  background: linear-gradient(135deg, var(--gradient-debug-frame-1), var(--gradient-debug-frame-2));
+  width: 90%;
+  height: 60%;
+  opacity: 80%;
+  border-radius: 20px;
+  /* margin-bottom: 18em; */
+  box-shadow: 0px 0px 5px 1px rgb(172, 172, 172);
+}
+
+.debug-pannel-wrapper {
+  position: absolute;
+  display: flex;
+  gap: 2em;
+  width: 90%;
+  height: 60%;
+  padding: 1em;
+}

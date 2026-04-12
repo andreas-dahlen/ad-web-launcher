@@ -4,6 +4,7 @@
 @import './basics/layers.css';
 @import './basics/components.css';
 @import './basics/primitives.css';
+@import './basics/debug.css';
 @import './testing.css';
 @import './objects.css';
 
