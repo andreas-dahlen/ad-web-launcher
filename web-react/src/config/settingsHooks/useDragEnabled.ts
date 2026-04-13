@@ -2,7 +2,7 @@ import { settingsStore, type SettingsStore } from '@config/appSettings'
 import { useEffect } from 'react'
 import { useShallow } from 'zustand/shallow'
 
-export const useDragLock = () => {
+export const useDragEnabled = () => {
   // export const useCarouselStore = (id: string) => {
 
   useEffect(() => {
@@ -11,8 +11,8 @@ export const useDragLock = () => {
 
   return settingsStore(
     useShallow((s: SettingsStore) => ({
-      dragLock: s.settings.dragLock ?? false,
-      setDragLock: s.setDragLock
+      dragEnabled: s.settings.isDragEnabled ?? false,
+      setDragEnabled: s.setDragEnabled
     }))
   )
 }

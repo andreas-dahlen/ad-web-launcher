@@ -44,27 +44,29 @@ export const APP_SETTINGS: AppSettings = {
    User-modifiable reactive settings
 ------------------------------------------------- */
 export interface UserSettings {
-  dragLock: boolean
-  DragGridVisual: boolean
+  isDragEnabled: boolean
+  DragGridEnabled: boolean
   defaultSnapX: number
   defaultSnapY: number
 }
 
 export const USER_SETTINGS = ({
   // = reactive<UserSettings>({
-  dragLock: false,
-  DragGridVisual: false,
+  isDagEnabled: false,
+  DragGridEnabled: false,
   defaultSnapX: 8,
   defaultSnapY: 16
 })
 
 type ReactiveSettings = {
-  dragLock: boolean
+  isDragEnabled: boolean
+  isGridEnabled: boolean
 }
 
 export type SettingsStore = {
   settings: ReactiveSettings
-  setDragLock: (value: boolean) => void
+  setDragEnabled: (value: boolean) => void
+  setGridEnabled: (value: boolean) => void
   get: () => unknown
 }
 
@@ -72,12 +74,18 @@ export const settingsStore = create<SettingsStore>()(
   immer((set, get) => ({
 
     settings: {
-      dragLock: false
+      isDragEnabled: false,
+      isGridEnabled: false
     },
 
-    setDragLock: (value) => {
+    setDragEnabled: (value) => {
       set(s => {
-        s.settings.dragLock = value
+        s.settings.isDragEnabled = value
+      })
+    },
+    setGridEnabled: (value) => {
+      set(s => {
+        s.settings.isGridEnabled = value
       })
     },
 

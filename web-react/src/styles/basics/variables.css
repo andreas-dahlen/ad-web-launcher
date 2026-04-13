@@ -33,4 +33,17 @@
 
   --gradient-debug-frame-1: rgb(51, 51, 51);
   --gradient-debug-frame-2: rgb(209, 209, 209);
+
+  --debug-slider: linear-gradient(135deg, var(--debug-button-off), var(--debug-button-on));
+  --color-off: linear-gradient(135deg, #e25555, #b92b2b);
+
+  --label-gray: rgb(204, 204, 204);
+
+  --svg-bright: rgb(45, 45, 45);
+  --svg-dark: rgb(159, 159, 159);
+
+  --debug-button-off: rgb(101, 101, 101);
+  --debug-button-on: rgb(209, 209, 209);
+  /* rgb(45, 45, 45) */
+  /* rgb(159, 159, 159) */
 }

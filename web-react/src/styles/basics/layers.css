@@ -65,4 +65,6 @@
     0 18px 48px rgba(0, 0, 0, 0.35),
     0 0 0 10px rgba(0, 0, 0, 0.444);
   overflow: hidden;
+  display: flex;
+  justify-content: center;
 }

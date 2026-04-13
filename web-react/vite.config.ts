@@ -2,12 +2,13 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 import { viteSingleFile } from 'vite-plugin-singleFile'
 import path from 'path'
+import svgr from "vite-plugin-svgr";
 
 const fromRoot = (relativePath: string) => path.resolve(__dirname, relativePath)
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), viteSingleFile()],
+  plugins: [react(), viteSingleFile(), svgr()],
   base: './',
   build: {
     target: 'es2015',

@@ -21,24 +21,22 @@ function dispatchEvent(element: HTMLElement, ctx: CtxType) {
 ------------------------------------------------- */
 const typeHandlers: Record<EventType, (el: HTMLElement) => void> = {
   press: (el) => {
-    setAttr(el, 'data-swiping', null);
-    setAttr(el, 'data-pressed', 'pressed')
+    setAttr(el, 'data-state', 'pressed')
   },
   pressRelease: (el) => {
-    setAttr(el, 'data-pressed', 'released')
+    setAttr(el, 'data-state', 'released')
   },
   pressCancel: (el) => {
-    setAttr(el, 'data-pressed', 'cancelled')
+    setAttr(el, 'data-state', 'cancelled')
   },
   swipeStart: (el) => {
-    setAttr(el, 'data-pressed', null);
-    setAttr(el, 'data-swiping', 'swiping')
+    setAttr(el, 'data-state', 'swiping')
   },
   swipeCommit: (el) => {
-    setAttr(el, 'data-swiping', 'committed')
+    setAttr(el, 'data-state', 'committed')
   },
   swipeRevert: (el) => {
-    setAttr(el, 'data-swiping', 'reverted')
+    setAttr(el, 'data-state', 'reverted')
   },
   swipe: () => { }
 }

@@ -47,19 +47,16 @@ export default function Button({
   })
 
   return (
-    <div className="non-interactive-default">
-      <div
-        ref={buttonRef}
-        {...rest}
-        className={`interactive-default ${className ?? ''}`}
-        style={{ pointerEvents: interactive ? "auto" : "none" }}
-        data-type="button"
-        data-id={id}
-        // data-press={true}
-        data-action={action || undefined}
-      >
-        {children}
-      </div>
+    <div
+      ref={buttonRef}
+      {...rest}
+      className={`default-button ${className ?? ''}`}
+      style={{ pointerEvents: interactive ? "auto" : "none" }}
+      data-type="button"
+      data-id={id}
+      data-action={action || undefined}
+    >
+      {children}
     </div>
   )
 }
