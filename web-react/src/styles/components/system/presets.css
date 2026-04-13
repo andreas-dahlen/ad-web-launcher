@@ -1,4 +1,4 @@
-.slider-base {
+.slider-preset {
   /* display: flex; */
   /* align-items: center; */
   /* justify-content: center; */
@@ -11,8 +11,7 @@
   border: 2px solid rgba(0, 0, 0, 0.52);
 }
 
-
-.button-base {
+.button-preset {
   width: 90px;
   height: 90px;
   border-radius: 10px;

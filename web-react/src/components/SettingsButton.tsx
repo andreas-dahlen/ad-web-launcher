@@ -17,12 +17,12 @@ export default function DebugItem({
 ) {
 
   return (
-    <div className='debug-item'>
+    <div className='settings-item'>
 
       <label htmlFor={id}>{label} </label>
       <Button
         id={id}
-        className='debug-button'
+        className='settings-button'
         data-state={value ? 'state-on' : 'state-off'}
         onPressRelease={setValue}
         data-pressed={'released'}

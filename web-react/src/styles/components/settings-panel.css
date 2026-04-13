@@ -1,14 +1,4 @@
-.debug-shell {
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #323232;
-  overflow: hidden;
-}
-
-.debug-pannel {
+.settings-panel {
   position: absolute;
   display: flex;
   flex-direction: column;
@@ -37,7 +27,7 @@
   }
 }
 
-.debug-row {
+.settings-row {
   position: relative;
   display: flex;
   /* align-items: space-around; */
@@ -50,7 +40,7 @@
 
 }
 
-.debug-slider-frame {
+.settings-slider-frame {
   z-index: 0;
   text-align: center;
 
@@ -64,7 +54,7 @@
   /* align-items: center; */
 }
 
-.debug-slider {
+.settings-slider {
   /* display: flex; */
   /* flex-direction: column; */
   /* gap: 1em; */
@@ -79,18 +69,18 @@
   height: 3em;
 }
 
-.slider-base.debug-slider-knob {
+.slider-preset.settings-slider-knob {
   background: var(--debug-slider);
   /* background-color: hotpink; */
   /* width: 10em;
   height: 20em; */
 }
 
-.debug-slider[data-swiping="swiping"] .debug-slider-knob {
+.settings-slider[data-state="swiping"] .settingsslider-knob {
   background: hotpink;
 }
 
-.debug-item {
+.settings-item {
   display: flex;
   flex-direction: column-reverse;
   justify-content: center;
@@ -110,7 +100,7 @@
 
 /* button stuff */
 
-.debug-button {
+.settings-button {
   width: 50px;
   height: 50px;
   border-radius: 12px;
@@ -151,7 +141,7 @@
   fill: var(--svg-bright);
 }
 
-.debug-button[data-state='state-on'] {
+.settings-button[data-state='state-on'] {
   background: var(--debug-button-on);
   /* color: #ffffff; */
 
@@ -159,7 +149,7 @@
 
 }
 
-.debug-button[data-state='state-off'] {
+.settings-button[data-state='state-off'] {
   background: var(--debug-button-off);
   /* color: #ffffff; */
 

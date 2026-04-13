@@ -24,7 +24,7 @@ Carousel
 Slider
 ///////////////
 */
-.default-slider {
+.slider-base {
   position: relative;
   pointer-events: auto;
   display: flex;
@@ -34,7 +34,7 @@ Slider
   border-radius: 10px;
 }
 
-.default-track {
+.track-base {
   position: absolute;
   display: flex;
   justify-content: center;
@@ -43,27 +43,27 @@ Slider
   background-color: rgba(0, 0, 0, 0.348);
 }
 
-.horizontal-slider {
+.horizontal-slider-base {
   height: 15%;
   width: 90%;
 }
 
-.vertical-slider {
+.vertical-slider-base {
   height: 90%;
   width: 12%;
 }
 
-.horizontal-track {
+.horizontal-track-base {
   height: 15%;
   width: 90%;
 }
 
-.vertical-track {
+.vertical-track-base {
   height: 90%;
   width: 12%;
 }
 
-.slider-thumb {
+.slider-thumb-base {
   will-change: transform;
   position: absolute;
 }
@@ -73,15 +73,16 @@ Slider
 Drag
 ///////////////
 */
-.drag-item {
+.drag-item-base {
   position: absolute;
   user-select: none;
   pointer-events: auto;
   will-change: transform;
 }
 
-/* ── Button interaction states (driven by data-state via callbacks) ── */
-.default-button {
+
+
+.button-base {
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -98,7 +99,7 @@ Drag
   transform: scale(1);
 }
 
-.default-button[data-pressed='pressed'] {
+/* .default-button[data-pressed='pressed'] {
   transform: scale(0.98);
   box-shadow:
     0 2px 6px rgba(0, 0, 0, 0.25),
@@ -114,4 +115,4 @@ Drag
 .default-button[data-pressed='cancelled'] {
   transform: scale(1);
   opacity: 0.95;
-}
+} */

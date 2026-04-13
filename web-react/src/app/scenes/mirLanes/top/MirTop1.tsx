@@ -8,7 +8,7 @@ export default function MirTop1() {
         id='test-button'
         className='button-default'
       >
-        <div className='button-base'>
+        <div className='button-preset'>
           Click Me!!!
         </div>
       </Button>

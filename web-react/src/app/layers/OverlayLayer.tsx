@@ -1,7 +1,8 @@
+import SettingsPanel from '@components/SettingsPanel.jsx';
+
 export default function OverlayLayer() {
 
-
   return (
-    <div>hello im an empty OverlayLayer</div>
+    <SettingsPanel />
   )
 }

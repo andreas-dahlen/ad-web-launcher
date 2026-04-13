@@ -12,7 +12,7 @@ export default function MirBottom2() {
       // trackStyle='slider-track'
       >
 
-        <div className='slider-base slider-col-2'></div>
+        <div className='slider-preset slider-col-2'></div>
       </Slider>
     </div>
   )

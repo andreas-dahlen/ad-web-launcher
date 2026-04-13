@@ -1,14 +1,4 @@
 /* main.css */
-@import './basics/variables.css';
-@import './basics/scenes.css';
-@import './basics/layers.css';
-@import './basics/components.css';
-@import './basics/primitives.css';
-@import './basics/debug.css';
-@import './testing.css';
-@import './objects.css';
-
-
 html {
     box-sizing: border-box;
     -webkit-text-size-adjust: 100%;

@@ -50,7 +50,7 @@ export default function Button({
     <div
       ref={buttonRef}
       {...rest}
-      className={`default-button ${className ?? ''}`}
+      className={`button-base ${className ?? ''}`}
       style={{ pointerEvents: interactive ? "auto" : "none" }}
       data-type="button"
       data-id={id}

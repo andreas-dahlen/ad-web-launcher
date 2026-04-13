@@ -52,7 +52,7 @@ export default function Drag({
       <div
         ref={dragItemRef}
         style={itemStyle}
-        className={`drag-item ${className}`}
+        className={`drag-item-base ${className}`}
         data-id={id}
         data-axis="both"
         data-type="drag"

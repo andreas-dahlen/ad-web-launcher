@@ -73,8 +73,8 @@ export default function Slider({
       // data-press="true"
       ref={sliderRef}
       className={horizontal ?
-        `default-slider horizontal-slider ${className}`
-        : `default-slider vertical-slider ${className}`}
+        `slider-base horizontal-slider-base ${className}`
+        : `slider-base vertical-slider-base ${className}`}
       data-id={id}
       data-axis={axis}
       data-react-swipe={reactSwipe ? true : undefined}
@@ -83,13 +83,13 @@ export default function Slider({
     >
       <div
         className={horizontal ?
-          `default-track horizontal-track ${trackStyling}`
-          : `default-track vertical-track ${trackStyling}`}>
+          `track-base horizontal-track-base ${trackStyling}`
+          : `track-base vertical-track-base ${trackStyling}`}>
       </div>
 
       <div
         ref={thumbRef}
-        className='slider-thumb'
+        className='slider-thumb-base'
         style={{
           ...thumbStyle,
           ...(horizontal ? { left: 0 } : { top: 0 })

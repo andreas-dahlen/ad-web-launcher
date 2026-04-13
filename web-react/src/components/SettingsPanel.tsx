@@ -1,12 +1,12 @@
 import { useDragEnabled } from '@config/settingsHooks/useDragEnabled';
 import { useGridEnabled } from '@config/settingsHooks/useGridEnabled';
-import DebugItem from '@debug/DebugItem.tsx';
+import SettingsButton from './SettingsButton.jsx';
+import Slider from '@slider/Slider.tsx';
 import locked from '@assets/locked.svg?react'
 import unlocked from '@assets/unlocked.svg?react'
 import grid from '@assets/grid.svg?react'
-import Slider from '@components/primitives/slider/Slider';
 
-export default function DebugPanel() {
+export default function SettingsPanel() {
 
   const { dragEnabled, setDragEnabled } = useDragEnabled()
   const setLock = () => {
@@ -19,44 +19,44 @@ export default function DebugPanel() {
 
   return (
     <>
-      <div className='debug-pannel'>
-        <div className='debug-row'>
-          <DebugItem
+      <div className='settings-panel'>
+        <div className='settings-row'>
+          <SettingsButton
             id='lock-drag-item'
             value={dragEnabled}
             setValue={setLock}
             label={dragEnabled ? 'drag unlocked' : 'drag locked'}
             ReactImg={dragEnabled ? unlocked : locked}>
-          </DebugItem>
-          <DebugItem
+          </SettingsButton>
+          <SettingsButton
             id='drag-grid'
             value={gridEnabled}
             setValue={setGrid}
             label={gridEnabled ? 'grid enabled' : 'grid disabled'}
             ReactImg={grid}>
-          </DebugItem>
+          </SettingsButton>
         </div >
-        <div className='debug-slider-frame'>
+        <div className='settings-slider-frame'>
           <Slider
             id='snapX-slider'
             axis='horizontal'
-            className='debug-slider'
+            className='settings-slider'
           // onValueChange={onValueChange}
           >
 
-            <div className='slider-base debug-slider-knob'></div>
+            <div className='slider-preset settings-slider-knob'></div>
           </Slider>
           <label>snap X: //valueNumber</label>
         </div>
-        <div className='debug-slider-frame'>
+        <div className='settings-slider-frame'>
           <Slider
             id='snapY-slider'
             axis='horizontal'
-            className='debug-slider'
+            className='settings-slider'
           // onValueChange={onValueChange}
           >
 
-            <div className='slider-base debug-slider-knob'></div>
+            <div className='slider-preset settings-slider-knob'></div>
           </Slider>
           <label>snap Y //valueNumber</label>
         </div>
