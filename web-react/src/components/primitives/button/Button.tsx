@@ -1,26 +1,15 @@
 import { useRef } from "react"
 import { usePointerBridge } from '../../hooks/pointerBridge.ts'
-import type { CtxType } from '@typeScript/ctxType.ts'
-
-export interface ButtonProps {
-  id: string
-  className?: string
-  action?: string
-  interactive?: boolean
-  onPress?: (detail: CtxType) => void
-  onPressRelease?: (detail: CtxType) => void
-  onPressCancel?: (detail: CtxType) => void
-  children?: React.ReactNode
-}
+import type { ButtonProps } from '@typeScript/propsType.ts'
 
 export default function Button({
   id,
   className,
   action,
   interactive = true,
-  onPress,
+  // onPress,
+  // onPressCancel,
   onPressRelease,
-  onPressCancel,
   children,
   ...rest
 }: ButtonProps & React.HTMLAttributes<HTMLDivElement>) {
@@ -34,14 +23,14 @@ export default function Button({
       const event = reaction.detail?.event
       if (!event) return
 
-      if (event === 'press' && onPress) {
-        onPress(reaction.detail)
-      }
+      // if (event === 'press' && onPress) {
+      //   onPress(reaction.detail)
+      // }
+      // if (event === 'pressCancel' && onPressCancel) {
+      //   onPressCancel(reaction.detail)
+      // }
       if (event === 'pressRelease' && onPressRelease) {
         onPressRelease(reaction.detail)
-      }
-      if (event === 'pressCancel' && onPressCancel) {
-        onPressCancel(reaction.detail)
       }
     }
   })
@@ -50,7 +39,7 @@ export default function Button({
     <div
       ref={buttonRef}
       {...rest}
-      className={`button-base ${className ?? ''}`}
+      className={`button ${className ?? ''}`}
       style={{ pointerEvents: interactive ? "auto" : "none" }}
       data-type="button"
       data-id={id}

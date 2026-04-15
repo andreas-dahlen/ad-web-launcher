@@ -7,13 +7,13 @@ import type { DragProps } from '@typeScript/propsType.ts'
 
 export default function Drag({
   id,
-  className,
   snapX,
   snapY,
   locked = false,
   reactSwipeCommit = false,
   onSwipeCommit,
-  children
+  children,
+  className
 }: DragProps) {
 
   // ── Fully subscribe to the drag store─────────────────────────────
@@ -52,7 +52,7 @@ export default function Drag({
       <div
         ref={dragItemRef}
         style={itemStyle}
-        className={`drag-item-base ${className}`}
+        className={`drag ${className ?? ''}`}
         data-id={id}
         data-axis="both"
         data-type="drag"

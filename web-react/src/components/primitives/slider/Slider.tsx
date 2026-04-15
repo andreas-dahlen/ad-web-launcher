@@ -8,12 +8,13 @@ import type { SliderProps } from '@typeScript/propsType.ts'
 export default function Slider({
   id,
   axis,
-  className,
   reactSwipe = false,
   reactSwipeStart = false,
   reactSwipeCommit = false,
   onValueChange,
+  className,
   trackStyling,
+  thumbStyling,
   children
 }: SliderProps) {
 
@@ -24,6 +25,12 @@ export default function Slider({
   const axisSize = horizontal ? size.x : size.y
   const axisThumbSize = horizontal ? thumbSize.x : thumbSize.y
   const constraints = { min, max }
+
+  // ── CSS classes ─────────────────────────────
+  const classAxis = axis === 'horizontal'
+    ? 'horizontal-slider'
+    : 'vertical-slider'
+
 
   // ── DOM references & sizing ─────────────────────────────
   const sliderRef = useRef<HTMLDivElement>(null)
@@ -72,9 +79,7 @@ export default function Slider({
       data-type="slider"
       // data-press="true"
       ref={sliderRef}
-      className={horizontal ?
-        `slider-base horizontal-slider-base ${className}`
-        : `slider-base vertical-slider-base ${className}`}
+      className={`slider ${classAxis} ${className ?? ''}`}
       data-id={id}
       data-axis={axis}
       data-react-swipe={reactSwipe ? true : undefined}
@@ -82,14 +87,12 @@ export default function Slider({
       data-react-swipe-commit={reactSwipeCommit ? true : undefined}
     >
       <div
-        className={horizontal ?
-          `track-base horizontal-track-base ${trackStyling}`
-          : `track-base vertical-track-base ${trackStyling}`}>
+        className={`track ${trackStyling ?? ''}`}>
       </div>
 
       <div
         ref={thumbRef}
-        className='slider-thumb-base'
+        className={`slider-thumb ${thumbStyling ?? ''}`}
         style={{
           ...thumbStyle,
           ...(horizontal ? { left: 0 } : { top: 0 })

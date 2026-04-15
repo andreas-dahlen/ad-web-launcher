@@ -1,10 +1,4 @@
-/* 
-////////////////
-Drag
-///////////////
-*/
-
-/* .button {
+.button {
   position: relative;
   display: flex;
   align-items: center;
@@ -19,7 +13,7 @@ Drag
     opacity 140ms ease;
 
   transform: scale(1);
-} */
+}
 
 /* .default-button[data-pressed='pressed'] {
   transform: scale(0.98);

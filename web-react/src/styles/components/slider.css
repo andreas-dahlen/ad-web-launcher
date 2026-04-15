@@ -1,0 +1,47 @@
+.slider {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: auto;
+
+
+  --slider-border-radius: 10px;
+  --slider-background: linear-gradient(135deg, var(--gradient-slider-1), var(--gradient-slider-2));
+
+  border-radius: var(--slider-border-radius);
+  background: var(--slider-background);
+  width: var(--slider-width);
+  height: var(--slider-height);
+}
+
+.track {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  --track-border-radius: 100em;
+  --track-background: rgba(0, 0, 0, 0.348);
+
+  border-radius: var(--track-border-radius);
+  background: var(--track-background);
+
+  width: var(--slider-width);
+  height: var(--slider-height);
+}
+
+.horizontal-slider {
+  --slider-width: 90%;
+  --slider-height: 15%;
+}
+
+.vertical-slider {
+  --slider-width: 12%;
+  --slider-height: 90%;
+}
+
+.slider-thumb {
+  will-change: transform;
+  position: absolute;
+}

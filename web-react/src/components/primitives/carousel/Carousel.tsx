@@ -20,7 +20,8 @@ export default function Carousel({
   lockPrevAt,
   lockNextAt,
   onSwipeCommit,
-  interactive = true
+  interactive = true,
+  className
 }: CarouselProps) {
 
   // ── Fully subscribe to the carousel store ─────────────────────────────
@@ -83,7 +84,7 @@ export default function Carousel({
     <div
       data-type="carousel"
       ref={carouselRef}
-      className='carousel-base'
+      className={`carousel ${className ?? ''}`}
       style={{ pointerEvents: interactive ? "auto" : "none" }}
       data-id={id}
       data-axis={axis}

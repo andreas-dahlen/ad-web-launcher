@@ -1,0 +1,41 @@
+.carousel {
+  --scene-size: 100%;
+  width: var(--scene-size);
+  height: var(--scene-size);
+
+  position: relative;
+  overflow: hidden;
+  touch-action: none;
+  transform: translateZ(0);
+}
+
+[data-role] {
+  position: absolute;
+  inset: 0;
+  /* backface-visibility: hidden; */
+  will-change: transform;
+}
+
+/* Scene component base styles */
+/*
+ * All scene components should use .scene-root as their root class.
+ * This ensures consistent sizing and GPU optimization.
+ */
+.scene-root {
+  /* Fill the carousel container */
+  position: absolute;
+  width: var(--scene-size);
+  height: var(--scene-size);
+
+  /* Center content */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* GPU compositing for smooth transforms */
+  transform: translateZ(0);
+  /* backface-visibility: hidden; */
+
+  /* Prevent layout thrashing */
+  contain: layout style paint;
+}

@@ -1,0 +1,8 @@
+.drag {
+  position: absolute;
+  user-select: none;
+  pointer-events: auto;
+  will-change: transform;
+
+  /* need vars */
+}
