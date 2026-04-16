@@ -6,7 +6,6 @@ export default function WallpaperLayer() {
   return (
     <div className="wallpaper-layer">
       <Carousel
-        className="interactive"
         id="wallpaper"
         scenes={wpScenes}
         axis="vertical"

@@ -2,40 +2,52 @@
   --scene-size: 100%;
   width: var(--scene-size);
   height: var(--scene-size);
-
   position: relative;
   overflow: hidden;
-  touch-action: none;
-  transform: translateZ(0);
+  /* transform: translateZ(0); */
 }
 
-[data-role] {
-  position: absolute;
-  inset: 0;
-  /* backface-visibility: hidden; */
-  will-change: transform;
-}
+/* [data-role] { */
+/* position: absolute; */
+/* inset: 0; */
+/* backface-visibility: hidden; */
+/* will-change: transform; */
+
+/* } */
 
 /* Scene component base styles */
 /*
  * All scene components should use .scene-root as their root class.
  * This ensures consistent sizing and GPU optimization.
  */
-.scene-root {
+.scene {
   /* Fill the carousel container */
   position: absolute;
   width: var(--scene-size);
   height: var(--scene-size);
-
-  /* Center content */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  /* GPU compositing for smooth transforms */
-  transform: translateZ(0);
-  /* backface-visibility: hidden; */
-
+  will-change: transform;
   /* Prevent layout thrashing */
-  contain: layout style paint;
+  contain: paint;
+
+  &>* {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--scene-size);
+    height: var(--scene-size);
+
+    background: var(--scene-bg, var(--bg))
+  }
 }
+
+/* .scene[data-role="current"] > * {
+  background: var(--scene-current);
+}
+
+.scene[data-role="prev"] > * {
+  background: var(--scene-prev);
+}
+
+.scene[data-role="next"] > * {
+  background: var(--scene-next);
+} */

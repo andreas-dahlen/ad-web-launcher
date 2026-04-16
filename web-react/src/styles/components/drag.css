@@ -1,8 +1,16 @@
 .drag {
   position: absolute;
-  user-select: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   pointer-events: auto;
   will-change: transform;
-
   /* need vars */
+  --drag-width: 70px;
+  --drag-height: 70px;
+  background: var(--button-bg);
+  border: var(--button-border);
+  border-radius: var(--button-radius);
+  width: var(--drag-width);
+  height: var(--drag-height);
 }

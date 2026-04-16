@@ -2,16 +2,16 @@ import Drag from '@drag/Drag.tsx';
 
 export default function MirWp2() {
 
-    return (
-        <div className="scene-root non-interactive">
-            <Drag
-                id='wp2-drag'
-            // className='button-preset move-col'
-            // locked={true}
+  return (
+    <div className="scene-root non-interactive">
+      <Drag
+        id='wp2-drag'
+      // className='button-preset move-col'
+      // locked={true}
 
-            >
-                <p className='button-preset'>futurebtn</p>
-            </Drag>
-        </div>
-    )
+      >
+        <p>futurebtn</p>
+      </Drag>
+    </div>
+  )
 }

@@ -13,6 +13,18 @@
     opacity 140ms ease;
 
   transform: scale(1);
+
+
+  --button-width: 50px;
+  --button-height: 50px;
+
+  width: var(--button-width);
+  height: var(--button-height);
+
+
+  background: var(--button-bg);
+  border-radius: var(--button-radius);
+  border: var(--button-border)
 }
 
 /* .default-button[data-pressed='pressed'] {

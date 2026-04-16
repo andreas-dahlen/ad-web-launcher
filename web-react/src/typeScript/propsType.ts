@@ -20,7 +20,7 @@ export interface CarouselProps {
   reactSwipeCommit?: boolean
   interactive?: boolean
   onSwipeCommit?: (detail: CtxType) => void
-  className?: string
+  // className?: string
   //uses JSX scenes and not children
 }
 

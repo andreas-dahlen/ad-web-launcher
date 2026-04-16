@@ -7,11 +7,11 @@ export default function Root() {
 
 
   return (
-    <>
+    <div className='theme' data-theme="default" >
       <WallpaperLayer />
       <HorizontalLayer />
       <ContentLayer />
       <OverlayLayer />
-    </>
+    </div>
   )
 }
