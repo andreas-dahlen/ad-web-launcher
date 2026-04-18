@@ -36,7 +36,7 @@
     width: var(--scene-size);
     height: var(--scene-size);
 
-    background: var(--scene-bg, var(--bg))
+    /* background: var(--scene-bg, var(--bg)) */
   }
 }
 

@@ -5,7 +5,6 @@
 
 @import './utilities/utils.css';
 
-@import './components/system/base.css';
 @import './components/system/presets.css';
 
 @import './components/settings-panel.css';
