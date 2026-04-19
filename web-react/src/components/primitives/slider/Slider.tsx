@@ -4,13 +4,11 @@ import { useSliderSizing } from "./hooks/useSliderSizing.ts"
 import { useSliderMotion } from "./hooks/useSliderMotion.ts"
 import { useSliderStore } from "./hooks/useSliderStore.ts"
 import type { SliderProps } from '@typeScript/propsType.ts'
+import { sliderStore } from '@interaction/stores/sliderStore.ts'
 
 export default function Slider({
   id,
   axis,
-  reactSwipe = false,
-  reactSwipeStart = false,
-  reactSwipeCommit = false,
   onValueChange,
   className,
   trackStyling,
@@ -45,6 +43,10 @@ export default function Slider({
   const lastEmitted = useRef<number | null>(null)
 
   // ── Pointer forwarding for gestures ─────────────────────────────
+
+  // FUTURE useSliderReaction or useSliderCallback — takes { id, horizontal, min, max, reactPress, reactSwipe, reactSwipeStart, reactSwipeCommit, onValueChange } and returns the onReaction handler to pass to usePointerBridge. Keeps Slider.tsx clean.
+
+
   usePointerBridge({
     elRef: sliderRef,
     onReaction: (reaction) => {
@@ -52,13 +54,16 @@ export default function Slider({
       if (!event) return
 
       const shouldReact =
-        (event === 'swipe' && reactSwipe) ||
-        (event === 'swipeStart' && reactSwipeStart) ||
-        (event === 'swipeCommit' && reactSwipeCommit)
+        (event === 'press') ||
+        (event === 'swipe') ||
+        (event === 'swipeStart') ||
+        (event === 'swipeCommit')
 
       if (!shouldReact) return
 
-      let emitValue = Math.round(value)
+
+      const currentValue = sliderStore.getState().get(id)?.value ?? 0
+      let emitValue = Math.round(currentValue)
       if (!horizontal) {
         emitValue = max - (emitValue - min)
       }
@@ -86,9 +91,6 @@ export default function Slider({
       className={`slider ${classAxisSlider} ${className ?? ''}`}
       data-id={id}
       data-axis={axis}
-      data-react-swipe={reactSwipe ? true : undefined}
-      data-react-swipe-start={reactSwipeStart ? true : undefined}
-      data-react-swipe-commit={reactSwipeCommit ? true : undefined}
     >
       <div
         className={`track ${classAxisTrack} ${trackStyling ?? ''}`}>

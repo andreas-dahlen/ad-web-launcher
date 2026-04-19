@@ -59,12 +59,14 @@ export const USER_SETTINGS = ({
 })
 
 type ReactiveSettings = {
+  isSettingsEnabled: boolean
   isDragEnabled: boolean
   isGridEnabled: boolean
 }
 
 export type SettingsStore = {
   settings: ReactiveSettings
+  setSettingsEnabled: (value: boolean) => void
   setDragEnabled: (value: boolean) => void
   setGridEnabled: (value: boolean) => void
   get: () => unknown
@@ -74,8 +76,17 @@ export const settingsStore = create<SettingsStore>()(
   immer((set, get) => ({
 
     settings: {
+      isSettingsEnabled: false,
+
+      //drag
       isDragEnabled: false,
       isGridEnabled: false
+    },
+
+    setSettingsEnabled: (value) => {
+      set(s => {
+        s.settings.isSettingsEnabled = value
+      })
     },
 
     setDragEnabled: (value) => {

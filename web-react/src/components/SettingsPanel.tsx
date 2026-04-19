@@ -5,6 +5,7 @@ import Slider from '@slider/Slider.tsx';
 import locked from '@assets/locked.svg?react'
 import unlocked from '@assets/unlocked.svg?react'
 import grid from '@assets/grid.svg?react'
+import { useState } from 'react';
 
 export default function SettingsPanel() {
 
@@ -16,6 +17,9 @@ export default function SettingsPanel() {
   const setGrid = () => {
     setGridEnabled(!gridEnabled)
   }
+
+  const [snapY, setSnapY] = useState(0)
+  const [snapX, setSnapX] = useState(0)
 
   return (
     <>
@@ -40,25 +44,23 @@ export default function SettingsPanel() {
           <Slider
             id='snapX-slider'
             axis='horizontal'
-            className='settings-slider'
-          // onValueChange={onValueChange}
+            onValueChange={setSnapX}
           >
 
-            <div className='slider-preset settings-slider-knob'></div>
+            {/* <div></div> */}
           </Slider>
-          <label>snap X: //valueNumber</label>
+          <label>snap X: {snapX}</label>
         </div>
         <div className='settings-slider-frame'>
           <Slider
             id='snapY-slider'
             axis='horizontal'
-            className='settings-slider'
-          // onValueChange={onValueChange}
+            onValueChange={setSnapY}
           >
 
-            <div className='slider-preset settings-slider-knob'></div>
+            {/* <div></div> */}
           </Slider>
-          <label>snap Y //valueNumber</label>
+          <label>snap Y {snapY}</label>
         </div>
       </div>
       {/* // </div > */}
@@ -66,44 +68,3 @@ export default function SettingsPanel() {
     </>
   )
 }
-{/* <template>
-  <div class="settings-panel">
-    <h3>App Settings</h3>
-
-    <!-- Drag Lock Toggle -->
-    <div class="row">
-      <label for="dragLock">Lock Drag Items</label>
-      <input type="checkbox" id="dragLock" class="enable-event"
-        v-model="USER_SETTINGS.dragLock" />
-    </div>
-    <div class="row">
-      <label for="dragGridVisual">Show Drag Grid</label>
-      <input type="checkbox" id="dragGridVisual" class="enable-event"
-        v-model="USER_SETTINGS.dragGridVisual" />
-    </div>
-
-    <div class="row">change snapping
-      <label for="defultSnapX">X</label>
-      <select class="enable-event" v-model.number="USER_SETTINGS.defaultSnapX">
-      <option v-for="n in 9" :key="n - 1" :value="n - 1">
-      {{ n - 1}}
-    </option>
-  </select>
-
-  <label for="defultSnapY">Y</label>
-  <select class="enable-event" v-model.number="USER_SETTINGS.defaultSnapY">
-  <option v-for="n in 19" :key="n - 1" :value="n - 1">
-  {{ n - 1}}
-</option>
-            </select >
-        </div >
-
-        < !--Debug Panel Toggle(optional)-- >
-        < !-- < div class="row" >
-            <label for="debugPanel">Show Debug Panel</label>
-            <input type="checkbox" id="debugPanel" v-model="USER_SETTINGS.debugPanel" />
-        </div > -->
-
-        < !--Add more toggles as needed -->
-    </div >
-</template > */}

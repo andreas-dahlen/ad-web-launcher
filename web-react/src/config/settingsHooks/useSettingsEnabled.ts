@@ -1,12 +1,12 @@
 import { settingsStore, type SettingsStore } from '@config/appSettings'
 import { useShallow } from 'zustand/shallow'
 
-export const useGridEnabled = () => {
+export const useSettingsEnabled = () => {
 
   return settingsStore(
     useShallow((s: SettingsStore) => ({
-      gridEnabled: s.settings.isGridEnabled ?? false,
-      setGridEnabled: s.setGridEnabled
+      settingsEnabled: s.settings.isSettingsEnabled ?? false,
+      setSettingsEnabled: s.setSettingsEnabled
     }))
   )
 }

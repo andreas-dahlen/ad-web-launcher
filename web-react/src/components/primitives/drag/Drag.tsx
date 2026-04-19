@@ -10,7 +10,6 @@ export default function Drag({
   snapX,
   snapY,
   locked = false,
-  reactSwipeCommit = false,
   onSwipeCommit,
   children,
   className
@@ -29,7 +28,6 @@ export default function Drag({
     elRef: dragItemRef,
     disabled: locked,
     onReaction: (reaction) => {
-      if (!reactSwipeCommit) return
       if (reaction.detail?.event === 'swipeCommit' && onSwipeCommit) {
         onSwipeCommit(reaction.detail)
       }
@@ -59,7 +57,6 @@ export default function Drag({
         data-locked={locked || undefined}
         data-snap-x={snapX}
         data-snap-y={snapY}
-        data-react-swipe-commit={reactSwipeCommit ? true : undefined}
       >
         {children}
       </div>
