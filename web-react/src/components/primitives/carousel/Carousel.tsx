@@ -17,6 +17,7 @@ export default function Carousel({
   id,
   axis,
   scenes,
+  sceneCount,
   lockPrevAt,
   lockNextAt,
   onSwipeCommit,
@@ -29,9 +30,9 @@ export default function Carousel({
   // ── Initialize count for mirror scenes ─────────────────────────────
 
   useEffect(() => {
-    if (interactive)
-      carouselStore.getState().setCount(id, scenes.length)
-  }, [id, scenes.length, interactive])
+    if (!interactive && scenes?.length)
+      carouselStore.getState().setCount(id, scenes.length ?? sceneCount)
+  }, [id, scenes?.length, interactive, sceneCount])
 
   // ── DOM reference & lane size ─────────────────────────────
   const carouselRef = useRef<HTMLDivElement>(null)
@@ -51,10 +52,11 @@ export default function Carousel({
   })
 
   // ── Augmented scenes & stable slot management ─────────────────────────────
-  const augmentedScenes = useAugmentedScenes(scenes, interactive, count)
+  const augmentedScenes = useAugmentedScenes(scenes ?? [], interactive, count)
   const total = augmentedScenes.length
 
   const slots: Slot[] = useMemo(() => {
+    if (total === 0) return []
     const prevIdx = (index - 1 + total) % total
     const nextIdx = (index + 1) % total
     return [

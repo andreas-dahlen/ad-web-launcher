@@ -9,7 +9,7 @@ export default function MirBottom3() {
     setSettingsEnabled(!settingsEnabled)
   }
 
-  console.log(settingsEnabled)
+  // console.log(settingsEnabled)
 
   return (
     <div>

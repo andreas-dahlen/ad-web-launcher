@@ -9,10 +9,10 @@ export default function MirBottom2() {
         id='vertical-slider'
         axis='vertical'
       // className=
-      // trackStyle='slider-track'
+      // trackStyle=''
       >
 
-        <div className='slider-preset slider-col-2'></div>
+        {/* <div></div> */}
       </Slider>
     </div>
   )

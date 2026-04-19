@@ -1,5 +1,5 @@
 import Carousel from "@carousel/Carousel.tsx";
-import { wpScenes } from "../indexes/laneIndex.ts"
+import { wpMirror } from "../indexes/laneIndex.ts"
 
 export default function WallpaperLayer() {
 
@@ -7,7 +7,7 @@ export default function WallpaperLayer() {
     <div className="layer">
       <Carousel
         id="wallpaper"
-        scenes={wpScenes}
+        sceneCount={wpMirror.length}
         axis="vertical"
       />
     </div>

@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import EmptyPlaceholder from '@scenes/EmptyPlaceholder.jsx'
+import EmptyPlaceholder from '@scenes/EmptyPlaceholder.js'
 
 export function useAugmentedScenes(
   scenes: React.ComponentType[],
@@ -7,15 +7,17 @@ export function useAugmentedScenes(
   targetLength?: number
 ) {
   return useMemo(() => {
-    if (interactive) return scenes
+    if (!interactive) console.log('nonInteractive: ', scenes.length)
+    if (!interactive) return scenes
 
     const length = targetLength ?? scenes.length
-    const augmented: React.ComponentType[] = [...scenes]
+    const augmented: React.ComponentType[] = []
 
     while (augmented.length < length) {
       augmented.push(EmptyPlaceholder)
     }
 
+    console.log('augmented interactives: ', augmented.length)
     return augmented
   }, [scenes, interactive, targetLength])
 }

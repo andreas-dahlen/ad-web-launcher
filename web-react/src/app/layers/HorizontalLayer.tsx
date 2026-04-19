@@ -1,25 +1,25 @@
 import Carousel from "@carousel/Carousel.tsx"
-import { topScenes, midScenes, bottomScenes } from "../indexes/laneIndex.ts"
+import { bottomMirror, midMirror, topMirror } from '../indexes/laneIndex'
 
 export default function HorizontalLayer() {
   return (
     <div className="layer">
       <Carousel
         id="top-horizontal"
-        scenes={topScenes}
         axis="horizontal"
+        sceneCount={topMirror.length}
       />
 
       <Carousel
         id="middle-horizontal"
-        scenes={midScenes}
         axis="horizontal"
+        sceneCount={midMirror.length}
       />
 
       <Carousel
         id="bottom-horizontal"
-        scenes={bottomScenes}
         axis="horizontal"
+        sceneCount={bottomMirror.length}
       />
     </div>
   )

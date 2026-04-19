@@ -13,7 +13,8 @@ export interface DragProps {
 export interface CarouselProps {
   id: string
   axis: 'horizontal' | 'vertical'
-  scenes: React.ComponentType[]
+  scenes?: React.ComponentType[]
+  sceneCount?: number
   lockPrevAt?: number
   lockNextAt?: number
   interactive?: boolean
