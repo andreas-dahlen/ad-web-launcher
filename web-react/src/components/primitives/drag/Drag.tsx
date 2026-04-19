@@ -46,7 +46,7 @@ export default function Drag({
   return (
     <div
       ref={containerRef}
-      className='relative-max-size non-interactive'
+      className='relative-max-size'
 
     >
       <div

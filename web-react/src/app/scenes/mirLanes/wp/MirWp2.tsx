@@ -3,7 +3,7 @@ import Drag from '@drag/Drag.tsx';
 export default function MirWp2() {
 
   return (
-    <div className="scene-root non-interactive">
+    <div>
       <Drag
         id='wp2-drag'
       // className='button-preset move-col'

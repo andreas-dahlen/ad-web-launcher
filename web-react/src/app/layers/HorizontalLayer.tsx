@@ -3,7 +3,7 @@ import { topScenes, midScenes, bottomScenes } from "../indexes/laneIndex.ts"
 
 export default function HorizontalLayer() {
   return (
-    <div className="carousel-layer">
+    <div className="layer">
       <Carousel
         id="top-horizontal"
         scenes={topScenes}

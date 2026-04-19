@@ -3,7 +3,7 @@ import Button from '@button/Button.tsx';
 
 export default function MirTop1() {
   return (
-    <div className="scene-root non-interactive">
+    <div>
       <Button
         id='test-button'
         className='button-default'

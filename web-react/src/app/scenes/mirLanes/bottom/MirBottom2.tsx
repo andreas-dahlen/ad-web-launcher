@@ -4,7 +4,7 @@ import Slider from '@slider/Slider.tsx';
 export default function MirBottom2() {
 
   return (
-    <div className="scene-root non-interactive">
+    <div>
       <Slider
         id='vertical-slider'
         axis='vertical'

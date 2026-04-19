@@ -1,22 +1,4 @@
 :root {
-  --gradient-a-1: #ffe100;
-  --gradient-a-2: #ff7300;
-
-  --gradient-b-1: #82cfff;
-  --gradient-b-2: #830599;
-
-  --gradient-c-1: #07ff2c;
-  --gradient-c-2: #080eaf;
-
-  --gradient-wall-1: #ffffff;
-  --gradient-wall-2: #000000;
-  --gradient-wall-3: #780000;
-
-  --gradient-slider-1: #00b6cb;
-  --gradient-slider-2: #003686;
-
-  --gradient-slider-knob-1: #afbf00;
-  --gradient-slider-knob-2: #00a6a0;
 
   /* settings-panel */
   --gradient-debug-frame-1: rgb(51, 51, 51);
@@ -32,47 +14,67 @@
 
   --debug-button-off: rgb(101, 101, 101);
   --debug-button-on: rgb(209, 209, 209);
-  /* rgb(45, 45, 45) */
-  /* rgb(159, 159, 159) */
-
-
-
-
-
-
-  /* Touch areas */
-  /* --touch-idle: rgba(0, 0, 0, 0.442);
-  --touch-pressed: #2ecc71;
-  --touch-release: #e74c3c;
-  --touch-swipe-left: #9b59b6;
-  --touch-swipe-right: #e67e22;
-  --touch-swipe-up: #9cb659;
-  --touch-swipe-down: #e622ae; */
 
   /* Motion - slightly faster for snappier feel on Android */
   --touch-transition-fast: 120ms;
   --touch-transition-normal: 200ms;
 
+  /* scene colors */
+  --_h-scene-1a: oklch(95.145% 0.20428 107.337);
+  --_h-scene-1b: oklch(62.793% 0.25768 29.223);
+  --_h-scene-2a: oklch(62.793% 0.25768 29.223);
+  --_h-scene-2b: oklch(78.558% 0.14794 224.301);
+  --_h-scene-3a: oklch(89.605% 0.16245 180.152);
+  --_h-scene-3b: oklch(92.486% 0.19429 102.902);
 
-  --_color-bg-1: rgb(142, 95, 32);
-  --_color-bg-2: rgb(178, 147, 52);
-  --_color-panel-1: rgb(125, 71, 44);
-  --_color-panel-2: rgb(192, 161, 109);
-  --_color-sub-panel-1: rgb(101, 87, 59);
-  --_color-sub-panel-2: rgb(101, 97, 29);
-  --_color-button-1: rgb(173, 173, 173);
-  --_color-button-2: rgb(82, 82, 82);
-  --_color-overlay-black: rgb(0, 0, 0);
+  --_v-wallp-1a: oklch(0% 0 0 / 0);
+  --_v-wallp-1b: oklch(59.31% 0.00007 271.152);
+  --_v-wallp-2a: oklch(0% 0 0 / 0);
+  --_v-wallp-2b: oklch(59.987% 0.00007 271.152);
+  --_v-wallp-3a: oklch(0% 0 0 / 0);
+  --_v-wallp-3b: oklch(59.31% 0.00007 271.152);
 
-  --_gradient-deg: 135deg;
-  --gradient-deg-panel: 135deg;
+  /* component colors */
+  --_color-panel-1: oklch(45.657% 0.08415 46.431);
+  --_color-panel-2: oklch(72.471% 0.07795 79.956);
+  --_color-sub-panel-1: oklch(46.31% 0.0457 84.176);
+  --_color-sub-panel-2: oklch(48.237% 0.08785 105.977);
+  --_color-button-1: oklch(74.763% 0.00008 271.152);
+  --_color-button-2: oklch(43.861% 0.00005 271.152);
+  --_color-overlay-black: oklch(0% 0 0);
+
+
+  --_gradient-deg-h: 125deg;
+  --_gradient-deg-v: 145deg;
+  --_gradient-deg-panel: 135deg;
   --_gradient-deg-sub-panel: 135deg;
   --_gradient-deg-button: 135deg;
 
-  --_bg: linear-gradient(var(--_gradient-deg),
-      var(--_color-bg-1),
-      var(--_color-bg-2));
+  --_h-scene-1: linear-gradient(var(--_gradient-deg-h),
+      var(--_h-scene-1a),
+      var(--_h-scene-1b));
 
+  --_h-scene-2: linear-gradient(var(--_gradient-deg-h),
+      var(--_h-scene-2a),
+      var(--_h-scene-2b));
+
+  --_h-scene-3: linear-gradient(var(--_gradient-deg-h),
+      var(--_h-scene-3a),
+      var(--_h-scene-3b));
+
+  --_v-scene-1: linear-gradient(var(--_gradient-deg-v),
+      var(--_v-wallp-1a),
+      var(--_v-wallp-1b));
+
+  --_v-scene-2: linear-gradient(var(--_gradient-deg-v),
+      var(--_v-wallp-2a),
+      var(--_v-wallp-2b));
+
+  --_v-scene-3: linear-gradient(var(--_gradient-deg-v),
+      var(--_v-wallp-3a),
+      var(--_v-wallp-3b));
+
+  /* components */
   --_panel-bg: linear-gradient(var(--_gradient-deg-panel),
       var(--_color-panel-1),
       var(--_color-panel-2));
@@ -85,21 +87,22 @@
       var(--_color-button-1),
       var(--_color-button-2));
 
-  --_panel-border: 1px solid black;
-  --_sub-panel-border: 1px solid black;
-  --_button-border: 1px solid black;
+  --_panel-border: 1px solid oklch(0% 0 0);
+  --_sub-panel-border: 1px solid oklch(0% 0 0);
+  --_button-border: 1px solid oklch(0% 0 0);
 
   --_panel-radius: 10px;
   --_sub-panel-radius: 10px;
   --_button-radius: 10px;
   --_extreme-radius: 100em;
 
-  --_color-on: rgb(184, 184, 184);
-  --_color-off: rgb(82, 82, 82);
-  --_color-pressed: rgb(175, 133, 112);
-  --_color-swipe: rgb(193, 168, 94);
+  --_color-on: oklch(78.261% 0.00009 271.152);
+  --_color-off: oklch(43.861% 0.00005 271.152);
+  --_color-pressed: oklch(65.176% 0.06012 47.733);
+  --_color-swipe: oklch(73.765% 0.09829 91.22);
 
   --_opacity-low: 0.3;
+  --_h-opacity: 0.75;
 }
 
 .theme {
@@ -108,8 +111,15 @@
 }
 
 [data-theme="default"] {
-  /* gradients */
-  --bg: var(--_bg);
+  /* scenes */
+  --h-scene-1: var(--_h-scene-1);
+  --h-scene-2: var(--_h-scene-2);
+  --h-scene-3: var(--_h-scene-3);
+  --v-scene-1: var(--_v-scene-1);
+  --v-scene-2: var(--_v-scene-2);
+  --v-scene-3: var(--_v-scene-3);
+
+  /* components */
   --panel-bg: var(--_panel-bg);
   --sub-panel-bg: var(--_sub-panel-bg);
   --button-bg: var(--_button-bg);
@@ -136,4 +146,5 @@
 
   /* opacity */
   --opacity-low: var(--_opacity-low);
+  --h-opacity: var(--_h-opacity);
 }

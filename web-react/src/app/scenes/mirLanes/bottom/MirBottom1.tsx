@@ -2,17 +2,17 @@ import Slider from '@slider/Slider.tsx';
 
 export default function MirBottom1() {
 
-    return (
-        <div className="scene-root non-interactive">
-            <Slider
-                id='bottom-slider-test'
-                axis='horizontal'
-            // className=
-            // trackStyle='slider-track'
-            >
+  return (
+    <div>
+      <Slider
+        id='bottom-slider-test'
+        axis='horizontal'
+      // className=
+      // trackStyle='slider-track'
+      >
 
-                {/* <div className='slider-preset slider-col-2'></div> */}
-            </Slider>
-        </div>
-    )
+        {/* <div className='slider-preset slider-col-2'></div> */}
+      </Slider>
+    </div>
+  )
 }

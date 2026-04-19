@@ -4,7 +4,7 @@ import { wpScenes } from "../indexes/laneIndex.ts"
 export default function WallpaperLayer() {
 
   return (
-    <div className="wallpaper-layer">
+    <div className="layer">
       <Carousel
         id="wallpaper"
         scenes={wpScenes}

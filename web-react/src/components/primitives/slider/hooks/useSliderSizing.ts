@@ -28,11 +28,9 @@ export function useSliderSizing({
                 y: el.offsetHeight
             }
 
-            const thumbContent = thumbEl.firstElementChild as HTMLElement | null
-
             const thumbSize = {
-                x: thumbContent?.offsetWidth ?? 0,
-                y: thumbContent?.offsetHeight ?? 0
+                x: thumbEl.offsetWidth ?? 0,
+                y: thumbEl.offsetHeight ?? 0
             }
 
             sliderStore.getState().setSize(id, size)

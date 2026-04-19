@@ -79,6 +79,13 @@ export default function Carousel({
       axisSize
     })
 
+  const setColor = (index: number) => {
+    const sceneCount = 3
+    const colorIndex = (index % sceneCount) + 1
+    if (axis === 'horizontal') return `scene-col-${colorIndex}`
+    return `wall-col-${colorIndex}`
+  }
+
   return (
     <div
       data-type="carousel"
@@ -95,7 +102,7 @@ export default function Carousel({
 
         return (
           <div
-            className='scene'
+            className={`scene ${interactive ? setColor(slot.sceneIdx) : ''}`}
             key={slot.sceneIdx}
             style={styleForRole(slot.role)}
             data-role={slot.role}

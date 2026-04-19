@@ -1,14 +1,9 @@
 @import './core/variables.css';
 @import './core/core.css';
 @import './core/layers.css';
-@import './core/scenes.css';
-
-@import './utilities/utils.css';
+@import './components/index.css';
 
 @import './components/system/presets.css';
-
-@import './components/settings-panel.css';
-
 @import './debug.css';
 
-@import './components/index.css';
+@import './components/settings-panel.css';

@@ -35,10 +35,38 @@
     justify-content: center;
     width: var(--scene-size);
     height: var(--scene-size);
-
-    /* background: var(--scene-bg, var(--bg)) */
   }
 }
+
+.scene-col-1 {
+  background: var(--scene-bg, var(--h-scene-1));
+  opacity: var(--scene-opacity, var(--h-opacity));
+}
+
+.scene-col-2 {
+  background: var(--scene-bg, var(--h-scene-2));
+  opacity: var(--scene-opacity, var(--h-opacity));
+}
+
+.scene-col-3 {
+  background: var(--scene-bg, var(--h-scene-3));
+  opacity: var(--scene-opacity, var(--h-opacity));
+}
+
+.wall-col-1 {
+  background: var(--scene-bg, var(--v-scene-1));
+}
+
+.wall-col-2 {
+  background: var(--scene-bg, var(--v-scene-2));
+}
+
+/* css-navigation-ignore */
+.wall-col-3 {
+  background: var(--scene-bg, var(--v-scene-3));
+}
+
+
 
 /* .scene[data-role="current"] > * {
   background: var(--scene-current);

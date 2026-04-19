@@ -14,3 +14,9 @@
   width: var(--drag-width);
   height: var(--drag-height);
 }
+
+.relative-max-size {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}

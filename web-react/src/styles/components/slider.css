@@ -12,14 +12,15 @@
 
   &.horizontal-slider {
     --slider-width: 90%;
-    --slider-height: 15%;
+    --slider-height: 40px;
   }
 
   &.vertical-slider {
-    --slider-width: 12%;
+    --slider-width: 45px;
     --slider-height: 90%;
   }
 }
+
 
 .track {
   position: absolute;
@@ -31,9 +32,18 @@
   background: var(--color-overlay);
   opacity: var(--opacity-low);
 
-  width: var(--track-width, var(--slider-width));
-  height: var(--track-height, var(--slider-height));
+  &.horizontal-track {
+    width: var(--track-width, var(--slider-width));
+    height: var(--track-height, 15%);
+  }
+
+  &.vertical-track {
+    width: var(--track-width, 12%);
+    height: var(--track-height, var(--slider-height));
+  }
 }
+
+
 
 .slider-thumb {
   --thumb-width: 50px;

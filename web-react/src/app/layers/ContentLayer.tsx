@@ -4,7 +4,7 @@ import { wpMirror, topMirror, midMirror, bottomMirror } from "../indexes/laneInd
 export default function ContentLayer() {
 
   return (
-    <div className="content-layer">
+    <div className="layer">
       <Carousel
         id="top-horizontal"
         scenes={topMirror}
@@ -26,7 +26,7 @@ export default function ContentLayer() {
         interactive={false}
       />
 
-      <div className="content-layer">
+      <div className="layer">
         <Carousel
           id="wallpaper"
           scenes={wpMirror}

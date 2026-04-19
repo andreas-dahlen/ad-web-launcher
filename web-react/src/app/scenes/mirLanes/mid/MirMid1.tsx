@@ -7,7 +7,7 @@ export default function MirMid1() {
   }
 
   return (
-    <div className="scene-root non-interactive">
+    <div>
       <Drag
         id='mid1-drag'
         className='button-preset move-col'

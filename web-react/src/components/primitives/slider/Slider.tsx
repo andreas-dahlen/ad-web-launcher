@@ -27,9 +27,13 @@ export default function Slider({
   const constraints = { min, max }
 
   // ── CSS classes ─────────────────────────────
-  const classAxis = axis === 'horizontal'
+  const classAxisSlider = axis === 'horizontal'
     ? 'horizontal-slider'
     : 'vertical-slider'
+
+  const classAxisTrack = axis === 'horizontal'
+    ? 'horizontal-track'
+    : 'vertical-track'
 
 
   // ── DOM references & sizing ─────────────────────────────
@@ -79,7 +83,7 @@ export default function Slider({
       data-type="slider"
       // data-press="true"
       ref={sliderRef}
-      className={`slider ${classAxis} ${className ?? ''}`}
+      className={`slider ${classAxisSlider} ${className ?? ''}`}
       data-id={id}
       data-axis={axis}
       data-react-swipe={reactSwipe ? true : undefined}
@@ -87,7 +91,7 @@ export default function Slider({
       data-react-swipe-commit={reactSwipeCommit ? true : undefined}
     >
       <div
-        className={`track ${trackStyling ?? ''}`}>
+        className={`track ${classAxisTrack} ${trackStyling ?? ''}`}>
       </div>
 
       <div
