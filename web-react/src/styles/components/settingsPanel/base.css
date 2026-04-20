@@ -52,10 +52,6 @@
   }
 }
 
-[data-state="swiping"] .slider-thumb {
-  background: hotpink;
-}
-
 /* TODO probably need to define overrides... so i remember them...
 example
 
@@ -80,64 +76,4 @@ example
     /* text-shadow: 0 0 8px rgb(0, 0, 0); */
 
   }
-}
-
-/* button stuff */
-
-.settings-button {
-  width: 50px;
-  height: 50px;
-  border-radius: 12px;
-
-  font-weight: 700;
-
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-
-  transition:
-    transform 90ms cubic-bezier(0.2, 0.8, 0.2, 1),
-    /* box-shadow 140ms cubic-bezier(0.2, 0.8, 0.2, 1),
-    filter 140ms ease, */
-    background 180ms ease;
-  /* color 180ms ease; */
-
-  transform: scale(1);
-
-  box-shadow:
-    0 4px 10px rgba(0, 0, 0, 0.299);
-
-  .svg-img {
-    width: 40px;
-    height: 40px;
-  }
-
-}
-
-.svg-bright path {
-  fill: var(--svg-dark);
-}
-
-.svg-dark path {
-  fill: var(--svg-bright);
-}
-
-.settings-button[data-state='state-on'] {
-  background: var(--debug-button-on);
-  /* color: #ffffff; */
-
-  /* box-shadow: 0 0 10px 3px rgba(0, 0, 0, 0.35); */
-
-}
-
-.settings-button[data-state='state-off'] {
-  background: var(--debug-button-off);
-  /* color: #ffffff; */
-
-  /* box-shadow: 0 0px 5px 3px rgba(255, 255, 255, 0.228); */
-
-
 }

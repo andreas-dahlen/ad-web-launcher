@@ -1,10 +1,10 @@
 import Button from '@components/primitives/button/Button';
-import { useSettingsEnabled } from '@config/settingsHooks/useSettingsEnabled';
+import { useSettingsStore } from '@config/settingsHooks/useSettings';
 
 
 export default function MirBottom3() {
 
-  const { settingsEnabled, setSettingsEnabled } = useSettingsEnabled()
+  const { settingsEnabled, setSettingsEnabled } = useSettingsStore()
   const setValue = () => {
     setSettingsEnabled(!settingsEnabled)
   }

@@ -1,12 +1,15 @@
-import SettingsPanel from '@components/SettingsPanel.jsx';
-import { useSettingsEnabled } from '@config/settingsHooks/useSettingsEnabled';
+import DragGrid from '@components/settingsPanel/DragGrid';
+import SettingsPanel from '@components/settingsPanel/SettingsPanel.js';
+import { useSettingsStore } from '@config/settingsHooks/useSettings';
 
 
 export default function OverlayLayer() {
 
-  const { settingsEnabled } = useSettingsEnabled()
+  const { settingsEnabled, gridEnabled } = useSettingsStore()
   return (
-
-    settingsEnabled ? <SettingsPanel /> : ''
+    <>
+      {gridEnabled ? <DragGrid /> : ''}
+      {settingsEnabled ? <SettingsPanel /> : ''}
+    </>
   )
 }

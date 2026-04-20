@@ -23,7 +23,7 @@ export function extractDomMeta(el: HTMLElement): DomMeta | null {
   const lockPrevAt = parseNumber(ds.lockPrevAt)
   const lockNextAt = parseNumber(ds.lockNextAt)
 
-  const locked = ds.locked === 'true'
+  const locked = ds.locking === 'true'
 
   return { el, ds, id, axis, type, swipeValid, pressValid, snapX, snapY, lockPrevAt, lockNextAt, locked }
 }

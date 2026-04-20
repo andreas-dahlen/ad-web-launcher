@@ -8,10 +8,10 @@ export default function MirBottom1() {
         id='bottom-slider-test'
         axis='horizontal'
       // className=
-      // trackStyle='slider-track'
+      // trackStyle=''
       >
 
-        {/* <div className='slider-preset slider-col-2'></div> */}
+        {/* <div className='slider-preset'></div> */}
       </Slider>
     </div>
   )

@@ -7,7 +7,6 @@ export function useAugmentedScenes(
   targetLength?: number
 ) {
   return useMemo(() => {
-    if (!interactive) console.log('nonInteractive: ', scenes.length)
     if (!interactive) return scenes
 
     const length = targetLength ?? scenes.length
@@ -17,7 +16,6 @@ export function useAugmentedScenes(
       augmented.push(EmptyPlaceholder)
     }
 
-    console.log('augmented interactives: ', augmented.length)
     return augmented
   }, [scenes, interactive, targetLength])
 }

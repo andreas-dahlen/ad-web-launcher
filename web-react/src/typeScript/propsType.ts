@@ -4,7 +4,7 @@ export interface DragProps {
   id: string
   snapX?: number
   snapY?: number
-  locked?: boolean
+  lockable?: boolean
   onSwipeCommit?: (detail: CtxType) => void
   children?: React.ReactNode
   className?: string

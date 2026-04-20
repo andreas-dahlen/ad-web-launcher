@@ -1,4 +1,10 @@
-@import './carousel.css';
-@import './slider.css';
-@import './drag.css';
-@import './button.css'
+@import './primitives/carousel.css';
+@import './primitives/slider.css';
+@import './primitives/drag.css';
+@import './primitives/button.css';
+
+@import './system/presets.css';
+
+@import './settingsPanel/base.css';
+@import './settingsPanel/buttons.css';
+@import './settingsPanel/dragGrid.css'

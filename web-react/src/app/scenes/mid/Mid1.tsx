@@ -10,9 +10,9 @@ export default function MirMid1() {
     <div>
       <Drag
         id='mid1-drag'
-        className='button-preset move-col'
+        className='button-preset'
         on-press={onPress}
-      // locked={true}
+      // lockable={true}
       >
         {/* TODO make it an opt in CSS style */}
 

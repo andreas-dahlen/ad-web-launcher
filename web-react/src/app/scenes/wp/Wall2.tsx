@@ -6,8 +6,8 @@ export default function MirWp2() {
     <div>
       <Drag
         id='wp2-drag'
-      // className='button-preset move-col'
-      // locked={true}
+        // className='button-preset'
+        lockable={true}
 
       >
         <p>futurebtn</p>

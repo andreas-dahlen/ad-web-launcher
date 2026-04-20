@@ -43,25 +43,13 @@ export const APP_SETTINGS: AppSettings = {
 /* -------------------------------------------------
    User-modifiable reactive settings
 ------------------------------------------------- */
-export interface UserSettings {
-  isDragEnabled: boolean
-  DragGridEnabled: boolean
-  defaultSnapX: number
-  defaultSnapY: number
-}
-
-export const USER_SETTINGS = ({
-  // = reactive<UserSettings>({
-  isDagEnabled: false,
-  DragGridEnabled: false,
-  defaultSnapX: 8,
-  defaultSnapY: 16
-})
 
 type ReactiveSettings = {
   isSettingsEnabled: boolean
   isDragEnabled: boolean
   isGridEnabled: boolean
+  defaultSnapX: number
+  defaultSnapY: number
 }
 
 export type SettingsStore = {
@@ -80,7 +68,9 @@ export const settingsStore = create<SettingsStore>()(
 
       //drag
       isDragEnabled: false,
-      isGridEnabled: false
+      isGridEnabled: false,
+      defaultSnapX: 8,
+      defaultSnapY: 16
     },
 
     setSettingsEnabled: (value) => {

@@ -1,9 +1,5 @@
 @import './core/variables.css';
 @import './core/core.css';
 @import './core/layers.css';
-@import './components/index.css';
-
-@import './components/system/presets.css';
 @import './debug.css';
-
-@import './components/settings-panel.css';
+@import './components/index.css';

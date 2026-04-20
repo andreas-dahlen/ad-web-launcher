@@ -1,6 +1,5 @@
-import { useDragEnabled } from '@config/settingsHooks/useDragEnabled';
-import { useGridEnabled } from '@config/settingsHooks/useGridEnabled';
-import SettingsButton from './SettingsButton.jsx';
+import { useSettingsStore } from '@config/settingsHooks/useSettings.js';
+import SettingsButton from './SettingsButton.js';
 import Slider from '@slider/Slider.tsx';
 import locked from '@assets/locked.svg?react'
 import unlocked from '@assets/unlocked.svg?react'
@@ -9,11 +8,10 @@ import { useState } from 'react';
 
 export default function SettingsPanel() {
 
-  const { dragEnabled, setDragEnabled } = useDragEnabled()
+  const { dragEnabled, setDragEnabled, gridEnabled, setGridEnabled } = useSettingsStore()
   const setLock = () => {
     setDragEnabled(!dragEnabled)
   }
-  const { gridEnabled, setGridEnabled } = useGridEnabled()
   const setGrid = () => {
     setGridEnabled(!gridEnabled)
   }

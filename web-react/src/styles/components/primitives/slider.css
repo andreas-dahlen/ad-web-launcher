@@ -57,3 +57,7 @@
   will-change: transform;
   position: absolute;
 }
+
+[data-state="swiping"] .slider-thumb {
+  background: hotpink;
+}
