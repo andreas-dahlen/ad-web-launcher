@@ -4,7 +4,7 @@ import { useSliderSizing } from "./hooks/useSliderSizing.ts"
 import { useSliderMotion } from "./hooks/useSliderMotion.ts"
 import { useSliderStore } from "./hooks/useSliderStore.ts"
 import type { SliderProps } from '@typeScript/propsType.ts'
-import { sliderStore } from '@interaction/stores/sliderStore.ts'
+import { sliderStore } from '../../../stores/sliderStore.ts'
 
 export default function Slider({
   id,

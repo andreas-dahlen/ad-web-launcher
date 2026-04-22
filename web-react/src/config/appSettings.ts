@@ -45,15 +45,17 @@ export const APP_SETTINGS: AppSettings = {
 ------------------------------------------------- */
 
 type ReactiveSettings = {
-  isSettingsEnabled: boolean
+  isSettingsOverlayEnabled: boolean
   isDragEnabled: boolean
   isGridEnabled: boolean
-  defaultSnapX: number
-  defaultSnapY: number
+  dragSnapX: number
+  dragSnapY: number
 }
 
 export type SettingsStore = {
   settings: ReactiveSettings
+  setDragSnapX: (value: number) => void
+  setDragSnapY: (value: number) => void
   setSettingsEnabled: (value: boolean) => void
   setDragEnabled: (value: boolean) => void
   setGridEnabled: (value: boolean) => void
@@ -64,18 +66,29 @@ export const settingsStore = create<SettingsStore>()(
   immer((set, get) => ({
 
     settings: {
-      isSettingsEnabled: false,
+      isSettingsOverlayEnabled: false,
 
       //drag
       isDragEnabled: false,
       isGridEnabled: false,
-      defaultSnapX: 8,
-      defaultSnapY: 16
+      dragSnapX: 8,
+      dragSnapY: 16
+    },
+
+    setDragSnapX: (value) => {
+      set(s => {
+        s.settings.dragSnapX = value
+      })
+    },
+    setDragSnapY: (value) => {
+      set(s => {
+        s.settings.dragSnapX = value
+      })
     },
 
     setSettingsEnabled: (value) => {
       set(s => {
-        s.settings.isSettingsEnabled = value
+        s.settings.isSettingsOverlayEnabled = value
       })
     },
 

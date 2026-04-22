@@ -2,9 +2,6 @@
 	"folders": [
 		{
 			"path": "web-react"
-		},
-		{
-			"path": "web-react/src"
 		}
 	],
 	"settings": {}

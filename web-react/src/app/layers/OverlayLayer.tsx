@@ -5,11 +5,11 @@ import { useSettingsStore } from '@config/settingsHooks/useSettings';
 
 export default function OverlayLayer() {
 
-  const { settingsEnabled, gridEnabled } = useSettingsStore()
+  const { settingsOverlayEnabled, gridEnabled } = useSettingsStore()
   return (
     <>
       {gridEnabled ? <DragGrid /> : ''}
-      {settingsEnabled ? <SettingsPanel /> : ''}
+      {settingsOverlayEnabled ? <SettingsPanel /> : ''}
     </>
   )
 }

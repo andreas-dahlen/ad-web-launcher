@@ -1,7 +1,8 @@
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
-import type { Vec2 } from '../../typeScript/primitiveType.ts'
-import type { CtxDrag } from '../../typeScript/ctxType.ts'
+import type { Vec2 } from '../typeScript/primitiveType.ts'
+import type { CtxDrag } from '../typeScript/ctxType.ts'
+import type { DragLayout } from '@typeScript/descriptor/dataType.ts'
 
 type Drag = {
   //react motion
@@ -9,11 +10,9 @@ type Drag = {
   dragging: boolean
   //reactPosition
   position: Vec2
-  // The "Optional" section non reactive
-  minX: number
-  maxX: number
-  minY: number
-  maxY: number
+  // non reactive
+
+  layout: DragLayout
 }
 
 export type DragStore = {
@@ -22,7 +21,7 @@ export type DragStore = {
   get: (id: string) => Readonly<Drag> | null
   delete: (id: string) => void
 
-  setConstraints: (id: string, constraints: { minX?: number, maxX?: number, minY?: number, maxY?: number }) => void
+  setLayout: (id: string, layout: DragLayout) => void
   setPosition: (id: string, pos: Vec2) => void
   swipeStart: (ctx: CtxDrag) => void
   swipe: (ctx: CtxDrag) => void
@@ -42,10 +41,16 @@ export const dragStore = create<DragStore>()(
           position: { x: 0, y: 0 },
           offset: { x: 0, y: 0 },
           dragging: false,
-          minX: -Infinity,
-          maxX: Infinity,
-          minY: -Infinity,
-          maxY: Infinity
+          layout: {
+            constraints: {
+              minX: -Infinity,
+              maxX: Infinity,
+              minY: -Infinity,
+              maxY: Infinity
+            },
+            container: { x: 0, y: 0 },
+            item: { x: 0, y: 0 }
+          }
         }
       })
     },
@@ -60,14 +65,15 @@ export const dragStore = create<DragStore>()(
       })
     },
 
-    setConstraints: (id, packet) => {
+    setLayout(id, packet) {
       set(state => {
         const s = state.bindings[id]
         if (!s) return
-        if (packet.minX !== undefined) s.minX = packet.minX;
-        if (packet.maxX !== undefined) s.maxX = packet.maxX;
-        if (packet.minY !== undefined) s.minY = packet.minY;
-        if (packet.maxY !== undefined) s.maxY = packet.maxY;
+        s.layout = {
+          constraints: packet.constraints,
+          container: packet.container,
+          item: packet.item
+        }
       })
     },
 

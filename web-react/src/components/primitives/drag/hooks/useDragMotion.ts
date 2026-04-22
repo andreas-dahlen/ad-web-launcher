@@ -11,7 +11,7 @@ export function useDragMotion({
   offset,
   dragging
 }: UseDragMotionProps) {
-  const itemStyle = useMemo(() => {
+  const motionStyle = useMemo(() => {
     const x = (position.x ?? 0) + (offset.x ?? 0)
     const y = (position.y ?? 0) + (offset.y ?? 0)
 
@@ -21,5 +21,5 @@ export function useDragMotion({
     }
   }, [position.x, position.y, offset.x, offset.y, dragging])
 
-  return { itemStyle }
+  return { motionStyle }
 }

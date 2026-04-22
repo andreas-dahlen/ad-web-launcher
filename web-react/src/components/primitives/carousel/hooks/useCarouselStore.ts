@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useShallow } from 'zustand/shallow'
-import { carouselStore, type CarouselStore } from '@stores/carouselStore.ts'
+import { carouselStore, type CarouselStore } from '../../../../stores/carouselStore'
 import { debugRegisterBinding, debugUnregisterBinding } from '@debug/functions'
 
 const DEFAULTS = {

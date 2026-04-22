@@ -1,5 +1,5 @@
 import { useEffect } from "react"
-import { dragStore } from '@stores/dragStore.ts'
+import { dragStore } from '../../../../stores/dragStore'
 
 interface UseDragSizingProps {
   elRef: React.RefObject<HTMLElement | null>
@@ -28,19 +28,34 @@ export function useDragSizing({
       const containerHeight = containerEl.offsetHeight
 
 
-      const size = {
-        x: containerWidth - itemWidth,
-        y: containerHeight - itemHeight
-      }
+      // const size = {
+      //   x: containerWidth - itemWidth,
+      //   y: containerHeight - itemHeight
+      // }
 
       const constraints = {
         minX: 0,
         minY: 0,
-        maxX: size.x,
-        maxY: size.y
+        maxX: containerWidth - itemWidth,
+        maxY: containerHeight - itemHeight
       }
 
-      dragStore.getState().setConstraints(id, constraints)
+      const container = {
+        x: containerWidth,
+        y: containerHeight
+      }
+
+      const item = {
+        x: itemWidth,
+        y: itemHeight
+      }
+
+      // dragStore.getState().setConstraints(id, constraints)
+      dragStore.getState().setLayout(id, {
+        constraints,
+        container,
+        item
+      })
     }
     updateLaneSize()
 

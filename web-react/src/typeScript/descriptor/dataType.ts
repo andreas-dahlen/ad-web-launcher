@@ -14,12 +14,20 @@ export interface CarouselModifiers {
 
 export interface DragData {
   readonly position: Vec2
-  readonly constraints: {
-    readonly minX: number
-    readonly maxX: number
-    readonly minY: number
-    readonly maxY: number
-  }
+  readonly layout: DragLayout
+}
+
+export interface DragLayout {
+  readonly constraints: DragConstraints
+  readonly container: Vec2
+  readonly item: Vec2
+}
+
+export interface DragConstraints {
+  readonly minX: number
+  readonly maxX: number
+  readonly minY: number
+  readonly maxY: number
 }
 
 export interface DragModifiers {
@@ -28,8 +36,13 @@ export interface DragModifiers {
 
 export interface SliderData {
   readonly thumbSize: Vec2
-  readonly constraints: { readonly min: number; readonly max: number }
+  readonly constraints: SliderConstraints
   readonly size: Vec2
+}
+
+export interface SliderConstraints {
+  readonly min: number
+  readonly max: number
 }
 
 export interface GestureUpdate {

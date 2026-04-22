@@ -1,49 +1,49 @@
 import { useEffect } from "react"
-import { sliderStore } from '@stores/sliderStore.ts'
+import { sliderStore } from '../../../../stores/sliderStore'
 
 interface UseSliderSizingProps {
-    elRef: React.RefObject<HTMLElement | null>
-    thumbRef: React.RefObject<HTMLElement | null>
-    id: string
+  elRef: React.RefObject<HTMLElement | null>
+  thumbRef: React.RefObject<HTMLElement | null>
+  id: string
 }
 
 export function useSliderSizing({
-    elRef,
-    thumbRef,
-    id,
+  elRef,
+  thumbRef,
+  id,
 }: UseSliderSizingProps) {
 
-    useEffect(() => {
+  useEffect(() => {
 
-        const el = elRef.current
-        const thumbEl = thumbRef.current
+    const el = elRef.current
+    const thumbEl = thumbRef.current
 
-        if (!el || !thumbEl) return
+    if (!el || !thumbEl) return
 
-        function updateLaneSize() {
-            if (!el || !thumbEl) return
+    function updateLaneSize() {
+      if (!el || !thumbEl) return
 
-            const size = {
-                x: el.offsetWidth,
-                y: el.offsetHeight
-            }
+      const size = {
+        x: el.offsetWidth,
+        y: el.offsetHeight
+      }
 
-            const thumbSize = {
-                x: thumbEl.offsetWidth ?? 0,
-                y: thumbEl.offsetHeight ?? 0
-            }
+      const thumbSize = {
+        x: thumbEl.offsetWidth ?? 0,
+        y: thumbEl.offsetHeight ?? 0
+      }
 
-            sliderStore.getState().setSize(id, size)
-            sliderStore.getState().setThumbSize(id, thumbSize)
-        }
+      sliderStore.getState().setSize(id, size)
+      sliderStore.getState().setThumbSize(id, thumbSize)
+    }
 
-        updateLaneSize()
+    updateLaneSize()
 
-        const observer = new ResizeObserver(updateLaneSize)
-        observer.observe(el)
-        observer.observe(thumbEl)
+    const observer = new ResizeObserver(updateLaneSize)
+    observer.observe(el)
+    observer.observe(thumbEl)
 
-        return () => observer.disconnect()
+    return () => observer.disconnect()
 
-    }, [elRef, thumbRef, id])
+  }, [elRef, thumbRef, id])
 }

@@ -4,7 +4,7 @@ import { useCarouselMotion } from "./hooks/useCarouselMotion.ts"
 import { useCarouselSizing } from "./hooks/useCarouselSizing.ts"
 import { useAugmentedScenes } from "./hooks/useAugmentedScenes.ts"
 import { useCarouselStore } from './hooks/useCarouselStore.ts'
-import { carouselStore } from '@stores/carouselStore.ts'
+import { carouselStore } from '../../../stores/carouselStore.ts'
 import type { SceneRole } from '@typeScript/primitiveType.ts'
 import type { CarouselProps } from '@typeScript/propsType.ts'
 

@@ -4,9 +4,9 @@ import { useSettingsStore } from '@config/settingsHooks/useSettings';
 
 export default function MirBottom3() {
 
-  const { settingsEnabled, setSettingsEnabled } = useSettingsStore()
+  const { settingsOverlayEnabled, setSettingsEnabled } = useSettingsStore()
   const setValue = () => {
-    setSettingsEnabled(!settingsEnabled)
+    setSettingsEnabled(!settingsOverlayEnabled)
   }
 
   // console.log(settingsEnabled)

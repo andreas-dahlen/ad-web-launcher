@@ -1,5 +1,5 @@
-import type { DragData } from '../../../typeScript/descriptor/dataType.ts'
-import type { Axis, Axis1D, Direction, Vec2 } from '../../../typeScript/primitiveType.ts'
+import type { DragLayout } from '@typeScript/descriptor/dataType.ts'
+import type { Axis, Axis1D, Direction, Vec2 } from '@typeScript/primitiveType.ts'
 
 export const vector = {
   clamp(delta: number, min: number, max: number) {
@@ -7,7 +7,7 @@ export const vector = {
     return Math.max(min, Math.min(max, delta))
   },
 
-  clamp2D(delta: Vec2, position: Vec2, constraints: DragData["constraints"]) {
+  clamp2D(delta: Vec2, position: Vec2, constraints: DragLayout["constraints"]) {
     const { x: dx, y: dy } = delta
     const { x: px, y: py } = position
     const { minX, maxX, minY, maxY } = constraints
@@ -17,7 +17,7 @@ export const vector = {
       y: this.clamp(py + dy, minY, maxY)
     }
   },
-  relativeClamp2D(delta: Vec2, position: Vec2, constraints: DragData["constraints"]) {
+  relativeClamp2D(delta: Vec2, position: Vec2, constraints: DragLayout["constraints"]) {
     const clamped = this.clamp2D(delta, position, constraints)
 
     return {

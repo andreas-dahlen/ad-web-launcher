@@ -8,11 +8,11 @@ function snapPositions(count: number) {
 }
 
 export default function DragGrid() {
-  const { defaultSnapX, defaultSnapY, gridEnabled } = useSettingsStore()
+  const { dragSnapX, dragSnapY, gridEnabled } = useSettingsStore()
   if (!gridEnabled) return null
 
-  const xPositions = snapPositions(defaultSnapX)
-  const yPositions = snapPositions(defaultSnapY)
+  const xPositions = snapPositions(dragSnapX)
+  const yPositions = snapPositions(dragSnapY)
 
   return (
     <div className="drag-grid">

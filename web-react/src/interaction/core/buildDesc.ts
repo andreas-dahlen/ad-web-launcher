@@ -1,8 +1,8 @@
 import { domQuery } from './domQuery.ts'
 import { extractDomMeta } from './domMeta.ts'
-import { carouselStore } from '../stores/carouselStore.ts'
-import { dragStore } from '../stores/dragStore.ts'
-import { sliderStore } from '../stores/sliderStore.ts'
+import { carouselStore } from '../../stores/carouselStore.ts'
+import { dragStore } from '../../stores/dragStore.ts'
+import { sliderStore } from '../../stores/sliderStore.ts'
 import type { BaseInteraction, BaseWithSwipe, DomMeta, Capabilities } from '../../typeScript/descriptor/baseType.ts'
 import type { CarouselData, CarouselModifiers, DragData, DragModifiers, SliderData } from '../../typeScript/descriptor/dataType.ts'
 import type { CarouselDesc, SliderDesc, DragDesc, ButtonDesc } from '../../typeScript/descriptor/descriptor.ts'
@@ -127,8 +127,7 @@ export const buildDesc = {
     const s = dragStore.getState().get(metaData.id)
     if (!s) return null
     const snap = (metaData.snapX != null && metaData.snapY != null) ? { x: metaData.snapX, y: metaData.snapY } : undefined
-    const c = { minX: s.minX, maxX: s.maxX, minY: s.minY, maxY: s.maxY }
-    return { position: s.position, constraints: c, snap: snap, locked: metaData.locked }
+    return { position: s.position, layout: s.layout, snap: snap, locked: metaData.locked }
   },
 
   /* =========================

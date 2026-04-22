@@ -10,6 +10,7 @@ export default function Drag({
   id,
   snapX,
   snapY,
+  settingsSnap = false,
   lockable = false,
   onSwipeCommit,
   children,
@@ -18,7 +19,8 @@ export default function Drag({
 
   // ── Fully subscribe to the drag store─────────────────────────────
   const { position, offset, dragging } = useDragStore(id)
-  const { dragEnabled } = useSettingsStore()
+  const { dragEnabled, dragSnapX, dragSnapY } = useSettingsStore()
+
 
   // ── DOM references & sizing ─────────────────────────────
   const containerRef = useRef<HTMLDivElement>(null)
@@ -31,7 +33,7 @@ export default function Drag({
 
   usePointerBridge({
     elRef: dragItemRef,
-    disabled: locked && !dragEnabled,
+    disabled: locked,
     onReaction: (reaction) => {
       if (reaction.detail?.event === 'swipeCommit' && onSwipeCommit) {
         onSwipeCommit(reaction.detail)
@@ -39,32 +41,35 @@ export default function Drag({
     }
   })
 
-  // ── Drag motion / styling ─────────────────────────────
-  const { itemStyle } = useDragMotion({
+  // ── Drag motion─────────────────────────────
+  const { motionStyle } = useDragMotion({
     position,
     offset,
     dragging
   })
 
+  const resolvedSnapX = settingsSnap ? dragSnapX : snapX
+  const resolvedSnapY = settingsSnap ? dragSnapY : snapY
+
   return (
     <div
       ref={containerRef}
-      className='relative-max-size'
+      className='drag-container'
     >
 
       <div
         ref={dragItemRef}
-        style={{ ...itemStyle, pointerEvents: locked ? 'none' : 'auto' }}
+        style={{ ...motionStyle, pointerEvents: locked ? 'none' : 'auto' }}
         className={`drag ${className ?? ''}`}
         data-id={id}
         data-axis="both"
         data-type="drag"
         data-locked={locked || undefined}
-        data-snap-x={snapX}
-        data-snap-y={snapY}
+        data-snap-x={resolvedSnapX}
+        data-snap-y={resolvedSnapY}
       >
         {children}
-      </div>
+      </div >
     </div>
   )
 }

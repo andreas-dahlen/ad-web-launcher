@@ -5,12 +5,18 @@ export default function MirWp2() {
   return (
     <div>
       <Drag
-        id='wp2-drag'
-        // className='button-preset'
+        id='wp2-drag-with-lock'
         lockable={true}
 
       >
-        <p>futurebtn</p>
+        <p>lockbtn</p>
+      </Drag>
+      <Drag
+        id='wp2-drag-with-snap'
+        settingsSnap={true}
+
+      >
+        <p>snapbtn</p>
       </Drag>
     </div>
   )
