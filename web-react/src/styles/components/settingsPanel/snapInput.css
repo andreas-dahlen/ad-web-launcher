@@ -1,0 +1,14 @@
+.snap-input {
+  display: flex;
+  color: black;
+  font-weight: bold;
+
+  >button {
+    pointer-events: auto;
+  }
+
+  span {
+    margin: 20px;
+    min-width: 20px;
+  }
+}

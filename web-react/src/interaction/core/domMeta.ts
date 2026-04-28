@@ -3,7 +3,7 @@ Context Builder
 ========================= */
 
 import type { DomMeta } from '../../typeScript/descriptor/baseType.ts'
-import { toAxis, toType } from '../../typeScript/primitiveType.ts'
+import { toAxis, toType } from '../../typeScript/core/primitiveType.ts'
 
 export function extractDomMeta(el: HTMLElement): DomMeta | null {
   const ds = el.dataset

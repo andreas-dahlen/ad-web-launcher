@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
-import type { Vec2 } from '../typeScript/primitiveType.ts'
-import type { CtxDrag } from '../typeScript/ctxType.ts'
+import type { Vec2 } from '../typeScript/core/primitiveType.ts'
+import type { CtxDrag } from '../typeScript/descriptor/ctxType.ts'
 import type { DragLayout } from '@typeScript/descriptor/dataType.ts'
 
 type Drag = {

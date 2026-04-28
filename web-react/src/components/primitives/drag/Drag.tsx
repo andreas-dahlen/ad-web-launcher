@@ -1,10 +1,10 @@
 import { useRef } from "react"
-import { usePointerBridge } from "../../hooks/pointerBridge.ts"
+import { usePointerBridge } from "../../../hooks/usePointerBridge.ts"
 import { useDragSizing } from "./hooks/useDragSizing.ts"
 import { useDragMotion } from "./hooks/useDragMotion.ts"
 import { useDragStore } from "./hooks/useDragStore.ts"
 import type { DragProps } from '@typeScript/propsType.ts'
-import { useSettingsStore } from '@config/settingsHooks/useSettings.ts'
+import { useSettingsStore } from '../../../hooks/useSettings.ts'
 
 export default function Drag({
   id,

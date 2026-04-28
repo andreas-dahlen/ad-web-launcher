@@ -1,14 +1,24 @@
-import { useSettingsStore } from '@config/settingsHooks/useSettings.js';
-import SettingsButton from './SettingsButton.js';
-import Slider from '@slider/Slider.tsx';
+import { useState } from 'react';
 import locked from '@assets/locked.svg?react'
 import unlocked from '@assets/unlocked.svg?react'
 import grid from '@assets/grid.svg?react'
-import { useState } from 'react';
+import { useSettingsStore } from '../../hooks/useSettings.js';
+import SettingsButton from './SettingsButton.tsx';
+import Slider from '@slider/Slider.tsx';
+import SnapInput from '@components/settingsPanel/SnapInput.tsx';
 
 export default function SettingsPanel() {
 
-  const { dragEnabled, setDragEnabled, gridEnabled, setGridEnabled } = useSettingsStore()
+  const {
+    dragEnabled,
+    setDragEnabled,
+    gridEnabled,
+    setGridEnabled,
+    setDragSnapX,
+    setDragSnapY,
+    dragSnapX,
+    dragSnapY } = useSettingsStore()
+
   const setLock = () => {
     setDragEnabled(!dragEnabled)
   }
@@ -16,8 +26,8 @@ export default function SettingsPanel() {
     setGridEnabled(!gridEnabled)
   }
 
-  const [snapY, setSnapY] = useState(0)
-  const [snapX, setSnapX] = useState(0)
+  const [sliderOne, setSliderOne] = useState(0)
+  const [sliderTwo, setSliderTwo] = useState(0)
 
   return (
     <>
@@ -38,30 +48,33 @@ export default function SettingsPanel() {
             ReactImg={grid}>
           </SettingsButton>
         </div >
+        <SnapInput id="snapX" min={8} max={18} step={1} value={dragSnapX} onChange={setDragSnapX}></SnapInput>
+
+        <SnapInput id="snapY" min={16} max={36} step={2} value={dragSnapY} onChange={setDragSnapY}></SnapInput>
         <div className='settings-slider-frame'>
           <Slider
-            id='snapX-slider'
+            id='settings-slider-1'
             axis='horizontal'
-            onValueChange={setSnapX}
+            onValueChange={setSliderOne}
           >
 
             {/* <div></div> */}
           </Slider>
-          <label>snap X: {snapX}</label>
+          <span>snap X: {sliderOne}</span>
         </div>
         <div className='settings-slider-frame'>
           <Slider
-            id='snapY-slider'
+            id='settings-slider-2'
             axis='horizontal'
-            onValueChange={setSnapY}
+            onValueChange={setSliderTwo}
           >
 
             {/* <div></div> */}
           </Slider>
-          <label>snap Y {snapY}</label>
+          <span>snap Y {sliderTwo}</span>
         </div>
+
       </div>
-      {/* // </div > */}
 
     </>
   )

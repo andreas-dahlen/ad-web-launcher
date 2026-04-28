@@ -1,6 +1,6 @@
 import DragGrid from '@components/settingsPanel/DragGrid';
 import SettingsPanel from '@components/settingsPanel/SettingsPanel.js';
-import { useSettingsStore } from '@config/settingsHooks/useSettings';
+import { useSettingsStore } from '../../hooks/useSettings';
 
 
 export default function OverlayLayer() {

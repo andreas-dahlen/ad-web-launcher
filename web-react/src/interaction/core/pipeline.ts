@@ -6,10 +6,10 @@ import { domUpdater } from '../updater/domUpdater.ts'
 import { dragStore } from '../../stores/dragStore.ts'
 import { sliderStore } from '../../stores/sliderStore.ts'
 import { carouselStore } from '../../stores/carouselStore.ts'
-import { CAROUSEL_EVENTS, DRAG_EVENTS, SLIDER_EVENTS, type CarouselFunctions, type DragFunctions, type InterpreterFn, type SliderFunctions } from '../../typeScript/pipelineType.ts'
-import type { EventBridgeType } from '../../typeScript/primitiveType.ts'
-import type { CtxType } from '../../typeScript/ctxType.ts'
-import type { PointerEventPackage } from '@hooks/pointerBridge.ts'
+import { CAROUSEL_EVENTS, DRAG_EVENTS, SLIDER_EVENTS, type CarouselFunctions, type DragFunctions, type InterpreterFn, type SliderFunctions } from '../../typeScript/core/pipelineType.ts'
+import type { EventBridgeType } from '../../typeScript/core/primitiveType.ts'
+import type { CtxType } from '../../typeScript/descriptor/ctxType.ts'
+import type { PointerEventPackage } from '../../hooks/usePointerBridge.ts'
 
 /* =====================
         Maping

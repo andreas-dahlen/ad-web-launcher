@@ -7,4 +7,5 @@
 
 @import './settingsPanel/base.css';
 @import './settingsPanel/buttons.css';
-@import './settingsPanel/dragGrid.css'
+@import './settingsPanel/dragGrid.css';
+@import './settingsPanel/snapInput.css';

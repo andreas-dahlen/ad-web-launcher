@@ -59,5 +59,13 @@
 }
 
 [data-state="swiping"] .slider-thumb {
-  background: hotpink;
+  background: rgb(0, 255, 242);
+}
+
+[data-state="pressed"] .slider-thumb {
+  background: rgb(213, 127, 214);
+}
+
+[data-state="commited"] .slider-thumb {
+  background: rgb(213, 127, 214);
 }

@@ -1,4 +1,4 @@
-import { APP_SETTINGS } from '@config/appSettings.ts';
+import { APP_SETTINGS } from './stores/settingsStore.ts';
 import DebugWrapper from '@debug/DebugWrapper.tsx';
 import Root from './app/Root.tsx';
 import '@styles/index.css'

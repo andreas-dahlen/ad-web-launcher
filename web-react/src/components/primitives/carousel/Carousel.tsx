@@ -1,11 +1,11 @@
 import { useRef, useEffect, useMemo } from "react"
-import { usePointerBridge } from '../../hooks/pointerBridge.ts'
+import { usePointerBridge } from '../../../hooks/usePointerBridge.ts'
 import { useCarouselMotion } from "./hooks/useCarouselMotion.ts"
 import { useCarouselSizing } from "./hooks/useCarouselSizing.ts"
 import { useAugmentedScenes } from "./hooks/useAugmentedScenes.ts"
 import { useCarouselStore } from './hooks/useCarouselStore.ts'
 import { carouselStore } from '../../../stores/carouselStore.ts'
-import type { SceneRole } from '@typeScript/primitiveType.ts'
+import type { SceneRole } from '@typeScript/core/primitiveType.ts'
 import type { CarouselProps } from '@typeScript/propsType.ts'
 
 interface Slot {

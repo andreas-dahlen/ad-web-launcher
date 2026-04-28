@@ -7,7 +7,7 @@ import type { BaseInteraction, BaseWithSwipe, DomMeta, Capabilities } from '../.
 import type { CarouselData, CarouselModifiers, DragData, DragModifiers, SliderData } from '../../typeScript/descriptor/dataType.ts'
 import type { CarouselDesc, SliderDesc, DragDesc, ButtonDesc } from '../../typeScript/descriptor/descriptor.ts'
 import type { Descriptor } from '../../typeScript/descriptor/descriptor.ts'
-import type { CtxButton, CtxCarousel, CtxDrag, CtxSlider } from '../../typeScript/ctxType.ts'
+import type { CtxButton, CtxCarousel, CtxDrag, CtxSlider } from '../../typeScript/descriptor/ctxType.ts'
 
 interface Builder {
   capabilities: Capabilities

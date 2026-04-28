@@ -1,5 +1,5 @@
 import { useMemo, useCallback } from "react"
-import { APP_SETTINGS } from "@config/appSettings.ts"
+import { APP_SETTINGS } from "../../../../stores/settingsStore"
 
 type Role = "prev" | "current" | "next"
 

@@ -1,4 +1,4 @@
-import type { Axis, Vec2 } from '../../typeScript/primitiveType.ts'
+import type { Axis, Vec2 } from '../../typeScript/core/primitiveType.ts'
 import { gestureUtils } from '../core/gestureUtils.ts'
 import { buildDesc } from '../core/buildDesc.ts'
 import type { Descriptor, SwipeableDescriptor } from '../../typeScript/descriptor/descriptor.ts'

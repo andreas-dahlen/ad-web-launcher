@@ -1,7 +1,7 @@
 import { immer } from "zustand/middleware/immer"
 import { create } from 'zustand'
-import type { Direction, Vec2 } from "../typeScript/primitiveType.ts"
-import type { CtxCarousel } from '../typeScript/ctxType.ts'
+import type { Direction, Vec2 } from "../typeScript/core/primitiveType.ts"
+import type { CtxCarousel } from '../typeScript/descriptor/ctxType.ts'
 
 type Carousel = {
   //react motion

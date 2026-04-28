@@ -1,5 +1,5 @@
 import type { DragLayout } from '@typeScript/descriptor/dataType.ts'
-import type { Axis, Axis1D, Direction, Vec2 } from '@typeScript/primitiveType.ts'
+import type { Axis, Axis1D, Direction, Vec2 } from '@typeScript/core/primitiveType'
 
 export const vector = {
   clamp(delta: number, min: number, max: number) {

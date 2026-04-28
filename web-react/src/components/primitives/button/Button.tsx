@@ -1,5 +1,5 @@
 import { useRef } from "react"
-import { usePointerBridge } from '../../hooks/pointerBridge.ts'
+import { usePointerBridge } from '../../../hooks/usePointerBridge.ts'
 import type { ButtonProps } from '@typeScript/propsType.ts'
 
 export default function Button({

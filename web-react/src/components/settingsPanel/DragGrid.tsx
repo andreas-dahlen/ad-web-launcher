@@ -1,4 +1,4 @@
-import { useSettingsStore } from '@config/settingsHooks/useSettings'
+import { useSettingsStore } from '../../hooks/useSettings'
 
 function snapPositions(count: number) {
   if (!count || count <= 0) return []

@@ -27,7 +27,7 @@
   border: var(--button-border)
 }
 
-/* .default-button[data-pressed='pressed'] {
+.button[data-state="pressed"] {
   transform: scale(0.98);
   box-shadow:
     0 2px 6px rgba(0, 0, 0, 0.25),
@@ -35,12 +35,12 @@
   filter: brightness(0.95);
 }
 
-.default-button[data-pressed='released'] {
+.button [data-state='released'] {
   transform: scale(1);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
 }
 
-.default-button[data-pressed='cancelled'] {
+.button[data-state='cancelled'] {
   transform: scale(1);
   opacity: 0.95;
-} */
+}

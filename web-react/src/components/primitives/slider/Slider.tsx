@@ -1,5 +1,5 @@
 import { useRef } from "react"
-import { usePointerBridge } from "../../hooks/pointerBridge.ts"
+import { usePointerBridge } from "../../../hooks/usePointerBridge.ts"
 import { useSliderSizing } from "./hooks/useSliderSizing.ts"
 import { useSliderMotion } from "./hooks/useSliderMotion.ts"
 import { useSliderStore } from "./hooks/useSliderStore.ts"

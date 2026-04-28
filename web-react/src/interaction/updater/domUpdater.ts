@@ -1,5 +1,5 @@
-import type { CtxType } from '../../typeScript/ctxType.ts'
-import type { EventType } from '../../typeScript/primitiveType.ts'
+import type { CtxType } from '../../typeScript/descriptor/ctxType.ts'
+import type { EventType } from '../../typeScript/core/primitiveType.ts'
 // domUpdater.ts
 /* -------------------------------------------------
    DOM helpers

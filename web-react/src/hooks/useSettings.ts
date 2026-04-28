@@ -1,4 +1,4 @@
-import { settingsStore, type SettingsStore } from '@config/appSettings.ts'
+import { settingsStore, type SettingsStore } from '../stores/settingsStore'
 import { useShallow } from 'zustand/shallow'
 
 export const useSettingsStore = () => {
@@ -9,7 +9,7 @@ export const useSettingsStore = () => {
       dragEnabled: s.settings.isDragEnabled ?? false,
       gridEnabled: s.settings.isGridEnabled ?? false,
       dragSnapX: s.settings.dragSnapX ?? 8,
-      dragSnapY: s.settings.dragSnapY ?? 8,
+      dragSnapY: s.settings.dragSnapY ?? 16,
       setDragSnapX: s.setDragSnapX,
       setDragSnapY: s.setDragSnapY,
       setSettingsEnabled: s.setSettingsEnabled,

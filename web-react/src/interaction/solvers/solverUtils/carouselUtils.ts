@@ -1,9 +1,9 @@
-import { APP_SETTINGS } from '@config/appSettings.ts'
+import { APP_SETTINGS } from '../../../stores/settingsStore.ts'
 import { normalizeBase } from '../../solvers/solverUtils/axisUtils.ts'
 import { vector } from '../../solvers/solverUtils/vectorUtils.ts'
-import type { Normalized1D } from '../../../typeScript/ctxType.ts'
+import type { Normalized1D } from '../../../typeScript/descriptor/ctxType.ts'
 import type { CarouselDesc } from '../../../typeScript/descriptor/descriptor.ts'
-import type { Axis, Direction } from '../../../typeScript/primitiveType.ts'
+import type { Axis, Direction } from '../../../typeScript/core/primitiveType.ts'
 
 export const carouselUtils = {
 

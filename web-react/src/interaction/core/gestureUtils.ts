@@ -1,7 +1,7 @@
-import { APP_SETTINGS } from '@config/appSettings.ts'
+import { APP_SETTINGS } from '../../stores/settingsStore.ts'
 import { normalizeParameter, getAxisSize } from '../../stores/sizeStore.ts'
-import type { InteractionType, Vec2 } from '../../typeScript/primitiveType.ts'
-import type { Axis } from '../../typeScript/primitiveType.ts'
+import type { InteractionType, Vec2 } from '../../typeScript/core/primitiveType.ts'
+import type { Axis } from '../../typeScript/core/primitiveType.ts'
 import type { Descriptor, SwipeableDescriptor } from '../../typeScript/descriptor/descriptor.ts'
 
 export const gestureUtils = {

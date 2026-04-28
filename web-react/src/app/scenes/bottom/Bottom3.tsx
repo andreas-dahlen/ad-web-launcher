@@ -1,5 +1,5 @@
 import Button from '@components/primitives/button/Button';
-import { useSettingsStore } from '@config/settingsHooks/useSettings';
+import { useSettingsStore } from '../../../hooks/useSettings';
 
 
 export default function MirBottom3() {
@@ -16,7 +16,7 @@ export default function MirBottom3() {
       <Button
         id="open-settings"
         onPressRelease={setValue}
-
+        className='settings-on-off-button'
       />
     </div>
   )

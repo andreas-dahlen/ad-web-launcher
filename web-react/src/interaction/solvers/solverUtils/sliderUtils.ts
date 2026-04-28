@@ -1,6 +1,6 @@
 import { normalizeBase } from '../../solvers/solverUtils/axisUtils.ts'
 import { vector } from '../../solvers/solverUtils/vectorUtils.ts'
-import type { Normalized1D } from '../../../typeScript/ctxType.ts'
+import type { Normalized1D } from '../../../typeScript/descriptor/ctxType.ts'
 import type { SliderDesc } from '../../../typeScript/descriptor/descriptor.ts'
 
 export const sliderUtils = {

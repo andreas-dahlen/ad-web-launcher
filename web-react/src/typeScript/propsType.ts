@@ -1,4 +1,4 @@
-import type { CtxType } from './ctxType.ts'
+import type { CtxType } from './descriptor/ctxType.ts'
 
 export interface DragProps {
   id: string

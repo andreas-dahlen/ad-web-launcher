@@ -1,7 +1,7 @@
 import type { BaseInteraction, BaseWithSwipe } from "./baseType.ts"
 import type { CarouselData, CarouselModifiers, SliderData, DragData, DragModifiers } from "./dataType.ts"
 import type { Capabilities } from "./baseType.ts"
-import type { CtxButton, CtxCarousel, CtxDrag, CtxSlider } from '../ctxType.ts'
+import type { CtxButton, CtxCarousel, CtxDrag, CtxSlider } from './ctxType.ts'
 
 
 export type CarouselDesc = {

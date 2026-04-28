@@ -2,8 +2,8 @@ import { log } from '@debug/functions.ts'
 import { immer } from 'zustand/middleware/immer'
 import { create } from 'zustand'
 import { useShallow } from 'zustand/shallow'
-import { APP_SETTINGS } from '@config/appSettings.ts'
-import type { Axis1D } from '../typeScript/primitiveType.ts'
+import { APP_SETTINGS } from './settingsStore.ts'
+import type { Axis1D } from '../typeScript/core/primitiveType.ts'
 
 /* -------------------------
 Device info (works for web and APK)

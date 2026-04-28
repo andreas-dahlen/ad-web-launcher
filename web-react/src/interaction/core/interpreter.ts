@@ -1,7 +1,7 @@
 import { log } from '@debug/functions.ts'
 import { gestureUtils } from './gestureUtils.ts'
 import { domQuery } from './domQuery.ts'
-import type { Axis, EventType, Vec2 } from '../../typeScript/primitiveType.ts'
+import type { Axis, EventType, Vec2 } from '../../typeScript/core/primitiveType.ts'
 import type { Descriptor } from '../../typeScript/descriptor/descriptor.ts'
 import type { GestureUpdate } from '../../typeScript/descriptor/dataType.ts'
 

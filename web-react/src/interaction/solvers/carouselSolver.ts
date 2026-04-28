@@ -4,8 +4,8 @@
  * 
  */
 import type { CarouselDesc } from '../../typeScript/descriptor/descriptor.ts'
-import type { EventType } from '../../typeScript/primitiveType.ts'
-import type { CarouselCtxPartial } from '../../typeScript/ctxType.ts'
+import type { EventType } from '../../typeScript/core/primitiveType.ts'
+import type { CarouselCtxPartial } from '../../typeScript/descriptor/ctxType.ts'
 import { carouselUtils } from '../solvers/solverUtils/carouselUtils.ts'
 import { exceedsCrossRange } from '../solvers/solverUtils/axisUtils.ts'
 

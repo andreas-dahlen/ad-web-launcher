@@ -1,5 +1,5 @@
-import type { GestureUpdate } from './descriptor/dataType.ts'
-import type { Direction, EventType, Vec2 } from './primitiveType.ts'
+import type { GestureUpdate } from './dataType.ts'
+import type { Direction, EventType, Vec2 } from '../core/primitiveType.ts'
 
 export interface CancelData {
   element: HTMLElement

@@ -1,8 +1,8 @@
 
-import { APP_SETTINGS } from "@config/appSettings.ts"
+import { APP_SETTINGS } from "../../../stores/settingsStore.ts"
 import { vector } from "./vectorUtils.ts"
-import type { Vec2 } from '../../../typeScript/primitiveType.ts'
-import type { Normalized1D } from '../../../typeScript/ctxType.ts'
+import type { Vec2 } from '../../../typeScript/core/primitiveType.ts'
+import type { Normalized1D } from '../../../typeScript/descriptor/ctxType.ts'
 import type { BaseWithSwipe } from '../../../typeScript/descriptor/baseType.ts'
 
 export function normalizeBase(base: BaseWithSwipe, delta: Vec2): Normalized1D {
