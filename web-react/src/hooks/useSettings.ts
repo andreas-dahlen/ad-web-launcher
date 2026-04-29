@@ -8,6 +8,7 @@ export const useSettingsStore = () => {
       settingsOverlayEnabled: s.settings.isSettingsOverlayEnabled ?? false,
       dragEnabled: s.settings.isDragEnabled ?? false,
       gridEnabled: s.settings.isGridEnabled ?? false,
+      snapEnabled: s.settings.isSnapEnabled ?? false,
       dragSnapX: s.settings.dragSnapX ?? 8,
       dragSnapY: s.settings.dragSnapY ?? 16,
       setDragSnapX: s.setDragSnapX,
@@ -15,6 +16,7 @@ export const useSettingsStore = () => {
       setSettingsEnabled: s.setSettingsEnabled,
       setDragEnabled: s.setDragEnabled,
       setGridEnabled: s.setGridEnabled,
+      setSnapEnabled: s.setSnapEnabled
     }))
   )
 }

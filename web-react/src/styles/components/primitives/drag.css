@@ -8,7 +8,7 @@
   /* need vars */
   --drag-width: 70px;
   --drag-height: 70px;
-  background: var(--button-bg);
+  background: var(--button-col);
   border: var(--button-border);
   border-radius: var(--button-radius);
   width: var(--drag-width);

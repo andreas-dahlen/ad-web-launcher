@@ -22,7 +22,7 @@
   height: var(--button-height);
 
 
-  background: var(--button-bg);
+  background: var(--button-col);
   border-radius: var(--button-radius);
   border: var(--button-border)
 }

@@ -2,9 +2,7 @@
   position: absolute;
   display: flex;
   flex-direction: column;
-  /* justify-content: center; */
-  /* align-items: center; */
-  gap: 1em;
+  gap: 5px;
   width: 90%;
   height: 60%;
   border-radius: 20px;
@@ -13,6 +11,10 @@
   overflow: hidden;
   pointer-events: none;
   backdrop-filter: blur(5px);
+
+  span {
+    font-weight: 400;
+  }
 
   &::before {
     content: '';
@@ -24,32 +26,63 @@
     opacity: 70%;
     background: linear-gradient(135deg, var(--gradient-debug-frame-1), var(--gradient-debug-frame-2));
     box-shadow: 0px 0px 5px 1px rgb(172, 172, 172);
+    z-index: -1;
   }
 }
 
 .settings-row {
   position: relative;
   display: flex;
-  /* align-items: space-around; */
   justify-content: center;
   min-width: 7em;
-  padding: 10px;
-  background-color: rgba(0, 0, 0, 0.505);
+  padding: 15px;
+  background: rgba(0, 0, 0, 0.379);
   border-radius: 20px;
   width: 100%;
-
+  gap: 8px;
 }
 
+.settings-item {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  pointer-events: none;
+  color: var(--text-col);
+}
+
+.snap-panel {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+
+  span {
+    color: var(--text-col);
+  }
+}
+
+.snap-button-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  &>* {
+    width: 39px;
+    height: 39px;
+  }
+}
+
+
+
+
+
+
 .settings-slider-frame {
-  z-index: 0;
   text-align: center;
   display: flex;
   align-items: center;
   flex-direction: column;
-
-  label {
-    font-size: 1.2em;
-  }
 }
 
 /* TODO probably need to define overrides... so i remember them...
@@ -59,21 +92,3 @@ example
   --data-state-col
 }
 */
-
-.settings-item {
-  display: flex;
-  flex-direction: column-reverse;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  pointer-events: none;
-
-  label {
-    max-width: 8ch;
-    color: var(--label-gray);
-    /* font-size: 2em; */
-    font-weight: 400;
-    /* text-shadow: 0 0 8px rgb(0, 0, 0); */
-
-  }
-}

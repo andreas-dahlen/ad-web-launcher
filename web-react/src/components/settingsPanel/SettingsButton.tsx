@@ -4,7 +4,7 @@ type DebugItemProps = {
   id: string
   value: boolean
   setValue: () => void
-  label?: string
+  msg?: string
   ReactImg: React.FC<React.SVGProps<SVGSVGElement>>
 }
 
@@ -13,22 +13,23 @@ export default function DebugItem({
   value,
   setValue,
   ReactImg,
-  label }: DebugItemProps
+  msg }: DebugItemProps
 ) {
 
   return (
     <div className='settings-item'>
 
-      <label htmlFor={id}>{label} </label>
+      <span>{msg}</span>
       <Button
         id={id}
         className='settings-button'
-        data-state={value ? 'state-on' : 'state-off'}
+        data-active={value ? 'true' : 'false'}
         onPressRelease={setValue}
-        data-pressed={'released'}
+        data-state={'released'}
       >
         <ReactImg className={value ?
           'svg-img svg-dark' : 'svg-img svg-bright'} />
+        {/* needs a fallback value? */}
       </Button>
     </div>
   )

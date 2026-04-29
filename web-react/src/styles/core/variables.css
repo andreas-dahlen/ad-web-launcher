@@ -1,23 +1,7 @@
 :root {
-
-  /* settings-panel */
-  --gradient-debug-frame-1: rgb(51, 51, 51);
-  --gradient-debug-frame-2: rgb(209, 209, 209);
-
-  --debug-slider: linear-gradient(135deg, var(--debug-button-off), var(--debug-button-on));
-  --color-off: linear-gradient(135deg, #e25555, #b92b2b);
-
-  --label-gray: rgb(204, 204, 204);
-
-  --svg-bright: rgb(45, 45, 45);
-  --svg-dark: rgb(159, 159, 159);
-
-  --debug-button-off: rgb(101, 101, 101);
-  --debug-button-on: rgb(209, 209, 209);
-
-  /* Motion - slightly faster for snappier feel on Android */
-  --touch-transition-fast: 120ms;
-  --touch-transition-normal: 200ms;
+  /* global defaults */
+  --_col: oklch(0% 0 0);
+  --_text-col: oklch(77.311% 0.00009 271.152);
 
   /* scene colors */
   --_h-scene-1a: oklch(95.145% 0.20428 107.337);
@@ -43,7 +27,7 @@
   --_color-button-2: oklch(43.861% 0.00005 271.152);
   --_color-overlay-black: oklch(0% 0 0);
 
-
+  /* gradients */
   --_gradient-deg-h: 125deg;
   --_gradient-deg-v: 145deg;
   --_gradient-deg-panel: 135deg;
@@ -75,15 +59,15 @@
       var(--_v-wallp-3b));
 
   /* components */
-  --_panel-bg: linear-gradient(var(--_gradient-deg-panel),
+  --_panel-col: linear-gradient(var(--_gradient-deg-panel),
       var(--_color-panel-1),
       var(--_color-panel-2));
 
-  --_sub-panel-bg: linear-gradient(var(--_gradient-deg-sub-panel),
+  --_sub-panel-col: linear-gradient(var(--_gradient-deg-sub-panel),
       var(--_color-sub-panel-1),
       var(--_color-sub-panel-2));
 
-  --_button-bg: linear-gradient(var(--_gradient-deg-button),
+  --_button-col: linear-gradient(var(--_gradient-deg-button),
       var(--_color-button-1),
       var(--_color-button-2));
 
@@ -111,6 +95,8 @@
 }
 
 [data-theme="default"] {
+  --text-col: var(--_text-col);
+
   /* scenes */
   --h-scene-1: var(--_h-scene-1);
   --h-scene-2: var(--_h-scene-2);
@@ -120,9 +106,9 @@
   --v-scene-3: var(--_v-scene-3);
 
   /* components */
-  --panel-bg: var(--_panel-bg);
-  --sub-panel-bg: var(--_sub-panel-bg);
-  --button-bg: var(--_button-bg);
+  --panel-col: var(--_panel-col);
+  --sub-panel-col: var(--_sub-panel-col);
+  --button-col: var(--_button-col);
 
   /* colors */
   --color-overlay: var(--_color-overlay-black);
@@ -147,4 +133,26 @@
   /* opacity */
   --opacity-low: var(--_opacity-low);
   --h-opacity: var(--_h-opacity);
+  /* settings-panel */
+  --gradient-debug-frame-1: rgb(51, 51, 51);
+  --gradient-debug-frame-2: rgb(209, 209, 209);
+
+  --debug-slider: linear-gradient(135deg, var(--debug-button-off), var(--debug-button-on));
+  --color-off: linear-gradient(135deg, #e25555, #b92b2b);
+
+  --label-gray: rgb(204, 204, 204);
+
+  --svg-bright: rgb(45, 45, 45);
+  --svg-dark: rgb(159, 159, 159);
+
+  --debug-button-off: rgb(101, 101, 101);
+  --debug-button-on: rgb(209, 209, 209);
+
+  /* Motion - slightly faster for snappier feel on Android */
+  --touch-transition-fast: 120ms;
+  --touch-transition-normal: 200ms;
+
+
+
+
 }

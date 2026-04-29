@@ -6,7 +6,7 @@
   pointer-events: auto;
 
   border-radius: var(--panel-radius);
-  background: var(--panel-bg);
+  background: var(--panel-col);
   width: var(--slider-width);
   height: var(--slider-height);
 
@@ -51,7 +51,7 @@
 
   width: var(--thumb-width);
   height: var(--thumb-height);
-  background: var(--button-bg);
+  background: var(--button-col);
   border-radius: var(--button-radius);
   border: var(--button-border);
   will-change: transform;

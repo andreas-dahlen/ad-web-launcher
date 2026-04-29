@@ -1,36 +1,36 @@
 /* main.css */
 html {
-    box-sizing: border-box;
-    -webkit-text-size-adjust: 100%;
-    font-size: var(--font-size-base, 16px);
+  box-sizing: border-box;
+  -webkit-text-size-adjust: 100%;
+  font-size: var(--font-size-base, 16px);
 }
 
 *,
 *::before,
 *::after {
-    box-sizing: inherit;
-    user-select: none;
-    touch-action: none;
+  box-sizing: inherit;
+  user-select: none;
+  touch-action: none;
 }
 
 body {
-    margin: 0;
-    background: #000000;
-    color: #e2e8f0;
-    font-family: 'Space Grotesk', 'DM Sans', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  margin: 0;
+  font-family: 'Space Grotesk', 'DM Sans', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 1.3em;
 }
 
 html,
 body,
 #app {
-    height: 100%;
-    width: 100%;
+  height: 100%;
+  width: 100%;
 }
 
 * {
-    touch-action: none;
-    pointer-events: none;
-    user-select: none;
-    padding: 0;
-    margin: 0;
+  touch-action: none;
+  pointer-events: none;
+  user-select: none;
+  padding: 0;
+  margin: 0;
+  text-align: center;
 }

@@ -11,6 +11,7 @@ type ReactiveSettings = {
   isSettingsOverlayEnabled: boolean
   isDragEnabled: boolean
   isGridEnabled: boolean
+  isSnapEnabled: boolean
   dragSnapX: number
   dragSnapY: number
 }
@@ -22,6 +23,7 @@ export type SettingsStore = {
   setSettingsEnabled: (value: boolean) => void
   setDragEnabled: (value: boolean) => void
   setGridEnabled: (value: boolean) => void
+  setSnapEnabled: (value: boolean) => void
   get: () => unknown
 }
 
@@ -34,6 +36,7 @@ export const settingsStore = create<SettingsStore>()(
       //drag
       isDragEnabled: false,
       isGridEnabled: false,
+      isSnapEnabled: false,
       dragSnapX: 8,
       dragSnapY: 16
     },
@@ -63,6 +66,12 @@ export const settingsStore = create<SettingsStore>()(
     setGridEnabled: (value) => {
       set(s => {
         s.settings.isGridEnabled = value
+      })
+    },
+
+    setSnapEnabled: (value) => {
+      set(s => {
+        s.settings.isSnapEnabled = value
       })
     },
 

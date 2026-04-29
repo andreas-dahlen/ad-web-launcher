@@ -2,7 +2,7 @@
 
 
 .settings-on-off-button[data-state='pressed'] {
-  --button-bg: hotPink;
+  --button-col: hotPink;
 }
 
 .settings-button {
@@ -46,19 +46,19 @@
   fill: var(--svg-bright);
 }
 
-.settings-button[data-state='state-on'] {
-  background: var(--debug-button-on);
-  /* color: #ffffff; */
-
-  /* box-shadow: 0 0 10px 3px rgba(0, 0, 0, 0.35); */
-
+.settings-button[data-active='true'] {
+  --button-col: var(--debug-button-on);
 }
 
-.settings-button[data-state='state-off'] {
-  background: var(--debug-button-off);
-  /* color: #ffffff; */
+.settings-button[data-active='false'] {
+  --button-col: var(--debug-button-off);
+}
 
-  /* box-shadow: 0 0px 5px 3px rgba(255, 255, 255, 0.228); */
+/* .settings-button[data-enabled='true'] {
 
+  opacity: 1;
+} */
 
+.settings-button[data-enabled='false'] {
+  opacity: 0.3;
 }
