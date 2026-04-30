@@ -1,6 +1,6 @@
 
 
-export default function MirMid3() {
+export default function Mid3() {
 
   return (
     <div>

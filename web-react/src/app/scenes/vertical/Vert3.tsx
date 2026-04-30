@@ -1,6 +1,4 @@
-
-
-export default function Top3() {
+export default function Wp3() {
 
   return (
     <div>

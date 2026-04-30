@@ -1,156 +1,156 @@
 :root {
-  /* global defaults */
-  --_col: oklch(0% 0 0);
-  --_text-col: oklch(77.311% 0.00009 271.152);
+    /* global defaults */
+    --_col: oklch(0% 0 0);
+    --_text-col: oklch(77.311% 0.00009 271.152);
 
-  /* scene colors */
-  --_h-scene-1a: oklch(95.145% 0.20428 107.337);
-  --_h-scene-1b: oklch(62.793% 0.25768 29.223);
-  --_h-scene-2a: oklch(62.793% 0.25768 29.223);
-  --_h-scene-2b: oklch(78.558% 0.14794 224.301);
-  --_h-scene-3a: oklch(89.605% 0.16245 180.152);
-  --_h-scene-3b: oklch(92.486% 0.19429 102.902);
+    /* scene colors */
+    --_h-scene-1a: oklch(95.145% 0.20428 107.337);
+    --_h-scene-1b: oklch(62.793% 0.25768 29.223);
+    --_h-scene-2a: oklch(62.793% 0.25768 29.223);
+    --_h-scene-2b: oklch(78.558% 0.14794 224.301);
+    --_h-scene-3a: oklch(89.605% 0.16245 180.152);
+    --_h-scene-3b: oklch(92.486% 0.19429 102.902);
 
-  --_v-wallp-1a: oklch(0% 0 0 / 0);
-  --_v-wallp-1b: oklch(59.31% 0.00007 271.152);
-  --_v-wallp-2a: oklch(0% 0 0 / 0);
-  --_v-wallp-2b: oklch(59.987% 0.00007 271.152);
-  --_v-wallp-3a: oklch(0% 0 0 / 0);
-  --_v-wallp-3b: oklch(59.31% 0.00007 271.152);
+    --_v-wallp-1a: oklch(0% 0 0 / 0);
+    --_v-wallp-1b: oklch(59.31% 0.00007 271.152);
+    --_v-wallp-2a: oklch(0% 0 0 / 0);
+    --_v-wallp-2b: oklch(59.987% 0.00007 271.152);
+    --_v-wallp-3a: oklch(0% 0 0 / 0);
+    --_v-wallp-3b: oklch(59.31% 0.00007 271.152);
 
-  /* component colors */
-  --_color-panel-1: oklch(45.657% 0.08415 46.431);
-  --_color-panel-2: oklch(72.471% 0.07795 79.956);
-  --_color-sub-panel-1: oklch(46.31% 0.0457 84.176);
-  --_color-sub-panel-2: oklch(48.237% 0.08785 105.977);
-  --_color-button-1: oklch(74.763% 0.00008 271.152);
-  --_color-button-2: oklch(43.861% 0.00005 271.152);
-  --_color-overlay-black: oklch(0% 0 0);
+    /* component colors */
+    --_color-panel-1: oklch(45.657% 0.08415 46.431);
+    --_color-panel-2: oklch(72.471% 0.07795 79.956);
+    --_color-sub-panel-1: oklch(46.31% 0.0457 84.176);
+    --_color-sub-panel-2: oklch(48.237% 0.08785 105.977);
+    --_color-button-1: oklch(74.763% 0.00008 271.152);
+    --_color-button-2: oklch(43.861% 0.00005 271.152);
+    --_color-overlay-black: oklch(0% 0 0);
 
-  /* gradients */
-  --_gradient-deg-h: 125deg;
-  --_gradient-deg-v: 145deg;
-  --_gradient-deg-panel: 135deg;
-  --_gradient-deg-sub-panel: 135deg;
-  --_gradient-deg-button: 135deg;
+    /* gradients */
+    --_gradient-deg-h: 125deg;
+    --_gradient-deg-v: 145deg;
+    --_gradient-deg-panel: 135deg;
+    --_gradient-deg-sub-panel: 135deg;
+    --_gradient-deg-button: 135deg;
 
-  --_h-scene-1: linear-gradient(var(--_gradient-deg-h),
-      var(--_h-scene-1a),
-      var(--_h-scene-1b));
+    --_h-scene-1: linear-gradient(var(--_gradient-deg-h),
+            var(--_h-scene-1a),
+            var(--_h-scene-1b));
 
-  --_h-scene-2: linear-gradient(var(--_gradient-deg-h),
-      var(--_h-scene-2a),
-      var(--_h-scene-2b));
+    --_h-scene-2: linear-gradient(var(--_gradient-deg-h),
+            var(--_h-scene-2a),
+            var(--_h-scene-2b));
 
-  --_h-scene-3: linear-gradient(var(--_gradient-deg-h),
-      var(--_h-scene-3a),
-      var(--_h-scene-3b));
+    --_h-scene-3: linear-gradient(var(--_gradient-deg-h),
+            var(--_h-scene-3a),
+            var(--_h-scene-3b));
 
-  --_v-scene-1: linear-gradient(var(--_gradient-deg-v),
-      var(--_v-wallp-1a),
-      var(--_v-wallp-1b));
+    --_v-scene-1: linear-gradient(var(--_gradient-deg-v),
+            var(--_v-wallp-1a),
+            var(--_v-wallp-1b));
 
-  --_v-scene-2: linear-gradient(var(--_gradient-deg-v),
-      var(--_v-wallp-2a),
-      var(--_v-wallp-2b));
+    --_v-scene-2: linear-gradient(var(--_gradient-deg-v),
+            var(--_v-wallp-2a),
+            var(--_v-wallp-2b));
 
-  --_v-scene-3: linear-gradient(var(--_gradient-deg-v),
-      var(--_v-wallp-3a),
-      var(--_v-wallp-3b));
+    --_v-scene-3: linear-gradient(var(--_gradient-deg-v),
+            var(--_v-wallp-3a),
+            var(--_v-wallp-3b));
 
-  /* components */
-  --_panel-col: linear-gradient(var(--_gradient-deg-panel),
-      var(--_color-panel-1),
-      var(--_color-panel-2));
+    /* components */
+    --_panel-col: linear-gradient(var(--_gradient-deg-panel),
+            var(--_color-panel-1),
+            var(--_color-panel-2));
 
-  --_sub-panel-col: linear-gradient(var(--_gradient-deg-sub-panel),
-      var(--_color-sub-panel-1),
-      var(--_color-sub-panel-2));
+    --_sub-panel-col: linear-gradient(var(--_gradient-deg-sub-panel),
+            var(--_color-sub-panel-1),
+            var(--_color-sub-panel-2));
 
-  --_button-col: linear-gradient(var(--_gradient-deg-button),
-      var(--_color-button-1),
-      var(--_color-button-2));
+    --_button-col: linear-gradient(var(--_gradient-deg-button),
+            var(--_color-button-1),
+            var(--_color-button-2));
 
-  --_panel-border: 1px solid oklch(0% 0 0);
-  --_sub-panel-border: 1px solid oklch(0% 0 0);
-  --_button-border: 1px solid oklch(0% 0 0);
+    --_panel-border: 1px solid oklch(0% 0 0);
+    --_sub-panel-border: 1px solid oklch(0% 0 0);
+    --_button-border: 1px solid oklch(0% 0 0);
 
-  --_panel-radius: 10px;
-  --_sub-panel-radius: 10px;
-  --_button-radius: 10px;
-  --_extreme-radius: 100em;
+    --_panel-radius: 10px;
+    --_sub-panel-radius: 10px;
+    --_button-radius: 10px;
+    --_extreme-radius: 100em;
 
-  --_color-on: oklch(78.261% 0.00009 271.152);
-  --_color-off: oklch(43.861% 0.00005 271.152);
-  --_color-pressed: oklch(65.176% 0.06012 47.733);
-  --_color-swipe: oklch(73.765% 0.09829 91.22);
+    --_color-on: oklch(78.261% 0.00009 271.152);
+    --_color-off: oklch(43.861% 0.00005 271.152);
+    --_color-pressed: oklch(65.176% 0.06012 47.733);
+    --_color-swipe: oklch(73.765% 0.09829 91.22);
 
-  --_opacity-low: 0.3;
-  --_h-opacity: 0.75;
+    --_opacity-low: 0.3;
+    --_h-opacity: 1;
 }
 
 .theme {
-  display: flex;
-  justify-content: center;
+    display: flex;
+    justify-content: center;
 }
 
 [data-theme="default"] {
-  --text-col: var(--_text-col);
+    --text-col: var(--_text-col);
 
-  /* scenes */
-  --h-scene-1: var(--_h-scene-1);
-  --h-scene-2: var(--_h-scene-2);
-  --h-scene-3: var(--_h-scene-3);
-  --v-scene-1: var(--_v-scene-1);
-  --v-scene-2: var(--_v-scene-2);
-  --v-scene-3: var(--_v-scene-3);
+    /* scenes */
+    /* --h-scene-1: var(--_h-scene-1);
+    --h-scene-2: var(--_h-scene-2);
+    --h-scene-3: var(--_h-scene-3);
+    --v-scene-1: var(--_v-scene-1);
+    --v-scene-2: var(--_v-scene-2);
+    --v-scene-3: var(--_v-scene-3); */
 
-  /* components */
-  --panel-col: var(--_panel-col);
-  --sub-panel-col: var(--_sub-panel-col);
-  --button-col: var(--_button-col);
+    /* components */
+    --panel-col: var(--_panel-col);
+    --sub-panel-col: var(--_sub-panel-col);
+    --button-col: var(--_button-col);
 
-  /* colors */
-  --color-overlay: var(--_color-overlay-black);
+    /* colors */
+    --color-overlay: var(--_color-overlay-black);
 
-  /* borders */
-  --panel-border: var(--_panel-border);
-  --sub-panel-border: var(--_sub-panel-border);
-  --button-border: var(--_button-border);
+    /* borders */
+    --panel-border: var(--_panel-border);
+    --sub-panel-border: var(--_sub-panel-border);
+    --button-border: var(--_button-border);
 
-  /* border radius */
-  --panel-radius: var(--_panel-radius);
-  --sub-panel-radius: var(--_sub-panel-radius);
-  --button-radius: var(--_button-radius);
-  --extreme-radius: var(--_extreme-radius);
+    /* border radius */
+    --panel-radius: var(--_panel-radius);
+    --sub-panel-radius: var(--_sub-panel-radius);
+    --button-radius: var(--_button-radius);
+    --extreme-radius: var(--_extreme-radius);
 
-  /* state driven color changes */
-  --state-color-on: var(--_color-on);
-  --state-color-off: var(--_color-off);
-  --state-color-pressed: var(--_color-pressed);
-  --state-color-swipe: var(--_color-swipe);
+    /* state driven color changes */
+    --state-color-on: var(--_color-on);
+    --state-color-off: var(--_color-off);
+    --state-color-pressed: var(--_color-pressed);
+    --state-color-swipe: var(--_color-swipe);
 
-  /* opacity */
-  --opacity-low: var(--_opacity-low);
-  --h-opacity: var(--_h-opacity);
-  /* settings-panel */
-  --gradient-debug-frame-1: rgb(51, 51, 51);
-  --gradient-debug-frame-2: rgb(209, 209, 209);
+    /* opacity */
+    --opacity-low: var(--_opacity-low);
+    --h-opacity: var(--_h-opacity);
+    /* settings-panel */
+    --gradient-debug-frame-1: rgb(51, 51, 51);
+    --gradient-debug-frame-2: rgb(209, 209, 209);
 
-  --debug-slider: linear-gradient(135deg, var(--debug-button-off), var(--debug-button-on));
-  --color-off: linear-gradient(135deg, #e25555, #b92b2b);
+    --debug-slider: linear-gradient(135deg, var(--debug-button-off), var(--debug-button-on));
+    --color-off: linear-gradient(135deg, #e25555, #b92b2b);
 
-  --label-gray: rgb(204, 204, 204);
+    --label-gray: rgb(204, 204, 204);
 
-  --svg-bright: rgb(45, 45, 45);
-  --svg-dark: rgb(159, 159, 159);
+    --svg-bright: rgb(45, 45, 45);
+    --svg-dark: rgb(159, 159, 159);
 
-  --debug-button-off: rgb(101, 101, 101);
-  --debug-button-on: rgb(209, 209, 209);
+    --debug-button-off: rgb(101, 101, 101);
+    --debug-button-on: rgb(209, 209, 209);
 
-  /* Motion - slightly faster for snappier feel on Android */
-  --touch-transition-fast: 120ms;
-  --touch-transition-normal: 200ms;
+    /* Motion - slightly faster for snappier feel on Android */
+    --touch-transition-fast: 120ms;
+    --touch-transition-normal: 200ms;
 
 
 

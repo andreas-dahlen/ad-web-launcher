@@ -1,5 +1,5 @@
 import Carousel from "@carousel/Carousel.tsx"
-import { wpMirror, topMirror, midMirror, bottomMirror } from "../indexes/laneIndex.ts"
+import { vertical, top, mid, bottom } from "../indexes/laneIndex.ts"
 
 export default function ContentLayer() {
 
@@ -7,21 +7,21 @@ export default function ContentLayer() {
     <div className="layer">
       <Carousel
         id="top-horizontal"
-        scenes={topMirror}
+        scenes={top}
         axis="horizontal"
         interactive={false}
       />
 
       <Carousel
         id="middle-horizontal"
-        scenes={midMirror}
+        scenes={mid}
         axis="horizontal"
         interactive={false}
       />
 
       <Carousel
         id="bottom-horizontal"
-        scenes={bottomMirror}
+        scenes={bottom}
         axis="horizontal"
         interactive={false}
       />
@@ -29,7 +29,7 @@ export default function ContentLayer() {
       <div className="layer">
         <Carousel
           id="wallpaper"
-          scenes={wpMirror}
+          scenes={vertical}
           axis="vertical"
           interactive={false}
         />

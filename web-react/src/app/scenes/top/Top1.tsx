@@ -1,7 +1,7 @@
 // import { useState } from 'react';
 import Button from '@button/Button.tsx';
 
-export default function MirTop1() {
+export default function Top1() {
   return (
     <div>
       <Button

@@ -1,6 +1,6 @@
 import Drag from '@drag/Drag.tsx';
 
-export default function MirMid1() {
+export default function Mid1() {
 
   const onPress = () => {
 

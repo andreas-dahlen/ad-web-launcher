@@ -8,6 +8,7 @@ interface SnapInput {
   max: number
   step: number
   id: string
+  enabled: boolean
   onChange: (value: number) => void
 }
 
@@ -34,14 +35,14 @@ export default function SnapInput(pr: SnapInput) {
       <div className='snap-button-wrapper'>
         <Button className={'settings-button'} id={`more-${pr.id}`}
           onPressRelease={() => handleChange(true)}
-          data-enabled={moreEnabled ? 'true' : 'false'}
-          interactive={moreEnabled}
+          data-enabled={moreEnabled && pr.enabled ? 'true' : 'false'}
+          interactive={moreEnabled && pr.enabled}
         >▲</Button>
 
         <Button className={'settings-button'} id={`less-${pr.id}`}
           onPressRelease={() => handleChange(false)}
-          data-enabled={lessEnabled ? 'true' : 'false'}
-          interactive={lessEnabled}
+          data-enabled={lessEnabled && pr.enabled ? 'true' : 'false'}
+          interactive={lessEnabled && pr.enabled}
         >▼</Button>
       </div>
     </div>

@@ -2,7 +2,7 @@ import Button from '@components/primitives/button/Button';
 import { useSettingsStore } from '../../../hooks/useSettings';
 
 
-export default function MirBottom3() {
+export default function Bottom3() {
 
   const { settingsOverlayEnabled, setSettingsEnabled } = useSettingsStore()
   const setValue = () => {

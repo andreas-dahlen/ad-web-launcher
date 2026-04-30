@@ -66,16 +66,7 @@
   background: var(--scene-col, var(--v-scene-3));
 }
 
-
-
-/* .scene[data-role="current"] > * {
-  background: var(--scene-current);
+.wallpaper {
+  background-size: cover;
+  background-position: center;
 }
-
-.scene[data-role="prev"] > * {
-  background: var(--scene-prev);
-}
-
-.scene[data-role="next"] > * {
-  background: var(--scene-next);
-} */

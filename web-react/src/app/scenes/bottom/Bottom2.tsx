@@ -1,7 +1,7 @@
 import Slider from '@slider/Slider.tsx';
 
 
-export default function MirBottom2() {
+export default function Bottom2() {
 
   return (
     <div>

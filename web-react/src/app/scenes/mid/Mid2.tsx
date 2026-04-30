@@ -1,6 +1,6 @@
 
 
-export default function MirMid2() {
+export default function Mid2() {
 
   return (
     <div>

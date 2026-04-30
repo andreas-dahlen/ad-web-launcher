@@ -19,7 +19,7 @@ export default function Drag({
 
   // ── Fully subscribe to the drag store─────────────────────────────
   const { position, offset, dragging } = useDragStore(id)
-  const { dragEnabled, dragSnapX, dragSnapY } = useSettingsStore()
+  const { dragEnabled, dragSnapX, dragSnapY, snapEnabled } = useSettingsStore()
 
 
   // ── DOM references & sizing ─────────────────────────────
@@ -48,8 +48,8 @@ export default function Drag({
     dragging
   })
 
-  const resolvedSnapX = settingsSnap ? dragSnapX : snapX
-  const resolvedSnapY = settingsSnap ? dragSnapY : snapY
+  const resolvedSnapX = snapEnabled && settingsSnap ? dragSnapX : snapX
+  const resolvedSnapY = snapEnabled && settingsSnap ? dragSnapY : snapY
 
   return (
     <div

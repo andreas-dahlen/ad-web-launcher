@@ -1,19 +1,22 @@
 import Button from '@components/primitives/button/Button';
 
-type DebugItemProps = {
+type SettingsButtonProps = {
   id: string
   value: boolean
+  enabled?: boolean
   setValue: () => void
   msg?: string
+  defaultState?: string
   ReactImg: React.FC<React.SVGProps<SVGSVGElement>>
 }
 
-export default function DebugItem({
+export default function SettingsButton({
   id,
   value,
   setValue,
   ReactImg,
-  msg }: DebugItemProps
+  enabled,
+  msg }: SettingsButtonProps
 ) {
 
   return (
@@ -24,8 +27,10 @@ export default function DebugItem({
         id={id}
         className='settings-button'
         data-active={value ? 'true' : 'false'}
+        data-enabled={enabled ? 'true' : 'false'}
         onPressRelease={setValue}
         data-state={'released'}
+        interactive={enabled}
       >
         <ReactImg className={value ?
           'svg-img svg-dark' : 'svg-img svg-bright'} />

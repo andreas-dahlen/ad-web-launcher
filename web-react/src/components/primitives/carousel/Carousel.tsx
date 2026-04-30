@@ -52,7 +52,7 @@ export default function Carousel({
   })
 
   // ── Augmented scenes & stable slot management ─────────────────────────────
-  const augmentedScenes = useAugmentedScenes(scenes ?? [], interactive, count)
+  const augmentedScenes = useAugmentedScenes(scenes ?? [], count)
   const total = augmentedScenes.length
 
   const slots: Slot[] = useMemo(() => {

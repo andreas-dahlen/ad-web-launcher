@@ -1,6 +1,6 @@
 
 
-export default function MirTop2() {
+export default function Top2() {
 
   return (
     <div>

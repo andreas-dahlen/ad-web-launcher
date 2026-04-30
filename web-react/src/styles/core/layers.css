@@ -28,3 +28,21 @@
   background: #323232;
   overflow: hidden;
 }
+
+.loading {
+  position: absolute;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: black;
+  color: white;
+  max-width: 600px;
+  margin: 0 auto;
+  transition: opacity 300ms ease-out;
+}
+
+.loading-fade {
+  opacity: 0;
+}

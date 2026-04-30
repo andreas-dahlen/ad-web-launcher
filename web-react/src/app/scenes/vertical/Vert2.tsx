@@ -1,6 +1,6 @@
 import Drag from '@drag/Drag.tsx';
 
-export default function MirWp2() {
+export default function Wp2() {
 
   return (
     <div>
