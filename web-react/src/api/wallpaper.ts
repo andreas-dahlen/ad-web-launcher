@@ -1,5 +1,3 @@
-const ACCESS_KEY = '55650523-78ea7add58a96a830ace8b39f'
-
 interface PixabayPhoto {
   largeImageURL: string
 }
@@ -9,6 +7,7 @@ interface PixabayResponse {
 }
 
 export async function fetchWallpapers(query = 'nature'): Promise<string[]> {
+  const ACCESS_KEY = import.meta.env.VITE_PIXABAY_KEY
   const res = await fetch(
     `https://pixabay.com/api/?key=${ACCESS_KEY}&q=${query}&image_type=photo&orientation=vertical&per_page=20safeseach=true`
   )
