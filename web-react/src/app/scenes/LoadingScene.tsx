@@ -1,6 +1,6 @@
 
-export default function LoadingScene({ fading }: { fading: boolean }) {
+export default function LoadingScene({ visible }: { visible: boolean }) {
   return (
-    <div className={`loading ${fading ? 'loading-fade' : ''}`}> Loading </div>
+    <div className={`loading ${visible ? '' : 'loading-fade'}`}> Loading </div>
   )
 }

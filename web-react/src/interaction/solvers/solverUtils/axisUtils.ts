@@ -1,5 +1,5 @@
 
-import { APP_SETTINGS } from "../../../stores/settingsStore.ts"
+import { APP_CONFIG } from '@config/appConfig.ts'
 import { vector } from "./vectorUtils.ts"
 import type { Vec2 } from '../../../typeScript/core/primitiveType.ts'
 import type { Normalized1D } from '../../../typeScript/descriptor/ctxType.ts'
@@ -21,5 +21,5 @@ export function normalizeBase(base: BaseWithSwipe, delta: Vec2): Normalized1D {
 export function exceedsCrossRange(norm: Normalized1D) {
     const currentPos = (norm.crossOffset ?? 0) + (norm.crossDelta ?? 0)
     const crossSize = norm.crossSize ?? 0
-    return currentPos < -APP_SETTINGS.hysteresis || currentPos > crossSize + APP_SETTINGS.hysteresis
+    return currentPos < -APP_CONFIG.hysteresis || currentPos > crossSize + APP_CONFIG.hysteresis
 }

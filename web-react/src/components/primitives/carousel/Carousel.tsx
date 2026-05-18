@@ -21,6 +21,7 @@ export default function Carousel({
   lockPrevAt,
   lockNextAt,
   onSwipeCommit,
+  // onSettled,
   interactive = true
 }: CarouselProps) {
 
@@ -75,11 +76,14 @@ export default function Carousel({
 
   // ── Carousel motion / styling ─────────────────────────────
   const {
-    styleForRole } = useCarouselMotion({
-      store: { offset, dragging, settling },
-      horizontal: axis === "horizontal",
-      axisSize
-    })
+    // onTransitionEnd,
+    styleForRole
+  } = useCarouselMotion({
+    store: { offset, dragging, settling },
+    horizontal: axis === "horizontal",
+    axisSize,
+    // onSettled
+  })
 
   const setColor = (index: number) => {
     const sceneCount = 3
@@ -108,6 +112,7 @@ export default function Carousel({
             key={slot.sceneIdx}
             style={styleForRole(slot.role)}
             data-role={slot.role}
+          // onTransitionEnd={onTransitionEnd}
           >
             <Scene />
           </div>

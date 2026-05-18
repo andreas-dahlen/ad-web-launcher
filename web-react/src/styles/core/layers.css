@@ -6,10 +6,25 @@
   pointer-events: none;
   display: flex;
   flex-direction: column;
+
+  .l-1 {
+    z-index: 1;
+  }
+
+  .l-2 {
+    z-index: 10;
+  }
+
+  .l-3 {
+    z-index: 20;
+  }
+
+  .l-4 {
+    z-index: 30;
+  }
 }
 
 .device-frame {
-  /* position: relative; */
   border-radius: 28px;
   box-shadow:
     0 18px 48px rgb(116, 116, 116),

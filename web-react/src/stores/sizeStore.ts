@@ -2,7 +2,7 @@ import { log } from '@debug/functions.ts'
 import { immer } from 'zustand/middleware/immer'
 import { create } from 'zustand'
 import { useShallow } from 'zustand/shallow'
-import { APP_SETTINGS } from './settingsStore.ts'
+import { APP_CONFIG } from '@config/appConfig.ts'
 import type { Axis1D } from '../typeScript/core/primitiveType.ts'
 
 /* -------------------------
@@ -33,7 +33,7 @@ export type SizeStore = {
 // -------------------------
 // consts
 // -------------------------
-const defaultDeviceRaw = APP_SETTINGS.rawPhoneValues
+const defaultDeviceRaw = APP_CONFIG.rawPhoneValues
 const defaultDevice: Device = {
   width: defaultDeviceRaw.width / defaultDeviceRaw.density,
   height: defaultDeviceRaw.height / defaultDeviceRaw.density,

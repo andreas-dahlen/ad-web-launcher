@@ -1,4 +1,5 @@
 import { useSettingsStore } from '../../hooks/useSettings'
+import { Z } from '@config/zIndex'
 
 function snapPositions(count: number) {
   if (!count || count <= 0) return []
@@ -15,7 +16,7 @@ export default function DragGrid() {
   const yPositions = snapPositions(dragSnapY)
 
   return (
-    <div className="drag-grid">
+    <div className="drag-grid" style={{ zIndex: Z.dragGrid }}>
       {xPositions.map(n => (
         <div key={`v-${n}`} className="grid-line vertical" style={{ left: `${n}%` }} />
       ))}

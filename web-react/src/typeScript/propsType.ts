@@ -19,7 +19,8 @@ export interface CarouselProps {
   lockPrevAt?: number
   lockNextAt?: number
   interactive?: boolean
-  onSwipeCommit?: (detail: CtxType) => void
+  onSwipeCommit?: (detail: CtxType) => void,
+  onSettled?: () => void
 }
 
 export interface SliderProps {

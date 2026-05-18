@@ -1,4 +1,4 @@
-import { APP_SETTINGS } from '../../stores/settingsStore.ts'
+import { APP_CONFIG } from '@config/appConfig.ts'
 import { normalizeParameter, getAxisSize } from '../../stores/sizeStore.ts'
 import type { InteractionType, Vec2 } from '../../typeScript/core/primitiveType.ts'
 import type { Axis } from '../../typeScript/core/primitiveType.ts'
@@ -32,7 +32,7 @@ export const gestureUtils = {
 	swipeThresholdCalc(distance: number, type: InteractionType): boolean {
 		if (type === 'slider') return true
 
-		const ratio = APP_SETTINGS.swipeThresholdRatio ?? 0.05
+		const ratio = APP_CONFIG.swipeThresholdRatio ?? 0.05
 
 		const screenSize = Math.min(
 			getAxisSize('horizontal'),

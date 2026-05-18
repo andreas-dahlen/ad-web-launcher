@@ -26,6 +26,7 @@ export const wallpaperStore = create<WallpaperStore>()(
         set(s => {
           s.pool = images
           s.wallpapers = images.slice(0, 3)
+          // console.log('pool: ', s.pool)
         })
       } catch (err) {
         console.warn('Failed to fetch wallpapers', err)
@@ -34,6 +35,7 @@ export const wallpaperStore = create<WallpaperStore>()(
     },
     replaceStale: (direction) => {
       set(s => {
+        // console.log('replaceStale', direction, 'wallpapers:', s.wallpapers, 'pool:', s.pool)
         const remaining = s.pool.filter(url => !s.wallpapers.includes(url))
         const pick = remaining[Math.floor(Math.random() * remaining.length)]
         if (!pick) return

@@ -10,7 +10,7 @@ export default function Mid1() {
     <div>
       <Drag
         id='mid1-drag'
-        className='button-preset'
+        className='button-preset z-test'
         on-press={onPress}
       // lockable={true}
       >

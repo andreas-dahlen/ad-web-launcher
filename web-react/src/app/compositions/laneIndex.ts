@@ -18,12 +18,18 @@ import Wp1 from '@scenes/wallpapers/Wp1'
 import Wp2 from '@scenes/wallpapers/Wp2'
 import Wp3 from '@scenes/wallpapers/Wp3'
 
-export const top = [Top1, Top2, Top3]
+const top = [Top1, Top2, Top3]
 
-export const mid = [Mid1, Mid2, Mid3]
+const mid = [Mid1, Mid2, Mid3]
 
-export const bottom = [Bottom1, Bottom2, Bottom3]
+const bottom = [Bottom1, Bottom2, Bottom3]
 
-export const vertical = [vert1, vert2, vert3]
+const vertical = [vert1, vert2, vert3]
 
-export const wallPapper = [Wp1, Wp2, Wp3]
+const wallPaper = [Wp1, Wp2, Wp3]
+
+export const lanes = {
+  horizontal: { top, mid, bottom },
+  vertical,
+  wallPaper
+}

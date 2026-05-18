@@ -1,15 +1,14 @@
-import DragGrid from '@components/settingsPanel/DragGrid';
 import SettingsPanel from '@components/settingsPanel/SettingsPanel.js';
 import { useSettingsStore } from '../../hooks/useSettings';
+import { Z } from '@config/zIndex';
 
-
+/** LAYER 4/4! Horizontal swipes. doesn't contain content! */
 export default function OverlayLayer() {
 
-  const { settingsOverlayEnabled, gridEnabled } = useSettingsStore()
+  const { settingsOverlayEnabled } = useSettingsStore()
   return (
-    <>
-      {gridEnabled ? <DragGrid /> : ''}
+    <div className='layer' style={{ zIndex: Z.overlay }}>
       {settingsOverlayEnabled ? <SettingsPanel /> : ''}
-    </>
+    </div>
   )
 }

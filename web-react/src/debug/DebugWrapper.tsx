@@ -1,6 +1,6 @@
 import { sizeStore, useSize } from '../stores/sizeStore'
-import type { PropsWithChildren } from 'react'
 import { useEffect } from 'react'
+import type { PropsWithChildren } from 'react'
 
 export default function DebugWrapper({ children }: PropsWithChildren) {
 

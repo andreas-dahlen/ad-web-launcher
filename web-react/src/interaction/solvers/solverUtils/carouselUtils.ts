@@ -1,9 +1,9 @@
-import { APP_SETTINGS } from '../../../stores/settingsStore.ts'
 import { normalizeBase } from '../../solvers/solverUtils/axisUtils.ts'
 import { vector } from '../../solvers/solverUtils/vectorUtils.ts'
 import type { Normalized1D } from '../../../typeScript/descriptor/ctxType.ts'
 import type { CarouselDesc } from '../../../typeScript/descriptor/descriptor.ts'
 import type { Axis, Direction } from '../../../typeScript/core/primitiveType.ts'
+import { APP_CONFIG } from '@config/appConfig.ts'
 
 export const carouselUtils = {
 
@@ -52,7 +52,7 @@ export const carouselUtils = {
   shouldCommit(delta: number, laneSize: number, axis: Axis) {
     if (laneSize == null) return false
     const axisBias = axis === 'vertical' ? 0.65 : 1
-    const threshold = laneSize * APP_SETTINGS.swipeCommitRatio * axisBias
+    const threshold = laneSize * APP_CONFIG.swipeCommitRatio * axisBias
     return Math.abs(delta) >= threshold
   }
 }

@@ -1,5 +1,5 @@
 import { useMemo, useCallback } from "react"
-import { APP_SETTINGS } from "../../../../stores/settingsStore"
+import { APP_CONFIG } from '@config/appConfig'
 
 type Role = "prev" | "current" | "next"
 
@@ -11,6 +11,7 @@ interface UseCarouselMotionProps {
   }
   axisSize: number
   horizontal: boolean
+  // onSettled?: () => void
 }
 
 const ROLE_OFFSETS = { prev: -1, current: 0, next: 1 } as const
@@ -19,6 +20,7 @@ export function useCarouselMotion({
   store,
   axisSize,
   horizontal,
+  // onSettled
 }: UseCarouselMotionProps) {
 
   const delta = store.offset ?? 0
@@ -27,7 +29,7 @@ export function useCarouselMotion({
 
   const transition = useMemo(() => {
     if (isDragging || isSettling) return "none"
-    return `transform ${APP_SETTINGS.swipeAnimationMs}ms cubic-bezier(0.25,0.46,0.45,0.94)`
+    return `transform ${APP_CONFIG.swipeAnimationMs}ms cubic-bezier(0.25,0.46,0.45,0.94)`
   }, [isDragging, isSettling])
 
   const translate = useCallback(
@@ -50,5 +52,15 @@ export function useCarouselMotion({
     [translate, axisSize, delta, transition]
   )
 
+  // const lastFiredRef = useRef(0)
+  // const onTransitionEnd = useCallback((e: React.TransitionEvent) => {
+  //   if (e.propertyName !== 'transform') return
+  //   const now = Date.now()
+  //   if (now - lastFiredRef.current < 100) return
+  //   lastFiredRef.current = now
+  //   onSettled?.()
+  // }, [onSettled])
+
+  // return { styleForRole, onTransitionEnd }
   return { styleForRole }
 }
