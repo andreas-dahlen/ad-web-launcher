@@ -101,10 +101,12 @@ export const buildDesc = {
 
   buildSwipeBase(metaData: DomMeta, r: Builder): BaseWithSwipe {
     const base = this.buildBase(metaData, r.pointerId)
+    const { startOffset, rect } = domQuery.getElSnapshot(r.x, r.y, metaData.el)
     return {
       ...base,
       axis: metaData.axis ?? 'both',
-      baseOffset: domQuery.resolveElOffsetInDom(r.x, r.y, metaData.el)
+      baseOffset: startOffset,
+      rect: rect
     }
   },
 

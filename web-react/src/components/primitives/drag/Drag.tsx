@@ -5,6 +5,7 @@ import { useDragMotion } from "./hooks/useDragMotion.ts"
 import { useDragStore } from "./hooks/useDragStore.ts"
 import type { DragProps } from '@typeScript/propsType.ts'
 import { useSettingsStore } from '../../../hooks/useSettings.ts'
+import { createPortal } from 'react-dom'
 
 export default function Drag({
   id,
@@ -26,6 +27,7 @@ export default function Drag({
   const containerRef = useRef<HTMLDivElement>(null)
   const dragItemRef = useRef<HTMLDivElement>(null)
   useDragSizing({ elRef: dragItemRef, containerRef: containerRef, id })
+  const mirrorSlot = document.getElementById("drag-slot")
 
   // ── Pointer forwarding for gestures ─────────────────────────────
 
@@ -51,12 +53,13 @@ export default function Drag({
   const resolvedSnapX = snapEnabled && settingsSnap ? dragSnapX : snapX
   const resolvedSnapY = snapEnabled && settingsSnap ? dragSnapY : snapY
 
-  return (
+
+
+  const item = (
     <div
       ref={containerRef}
       className='drag-container'
     >
-
       <div
         ref={dragItemRef}
         style={{ ...motionStyle, pointerEvents: locked ? 'none' : 'auto' }}
@@ -70,6 +73,33 @@ export default function Drag({
       >
         {children}
       </div >
-    </div>
+    </div>)
+
+  return (
+    <>
+      {item}
+      {mirrorSlot ? createPortal(
+        <div
+          className='drag-container'
+          style={{
+            // width: layout?.container.x,
+            // height: layout?.container.y
+          }}
+        >
+          <div
+            style={{ ...motionStyle, pointerEvents: 'none', background: 'hotPink' }}
+            className={`drag ${className ?? ''}`}
+            data-id={id}
+            data-axis="both"
+            data-type="drag"
+            data-locked={locked || undefined}
+            data-snap-x={resolvedSnapX}
+            data-snap-y={resolvedSnapY}
+          >
+            {children}
+          </div >
+        </div>
+        , mirrorSlot) : ''}
+    </>
   )
 }

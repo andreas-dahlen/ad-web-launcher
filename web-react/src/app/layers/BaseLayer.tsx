@@ -1,5 +1,5 @@
 import { Z } from '@config/zIndex';
-import { baseComp } from '../compositions/baseComp';
+import { baseComp } from '../compositions/laneComps';
 import Carousel from '@components/primitives/carousel/Carousel';
 import useRuntimeBindings from '../compositions/useRuntimeBindings';
 

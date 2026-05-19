@@ -2,8 +2,7 @@ import Carousel from "@carousel/Carousel.tsx"
 import DragGrid from '@components/settingsPanel/DragGrid.tsx'
 import { useSettingsStore } from '../../hooks/useSettings.ts'
 import { Z } from '@config/zIndex.ts'
-import { contentComp } from '../compositions/baseComp.ts'
-
+import { contentComp } from '../compositions/laneComps.ts'
 
 /** LAYER 3/4! Interactive=false carousel. Contents are mounted inside!
  * The carousel swipes are handled by baseLayer. */
@@ -33,6 +32,9 @@ export default function ContentLayer() {
         return oneCarousel
       })}
       {gridEnabled ? <DragGrid /> : ''}
+
+      <div id="drag-slot">
+      </div>
     </div>
   )
 }

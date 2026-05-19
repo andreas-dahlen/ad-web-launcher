@@ -1,8 +1,9 @@
-import type { Axis, Vec2 } from '../../typeScript/core/primitiveType.ts'
+import type { Axis } from '../../typeScript/core/primitiveType.ts'
 import { gestureUtils } from '../core/gestureUtils.ts'
 import { buildDesc } from '../core/buildDesc.ts'
 import type { Descriptor, SwipeableDescriptor } from '../../typeScript/descriptor/descriptor.ts'
 import { extractDomMeta } from './domMeta.ts'
+import type { OffsetInElement } from '@typeScript/descriptor/baseType.ts'
 
 export const domQuery = {
 
@@ -37,14 +38,14 @@ export const domQuery = {
      DOM offset Resolution
   =============================== */
 
-  resolveElOffsetInDom(x: number, y: number, element: Element): Vec2 {
+  getElSnapshot(x: number, y: number, element: Element): OffsetInElement {
     //static start poisition inside of element at x, y
     const rect = element.getBoundingClientRect()
     const left = (x - rect.left)
     const top = (y - rect.top)
     const startOffset = gestureUtils.normalizedDelta({ x: left, y: top })
     return {
-      ...startOffset
+      startOffset, rect
     }
   }
 }

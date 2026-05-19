@@ -11,7 +11,13 @@ export type BaseWithSwipe =
   BaseInteraction & {
     readonly axis: Axis
     readonly baseOffset: Vec2
+    readonly rect: DOMRect
   }
+
+export type OffsetInElement = {
+  startOffset: Vec2
+  rect: DOMRect
+}
 
 export interface Capabilities {
   readonly pressable: boolean

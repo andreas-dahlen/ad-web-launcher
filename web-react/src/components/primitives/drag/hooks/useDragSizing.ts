@@ -1,5 +1,6 @@
-import { useEffect } from "react"
+import { useLayoutEffect } from "react"
 import { dragStore } from '../../../../stores/dragStore'
+
 
 interface UseDragSizingProps {
   elRef: React.RefObject<HTMLElement | null>
@@ -13,7 +14,7 @@ export function useDragSizing({
   id
 }: UseDragSizingProps) {
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const el = elRef.current
     const containerEl = containerRef.current
 
@@ -26,12 +27,6 @@ export function useDragSizing({
       const itemHeight = el.offsetHeight
       const containerWidth = containerEl.offsetWidth
       const containerHeight = containerEl.offsetHeight
-
-
-      // const size = {
-      //   x: containerWidth - itemWidth,
-      //   y: containerHeight - itemHeight
-      // }
 
       const constraints = {
         minX: 0,
@@ -50,12 +45,7 @@ export function useDragSizing({
         y: itemHeight
       }
 
-      // dragStore.getState().setConstraints(id, constraints)
-      dragStore.getState().setLayout(id, {
-        constraints,
-        container,
-        item
-      })
+      dragStore.getState().setLayout(id, { constraints, container, item })
     }
     updateLaneSize()
 
