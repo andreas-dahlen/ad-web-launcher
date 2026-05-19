@@ -32,7 +32,7 @@ const DEST_INDEX = path.join(ANDROID_ASSETS, 'index.html')
 -------------------------------------------------- */
 if (!fs.existsSync(SRC_INDEX)) {
   console.error('❌ web/dist/index.html not found')
-  console.error('→ Did you run `npm run build` in /web ?')
+  console.error('→ Did you run `npm run build` in /web-react ?')
   process.exit(1)
 }
 
@@ -50,4 +50,4 @@ if (fs.existsSync(DEST_INDEX)) {
 
 fs.copyFileSync(SRC_INDEX, DEST_INDEX)
 
-console.log(`✅ Asset updated successfully [DEBUG]:${process.meta.env.VITE_DEBUG}`)
+console.log(`✅ Asset updated successfully`)
