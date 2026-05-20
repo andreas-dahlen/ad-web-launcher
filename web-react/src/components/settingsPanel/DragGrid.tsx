@@ -1,4 +1,4 @@
-import { useSettingsStore } from '../../hooks/useSettings'
+import { useSettingsStore } from '../../hooks/useSettingsStore'
 import { Z } from '@config/zIndex'
 
 function snapPositions(count: number) {

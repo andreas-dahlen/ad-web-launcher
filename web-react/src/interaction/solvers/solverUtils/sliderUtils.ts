@@ -9,8 +9,8 @@ export const sliderUtils = {
     const { axis } = desc.base
     if (axis === 'both') return {}
     const base = normalizeBase(desc.base, desc.ctx.delta)
-    const track = vector.resolveByAxis1D(desc.data.containerSize, axis)
-    const thumb = vector.resolveByAxis1D(desc.data.thumbSize, axis)
+    const track = vector.resolveByAxis1D(desc.data.containerSize.width, desc.data.containerSize.height, axis)
+    const thumb = vector.resolveByAxis1D(desc.data.thumbSize.width, desc.data.thumbSize.height, axis)
     return {
       ...base,
       mainSize: track?.main,

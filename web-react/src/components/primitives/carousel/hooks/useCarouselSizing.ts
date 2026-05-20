@@ -20,8 +20,8 @@ export function useCarouselSizing({
             if (!el) return
 
             const size = {
-                x: el.offsetWidth,
-                y: el.offsetHeight
+                width: el.offsetWidth,
+                height: el.offsetHeight
             }
 
             carouselStore.getState().setSize(id, size)

@@ -39,7 +39,7 @@ export default function Carousel({
   const carouselRef = useRef<HTMLDivElement>(null)
   useCarouselSizing({ elRef: carouselRef, axis, id })
 
-  const axisSize = axis === "horizontal" ? sceneSize.x : sceneSize.y
+  const axisSize = axis === "horizontal" ? sceneSize.width : sceneSize.height
 
   // ── Pointer forwarding for gestures ─────────────────────────────
   usePointerBridge({

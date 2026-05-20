@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
-import type { Vec2 } from '../typeScript/core/primitiveType.ts'
+import type { Size2D } from '../typeScript/core/primitiveType.ts'
 import type { CtxSlider } from '../typeScript/descriptor/ctxType.ts'
 
 type Slider = {
@@ -10,10 +10,10 @@ type Slider = {
   //react sizing
   min: number
   max: number
-  containerSize: Vec2
+  containerSize: Size2D
 
   // the optional section non reactive
-  thumbSize: Vec2
+  thumbSize: Size2D
   dragging: boolean
 }
 
@@ -24,8 +24,8 @@ export type SliderStore = {
   delete: (id: string) => void
 
   setConstraints: (id: string, constraints: { min: number, max: number }) => void
-  setContainerSize: (id: string, containerSize: Vec2) => void
-  setThumbSize: (id: string, thumbSize: Vec2) => void
+  setContainerSize: (id: string, containerSize: Size2D) => void
+  setThumbSize: (id: string, thumbSize: Size2D) => void
   press: (ctx: CtxSlider) => void
   swipeStart: (ctx: CtxSlider) => void
   swipe: (ctx: CtxSlider) => void
@@ -47,8 +47,8 @@ export const sliderStore = create<SliderStore>()(
           value: 0,
           min: 0,
           max: 100,
-          containerSize: { x: 0, y: 0 },
-          thumbSize: { x: 0, y: 0 },
+          containerSize: { width: 0, height: 0 },
+          thumbSize: { width: 0, height: 0 },
           dragging: false
         }
       })
@@ -76,7 +76,7 @@ export const sliderStore = create<SliderStore>()(
       set(state => {
         const s = state.bindings[id]
         if (!s) return
-        if (s.containerSize.x === containerSize.x && s.containerSize.y === containerSize.y) return
+        if (s.containerSize.width === containerSize.width && s.containerSize.height === containerSize.height) return
         s.containerSize = containerSize
 
       })
@@ -85,7 +85,7 @@ export const sliderStore = create<SliderStore>()(
       set(state => {
         const s = state.bindings[id]
         if (!s) return
-        if (s.thumbSize.x === thumbSize.x && s.thumbSize.y === thumbSize.y) return
+        if (s.thumbSize.width === thumbSize.width && s.thumbSize.height === thumbSize.height) return
         s.thumbSize = thumbSize
       })
     },

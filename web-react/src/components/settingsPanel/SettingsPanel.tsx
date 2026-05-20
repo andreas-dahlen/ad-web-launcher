@@ -3,10 +3,11 @@ import locked from '@assets/locked.svg?react'
 import unlocked from '@assets/unlocked.svg?react'
 import grid from '@assets/grid.svg?react'
 import snap from '@assets/snap.svg?react'
-import { useSettingsStore } from '../../hooks/useSettings.js';
+import { useSettingsStore } from '../../hooks/useSettingsStore.js';
 import SettingsButton from './SettingsButton.tsx';
 import Slider from '@slider/Slider.tsx';
 import SnapInput from '@components/settingsPanel/SnapInput.tsx';
+import { gestureStore } from '../../stores/gestureStore.ts';
 
 export default function SettingsPanel() {
 
@@ -15,12 +16,19 @@ export default function SettingsPanel() {
     setDragEnabled,
     gridEnabled,
     setGridEnabled,
-    setDragSnapX,
-    setDragSnapY,
     dragSnapX,
+    setDragSnapX,
     dragSnapY,
+    setDragSnapY,
     snapEnabled,
-    setSnapEnabled } = useSettingsStore()
+    setSnapEnabled
+  } = useSettingsStore()
+
+  const isSwiping = gestureStore(state => state.activeSwipes > 0)
+
+  const [sliderOne, setSliderOne] = useState(0)
+  const [sliderTwo, setSliderTwo] = useState(0)
+
 
   const handleGridEnabling = () => {
     if (!gridEnabled) {
@@ -29,11 +37,9 @@ export default function SettingsPanel() {
     }
   }
 
-  const [sliderOne, setSliderOne] = useState(0)
-  const [sliderTwo, setSliderTwo] = useState(0)
 
   return (
-    <div className='settings-panel'>
+    <div className='settings-panel' style={{ opacity: isSwiping ? '0.3' : '1' }}>
       <div className='settings-row'>
         <SettingsButton
           id='lock-drag-item'
@@ -49,7 +55,6 @@ export default function SettingsPanel() {
           enabled={true}
           setValue={() => {
             setSnapEnabled(!snapEnabled)
-            setGridEnabled(false)
           }
           }
           msg={'Snap'}
@@ -59,7 +64,7 @@ export default function SettingsPanel() {
         <SettingsButton
           id='drag-grid'
           value={gridEnabled}
-          enabled={snapEnabled}
+          enabled={true}
           setValue={() => setGridEnabled(!gridEnabled)}
           msg={'Grid'}
           ReactImg={grid}>

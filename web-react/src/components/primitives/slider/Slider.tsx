@@ -20,8 +20,8 @@ export default function Slider({
   const { value, min, max, containerSize, thumbSize, dragging } = useSliderStore(id)
 
   const horizontal = axis === 'horizontal'
-  const axisSize = horizontal ? containerSize.x : containerSize.y
-  const axisThumbSize = horizontal ? thumbSize.x : thumbSize.y
+  const axisSize = horizontal ? containerSize.width : containerSize.height
+  const axisThumbSize = horizontal ? thumbSize.width : thumbSize.height
   const constraints = { min, max }
 
   // ── CSS classes ─────────────────────────────

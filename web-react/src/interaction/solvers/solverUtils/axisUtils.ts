@@ -8,8 +8,8 @@ import type { BaseWithSwipe } from '../../../typeScript/descriptor/baseType.ts'
 export function normalizeBase(base: BaseWithSwipe, delta: Vec2): Normalized1D {
     const { grabOffset, axis } = base
     if (axis === 'both') return {}
-    const offset = vector.resolveByAxis1D(grabOffset, axis)
-    const movement = vector.resolveByAxis1D(delta, axis)
+    const offset = vector.resolveByAxis1D(grabOffset.x, grabOffset.y, axis)
+    const movement = vector.resolveByAxis1D(delta.x, delta.y, axis)
     return {
         mainOffset: offset?.main,
         crossOffset: offset?.cross,

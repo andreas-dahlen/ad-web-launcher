@@ -11,6 +11,7 @@ import type { EventBridgeType } from '../../typeScript/core/primitiveType.ts'
 import type { CtxType } from '../../typeScript/descriptor/ctxType.ts'
 import type { PointerEventPackage } from '../../hooks/usePointerBridge.ts'
 import type { Descriptor } from '@typeScript/descriptor/descriptor.ts'
+import { gestureStore } from '../../stores/gestureStore.ts'
 
 /* =====================
         Maping
@@ -28,6 +29,7 @@ export const pipeline = {
   abortGesture(pointerId: number) {
     //FUTURE for safty could possibly think about how to setup a abort for zustand stores to abort and reset store values.
     interpreter.deleteGesture(pointerId)
+    gestureStore.getState().decrement() // ← or reset to 0 if you're feeling paranoid
   },
 
   hydrateStores(desc: Descriptor) {
@@ -35,6 +37,8 @@ export const pipeline = {
 
       dragStore.getState().setFrame(desc.base.id, desc.base.frame)
     }
+
+    //set value here
   },
 
   orchestrate(eventPackage: PointerEventPackage) {
@@ -56,6 +60,8 @@ export const pipeline = {
     /* -------------------------
        Solvers and Store Mutations narrowed
     -------------------------- */
+    //set value here
+
 
     const { type, ctx: { event } } = desc
     let ctx: CtxType
@@ -102,5 +108,10 @@ export const pipeline = {
        Renderer
     -------------------------- */
     domUpdater.handle(ctx)
+
+
+    if (ctx.event === 'swipeStart') gestureStore.getState().increment()
+    if (ctx.event === 'swipeCommit' || ctx.event === 'swipeRevert') gestureStore.getState().decrement()
   }
+
 }

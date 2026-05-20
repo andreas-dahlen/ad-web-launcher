@@ -36,13 +36,13 @@ export function useDragSizing({
       }
 
       const containerSize = {
-        x: containerWidth,
-        y: containerHeight
+        width: containerWidth,
+        height: containerHeight
       }
 
       const itemSize = {
-        x: itemWidth,
-        y: itemHeight
+        width: itemWidth,
+        height: itemHeight
       }
 
       dragStore.getState().setLayout(id, { constraints, containerSize, itemSize })

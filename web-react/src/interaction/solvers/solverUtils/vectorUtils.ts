@@ -26,10 +26,10 @@ export const vector = {
     }
   },
 
-  resolveByAxis1D(value: Vec2, axis: Axis1D) {
+  resolveByAxis1D(x: number, y: number, axis: Axis1D) {
     switch (axis) {
-      case 'horizontal': return { main: value.x, cross: value.y }
-      case 'vertical': return { main: value.y, cross: value.x }
+      case 'horizontal': return { main: x, cross: y }
+      case 'vertical': return { main: y, cross: x }
       default:
         throw new Error(`resolveByAxis1D called with unknown axis: ${axis}`)
     }

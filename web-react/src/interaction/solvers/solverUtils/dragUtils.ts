@@ -65,8 +65,8 @@ export const dragUtils = {
       )
     }
     return {
-      x: snapAxis(value.x, snapX, containerSize.x, itemSize.x, constraints.minX, constraints.maxX),
-      y: snapAxis(value.y, snapY, containerSize.y, itemSize.y, constraints.minY, constraints.maxY)
+      x: snapAxis(value.x, snapX, containerSize.width, itemSize.width, constraints.minX, constraints.maxX),
+      y: snapAxis(value.y, snapY, containerSize.height, itemSize.height, constraints.minY, constraints.maxY)
     }
   }
 }

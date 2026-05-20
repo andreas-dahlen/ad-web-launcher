@@ -52,8 +52,8 @@ export const dragStore = create<DragStore>()(
               minY: -Infinity,
               maxY: Infinity
             },
-            containerSize: { x: 0, y: 0 },
-            itemSize: { x: 0, y: 0 }
+            containerSize: { width: 0, height: 0 },
+            itemSize: { width: 0, height: 0 }
           },
           frame: {
             left: 0,

@@ -24,13 +24,13 @@ export function useSliderSizing({
       if (!el || !thumbEl) return
 
       const containerSize = {
-        x: el.offsetWidth,
-        y: el.offsetHeight
+        width: el.offsetWidth,
+        height: el.offsetHeight
       }
 
       const thumbSize = {
-        x: thumbEl.offsetWidth ?? 0,
-        y: thumbEl.offsetHeight ?? 0
+        width: thumbEl.offsetWidth ?? 0,
+        height: thumbEl.offsetHeight ?? 0
       }
 
       sliderStore.getState().setContainerSize(id, containerSize)

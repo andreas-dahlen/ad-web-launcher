@@ -4,7 +4,7 @@ import { useDragSizing } from "./hooks/useDragSizing.ts"
 import { useDragMotion } from "./hooks/useDragMotion.ts"
 import { useDragStore } from "./hooks/useDragStore.ts"
 import type { DragProps } from '@typeScript/propsType.ts'
-import { useSettingsStore } from '../../../hooks/useSettings.ts'
+import { useSettingsStore } from '../../../hooks/useSettingsStore.ts'
 import { createPortal } from 'react-dom'
 
 export default function Drag({
@@ -53,29 +53,6 @@ export default function Drag({
   const resolvedSnapX = snapEnabled && settingsSnap ? dragSnapX : snapX
   const resolvedSnapY = snapEnabled && settingsSnap ? dragSnapY : snapY
 
-
-
-  // const item = (
-  //   <div
-  //     ref={containerRef}
-  //     className='drag-container'
-  //     data-frame='drag'
-  //   >
-  //     <div
-  //       ref={dragItemRef}
-  //       style={{ ...motionStyle, pointerEvents: locked ? 'none' : 'auto' }}
-  //       className={`drag ${className ?? ''}`}
-  //       data-id={id}
-  //       data-axis="both"
-  //       data-type="drag"
-  //       data-locked={locked || undefined}
-  //       data-snap-x={resolvedSnapX}
-  //       data-snap-y={resolvedSnapY}
-  //     >
-  //       {children}
-  //     </div >
-  //   </div>)
-
   return (
     <>
       <div
@@ -101,8 +78,8 @@ export default function Drag({
         <div
           className='drag-container'
           style={{
-            width: layout.containerSize.x,
-            height: layout.containerSize.y,
+            width: layout.containerSize.width,
+            height: layout.containerSize.height,
             top: frame.top,
             // left: frame.left
           }}

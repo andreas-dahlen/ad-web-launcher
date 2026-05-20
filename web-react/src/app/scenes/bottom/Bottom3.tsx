@@ -1,5 +1,5 @@
 import Button from '@components/primitives/button/Button';
-import { useSettingsStore } from '../../../hooks/useSettings';
+import { useSettingsStore } from '../../../hooks/useSettingsStore';
 
 
 export default function Bottom3() {

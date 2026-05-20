@@ -104,6 +104,8 @@ function onMove(x: number, y: number, pointerId: number): Descriptor | null {
 
     pipeline.hydrateStores(resolved)
 
+    //set value here
+
     g.phase = 'SWIPING'
     g.last.x = x
     g.last.y = y

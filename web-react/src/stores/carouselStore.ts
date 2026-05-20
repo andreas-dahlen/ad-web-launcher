@@ -1,6 +1,6 @@
 import { immer } from "zustand/middleware/immer"
 import { create } from 'zustand'
-import type { Direction, Vec2 } from "../typeScript/core/primitiveType.ts"
+import type { Direction, Size2D } from "../typeScript/core/primitiveType.ts"
 import type { CtxCarousel } from '../typeScript/descriptor/ctxType.ts'
 
 type Carousel = {
@@ -10,7 +10,7 @@ type Carousel = {
 
   //reactScenes
   count: number
-  sceneSize: Vec2
+  sceneSize: Size2D
   dragging: boolean
 
   //read only... not used by react
@@ -25,7 +25,7 @@ export type CarouselStore = {
   delete: (id: string) => void
 
   setCount: (id: string, count: number) => void
-  setSize: (id: string, sceneSize: Vec2) => void
+  setSize: (id: string, sceneSize: Size2D) => void
   // setPosition: (id: string) => void
 
   swipeStart: (ctx: CtxCarousel) => void
@@ -48,7 +48,7 @@ export const carouselStore = create<CarouselStore>()(
           liveOffset: 0,
 
           count: 0,
-          sceneSize: { x: 0, y: 0 },
+          sceneSize: { width: 0, height: 0 },
           dragging: false,
 
           settling: false,
@@ -79,7 +79,7 @@ export const carouselStore = create<CarouselStore>()(
       set(state => {
         const s = state.bindings[id]
         if (!s) return
-        if (s.sceneSize.x === sceneSize.x && s.sceneSize.y === sceneSize.y) return
+        if (s.sceneSize.width === sceneSize.width && s.sceneSize.height === sceneSize.height) return
         s.sceneSize = sceneSize
       })
     },

@@ -1,6 +1,6 @@
 import Carousel from "@carousel/Carousel.tsx"
 import DragGrid from '@components/settingsPanel/DragGrid.tsx'
-import { useSettingsStore } from '../../hooks/useSettings.ts'
+import { useSettingsStore } from '../../hooks/useSettingsStore.ts'
 import { Z } from '@config/zIndex.ts'
 import { contentComp } from '../compositions/laneComps.ts'
 
