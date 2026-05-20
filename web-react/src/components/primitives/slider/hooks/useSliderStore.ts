@@ -7,7 +7,7 @@ const DEFAULTS = {
   value: 0,
   min: 0,
   max: 100,
-  size: { x: 0, y: 0 },
+  containerSize: { x: 0, y: 0 },
   thumbSize: { x: 0, y: 0 },
   dragging: false
 } as const

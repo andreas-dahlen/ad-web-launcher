@@ -6,9 +6,9 @@ import { debugRegisterBinding, debugUnregisterBinding } from '@debug/functions'
 const DEFAULTS = {
   index: 0,
   count: 0,
-  offset: 0,
+  liveOffset: 0,
   dragging: false,
-  size: { x: 0, y: 0 },
+  sceneSize: { x: 0, y: 0 },
   settling: false,
   pendingDir: null
 } as const

@@ -26,7 +26,7 @@ export default function Carousel({
 }: CarouselProps) {
 
   // ── Fully subscribe to the carousel store ─────────────────────────────
-  const { settling, index, offset, count, dragging, size } = useCarouselStore(id)
+  const { settling, index, liveOffset, count, dragging, sceneSize } = useCarouselStore(id)
 
   // ── Initialize count for mirror scenes ─────────────────────────────
 
@@ -39,7 +39,7 @@ export default function Carousel({
   const carouselRef = useRef<HTMLDivElement>(null)
   useCarouselSizing({ elRef: carouselRef, axis, id })
 
-  const axisSize = axis === "horizontal" ? size.x : size.y
+  const axisSize = axis === "horizontal" ? sceneSize.x : sceneSize.y
 
   // ── Pointer forwarding for gestures ─────────────────────────────
   usePointerBridge({
@@ -79,7 +79,7 @@ export default function Carousel({
     // onTransitionEnd,
     styleForRole
   } = useCarouselMotion({
-    store: { offset, dragging, settling },
+    store: { liveOffset, dragging, settling },
     horizontal: axis === "horizontal",
     axisSize,
     // onSettled
@@ -97,6 +97,7 @@ export default function Carousel({
       data-type="carousel"
       ref={carouselRef}
       className={`carousel`}
+      data-frame="carousel"
       style={{ pointerEvents: interactive ? "auto" : "none" }}
       data-id={id}
       data-axis={axis}

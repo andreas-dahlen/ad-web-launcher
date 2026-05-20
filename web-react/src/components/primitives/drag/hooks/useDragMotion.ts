@@ -2,18 +2,18 @@ import { useMemo } from "react"
 import { Z } from '@config/zIndex';
 
 interface UseDragMotionProps {
-  position: { x?: number; y?: number }
-  offset: { x?: number; y?: number }
+  settledOffset: { x?: number; y?: number }
+  liveOffset: { x?: number; y?: number }
   dragging: boolean
 }
 
 export function useDragMotion({
-  position,
-  offset,
+  settledOffset,
+  liveOffset,
   dragging
 }: UseDragMotionProps) {
-  const x = (position.x ?? 0) + (offset.x ?? 0)
-  const y = (position.y ?? 0) + (offset.y ?? 0)
+  const x = (settledOffset.x ?? 0) + (liveOffset.x ?? 0)
+  const y = (settledOffset.y ?? 0) + (liveOffset.y ?? 0)
   const motionStyle = useMemo(() => {
 
     return {

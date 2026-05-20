@@ -3,8 +3,18 @@ import { normalizeParameter, getAxisSize } from '../../stores/sizeStore.ts'
 import type { InteractionType, Vec2 } from '../../typeScript/core/primitiveType.ts'
 import type { Axis } from '../../typeScript/core/primitiveType.ts'
 import type { Descriptor, SwipeableDescriptor } from '../../typeScript/descriptor/descriptor.ts'
+import type { FrameSnapshot } from '@typeScript/descriptor/baseType.ts'
 
 export const gestureUtils = {
+
+	normalizeFrame(rect: DOMRect): FrameSnapshot {
+		return {
+			left: normalizeParameter(rect.left), //needs to be subtracted with debug frame rect.
+			top: normalizeParameter(rect.top), //works
+			width: normalizeParameter(rect.width),
+			height: normalizeParameter(rect.height),
+		}
+	},
 
 	normalizedDelta(delta: Vec2): Vec2 {
 		return {

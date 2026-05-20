@@ -10,7 +10,7 @@ type Slider = {
   //react sizing
   min: number
   max: number
-  size: Vec2
+  containerSize: Vec2
 
   // the optional section non reactive
   thumbSize: Vec2
@@ -24,7 +24,7 @@ export type SliderStore = {
   delete: (id: string) => void
 
   setConstraints: (id: string, constraints: { min: number, max: number }) => void
-  setSize: (id: string, size: Vec2) => void
+  setContainerSize: (id: string, containerSize: Vec2) => void
   setThumbSize: (id: string, thumbSize: Vec2) => void
   press: (ctx: CtxSlider) => void
   swipeStart: (ctx: CtxSlider) => void
@@ -47,7 +47,7 @@ export const sliderStore = create<SliderStore>()(
           value: 0,
           min: 0,
           max: 100,
-          size: { x: 0, y: 0 },
+          containerSize: { x: 0, y: 0 },
           thumbSize: { x: 0, y: 0 },
           dragging: false
         }
@@ -72,12 +72,12 @@ export const sliderStore = create<SliderStore>()(
       })
     },
 
-    setSize: (id, size) => {
+    setContainerSize: (id, containerSize) => {
       set(state => {
         const s = state.bindings[id]
         if (!s) return
-        if (s.size.x === size.x && s.size.y === size.y) return
-        s.size = size
+        if (s.containerSize.x === containerSize.x && s.containerSize.y === containerSize.y) return
+        s.containerSize = containerSize
 
       })
     },

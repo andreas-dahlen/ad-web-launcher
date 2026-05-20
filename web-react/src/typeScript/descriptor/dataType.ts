@@ -2,7 +2,7 @@ import type { Vec2 } from "../core/primitiveType.ts"
 
 export interface CarouselData {
   readonly index: number
-  readonly size: Vec2
+  readonly sceneSize: Vec2 //size2D
 }
 
 export interface CarouselModifiers {
@@ -13,14 +13,14 @@ export interface CarouselModifiers {
 }
 
 export interface DragData {
-  readonly position: Vec2
+  readonly settledOffset: Vec2
   readonly layout: DragLayout
 }
 
 export interface DragLayout {
   readonly constraints: DragConstraints
-  readonly container: Vec2
-  readonly item: Vec2
+  readonly containerSize: Vec2 //size2D
+  readonly itemSize: Vec2 //size2D
 }
 
 export interface DragConstraints {
@@ -35,9 +35,9 @@ export interface DragModifiers {
 }
 
 export interface SliderData {
-  readonly thumbSize: Vec2
+  readonly thumbSize: Vec2 //size2D
   readonly constraints: SliderConstraints
-  readonly size: Vec2
+  readonly containerSize: Vec2 //size2D
 }
 
 export interface SliderConstraints {

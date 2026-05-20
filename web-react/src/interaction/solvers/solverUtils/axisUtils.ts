@@ -6,9 +6,9 @@ import type { Normalized1D } from '../../../typeScript/descriptor/ctxType.ts'
 import type { BaseWithSwipe } from '../../../typeScript/descriptor/baseType.ts'
 
 export function normalizeBase(base: BaseWithSwipe, delta: Vec2): Normalized1D {
-    const { baseOffset, axis } = base
+    const { grabOffset, axis } = base
     if (axis === 'both') return {}
-    const offset = vector.resolveByAxis1D(baseOffset, axis)
+    const offset = vector.resolveByAxis1D(grabOffset, axis)
     const movement = vector.resolveByAxis1D(delta, axis)
     return {
         mainOffset: offset?.main,

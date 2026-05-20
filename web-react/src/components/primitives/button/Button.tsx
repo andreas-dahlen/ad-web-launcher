@@ -42,6 +42,7 @@ export default function Button({
       className={`button ${className ?? ''}`}
       style={{ pointerEvents: interactive ? "auto" : "none" }}
       data-type="button"
+      data-frame="button"
       data-id={id}
       data-action={action || undefined}
     >

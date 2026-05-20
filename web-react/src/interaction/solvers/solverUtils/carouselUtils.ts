@@ -11,7 +11,7 @@ export const carouselUtils = {
     const { axis } = desc.base
     if (axis === 'both') return {}
     const base = normalizeBase(desc.base, desc.ctx.delta)
-    const track = vector.resolveByAxis1D(desc.data.size, axis)
+    const track = vector.resolveByAxis1D(desc.data.sceneSize, axis)
     return {
       ...base,
       mainSize: track?.main,

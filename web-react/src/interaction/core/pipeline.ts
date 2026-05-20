@@ -10,6 +10,7 @@ import { CAROUSEL_EVENTS, DRAG_EVENTS, SLIDER_EVENTS, type CarouselFunctions, ty
 import type { EventBridgeType } from '../../typeScript/core/primitiveType.ts'
 import type { CtxType } from '../../typeScript/descriptor/ctxType.ts'
 import type { PointerEventPackage } from '../../hooks/usePointerBridge.ts'
+import type { Descriptor } from '@typeScript/descriptor/descriptor.ts'
 
 /* =====================
         Maping
@@ -27,6 +28,13 @@ export const pipeline = {
   abortGesture(pointerId: number) {
     //FUTURE for safty could possibly think about how to setup a abort for zustand stores to abort and reset store values.
     interpreter.deleteGesture(pointerId)
+  },
+
+  hydrateStores(desc: Descriptor) {
+    if (desc.type === 'drag') {
+
+      dragStore.getState().setFrame(desc.base.id, desc.base.frame)
+    }
   },
 
   orchestrate(eventPackage: PointerEventPackage) {

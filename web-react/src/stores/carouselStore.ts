@@ -6,11 +6,11 @@ import type { CtxCarousel } from '../typeScript/descriptor/ctxType.ts'
 type Carousel = {
   //react motion
   index: number
-  offset: number
+  liveOffset: number
 
   //reactScenes
   count: number
-  size: Vec2
+  sceneSize: Vec2
   dragging: boolean
 
   //read only... not used by react
@@ -25,7 +25,7 @@ export type CarouselStore = {
   delete: (id: string) => void
 
   setCount: (id: string, count: number) => void
-  setSize: (id: string, trackSize: Vec2) => void
+  setSize: (id: string, sceneSize: Vec2) => void
   // setPosition: (id: string) => void
 
   swipeStart: (ctx: CtxCarousel) => void
@@ -45,10 +45,10 @@ export const carouselStore = create<CarouselStore>()(
       set(state => {
         state.bindings[id] = {
           index: 0,
-          offset: 0,
+          liveOffset: 0,
 
           count: 0,
-          size: { x: 0, y: 0 },
+          sceneSize: { x: 0, y: 0 },
           dragging: false,
 
           settling: false,
@@ -75,12 +75,12 @@ export const carouselStore = create<CarouselStore>()(
         s.count = Math.max(0, count)
       })
     },
-    setSize: (id, trackSize) => {
+    setSize: (id, sceneSize) => {
       set(state => {
         const s = state.bindings[id]
         if (!s) return
-        if (s.size.x === trackSize.x && s.size.y === trackSize.y) return
-        s.size = trackSize
+        if (s.sceneSize.x === sceneSize.x && s.sceneSize.y === sceneSize.y) return
+        s.sceneSize = sceneSize
       })
     },
 
@@ -92,7 +92,7 @@ export const carouselStore = create<CarouselStore>()(
         s.settling = false
         if (s.pendingDir !== null) {
           s.index = getNextIndex(s.index, s.pendingDir, s.count)
-          s.offset = 0
+          s.liveOffset = 0
           s.pendingDir = null
         }
       })
@@ -102,7 +102,7 @@ export const carouselStore = create<CarouselStore>()(
       set(state => {
         const s = state.bindings[ctx.id]
         if (!s) return
-        s.offset = ctx.delta1D ?? s.offset
+        s.liveOffset = ctx.delta1D ?? s.liveOffset
       })
     },
     swipeCommit: (ctx) => {
@@ -111,7 +111,7 @@ export const carouselStore = create<CarouselStore>()(
         if (!s) return
         if (s.settling) return
         s.pendingDir = ctx.direction ?? null
-        s.offset = ctx.delta1D ?? s.offset
+        s.liveOffset = ctx.delta1D ?? s.liveOffset
         s.dragging = false
       })
     },
@@ -119,7 +119,7 @@ export const carouselStore = create<CarouselStore>()(
       set(state => {
         const s = state.bindings[ctx.id]
         if (!s) return
-        s.offset = 0
+        s.liveOffset = 0
         s.dragging = false
         s.pendingDir = null
       })

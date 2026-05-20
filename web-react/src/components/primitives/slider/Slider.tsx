@@ -17,10 +17,10 @@ export default function Slider({
 }: SliderProps) {
 
   // ── Fully subscribe to the slider store ─────────────────────────────
-  const { value, min, max, size, thumbSize, dragging } = useSliderStore(id)
+  const { value, min, max, containerSize, thumbSize, dragging } = useSliderStore(id)
 
   const horizontal = axis === 'horizontal'
-  const axisSize = horizontal ? size.x : size.y
+  const axisSize = horizontal ? containerSize.x : containerSize.y
   const axisThumbSize = horizontal ? thumbSize.x : thumbSize.y
   const constraints = { min, max }
 
@@ -88,6 +88,7 @@ export default function Slider({
       data-type="slider"
       // data-press="true"
       ref={sliderRef}
+      data-frame="slider"
       className={`slider ${classAxisSlider} ${className ?? ''}`}
       data-id={id}
       data-axis={axis}

@@ -35,17 +35,17 @@ export function useDragSizing({
         maxY: containerHeight - itemHeight
       }
 
-      const container = {
+      const containerSize = {
         x: containerWidth,
         y: containerHeight
       }
 
-      const item = {
+      const itemSize = {
         x: itemWidth,
         y: itemHeight
       }
 
-      dragStore.getState().setLayout(id, { constraints, container, item })
+      dragStore.getState().setLayout(id, { constraints, containerSize, itemSize })
     }
     updateLaneSize()
 

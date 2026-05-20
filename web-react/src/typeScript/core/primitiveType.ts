@@ -26,6 +26,11 @@ export interface Vec2 {
   y: number
 }
 
+export interface Size2D {
+  width: number
+  height: number
+}
+
 export const VALID_AXES = new Set<Axis>(['horizontal', 'vertical', 'both'])
 export const VALID_TYPES = new Set<InteractionType>(['button', 'carousel', 'slider', 'drag'])
 

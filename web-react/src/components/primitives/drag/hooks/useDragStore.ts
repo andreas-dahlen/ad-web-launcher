@@ -4,8 +4,14 @@ import { dragStore, type DragStore } from '../../../../stores/dragStore'
 import { debugRegisterBinding, debugUnregisterBinding } from '@debug/functions'
 
 const DEFAULTS = {
-  position: { x: 0, y: 0 },
-  offset: { x: 0, y: 0 },
+  settledOffset: { x: 0, y: 0 },
+  liveOffset: { x: 0, y: 0 },
+  frame: {
+    left: 0,
+    top: 0,
+    width: 0,
+    height: 0
+  },
   dragging: false,
   minX: -Infinity,
   maxX: Infinity,

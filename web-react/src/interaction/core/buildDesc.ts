@@ -101,12 +101,12 @@ export const buildDesc = {
 
   buildSwipeBase(metaData: DomMeta, r: Builder): BaseWithSwipe {
     const base = this.buildBase(metaData, r.pointerId)
-    const { startOffset, rect } = domQuery.getElSnapshot(r.x, r.y, metaData.el)
+    const { grabOffset, frame } = domQuery.getElSnapshot(r.x, r.y, metaData.el)
     return {
       ...base,
       axis: metaData.axis ?? 'both',
-      baseOffset: startOffset,
-      rect: rect
+      grabOffset: grabOffset,
+      frame: frame
     }
   },
 
@@ -118,18 +118,18 @@ export const buildDesc = {
     const s = carouselStore.getState().get(metaData.id)
     if (!s) return null
     const lockSwipeAt = { prev: metaData.lockPrevAt, next: metaData.lockNextAt }
-    return { index: s.index, size: s.size, lockSwipeAt }
+    return { index: s.index, sceneSize: s.sceneSize, lockSwipeAt }
   },
   buildSliderData(metaData: DomMeta): SliderData | null {
     const s = sliderStore.getState().get(metaData.id)
     if (!s) return null
-    return { thumbSize: s.thumbSize, constraints: { min: s.min, max: s.max }, size: s.size }
+    return { thumbSize: s.thumbSize, constraints: { min: s.min, max: s.max }, containerSize: s.containerSize }
   },
   buildDragData(metaData: DomMeta): DragData & DragModifiers | null {
     const s = dragStore.getState().get(metaData.id)
     if (!s) return null
     const snap = (metaData.snapX != null && metaData.snapY != null) ? { x: metaData.snapX, y: metaData.snapY } : undefined
-    return { position: s.position, layout: s.layout, snap: snap, locked: metaData.locked }
+    return { settledOffset: s.settledOffset, layout: s.layout, snap: snap, locked: metaData.locked }
   },
 
   /* =========================

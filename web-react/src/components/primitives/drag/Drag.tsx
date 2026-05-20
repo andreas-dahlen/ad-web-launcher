@@ -19,7 +19,7 @@ export default function Drag({
 }: DragProps) {
 
   // ── Fully subscribe to the drag store─────────────────────────────
-  const { position, offset, dragging } = useDragStore(id)
+  const { settledOffset, liveOffset, dragging, frame, layout } = useDragStore(id)
   const { dragEnabled, dragSnapX, dragSnapY, snapEnabled } = useSettingsStore()
 
 
@@ -45,8 +45,8 @@ export default function Drag({
 
   // ── Drag motion─────────────────────────────
   const { motionStyle } = useDragMotion({
-    position,
-    offset,
+    settledOffset,
+    liveOffset,
     dragging
   })
 
@@ -55,51 +55,66 @@ export default function Drag({
 
 
 
-  const item = (
-    <div
-      ref={containerRef}
-      className='drag-container'
-    >
-      <div
-        ref={dragItemRef}
-        style={{ ...motionStyle, pointerEvents: locked ? 'none' : 'auto' }}
-        className={`drag ${className ?? ''}`}
-        data-id={id}
-        data-axis="both"
-        data-type="drag"
-        data-locked={locked || undefined}
-        data-snap-x={resolvedSnapX}
-        data-snap-y={resolvedSnapY}
-      >
-        {children}
-      </div >
-    </div>)
+  // const item = (
+  //   <div
+  //     ref={containerRef}
+  //     className='drag-container'
+  //     data-frame='drag'
+  //   >
+  //     <div
+  //       ref={dragItemRef}
+  //       style={{ ...motionStyle, pointerEvents: locked ? 'none' : 'auto' }}
+  //       className={`drag ${className ?? ''}`}
+  //       data-id={id}
+  //       data-axis="both"
+  //       data-type="drag"
+  //       data-locked={locked || undefined}
+  //       data-snap-x={resolvedSnapX}
+  //       data-snap-y={resolvedSnapY}
+  //     >
+  //       {children}
+  //     </div >
+  //   </div>)
 
   return (
     <>
-      {item}
-      {mirrorSlot ? createPortal(
+      <div
+        ref={containerRef}
+        className='drag-container'
+        data-frame='drag'
+      >
+        <div
+          ref={dragItemRef}
+          style={{ ...motionStyle, pointerEvents: locked ? 'none' : 'auto' }}
+          className={`drag ${className ?? ''}`}
+          data-id={id}
+          data-axis="both"
+          data-type="drag"
+          data-locked={locked || undefined}
+          data-snap-x={resolvedSnapX}
+          data-snap-y={resolvedSnapY}
+        >
+          {children}
+        </div >
+      </div>
+      {mirrorSlot && dragging && createPortal(
         <div
           className='drag-container'
           style={{
-            // width: layout?.container.x,
-            // height: layout?.container.y
+            width: layout.containerSize.x,
+            height: layout.containerSize.y,
+            top: frame.top,
+            // left: frame.left
           }}
         >
           <div
             style={{ ...motionStyle, pointerEvents: 'none', background: 'hotPink' }}
             className={`drag ${className ?? ''}`}
-            data-id={id}
-            data-axis="both"
-            data-type="drag"
-            data-locked={locked || undefined}
-            data-snap-x={resolvedSnapX}
-            data-snap-y={resolvedSnapY}
           >
             {children}
           </div >
         </div>
-        , mirrorSlot) : ''}
+        , mirrorSlot)}
     </>
   )
 }

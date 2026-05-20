@@ -10,13 +10,20 @@ export interface BaseInteraction {
 export type BaseWithSwipe =
   BaseInteraction & {
     readonly axis: Axis
-    readonly baseOffset: Vec2
-    readonly rect: DOMRect
+    readonly grabOffset: Vec2
+    readonly frame: FrameSnapshot
   }
 
-export type OffsetInElement = {
-  startOffset: Vec2
-  rect: DOMRect
+export type ElSnapshots = {
+  grabOffset: Vec2
+  frame: FrameSnapshot
+}
+
+export interface FrameSnapshot {
+  left: number
+  top: number
+  width: number
+  height: number
 }
 
 export interface Capabilities {

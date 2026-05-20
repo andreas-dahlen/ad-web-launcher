@@ -5,7 +5,7 @@ type Role = "prev" | "current" | "next"
 
 interface UseCarouselMotionProps {
   store: {
-    offset: number
+    liveOffset: number
     dragging: boolean
     settling: boolean
   }
@@ -23,7 +23,7 @@ export function useCarouselMotion({
   // onSettled
 }: UseCarouselMotionProps) {
 
-  const delta = store.offset ?? 0
+  const delta = store.liveOffset ?? 0
   const isDragging = store.dragging ?? false
   const isSettling = store.settling ?? false
 

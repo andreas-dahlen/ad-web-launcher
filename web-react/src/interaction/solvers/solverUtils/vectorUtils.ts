@@ -7,9 +7,9 @@ export const vector = {
     return Math.max(min, Math.min(max, delta))
   },
 
-  clamp2D(delta: Vec2, position: Vec2, constraints: DragLayout["constraints"]) {
+  clamp2D(delta: Vec2, settledOffset: Vec2, constraints: DragLayout["constraints"]) {
     const { x: dx, y: dy } = delta
-    const { x: px, y: py } = position
+    const { x: px, y: py } = settledOffset
     const { minX, maxX, minY, maxY } = constraints
 
     return {
@@ -17,12 +17,12 @@ export const vector = {
       y: this.clamp(py + dy, minY, maxY)
     }
   },
-  relativeClamp2D(delta: Vec2, position: Vec2, constraints: DragLayout["constraints"]) {
-    const clamped = this.clamp2D(delta, position, constraints)
+  relativeClamp2D(delta: Vec2, settledOffset: Vec2, constraints: DragLayout["constraints"]) {
+    const clamped = this.clamp2D(delta, settledOffset, constraints)
 
     return {
-      x: clamped.x - position.x,
-      y: clamped.y - position.y
+      x: clamped.x - settledOffset.x,
+      y: clamped.y - settledOffset.y
     }
   },
 

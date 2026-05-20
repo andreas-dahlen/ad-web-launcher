@@ -3,16 +3,19 @@ import { immer } from 'zustand/middleware/immer'
 import type { Vec2 } from '../typeScript/core/primitiveType.ts'
 import type { CtxDrag } from '../typeScript/descriptor/ctxType.ts'
 import type { DragLayout } from '@typeScript/descriptor/dataType.ts'
+import type { FrameSnapshot } from '@typeScript/descriptor/baseType.ts'
 
 type Drag = {
   //react motion
-  offset: Vec2
+  liveOffset: Vec2
   dragging: boolean
   //reactPosition
-  position: Vec2
-  // non reactive
+  settledOffset: Vec2
 
+  // resize observer
   layout: DragLayout
+
+  frame: FrameSnapshot
 }
 
 export type DragStore = {
@@ -22,6 +25,7 @@ export type DragStore = {
   delete: (id: string) => void
 
   setLayout: (id: string, layout: DragLayout) => void
+  setFrame: (id: string, frame: FrameSnapshot) => void
   setPosition: (id: string, pos: Vec2) => void
   swipeStart: (ctx: CtxDrag) => void
   swipe: (ctx: CtxDrag) => void
@@ -38,8 +42,8 @@ export const dragStore = create<DragStore>()(
 
       set(state => {
         state.bindings[id] = {
-          position: { x: 0, y: 0 },
-          offset: { x: 0, y: 0 },
+          settledOffset: { x: 0, y: 0 },
+          liveOffset: { x: 0, y: 0 },
           dragging: false,
           layout: {
             constraints: {
@@ -48,8 +52,14 @@ export const dragStore = create<DragStore>()(
               minY: -Infinity,
               maxY: Infinity
             },
-            container: { x: 0, y: 0 },
-            item: { x: 0, y: 0 }
+            containerSize: { x: 0, y: 0 },
+            itemSize: { x: 0, y: 0 }
+          },
+          frame: {
+            left: 0,
+            top: 0,
+            width: 0,
+            height: 0
           }
         }
       })
@@ -71,9 +81,17 @@ export const dragStore = create<DragStore>()(
         if (!s) return
         s.layout = {
           constraints: packet.constraints,
-          container: packet.container,
-          item: packet.item
+          containerSize: packet.containerSize,
+          itemSize: packet.itemSize
         }
+      })
+    },
+
+    setFrame(id, packet) {
+      set(state => {
+        const s = state.bindings[id]
+        if (!s) return
+        s.frame = packet
       })
     },
 
@@ -81,7 +99,7 @@ export const dragStore = create<DragStore>()(
       set(state => {
         const s = state.bindings[id]
         if (!s) return
-        s.position = { x: pos.x, y: pos.y }
+        s.settledOffset = { x: pos.x, y: pos.y }
       })
     },
 
@@ -90,7 +108,7 @@ export const dragStore = create<DragStore>()(
         const s = state.bindings[ctx.id]
         if (!s) return
         s.dragging = true
-        s.offset = { x: 0, y: 0 }
+        s.liveOffset = { x: 0, y: 0 }
       })
     },
 
@@ -98,7 +116,7 @@ export const dragStore = create<DragStore>()(
       set(state => {
         const s = state.bindings[ctx.id]
         if (!s) return
-        s.offset = ctx.delta ?? s.offset
+        s.liveOffset = ctx.delta ?? s.liveOffset
       })
     },
 
@@ -106,8 +124,8 @@ export const dragStore = create<DragStore>()(
       set(state => {
         const s = state.bindings[ctx.id]
         if (!s) return
-        s.position = ctx.delta ?? s.position
-        s.offset = { x: 0, y: 0 }
+        s.settledOffset = ctx.delta ?? s.settledOffset
+        s.liveOffset = { x: 0, y: 0 }
         s.dragging = false
       })
     }

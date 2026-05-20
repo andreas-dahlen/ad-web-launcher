@@ -3,7 +3,7 @@ import { gestureUtils } from '../core/gestureUtils.ts'
 import { buildDesc } from '../core/buildDesc.ts'
 import type { Descriptor, SwipeableDescriptor } from '../../typeScript/descriptor/descriptor.ts'
 import { extractDomMeta } from './domMeta.ts'
-import type { OffsetInElement } from '@typeScript/descriptor/baseType.ts'
+import type { ElSnapshots } from '@typeScript/descriptor/baseType.ts'
 
 export const domQuery = {
 
@@ -37,15 +37,22 @@ export const domQuery = {
   /* ============================
      DOM offset Resolution
   =============================== */
+  /** static start poisition inside of FRAME at x, y. Used to calculate pointers positioning (grabOffset) aswell as returning frame position (rect)*/
+  getElSnapshot(x: number, y: number, element: Element): ElSnapshots {
 
-  getElSnapshot(x: number, y: number, element: Element): OffsetInElement {
-    //static start poisition inside of element at x, y
-    const rect = element.getBoundingClientRect()
+    const frameRef = element.closest('[data-frame]')
+
+    if (!frameRef) {
+      throw new Error('No data-frame found for interaction element')
+    }
+
+    const rect = frameRef.getBoundingClientRect()
     const left = (x - rect.left)
     const top = (y - rect.top)
-    const startOffset = gestureUtils.normalizedDelta({ x: left, y: top })
+    const grabOffset = gestureUtils.normalizedDelta({ x: left, y: top })
+    const frame = gestureUtils.normalizeFrame(rect)
     return {
-      startOffset, rect
+      grabOffset, frame
     }
   }
 }
