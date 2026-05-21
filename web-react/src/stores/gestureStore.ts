@@ -1,30 +1,47 @@
+import type { InteractionType } from '@typeScript/core/primitiveType';
+import type { CtxType } from '@typeScript/descriptor/ctxType';
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 
-
+type ActiveGesture = {
+  pointerId: number
+  type: InteractionType
+}
 
 export type GestureStore = {
-  activeSwipes: number
+  gestureNodes: Record<number, ActiveGesture>
 
-  increment: () => void
-  decrement: () => void
+  increment: (ctx: CtxType, id: number) => void
+  decrement: (id: number) => void
+  isGestureActive: (type: InteractionType) => boolean
 }
 
 
 export const gestureStore = create<GestureStore>()(
-  immer((set) => ({
+  immer((set, get) => ({
 
-    activeSwipes: 0,
+    gestureNodes: {},
 
-    increment: () => {
+    increment: (ctx, id) => {
+      if (get().gestureNodes[id]) return
+
       set(state => {
-        state.activeSwipes++
+        state.gestureNodes[id] = {
+          pointerId: id,
+          type: ctx.type
+        }
       })
     },
-    decrement: () => {
+
+    decrement: (id) => {
       set(state => {
-        state.activeSwipes = Math.max(0, state.activeSwipes - 1)
+        delete state.gestureNodes[id]
       })
+    },
+
+    isGestureActive: (searchType) => {
+      const gestures = Object.values(get().gestureNodes)
+      return gestures.some(gesture => gesture.type === searchType)
     }
   })
   )

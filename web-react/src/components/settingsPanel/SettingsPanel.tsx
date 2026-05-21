@@ -7,7 +7,7 @@ import { useSettingsStore } from '../../hooks/useSettingsStore.js';
 import SettingsButton from './SettingsButton.tsx';
 import Slider from '@slider/Slider.tsx';
 import SnapInput from '@components/settingsPanel/SnapInput.tsx';
-import { gestureStore } from '../../stores/gestureStore.ts';
+import { useGestureStore } from '../../hooks/useGestureStore.ts';
 
 export default function SettingsPanel() {
 
@@ -24,22 +24,22 @@ export default function SettingsPanel() {
     setSnapEnabled
   } = useSettingsStore()
 
-  const isSwiping = gestureStore(state => state.activeSwipes > 0)
+  const { isGestureActive } = useGestureStore()
 
   const [sliderOne, setSliderOne] = useState(0)
   const [sliderTwo, setSliderTwo] = useState(0)
 
 
-  const handleGridEnabling = () => {
-    if (!gridEnabled) {
-      setGridEnabled(true)
-      setTimeout(() => { setGridEnabled(false) }, 2000)
-    }
-  }
+  // const handleGridEnabling = () => {
+  //   if (!gridEnabled) {
+  //     setGridEnabled(true)
+  //     setTimeout(() => { setGridEnabled(false) }, 2000)
+  //   }
+  // }
 
 
   return (
-    <div className='settings-panel' style={{ opacity: isSwiping ? '0.3' : '1' }}>
+    <div className='settings-panel' style={{ opacity: isGestureActive('drag') ? '0.3' : '1' }}>
       <div className='settings-row'>
         <SettingsButton
           id='lock-drag-item'
@@ -73,12 +73,12 @@ export default function SettingsPanel() {
 
         <SnapInput id="snapX" min={8} max={18} step={1} value={dragSnapX} enabled={snapEnabled} onChange={(v) => {
           setDragSnapX(v)
-          handleGridEnabling()
+          // handleGridEnabling()
         }} />
 
         <SnapInput id="snapY" min={16} max={36} step={2} value={dragSnapY} enabled={snapEnabled} onChange={(v) => {
           setDragSnapY(v)
-          handleGridEnabling()
+          // handleGridEnabling()
         }} />
       </div >
 

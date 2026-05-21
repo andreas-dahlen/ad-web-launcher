@@ -4,7 +4,6 @@ import { domQuery } from './domQuery.ts'
 import type { Axis, EventType, Vec2 } from '../../typeScript/core/primitiveType.ts'
 import type { Descriptor } from '../../typeScript/descriptor/descriptor.ts'
 import type { GestureUpdate } from '../../typeScript/descriptor/dataType.ts'
-import { pipeline } from './pipeline.ts'
 
 /* ========================
    Gesture state
@@ -101,8 +100,6 @@ function onMove(x: number, y: number, pointerId: number): Descriptor | null {
 
     //FUTURE return pressCancel if unresolved 
     if (!resolved) return null
-
-    pipeline.hydrateStores(resolved)
 
     //set value here
 

@@ -1,15 +1,13 @@
 import Carousel from "@carousel/Carousel.tsx"
 import DragGrid from '@components/settingsPanel/DragGrid.tsx'
-import { useSettingsStore } from '../../hooks/useSettingsStore.ts'
 import { Z } from '@config/zIndex.ts'
 import { contentComp } from '../compositions/laneComps.ts'
 
-/** LAYER 3/4! Interactive=false carousel. Contents are mounted inside!
+/** LAYER 2/3! Interactive=false carousel. Contents are mounted inside!
  * The carousel swipes are handled by baseLayer. */
 export default function ContentLayer() {
-  const { gridEnabled } = useSettingsStore()
   return (
-    <div className="layer" style={{ zIndex: Z.content }}>
+    <div className="layer content-layer" style={{ zIndex: Z.content }}>
       {contentComp.map(comp => {
         const oneCarousel = (
           < Carousel
@@ -22,7 +20,7 @@ export default function ContentLayer() {
           return (
             <div
               key={`${comp.id}-content-layer`}
-              className="layer"
+              className="layer content-layer"
               style={{ zIndex: Z[comp.renderLayer] }}
             >
               {oneCarousel}
@@ -31,10 +29,8 @@ export default function ContentLayer() {
         }
         return oneCarousel
       })}
-      {gridEnabled ? <DragGrid /> : ''}
-
-      <div id="drag-slot">
-      </div>
+      <DragGrid />
+      <div id="drag-slot" />
     </div>
   )
 }

@@ -24,12 +24,12 @@ const mid = [Mid1, Mid2, Mid3]
 
 const bottom = [Bottom1, Bottom2, Bottom3]
 
-const vertical = [vert1, vert2, vert3]
-
 const wallPaper = [Wp1, Wp2, Wp3]
+
+const vertical = [vert1, vert2, vert3]
 
 export const lanes = {
   horizontal: { top, mid, bottom },
-  vertical,
-  wallPaper
+  wallPaper,
+  vertical
 }

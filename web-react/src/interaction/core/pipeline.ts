@@ -6,11 +6,10 @@ import { domUpdater } from '../updater/domUpdater.ts'
 import { dragStore } from '../../stores/dragStore.ts'
 import { sliderStore } from '../../stores/sliderStore.ts'
 import { carouselStore } from '../../stores/carouselStore.ts'
-import { CAROUSEL_EVENTS, DRAG_EVENTS, SLIDER_EVENTS, type CarouselFunctions, type DragFunctions, type InterpreterFn, type SliderFunctions } from '../../typeScript/core/pipelineType.ts'
+import type { InterpreterFn } from '../../typeScript/core/pipelineType.ts'
 import type { EventBridgeType } from '../../typeScript/core/primitiveType.ts'
 import type { CtxType } from '../../typeScript/descriptor/ctxType.ts'
 import type { PointerEventPackage } from '../../hooks/usePointerBridge.ts'
-import type { Descriptor } from '@typeScript/descriptor/descriptor.ts'
 import { gestureStore } from '../../stores/gestureStore.ts'
 
 /* =====================
@@ -29,16 +28,13 @@ export const pipeline = {
   abortGesture(pointerId: number) {
     //FUTURE for safty could possibly think about how to setup a abort for zustand stores to abort and reset store values.
     interpreter.deleteGesture(pointerId)
-    gestureStore.getState().decrement() // ← or reset to 0 if you're feeling paranoid
+    gestureStore.getState().decrement(pointerId) // ← or reset to 0 if you're feeling paranoid
   },
 
-  hydrateStores(desc: Descriptor) {
-    if (desc.type === 'drag') {
+  notifyGestureStore(ctx: CtxType, pointerId: number) {
+    if (ctx.event === 'swipeStart') gestureStore.getState().increment(ctx, pointerId)
 
-      dragStore.getState().setFrame(desc.base.id, desc.base.frame)
-    }
-
-    //set value here
+    if (ctx.event === 'swipeCommit' || ctx.event === 'swipeRevert') gestureStore.getState().decrement(pointerId)
   },
 
   orchestrate(eventPackage: PointerEventPackage) {
@@ -57,12 +53,10 @@ export const pipeline = {
 
     const desc = interpreterFn(x, y, pointerId)
     if (!desc) return null
+
     /* -------------------------
        Solvers and Store Mutations narrowed
     -------------------------- */
-    //set value here
-
-
     const { type, ctx: { event } } = desc
     let ctx: CtxType
 
@@ -71,9 +65,8 @@ export const pipeline = {
         ctx = desc.ctx
         const sr = carouselSolver?.[event]?.(desc)
         if (sr) ctx = { ...ctx, ...sr }
-        if (ctx.storeAccepted && CAROUSEL_EVENTS.has(ctx.event)) {
-          const fn = carouselStore.getState()[ctx.event as keyof CarouselFunctions]
-          fn?.(ctx)
+        if (ctx.storeAccepted) {
+          carouselStore.getState().apply(ctx)
         }
         break
       }
@@ -82,9 +75,8 @@ export const pipeline = {
         const sr = sliderSolver?.[event]?.(desc)
         if (sr) ctx = { ...ctx, ...sr }
         if (ctx.gestureUpdate != null) interpreter.applyGestureUpdate(ctx.gestureUpdate)
-        if (ctx.storeAccepted && SLIDER_EVENTS.has(ctx.event)) {
-          const fn = sliderStore.getState()[ctx.event as keyof SliderFunctions]
-          fn?.(ctx)
+        if (ctx.storeAccepted) {
+          sliderStore.getState().apply(ctx)
         }
         break
       }
@@ -92,10 +84,14 @@ export const pipeline = {
         ctx = desc.ctx
         const sr = dragSolver?.[event]?.(desc)
         if (sr) ctx = { ...ctx, ...sr }
-        if (ctx.storeAccepted && DRAG_EVENTS.has(ctx.event)) {
-          const fn = dragStore.getState()[ctx.event as keyof DragFunctions]
-          fn?.(ctx)
+        if (ctx.storeAccepted) {
+          dragStore.getState().apply(ctx)
+
+          if (ctx.event === 'swipeStart') {
+            dragStore.getState().setFrame(desc.base.id, desc.base.frame)
+          }
         }
+
         break
       }
       case 'button': {
@@ -104,14 +100,15 @@ export const pipeline = {
       }
       default: { throw new Error(`Unknown descriptor type: ${type}`) }
     }
+
     /* -------------------------
        Renderer
     -------------------------- */
     domUpdater.handle(ctx)
 
-
-    if (ctx.event === 'swipeStart') gestureStore.getState().increment()
-    if (ctx.event === 'swipeCommit' || ctx.event === 'swipeRevert') gestureStore.getState().decrement()
+    /* -------------------------
+       Global gesture storage for jsx subscription side effects
+    -------------------------- */
+    this.notifyGestureStore(ctx, desc.base.pointerId)
   }
-
 }

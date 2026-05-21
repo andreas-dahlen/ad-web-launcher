@@ -2,7 +2,7 @@ import SettingsPanel from '@components/settingsPanel/SettingsPanel.js';
 import { useSettingsStore } from '../../hooks/useSettingsStore';
 import { Z } from '@config/zIndex';
 
-/** LAYER 4/4! Horizontal swipes. doesn't contain content! */
+/** LAYER 3/3! */
 export default function OverlayLayer() {
 
   const { settingsOverlayEnabled } = useSettingsStore()

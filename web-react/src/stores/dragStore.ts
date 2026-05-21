@@ -27,9 +27,8 @@ export type DragStore = {
   setLayout: (id: string, layout: DragLayout) => void
   setFrame: (id: string, frame: FrameSnapshot) => void
   setPosition: (id: string, pos: Vec2) => void
-  swipeStart: (ctx: CtxDrag) => void
-  swipe: (ctx: CtxDrag) => void
-  swipeCommit: (ctx: CtxDrag) => void
+
+  apply: (ctx: CtxDrag) => void
 }
 
 export const dragStore = create<DragStore>()(
@@ -103,32 +102,31 @@ export const dragStore = create<DragStore>()(
       })
     },
 
-    swipeStart: (ctx) => {
+    apply: (ctx) => {
       set(state => {
         const s = state.bindings[ctx.id]
         if (!s) return
-        s.dragging = true
-        s.liveOffset = { x: 0, y: 0 }
-      })
-    },
-
-    swipe: (ctx) => {
-      set(state => {
-        const s = state.bindings[ctx.id]
-        if (!s) return
-        s.liveOffset = ctx.delta ?? s.liveOffset
-      })
-    },
-
-    swipeCommit: (ctx) => {
-      set(state => {
-        const s = state.bindings[ctx.id]
-        if (!s) return
-        s.settledOffset = ctx.delta ?? s.settledOffset
-        s.liveOffset = { x: 0, y: 0 }
-        s.dragging = false
+        switch (ctx.event) {
+          case 'swipeStart': {
+            s.dragging = true
+            s.liveOffset = { x: 0, y: 0 }
+            break
+          }
+          case 'swipe': {
+            s.liveOffset = ctx.delta ?? s.liveOffset
+            break
+          }
+          case 'swipeCommit': {
+            s.settledOffset = ctx.delta ?? s.settledOffset
+            s.liveOffset = { x: 0, y: 0 }
+            s.dragging = false
+            break
+          }
+          default: { throw new Error(`Invalid carousel event! Event: ${ctx.event}`) }
+        }
       })
     }
+
   })
   )
 )

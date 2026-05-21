@@ -26,10 +26,14 @@ export type SliderStore = {
   setConstraints: (id: string, constraints: { min: number, max: number }) => void
   setContainerSize: (id: string, containerSize: Size2D) => void
   setThumbSize: (id: string, thumbSize: Size2D) => void
-  press: (ctx: CtxSlider) => void
-  swipeStart: (ctx: CtxSlider) => void
-  swipe: (ctx: CtxSlider) => void
-  swipeCommit: (ctx: CtxSlider) => void
+
+  apply: (ctx: CtxSlider) => void
+
+
+  // press: (ctx: CtxSlider) => void
+  // swipeStart: (ctx: CtxSlider) => void
+  // swipe: (ctx: CtxSlider) => void
+  // swipeCommit: (ctx: CtxSlider) => void
 }
 /* -------------------------------
    Slider state functions
@@ -90,36 +94,64 @@ export const sliderStore = create<SliderStore>()(
       })
     },
     // if (s.thumbSize === thumbSize)
-    press: (ctx) => {
+    // press: (ctx) => {
+    //   set(state => {
+    //     const s = state.bindings[ctx.id]
+    //     if (!s) return
+    //     s.value = ctx.delta1D ?? s.value
+    //   })
+    // },
+    // swipeStart: (ctx) => {
+    //   set(state => {
+    //     const s = state.bindings[ctx.id]
+    //     if (!s) return
+    //     s.dragging = true
+    //     s.value = ctx.delta1D ?? s.value
+    //   })
+    // },
+    // swipe: (ctx) => {
+    //   set(state => {
+    //     const s = state.bindings[ctx.id]
+    //     if (!s) return
+    //     s.value = ctx.delta1D ?? s.value
+    //   })
+    // },
+    // swipeCommit: (ctx) => {
+    //   set(state => {
+    //     const s = state.bindings[ctx.id]
+    //     if (!s) return
+    //     s.dragging = false
+    //     s.value = ctx.delta1D ?? s.value
+    //   })
+    // },
+
+    apply: (ctx) => {
       set(state => {
         const s = state.bindings[ctx.id]
         if (!s) return
-        s.value = ctx.delta1D ?? s.value
+        switch (ctx.event) {
+          case 'press': {
+            s.value = ctx.delta1D ?? s.value
+            break
+          }
+          case 'swipeStart': {
+            s.dragging = true
+            s.value = ctx.delta1D ?? s.value
+            break
+          }
+          case 'swipe': {
+            s.value = ctx.delta1D ?? s.value
+            break
+          }
+          case 'swipeCommit': {
+            s.dragging = false
+            s.value = ctx.delta1D ?? s.value
+            break
+          }
+          default: { throw new Error(`Invalid carousel event! Event: ${ctx.event}`) }
+        }
       })
-    },
-    swipeStart: (ctx) => {
-      set(state => {
-        const s = state.bindings[ctx.id]
-        if (!s) return
-        s.dragging = true
-        s.value = ctx.delta1D ?? s.value
-      })
-    },
-    swipe: (ctx) => {
-      set(state => {
-        const s = state.bindings[ctx.id]
-        if (!s) return
-        s.value = ctx.delta1D ?? s.value
-      })
-    },
-    swipeCommit: (ctx) => {
-      set(state => {
-        const s = state.bindings[ctx.id]
-        if (!s) return
-        s.dragging = false
-        s.value = ctx.delta1D ?? s.value
-      })
-    },
+    }
   })
   )
 )

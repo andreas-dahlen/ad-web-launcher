@@ -26,12 +26,8 @@ export type CarouselStore = {
 
   setCount: (id: string, count: number) => void
   setSize: (id: string, sceneSize: Size2D) => void
-  // setPosition: (id: string) => void
 
-  swipeStart: (ctx: CtxCarousel) => void
-  swipe: (ctx: CtxCarousel) => void
-  swipeCommit: (ctx: CtxCarousel) => void
-  swipeRevert: (ctx: CtxCarousel) => void
+  apply: (ctx: CtxCarousel) => void
 }
 
 export const carouselStore = create<CarouselStore>()(
@@ -84,49 +80,51 @@ export const carouselStore = create<CarouselStore>()(
       })
     },
 
-    swipeStart: (ctx) => {
+    apply: (ctx) => {
       set(state => {
         const s = state.bindings[ctx.id]
         if (!s) return
-        s.dragging = true
-        s.settling = false
-        if (s.pendingDir !== null) {
-          s.index = getNextIndex(s.index, s.pendingDir, s.count)
-          s.liveOffset = 0
-          s.pendingDir = null
+
+        switch (ctx.event) {
+          case 'swipeStart': {
+            s.dragging = true
+            s.settling = false
+            if (s.pendingDir !== null) {
+              s.index = getNextIndex(s.index, s.pendingDir, s.count)
+              s.liveOffset = 0
+              s.pendingDir = null
+            }
+            break
+          }
+          case 'swipe': {
+            s.liveOffset = ctx.delta1D ?? s.liveOffset
+            break
+          }
+          case 'swipeCommit': {
+            if (s.settling) return
+            s.pendingDir = ctx.direction ?? null
+            s.liveOffset = ctx.delta1D ?? s.liveOffset
+            s.dragging = false
+            break
+          }
+          case 'swipeRevert': {
+            s.liveOffset = 0
+            s.dragging = false
+            s.pendingDir = null
+            break
+          }
+          default: { throw new Error(`Invalid carousel event! Event: ${ctx.event}`) }
         }
       })
-    },
+    }
 
-    swipe: (ctx) => {
-      set(state => {
-        const s = state.bindings[ctx.id]
-        if (!s) return
-        s.liveOffset = ctx.delta1D ?? s.liveOffset
-      })
-    },
-    swipeCommit: (ctx) => {
-      set(state => {
-        const s = state.bindings[ctx.id]
-        if (!s) return
-        if (s.settling) return
-        s.pendingDir = ctx.direction ?? null
-        s.liveOffset = ctx.delta1D ?? s.liveOffset
-        s.dragging = false
-      })
-    },
-    swipeRevert: (ctx) => {
-      set(state => {
-        const s = state.bindings[ctx.id]
-        if (!s) return
-        s.liveOffset = 0
-        s.dragging = false
-        s.pendingDir = null
-      })
-    },
   })
   )
 )
+
+
+
+
 
 function getNextIndex(currentIndex: number, direction: Direction | null, count: number): number {
   if (!count || !direction) return currentIndex
