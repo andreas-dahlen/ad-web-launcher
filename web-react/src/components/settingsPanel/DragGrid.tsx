@@ -12,9 +12,12 @@ function snapPositions(count: number) {
 export default function DragGrid() {
   const { dragSnapX, dragSnapY, gridEnabled } = useSettingsStore()
 
-  const { isGestureActive } = useGestureStore()
+  const { activeGesture } = useGestureStore()
 
-  if (!gridEnabled && !isGestureActive('drag')) return null
+  const shouldRender =
+    gridEnabled || activeGesture === 'drag'
+
+  if (!shouldRender) return null
 
   const xPositions = snapPositions(dragSnapX)
   const yPositions = snapPositions(dragSnapY)

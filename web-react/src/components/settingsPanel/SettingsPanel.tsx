@@ -7,7 +7,6 @@ import { useSettingsStore } from '../../hooks/useSettingsStore.js';
 import SettingsButton from './SettingsButton.tsx';
 import Slider from '@slider/Slider.tsx';
 import SnapInput from '@components/settingsPanel/SnapInput.tsx';
-import { useGestureStore } from '../../hooks/useGestureStore.ts';
 
 export default function SettingsPanel() {
 
@@ -24,22 +23,10 @@ export default function SettingsPanel() {
     setSnapEnabled
   } = useSettingsStore()
 
-  const { isGestureActive } = useGestureStore()
-
   const [sliderOne, setSliderOne] = useState(0)
   const [sliderTwo, setSliderTwo] = useState(0)
-
-
-  // const handleGridEnabling = () => {
-  //   if (!gridEnabled) {
-  //     setGridEnabled(true)
-  //     setTimeout(() => { setGridEnabled(false) }, 2000)
-  //   }
-  // }
-
-
   return (
-    <div className='settings-panel' style={{ opacity: isGestureActive('drag') ? '0.3' : '1' }}>
+    <div className='settings-panel'>
       <div className='settings-row'>
         <SettingsButton
           id='lock-drag-item'

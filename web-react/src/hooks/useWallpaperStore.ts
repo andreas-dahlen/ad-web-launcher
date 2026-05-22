@@ -8,7 +8,7 @@ export const useWallpaperStore = () => {
     wallpaperStore.getState().init()
     return () => {
       // wallpaperStore.getState().delete()
-    }
+    } //TODO add delete?
   }, [])
 
   return wallpaperStore(

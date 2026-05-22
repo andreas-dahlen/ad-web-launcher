@@ -25,5 +25,5 @@ export const useSliderStore = (id: string) => {
 
   return sliderStore(
     useShallow((s: SliderStore) => s.bindings[id] ?? DEFAULTS)
-  )
+  ) //TODO remove useShallow?
 }

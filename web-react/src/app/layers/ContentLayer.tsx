@@ -7,7 +7,7 @@ import { contentComp } from '../compositions/laneComps.ts'
  * The carousel swipes are handled by baseLayer. */
 export default function ContentLayer() {
   return (
-    <div className="layer content-layer" style={{ zIndex: Z.content }}>
+    <div className="layer" style={{ zIndex: Z.content }}>
       {contentComp.map(comp => {
         const oneCarousel = (
           < Carousel
@@ -20,7 +20,7 @@ export default function ContentLayer() {
           return (
             <div
               key={`${comp.id}-content-layer`}
-              className="layer content-layer"
+              className="layer"
               style={{ zIndex: Z[comp.renderLayer] }}
             >
               {oneCarousel}

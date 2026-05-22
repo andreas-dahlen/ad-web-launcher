@@ -7,8 +7,7 @@ export const useGestureStore = () => {
 
   return gestureStore(
     useShallow((s: GestureStore) => ({
-      gestureNodes: s.gestureNodes,
-      isGestureActive: s.isGestureActive
-    }))
+      activeGesture: s.activeGesture
+    })) //TODO: useSHallow is useless unless this expands.
   )
 }

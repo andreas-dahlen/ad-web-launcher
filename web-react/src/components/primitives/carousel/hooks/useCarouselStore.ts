@@ -26,5 +26,5 @@ export const useCarouselStore = (id: string) => {
 
   return carouselStore(
     useShallow((s: CarouselStore) => s.bindings[id] ?? DEFAULTS)
-  )
+  ) //TODO remove useShallow?
 }

@@ -9,11 +9,11 @@ type ActiveGesture = {
 }
 
 export type GestureStore = {
+  activeGesture: InteractionType | 'none'
   gestureNodes: Record<number, ActiveGesture>
 
   increment: (ctx: CtxType, id: number) => void
   decrement: (id: number) => void
-  isGestureActive: (type: InteractionType) => boolean
 }
 
 
@@ -21,6 +21,8 @@ export const gestureStore = create<GestureStore>()(
   immer((set, get) => ({
 
     gestureNodes: {},
+
+    activeGesture: 'none',
 
     increment: (ctx, id) => {
       if (get().gestureNodes[id]) return
@@ -30,18 +32,18 @@ export const gestureStore = create<GestureStore>()(
           pointerId: id,
           type: ctx.type
         }
+        state.activeGesture = ctx.type
       })
     },
 
     decrement: (id) => {
       set(state => {
         delete state.gestureNodes[id]
-      })
-    },
+        const remaining = Object.values(state.gestureNodes)
 
-    isGestureActive: (searchType) => {
-      const gestures = Object.values(get().gestureNodes)
-      return gestures.some(gesture => gesture.type === searchType)
+        state.activeGesture =
+          remaining[0]?.type ?? 'none'
+      })
     }
   })
   )

@@ -32,5 +32,5 @@ export const useDragStore = (id: string) => {
 
   return dragStore(
     useShallow((s: DragStore) => s.bindings[id] ?? DEFAULTS)
-  )
+  ) //TODO remove useShallow?
 }

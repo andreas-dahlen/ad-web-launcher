@@ -7,7 +7,7 @@ import useRuntimeBindings from '../compositions/useRuntimeBindings';
 export default function BaseLayer() {
   const { runtimeBindings } = useRuntimeBindings()
   return (
-    <div className='layer base-layer' style={{ zIndex: Z.base }}>
+    <div className='layer' style={{ zIndex: Z.base }}>
       {baseComp.map(comp => {
         const oneCarousel = (
           <Carousel
@@ -21,7 +21,7 @@ export default function BaseLayer() {
           return (
             <div
               key={`${comp.id}-layer`}
-              className="layer base-layer"
+              className="layer"
               style={{ zIndex: Z[comp.renderLayer] }}
             >
               {oneCarousel}
