@@ -11,7 +11,7 @@ export default function Button({
   // onPressCancel,
   onPressRelease,
   children,
-  ...rest
+  buttonDataAttrs
 }: ButtonProps & React.HTMLAttributes<HTMLDivElement>) {
 
   const buttonRef = useRef<HTMLDivElement>(null)
@@ -38,7 +38,7 @@ export default function Button({
   return (
     <div
       ref={buttonRef}
-      {...rest}
+      {...buttonDataAttrs}
       className={`button ${className ?? ''}`}
       style={{ pointerEvents: interactive ? "auto" : "none" }}
       data-type="button"

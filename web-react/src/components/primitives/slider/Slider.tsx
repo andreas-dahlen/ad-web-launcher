@@ -11,8 +11,8 @@ export default function Slider({
   axis,
   onValueChange,
   className,
-  trackStyling,
-  thumbStyling,
+  trackClassName,
+  thumbClassName,
   children
 }: SliderProps) {
 
@@ -94,12 +94,12 @@ export default function Slider({
       data-axis={axis}
     >
       <div
-        className={`track ${classAxisTrack} ${trackStyling ?? ''}`}>
+        className={`track ${classAxisTrack} ${trackClassName ?? ''}`}>
       </div>
 
       <div
         ref={thumbRef}
-        className={`slider-thumb ${thumbStyling ?? ''}`}
+        className={`slider-thumb ${thumbClassName ?? ''}`}
         style={{
           ...thumbStyle,
           ...(horizontal ? { left: 0 } : { top: 0 })

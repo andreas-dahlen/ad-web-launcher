@@ -27,6 +27,8 @@ export type CarouselStore = {
   setCount: (id: string, count: number) => void
   setSize: (id: string, sceneSize: Size2D) => void
 
+  setSettling: (id: string) => void
+
   apply: (ctx: CtxCarousel) => void
 }
 
@@ -77,6 +79,30 @@ export const carouselStore = create<CarouselStore>()(
         if (!s) return
         if (s.sceneSize.width === sceneSize.width && s.sceneSize.height === sceneSize.height) return
         s.sceneSize = sceneSize
+      })
+    },
+
+    /**
+ * Commits pendingDir → index immediately after the swipe animation completes.
+ * Without this, index only updates on the next swipeStart — fine visually,
+ * but unreliable for anything that needs to know which scene is current.
+ * Called from onTransitionEnd in useCarouselMotion.
+ */
+    setSettling: (id) => {
+      set(state => {
+        const s = state.bindings[id]
+        if (!s?.pendingDir) return
+        s.settling = true
+        s.index = getNextIndex(s.index, s.pendingDir, s.count)
+        s.liveOffset = 0
+        s.pendingDir = null
+      })
+      requestAnimationFrame(() => {
+        set(state => {
+          const s = state.bindings[id]
+          if (!s) return
+          s.settling = false
+        })
       })
     },
 

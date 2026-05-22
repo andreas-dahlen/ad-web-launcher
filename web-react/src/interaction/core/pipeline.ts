@@ -107,7 +107,7 @@ export const pipeline = {
     domUpdater.handle(ctx)
 
     /* -------------------------
-       Global gesture storage for jsx subscription side effects
+       Global gesture storage for tsx subscription side effects
     -------------------------- */
     this.notifyGestureStore(ctx, desc.base.pointerId)
   }

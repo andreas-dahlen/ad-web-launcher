@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { APP_CONFIG } from '@config/appConfig.ts';
-import DebugWrapper from '@debug/DebugWrapper.tsx';
+import DebugWrapper from '@components/appBasics/DebugWrapper.tsx';
 import Root from './app/Root.tsx';
 import '@styles/index.css'
-import LoadingScene from '@scenes/LoadingScene.tsx';
+import LoadingScene from './components/appBasics/LoadingScene.tsx';
 
 export default function App() {
 

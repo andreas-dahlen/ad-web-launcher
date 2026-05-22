@@ -26,11 +26,13 @@ export default function SettingsButton({
       <Button
         id={id}
         className='settings-button'
-        data-active={value ? 'true' : 'false'}
-        data-enabled={enabled ? 'true' : 'false'}
         onPressRelease={setValue}
-        data-state={'released'}
         interactive={enabled}
+        buttonDataAttrs={{
+          'data-active': value,
+          'data-enabled': enabled,
+          'data-state': 'released'
+        }}
       >
         <ReactImg className={value ?
           'svg-img svg-dark' : 'svg-img svg-bright'} />

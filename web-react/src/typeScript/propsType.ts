@@ -1,5 +1,13 @@
 import type { CtxType } from './descriptor/ctxType.ts'
 
+export type DataAttributes = {
+  [key: `data-${string}`]:
+  string |
+  number |
+  boolean |
+  undefined
+}
+
 export interface DragProps {
   id: string
   snapX?: number
@@ -9,6 +17,7 @@ export interface DragProps {
   onSwipeCommit?: (detail: CtxType) => void
   children?: React.ReactNode
   className?: string
+  dragDataAttrs?: DataAttributes
 }
 
 export interface CarouselProps {
@@ -19,8 +28,8 @@ export interface CarouselProps {
   lockPrevAt?: number
   lockNextAt?: number
   interactive?: boolean
-  onSwipeCommit?: (detail: CtxType) => void,
-  onSettled?: () => void
+  onSwipeCommit?: (detail: CtxType) => void
+  carouselDataAttrs?: DataAttributes
 }
 
 export interface SliderProps {
@@ -29,8 +38,9 @@ export interface SliderProps {
   onValueChange?: (value: number) => void
   children?: React.ReactNode
   className?: string
-  trackStyling?: string
-  thumbStyling?: string
+  trackClassName?: string
+  thumbClassName?: string
+  sliderDataAttrs?: DataAttributes
 }
 
 export interface ButtonProps {
@@ -40,4 +50,20 @@ export interface ButtonProps {
   interactive?: boolean
   onPressRelease?: (detail: CtxType) => void
   children?: React.ReactNode
+  buttonDataAttrs?: DataAttributes
+}
+
+export interface DragButtonProps {
+  id: string
+  snapX?: number
+  snapY?: number
+  settingsSnap?: boolean
+  onSwipeCommit?: (detail: CtxType) => void
+  children?: React.ReactNode
+  className?: string
+  action?: string
+  isDrag?: boolean
+  onPressRelease?: (detail: CtxType) => void
+  dragDataAttrs?: DataAttributes
+  buttonDataAttrs?: DataAttributes
 }

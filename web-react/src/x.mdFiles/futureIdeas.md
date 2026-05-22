@@ -1,13 +1,38 @@
+** Option B — namespacing
+
+Engine attrs:
+
+data-engine-state
+data-engine-dragging
+
+Consumer attrs:
+
+data-active
+data-theme
+
+VERY scalable.
+
+Option C — merge protection
+
+Inside Button:
+
+const mergedAttrs = {
+  ...buttonDataAttrs,
+  'data-state': internalState
+} **
+
+
+
+
+
 long press,
  double tap,
  easier behavioral swapping,
  lane swapping with drag,
+ multiple pointer support for multi-touch gestures,
+ drag element boarder tracking for later => triggering lane swapping,
 
- add a list of pointerIds to the gestureStore... what primitive type is being active? global lock, is a new gesture allowed to start?
-
- add animation to the settings panel fade!
-
- add a lane effect when dragging a draggable over a lane... maybe a highlight or something. so you can see constraints.
+ dynamic lane creation and deletion. and of course, when we have the drag and drop system in place, everything becomes a drag and drop target, so you can drag widgets into the scene from a palette, or drag them between scenes. The portal system would handle the cross-scene dragging and dropping, allowing for a seamless user experience or to use the same drag and drop system for both in-scene and cross-scene interactions. The key is to design the drag and drop system to be flexible enough to handle both scenarios without needing separate implementations. or just change the composition of the scenes and widgets in the store and let the rendering take care of the rest. The drag and drop system would just need to know how to update the store correctly when a widget is moved, whether it's within the same scene or across different scenes.
 
   create adding an image and consider API options or local storage or phone storage options would probably be cleanest.
 

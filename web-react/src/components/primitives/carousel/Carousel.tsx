@@ -5,6 +5,7 @@ import { useCarouselSizing } from "./hooks/useCarouselSizing.ts"
 import { useAugmentedScenes } from "./hooks/useAugmentedScenes.ts"
 import { useCarouselStore } from './hooks/useCarouselStore.ts'
 import { carouselStore } from '../../../stores/carouselStore.ts'
+import { SceneContext } from '@components/primitives/carousel/hooks/useSceneContext.ts'
 import type { SceneRole } from '@typeScript/core/primitiveType.ts'
 import type { CarouselProps } from '@typeScript/propsType.ts'
 
@@ -76,13 +77,13 @@ export default function Carousel({
 
   // ── Carousel motion / styling ─────────────────────────────
   const {
-    // onTransitionEnd,
+    onTransitionEnd,
     styleForRole
   } = useCarouselMotion({
     store: { liveOffset, dragging, settling },
     horizontal: axis === "horizontal",
     axisSize,
-    // onSettled
+    id
   })
 
   const setColor = (index: number) => {
@@ -96,7 +97,7 @@ export default function Carousel({
     <div
       data-type="carousel"
       ref={carouselRef}
-      className={`carousel`}
+      className="carousel"
       data-frame="carousel"
       style={{ pointerEvents: interactive ? "auto" : "none" }}
       data-id={id}
@@ -113,9 +114,11 @@ export default function Carousel({
             key={slot.sceneIdx}
             style={styleForRole(slot.role)}
             data-role={slot.role}
-          // onTransitionEnd={onTransitionEnd}
+            onTransitionEnd={onTransitionEnd}
           >
-            <Scene />
+            <SceneContext.Provider value={{ sceneIndex: slot.sceneIdx, carouselId: id }}>
+              <Scene />
+            </SceneContext.Provider>
           </div>
         )
       })}

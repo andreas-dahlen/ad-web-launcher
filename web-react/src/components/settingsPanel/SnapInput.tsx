@@ -35,13 +35,13 @@ export default function SnapInput(pr: SnapInput) {
       <div className='snap-button-wrapper'>
         <Button className={'settings-button'} id={`more-${pr.id}`}
           onPressRelease={() => handleChange(true)}
-          data-enabled={moreEnabled}
+          buttonDataAttrs={{ 'data-enabled': moreEnabled }}
           interactive={moreEnabled}
         >▲</Button>
 
         <Button className={'settings-button'} id={`less-${pr.id}`}
           onPressRelease={() => handleChange(false)}
-          data-enabled={lessEnabled}
+          buttonDataAttrs={{ 'data-enabled': lessEnabled }}
           interactive={lessEnabled}
         >▼</Button>
       </div>
