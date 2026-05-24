@@ -46,6 +46,10 @@
   fill: var(--svg-bright);
 }
 
+.svg-default path {
+  fill: var(--svg-default);
+}
+
 .settings-button[data-active='true'] {
   --button-col: var(--debug-button-on);
 }
@@ -54,12 +58,32 @@
   --button-col: var(--debug-button-off);
 }
 
-/* .settings-button[data-enabled='true'] {
+.settings-button[data-enabled='true'] {
 
   opacity: 1;
-} */
+}
 
 .settings-button[data-enabled='false'] {
   opacity: 0.3;
   pointer-events: none;
+}
+
+.close-settings-button {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  width: 40px;
+  height: 40px;
+  background: none;
+  border: none;
+  box-shadow: none;
+
+  &[data-state='pressed'] {
+    box-shadow: none;
+  }
+
+  .svg-img {
+    width: 30px;
+    height: 30px;
+  }
 }

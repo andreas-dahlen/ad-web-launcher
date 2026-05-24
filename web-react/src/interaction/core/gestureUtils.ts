@@ -1,5 +1,5 @@
 import { APP_CONFIG } from '@config/appConfig.ts'
-import { normalizeParameter, getAxisSize } from '../../stores/sizeStore.ts'
+import { normalizeParameter, sizeStore } from '../../stores/sizeStore.ts'
 import type { InteractionType, Vec2 } from '../../typeScript/core/primitiveType.ts'
 import type { Axis } from '../../typeScript/core/primitiveType.ts'
 import type { Descriptor, SwipeableDescriptor } from '../../typeScript/descriptor/descriptor.ts'
@@ -12,11 +12,11 @@ export const gestureUtils = {
 			left: normalizeParameter(rect.left), //needs to be subtracted with debug frame rect if ever used!
 			top: normalizeParameter(rect.top), //works
 			width: normalizeParameter(rect.width),
-			height: normalizeParameter(rect.height),
+			height: normalizeParameter(rect.height), //in current system these shouldn´t be normalized!? never used though... width and height...
 		}
 	},
 
-	normalizedDelta(delta: Vec2): Vec2 {
+	normalizeVec2(delta: Vec2): Vec2 {
 		return {
 			x: normalizeParameter(delta.x),
 			y: normalizeParameter(delta.y)
@@ -43,10 +43,10 @@ export const gestureUtils = {
 		if (type === 'slider') return true
 
 		const ratio = APP_CONFIG.swipeThresholdRatio ?? 0.05
-
+		const device = sizeStore.getState().device
 		const screenSize = Math.min(
-			getAxisSize('horizontal'),
-			getAxisSize('vertical')
+			device.width,
+			device.height
 		)
 
 		return distance >= screenSize * ratio

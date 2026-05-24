@@ -1,16 +1,9 @@
-import { sizeStore, useSize } from '../../stores/sizeStore'
-import { useEffect } from 'react'
+import { useSize } from '../../stores/sizeStore'
 import type { PropsWithChildren } from 'react'
 
 export default function DebugWrapper({ children }: PropsWithChildren) {
 
   const { device, scale } = useSize()
-
-  useEffect(() => {
-    const handleResize = () => sizeStore.getState().update()
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [])
 
   const frameStyle = {
     width: `${device.width}px`,

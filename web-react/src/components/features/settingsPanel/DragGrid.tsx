@@ -4,9 +4,7 @@ import { Z } from '@config/zIndex'
 
 function snapPositions(count: number) {
   if (!count || count <= 0) return []
-  if (count === 1) return [50]
-  const step = 100 / (count - 1)
-  return Array.from({ length: count }, (_, i) => i * step)
+  return Array.from({ length: count }, (_, i) => (i + 0.5) * 100 / count)
 }
 
 export default function DragGrid() {

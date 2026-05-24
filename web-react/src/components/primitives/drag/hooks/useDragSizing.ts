@@ -23,16 +23,15 @@ export function useDragSizing({
     function updateLayout() {
       if (!el || !containerEl) return
 
-      const { scaledHeight, scaledWidth } = sizeStore.getState() //TODO in the future divide by scale from sizeStore?
-
       const itemWidth = el.offsetWidth
       const itemHeight = el.offsetHeight
       const containerWidth = containerEl.offsetWidth
       const containerHeight = containerEl.offsetHeight
+      const device = sizeStore.getState().device
 
       const deviceSize = {
-        width: scaledWidth,
-        height: scaledHeight
+        width: device.width,
+        height: device.height
       }
 
       const containerSize = {
@@ -51,7 +50,9 @@ export function useDragSizing({
         maxX: containerWidth - itemWidth,
         maxY: containerHeight - itemHeight
       }
-      dragStore.getState().setLayout(id, { constraints, containerSize, itemSize, deviceSize })
+      dragStore.getState().setLayout(id, {
+        constraints, containerSize, itemSize, deviceSize
+      })
     }
     updateLayout()
 

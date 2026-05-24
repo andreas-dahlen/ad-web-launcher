@@ -30,8 +30,7 @@ export default function SnapInput(pr: SnapInput) {
 
   return (
     <div className="snap-panel">
-      <span>{pr.value - 2}</span>
-      {/* // exclude off-screen boundary lines */}
+      <span>{pr.value}</span>
       <div className='snap-button-wrapper'>
         <Button className={'settings-button'} id={`more-${pr.id}`}
           onPressRelease={() => handleChange(true)}

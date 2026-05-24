@@ -9,12 +9,13 @@ import { sliderStore } from '../../../stores/sliderStore.ts'
 export default function Slider({
   id,
   axis,
-  onValueChange,
+  interactive = true,
   className,
   trackClassName,
   thumbClassName,
   children,
-  sliderDataAttrs
+  sliderDataAttrs,
+  onValueChange
 }: SliderProps) {
 
   // ── Fully subscribe to the slider store ─────────────────────────────
@@ -50,6 +51,7 @@ export default function Slider({
 
   usePointerBridge({
     elRef: sliderRef,
+    disabled: !interactive,
     onReaction: (reaction) => {
       const event = reaction.detail?.event
       if (!event) return
@@ -87,10 +89,10 @@ export default function Slider({
   return (
     <div
       data-type="slider"
-      // data-press="true"
       ref={sliderRef}
       data-frame="slider"
       className={`slider ${classAxisSlider} ${className ?? ''}`}
+      style={{ pointerEvents: interactive ? 'auto' : 'none' }}
       data-id={id}
       data-axis={axis}
       {...sliderDataAttrs}

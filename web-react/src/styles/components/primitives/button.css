@@ -35,9 +35,8 @@
   filter: brightness(0.95);
 }
 
-.button [data-state='released'] {
+.button[data-state='released'] {
   transform: scale(1);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
 }
 
 .button[data-state='cancelled'] {

@@ -67,6 +67,16 @@ export type ButtonProps = BaseProps & {
 }
 
 //composition layer
+
+export type DragFrameProps = SnapConfig & {
+  id: string
+  className?: string
+  children?: React.ReactNode
+  dragDataAttrs?: DataAttributes
+  onSwipeCommit?: (detail: CtxType) => void
+}
+
+
 export type DragButtonProps = SnapConfig & {
   id: string
   className?: string
@@ -76,4 +86,17 @@ export type DragButtonProps = SnapConfig & {
   buttonDataAttrs?: DataAttributes
   onSwipeCommit?: (detail: CtxType) => void
   onPressRelease?: (detail: CtxType) => void
+}
+
+export type DragSliderProps = SnapConfig & {
+  id: string
+  axis: 'horizontal' | 'vertical'
+  className?: string
+  trackClassName?: string
+  thumbClassName?: string
+  children?: React.ReactNode
+  sliderDataAttrs?: DataAttributes
+  dragDataAttrs?: DataAttributes
+  onSwipeCommit?: (detail: CtxType) => void
+  onValueChange?: (value: number) => void
 }

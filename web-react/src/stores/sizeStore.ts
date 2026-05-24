@@ -3,7 +3,6 @@ import { immer } from 'zustand/middleware/immer'
 import { create } from 'zustand'
 import { useShallow } from 'zustand/shallow'
 import { APP_CONFIG } from '@config/appConfig.ts'
-import type { Axis1D } from '../typeScript/core/primitiveType.ts'
 
 /* -------------------------
 Device info (works for web and APK)
@@ -23,11 +22,9 @@ declare global {
 export type SizeStore = {
   device: Device,
   scale: number,
-  scaledWidth: number,
-  scaledHeight: number,
-  update: () => void,
+
+  update: (width: number, height: number) => void,
   normalizeParameter: (parameter: number) => number,
-  getAxisSize: (axis: Axis1D) => number
 
 }
 // -------------------------
@@ -44,35 +41,27 @@ export const sizeStore = create<SizeStore>()(
   immer((set, get) => {
     // Init state with defaults
     const device = sanitizeDevice(window.__DEVICE || defaultDevice)
-    const { scale, scaledWidth, scaledHeight } = computeScale(
+    const { scale } = computeScale(
       device,
       window.innerWidth,
       window.innerHeight
     )
 
+
     return {
       device,
       scale,
-      scaledWidth,
-      scaledHeight,
 
       // update on resize
-      update: () => {
-        const { scale, scaledWidth, scaledHeight } = computeScale(
+      update: (width, height) => {
+        const { scale } = computeScale(
           get().device,
-          window.innerWidth,
-          window.innerHeight
+          width,
+          height
         )
         set(s => {
           s.scale = scale
-          s.scaledWidth = scaledWidth
-          s.scaledHeight = scaledHeight
         })
-      },
-
-      getAxisSize: (axis: Axis1D) => {
-        const s = get()
-        return axis === 'horizontal' ? s.scaledWidth : s.scaledHeight
       },
 
       normalizeParameter: (parameter: number) => {
@@ -112,21 +101,13 @@ function computeScale(dev: Device, vw: number, vh: number) {
     scale = 1
   }
   return {
-    scale,
-    scaledWidth: dev.width * scale,
-    scaledHeight: dev.height * scale
+    scale
   }
 }
 // -------------------------
 // Public API
 // -------------------------
 /**
- * Return the size along a given axis
- */
-export function getAxisSize(axis: Axis1D) {
-  return sizeStore.getState().getAxisSize(axis)
-}
-
 /**
  * Normalize a parameter from CSS pixels to device pixels
  */
@@ -139,8 +120,6 @@ export const useSize = () => {
   return sizeStore(
     useShallow(s => ({
       scale: s.scale,
-      scaledWidth: s.scaledWidth,
-      scaledHeight: s.scaledHeight,
       device: s.device
     }))
   )

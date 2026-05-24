@@ -65,8 +65,8 @@ function onDown(x: number, y: number, pointerId: number): Descriptor | null {
   gestures[pointerId] = {
     pointerId: pointerId,
     phase: 'PENDING',
-    start: { x: x, y: y },
-    last: { x: x, y: y },
+    start: gestureUtils.normalizeVec2({ x, y }),
+    last: gestureUtils.normalizeVec2({ x, y }),
     totalDelta: { x: 0, y: 0 },
     desc: resolved
 
@@ -82,8 +82,9 @@ function onDown(x: number, y: number, pointerId: number): Descriptor | null {
 function onMove(x: number, y: number, pointerId: number): Descriptor | null {
   const g = gestures[pointerId]
   if (!g) return null
-  const absX = Math.abs(x - g.start.x)
-  const absY = Math.abs(y - g.start.y)
+  const point = gestureUtils.normalizeVec2({ x, y })
+  const absX = Math.abs(point.x - g.start.x)
+  const absY = Math.abs(point.y - g.start.y)
   const biggest = Math.max(absX, absY)
   /* -----------------------------------
      Pending → swipe start
@@ -102,8 +103,8 @@ function onMove(x: number, y: number, pointerId: number): Descriptor | null {
     if (!resolved) return null
 
     g.phase = 'SWIPING'
-    g.last.x = x
-    g.last.y = y
+    g.last.x = point.x
+    g.last.y = point.y
 
     const cancel = g.desc.capabilities.pressable
       && resolved !== g.desc
@@ -121,17 +122,17 @@ function onMove(x: number, y: number, pointerId: number): Descriptor | null {
   ----------------------------- */
   if (g.phase === 'SWIPING' && g.desc) {
 
-    const deltaX = x - g.last.x
-    const deltaY = y - g.last.y
+    const deltaX = point.x - g.last.x
+    const deltaY = point.y - g.last.y
 
     g.totalDelta.x += deltaX
     g.totalDelta.y += deltaY
 
-    g.last.x = x
-    g.last.y = y
+    g.last.x = point.x
+    g.last.y = point.y
 
     if (g.desc.type !== 'button') {
-      g.desc.ctx.delta = gestureUtils.normalizedDelta(g.totalDelta) ?? g.desc.ctx.delta
+      g.desc.ctx.delta = g.totalDelta
       g.desc.ctx.cancel = undefined
       g.desc.ctx.event = 'swipe'
       return g.desc

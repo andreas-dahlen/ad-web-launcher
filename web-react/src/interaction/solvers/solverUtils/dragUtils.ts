@@ -24,24 +24,24 @@ export const dragUtils = {
     if (!desc.data?.snap) return null
     const { x: snapX, y: snapY } = desc.data.snap
 
-    const { containerSize, itemSize, constraints } = desc.data.layout
+    const { deviceSize, itemSize, constraints } = desc.data.layout
 
 
-    const snapAxis = (value: number, count: number, containerSize: number, itemSize: number, min: number, max: number) => {
+    const snapAxis = (value: number, count: number, deviceSize: number, itemSize: number, frameOffset: number, min: number, max: number) => {
       if (!count || count <= 0) return value
-      if (count === 1) return vector.clamp(containerSize / 2 - itemSize / 2, min, max)
-      const gridPositions = Array.from({ length: count }, (_, i) =>
-        (i * containerSize / (count - 1)) - itemSize / 2
+      const positions = Array.from({ length: count }, (_, i) =>
+        (i + 0.5) * deviceSize / count - frameOffset - itemSize / 2
       )
-      // find nearest grid position to current value
       return vector.clamp(
-        gridPositions.reduce((a, b) => Math.abs(b - value) < Math.abs(a - value) ? b : a),
+        positions.reduce((a, b) => Math.abs(b - value) < Math.abs(a - value) ? b : a),
         min, max
       )
     }
+
     return {
-      x: snapAxis(value.x, snapX, containerSize.width, itemSize.width, constraints.minX, constraints.maxX),
-      y: snapAxis(value.y, snapY, containerSize.height, itemSize.height, constraints.minY, constraints.maxY)
+      x: snapAxis(value.x, snapX, deviceSize.width, itemSize.width, 0, constraints.minX, constraints.maxX),
+      y: snapAxis(value.y, snapY, deviceSize.height, itemSize.height, desc.base.frame.height, constraints.minY, constraints.maxY)
     }
   }
 }
+

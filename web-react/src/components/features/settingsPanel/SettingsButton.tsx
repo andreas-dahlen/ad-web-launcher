@@ -2,20 +2,21 @@ import Button from '@components/primitives/button/Button';
 
 type SettingsButtonProps = {
   id: string
-  value: boolean
-  enabled?: boolean
-  setValue: () => void
-  msg?: string
-  defaultState?: string
+  value?: boolean
   ReactImg: React.FC<React.SVGProps<SVGSVGElement>>
+  setValue: () => void
+  className?: string
+  isEnabled?: boolean
+  msg?: string
 }
 
 export default function SettingsButton({
   id,
   value,
+  className,
   setValue,
   ReactImg,
-  enabled,
+  isEnabled,
   msg }: SettingsButtonProps
 ) {
 
@@ -25,18 +26,16 @@ export default function SettingsButton({
       <span>{msg}</span>
       <Button
         id={id}
-        className='settings-button'
+        className={`settings-button ${className}`}
         onPressRelease={setValue}
-        interactive={enabled}
+        interactive={isEnabled}
         buttonDataAttrs={{
-          'data-active': value,
-          'data-enabled': enabled,
+          'data-active': value ?? false,
+          'data-enabled': isEnabled,
           'data-state': 'released'
         }}
       >
-        <ReactImg className={value ?
-          'svg-img svg-dark' : 'svg-img svg-bright'} />
-        {/* needs a fallback value? */}
+        <ReactImg className={`svg-img ${value === true ? 'svg-dark' : value === false ? 'svg-bright' : 'svg-default'}`} />
       </Button>
     </div>
   )

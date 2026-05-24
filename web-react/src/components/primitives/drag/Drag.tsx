@@ -27,8 +27,8 @@ export default function Drag({
   const containerRef = useRef<HTMLDivElement>(null)
   const dragItemRef = useRef<HTMLDivElement>(null)
   useDragSizing({ elRef: dragItemRef, containerRef: containerRef, id })
-  const mirrorSlot = document.getElementById("drag-slot")
 
+  const mirrorSlot = document.getElementById("drag-slot")
   // ── Pointer forwarding for gestures ─────────────────────────────
 
   usePointerBridge({
