@@ -1,5 +1,7 @@
 import type { CtxType } from './descriptor/ctxType.ts'
 
+
+// utility
 export type DataAttributes = {
   [key: `data-${string}`]:
   string |
@@ -8,62 +10,70 @@ export type DataAttributes = {
   undefined
 }
 
-export interface DragProps {
+//base
+type BaseProps = {
   id: string
-  snapX?: number
-  snapY?: number
-  settingsSnap?: boolean
-  lockable?: boolean
-  onSwipeCommit?: (detail: CtxType) => void
-  children?: React.ReactNode
   className?: string
-  dragDataAttrs?: DataAttributes
+  interactive?: boolean
 }
 
-export interface CarouselProps {
-  id: string
+//discriminating unions - capabilities
+export type SnapConfig = //default is false
+  | {
+    useSettingsSnap: true
+    snapX?: never
+    snapY?: never
+  }
+  | {
+    useSettingsSnap?: false
+    snapX?: number
+    snapY?: number
+  }
+
+export type CarouselScenes =
+  | { scenes: React.ComponentType[]; sceneCount?: never }
+  | { sceneCount: number; scenes?: never }
+
+
+//domain layer
+export type DragProps = BaseProps & SnapConfig & {
+  children?: React.ReactNode
+  dragDataAttrs?: DataAttributes
+  onSwipeCommit?: (detail: CtxType) => void
+}
+
+export type CarouselProps = BaseProps & CarouselScenes & {
   axis: 'horizontal' | 'vertical'
-  scenes?: React.ComponentType[]
-  sceneCount?: number
   lockPrevAt?: number
   lockNextAt?: number
-  interactive?: boolean
-  onSwipeCommit?: (detail: CtxType) => void
   carouselDataAttrs?: DataAttributes
+  onSwipeCommit?: (detail: CtxType) => void
 }
 
-export interface SliderProps {
-  id: string
+export type SliderProps = BaseProps & {
   axis: 'horizontal' | 'vertical'
-  onValueChange?: (value: number) => void
-  children?: React.ReactNode
-  className?: string
   trackClassName?: string
   thumbClassName?: string
+  children?: React.ReactNode
   sliderDataAttrs?: DataAttributes
+  onValueChange?: (value: number) => void
 }
 
-export interface ButtonProps {
-  id: string
-  className?: string
+export type ButtonProps = BaseProps & {
   action?: string
-  interactive?: boolean
-  onPressRelease?: (detail: CtxType) => void
   children?: React.ReactNode
   buttonDataAttrs?: DataAttributes
+  onPressRelease?: (detail: CtxType) => void
 }
 
-export interface DragButtonProps {
+//composition layer
+export type DragButtonProps = SnapConfig & {
   id: string
-  snapX?: number
-  snapY?: number
-  settingsSnap?: boolean
-  onSwipeCommit?: (detail: CtxType) => void
-  children?: React.ReactNode
   className?: string
   action?: string
-  isDrag?: boolean
-  onPressRelease?: (detail: CtxType) => void
+  children?: React.ReactNode
   dragDataAttrs?: DataAttributes
   buttonDataAttrs?: DataAttributes
+  onSwipeCommit?: (detail: CtxType) => void
+  onPressRelease?: (detail: CtxType) => void
 }

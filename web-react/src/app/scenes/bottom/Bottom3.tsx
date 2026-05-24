@@ -4,9 +4,9 @@ import { useSettingsStore } from '../../../hooks/useSettingsStore';
 
 export default function Bottom3() {
 
-  const { settingsOverlayEnabled, setSettingsEnabled } = useSettingsStore()
+  const { isSettingsPanelOpen, setSettingsPanelOpen } = useSettingsStore()
   const setValue = () => {
-    setSettingsEnabled(!settingsOverlayEnabled)
+    setSettingsPanelOpen(!isSettingsPanelOpen)
   }
 
   // console.log(settingsEnabled)

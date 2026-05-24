@@ -42,5 +42,4 @@ export interface DomMeta {
   readonly snapY: number | null
   readonly lockPrevAt: number | null
   readonly lockNextAt: number | null
-  readonly locked: boolean
 }

@@ -1,5 +1,5 @@
-import { useGestureStore } from '../../hooks/useGestureStore'
-import { useSettingsStore } from '../../hooks/useSettingsStore'
+import { useGestureStore } from '../../../hooks/useGestureStore'
+import { useSettingsStore } from '../../../hooks/useSettingsStore'
 import { Z } from '@config/zIndex'
 
 function snapPositions(count: number) {
@@ -10,12 +10,12 @@ function snapPositions(count: number) {
 }
 
 export default function DragGrid() {
-  const { dragSnapX, dragSnapY, gridEnabled } = useSettingsStore()
+  const { dragSnapX, dragSnapY, isGridEnabled } = useSettingsStore()
 
   const { activeGesture } = useGestureStore()
 
   const shouldRender =
-    gridEnabled || activeGesture === 'drag'
+    isGridEnabled || activeGesture === 'drag'
 
   if (!shouldRender) return null
 

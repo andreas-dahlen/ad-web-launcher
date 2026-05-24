@@ -26,7 +26,7 @@ export const domQuery = {
       el): el is HTMLElement => {
       if (!(el instanceof HTMLElement)) return false
       const metaData = extractDomMeta(el)
-      if (!metaData || metaData.locked) return false
+      if (!metaData) return false
       return metaData.axis === inputAxis || metaData.axis === 'both'
     })
     const desc = el ? buildDesc.resolveFromElement(el, x, y, pointerId) : null

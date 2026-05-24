@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react';
 import { APP_CONFIG } from '@config/appConfig.ts';
-import DebugWrapper from '@components/appBasics/DebugWrapper.tsx';
+import DebugWrapper from '@components/system/DebugWrapper.tsx';
 import Root from './app/Root.tsx';
 import '@styles/index.css'
-import LoadingScene from './components/appBasics/LoadingScene.tsx';
+import LoadingScene from './components/system/LoadingScene.tsx';
 
 export default function App() {
 
-  const [visible, setVisible] = useState(true)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    const timer = setTimeout(() => setVisible(false), 300)
+    const timer = setTimeout(() => setIsLoading(false), 300)
     return () => clearTimeout(timer)
   }, [])
 
@@ -27,7 +27,7 @@ export default function App() {
   return (
     <>
       {content}
-      <LoadingScene visible={visible} />
+      <LoadingScene visible={isLoading} />
     </>
   )
 }

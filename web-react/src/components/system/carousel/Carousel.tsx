@@ -5,7 +5,7 @@ import { useCarouselSizing } from "./hooks/useCarouselSizing.ts"
 import { useAugmentedScenes } from "./hooks/useAugmentedScenes.ts"
 import { useCarouselStore } from './hooks/useCarouselStore.ts'
 import { carouselStore } from '../../../stores/carouselStore.ts'
-import { SceneContext } from '@components/primitives/carousel/hooks/useSceneContext.ts'
+import { SceneContext } from '@components/system/carousel/hooks/useSceneContext.ts'
 import type { SceneRole } from '@typeScript/core/primitiveType.ts'
 import type { CarouselProps } from '@typeScript/propsType.ts'
 
@@ -22,7 +22,7 @@ export default function Carousel({
   lockPrevAt,
   lockNextAt,
   onSwipeCommit,
-  // onSettled,
+  carouselDataAttrs,
   interactive = true
 }: CarouselProps) {
 
@@ -104,6 +104,7 @@ export default function Carousel({
       data-axis={axis}
       data-lock-prev-at={lockPrevAt ?? ''}
       data-lock-next-at={lockNextAt ?? ''}
+      {...carouselDataAttrs}
     >
       {renderSlots.map((slot) => {
         const Scene = augmentedScenes[slot.sceneIdx]

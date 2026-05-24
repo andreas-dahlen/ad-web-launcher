@@ -9,8 +9,8 @@ import { persist } from 'zustand/middleware'
 ------------------------------------------------- */
 
 type ReactiveSettings = {
-  isSettingsOverlayEnabled: boolean
-  isDragEnabled: boolean
+  isSettingsPanelOpen: boolean
+  isLayoutEditMode: boolean
   isGridEnabled: boolean
   isSnapEnabled: boolean
   dragSnapX: number
@@ -19,12 +19,12 @@ type ReactiveSettings = {
 
 export type SettingsStore = {
   settings: ReactiveSettings
-  setDragSnapX: (value: number) => void
-  setDragSnapY: (value: number) => void
-  setSettingsEnabled: (value: boolean) => void
-  setDragEnabled: (value: boolean) => void
+  setSettingsPanelOpen: (value: boolean) => void
+  setLayoutEditMode: (value: boolean) => void
   setGridEnabled: (value: boolean) => void
   setSnapEnabled: (value: boolean) => void
+  setDragSnapX: (value: number) => void
+  setDragSnapY: (value: number) => void
   get: () => unknown
 }
 
@@ -33,36 +33,24 @@ export const settingsStore = create<SettingsStore>()(
     immer((set, get) => ({
 
       settings: {
-        isSettingsOverlayEnabled: false,
-
-        //drag
-        isDragEnabled: false,
+        isSettingsPanelOpen: false,
+        isLayoutEditMode: false,
+        //drag specifics
         isGridEnabled: false,
         isSnapEnabled: true,
         dragSnapX: 8,
         dragSnapY: 16
       },
 
-      setDragSnapX: (value) => {
+      setSettingsPanelOpen: (value) => {
         set(s => {
-          s.settings.dragSnapX = value
-        })
-      },
-      setDragSnapY: (value) => {
-        set(s => {
-          s.settings.dragSnapY = value
+          s.settings.isSettingsPanelOpen = value
         })
       },
 
-      setSettingsEnabled: (value) => {
+      setLayoutEditMode: (value) => {
         set(s => {
-          s.settings.isSettingsOverlayEnabled = value
-        })
-      },
-
-      setDragEnabled: (value) => {
-        set(s => {
-          s.settings.isDragEnabled = value
+          s.settings.isLayoutEditMode = value
         })
       },
       setGridEnabled: (value) => {
@@ -74,6 +62,17 @@ export const settingsStore = create<SettingsStore>()(
       setSnapEnabled: (value) => {
         set(s => {
           s.settings.isSnapEnabled = value
+        })
+      },
+
+      setDragSnapX: (value) => {
+        set(s => {
+          s.settings.dragSnapX = value
+        })
+      },
+      setDragSnapY: (value) => {
+        set(s => {
+          s.settings.dragSnapY = value
         })
       },
 

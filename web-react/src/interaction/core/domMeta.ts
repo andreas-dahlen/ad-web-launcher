@@ -23,9 +23,7 @@ export function extractDomMeta(el: HTMLElement): DomMeta | null {
   const lockPrevAt = parseNumber(ds.lockPrevAt)
   const lockNextAt = parseNumber(ds.lockNextAt)
 
-  const locked = ds.locking === 'true'
-
-  return { el, ds, id, axis, type, swipeValid, pressValid, snapX, snapY, lockPrevAt, lockNextAt, locked }
+  return { el, ds, id, axis, type, swipeValid, pressValid, snapX, snapY, lockPrevAt, lockNextAt }
 }
 
 function parseNumber(value: string | undefined): number | null {

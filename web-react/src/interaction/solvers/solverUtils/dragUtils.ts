@@ -24,31 +24,6 @@ export const dragUtils = {
     if (!desc.data?.snap) return null
     const { x: snapX, y: snapY } = desc.data.snap
 
-
-    /**  OLD */
-
-    // const dragConstraints = desc.data.layout.constraints
-
-    // const snapAxis = (v: number, count: number, min: number, max: number) => {
-    //   if (!count || count <= 0) return v
-    //   const range = max - min
-    //   if (count === 1) { return min + range / 2 }
-    //   // Divide range into equal segments
-    //   const step = range / (count - 1)
-    //   // Translate to 0-based range before snapping
-    //   const relative = v - min
-    //   const snapped = Math.round(relative / step) * step
-    //   return min + snapped
-    // }
-
-    // return {
-    //   x: snapAxis(value.x, snapX, dragConstraints.minX, dragConstraints.maxX),
-    //   y: snapAxis(value.y, snapY, dragConstraints.minY, dragConstraints.maxY)
-    // }
-
-
-    /** NEW */
-
     const { containerSize, itemSize, constraints } = desc.data.layout
 
 

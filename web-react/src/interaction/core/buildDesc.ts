@@ -129,7 +129,7 @@ export const buildDesc = {
     const s = dragStore.getState().get(metaData.id)
     if (!s) return null
     const snap = (metaData.snapX != null && metaData.snapY != null) ? { x: metaData.snapX, y: metaData.snapY } : undefined
-    return { settledOffset: s.settledOffset, layout: s.layout, snap: snap, locked: metaData.locked }
+    return { settledOffset: s.settledOffset, layout: s.layout, snap: snap }
   },
 
   /* =========================
@@ -159,8 +159,7 @@ export const buildDesc = {
       ds.action !== undefined)
 
     const swipeable =
-      swipeValid &&
-      ds.locked !== 'true'
+      swipeValid
 
     return {
       pressable: pressable,

@@ -52,7 +52,8 @@ export const dragStore = create<DragStore>()(
               maxY: Infinity
             },
             containerSize: { width: 0, height: 0 },
-            itemSize: { width: 0, height: 0 }
+            itemSize: { width: 0, height: 0 },
+            deviceSize: { width: 0, height: 0 }
           },
           frame: {
             left: 0,
@@ -81,7 +82,8 @@ export const dragStore = create<DragStore>()(
         s.layout = {
           constraints: packet.constraints,
           containerSize: packet.containerSize,
-          itemSize: packet.itemSize
+          itemSize: packet.itemSize,
+          deviceSize: packet.deviceSize
         }
       })
     },

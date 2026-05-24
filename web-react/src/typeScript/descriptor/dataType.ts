@@ -18,9 +18,10 @@ export interface DragData {
 }
 
 export interface DragLayout {
-  readonly constraints: DragConstraints
+  readonly deviceSize: Size2D
   readonly containerSize: Size2D
   readonly itemSize: Size2D
+  readonly constraints: DragConstraints
 }
 
 export interface DragConstraints {

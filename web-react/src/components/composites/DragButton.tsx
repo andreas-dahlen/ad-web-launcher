@@ -1,37 +1,34 @@
 import Drag from '@components/primitives/drag/Drag'
 import Button from '@components/primitives/button/Button'
 import type { DragButtonProps } from '@typeScript/propsType'
+import { useSettingsStore } from '../../hooks/useSettingsStore'
 
 export default function DragButton({
   id,
-  snapX,
-  snapY,
-  settingsSnap = false, //set to true always?
-  onSwipeCommit,
-  children,
+  // useSettingsSnap = false,
   className,
   action,
-  isDrag,
-  onPressRelease,
+  children,
   buttonDataAttrs,
-  dragDataAttrs
+  dragDataAttrs,
+  onSwipeCommit,
+  onPressRelease,
 }: DragButtonProps) {
+
+  const { isLayoutEditMode, isSnapEnabled } = useSettingsStore()
 
   return (
 
     <Drag
       id={`${id}-drag`}
-      className={className}
-      snapX={snapX}
-      snapY={snapY}
-      settingsSnap={settingsSnap}
-      lockable={true}
+      useSettingsSnap={isSnapEnabled}
+      interactive={isLayoutEditMode}
       onSwipeCommit={onSwipeCommit}
       dragDataAttrs={dragDataAttrs}
     >
       <Button
         id={`${id}-button`}
-        interactive={!isDrag}
+        interactive={!isLayoutEditMode}
         className={className}
         action={action}
         onPressRelease={onPressRelease}
@@ -39,8 +36,6 @@ export default function DragButton({
       >
         {children}
       </Button>
-
-      {/* {children} */}
     </Drag>
   )
 

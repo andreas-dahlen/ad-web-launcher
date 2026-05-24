@@ -3,23 +3,23 @@ import locked from '@assets/locked.svg?react'
 import unlocked from '@assets/unlocked.svg?react'
 import grid from '@assets/grid.svg?react'
 import snap from '@assets/snap.svg?react'
-import { useSettingsStore } from '../../hooks/useSettingsStore.js';
+import { useSettingsStore } from '../../../hooks/useSettingsStore.js';
 import SettingsButton from './SettingsButton.tsx';
 import Slider from '@slider/Slider.tsx';
-import SnapInput from '@components/settingsPanel/SnapInput.tsx';
+import SnapInput from '@components/features/settingsPanel/SnapInput.tsx';
 
 export default function SettingsPanel() {
 
   const {
-    dragEnabled,
-    setDragEnabled,
-    gridEnabled,
+    isLayoutEditMode,
+    setLayoutEditMode,
+    isGridEnabled,
     setGridEnabled,
     dragSnapX,
     setDragSnapX,
     dragSnapY,
     setDragSnapY,
-    snapEnabled,
+    isSnapEnabled,
     setSnapEnabled
   } = useSettingsStore()
 
@@ -30,18 +30,18 @@ export default function SettingsPanel() {
       <div className='settings-row'>
         <SettingsButton
           id='lock-drag-item'
-          value={dragEnabled}
-          setValue={() => setDragEnabled(!dragEnabled)}
+          value={isLayoutEditMode}
+          setValue={() => setLayoutEditMode(!isLayoutEditMode)}
           msg={'Drag'}
           enabled={true}
-          ReactImg={dragEnabled ? unlocked : locked}>
+          ReactImg={isLayoutEditMode ? unlocked : locked}>
         </SettingsButton>
         <SettingsButton
           id='snap'
-          value={snapEnabled}
+          value={isSnapEnabled}
           enabled={true}
           setValue={() => {
-            setSnapEnabled(!snapEnabled)
+            setSnapEnabled(!isSnapEnabled)
           }
           }
           msg={'Snap'}
@@ -50,20 +50,20 @@ export default function SettingsPanel() {
         </SettingsButton>
         <SettingsButton
           id='drag-grid'
-          value={gridEnabled}
+          value={isGridEnabled}
           enabled={true}
-          setValue={() => setGridEnabled(!gridEnabled)}
+          setValue={() => setGridEnabled(!isGridEnabled)}
           msg={'Grid'}
           ReactImg={grid}>
         </SettingsButton>
 
 
-        <SnapInput id="snapX" min={8} max={18} step={1} value={dragSnapX} enabled={snapEnabled} onChange={(v) => {
+        <SnapInput id="snapX" min={8} max={18} step={1} value={dragSnapX} enabled={isSnapEnabled} onChange={(v) => {
           setDragSnapX(v)
           // handleGridEnabling()
         }} />
 
-        <SnapInput id="snapY" min={16} max={36} step={2} value={dragSnapY} enabled={snapEnabled} onChange={(v) => {
+        <SnapInput id="snapY" min={16} max={36} step={2} value={dragSnapY} enabled={isSnapEnabled} onChange={(v) => {
           setDragSnapY(v)
           // handleGridEnabling()
         }} />

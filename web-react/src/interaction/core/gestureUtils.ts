@@ -9,7 +9,7 @@ export const gestureUtils = {
 
 	normalizeFrame(rect: DOMRect): FrameSnapshot {
 		return {
-			left: normalizeParameter(rect.left), //needs to be subtracted with debug frame rect.
+			left: normalizeParameter(rect.left), //needs to be subtracted with debug frame rect if ever used!
 			top: normalizeParameter(rect.top), //works
 			width: normalizeParameter(rect.width),
 			height: normalizeParameter(rect.height),
@@ -59,8 +59,7 @@ export const gestureUtils = {
 	isSwipeableDescriptor(desc: Descriptor, intentAxis: Axis): desc is SwipeableDescriptor {
 		if (desc.type == 'button') return false
 		const swipeable = desc.capabilities.swipeable
-		const isLocked = desc.type === 'drag' && desc.data.locked
-		if (!swipeable || isLocked) return false
+		if (!swipeable) return false
 		if (desc.type == 'slider') return true
 		const axis = this.resolveAxis(intentAxis, desc)
 		return !!axis

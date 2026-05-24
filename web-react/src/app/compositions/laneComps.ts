@@ -1,21 +1,29 @@
-import type { CarouselProps } from '@typeScript/propsType'
+import type { CarouselScenes } from '@typeScript/propsType'
 import { lanes } from './laneIndex'
 import type { Z } from '@config/zIndex'
+import type { Axis1D } from '@typeScript/core/primitiveType'
 
 type LayerKey = keyof typeof Z
 
-type BaseComp = Pick<
-  CarouselProps,
-  'id' | 'axis' | 'sceneCount' | 'scenes'
-> & { renderLayer?: LayerKey }
+type BaseCompConfig = CarouselScenes & {
+  id: string
+  axis: Axis1D
+  renderLayer?: LayerKey
+}
+
+// 'id' | 'axis' | 'sceneCount' | 'scenes'
+
+type ContentCompConfig = CarouselScenes & {
+  id: string
+  axis: Axis1D
+  interactive: boolean
+  renderLayer?: LayerKey
+}
+
+// 'id' | 'axis' | 'scenes' | 'interactive'
 
 
-type ContentComp = Pick<
-  CarouselProps,
-  'id' | 'axis' | 'scenes' | 'interactive'
-> & { renderLayer?: LayerKey }
-
-export const baseComp: BaseComp[] = [
+export const baseComp: BaseCompConfig[] = [
   {
     id: 'wallpaper',
     axis: 'vertical',
@@ -39,7 +47,7 @@ export const baseComp: BaseComp[] = [
   }
 ]
 
-export const contentComp: ContentComp[] = [
+export const contentComp: ContentCompConfig[] = [
   {
     id: 'top-horizontal',
     axis: 'horizontal',

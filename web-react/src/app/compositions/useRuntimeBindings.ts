@@ -1,12 +1,14 @@
 import type { CtxType } from '@typeScript/descriptor/ctxType'
 import { useWallpaperStore } from '../../hooks/useWallpaperStore'
-import type { CarouselProps } from '@typeScript/propsType'
 
+type RuntimeBindings = {
+  onSwipeCommit?: (detail: CtxType) => void
+}
 export default function useRuntimeBindings() {
 
   const { replaceStale } = useWallpaperStore()
 
-  const runtimeBindings: Record<string, Partial<CarouselProps>> = {
+  const runtimeBindings: Record<string, RuntimeBindings> = {
     wallpaper: {
       onSwipeCommit: (detail: CtxType) => {
         if (detail.type !== 'carousel') return

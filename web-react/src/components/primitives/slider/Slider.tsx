@@ -13,7 +13,8 @@ export default function Slider({
   className,
   trackClassName,
   thumbClassName,
-  children
+  children,
+  sliderDataAttrs
 }: SliderProps) {
 
   // ── Fully subscribe to the slider store ─────────────────────────────
@@ -92,6 +93,7 @@ export default function Slider({
       className={`slider ${classAxisSlider} ${className ?? ''}`}
       data-id={id}
       data-axis={axis}
+      {...sliderDataAttrs}
     >
       <div
         className={`track ${classAxisTrack} ${trackClassName ?? ''}`}>

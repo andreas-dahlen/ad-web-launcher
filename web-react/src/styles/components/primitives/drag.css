@@ -6,8 +6,8 @@
   pointer-events: auto;
   will-change: transform;
   /* need vars */
-  --drag-width: 70px;
-  --drag-height: 70px;
+  /* --drag-width: 70px;
+  --drag-height: 70px; */
   background: var(--button-col);
   border: var(--button-border);
   border-radius: var(--button-radius);

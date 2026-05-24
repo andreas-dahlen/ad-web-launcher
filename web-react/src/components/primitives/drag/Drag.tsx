@@ -11,17 +11,17 @@ export default function Drag({
   id,
   snapX,
   snapY,
-  settingsSnap = false,
-  lockable = false,
+  useSettingsSnap = false,
+  interactive = true,
   onSwipeCommit,
   children,
-  className
+  className,
+  dragDataAttrs
 }: DragProps) {
 
   // ── Fully subscribe to the drag store─────────────────────────────
   const { settledOffset, liveOffset, dragging, frame, layout } = useDragStore(id)
-  const { dragEnabled, dragSnapX, dragSnapY, snapEnabled } = useSettingsStore()
-
+  const { dragSnapX, dragSnapY, isSnapEnabled } = useSettingsStore()
 
   // ── DOM references & sizing ─────────────────────────────
   const containerRef = useRef<HTMLDivElement>(null)
@@ -31,11 +31,9 @@ export default function Drag({
 
   // ── Pointer forwarding for gestures ─────────────────────────────
 
-  const locked = lockable && !dragEnabled
-
   usePointerBridge({
     elRef: dragItemRef,
-    disabled: locked,
+    disabled: !interactive,
     onReaction: (reaction) => {
       if (reaction.detail?.event === 'swipeCommit' && onSwipeCommit) {
         onSwipeCommit(reaction.detail)
@@ -50,8 +48,8 @@ export default function Drag({
     dragging
   })
 
-  const resolvedSnapX = snapEnabled && settingsSnap ? dragSnapX : snapX
-  const resolvedSnapY = snapEnabled && settingsSnap ? dragSnapY : snapY
+  const resolvedSnapX = isSnapEnabled && useSettingsSnap ? dragSnapX : snapX
+  const resolvedSnapY = isSnapEnabled && useSettingsSnap ? dragSnapY : snapY
 
   return (
     <>
@@ -62,14 +60,15 @@ export default function Drag({
       >
         <div
           ref={dragItemRef}
-          style={{ ...motionStyle, pointerEvents: locked ? 'none' : 'auto' }}
+          style={{ ...motionStyle, pointerEvents: interactive ? 'auto' : 'none' }}
           className={`drag ${className ?? ''}`}
           data-id={id}
           data-axis="both"
           data-type="drag"
-          data-locked={locked || undefined}
+          // data-locked={interactive || undefined}
           data-snap-x={resolvedSnapX}
           data-snap-y={resolvedSnapY}
+          {...dragDataAttrs}
         >
           {children}
         </div >
@@ -77,6 +76,7 @@ export default function Drag({
       {mirrorSlot && dragging && createPortal(
         <div
           className='drag-container'
+          data-frame='drag'
           style={{
             width: layout.containerSize.width,
             height: layout.containerSize.height,
@@ -85,8 +85,9 @@ export default function Drag({
           }}
         >
           <div
-            style={{ ...motionStyle, pointerEvents: 'none', background: 'hotPink' }}
+            style={{ ...motionStyle, pointerEvents: 'none' }}
             className={`drag ${className ?? ''}`}
+            {...dragDataAttrs}
           >
             {children}
           </div >

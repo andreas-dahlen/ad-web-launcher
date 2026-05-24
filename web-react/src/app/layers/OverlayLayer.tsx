@@ -1,14 +1,14 @@
-import SettingsPanel from '@components/settingsPanel/SettingsPanel.js';
+import SettingsPanel from '@components/features/settingsPanel/SettingsPanel.js';
 import { useSettingsStore } from '../../hooks/useSettingsStore';
 import { Z } from '@config/zIndex';
 
 /** LAYER 3/3! */
 export default function OverlayLayer() {
 
-  const { settingsOverlayEnabled } = useSettingsStore()
+  const { isSettingsPanelOpen } = useSettingsStore()
   return (
     <div className='layer' style={{ zIndex: Z.overlay }}>
-      {settingsOverlayEnabled ? <SettingsPanel /> : ''}
+      {isSettingsPanelOpen ? <SettingsPanel /> : ''}
     </div>
   )
 }

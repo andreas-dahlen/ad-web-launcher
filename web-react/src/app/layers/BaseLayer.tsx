@@ -1,6 +1,6 @@
 import { Z } from '@config/zIndex';
 import { baseComp } from '../compositions/laneComps';
-import Carousel from '@components/primitives/carousel/Carousel';
+import Carousel from '@components/system/carousel/Carousel';
 import useRuntimeBindings from '../compositions/useRuntimeBindings';
 
 //Layer 1/3 scenes read inputs here!
@@ -12,8 +12,8 @@ export default function BaseLayer() {
         const oneCarousel = (
           <Carousel
             key={comp.id}
-            {...comp}
             {...runtimeBindings[comp.id]}
+            {...comp}
           />
         )
 

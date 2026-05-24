@@ -1,5 +1,5 @@
-import Carousel from "@carousel/Carousel.tsx"
-import DragGrid from '@components/settingsPanel/DragGrid.tsx'
+import Carousel from "@components/system/carousel/Carousel.tsx"
+import DragGrid from '@components/features/settingsPanel/DragGrid.tsx'
 import { Z } from '@config/zIndex.ts'
 import { contentComp } from '../compositions/laneComps.ts'
 

@@ -101,8 +101,6 @@ function onMove(x: number, y: number, pointerId: number): Descriptor | null {
     //FUTURE return pressCancel if unresolved 
     if (!resolved) return null
 
-    //set value here
-
     g.phase = 'SWIPING'
     g.last.x = x
     g.last.y = y
@@ -163,7 +161,6 @@ function finalizeGesture(g: GestureState, event: EventType): Descriptor | null {
     delete gestures[g.pointerId]
     return null
   }
-
   g.desc.ctx.event = event
   const descriptor = g.desc
   delete gestures[g.pointerId]
