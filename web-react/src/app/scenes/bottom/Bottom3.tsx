@@ -9,8 +9,6 @@ export default function Bottom3() {
     setSettingsPanelOpen(!isSettingsPanelOpen)
   }
 
-  // console.log(settingsEnabled)
-
   return (
     <div>
       <Button

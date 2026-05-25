@@ -1,38 +1,37 @@
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 import type { Size2D } from '../typeScript/core/primitiveType.ts'
-import type { CtxSlider } from '../typeScript/descriptor/ctxType.ts'
+import type { CtxScroll } from '../typeScript/descriptor/ctxType.ts'
 
-type Slider = {
+type Scroll = {
   //react motion
-  value: number         // logical position
-
+  //react motion
+  liveValue: number
+  //reactPosition
+  settledValue: number
   //react sizing
-  min: number
-  max: number
   containerSize: Size2D
+  contentSize: Size2D
 
   // the optional section non reactive
-  thumbSize: Size2D
   dragging: boolean
 }
 
-export type SliderStore = {
-  bindings: Record<string, Slider>
+export type ScrollStore = {
+  bindings: Record<string, Scroll>
   init: (id: string) => void
-  get: (id: string) => Readonly<Slider> | null
+  get: (id: string) => Readonly<Scroll> | null
   delete: (id: string) => void
 
-  setConstraints: (id: string, constraints: { min: number, max: number }) => void
   setContainerSize: (id: string, containerSize: Size2D) => void
-  setThumbSize: (id: string, thumbSize: Size2D) => void
+  setContentSize: (id: string, contentSize: Size2D) => void
 
-  apply: (ctx: CtxSlider) => void
+  apply: (ctx: CtxScroll) => void
 }
 /* -------------------------------
-   Slider state functions
+   scroll state functions
 --------------------------------- */
-export const sliderStore = create<SliderStore>()(
+export const scrollStore = create<ScrollStore>()(
   immer((set, get) => ({
 
     bindings: {},
@@ -42,15 +41,15 @@ export const sliderStore = create<SliderStore>()(
 
       set(state => {
         state.bindings[id] = {
-          value: 0,
-          min: 0,
-          max: 100,
+          liveValue: 0,
+          settledValue: 0,
           containerSize: { width: 0, height: 0 },
-          thumbSize: { width: 0, height: 0 },
+          contentSize: { width: 0, height: 0 },
           dragging: false
         }
       })
     },
+
     get: (id) => {
       return get().bindings[id] ?? null
     },
@@ -60,16 +59,6 @@ export const sliderStore = create<SliderStore>()(
         delete state.bindings[id]
       })
     },
-
-    setConstraints: (id, constraints) => {
-      set(state => {
-        const s = state.bindings[id]
-        if (!s) return
-        s.min = constraints.min;
-        s.max = constraints.max;
-      })
-    },
-
     setContainerSize: (id, containerSize) => {
       set(state => {
         const s = state.bindings[id]
@@ -79,12 +68,12 @@ export const sliderStore = create<SliderStore>()(
 
       })
     },
-    setThumbSize: (id, thumbSize) => {
+    setContentSize: (id, contentSize) => {
       set(state => {
         const s = state.bindings[id]
         if (!s) return
-        if (s.thumbSize.width === thumbSize.width && s.thumbSize.height === thumbSize.height) return
-        s.thumbSize = thumbSize
+        if (s.contentSize.width === contentSize.width && s.contentSize.height === contentSize.height) return
+        s.contentSize = contentSize
       })
     },
 
@@ -94,24 +83,25 @@ export const sliderStore = create<SliderStore>()(
         if (!s) return
         switch (ctx.event) {
           case 'press': {
-            s.value = ctx.delta1D ?? s.value
+            s.liveValue = ctx.delta1D ?? s.liveValue
             break
           }
           case 'swipeStart': {
             s.dragging = true
-            s.value = ctx.delta1D ?? s.value
+            s.liveValue = ctx.delta1D ?? s.liveValue
             break
           }
           case 'swipe': {
-            s.value = ctx.delta1D ?? s.value
+            s.liveValue = ctx.delta1D ?? s.liveValue
             break
           }
           case 'swipeCommit': {
             s.dragging = false
-            s.value = ctx.delta1D ?? s.value
+            s.settledValue = ctx.delta1D ?? s.liveValue
+            s.liveValue = ctx.delta1D ?? s.liveValue
             break
           }
-          default: { throw new Error(`Invalid slider event! Event: ${ctx.event}`) }
+          default: { throw new Error(`Invalid scroll event! Event: ${ctx.event}`) }
         }
       })
     }

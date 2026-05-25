@@ -124,7 +124,7 @@ export const dragStore = create<DragStore>()(
             s.dragging = false
             break
           }
-          default: { throw new Error(`Invalid carousel event! Event: ${ctx.event}`) }
+          default: { throw new Error(`Invalid drag event! Event: ${ctx.event}`) }
         }
       })
     }

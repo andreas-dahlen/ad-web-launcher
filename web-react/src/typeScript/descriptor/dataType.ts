@@ -47,6 +47,12 @@ export interface SliderConstraints {
   readonly max: number
 }
 
+export interface ScrollData {
+  readonly settledValue: number
+  readonly containerSize: Size2D
+  readonly contentSize: Size2D
+}
+
 export interface GestureUpdate {
   //Updates stay as its own part of descriptor and is never merged into other parts. Currently only used for slider
   readonly pointerId: number

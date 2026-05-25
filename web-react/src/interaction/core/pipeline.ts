@@ -2,6 +2,7 @@ import { interpreter } from './interpreter.ts'
 import { carouselSolver } from '../solvers/carouselSolver.ts'
 import { sliderSolver } from '../solvers/sliderSolver.ts'
 import { dragSolver } from '../solvers/dragSolver.ts'
+import { scrollSolver } from '@interaction/solvers/scrollSolver.ts'
 import { domUpdater } from '../updater/domUpdater.ts'
 import { dragStore } from '../../stores/dragStore.ts'
 import { sliderStore } from '../../stores/sliderStore.ts'
@@ -11,6 +12,7 @@ import type { EventBridgeType } from '../../typeScript/core/primitiveType.ts'
 import type { CtxType } from '../../typeScript/descriptor/ctxType.ts'
 import type { PointerEventPackage } from '../../hooks/usePointerBridge.ts'
 import { gestureStore } from '../../stores/gestureStore.ts'
+import { scrollStore } from '../../stores/scrollStore.ts'
 
 /* =====================
         Maping
@@ -91,7 +93,15 @@ export const pipeline = {
             dragStore.getState().setFrame(desc.base.id, desc.base.frame)
           }
         }
-
+        break
+      }
+      case 'scroll': {
+        ctx = desc.ctx
+        const sr = scrollSolver?.[event]?.(desc)
+        if (sr) ctx = { ...ctx, ...sr }
+        if (ctx.storeAccepted) {
+          scrollStore.getState().apply(ctx)
+        }
         break
       }
       case 'button': {

@@ -59,6 +59,13 @@ export type SliderProps = BaseProps & {
   onValueChange?: (value: number) => void
 }
 
+export type ScrollProps = BaseProps & {
+  axis: 'both'
+  scrollDataAttrs?: DataAttributes
+  children?: React.ReactNode
+  onSwipeCommit?: (detail: CtxType) => void
+}
+
 export type ButtonProps = BaseProps & {
   action?: string
   children?: React.ReactNode

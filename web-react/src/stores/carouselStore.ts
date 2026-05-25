@@ -148,10 +148,6 @@ export const carouselStore = create<CarouselStore>()(
   )
 )
 
-
-
-
-
 function getNextIndex(currentIndex: number, direction: Direction | null, count: number): number {
   if (!count || !direction) return currentIndex
   switch (direction.dir) {

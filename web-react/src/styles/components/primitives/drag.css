@@ -1,3 +1,8 @@
+.drag-container {
+  position: absolute;
+  inset: 0;
+}
+
 .drag {
   position: absolute;
   display: flex;
@@ -13,9 +18,4 @@
   border-radius: var(--button-radius);
   width: var(--drag-width);
   height: var(--drag-height);
-}
-
-.drag-container {
-  position: absolute;
-  inset: 0;
 }

@@ -1,7 +1,7 @@
 import type { BaseInteraction, BaseWithSwipe } from "./baseType.ts"
-import type { CarouselData, CarouselModifiers, SliderData, DragData, DragModifiers } from "./dataType.ts"
+import type { CarouselData, CarouselModifiers, SliderData, DragData, DragModifiers, ScrollData } from "./dataType.ts"
 import type { Capabilities } from "./baseType.ts"
-import type { CtxButton, CtxCarousel, CtxDrag, CtxSlider } from './ctxType.ts'
+import type { CtxButton, CtxCarousel, CtxDrag, CtxScroll, CtxSlider } from './ctxType.ts'
 
 
 export type CarouselDesc = {
@@ -31,10 +31,18 @@ export type ButtonDesc = {
   ctx: CtxButton
 }
 
+export type ScrollDesc = {
+  readonly base: BaseWithSwipe
+  readonly data: ScrollData
+  readonly capabilities: Capabilities
+  ctx: CtxScroll
+}
+
 export type Descriptor =
   | ({ type: 'carousel' } & CarouselDesc)
   | ({ type: 'slider' } & SliderDesc)
   | ({ type: 'drag' } & DragDesc)
   | ({ type: 'button' } & ButtonDesc)
+  | ({ type: 'scroll' } & ScrollDesc)
 
 export type SwipeableDescriptor = Exclude<Descriptor, { type: 'button' }>

@@ -40,7 +40,7 @@ export const gestureUtils = {
 
 	//FUTURE possible swipeThreshold dif for every type
 	swipeThresholdCalc(distance: number, type: InteractionType): boolean {
-		if (type === 'slider') return true
+		if (type === 'slider' || type === 'scroll') return true
 
 		const ratio = APP_CONFIG.swipeThresholdRatio ?? 0.05
 		const device = sizeStore.getState().device
@@ -60,7 +60,7 @@ export const gestureUtils = {
 		if (desc.type == 'button') return false
 		const swipeable = desc.capabilities.swipeable
 		if (!swipeable) return false
-		if (desc.type == 'slider') return true
+		if (desc.type == 'slider' || desc.type == 'scroll') return true
 		const axis = this.resolveAxis(intentAxis, desc)
 		return !!axis
 	}

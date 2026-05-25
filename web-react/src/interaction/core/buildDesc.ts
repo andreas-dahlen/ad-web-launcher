@@ -4,10 +4,11 @@ import { carouselStore } from '../../stores/carouselStore.ts'
 import { dragStore } from '../../stores/dragStore.ts'
 import { sliderStore } from '../../stores/sliderStore.ts'
 import type { BaseInteraction, BaseWithSwipe, DomMeta, Capabilities } from '../../typeScript/descriptor/baseType.ts'
-import type { CarouselData, CarouselModifiers, DragData, DragModifiers, SliderData } from '../../typeScript/descriptor/dataType.ts'
-import type { CarouselDesc, SliderDesc, DragDesc, ButtonDesc } from '../../typeScript/descriptor/descriptor.ts'
+import type { CarouselData, CarouselModifiers, DragData, DragModifiers, ScrollData, SliderData } from '../../typeScript/descriptor/dataType.ts'
+import type { CarouselDesc, SliderDesc, DragDesc, ButtonDesc, ScrollDesc } from '../../typeScript/descriptor/descriptor.ts'
 import type { Descriptor } from '../../typeScript/descriptor/descriptor.ts'
-import type { CtxButton, CtxCarousel, CtxDrag, CtxSlider } from '../../typeScript/descriptor/ctxType.ts'
+import type { CtxButton, CtxCarousel, CtxDrag, CtxScroll, CtxSlider } from '../../typeScript/descriptor/ctxType.ts'
+import { scrollStore } from '../../stores/scrollStore.ts'
 
 interface Builder {
   capabilities: Capabilities
@@ -40,6 +41,11 @@ export const buildDesc = {
       case 'drag': {
         const desc = this.buildDrag(metaData, r)
         if (desc) return { type: "drag", ...desc }
+        return null
+      }
+      case 'scroll': {
+        const desc = this.buildScroll(metaData, r)
+        if (desc) return { type: "scroll", ...desc }
         return null
       }
       case 'button': return {
@@ -79,6 +85,18 @@ export const buildDesc = {
     }
     return null
   },
+
+  buildScroll(metaData: DomMeta, r: Builder): ScrollDesc | null {
+    const data = this.buildScrollData(metaData)
+    if (data) return {
+      base: this.buildSwipeBase(metaData, r),
+      data: data,
+      capabilities: r.capabilities,
+      ctx: this.buildScrollCtx(metaData)
+    }
+    return null
+  },
+
   buildButton(metaData: DomMeta, r: Builder): ButtonDesc {
     return {
       base: this.buildBase(metaData, r.pointerId),
@@ -131,6 +149,11 @@ export const buildDesc = {
     const snap = (metaData.snapX != null && metaData.snapY != null) ? { x: metaData.snapX, y: metaData.snapY } : undefined
     return { settledOffset: s.settledOffset, layout: s.layout, snap: snap }
   },
+  buildScrollData(metaData: DomMeta): ScrollData | null {
+    const s = scrollStore.getState().get(metaData.id)
+    if (!s) return null
+    return { containerSize: s.containerSize, contentSize: s.contentSize, settledValue: s.settledValue }
+  },
 
   /* =========================
     ctx placeholders
@@ -144,8 +167,14 @@ export const buildDesc = {
   buildDragCtx(metaData: DomMeta): CtxDrag {
     return { type: 'drag', event: 'press', id: metaData.id, element: metaData.el, delta: { x: 0, y: 0 }, storeAccepted: false }
   },
+  buildScrollCtx(metaData: DomMeta): CtxScroll {
+    return {
+      type: 'scroll', event: 'press', id: metaData.id, element: metaData.el, delta: { x: 0, y: 0 },
+      storeAccepted: false
+    }
+  },
   buildBtnCtx(metaData: DomMeta): CtxButton {
-    return { type: 'button', event: 'press', id: metaData.id, element: metaData.el, storeAccepted: false }
+    return { type: 'button', event: 'press', id: metaData.id, element: metaData.el }
   },
 
   /* =========================

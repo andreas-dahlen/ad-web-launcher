@@ -10,35 +10,42 @@ export type CtxBase = {
   event: EventType
   readonly id: string
   readonly element: HTMLElement
+
+}
+
+export type CtxBaseSwipe = CtxBase & {
   storeAccepted: boolean
+  delta: Vec2
+  cancel?: CancelData
 }
 
 export type CtxButton = CtxBase & {
   type: 'button'
 }
 
-export type CtxCarousel = CtxBase & {
+export type CtxCarousel = CtxBaseSwipe & {
   type: 'carousel'
-  delta: Vec2
-  cancel?: CancelData
 
   delta1D?: number
   direction?: Direction
 }
 
-export type CtxSlider = CtxBase & {
+export type CtxSlider = CtxBaseSwipe & {
   type: 'slider'
-  delta: Vec2
-  cancel?: CancelData
 
   delta1D?: number
   gestureUpdate?: GestureUpdate
 }
 
-export type CtxDrag = CtxBase & {
+export type CtxScroll = CtxBaseSwipe & {
+  type: 'scroll'
+
+  delta1D?: number
+  //possibly gestureUpdate? we'll see
+}
+
+export type CtxDrag = CtxBaseSwipe & {
   type: 'drag'
-  delta: Vec2
-  cancel?: CancelData
 }
 
 export type CtxType =
@@ -46,6 +53,7 @@ export type CtxType =
   | CtxSlider
   | CtxDrag
   | CtxButton
+  | CtxScroll
 
 /* -------------------------
         Solvers
@@ -54,6 +62,8 @@ export type CtxType =
 export type CarouselCtxPartial = Partial<Pick<CtxCarousel, 'delta1D' | 'direction' | 'storeAccepted' | 'event'>>
 export type SliderCtxPartial = Partial<Pick<CtxSlider, 'delta1D' | 'gestureUpdate' | 'storeAccepted'>>
 export type DragCtxPartial = Partial<Pick<CtxDrag, 'storeAccepted' | 'delta'>>
+export type ScrollCtxPartial = Partial<Pick<CtxScroll,
+  'delta1D' | 'storeAccepted'>>
 
 export interface Normalized1D {
   mainSize?: number

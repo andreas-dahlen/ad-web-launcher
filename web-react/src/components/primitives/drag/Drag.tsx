@@ -60,11 +60,11 @@ export default function Drag({
       >
         <div
           ref={dragItemRef}
-          style={{ ...motionStyle, pointerEvents: interactive ? 'auto' : 'none' }}
-          className={`drag ${className ?? ''}`}
+          data-type="drag"
           data-id={id}
           data-axis="both"
-          data-type="drag"
+          className={`drag ${className ?? ''}`}
+          style={{ ...motionStyle, pointerEvents: interactive ? 'auto' : 'none' }}
           // data-locked={interactive || undefined}
           data-snap-x={resolvedSnapX}
           data-snap-y={resolvedSnapY}

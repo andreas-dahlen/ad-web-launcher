@@ -9,7 +9,7 @@ export type Direction =
   | { axis: 'vertical'; dir: 'up' | 'down' }
   | { axis: 'both'; dir: 'left' | 'right' | 'up' | 'down' }
 
-export type InteractionType = 'button' | 'carousel' | 'slider' | 'drag'
+export type InteractionType = 'button' | 'carousel' | 'slider' | 'drag' | 'scroll'
 export type DataKeys = Exclude<InteractionType, 'button'>;
 
 export type EventType =
@@ -32,7 +32,7 @@ export interface Size2D {
 }
 
 export const VALID_AXES = new Set<Axis>(['horizontal', 'vertical', 'both'])
-export const VALID_TYPES = new Set<InteractionType>(['button', 'carousel', 'slider', 'drag'])
+export const VALID_TYPES = new Set<InteractionType>(['button', 'carousel', 'slider', 'drag', 'scroll'])
 
 export function toAxis(v: string | undefined): Axis | null {
   return v != null && VALID_AXES.has(v as Axis) ? v as Axis : null

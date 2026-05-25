@@ -13,9 +13,10 @@ export type InterpreterFn = (x: number, y: number, pointerId: number) => Descrip
 
 // pipelineType.ts
 const EVENT_MAP = {
-  carousel: ['swipe', 'swipeStart', 'swipeCommit', 'swipeRevert'],
-  slider: ['press', 'swipeStart', 'swipe', 'swipeCommit'],
-  drag: ['swipeStart', 'swipe', 'swipeCommit'],
+   carousel: ['swipe', 'swipeStart', 'swipeCommit', 'swipeRevert'],
+   slider: ['press', 'swipeStart', 'swipe', 'swipeCommit'],
+   drag: ['swipeStart', 'swipe', 'swipeCommit'],
+   scroll: ['swipeStart', 'swipe', 'swipeCommit']
 } as const satisfies Record<DataKeys, EventType[]>
 
 // derive the type from the value
