@@ -99,6 +99,7 @@ export const pipeline = {
         ctx = desc.ctx
         const sr = scrollSolver?.[event]?.(desc)
         if (sr) ctx = { ...ctx, ...sr }
+        if (ctx.gestureUpdate != null) interpreter.applyGestureUpdate(ctx.gestureUpdate)
         if (ctx.storeAccepted) {
           scrollStore.getState().apply(ctx)
         }

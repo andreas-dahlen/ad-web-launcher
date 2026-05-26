@@ -5,16 +5,18 @@ import type { CtxScroll } from '../typeScript/descriptor/ctxType.ts'
 
 type Scroll = {
   //react motion
-  //react motion
+  overflowValue: number
+
   liveValue: number
   //reactPosition
   settledValue: number
-  //react sizing
-  containerSize: Size2D
-  contentSize: Size2D
+
+  velocity: number
 
   // the optional section non reactive
   dragging: boolean
+  containerSize: Size2D
+  contentSize: Size2D
 }
 
 export type ScrollStore = {
@@ -41,7 +43,9 @@ export const scrollStore = create<ScrollStore>()(
 
       set(state => {
         state.bindings[id] = {
+          overflowValue: 0,
           liveValue: 0,
+          velocity: 0,
           settledValue: 0,
           containerSize: { width: 0, height: 0 },
           contentSize: { width: 0, height: 0 },
@@ -92,13 +96,26 @@ export const scrollStore = create<ScrollStore>()(
             break
           }
           case 'swipe': {
-            s.liveValue = ctx.delta1D ?? s.liveValue
+            const newValue = ctx.delta1D ?? s.liveValue
+            s.velocity = newValue - s.liveValue
+            s.liveValue = newValue
+            s.overflowValue = ctx.overflowValue ?? 0
             break
           }
           case 'swipeCommit': {
             s.dragging = false
             s.settledValue = ctx.delta1D ?? s.liveValue
             s.liveValue = ctx.delta1D ?? s.liveValue
+            s.overflowValue = ctx.overflowValue ?? s.overflowValue
+            if (ctx.delta1D) startMomentum(ctx.id, s.velocity)
+            s.velocity = 0
+            break
+          }
+          case 'swipeRevert': {
+            s.dragging = false
+            s.overflowValue = ctx.overflowValue ?? s.overflowValue
+            s.liveValue = 0
+            s.settledValue = 0
             break
           }
           default: { throw new Error(`Invalid scroll event! Event: ${ctx.event}`) }
@@ -108,3 +125,52 @@ export const scrollStore = create<ScrollStore>()(
   })
   )
 )
+
+// function startMomentum(id: string, initialVelocity: number) {
+//   let velocity = initialVelocity
+
+//   function tick() {
+//     velocity *= 0.95  // friction — tweak this
+
+//     if (Math.abs(velocity) < 0.5) return  // done
+
+//     scrollStore.setState(state => {
+//       const s = state.bindings[id]
+//       if (!s) return
+//       const maxScroll = Math.max(0, s.contentSize.height - s.containerSize.height)
+//       s.liveValue = Math.max(0, Math.min(maxScroll, s.liveValue + velocity))
+//       s.settledValue = s.liveValue
+//     })
+
+//     requestAnimationFrame(tick)
+//   }
+
+//   requestAnimationFrame(tick)
+// }
+
+const MOMENTUM = {
+  durationMs: 600,
+  distanceMultiplier: 4
+} as const
+
+function startMomentum(id: string, initialVelocity: number) {
+  const friction = Math.exp(-76.7 / MOMENTUM.durationMs)
+  let velocity = initialVelocity * MOMENTUM.distanceMultiplier
+
+  function tick() {
+    velocity *= friction
+    if (Math.abs(velocity) < 0.5) return
+
+    scrollStore.setState(state => {
+      const s = state.bindings[id]
+      if (!s) return
+      const maxScroll = Math.max(0, s.contentSize.height - s.containerSize.height)
+      s.liveValue = Math.max(0, Math.min(maxScroll, s.liveValue + velocity))
+      s.settledValue = s.liveValue
+    })
+
+    requestAnimationFrame(tick)
+  }
+
+  requestAnimationFrame(tick)
+}

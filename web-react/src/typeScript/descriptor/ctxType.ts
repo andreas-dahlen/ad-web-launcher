@@ -41,7 +41,9 @@ export type CtxScroll = CtxBaseSwipe & {
   type: 'scroll'
 
   delta1D?: number
-  //possibly gestureUpdate? we'll see
+  overflowValue?: number
+
+  gestureUpdate?: GestureUpdate
 }
 
 export type CtxDrag = CtxBaseSwipe & {
@@ -63,7 +65,7 @@ export type CarouselCtxPartial = Partial<Pick<CtxCarousel, 'delta1D' | 'directio
 export type SliderCtxPartial = Partial<Pick<CtxSlider, 'delta1D' | 'gestureUpdate' | 'storeAccepted'>>
 export type DragCtxPartial = Partial<Pick<CtxDrag, 'storeAccepted' | 'delta'>>
 export type ScrollCtxPartial = Partial<Pick<CtxScroll,
-  'delta1D' | 'storeAccepted'>>
+  'delta1D' | 'storeAccepted' | 'gestureUpdate'>>
 
 export interface Normalized1D {
   mainSize?: number

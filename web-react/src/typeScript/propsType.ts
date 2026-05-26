@@ -60,10 +60,10 @@ export type SliderProps = BaseProps & {
 }
 
 export type ScrollProps = BaseProps & {
-  axis: 'both'
+  axis: 'horizontal' | 'vertical'
   scrollDataAttrs?: DataAttributes
   children?: React.ReactNode
-  onSwipeCommit?: (detail: CtxType) => void
+  onEdgeDir?: 'left' | 'right' | 'both' | 'top' | 'bottom'
 }
 
 export type ButtonProps = BaseProps & {

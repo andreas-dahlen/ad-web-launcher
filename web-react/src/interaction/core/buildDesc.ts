@@ -151,8 +151,9 @@ export const buildDesc = {
   },
   buildScrollData(metaData: DomMeta): ScrollData | null {
     const s = scrollStore.getState().get(metaData.id)
+    const onEdgeDir = metaData.onEdgeDir != null ? metaData.onEdgeDir : undefined
     if (!s) return null
-    return { containerSize: s.containerSize, contentSize: s.contentSize, settledValue: s.settledValue }
+    return { onEdgeDir, containerSize: s.containerSize, contentSize: s.contentSize, settledValue: s.settledValue }
   },
 
   /* =========================

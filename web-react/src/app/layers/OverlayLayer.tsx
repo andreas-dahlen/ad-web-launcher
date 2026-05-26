@@ -15,8 +15,12 @@ export default function OverlayLayer() {
 
         <Scroll
           id='testing-scroll'
-          axis='both'
-        ></Scroll>
+          axis='vertical'
+          onEdgeDir='top'
+        >
+          <div className='test-frame'></div>
+
+        </Scroll>
 
       </div>
 

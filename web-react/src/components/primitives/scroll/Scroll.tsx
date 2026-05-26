@@ -4,6 +4,7 @@ import { useScrollSizing } from '@components/primitives/scroll/hooks/useScrollSi
 import { useScrollStore } from '@components/primitives/scroll/hooks/useScrollStore.ts'
 import type { ScrollProps } from '@typeScript/propsType.ts'
 import { useScrollMotion } from '@components/primitives/scroll/hooks/useScrollMotion.ts'
+import { useOverflowMotion } from '@components/primitives/scroll/hooks/useOverflowMotion.ts'
 
 export default function Scroll({
   id,
@@ -12,32 +13,38 @@ export default function Scroll({
   className,
   children,
   scrollDataAttrs,
-  onSwipeCommit,
+  onEdgeDir,
 }: ScrollProps) {
 
   // ── Fully subscribe to the slider store ─────────────────────────────
-  const { liveValue, settledValue, dragging } = useScrollStore(id)
+  const { overflowValue, liveValue, dragging } = useScrollStore(id)
 
   // ── DOM references & sizing ─────────────────────────────
   const containerRef = useRef<HTMLDivElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
   useScrollSizing({ containerRef: containerRef, contentRef: contentRef, id })
 
+
+
   // ── Pointer forwarding for gestures ─────────────────────────────
   usePointerBridge({
     elRef: contentRef,
     disabled: !interactive,
-    onReaction: (reaction) => {
-      if (reaction.detail?.event === 'swipeCommit' && onSwipeCommit) {
-        onSwipeCommit(reaction.detail)
-      }
-    }
+    // onReaction: (reaction) => {
+    //   if (reaction.detail?.event === 'swipeCommit' && onEdge && allowedEdgeOverflow) {
+    //     onEdge(overflow, allowedEdgeOverflow)
+    //   }
+    // }
   })
 
   // ── Slider motion / styling ─────────────────────────────
   const { contentStyle } = useScrollMotion({
     liveValue,
-    settledValue,
+    dragging
+  })
+
+  const { overflowStyle } = useOverflowMotion({
+    overflowValue,
     dragging
   })
 
@@ -46,6 +53,7 @@ export default function Scroll({
       ref={containerRef}
       data-frame="scroll"
       className="scroll-container"
+      style={{ ...overflowStyle }}
     >
 
       <div
@@ -53,6 +61,7 @@ export default function Scroll({
         data-type="scroll"
         data-id={id}
         data-axis={axis}
+        data-on-edge-dir={onEdgeDir}
         className={`scroll ${className ?? ''}`}
         style={{ ...contentStyle, pointerEvents: interactive ? 'auto' : 'none' }}
         {...scrollDataAttrs}

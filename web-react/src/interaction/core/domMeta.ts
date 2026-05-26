@@ -3,7 +3,7 @@ Context Builder
 ========================= */
 
 import type { DomMeta } from '../../typeScript/descriptor/baseType.ts'
-import { toAxis, toType } from '../../typeScript/core/primitiveType.ts'
+import { toAxis, toOnEdgeDir, toType } from '../../typeScript/core/primitiveType.ts'
 
 export function extractDomMeta(el: HTMLElement): DomMeta | null {
   const ds = el.dataset
@@ -11,6 +11,7 @@ export function extractDomMeta(el: HTMLElement): DomMeta | null {
 
   const axis = toAxis(ds.axis)
   const type = toType(ds.type)
+  const onEdgeDir = toOnEdgeDir(ds.onEdgeDir)
 
   if (!type) return null
   if (type !== 'button' && !axis) return null
@@ -23,7 +24,7 @@ export function extractDomMeta(el: HTMLElement): DomMeta | null {
   const lockPrevAt = parseNumber(ds.lockPrevAt)
   const lockNextAt = parseNumber(ds.lockNextAt)
 
-  return { el, ds, id, axis, type, swipeValid, pressValid, snapX, snapY, lockPrevAt, lockNextAt }
+  return { el, ds, id, axis, type, swipeValid, pressValid, snapX, snapY, lockPrevAt, lockNextAt, onEdgeDir }
 }
 
 function parseNumber(value: string | undefined): number | null {

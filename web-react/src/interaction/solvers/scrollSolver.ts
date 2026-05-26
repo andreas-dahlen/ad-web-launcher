@@ -3,7 +3,6 @@
  * This is exactly like carousel, except:
  * - No commit threshold check (always commits)
  * - Quantizes delta to step boundaries on commit
- * - No swipeRevert reaction
  */
 
 import type { EventType } from '../../typeScript/core/primitiveType.ts'
@@ -16,24 +15,56 @@ export const scrollSolver: Partial<Record<EventType, (desc: ScrollDesc) => Scrol
   /**
    * Handle swipeStart - returns reaction to enable dragging
    */
-  press() {
-    return { storeAccepted: true }
+
+  press(desc) {
+    const norm = scrollUtils.normalize(desc)
+    const result = scrollUtils.resolveScroll(norm, desc)
+    if (result == null) return { storeAccepted: false }
+    return { ...result, storeAccepted: true }
   },
 
-  swipeStart() {
-    return { storeAccepted: true }
+  swipeStart(desc) {
+    const norm = scrollUtils.normalize(desc)
+    const result = scrollUtils.resolveScroll(norm, desc)
+    if (result == null) return { storeAccepted: false }
+    return { ...result, storeAccepted: true }
   },
+
   swipe(desc) {
     const norm = scrollUtils.normalize(desc)
-    const value = scrollUtils.resolveSwipe(norm, desc)
-    if (value == null) return { storeAccepted: false }
-    return { delta1D: value, storeAccepted: true }
+    const isOverflow = desc.ctx.gestureUpdate?.isOverflow
+
+    if (isOverflow === undefined) {
+      const result = scrollUtils.resolveMode(norm, desc)
+      if (result == null) return { storeAccepted: false }
+      return {
+        ...result.value,
+        gestureUpdate: {
+          pointerId: desc.base.pointerId,
+          isOverflow: result.isOverflow
+        }
+      }
+    }
+
+    if (isOverflow) {
+      return { ...scrollUtils.resolveScrollOverflow(norm, desc), storeAccepted: true }
+    }
+
+    return { ...scrollUtils.resolveScroll(norm, desc), storeAccepted: true }
   },
+
+
+
+
+
   swipeCommit(desc) {
     const norm = scrollUtils.normalize(desc)
-    const value = scrollUtils.resolveSwipe(norm, desc)
-    if (value == null) return { storeAccepted: false }
-    return { delta1D: value, storeAccepted: true }
-  }
+    const result = desc.ctx.gestureUpdate?.isOverflow
+      ? scrollUtils.resolveScrollOverflowEnd(norm, desc)
+      : scrollUtils.resolveScroll(norm, desc)
+
+    if (result == null) return { storeAccepted: false }
+    return { ...result, storeAccepted: true }
+  },
 }
 

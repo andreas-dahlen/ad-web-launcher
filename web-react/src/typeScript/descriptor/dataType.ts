@@ -1,4 +1,4 @@
-import type { Size2D, Vec2 } from "../core/primitiveType.ts"
+import type { OnEdgeDir, Size2D, Vec2 } from "../core/primitiveType.ts"
 
 export interface CarouselData {
   readonly index: number
@@ -51,11 +51,15 @@ export interface ScrollData {
   readonly settledValue: number
   readonly containerSize: Size2D
   readonly contentSize: Size2D
+  readonly onEdgeDir?: OnEdgeDir
 }
 
 export interface GestureUpdate {
-  //Updates stay as its own part of descriptor and is never merged into other parts. Currently only used for slider
+  //Updates stay as its own part of descriptor and is never merged into other parts. Currently only used for slider and for scroll.
   readonly pointerId: number
+  //slider
   readonly sliderStartOffset?: number
   readonly sliderValuePerPixel?: number
+  //scroll
+  readonly isOverflow?: boolean
 }

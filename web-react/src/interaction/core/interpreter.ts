@@ -41,6 +41,13 @@ function applyGestureUpdate(update: GestureUpdate) {
       }
       break
     }
+    case 'scroll': {
+      g.desc.ctx.gestureUpdate = {
+        ...g.desc.ctx.gestureUpdate,
+        ...update,
+      }
+      break
+    }
   }
 }
 

@@ -6,6 +6,8 @@ import { scrollStore, type ScrollStore } from '../../../../stores/scrollStore'
 const DEFAULTS = {
   liveValue: 0,
   settledValue: 0,
+  overflowValue: 0,
+  velocity: 0,
   containerSize: { width: 0, height: 0 },
   contentSize: { width: 0, height: 0 },
   dragging: false

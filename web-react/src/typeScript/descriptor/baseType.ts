@@ -1,4 +1,4 @@
-import type { Vec2, Axis, InteractionType } from "../core/primitiveType.ts"
+import type { Vec2, Axis, InteractionType, OnEdgeDir } from "../core/primitiveType.ts"
 
 export interface BaseInteraction {
   // event: EventType
@@ -42,4 +42,5 @@ export interface DomMeta {
   readonly snapY: number | null
   readonly lockPrevAt: number | null
   readonly lockNextAt: number | null
+  readonly onEdgeDir: OnEdgeDir | null
 }
