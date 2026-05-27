@@ -10,6 +10,7 @@ export default function Scroll({
   id,
   axis,
   interactive = true,
+  instantSwipe = true,
   className,
   children,
   scrollDataAttrs,
@@ -53,7 +54,8 @@ export default function Scroll({
       ref={containerRef}
       data-frame="scroll"
       className="scroll-container"
-      style={{ ...overflowStyle }}
+      style={onEdgeDir ? overflowStyle : undefined}
+
     >
 
       <div
@@ -62,10 +64,20 @@ export default function Scroll({
         data-id={id}
         data-axis={axis}
         data-on-edge-dir={onEdgeDir}
+        data-instant-swipe={instantSwipe}
         className={`scroll ${className ?? ''}`}
         style={{ ...contentStyle, pointerEvents: interactive ? 'auto' : 'none' }}
         {...scrollDataAttrs}
       >
+        {onEdgeDir &&
+          <div className='invis-scroll-input-field'
+            data-type="scroll"
+            data-id={id}
+            data-axis={axis}
+            data-on-edge-dir={onEdgeDir}
+            data-instant-swipe={false}
+          />}
+
         {children}
       </div>
     </div >

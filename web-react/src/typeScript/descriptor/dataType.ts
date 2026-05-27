@@ -51,6 +51,7 @@ export interface ScrollData {
   readonly settledValue: number
   readonly containerSize: Size2D
   readonly contentSize: Size2D
+  readonly isVisible: boolean //always included but not always used... onEdgeDir drives behavior.
   readonly onEdgeDir?: OnEdgeDir
 }
 

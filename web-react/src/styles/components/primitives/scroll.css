@@ -4,6 +4,7 @@
 }
 
 .scroll {
+  position: relative;
   min-height: 100%;
   min-width: 100%;
   opacity: 90%;
@@ -16,6 +17,16 @@
   /* width: 200px; */
   height: 2000px;
   background: linear-gradient(to bottom, hotPink, black, royalBlue, black, hotPink, black, royalBlue)
+}
+
+.invis-scroll-input-field {
+  position: absolute;
+  background: yellowgreen;
+  width: 100%;
+  --scroll-invis-extra-height: 200px;
+  height: var(--scroll-invis-extra-height);
+  top: calc(-1*var(--scroll-invis-extra-height));
+  pointer-events: auto;
 }
 
 /* .test-content {

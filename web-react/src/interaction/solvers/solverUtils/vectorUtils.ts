@@ -1,5 +1,5 @@
 import type { DragLayout } from '@typeScript/descriptor/dataType.ts'
-import type { Axis, Axis1D, Direction, Vec2 } from '@typeScript/core/primitiveType'
+import type { Axis, Axis1D, Direction, OnEdgeDir, Vec2 } from '@typeScript/core/primitiveType'
 
 export const vector = {
   clamp(delta: number, min: number, max: number) {
@@ -42,5 +42,18 @@ export const vector = {
         : ({ axis, dir: delta > 0 ? 'down' : 'up' })
     }
     return null
+  },
+  isThresholdDirAndOnEdgeDir(onEdgeDir: OnEdgeDir, axis: Axis, thresholdValue: Vec2): boolean | null {
+    const dirVal = axis === 'horizontal'
+      ? thresholdValue.x
+      : thresholdValue.y
+    const dir = vector.resolveDirection1D(dirVal, axis)
+    if (!dir) return null
+    const result = dir.dir == 'up' && onEdgeDir == 'down' ||
+      dir.dir == 'down' && onEdgeDir == 'up' ||
+      dir.dir == 'left' && onEdgeDir == 'right' ||
+      dir.dir == 'right' && onEdgeDir == 'left' ?
+      true : false
+    return result
   }
 }

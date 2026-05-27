@@ -6,6 +6,7 @@ import type { CtxScroll } from '../typeScript/descriptor/ctxType.ts'
 type Scroll = {
   //react motion
   overflowValue: number
+  isVisible: boolean
 
   liveValue: number
   //reactPosition
@@ -44,6 +45,7 @@ export const scrollStore = create<ScrollStore>()(
       set(state => {
         state.bindings[id] = {
           overflowValue: 0,
+          isVisible: false,
           liveValue: 0,
           velocity: 0,
           settledValue: 0,
@@ -86,33 +88,38 @@ export const scrollStore = create<ScrollStore>()(
         const s = state.bindings[ctx.id]
         if (!s) return
         switch (ctx.event) {
-          case 'press': {
+          case 'press': { //only happens during scroll
             s.liveValue = ctx.delta1D ?? s.liveValue
+            s.isVisible = true
             break
           }
           case 'swipeStart': {
             s.dragging = true
             s.liveValue = ctx.delta1D ?? s.liveValue
+            s.overflowValue = ctx.overflowValue ?? s.overflowValue
+            s.isVisible = ctx.isVisible ?? s.isVisible
             break
           }
           case 'swipe': {
             const newValue = ctx.delta1D ?? s.liveValue
             s.velocity = newValue - s.liveValue
             s.liveValue = newValue
-            s.overflowValue = ctx.overflowValue ?? 0
+            s.overflowValue = ctx.overflowValue ?? s.overflowValue
             break
           }
           case 'swipeCommit': {
             s.dragging = false
+            s.isVisible = ctx.isVisible ?? s.isVisible
             s.settledValue = ctx.delta1D ?? s.liveValue
             s.liveValue = ctx.delta1D ?? s.liveValue
             s.overflowValue = ctx.overflowValue ?? s.overflowValue
-            if (ctx.delta1D) startMomentum(ctx.id, s.velocity)
+            if (ctx.delta1D !== undefined) startMomentum(ctx.id, s.velocity)
             s.velocity = 0
             break
           }
           case 'swipeRevert': {
             s.dragging = false
+            s.isVisible = ctx.isVisible ?? s.isVisible
             s.overflowValue = ctx.overflowValue ?? s.overflowValue
             s.liveValue = 0
             s.settledValue = 0

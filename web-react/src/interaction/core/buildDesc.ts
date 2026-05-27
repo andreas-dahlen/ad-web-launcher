@@ -153,7 +153,7 @@ export const buildDesc = {
     const s = scrollStore.getState().get(metaData.id)
     const onEdgeDir = metaData.onEdgeDir != null ? metaData.onEdgeDir : undefined
     if (!s) return null
-    return { onEdgeDir, containerSize: s.containerSize, contentSize: s.contentSize, settledValue: s.settledValue }
+    return { onEdgeDir, containerSize: s.containerSize, contentSize: s.contentSize, settledValue: s.settledValue, isVisible: s.isVisible }
   },
 
   /* =========================
@@ -170,8 +170,7 @@ export const buildDesc = {
   },
   buildScrollCtx(metaData: DomMeta): CtxScroll {
     return {
-      type: 'scroll', event: 'press', id: metaData.id, element: metaData.el, delta: { x: 0, y: 0 },
-      storeAccepted: false
+      type: 'scroll', event: 'press', id: metaData.id, element: metaData.el, delta: { x: 0, y: 0 }, storeAccepted: false
     }
   },
   buildBtnCtx(metaData: DomMeta): CtxButton {
@@ -182,18 +181,16 @@ export const buildDesc = {
       Build capabilities
     ========================= */
   buildCapabilities(metaData: DomMeta): Capabilities {
-    const { ds, pressValid, swipeValid } = metaData
+    const { ds, pressable, swipeable, instantSwipe } = metaData
 
-    const pressable = !!(
-      pressValid ||
-      ds.action !== undefined)
-
-    const swipeable =
-      swipeValid
+    const pressConfirm =
+      pressable ||
+      ds.action !== undefined
 
     return {
-      pressable: pressable,
-      swipeable: swipeable,
+      pressable: pressConfirm,
+      swipeable,
+      instantSwipe
     }
   }
 }

@@ -6,7 +6,7 @@ export default function DrawerPanel() {
     <Scroll
       id='drawer'
       axis="vertical"
-      onEdgeDir='top'
+      onEdgeDir='up'
     >
       {/* 
       <div className='test-frame'>

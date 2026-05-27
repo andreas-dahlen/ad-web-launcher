@@ -16,15 +16,16 @@ export function extractDomMeta(el: HTMLElement): DomMeta | null {
   if (!type) return null
   if (type !== 'button' && !axis) return null
 
-  const pressValid = Boolean(id && type)
-  const swipeValid = Boolean(id && axis && type)
+  const pressable = Boolean(id && type)
+  const swipeable = Boolean(id && axis && type)
+  const instantSwipe = ds.instantSwipe === 'true'
 
   const snapX = parseNumber(ds.snapX)
   const snapY = parseNumber(ds.snapY)
   const lockPrevAt = parseNumber(ds.lockPrevAt)
   const lockNextAt = parseNumber(ds.lockNextAt)
 
-  return { el, ds, id, axis, type, swipeValid, pressValid, snapX, snapY, lockPrevAt, lockNextAt, onEdgeDir }
+  return { el, ds, id, axis, type, swipeable, pressable, snapX, snapY, lockPrevAt, lockNextAt, onEdgeDir, instantSwipe }
 }
 
 function parseNumber(value: string | undefined): number | null {

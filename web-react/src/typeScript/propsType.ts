@@ -1,3 +1,4 @@
+import type { Axis1D, OnEdgeDir } from '@typeScript/core/primitiveType.ts'
 import type { CtxType } from './descriptor/ctxType.ts'
 
 
@@ -43,7 +44,7 @@ export type DragProps = BaseProps & SnapConfig & {
 }
 
 export type CarouselProps = BaseProps & CarouselScenes & {
-  axis: 'horizontal' | 'vertical'
+  axis: Axis1D
   lockPrevAt?: number
   lockNextAt?: number
   carouselDataAttrs?: DataAttributes
@@ -51,7 +52,8 @@ export type CarouselProps = BaseProps & CarouselScenes & {
 }
 
 export type SliderProps = BaseProps & {
-  axis: 'horizontal' | 'vertical'
+  axis: Axis1D
+  instantSwipe?: boolean
   trackClassName?: string
   thumbClassName?: string
   children?: React.ReactNode
@@ -60,10 +62,11 @@ export type SliderProps = BaseProps & {
 }
 
 export type ScrollProps = BaseProps & {
-  axis: 'horizontal' | 'vertical'
-  scrollDataAttrs?: DataAttributes
+  axis: Axis1D
+  instantSwipe?: boolean
+  onEdgeDir?: OnEdgeDir
   children?: React.ReactNode
-  onEdgeDir?: 'left' | 'right' | 'both' | 'top' | 'bottom'
+  scrollDataAttrs?: DataAttributes
 }
 
 export type ButtonProps = BaseProps & {
@@ -86,8 +89,8 @@ export type DragFrameProps = SnapConfig & {
 
 export type DragButtonProps = SnapConfig & {
   id: string
-  className?: string
   action?: string
+  className?: string
   children?: React.ReactNode
   dragDataAttrs?: DataAttributes
   buttonDataAttrs?: DataAttributes
@@ -97,7 +100,7 @@ export type DragButtonProps = SnapConfig & {
 
 export type DragSliderProps = SnapConfig & {
   id: string
-  axis: 'horizontal' | 'vertical'
+  axis: Axis1D
   className?: string
   trackClassName?: string
   thumbClassName?: string

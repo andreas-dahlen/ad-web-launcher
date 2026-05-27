@@ -29,15 +29,14 @@ export interface FrameSnapshot {
 export interface Capabilities {
   readonly pressable: boolean
   readonly swipeable: boolean
+  readonly instantSwipe: boolean
 }
-export interface DomMeta {
+export type DomMeta = Capabilities & {
   readonly el: HTMLElement
   readonly ds: DOMStringMap
   readonly id: string
   readonly axis: Axis | null
   readonly type: InteractionType
-  readonly pressValid: boolean
-  readonly swipeValid: boolean
   readonly snapX: number | null
   readonly snapY: number | null
   readonly lockPrevAt: number | null

@@ -17,6 +17,7 @@ export type CtxBaseSwipe = CtxBase & {
   storeAccepted: boolean
   delta: Vec2
   cancel?: CancelData
+  thresholdValue?: Vec2
 }
 
 export type CtxButton = CtxBase & {
@@ -42,6 +43,7 @@ export type CtxScroll = CtxBaseSwipe & {
 
   delta1D?: number
   overflowValue?: number
+  isVisible?: boolean
 
   gestureUpdate?: GestureUpdate
 }
@@ -65,7 +67,7 @@ export type CarouselCtxPartial = Partial<Pick<CtxCarousel, 'delta1D' | 'directio
 export type SliderCtxPartial = Partial<Pick<CtxSlider, 'delta1D' | 'gestureUpdate' | 'storeAccepted'>>
 export type DragCtxPartial = Partial<Pick<CtxDrag, 'storeAccepted' | 'delta'>>
 export type ScrollCtxPartial = Partial<Pick<CtxScroll,
-  'delta1D' | 'storeAccepted' | 'gestureUpdate'>>
+  'delta1D' | 'overflowValue' | 'storeAccepted' | 'gestureUpdate'>>
 
 export interface Normalized1D {
   mainSize?: number

@@ -10,6 +10,7 @@ export default function Slider({
   id,
   axis,
   interactive = true,
+  instantSwipe = true,
   className,
   trackClassName,
   thumbClassName,
@@ -95,6 +96,7 @@ export default function Slider({
       style={{ pointerEvents: interactive ? 'auto' : 'none' }}
       data-id={id}
       data-axis={axis}
+      data-instant-swipe={instantSwipe}
       {...sliderDataAttrs}
     >
       <div

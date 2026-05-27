@@ -99,7 +99,7 @@ function onMove(x: number, y: number, pointerId: number): Descriptor | null {
 
   if (g.phase === 'PENDING') {
     if (!g.desc) return null
-    if (!gestureUtils.swipeThresholdCalc(biggest, g.desc.type)) return null
+    if (!gestureUtils.swipeThresholdCalc(biggest, g.desc.capabilities.instantSwipe)) return null
     const intentAxis: Axis = absX > absY ? 'horizontal' : 'vertical'
 
     const resolved = gestureUtils.isSwipeableDescriptor(g.desc, intentAxis)
@@ -108,6 +108,7 @@ function onMove(x: number, y: number, pointerId: number): Descriptor | null {
 
     //FUTURE return pressCancel if unresolved 
     if (!resolved) return null
+    const thresholdValue = { x: point.x - g.last.x, y: point.y - g.last.y }
 
     g.phase = 'SWIPING'
     g.last.x = point.x
@@ -121,6 +122,7 @@ function onMove(x: number, y: number, pointerId: number): Descriptor | null {
     g.desc = resolved
     g.desc.ctx.cancel = cancel
     g.desc.ctx.event = 'swipeStart'
+    g.desc.ctx.thresholdValue = thresholdValue
     return g.desc
   }
 

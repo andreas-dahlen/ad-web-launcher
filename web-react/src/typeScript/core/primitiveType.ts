@@ -9,7 +9,7 @@ export type Direction =
   | { axis: 'vertical'; dir: 'up' | 'down' }
   | { axis: 'both'; dir: 'left' | 'right' | 'up' | 'down' }
 
-export type OnEdgeDir = 'left' | 'right' | 'both' | 'top' | 'bottom'
+export type OnEdgeDir = 'left' | 'right' | 'up' | 'down'
 
 export type InteractionType = 'button' | 'carousel' | 'slider' | 'drag' | 'scroll'
 export type DataKeys = Exclude<InteractionType, 'button'>;
@@ -32,7 +32,7 @@ export interface Size2D {
   width: number
   height: number
 }
-export const VALID_DIRS = new Set<OnEdgeDir>(['left', 'right', 'both', 'top', 'bottom'])
+export const VALID_DIRS = new Set<OnEdgeDir>(['left', 'right', 'up', 'down'])
 
 export const VALID_AXES = new Set<Axis>(['horizontal', 'vertical', 'both'])
 export const VALID_TYPES = new Set<InteractionType>(['button', 'carousel', 'slider', 'drag', 'scroll'])
