@@ -1,9 +1,8 @@
-import { normalizeBase } from '../../solvers/solverUtils/axisUtils.ts'
+import { getCommitOffset, normalizeBase } from '../../solvers/solverUtils/axisUtils.ts'
 import { vector } from '../../solvers/solverUtils/vectorUtils.ts'
 import type { Normalized1D } from '../../../typeScript/descriptor/ctxType.ts'
 import type { CarouselDesc } from '../../../typeScript/descriptor/descriptor.ts'
-import type { Axis, Direction } from '../../../typeScript/core/primitiveType.ts'
-import { APP_CONFIG } from '@config/appConfig.ts'
+import type { Axis } from '../../../typeScript/core/primitiveType.ts'
 
 export const carouselUtils = {
 
@@ -31,28 +30,13 @@ export const carouselUtils = {
     const { mainSize, mainDelta } = norm
     if (mainDelta == null || mainSize == null) return
 
-    if (this.shouldCommit(mainDelta, mainSize, axis)) {
+    if (vector.shouldCommit(mainDelta, mainSize, axis)) {
       const direction = vector.resolveDirection1D(mainDelta, axis)
       if (direction) {
-        const delta = this.getCommitOffset(direction, mainSize)
+        const delta = getCommitOffset(direction, mainSize)
         return { direction, delta }
       }
     }
     return null
-  },
-
-  getCommitOffset(direction: Direction, laneSize: number) {
-    if (laneSize == null) return 0
-
-    if (direction.dir === 'right' || direction.dir === 'down') return laneSize
-    if (direction.dir === 'left' || direction.dir === 'up') return -laneSize
-    return 0
-  },
-
-  shouldCommit(delta: number, laneSize: number, axis: Axis) {
-    if (laneSize == null) return false
-    const axisBias = axis === 'vertical' ? 0.65 : 1
-    const threshold = laneSize * APP_CONFIG.swipeCommitRatio * axisBias
-    return Math.abs(delta) >= threshold
   }
 }

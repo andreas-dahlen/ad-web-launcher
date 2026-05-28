@@ -110,3 +110,9 @@ export type DragSliderProps = SnapConfig & {
   onSwipeCommit?: (detail: CtxType) => void
   onValueChange?: (value: number) => void
 }
+
+export type Teleporter = {
+  children: React.ReactNode
+  targetEl: HTMLElement
+  toPortal: boolean
+}

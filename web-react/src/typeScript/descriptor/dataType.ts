@@ -63,4 +63,5 @@ export interface GestureUpdate {
   readonly sliderValuePerPixel?: number
   //scroll
   readonly isOverflow?: boolean
+  readonly startOverflowValue?: number
 }

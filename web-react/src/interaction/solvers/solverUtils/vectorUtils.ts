@@ -1,5 +1,6 @@
 import type { DragLayout } from '@typeScript/descriptor/dataType.ts'
 import type { Axis, Axis1D, Direction, OnEdgeDir, Vec2 } from '@typeScript/core/primitiveType'
+import { APP_CONFIG } from '@config/appConfig'
 
 export const vector = {
   clamp(delta: number, min: number, max: number) {
@@ -43,17 +44,24 @@ export const vector = {
     }
     return null
   },
-  isThresholdDirAndOnEdgeDir(onEdgeDir: OnEdgeDir, axis: Axis, thresholdValue: Vec2): boolean | null {
+  isThresholdDirAndOnEdgeDir(onEdgeDir: OnEdgeDir, axis: Axis, thresholdValue: Vec2): boolean {
     const dirVal = axis === 'horizontal'
       ? thresholdValue.x
       : thresholdValue.y
     const dir = vector.resolveDirection1D(dirVal, axis)
-    if (!dir) return null
+    if (!dir) return false
     const result = dir.dir == 'up' && onEdgeDir == 'down' ||
       dir.dir == 'down' && onEdgeDir == 'up' ||
       dir.dir == 'left' && onEdgeDir == 'right' ||
       dir.dir == 'right' && onEdgeDir == 'left' ?
       true : false
     return result
+  },
+
+  shouldCommit(delta: number, laneSize: number, axis: Axis) {
+    if (laneSize == null) return false
+    const axisBias = axis === 'vertical' ? 0.65 : 1
+    const threshold = laneSize * APP_CONFIG.swipeCommitRatio * axisBias
+    return Math.abs(delta) >= threshold
   }
 }

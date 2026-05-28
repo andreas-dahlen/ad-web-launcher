@@ -1,7 +1,7 @@
 
 import { APP_CONFIG } from '@config/appConfig.ts'
 import { vector } from "./vectorUtils.ts"
-import type { Vec2 } from '../../../typeScript/core/primitiveType.ts'
+import type { Vec2, Direction } from '../../../typeScript/core/primitiveType.ts'
 import type { Normalized1D } from '../../../typeScript/descriptor/ctxType.ts'
 import type { BaseWithSwipe } from '../../../typeScript/descriptor/baseType.ts'
 
@@ -22,4 +22,12 @@ export function exceedsCrossRange(norm: Normalized1D) {
     const currentPos = (norm.crossOffset ?? 0) + (norm.crossDelta ?? 0)
     const crossSize = norm.crossSize ?? 0
     return currentPos < -APP_CONFIG.hysteresis || currentPos > crossSize + APP_CONFIG.hysteresis
+}
+
+export function getCommitOffset(direction: Direction, laneSize: number) {
+    if (laneSize == null) return 0
+
+    if (direction.dir === 'right' || direction.dir === 'down') return laneSize
+    if (direction.dir === 'left' || direction.dir === 'up') return -laneSize
+    return 0
 }
