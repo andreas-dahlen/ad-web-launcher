@@ -5,10 +5,10 @@ import grid from '@assets/grid.svg?react'
 import snap from '@assets/snap.svg?react'
 import exit from '@assets/exit.svg?react'
 import { useSettingsStore } from '../../../hooks/useSettingsStore.js';
-import SettingsButton from './SettingsButton.tsx';
+import SettingsButton from './composites/SettingsButton.tsx';
 import Slider from '@slider/Slider.tsx';
-import SnapInput from '@components/features/settingsPanel/SnapInput.tsx';
-
+import SnapInput from '@components/features/settingsPanel/composites/SnapInput.tsx';
+import SettingsPanelCss from './SettingsPanel.module.css'
 export default function SettingsPanel() {
 
   const {
@@ -28,15 +28,15 @@ export default function SettingsPanel() {
   const [sliderOne, setSliderOne] = useState(0)
   const [sliderTwo, setSliderTwo] = useState(0)
   return (
-    <div className='settings-panel'>
+    <div className={SettingsPanelCss.panel}>
 
       <SettingsButton
         id="close-settings"
-        className='close-settings-button'
+        className={SettingsPanelCss.close}
         setValue={() => setSettingsPanelOpen(false)}
         ReactImg={exit}
       />
-      <div className='settings-row'>
+      <div className={SettingsPanelCss.row}>
         <SettingsButton
           id='lock-drag-item'
           value={isLayoutEditMode}

@@ -22,7 +22,7 @@ type Scroll = {
 
 export type ScrollStore = {
   bindings: Record<string, Scroll>
-  init: (id: string) => void
+  init: (id: string, fallback: Scroll) => void
   get: (id: string) => Readonly<Scroll> | null
   delete: (id: string) => void
 
@@ -39,19 +39,12 @@ export const scrollStore = create<ScrollStore>()(
 
     bindings: {},
 
-    init: (id) => {
+    init: (id, fallback) => {
       if (get().bindings[id]) return
 
       set(state => {
         state.bindings[id] = {
-          overflowValue: 0,
-          isVisible: false,
-          liveValue: 0,
-          velocity: 0,
-          settledValue: 0,
-          containerSize: { width: 0, height: 0 },
-          contentSize: { width: 0, height: 0 },
-          dragging: false
+          ...fallback
         }
       })
     },

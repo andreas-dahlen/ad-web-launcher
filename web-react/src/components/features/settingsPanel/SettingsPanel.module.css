@@ -1,4 +1,4 @@
-.settings-panel {
+.panel {
   display: flex;
   flex-direction: column;
   gap: 5px;
@@ -37,7 +37,7 @@
   opacity: 0.3;
 }
 
-.settings-row {
+.row {
   position: relative;
   display: flex;
   justify-content: center;
@@ -49,48 +49,22 @@
   /* gap: 8px; */
 }
 
-.settings-item {
-  display: flex;
-  flex-direction: column-reverse;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  pointer-events: none;
-  color: var(--text-col);
-}
+.close {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  width: 30px;
+  height: 30px;
+  background: none;
+  border: none;
+  box-shadow: none;
 
-.snap-panel {
-  display: flex;
-  align-items: center;
-  gap: 5px;
+  &[data-state='pressed'] {
+    box-shadow: none;
+  }
 
-  span {
-    color: var(--text-col);
+  .svg-img {
+    width: 30px;
+    height: 30px;
   }
 }
-
-.snap-button-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-
-  &>* {
-    width: 39px;
-    height: 39px;
-  }
-}
-
-.settings-slider-frame {
-  text-align: center;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-}
-
-/* TODO probably need to define overrides... so i remember them...
-example
-
-[data-state="swiping"] .slider-thumb.specific-class-name {
-  --data-state-col
-}
-*/

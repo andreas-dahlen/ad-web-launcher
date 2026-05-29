@@ -7,7 +7,6 @@ export default function Mid1() {
     <div>¨
       <DragButton
         id='drag-btn-test'
-
       >
 
       </DragButton>

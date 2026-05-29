@@ -16,3 +16,8 @@
     transform: rotate(360deg);
   }
 }
+
+.test-frame {
+  height: 2000px;
+  background: linear-gradient(to bottom, hotPink, black, royalBlue, black, hotPink, black, royalBlue)
+}

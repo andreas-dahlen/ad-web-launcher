@@ -8,6 +8,9 @@ import { carouselStore } from '../../../stores/carouselStore.ts'
 import { SceneContext } from '@components/system/carousel/hooks/useSceneContext.ts'
 import type { SceneRole } from '@typeScript/core/primitiveType.ts'
 import type { CarouselProps } from '@typeScript/propsType.ts'
+import carouselCss from './Carousel.module.css'
+import clsx from 'clsx'
+import { dasx } from '../../../data/dataAttrs.ts'
 
 interface Slot {
   sceneIdx: number
@@ -95,24 +98,26 @@ export default function Carousel({
 
   return (
     <div
-      data-type="carousel"
-      ref={carouselRef}
-      className="carousel"
-      data-frame="carousel"
+      className={carouselCss.carousel}
       style={{ pointerEvents: interactive ? "auto" : "none" }}
-      data-id={id}
-      data-axis={axis}
-      data-lock-prev-at={lockPrevAt ?? ''}
-      data-lock-next-at={lockNextAt ?? ''}
-      {...carouselDataAttrs}
+      ref={carouselRef}
+      {...dasx({
+        id,
+        type: "carousel",
+        axis,
+        frame: "carousel",
+        lockNextAt,
+        lockPrevAt,
+        ...carouselDataAttrs
+      })}
     >
       {renderSlots.map((slot) => {
         const Scene = augmentedScenes[slot.sceneIdx]
 
         return (
           <div
-            className={`scene ${interactive ? setColor(slot.sceneIdx) : ''}`}
             key={slot.sceneIdx}
+            className={clsx(carouselCss.scene, interactive && setColor(slot.sceneIdx))}
             style={styleForRole(slot.role)}
             data-role={slot.role}
             onTransitionEnd={onTransitionEnd}

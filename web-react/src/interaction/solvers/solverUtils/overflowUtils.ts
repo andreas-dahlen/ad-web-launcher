@@ -11,9 +11,16 @@ export const overflowUtils = {
     return vector.isThresholdDirAndOnEdgeDir(desc.data.onEdgeDir, desc.base.axis, desc.ctx.thresholdValue)
   },
 
-  resolveStart(desc: ScrollDesc) {
+  resolveStart(desc: ScrollDesc, isOverflow: boolean) {
     const startValue = desc.data.isVisible ? 0 : desc.data.containerSize.height
-    return { overflowValue: startValue }
+    return {
+      //could return resolveSwipe but omition is fine aswell i guess... only one frame xD
+      gestureUpdate: {
+        pointerId: desc.base.pointerId,
+        isOverflow: isOverflow,
+        startOverflowValue: startValue
+      }
+    }
   },
 
   resolveSwipe(mainDelta: number, desc: ScrollDesc) {

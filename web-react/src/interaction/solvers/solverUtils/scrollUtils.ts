@@ -11,6 +11,18 @@ export const scrollUtils = {
     return base.mainDelta
   },
 
+  resolveStart(mainDelta: number, desc: ScrollDesc, isOverflow: boolean) {
+    const maxScroll = Math.max(0, desc.data.contentSize.height - desc.data.containerSize.height)
+    const raw = desc.data.settledValue - mainDelta
+    return {
+      delta1D: vector.clamp(raw, 0, maxScroll),
+      gestureUpdate: {
+        pointerId: desc.base.pointerId,
+        isOverflow,
+      }
+    }
+  },
+
   resolveSwipe(mainDelta: number, desc: ScrollDesc) {
     const maxScroll = Math.max(0, desc.data.contentSize.height - desc.data.containerSize.height)
     const raw = desc.data.settledValue - mainDelta

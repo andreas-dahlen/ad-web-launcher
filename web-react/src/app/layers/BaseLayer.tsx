@@ -2,12 +2,13 @@ import { Z } from '@config/zIndex';
 import { baseComp } from '../compositions/laneComps';
 import Carousel from '@components/system/carousel/Carousel';
 import useRuntimeBindings from '../compositions/useRuntimeBindings';
+import layerCss from './Layers.module.css'
 
 //Layer 1/3 scenes read inputs here!
 export default function BaseLayer() {
   const { runtimeBindings } = useRuntimeBindings()
   return (
-    <div className='layer' style={{ zIndex: Z.base }}>
+    <div className={layerCss.layer} style={{ zIndex: Z.base }}>
       {baseComp.map(comp => {
         const oneCarousel = (
           <Carousel
@@ -21,7 +22,7 @@ export default function BaseLayer() {
           return (
             <div
               key={`${comp.id}-layer`}
-              className="layer"
+              className={layerCss.layer}
               style={{ zIndex: Z[comp.renderLayer] }}
             >
               {oneCarousel}

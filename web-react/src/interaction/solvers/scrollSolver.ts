@@ -16,19 +16,9 @@ export const scrollSolver: Partial<Record<EventType, (desc: ScrollDesc) => Scrol
     const delta1d = scrollUtils.normalize(desc)
     if (delta1d == null) return { storeAccepted: false }
     const isOverflow = overflowUtils.isOverflow(desc)
-    const result = isOverflow
-      ? overflowUtils.resolveStart(desc)
-      : scrollUtils.resolveSwipe(delta1d, desc)
-    const start = overflowUtils.resolveStart(desc)
-    return {
-      ...result,
-      storeAccepted: true,
-      gestureUpdate: {
-        pointerId: desc.base.pointerId,
-        isOverflow,
-        startOverflowValue: start.overflowValue
-      }
-    }
+    return isOverflow
+      ? { ...overflowUtils.resolveStart(desc, isOverflow), storeAccepted: true }
+      : { ...scrollUtils.resolveStart(delta1d, desc, isOverflow), storeAccepted: true }
   },
 
   swipe(desc) {

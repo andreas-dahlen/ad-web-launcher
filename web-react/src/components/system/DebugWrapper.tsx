@@ -1,5 +1,6 @@
 import { useSize } from '../../stores/sizeStore'
 import type { PropsWithChildren } from 'react'
+import systemCss from './System.module.css'
 
 export default function DebugWrapper({ children }: PropsWithChildren) {
 
@@ -13,8 +14,8 @@ export default function DebugWrapper({ children }: PropsWithChildren) {
   }
 
   return (
-    <div className="debug-shell">
-      <div className="device-frame" style={frameStyle}>
+    <div className={systemCss.shell}>
+      <div className={systemCss.frame} style={frameStyle}>
         {children}
       </div>
     </div >

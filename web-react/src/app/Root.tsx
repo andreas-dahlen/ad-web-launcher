@@ -5,7 +5,6 @@ import { useGestureStore } from '../hooks/useGestureStore.ts'
 import { useLayoutEffect } from 'react'
 import { sizeStore } from '../stores/sizeStore.ts'
 
-
 export default function Root() {
 
   const { activeGesture } = useGestureStore()
@@ -21,7 +20,7 @@ export default function Root() {
   }, [])
 
   return (
-    <div className='theme' data-theme="default" data-active-gesture={activeGesture}>
+    <div className="theme" data-theme="default" data-active-gesture={activeGesture}>
       <BaseLayer />
       <ContentLayer />
       <OverlayLayer />

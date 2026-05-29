@@ -5,6 +5,9 @@ import { useScrollStore } from '@components/primitives/scroll/hooks/useScrollSto
 import type { ScrollProps } from '@typeScript/propsType.ts'
 import { useScrollMotion } from '@components/primitives/scroll/hooks/useScrollMotion.ts'
 import { useOverflowMotion } from '@components/primitives/scroll/hooks/useOverflowMotion.ts'
+import scrollCss from './Scroll.module.css'
+import clsx from 'clsx'
+import { dasx } from '../../../data/dataAttrs.ts'
 
 export default function Scroll({
   id,
@@ -15,10 +18,11 @@ export default function Scroll({
   children,
   scrollDataAttrs,
   onEdgeDir,
+  isInitialVisible = false
 }: ScrollProps) {
 
   // ── Fully subscribe to the slider store ─────────────────────────────
-  const { overflowValue, liveValue, dragging } = useScrollStore(id)
+  const { overflowValue, liveValue, dragging } = useScrollStore(id, isInitialVisible)
 
   // ── DOM references & sizing ─────────────────────────────
   const containerRef = useRef<HTMLDivElement>(null)
@@ -51,31 +55,34 @@ export default function Scroll({
 
   return (
     <div
+      className={scrollCss.container}
+      style={onEdgeDir ? overflowStyle : undefined}
       ref={containerRef}
       data-frame="scroll"
-      className="scroll-container"
-      style={onEdgeDir ? overflowStyle : undefined}
-
     >
 
       <div
-        ref={contentRef}
-        data-type="scroll"
-        data-id={id}
-        data-axis={axis}
-        data-on-edge-dir={onEdgeDir}
-        data-instant-swipe={instantSwipe}
-        className={`scroll ${className ?? ''}`}
+        className={clsx(scrollCss.scroll, className)}
         style={{ ...contentStyle, pointerEvents: interactive ? 'auto' : 'none' }}
-        {...scrollDataAttrs}
+        ref={contentRef}
+        {...dasx({
+          type: "scroll",
+          id,
+          axis,
+          onEdgeDir,
+          instantSwipe,
+          ...scrollDataAttrs
+        })}
       >
         {onEdgeDir &&
-          <div className='invis-scroll-input-field'
-            data-type="scroll"
-            data-id={id}
-            data-axis={axis}
-            data-on-edge-dir={onEdgeDir}
-            data-instant-swipe={false}
+          <div className={scrollCss.knob}
+            {...dasx({
+              type: "scroll",
+              id,
+              axis,
+              onEdgeDir,
+              instantSwipe: false
+            })}
           />}
 
         {children}

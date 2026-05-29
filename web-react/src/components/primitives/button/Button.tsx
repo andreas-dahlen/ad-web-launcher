@@ -1,14 +1,15 @@
 import { useRef } from "react"
 import { usePointerBridge } from '../../../hooks/usePointerBridge.ts'
 import type { ButtonProps } from '@typeScript/propsType.ts'
+import buttonCss from './Button.module.css'
+import clsx from 'clsx'
+import { dasx } from '../../../data/dataAttrs.ts'
 
 export default function Button({
   id,
   className,
   action,
   interactive = true,
-  // onPress,
-  // onPressCancel,
   onPressRelease,
   children,
   buttonDataAttrs
@@ -23,12 +24,6 @@ export default function Button({
       const event = reaction.detail?.event
       if (!event) return
 
-      // if (event === 'press' && onPress) {
-      //   onPress(reaction.detail)
-      // }
-      // if (event === 'pressCancel' && onPressCancel) {
-      //   onPressCancel(reaction.detail)
-      // }
       if (event === 'pressRelease' && onPressRelease) {
         onPressRelease(reaction.detail)
       }
@@ -37,14 +32,16 @@ export default function Button({
 
   return (
     <div
-      ref={buttonRef}
-      {...buttonDataAttrs}
-      className={`button ${className ?? ''}`}
+      className={clsx(buttonCss.button, className)}
       style={{ pointerEvents: interactive ? "auto" : "none" }}
-      data-type="button"
-      data-frame="button"
-      data-id={id}
-      data-action={action || undefined}
+      ref={buttonRef}
+      {...dasx({
+        type: "button",
+        frame: "button",
+        id,
+        action,
+        ...buttonDataAttrs
+      })}
     >
       {children}
     </div>

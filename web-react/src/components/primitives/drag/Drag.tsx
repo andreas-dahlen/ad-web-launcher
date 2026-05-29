@@ -6,6 +6,9 @@ import { useDragStore } from "./hooks/useDragStore.ts"
 import type { DragProps } from '@typeScript/propsType.ts'
 import { useSettingsStore } from '../../../hooks/useSettingsStore.ts'
 import { createPortal } from 'react-dom'
+import dragCss from './Drag.module.css'
+import clsx from 'clsx'
+import { dasx } from '../../../data/dataAttrs.ts'
 
 export default function Drag({
   id,
@@ -55,27 +58,28 @@ export default function Drag({
     <>
       <div
         ref={containerRef}
-        className='drag-container'
+        className={dragCss.container}
         data-frame='drag'
       >
         <div
-          ref={dragItemRef}
-          data-type="drag"
-          data-id={id}
-          data-axis="both"
-          className={`drag ${className ?? ''}`}
+          className={clsx(dragCss.drag, className)}
           style={{ ...motionStyle, pointerEvents: interactive ? 'auto' : 'none' }}
-          // data-locked={interactive || undefined}
-          data-snap-x={resolvedSnapX}
-          data-snap-y={resolvedSnapY}
-          {...dragDataAttrs}
+          ref={dragItemRef}
+          {...dasx({
+            id,
+            type: "drag",
+            axis: "both",
+            dataSnapX: resolvedSnapX,
+            dataSnapY: resolvedSnapY,
+            ...dragDataAttrs
+          })}
         >
           {children}
         </div >
       </div>
       {mirrorSlot && dragging && createPortal(
         <div
-          className='drag-container'
+          className={dragCss.container}
           data-frame='drag'
           style={{
             width: layout.containerSize.width,
@@ -86,7 +90,7 @@ export default function Drag({
         >
           <div
             style={{ ...motionStyle, pointerEvents: 'none' }}
-            className={`drag ${className ?? ''}`}
+            className={clsx(dragCss.drag, className)}
             {...dragDataAttrs}
           >
             {children}

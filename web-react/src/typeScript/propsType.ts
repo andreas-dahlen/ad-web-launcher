@@ -4,7 +4,7 @@ import type { CtxType } from './descriptor/ctxType.ts'
 
 // utility
 export type DataAttributes = {
-  [key: `data-${string}`]:
+  [key: `${string}`]:
   string |
   number |
   boolean |
@@ -35,6 +35,9 @@ export type CarouselScenes =
   | { scenes: React.ComponentType[]; sceneCount?: never }
   | { sceneCount: number; scenes?: never }
 
+export type OverflowProps =
+  | { onEdgeDir: OnEdgeDir; isInitialVisible: boolean }
+  | { onEdgeDir: never; isInitialVisible: never }
 
 //domain layer
 export type DragProps = BaseProps & SnapConfig & {
@@ -61,10 +64,9 @@ export type SliderProps = BaseProps & {
   onValueChange?: (value: number) => void
 }
 
-export type ScrollProps = BaseProps & {
+export type ScrollProps = BaseProps & OverflowProps & {
   axis: Axis1D
   instantSwipe?: boolean
-  onEdgeDir?: OnEdgeDir
   children?: React.ReactNode
   scrollDataAttrs?: DataAttributes
 }

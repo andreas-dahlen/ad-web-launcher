@@ -10,12 +10,12 @@
   width: var(--slider-width);
   height: var(--slider-height);
 
-  &.horizontal-slider {
+  &[data-axis="horizontal"] {
     --slider-width: 90%;
     --slider-height: 40px;
   }
 
-  &.vertical-slider {
+  &[data-axis="vertical"] {
     --slider-width: 45px;
     --slider-height: 90%;
   }
@@ -32,12 +32,12 @@
   background: var(--color-overlay);
   opacity: var(--opacity-low);
 
-  &.horizontal-track {
+  &[data-axis="horizontal"] {
     width: var(--track-width, var(--slider-width));
     height: var(--track-height, 15%);
   }
 
-  &.vertical-track {
+  &[data-axis="horizontal"] {
     width: var(--track-width, 12%);
     height: var(--track-height, var(--slider-height));
   }
@@ -45,7 +45,7 @@
 
 
 
-.slider-thumb {
+.thumb {
   --thumb-width: 50px;
   --thumb-height: 50px;
 
@@ -58,14 +58,14 @@
   position: absolute;
 }
 
-[data-state="swiping"] .slider-thumb {
+[data-state="swiping"] .thumb {
   background: rgb(0, 255, 242);
 }
 
-[data-state="pressed"] .slider-thumb {
+[data-state="pressed"] .thumb {
   background: rgb(213, 127, 214);
 }
 
-[data-state="commited"] .slider-thumb {
+[data-state="commited"] .thumb {
   background: rgb(213, 127, 214);
 }

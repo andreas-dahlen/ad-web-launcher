@@ -21,6 +21,7 @@ const mergedAttrs = {
   'data-state': internalState
 } **
 
+TODO !IMPORTANT: protect against wrong axis commit in scroll primitive. Maybe we can have a "scroll lock" that locks the scroll to the axis of the initial movement until the pointer is released, preventing accidental axis switching. Use initial placement and movement direction to determine the locked axis, and provide visual feedback (like a subtle highlight) to indicate that the scroll is locked to that axis.
 
 
 

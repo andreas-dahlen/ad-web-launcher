@@ -1,6 +1,7 @@
-.scroll-container {
+.container {
   position: absolute;
   inset: 0;
+  min-height: 100%;
 }
 
 .scroll {
@@ -14,23 +15,16 @@
 
 
 .test-frame {
-  /* width: 200px; */
   height: 2000px;
   background: linear-gradient(to bottom, hotPink, black, royalBlue, black, hotPink, black, royalBlue)
 }
 
-.invis-scroll-input-field {
+.knob {
   position: absolute;
   background: yellowgreen;
   width: 100%;
-  --scroll-invis-extra-height: 200px;
-  height: var(--scroll-invis-extra-height);
-  top: calc(-1*var(--scroll-invis-extra-height));
+  --knob-height: 200px;
+  height: var(--knob-height);
+  top: calc(-1*var(--knob-height));
   pointer-events: auto;
 }
-
-/* .test-content {
-  background: royalblue;
-  width: 200px;
-  height: 200px;
-} */

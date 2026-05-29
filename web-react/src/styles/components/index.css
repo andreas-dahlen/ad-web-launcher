@@ -1,9 +1,3 @@
-@import './primitives/carousel.css';
-@import './primitives/slider.css';
-@import './primitives/drag.css';
-@import './primitives/scroll.css';
-@import './primitives/button.css';
-
 @import './system/presets.css';
 
 @import './settingsPanel/base.css';

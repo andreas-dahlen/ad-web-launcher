@@ -5,6 +5,9 @@ import { useSliderMotion } from "./hooks/useSliderMotion.ts"
 import { useSliderStore } from "./hooks/useSliderStore.ts"
 import type { SliderProps } from '@typeScript/propsType.ts'
 import { sliderStore } from '../../../stores/sliderStore.ts'
+import sliderCss from './Slider.module.css'
+import clsx from 'clsx'
+import { dasx } from '../../../data/dataAttrs.ts'
 
 export default function Slider({
   id,
@@ -16,6 +19,7 @@ export default function Slider({
   thumbClassName,
   children,
   sliderDataAttrs,
+  //TODO add initialValue
   onValueChange
 }: SliderProps) {
 
@@ -26,16 +30,6 @@ export default function Slider({
   const axisSize = horizontal ? containerSize.width : containerSize.height
   const axisThumbSize = horizontal ? thumbSize.width : thumbSize.height
   const constraints = { min, max }
-
-  // ── CSS classes ─────────────────────────────
-  const classAxisSlider = axis === 'horizontal'
-    ? 'horizontal-slider'
-    : 'vertical-slider'
-
-  const classAxisTrack = axis === 'horizontal'
-    ? 'horizontal-track'
-    : 'vertical-track'
-
 
   // ── DOM references & sizing ─────────────────────────────
   const sliderRef = useRef<HTMLDivElement>(null)
@@ -89,27 +83,29 @@ export default function Slider({
 
   return (
     <div
-      data-type="slider"
-      ref={sliderRef}
-      data-frame="slider"
-      className={`slider ${classAxisSlider} ${className ?? ''}`}
+      className={clsx(sliderCss.slider, className)}
       style={{ pointerEvents: interactive ? 'auto' : 'none' }}
-      data-id={id}
-      data-axis={axis}
-      data-instant-swipe={instantSwipe}
-      {...sliderDataAttrs}
+      ref={sliderRef}
+      {...dasx({
+        id,
+        type: "slider",
+        axis,
+        frame: "slider",
+        instantSwipe,
+        ...sliderDataAttrs
+      })}
     >
       <div
-        className={`track ${classAxisTrack} ${trackClassName ?? ''}`}>
+        className={clsx(sliderCss.track, trackClassName)}>
       </div>
 
       <div
-        ref={thumbRef}
-        className={`slider-thumb ${thumbClassName ?? ''}`}
+        className={clsx(sliderCss.thumb, thumbClassName)}
         style={{
           ...thumbStyle,
           ...(horizontal ? { left: 0 } : { top: 0 })
         }}
+        ref={thumbRef}
       >
         {children}
       </div>
