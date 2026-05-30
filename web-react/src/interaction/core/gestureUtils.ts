@@ -1,9 +1,9 @@
 import { APP_CONFIG } from '@config/appConfig.ts'
-import { normalizeParameter, sizeStore } from '../../stores/sizeStore.ts'
-import type { Vec2 } from '../../typeScript/core/primitiveType.ts'
-import type { Axis } from '../../typeScript/core/primitiveType.ts'
-import type { Descriptor, SwipeableDescriptor } from '../../typeScript/descriptor/descriptor.ts'
-import type { FrameSnapshot } from '@typeScript/descriptor/baseType.ts'
+import { normalizeParameter, sizeStore } from '../../shared/runtime/sizeStore.ts'
+import type { Vec2 } from '../../shared/typing/core.types.ts'
+import type { Axis } from '../../shared/typing/core.types.ts'
+import type { Descriptor, SwipeableDescriptor } from '../types/descriptor.types.ts'
+import type { FrameSnapshot } from '@interaction/types/base.types.ts'
 
 export const gestureUtils = {
 

@@ -1,0 +1,190 @@
+# src Folder Structure
+
+src/
+- `App.tsx`
+- `main.tsx`
+- api/
+  - `wallpaper.ts`
+- app/
+  - `Root.tsx`
+  - compositions/
+    - `laneComps.ts`
+    - `useRuntimeBindings.ts`
+  - layers/
+    - `BaseLayer.tsx`
+    - `ContentLayer.tsx`
+    - `Layers.module.css`
+    - `OverlayLayer.tsx`
+  - scenes/
+    - `EmptyPlaceholder.tsx`
+    - bottom/
+      - `Bottom1.tsx`
+      - `Bottom2.tsx`
+      - `Bottom3.tsx`
+    - mid/
+      - `Mid1.tsx`
+      - `Mid2.tsx`
+      - `Mid3.tsx`
+    - top/
+      - `Top1.tsx`
+      - `Top2.tsx`
+      - `Top3.tsx`
+    - vertical/
+      - `Vert1.tsx`
+      - `Vert2.tsx`
+      - `Vert3.tsx`
+    - wallpapers/
+      - `Wp1.tsx`
+      - `Wp2.tsx`
+      - `Wp3.tsx`
+- assets/
+  - `exit.svg`
+  - `grid.svg`
+  - `locked.svg`
+  - `lockOld.svg`
+  - `react.svg`
+  - `snap.svg`
+  - `unlocked.svg`
+- composites/
+  - `comp.types.ts`
+  - `DragButton.tsx`
+  - `DragFrame.tsx`
+  - `DragSlider.tsx`
+- config/
+  - `appConfig.ts`
+  - `zIndex.ts`
+- data/
+  - `laneIndex.ts`
+- features/
+  - appDrawer/
+    - `DrawerPanel.tsx`
+  - buttonPanel/
+    - `ButtonPanel.tsx`
+  - dragGrid/
+    - `DragGrid.module.css`
+    - `DragGrid.tsx`
+  - settingsPanel/
+    - `SettingsPanel.module.css`
+    - `SettingsPanel.tsx`
+    - composites/
+      - `Composites.module.css`
+      - `SettingsButton.tsx`
+      - `SnapInput.tsx`
+- infrastructure/
+  - `DebugWrapper.tsx`
+  - `LoadingScene.tsx`
+  - `System.module.css`
+  - `Teleporter.tsx`
+- interaction/
+  - core/
+    - `buildDesc.ts`
+    - `domMeta.ts`
+    - `domQuery.ts`
+    - `gestureUtils.ts`
+    - `interpreter.ts`
+    - `pipeline.ts`
+  - solvers/
+    - carouselSolver/
+      - `carouselSolver.ts`
+      - `carouselUtils.ts`
+    - dragSolver/
+      - `dragSolver.ts`
+      - `dragUtils.ts`
+    - scrollSolver/
+      - `overflowUtils.ts`
+      - `scrollSolver.ts`
+      - `scrollUtils.ts`
+    - sliderSolver/
+      - `sliderSolver.ts`
+      - `sliderUtils.ts`
+    - utils/
+      - `axisUtils.ts`
+      - `vectorUtils.ts`
+  - types/
+    - `base.types.ts`
+    - `ctx.types.ts`
+    - `data.types.ts`
+    - `descriptor.types.ts`
+  - updater/
+    - `domUpdater.ts`
+- primitives/
+  - `prim.types.ts`
+  - button/
+    - `Button.module.css`
+    - `Button.tsx`
+  - carousel/
+    - `Carousel.module.css`
+    - `Carousel.tsx`
+    - hooks/
+      - `useAugmentedScenes.ts`
+      - `useCarouselMotion.ts`
+      - `useCarouselSizing.ts`
+      - `useSceneContext.ts`
+    - store/
+      - `carouselStore.ts`
+      - `useCarouselStore.ts`
+  - drag/
+    - `Drag.module.css`
+    - `Drag.tsx`
+    - hooks/
+      - `useDragMotion.ts`
+      - `useDragSizing.ts`
+    - store/
+      - `dragStore.ts`
+      - `useDragStore.ts`
+  - scroll/
+    - `Scroll.module.css`
+    - `Scroll.tsx`
+    - hooks/
+      - `useOverflowMotion.ts`
+      - `useScrollMotion.ts`
+      - `useScrollSizing.ts`
+    - store/
+      - `scrollStore.ts`
+      - `useScrollStore.ts`
+  - slider/
+    - `Slider.module.css`
+    - `Slider.tsx`
+    - hooks/
+      - `useSliderMotion.ts`
+      - `useSliderSizing.ts`
+    - store/
+      - `sliderStore.ts`
+      - `useSliderStore.ts`
+- shared/
+  - state/
+    - hooks/
+      - `useAppStore.ts`
+      - `useGestureStore.ts`
+      - `usePointerBridge.ts`
+      - `useSettingsStore.ts`
+      - `useWallpaperStore.ts`
+    - stores/
+      - `appStore.ts`
+      - `settingsStore.ts`
+      - `wallpaperStore.ts`
+  - styles/
+    - `debug.css`
+    - `index.css`
+    - `presets.css`
+    - core/
+      - `core.css`
+      - `variables.css`
+  - typing/
+    - `core.types.ts`
+    - `propUtils.types.ts`
+    - `svg.d.ts`
+  - utils/
+    - `dataAttrs.ts`
+    - `test.ts`
+  - runtime/
+    - `gestureStore.ts`
+    - `sizeStore.ts`
+- test/
+  - `debugFlags.ts`
+  - `functions.ts`
+- x.mdFiles/
+  - `futureIdeas.md`
+  - `jsGuide.md`
+  - `react-explanation.md`
+  - `SYSTEM_CONTEXT.md`

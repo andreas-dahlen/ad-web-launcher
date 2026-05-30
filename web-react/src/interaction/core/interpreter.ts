@@ -1,9 +1,9 @@
-import { log } from '@debug/functions.ts'
+import { log } from '../../test/functions.ts'
 import { gestureUtils } from './gestureUtils.ts'
 import { domQuery } from './domQuery.ts'
-import type { Axis, EventType, Vec2 } from '../../typeScript/core/primitiveType.ts'
-import type { Descriptor } from '../../typeScript/descriptor/descriptor.ts'
-import type { GestureUpdate } from '../../typeScript/descriptor/dataType.ts'
+import type { Axis, EventType, Vec2 } from '../../shared/typing/core.types.ts'
+import type { Descriptor } from '../types/descriptor.types.ts'
+import type { GestureUpdate } from '../types/data.types.ts'
 
 /* ========================
    Gesture state

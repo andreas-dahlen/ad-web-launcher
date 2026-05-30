@@ -1,7 +1,7 @@
-import Drag from '@drag/Drag.tsx';
-import { useSettingsStore } from '../../../hooks/useSettingsStore';
+import Drag from '../../../primitives/drag/Drag';
+import { useSettingsStore } from '@hooks//useSettingsStore';
 
-export default function Wp2() {
+export default function Vert2() {
 
   const { isLayoutEditMode } = useSettingsStore()
 

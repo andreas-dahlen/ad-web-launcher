@@ -1,11 +1,11 @@
-import type { CarouselScenes } from '@typeScript/propsType'
-import { lanes } from './laneIndex'
+import type { CarouselSceneProps } from '@primitives/prim.types'
+import { lanes } from '../../data/laneIndex'
 import type { Z } from '@config/zIndex'
-import type { Axis1D } from '@typeScript/core/primitiveType'
+import type { Axis1D } from '../../shared/typing/core.types'
 
 type LayerKey = keyof typeof Z
 
-type BaseCompConfig = CarouselScenes & {
+type BaseCompConfig = CarouselSceneProps & {
   id: string
   axis: Axis1D
   renderLayer?: LayerKey
@@ -13,7 +13,7 @@ type BaseCompConfig = CarouselScenes & {
 
 // 'id' | 'axis' | 'sceneCount' | 'scenes'
 
-type ContentCompConfig = CarouselScenes & {
+type ContentCompConfig = CarouselSceneProps & {
   id: string
   axis: Axis1D
   interactive: boolean

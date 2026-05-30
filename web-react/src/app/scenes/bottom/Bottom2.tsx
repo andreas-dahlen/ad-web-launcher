@@ -1,4 +1,4 @@
-import Slider from '@slider/Slider.tsx';
+import Slider from '../../../primitives/slider/Slider'
 
 
 export default function Bottom2() {

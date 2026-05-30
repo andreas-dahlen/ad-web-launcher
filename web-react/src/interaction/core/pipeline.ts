@@ -1,22 +1,24 @@
 import { interpreter } from './interpreter.ts'
-import { carouselSolver } from '../solvers/carouselSolver.ts'
-import { sliderSolver } from '../solvers/sliderSolver.ts'
-import { dragSolver } from '../solvers/dragSolver.ts'
-import { scrollSolver } from '@interaction/solvers/scrollSolver.ts'
+import { carouselSolver } from '../solvers/carouselSolver/carouselSolver.ts'
+import { sliderSolver } from '../solvers/sliderSolver/sliderSolver.ts'
+import { dragSolver } from '../solvers/dragSolver/dragSolver.ts'
+import { scrollSolver } from '@interaction/solvers/scrollSolver/scrollSolver.ts'
 import { domUpdater } from '../updater/domUpdater.ts'
-import { dragStore } from '../../stores/dragStore.ts'
-import { sliderStore } from '../../stores/sliderStore.ts'
-import { carouselStore } from '../../stores/carouselStore.ts'
-import type { InterpreterFn } from '../../typeScript/core/pipelineType.ts'
-import type { EventBridgeType } from '../../typeScript/core/primitiveType.ts'
-import type { CtxType } from '../../typeScript/descriptor/ctxType.ts'
-import type { PointerEventPackage } from '../../hooks/usePointerBridge.ts'
-import { gestureStore } from '../../stores/gestureStore.ts'
-import { scrollStore } from '../../stores/scrollStore.ts'
+import { dragStore } from '@primitives/drag/store/dragStore.ts'
+import { sliderStore } from '@primitives/slider/store/sliderStore.ts'
+import { carouselStore } from '@primitives/carousel/store/carouselStore.ts'
+import type { EventBridgeType } from '../../shared/typing/core.types.ts'
+import type { CtxType } from '../types/ctx.types.ts'
+import type { PointerEventPackage } from '@hooks/usePointerBridge.ts'
+import { gestureStore } from '../../shared/runtime/gestureStore.ts'
+import { scrollStore } from '@primitives/scroll/store/scrollStore.ts'
+import type { Descriptor } from '@interaction/types/descriptor.types.ts'
 
 /* =====================
         Maping
 ======================= */
+export type InterpreterFn = (x: number, y: number, pointerId: number) => Descriptor | null
+
 const interpreterMap: Record<EventBridgeType, InterpreterFn> = {
   down: interpreter.onDown,
   move: interpreter.onMove,

@@ -1,9 +1,9 @@
-import type { Axis } from '../../typeScript/core/primitiveType.ts'
+import type { Axis } from '../../shared/typing/core.types.ts'
 import { gestureUtils } from '../core/gestureUtils.ts'
 import { buildDesc } from '../core/buildDesc.ts'
-import type { Descriptor, SwipeableDescriptor } from '../../typeScript/descriptor/descriptor.ts'
+import type { Descriptor, SwipeableDescriptor } from '../types/descriptor.types.ts'
 import { extractDomMeta } from './domMeta.ts'
-import type { ElSnapshots } from '@typeScript/descriptor/baseType.ts'
+import type { ElSnapshots } from '@interaction/types/base.types.ts'
 
 export const domQuery = {
 

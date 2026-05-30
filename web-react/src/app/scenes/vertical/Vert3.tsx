@@ -1,4 +1,4 @@
-export default function Wp3() {
+export default function Vert3() {
 
   return (
     <div>

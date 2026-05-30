@@ -1,7 +1,7 @@
-import SettingsPanel from '@components/features/settingsPanel/SettingsPanel.js';
-import { useSettingsStore } from '../../hooks/useSettingsStore';
+import SettingsPanel from '../../features/settingsPanel/SettingsPanel.js';
+import { useSettingsStore } from '@hooks//useSettingsStore.js';
 import { Z } from '@config/zIndex';
-import Scroll from '@components/primitives/scroll/Scroll';
+import Scroll from '../../primitives/scroll/Scroll.js';
 import layerCss from './Layers.module.css'
 /** LAYER 3/3! */
 export default function OverlayLayer() {

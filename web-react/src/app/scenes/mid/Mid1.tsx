@@ -1,5 +1,5 @@
-import DragButton from '@components/composites/DragButton';
-import Drag from '@drag/Drag.tsx';
+import DragButton from '../../../composites/DragButton';
+import Drag from '../../../primitives/drag/Drag';
 
 export default function Mid1() {
 

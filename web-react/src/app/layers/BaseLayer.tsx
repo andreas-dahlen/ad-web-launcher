@@ -1,6 +1,6 @@
 import { Z } from '@config/zIndex';
 import { baseComp } from '../compositions/laneComps';
-import Carousel from '@components/system/carousel/Carousel';
+import Carousel from '../../primitives/carousel/Carousel';
 import useRuntimeBindings from '../compositions/useRuntimeBindings';
 import layerCss from './Layers.module.css'
 

@@ -2,8 +2,8 @@
 Context Builder
 ========================= */
 
-import type { DomMeta } from '../../typeScript/descriptor/baseType.ts'
-import { toAxis, toOnEdgeDir, toType } from '../../typeScript/core/primitiveType.ts'
+import type { DomMeta } from '../types/base.types.ts'
+import { toAxis, toOnEdgeDir, toType } from '../../shared/typing/core.types.ts'
 
 export function extractDomMeta(el: HTMLElement): DomMeta | null {
   const ds = el.dataset

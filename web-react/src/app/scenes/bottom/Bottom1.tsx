@@ -1,6 +1,6 @@
 // import { useCarouselStore } from '@components/primitives/carousel/hooks/useCarouselStore';
 // import { useSceneContext } from '@components/primitives/carousel/hooks/useSceneContext';
-import Slider from '@slider/Slider.tsx';
+import Slider from '../../../primitives/slider/Slider'
 
 export default function Bottom1() {
   // const { sceneIndex, carouselId } = useSceneContext()

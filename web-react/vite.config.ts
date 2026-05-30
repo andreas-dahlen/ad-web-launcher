@@ -16,22 +16,23 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@scenes': fromRoot('src/app/scenes'),
+      '@api': fromRoot('src/api'),
+      '@app': fromRoot('src/app'),
       '@assets': fromRoot('src/assets'),
-      '@components': fromRoot('src/components'),
-      '@hooks': fromRoot('src/components/hooks'),
-      '@carousel': fromRoot('src/components/primitives/carousel'),
-      '@button': fromRoot('src/components/primitives/button'),
-      '@drag': fromRoot('src/components/primitives/drag'),
-      '@slider': fromRoot('src/components/primitives/slider'),
-      '@primitives': fromRoot('src/components/primitives'),
       '@config': fromRoot('src/config'),
-      '@utils': fromRoot('src/config/utils'),
-      '@typeScript': fromRoot('src/typeScript'),
-      '@debug': fromRoot('src/debug'),
+      '@data': fromRoot('src/data'),
+      '@features': fromRoot('src/features'),
       '@interaction': fromRoot('src/interaction'),
-      '@stores': fromRoot('src/interaction/stores'),
-      '@styles': fromRoot('src/styles')
+      '@primitives': fromRoot('src/primitives'),
+      '@composites': fromRoot('src/composites'),
+
+      '@stores': fromRoot('src/shared/state/stores'),
+      '@hooks': fromRoot('src/shared/state/hooks'),
+      '@typing': fromRoot('src/shared/typing'),
+      '@styles': fromRoot('src/shared/styles'),
+      '@utils': fromRoot('src/shared/utils'),
+      '@infrastructure': fromRoot('src/infrastructure'),
+      '@test': fromRoot('src/test')
     }
   }
 })

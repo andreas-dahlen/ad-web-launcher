@@ -1,22 +1,24 @@
 {
   "compilerOptions": {
     "paths": {
-      "@scenes/*": ["./src/app/scenes/*"],
+      "@api/*": ["./src/api/*"],
+      "@app/*": ["./src/app/*"],
       "@assets/*": ["./src/assets/*"],
-      "@components/*": ["./src/components/*"],
-      "@hooks/*": ["./src/components/hooks/*"],
-      "@carousel/*": ["./src/components/primitives/carousel/*"],
-      "@button/*": ["./src/components/primitives/button/*"],
-      "@drag/*": ["./src/components/primitives/drag/*"],
-      "@slider/*": ["./src/components/primitives/slider/*"],
-      "@primitives/*": ["./src/components/primitives/*"],
       "@config/*": ["./src/config/*"],
-      "@utils/*": ["./src/config/utils/*"],
-      "@typeScript/*": ["./src/typeScript/*"],
-      "@debug/*": ["./src/debug/*"],
+      "@data/*": ["./src/data/*"],
+      "@features/*": ["./src/features/*"],
       "@interaction/*": ["./src/interaction/*"],
-      "@stores/*": ["./src/interaction/stores/*"],
-      "@styles/*": ["./src/styles/*"]
+      "@primitives/*": ["./src/primitives/*"],
+      "@composites/*": ["./src/composites/*"],
+
+      "@stores/*": ["./src/shared/state/stores/*"],
+      "@hooks/*": ["./src/shared/state/hooks/*"],
+      "@typing/*": ["./src/shared/typing/*"],
+      "@styles/*": ["./src/shared/styles/*"],
+      "@utils/*": ["./src/shared/utils/*"],
+
+      "@infrastructure/*": ["./src/infrastructure/*"],
+      "@test/*": ["./src/test/*"]
     }
   }
 }

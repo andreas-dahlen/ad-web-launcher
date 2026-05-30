@@ -1,5 +1,5 @@
-import type { CtxType } from '@typeScript/descriptor/ctxType'
-import { useWallpaperStore } from '../../hooks/useWallpaperStore'
+import { useWallpaperStore } from '@hooks//useWallpaperStore'
+import type { CtxType } from '@interaction/types/ctx.types'
 
 type RuntimeBindings = {
   onSwipeCommit?: (detail: CtxType) => void

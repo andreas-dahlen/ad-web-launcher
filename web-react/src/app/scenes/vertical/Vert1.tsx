@@ -1,4 +1,4 @@
-export default function Wp1() {
+export default function Vert1() {
 
   return (
     <div>

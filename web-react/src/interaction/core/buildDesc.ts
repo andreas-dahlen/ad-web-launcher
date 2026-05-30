@@ -1,14 +1,14 @@
 import { domQuery } from './domQuery.ts'
 import { extractDomMeta } from './domMeta.ts'
-import { carouselStore } from '../../stores/carouselStore.ts'
-import { dragStore } from '../../stores/dragStore.ts'
-import { sliderStore } from '../../stores/sliderStore.ts'
-import type { BaseInteraction, BaseWithSwipe, DomMeta, Capabilities } from '../../typeScript/descriptor/baseType.ts'
-import type { CarouselData, CarouselModifiers, DragData, DragModifiers, ScrollData, SliderData } from '../../typeScript/descriptor/dataType.ts'
-import type { CarouselDesc, SliderDesc, DragDesc, ButtonDesc, ScrollDesc } from '../../typeScript/descriptor/descriptor.ts'
-import type { Descriptor } from '../../typeScript/descriptor/descriptor.ts'
-import type { CtxButton, CtxCarousel, CtxDrag, CtxScroll, CtxSlider } from '../../typeScript/descriptor/ctxType.ts'
-import { scrollStore } from '../../stores/scrollStore.ts'
+import { carouselStore } from '@primitives/carousel/store/carouselStore.ts'
+import { dragStore } from '@primitives/drag/store/dragStore.ts'
+import { sliderStore } from '@primitives/slider/store/sliderStore.ts'
+import type { BaseInteraction, BaseWithSwipe, DomMeta, Capabilities } from '../types/base.types.ts'
+import type { CarouselData, CarouselModifiers, DragData, DragModifiers, ScrollData, SliderData } from '../types/data.types.ts'
+import type { CarouselDesc, SliderDesc, DragDesc, ButtonDesc, ScrollDesc } from '../types/descriptor.types.ts'
+import type { Descriptor } from '../types/descriptor.types.ts'
+import type { CtxButton, CtxCarousel, CtxDrag, CtxScroll, CtxSlider } from '../types/ctx.types.ts'
+import { scrollStore } from '@primitives/scroll/store/scrollStore.ts'
 
 interface Builder {
   capabilities: Capabilities

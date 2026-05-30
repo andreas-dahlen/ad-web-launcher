@@ -1,5 +1,5 @@
 // import { useState } from 'react';
-import Button from '@button/Button.tsx';
+import Button from '@primitives/button/Button'
 
 export default function Top1() {
   return (
