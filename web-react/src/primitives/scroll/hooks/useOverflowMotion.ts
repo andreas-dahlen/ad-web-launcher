@@ -7,7 +7,7 @@ interface UseDragOverflowProps {
 
 export function useOverflowMotion({
   overflowValue,
-  dragging
+  dragging,
 }: UseDragOverflowProps) {
   const overflowStyle = useMemo(() => {
 

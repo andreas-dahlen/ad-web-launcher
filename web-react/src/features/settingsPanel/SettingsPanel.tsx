@@ -71,8 +71,6 @@ export default function SettingsPanel() {
         }} />
       </div >
 
-
-
       <div className='settings-slider-frame'>
         <Slider
           id='settings-slider-1'

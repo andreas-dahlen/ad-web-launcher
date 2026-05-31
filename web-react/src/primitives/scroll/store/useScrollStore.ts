@@ -15,7 +15,7 @@ const DEFAULTS = {
 } as const
 
 const DEFAULTS_OFFSCREEN = {
-  overflowValue: 800,
+  overflowValue: -800,
   isVisible: false,
   liveValue: 0,
   settledValue: 0,
@@ -27,19 +27,18 @@ const DEFAULTS_OFFSCREEN = {
 
 export const useScrollStore = (id: string, isInitialVisible: boolean) => {
 
-  const fallback = isInitialVisible ? DEFAULTS : DEFAULTS_OFFSCREEN
-
   useEffect(() => {
     debugRegisterBinding(id, 'useScrollStore')
-    scrollStore.getState().init(id, fallback)
+    scrollStore.getState().init(id, isInitialVisible ? DEFAULTS : DEFAULTS_OFFSCREEN)
     return () => {
       debugUnregisterBinding(id, 'useScrollStore')
       scrollStore.getState().delete(id)
     }
-  }, [fallback, id])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id])
 
   return scrollStore(
     useShallow((s: ScrollStore) => s.bindings[id] ??
-      fallback)
+      (isInitialVisible ? DEFAULTS : DEFAULTS_OFFSCREEN))
   ) //TODO remove useShallow?
 }

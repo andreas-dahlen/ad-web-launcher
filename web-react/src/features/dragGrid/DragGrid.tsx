@@ -17,8 +17,6 @@ export default function DragGrid() {
   const shouldRender =
     isGridEnabled || activeGesture === 'drag'
 
-  console.log(shouldRender)
-
   if (!shouldRender) return null
 
   const xPositions = snapPositions(dragSnapX)

@@ -69,8 +69,8 @@ export default function Drag({
             id,
             type: "drag",
             axis: "both",
-            dataSnapX: resolvedSnapX,
-            dataSnapY: resolvedSnapY,
+            snapX: resolvedSnapX,
+            snapY: resolvedSnapY,
             ...dragDataAttrs
           })}
         >

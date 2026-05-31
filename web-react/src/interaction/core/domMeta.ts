@@ -6,6 +6,7 @@ import type { DomMeta } from '../types/base.types.ts'
 import { toAxis, toOnEdgeDir, toType } from '../../shared/typing/core.types.ts'
 
 export function extractDomMeta(el: HTMLElement): DomMeta | null {
+  console.log(el)
   const ds = el.dataset
   const id = ds.id ?? ''
 
@@ -24,7 +25,6 @@ export function extractDomMeta(el: HTMLElement): DomMeta | null {
   const snapY = parseNumber(ds.snapY)
   const lockPrevAt = parseNumber(ds.lockPrevAt)
   const lockNextAt = parseNumber(ds.lockNextAt)
-
   return { el, ds, id, axis, type, swipeable, pressable, snapX, snapY, lockPrevAt, lockNextAt, onEdgeDir, instantSwipe }
 }
 

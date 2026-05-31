@@ -9,7 +9,6 @@ import Mid3 from '@app/scenes/mid/Mid3'
 import Bottom1 from '@app/scenes/bottom/Bottom1'
 import Bottom2 from '@app/scenes/bottom/Bottom2'
 import Bottom3 from '@app/scenes/bottom/Bottom3'
-
 import Vert1 from '@app/scenes/vertical/Vert1'
 import Vert2 from '@app/scenes/vertical/Vert2'
 import Vert3 from '@app/scenes/vertical/Vert3'
