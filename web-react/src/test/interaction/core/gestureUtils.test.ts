@@ -3,11 +3,12 @@ import { describe, expect, it } from 'vitest'
 
 describe('gestureUtils', () => {
 
-
   describe('resolveAxis', () => {
     it('returns both when both', () => {
-      gestureUtils.resolveAxis('both',)
-    })
 
+      const result = gestureUtils.resolveAxis('horizontal', dragDesc)
+
+      expect(result).toBe('both')
+    })
   })
 })

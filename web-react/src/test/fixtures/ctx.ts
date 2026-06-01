@@ -1,6 +1,6 @@
 import type { CtxBase, CtxBaseSwipe, CtxButton, CtxCarousel, CtxDrag, CtxScroll, CtxSlider } from '@interaction/types/ctx.types';
 import type { GestureUpdate } from '@interaction/types/data.types';
-import { createMetaEl } from '@test/functions';
+import { createEl, createElByType } from '@test/functions';
 
 export function createGestureUpdate(
   overrides: Partial<GestureUpdate> = {}
@@ -21,9 +21,9 @@ export function createCtxBase(
   overrides: Partial<CtxBase> = {}
 ): CtxBase {
   return {
-    event: "swipeStart",
+    event: "press",
     id: "test",
-    element: createMetaEl(),
+    element: createEl(),
     ...overrides
   }
 }
@@ -33,32 +33,33 @@ export function createCtxSwipe(
 ): CtxBaseSwipe {
   return {
     ...createCtxBase(),
-    storeAccepted: true,
+    event: "swipe",
+    storeAccepted: false,
     delta: { x: 40, y: 50 },
-    cancel: { element: createMetaEl(), pressCancel: true },
+    cancel: { element: createEl(), pressCancel: true },
     thresholdValue: { x: 4, y: 5 },
     ...overrides
   }
 }
-
 export function createCtxButton(
   overrides: Partial<CtxButton> = {}
 ): CtxButton {
   return {
+    ...createCtxBase(),
     type: "button",
-    event: 'press',
-    id: "test",
-    element: createMetaEl(),
+    element: createElByType('button'),
     ...overrides
   }
 }
+
 
 export function createCtxCarousel(
   overrides: Partial<CtxCarousel> = {}
 ): CtxCarousel {
   return {
-    type: "carousel",
     ...createCtxSwipe(),
+    type: "carousel",
+    element: createElByType('carousel'),
     delta1D: 30,
     direction: { axis: "vertical", dir: "up" },
     ...overrides
@@ -69,12 +70,8 @@ export function createCtxSlider(
 ): CtxSlider {
   return {
     ...createCtxSwipe(),
-    id: "test",
     type: "slider",
-    event: "swipe",
-    storeAccepted: true,
-    delta: { x: 30, y: 30 },
-    element: createMetaEl(),
+    element: createElByType('slider'),
     delta1D: 30,
     gestureUpdate: createGestureUpdate(),
     ...overrides
@@ -85,13 +82,9 @@ export function createCtxScroll(
 ): CtxScroll {
   return {
     ...createCtxSwipe(),
-    id: "test",
     type: "scroll",
-    event: "swipe",
+    element: createElByType('scroll'),
     delta1D: 30,
-    storeAccepted: true,
-    delta: { x: 30, y: 30 },
-    element: createMetaEl(),
     overflowValue: 30,
     isVisible: true,
     gestureUpdate: createGestureUpdate(),
@@ -104,11 +97,7 @@ export function createCtxDrag(
   return {
     ...createCtxSwipe(),
     type: "drag",
-    id: "test",
-    delta: { x: 40, y: 50 },
-    storeAccepted: true,
-    element: createMetaEl(),
-    event: "swipe",
+    element: createElByType('drag'),
     ...overrides
   }
 }

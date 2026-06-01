@@ -24,7 +24,9 @@ export const buildDesc = {
   ========================= */
   resolveFromElement(el: HTMLElement, x: number, y: number, pointerId: number): Descriptor | null {
     const metaData = extractDomMeta(el)
+    console.log(metaData)
     if (!metaData) return null
+    console.log("it passed")
     const capabilities = this.buildCapabilities(metaData)
     const r = { capabilities, x, y, pointerId }
     switch (metaData.type) {

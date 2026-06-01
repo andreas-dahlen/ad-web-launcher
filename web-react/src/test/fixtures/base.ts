@@ -1,12 +1,12 @@
 import type { BaseInteraction, BaseWithSwipe } from '@interaction/types/base.types';
-import { createMetaEl } from '@test/functions';
+import { createEl } from '@test/functions';
 
 export function createBaseInteraction(
   overrides: Partial<BaseInteraction> = {}
 ): BaseInteraction {
   return {
     pointerId: 1,
-    element: createMetaEl(),
+    element: createEl(),
     id: 'test',
     ...overrides,
   }

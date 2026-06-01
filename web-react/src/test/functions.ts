@@ -1,9 +1,8 @@
-import type { InteractionType, Size2D, Vec2 } from '@typing/core.types.ts'
 import { DEBUG } from './debugFlags.ts'
-import type { ButtonDesc, CarouselDesc, Descriptor, DragDesc, ScrollDesc, SliderDesc } from '@interaction/types/descriptor.types.ts'
-import type { CtxBase, CtxBaseSwipe, CtxButton, CtxCarousel, CtxDrag, CtxScroll, CtxSlider } from '@interaction/types/ctx.types.ts'
-import type { CarouselData, DragData, DragModifiers, GestureUpdate, ScrollData, SliderData } from '@interaction/types/data.types.ts'
-import type { BaseInteraction, BaseWithSwipe, Capabilities } from '@interaction/types/base.types.ts'
+import type { InteractionType } from '@typing/core.types.ts'
+import { mockMetaByType } from '@test/fixtures/meta.ts'
+import { extractDomMeta } from '@interaction/core/domMeta.ts'
+import type { DomMeta } from '@interaction/types/base.types.ts'
 
 type DebugKey = keyof typeof DEBUG.channels
 
@@ -107,156 +106,73 @@ export function ensure<T>(
 
 //VITEST test functions
 
-export function createMetaEl(overrides: Partial<DOMStringMap> = {}) {
+// export function createTestDescriptor(
+//   type: InteractionType,
+//   metaOps?: MetaDataset,
+//   inputOpts?: {
+//     x?: number
+//     y?: number
+//     pointerId?: number
+//     overrideDesc?: Partial<Omit<Descriptor, 'type'>>
+//   }
+// ): Descriptor {
+
+//   const { el, x, y, pointerId } = createResolutionInput(type, metaOps, inputOpts)
+
+//   const base = buildDesc.resolveFromElement(el, x, y, pointerId)
+//   if (!base) throw new Error("resolveFromElement failure")
+
+//   const overrides = inputOpts?.overrideDesc ?? {}
+
+//   return {
+//     ...base,
+//     ...overrides,
+//   } as Descriptor
+// }
+
+
+// export function createResolutionInput(
+//   type: InteractionType,
+//   metaOps?: MetaDataset,
+//   inputOpts?: { x?: number; y?: number; pointerId?: number }
+// ) {
+
+//   const el = createMetaElByType(type, metaOps)
+
+//   if (!el) throw new Error("element creation failure")
+
+//   return {
+//     el,
+//     x: inputOpts?.x ?? 10,
+//     y: inputOpts?.y ?? 20,
+//     pointerId: inputOpts?.pointerId ?? 1,
+//   }
+// }
+type MetaDataset = Record<string, string>
+export function createElByType(type: InteractionType, overrides: MetaDataset = {}) {
   const el = document.createElement('div')
 
-  Object.assign(el.dataset, overrides)
+  const mockBase = mockMetaByType[type]
+
+  Object.assign(el.dataset, { ...mockBase, ...overrides })
 
   return el
 }
 
-export function createTestDescriptor(type: InteractionType, vec2: Vec2, size2D: Size2D, number: number): Descriptor {
+export function createEl(overrides: MetaDataset = {}) {
+  const el = document.createElement('div')
 
-  const createBase = {
-    pointerId: 1,
-    element: createMetaEl(),
-    id: "test"
-  } as BaseInteraction
+  Object.assign(el.dataset, {
+    ...overrides
+  })
 
-  const createBaseSwipe = {
-    ...createBase,
-    axis: type == "drag" ? "both" : "vertical",
-    grabOffset: vec2,
-    frame: { left: number, top: number, ...size2D }
-  } as BaseWithSwipe
-
-  const createCapabilities = {
-    pressable: true,
-    swipeable: true,
-    instantSwipe: false
-  } as Capabilities
-
-  const createCarouselData = { index: number, sceneSize: size2D, lockSwipeAt: { prev: number, next: number } } as CarouselData
-
-  const createDragData = {
-    settledOffset: vec2,
-    layout: {
-      deviceSize: size2D,
-      containerSize: size2D,
-      itemSize: size2D,
-      constraints: { minX: 0, minY: 0, maxX: number, maxY: number }
-    },
-    snap: vec2,
-    locked: false //thing this one isn't used anymore. TODO confirm.
-  } as DragData & DragModifiers
-
-  const createSliderData = {
-    thumbSize: size2D,
-    constraints: { min: 0, max: number },
-    containerSize: size2D
-  } as SliderData
-
-  const createScrollData = {
-    settledValue: number,
-    containerSize: size2D,
-    contentSize: size2D,
-    isVisible: true, //always included but not always used... onEdgeDir drives behavior.
-    onEdgeDir: 'up'
-  } as ScrollData
-
-  const createGestureUpdate = {
-    pointerId: number,
-    //slider
-    sliderStartOffset: number,
-    sliderValuePerPixel: number,
-    //scroll
-    isOverflow: true,
-    startOverflowValue: number
-  } as GestureUpdate
-
-  const createCtxBase = {
-    type: type,
-    event: "swipeStart",
-    id: "test",
-    element: createMetaEl()
-  } as CtxBase
-
-  const createCtxSwipe = {
-    ...createCtxBase,
-    storeAccepted: true,
-    delta: vec2,
-    cancel: { element: createMetaEl(), pressCancel: true },
-    thresholdValue: vec2
-  } as CtxBaseSwipe
-
-  const createCtxButton = {
-    ...createCtxBase
-  } as CtxButton
-
-  const createCtxCarousel = {
-    ...createCtxSwipe,
-    delta1D: number,
-    direction: { axis: "vertical", dir: "up" }
-  } as CtxCarousel
-
-  const createCtxSlider = {
-    ...createCtxSwipe,
-    delta1D: number,
-    gestureUpdate: createGestureUpdate
-  } as CtxSlider
-
-  const createCtxScroll = {
-    ...createCtxSwipe,
-    delta1D: number,
-    overflowValue: number,
-    isVisible: true,
-    gestureUpdate: createGestureUpdate
-  } as CtxScroll
-
-  const createCtxDrag = {
-    ...createCtxSwipe
-  } as CtxDrag
-
-  if (type == "button") {
-    return {
-      base: createBase,
-      capabilities: createCapabilities,
-      ctx: createCtxBase as CtxButton
-    } as ButtonDesc
-  }
-
-  if (type == "carousel") {
-    return {
-      base: createBaseSwipe,
-      data: createCarouselData,
-      capabilities: createCapabilities
-      ctx: createCtxCarousel
-    } as CarouselDesc
-  }
-
-  if (type == "slider") {
-    return {
-      base: createBaseSwipe,
-      data: createSliderData,
-      capabilities: createCapabilities,
-      ctx: createCtxSlider
-    } as SliderDesc
-  }
-
-  if (type == "drag") {
-    return {
-      base: createBaseSwipe,
-      data: createDragData,
-      capabilites: createCapabilities
-      ctx: createCtxDrag
-    } as DragDesc
-  }
-  if (type == "scroll") {
-    return {
-      base: createBaseSwipe,
-      data: createScrollData,
-      capabilities: createCapabilities,
-      ctx: createCtxScroll
-    } as ScrollDesc
-  }
+  return el
 }
+
+export function createDomMeta(type: InteractionType, overrides: MetaDataset = {}): DomMeta {
+  const el = createElByType(type, overrides)
+  const value = extractDomMeta(el)
+  if (!value) throw new Error("extract dom meta failed")
+  return extractDomMeta(el) as DomMeta
+}
+

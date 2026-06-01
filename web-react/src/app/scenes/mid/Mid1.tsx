@@ -1,5 +1,6 @@
 import DragButton from '../../../composites/DragButton';
 import Drag from '../../../primitives/drag/Drag';
+import { createTestDescriptor } from '@test/functions';
 
 export default function Mid1() {
 
@@ -7,6 +8,7 @@ export default function Mid1() {
     <div>¨
       <DragButton
         id='drag-btn-test'
+        onPressRelease={() => createTestDescriptor('drag')}
       >
 
       </DragButton>
