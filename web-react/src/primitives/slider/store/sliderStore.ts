@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 import type { Size2D } from '@typing/core.types'
-import type { CtxSlider } from '@interaction/types/ctx.types'
+import type { CtxSlider } from '@interaction/types/Runtime.types'
 
 type Slider = {
   //react motion

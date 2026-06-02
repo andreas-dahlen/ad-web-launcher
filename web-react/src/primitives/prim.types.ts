@@ -1,4 +1,4 @@
-import type { CtxType } from '@interaction/types/ctx.types'
+import type { CtxType } from '@interaction/types/Runtime.types'
 import type { Axis1D, OnEdgeDir } from '@typing/core.types'
 import type { BaseProps, DataAttributes } from '@typing/propUtils.types'
 

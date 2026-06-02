@@ -1,17 +1,17 @@
 import { getCommitOffset, normalizeBase } from '../utils/axisUtils.ts'
 import { vector } from '../utils/vectorUtils.ts'
-import type { Normalized1D } from '../../types/ctx.types.ts'
-import type { CarouselDesc } from '../../types/descriptor.types.ts'
-import type { Axis } from '../../../shared/typing/core.types.ts'
+import type { Normalized1D } from '../../types/Runtime.types.ts'
+import type { Axis, Vec2 } from '../../../shared/typing/core.types.ts'
+import type { BaseWithAxis1D } from '@interaction/types/base.types.ts'
+import type { CarouselData } from '@interaction/types/data.types.ts'
 
 export const carouselUtils = {
 
-  normalize(desc: CarouselDesc): Normalized1D {
-    const { axis } = desc.base
-    const base = normalizeBase(desc.base, desc.base.axis, desc.ctx.delta)
-    const track = vector.resolveByAxis1D(desc.data.sceneSize.width, desc.data.sceneSize.height, axis)
+  normalize(base: BaseWithAxis1D, data: CarouselData, delta: Vec2): Normalized1D {
+    const basics = normalizeBase(base.grabOffset, base.axis, delta)
+    const track = vector.resolveByAxis1D(data.sceneSize.width, data.sceneSize.height, base.axis)
     return {
-      ...base,
+      ...basics,
       mainSize: track?.main,
       crossSize: track?.cross
     }

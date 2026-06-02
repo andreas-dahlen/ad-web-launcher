@@ -1,6 +1,8 @@
 import type { OnEdgeDir, Size2D, Vec2 } from "../../shared/typing/core.types.ts"
 
-export interface CarouselData {
+export type CarouselData = CarouselDataBase & CarouselModifiers
+
+interface CarouselDataBase {
   readonly index: number
   readonly sceneSize: Size2D
 }
@@ -12,7 +14,9 @@ export interface CarouselModifiers {
   }
 }
 
-export interface DragData {
+export type DragData = DragDataBase & DragModifiers
+
+interface DragDataBase {
   readonly settledOffset: Vec2
   readonly layout: DragLayout
 }
@@ -55,9 +59,8 @@ export interface ScrollData {
   readonly onEdgeDir?: OnEdgeDir
 }
 
-export interface GestureUpdate {
+export interface ComputedPatch {
   //Updates stay as its own part of descriptor and is never merged into other parts. Currently only used for slider and for scroll.
-  readonly pointerId: number
   //slider
   readonly sliderStartOffset?: number
   readonly sliderValuePerPixel?: number

@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 import type { Vec2 } from '@typing/core.types'
-import type { CtxDrag } from '@interaction/types/ctx.types'
+import type { CtxDrag } from '@interaction/types/Runtime.types'
 import type { DragLayout } from '@interaction/types/data.types'
 import type { FrameSnapshot } from '@interaction/types/base.types'
 

@@ -1,4 +1,4 @@
-import type { CtxType } from '../types/ctx.types.ts'
+import type { Runtime } from '@interaction/types/Runtime.types.ts'
 import type { EventType } from '../../shared/typing/core.types.ts'
 // domUpdater.ts
 /* -------------------------------------------------
@@ -12,14 +12,15 @@ function setAttr(element: HTMLElement, key: string, value: unknown) {
   }
 }
 
-function dispatchEvent(element: HTMLElement, ctx: CtxType) {
-  element.dispatchEvent(new CustomEvent<CtxType>('reaction', { detail: ctx }))
+//TODO rename emitReaction?? and also 
+function dispatchEvent(element: HTMLElement, event: EventType) {
+  element.dispatchEvent(new CustomEvent<EventType>('reaction', { detail: event }))
 }
 
 /* -------------------------------------------------
    DOM / UI attribute handlers
 ------------------------------------------------- */
-const typeHandlers: Record<EventType, (el: HTMLElement) => void> = {
+const eventHandlers: Record<EventType, (el: HTMLElement) => void> = {
   press: (el) => {
     setAttr(el, 'data-state', 'pressed')
   },
@@ -45,26 +46,25 @@ const typeHandlers: Record<EventType, (el: HTMLElement) => void> = {
    Render
 ------------------------------------------------- */
 export const domUpdater = {
-  handle(ctx: CtxType) {
-    if (!ctx.element) return
+  handle(runtime: Runtime, el: HTMLElement) {
+    if (!el) return
 
     //1️⃣ Handle optional extra events
-    handleExtras(ctx)
+    handleExtras(runtime)
 
     // 2️⃣ Apply DOM / UI attributes
-    typeHandlers[ctx.event]?.(ctx.element)
+    eventHandlers[runtime.event]?.(el)
 
     // 3️⃣ Dispatch custom event
-    dispatchEvent(ctx.element, ctx)
+    dispatchEvent(el, runtime.event)
   }
 }
 
-function handleExtras(ctx: CtxType) {
-  if (ctx.type === 'button') return
-  const cancel = ctx.cancel
+function handleExtras(runtime: Runtime) {
+  const cancel = runtime.cancel
   if (!cancel?.pressCancel) return
 
   const event = 'pressCancel'
-  typeHandlers[event]?.(cancel.element)
-  dispatchEvent(cancel.element, { ...ctx, event })
+  eventHandlers[event]?.(cancel.element)
+  dispatchEvent(cancel.element, event)
 }

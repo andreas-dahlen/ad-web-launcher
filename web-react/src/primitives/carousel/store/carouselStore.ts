@@ -1,7 +1,7 @@
 import { immer } from "zustand/middleware/immer"
 import { create } from 'zustand'
 import type { Direction, Size2D } from '../../../shared/typing/core.types'
-import type { CtxCarousel } from '@interaction/types/ctx.types'
+import type { CtxCarousel } from '@interaction/types/Runtime.types'
 
 type Carousel = {
   //react motion

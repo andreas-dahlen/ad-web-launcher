@@ -2,11 +2,9 @@
 import { APP_CONFIG } from '@config/appConfig.ts'
 import { vector } from "./vectorUtils.ts"
 import type { Vec2, Direction, Axis1D } from '../../../shared/typing/core.types.ts'
-import type { Normalized1D } from '../../types/ctx.types.ts'
-import type { BaseWithSwipe } from '../../types/base.types.ts'
+import type { Normalized1D } from '../../types/Runtime.types.ts'
 
-export function normalizeBase(base: BaseWithSwipe, axis: Axis1D, delta: Vec2): Normalized1D {
-    const { grabOffset } = base
+export function normalizeBase(grabOffset: Vec2, axis: Axis1D, delta: Vec2): Normalized1D {
     const offset = vector.resolveByAxis1D(grabOffset.x, grabOffset.y, axis)
     const movement = vector.resolveByAxis1D(delta.x, delta.y, axis)
     return {

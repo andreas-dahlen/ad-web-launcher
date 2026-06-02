@@ -1,5 +1,5 @@
 import { useWallpaperStore } from '@hooks//useWallpaperStore'
-import type { CtxType } from '@interaction/types/ctx.types'
+import type { CtxType } from '@interaction/types/Runtime.types'
 
 type RuntimeBindings = {
   onSwipeCommit?: (detail: CtxType) => void

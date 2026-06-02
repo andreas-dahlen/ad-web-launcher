@@ -1,13 +1,13 @@
 import { vector } from '../utils/vectorUtils.ts'
 import type { DragDesc } from '../../types/descriptor.types.ts'
 import type { Vec2 } from '../../../shared/typing/core.types.ts'
+import type { DragData } from '@interaction/types/data.types.ts'
 
 export const dragUtils = {
 
-  resolveSwipe(desc: DragDesc) {
-    const delta = desc.ctx.delta
-    const settledOffset = desc.data.settledOffset
-    const dragConstraints = desc.data.layout.constraints
+  resolveSwipe(data: DragData, delta: Vec2) {
+    const settledOffset = data.settledOffset
+    const dragConstraints = data.layout.constraints
     const clamped =
       vector.relativeClamp2D(delta, settledOffset, dragConstraints)
     const dx = clamped.x
@@ -15,9 +15,8 @@ export const dragUtils = {
     return { x: dx, y: dy }
   },
 
-  resolveCommit(desc: DragDesc) {
-    const delta = desc.ctx.delta
-    return vector.clamp2D(delta, desc.data.settledOffset, desc.data.layout.constraints)
+  resolveCommit(data: DragData, delta: Vec2) {
+    return vector.clamp2D(delta, data.settledOffset, data.layout.constraints)
   },
 
   resolveSnapAdjustment(desc: DragDesc, value: Vec2) {

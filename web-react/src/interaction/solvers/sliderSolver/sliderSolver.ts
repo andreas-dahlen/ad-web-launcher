@@ -8,29 +8,32 @@
 import { exceedsCrossRange } from "../utils/axisUtils.ts"
 import type { EventType } from '../../../shared/typing/core.types.ts'
 import type { SliderDesc } from '../../types/descriptor.types.ts'
-import type { SliderCtxPartial } from '../../types/ctx.types.ts'
+import type { Runtime, SliderSolution } from '../../types/Runtime.types.ts'
 import { sliderUtils } from './sliderUtils.ts'
+import type { ComputedPatch } from '@interaction/types/data.types.ts'
 
-export const sliderSolver: Partial<Record<EventType, (desc: SliderDesc) => SliderCtxPartial>> = {
+export const sliderSolver: Partial<
+  Record<EventType, (runtime: Runtime, desc: SliderDesc, computed: ComputedPatch) => SliderSolution>
+> = {
 
   /**
    * Handle swipeStart - returns reaction to enable dragging
    */
-  press(desc) {
-    // isSlider(desc)
-    if (!desc.data) return { storeAccepted: false }
-    const norm = sliderUtils.normalize(desc)
+  press(runtime, desc) {
+    const norm = sliderUtils.normalize(desc.base, desc.data, runtime.delta)
     const result = sliderUtils.resolveStart(norm, desc.data.constraints)
+    if (!result?.value) return { storeAccepted: false }
     return {
-      delta1D: result?.value,
+      delta1D: result.value,
       storeAccepted: true
     }
   },
 
-  swipeStart(desc) {
-    if (!desc.data) return { storeAccepted: false }
-    const norm = sliderUtils.normalize(desc)
+  swipeStart(runtime, desc) {
+
+    const norm = sliderUtils.normalize(desc.base, desc.data, runtime.delta)
     const result = sliderUtils.resolveStart(norm, desc.data.constraints)
+    if (!result?.value) return { storeAccepted: false }
     return {
       delta1D: result?.value,
       storeAccepted: true,
@@ -45,13 +48,13 @@ export const sliderSolver: Partial<Record<EventType, (desc: SliderDesc) => Slide
   /**
    * Handle swipe (drag) - clamp delta so thumb stays within [min, max] visually
    */
-  swipe(desc) {
-    if (!desc.data) return { storeAccepted: false }
-    const norm = sliderUtils.normalize(desc)
+  swipe(runtime, desc) { //need to pass computed values
+    const norm = sliderUtils.normalize(desc.base, desc.data, runtime.delta)
     const gated = exceedsCrossRange(norm)
     if (gated) return { storeAccepted: false }
     const value =
       sliderUtils.resolveSwipe(norm, desc)
+    if (!value) return { storeAccepted: false }
     return { delta1D: value, storeAccepted: true }
   },
 
@@ -59,13 +62,14 @@ export const sliderSolver: Partial<Record<EventType, (desc: SliderDesc) => Slide
    * Handle swipeCommit - convert pixel delta to logical delta
    * Clamps result so position stays within [min, max]
    */
-  swipeCommit(desc) {
-    const norm = sliderUtils.normalize(desc)
+  swipeCommit(runtime, desc) {
+    const norm = sliderUtils.normalize(desc.base, desc.data, runtime.delta)
     const gated = exceedsCrossRange(norm)
     if (gated) return { storeAccepted: false }
 
     const value =
       sliderUtils.resolveSwipe(norm, desc)
+    if (!value) return { storeAccepted: false }
     return { delta1D: value, storeAccepted: true }
   }
 }

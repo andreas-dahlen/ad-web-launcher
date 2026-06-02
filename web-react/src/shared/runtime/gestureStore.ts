@@ -1,5 +1,5 @@
 import type { InteractionType } from '../typing/core.types';
-import type { CtxType } from '@interaction/types/ctx.types';
+import type { CtxType } from '@interaction/types/Runtime.types';
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 

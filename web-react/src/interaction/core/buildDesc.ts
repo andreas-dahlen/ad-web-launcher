@@ -3,11 +3,10 @@ import { extractDomMeta } from './domMeta.ts'
 import { carouselStore } from '@primitives/carousel/store/carouselStore.ts'
 import { dragStore } from '@primitives/drag/store/dragStore.ts'
 import { sliderStore } from '@primitives/slider/store/sliderStore.ts'
-import type { BaseInteraction, BaseWithSwipe, DomMeta, Capabilities } from '../types/base.types.ts'
-import type { CarouselData, CarouselModifiers, DragData, DragModifiers, ScrollData, SliderData } from '../types/data.types.ts'
+import type { BaseInteraction, DomMeta, Capabilities, BaseWithSwipe } from '../types/base.types.ts'
+import type { CarouselData, DragData, ScrollData, SliderData } from '../types/data.types.ts'
 import type { CarouselDesc, SliderDesc, DragDesc, ButtonDesc, ScrollDesc } from '../types/descriptor.types.ts'
 import type { Descriptor } from '../types/descriptor.types.ts'
-import type { CtxButton, CtxCarousel, CtxDrag, CtxScroll, CtxSlider } from '../types/ctx.types.ts'
 import { scrollStore } from '@primitives/scroll/store/scrollStore.ts'
 
 interface Builder {
@@ -61,8 +60,7 @@ export const buildDesc = {
       type: 'carousel',
       base: { ...this.buildSwipeBase(metaData, r), axis: metaData.axis },
       data: data,
-      capabilities: r.capabilities,
-      ctx: this.buildCarouselCtx(metaData)
+      capabilities: r.capabilities
     }
     return null
   },
@@ -73,8 +71,7 @@ export const buildDesc = {
       type: 'slider',
       base: { ...this.buildSwipeBase(metaData, r), axis: metaData.axis },
       data: data,
-      capabilities: r.capabilities,
-      ctx: this.buildSliderCtx(metaData)
+      capabilities: r.capabilities
     }
     return null
   },
@@ -85,8 +82,7 @@ export const buildDesc = {
       type: 'drag',
       base: { ...this.buildSwipeBase(metaData, r), axis: metaData.axis },
       data: data,
-      capabilities: r.capabilities,
-      ctx: this.buildDragCtx(metaData)
+      capabilities: r.capabilities
     }
     return null
   },
@@ -98,8 +94,7 @@ export const buildDesc = {
       type: 'scroll',
       base: { ...this.buildSwipeBase(metaData, r), axis: metaData.axis },
       data: data,
-      capabilities: r.capabilities,
-      ctx: this.buildScrollCtx(metaData)
+      capabilities: r.capabilities
     }
     return null
   },
@@ -108,8 +103,7 @@ export const buildDesc = {
     return {
       type: 'button',
       base: this.buildBase(metaData, r.pointerId),
-      capabilities: r.capabilities,
-      ctx: this.buildBtnCtx(metaData)
+      capabilities: r.capabilities
     }
   },
 
@@ -139,7 +133,7 @@ export const buildDesc = {
     Build Data
   ========================= */
 
-  buildCarouselData(metaData: DomMeta): (CarouselData & CarouselModifiers) | null {
+  buildCarouselData(metaData: DomMeta): (CarouselData) | null {
     const s = carouselStore.getState().get(metaData.id)
     if (!s) return null
     const lockSwipeAt = { prev: metaData.lockPrevAt, next: metaData.lockNextAt }
@@ -150,7 +144,7 @@ export const buildDesc = {
     if (!s) return null
     return { thumbSize: s.thumbSize, constraints: { min: s.min, max: s.max }, containerSize: s.containerSize }
   },
-  buildDragData(metaData: DomMeta): DragData & DragModifiers | null {
+  buildDragData(metaData: DomMeta): DragData | null {
     const s = dragStore.getState().get(metaData.id)
     if (!s) return null
     const snap = (metaData.snapX != null && metaData.snapY != null) ? { x: metaData.snapX, y: metaData.snapY } : undefined
@@ -162,28 +156,6 @@ export const buildDesc = {
     if (!s) return null
     return { onEdgeDir, containerSize: s.containerSize, contentSize: s.contentSize, settledValue: s.settledValue, isVisible: s.isVisible }
   },
-
-  /* =========================
-    ctx placeholders
-  ========================= */
-  buildCarouselCtx(metaData: DomMeta): CtxCarousel {
-    return { type: 'carousel', event: 'press', id: metaData.id, element: metaData.el, delta: { x: 0, y: 0 }, storeAccepted: false }
-  },
-  buildSliderCtx(metaData: DomMeta): CtxSlider {
-    return { type: 'slider', event: 'press', id: metaData.id, element: metaData.el, delta: { x: 0, y: 0 }, storeAccepted: false }
-  },
-  buildDragCtx(metaData: DomMeta): CtxDrag {
-    return { type: 'drag', event: 'press', id: metaData.id, element: metaData.el, delta: { x: 0, y: 0 }, storeAccepted: false }
-  },
-  buildScrollCtx(metaData: DomMeta): CtxScroll {
-    return {
-      type: 'scroll', event: 'press', id: metaData.id, element: metaData.el, delta: { x: 0, y: 0 }, storeAccepted: false
-    }
-  },
-  buildBtnCtx(metaData: DomMeta): CtxButton {
-    return { type: 'button', event: 'press', id: metaData.id, element: metaData.el }
-  },
-
   /* =========================
       Build capabilities
     ========================= */

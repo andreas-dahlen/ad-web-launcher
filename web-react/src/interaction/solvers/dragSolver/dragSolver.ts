@@ -7,25 +7,29 @@
  * - No commit threshold check (always commits)
  * - No swipeRevert reaction
  */
+
 import type { EventType } from '../../../shared/typing/core.types.ts'
 import type { DragDesc } from '../../types/descriptor.types.ts'
-import type { DragCtxPartial } from '../../types/ctx.types.ts'
+import type { DragSolution, Runtime } from '../../types/Runtime.types.ts'
 import { dragUtils } from './dragUtils.ts'
+import type { ComputedPatch } from '@interaction/types/data.types.ts'
 
-export const dragSolver: Partial<Record<EventType, (desc: DragDesc) => DragCtxPartial>> = {
+export const dragSolver: Partial<
+  Record<EventType, (runtime: Runtime, desc: DragDesc, computed: ComputedPatch) => DragSolution>
+> = {
 
   /**
    * Handle swipeStart - returns reaction to enable dragging
    */
   swipeStart() {
-    return { storeAccepted: true }
+    return { delta: { x: 0, y: 0 }, storeAccepted: true }
   },
 
   /**
    * Handle swipe (drag) - clamp deltas and return offset reaction
    */
-  swipe(desc) {
-    const delta = dragUtils.resolveSwipe(desc)
+  swipe(runtime, desc) {
+    const delta = dragUtils.resolveSwipe(desc.data, runtime.delta)
     if (typeof delta !== "object") return { storeAccepted: false }
     return {
       delta,
@@ -36,14 +40,14 @@ export const dragSolver: Partial<Record<EventType, (desc: DragDesc) => DragCtxPa
   /**
    * Handle swipeCommit - always commit at current position (no revert)
    */
-  swipeCommit(desc) {
-    let value = dragUtils.resolveCommit(desc)
+  swipeCommit(runtime, desc) {
+    let value = dragUtils.resolveCommit(desc.data, runtime.delta)
     if (!value) return { storeAccepted: false }
     const snap = dragUtils.resolveSnapAdjustment(desc, value)
     if (snap != null) { value = snap }
     return {
       delta: value,
-      storeAccepted: true,
+      storeAccepted: true
     }
   }
 }

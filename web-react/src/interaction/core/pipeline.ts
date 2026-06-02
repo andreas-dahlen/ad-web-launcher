@@ -1,4 +1,4 @@
-import { interpreter } from './interpreter.ts'
+import { interpreter, type GestureInput } from './interpreter.ts'
 import { carouselSolver } from '../solvers/carouselSolver/carouselSolver.ts'
 import { sliderSolver } from '../solvers/sliderSolver/sliderSolver.ts'
 import { dragSolver } from '../solvers/dragSolver/dragSolver.ts'
@@ -7,17 +7,14 @@ import { domUpdater } from '../updater/domUpdater.ts'
 import { dragStore } from '@primitives/drag/store/dragStore.ts'
 import { sliderStore } from '@primitives/slider/store/sliderStore.ts'
 import { carouselStore } from '@primitives/carousel/store/carouselStore.ts'
-import type { EventBridgeType } from '../../shared/typing/core.types.ts'
-import type { CtxType } from '../types/ctx.types.ts'
+import type { EventBridgeType, EventType, InteractionType } from '../../shared/typing/core.types.ts'
 import type { PointerEventPackage } from '@hooks/usePointerBridge.ts'
 import { gestureStore } from '../../shared/runtime/gestureStore.ts'
 import { scrollStore } from '@primitives/scroll/store/scrollStore.ts'
-import type { Descriptor } from '@interaction/types/descriptor.types.ts'
-
 /* =====================
         Maping
 ======================= */
-export type InterpreterFn = (x: number, y: number, pointerId: number) => Descriptor | null
+export type InterpreterFn = (x: number, y: number, pointerId: number) => GestureInput | null
 
 const interpreterMap: Record<EventBridgeType, InterpreterFn> = {
   down: interpreter.onDown,
@@ -35,10 +32,10 @@ export const pipeline = {
     gestureStore.getState().decrement(pointerId) // ← or reset to 0 if you're feeling paranoid
   },
 
-  notifyGestureStore(ctx: CtxType, pointerId: number) {
-    if (ctx.event === 'swipeStart') gestureStore.getState().increment(ctx, pointerId)
+  notifyGestureStore(type: InteractionType, event: EventType, pointerId: number) {
+    if (event === 'swipeStart') gestureStore.getState().increment(type, pointerId)
 
-    if (ctx.event === 'swipeCommit' || ctx.event === 'swipeRevert') gestureStore.getState().decrement(pointerId)
+    if (event === 'swipeCommit') gestureStore.getState().decrement(pointerId)
   },
 
   orchestrate(eventPackage: PointerEventPackage) {
@@ -55,73 +52,74 @@ export const pipeline = {
       return null
     }
 
-    const desc = interpreterFn(x, y, pointerId)
-    if (!desc) return null
+    const g = interpreterFn(x, y, pointerId)
+    if (!g) return null
 
     /* -------------------------
        Solvers and Store Mutations narrowed
     -------------------------- */
-    const { type, ctx: { event } } = desc
-    let ctx: CtxType
+    const { computed, desc } = g.gesture
+    const { runtime } = g
+    const event = runtime.event
+    const type = desc.type
 
     switch (type) {
       case 'carousel': {
-        ctx = desc.ctx
-        const sr = carouselSolver?.[event]?.(desc)
-        if (sr) ctx = { ...ctx, ...sr }
-        if (ctx.storeAccepted) {
-          carouselStore.getState().apply(ctx)
+        const solution = carouselSolver?.[event]?.(runtime, desc, computed)
+        if (solution?.storeAccepted) {
+          if (solution?.event) g.runtime.event = solution.event
+          //TODO future make runtime imutable input.. and solution is used for final event override by consumers... ?
+          carouselStore.getState().apply(solution)
         }
         break
       }
       case 'slider': {
-        ctx = desc.ctx
-        const sr = sliderSolver?.[event]?.(desc)
-        if (sr) ctx = { ...ctx, ...sr }
-        if (ctx.gestureUpdate != null) interpreter.applyGestureUpdate(ctx.gestureUpdate)
-        if (ctx.storeAccepted) {
-          sliderStore.getState().apply(ctx)
+        const solution = sliderSolver?.[event]?.(runtime, desc, computed)
+        if (solution?.storeAccepted) {
+          if (solution.computedUpdate != null) interpreter.applyComputedUpdate(solution.computedUpdate, desc.base.pointerId)
+          sliderStore.getState().apply(solution)
         }
         break
       }
       case 'drag': {
-        ctx = desc.ctx
-        const sr = dragSolver?.[event]?.(desc)
-        if (sr) ctx = { ...ctx, ...sr }
-        if (ctx.storeAccepted) {
-          dragStore.getState().apply(ctx)
+        const solution = dragSolver?.[event]?.(runtime, desc, computed)
+        if (solution?.storeAccepted) {
+          dragStore.getState().apply(solution)
 
-          if (ctx.event === 'swipeStart') {
+          if (g.runtime.event === 'swipeStart') {
             dragStore.getState().setFrame(desc.base.id, desc.base.frame)
           }
         }
         break
       }
       case 'scroll': {
-        ctx = desc.ctx
-        const sr = scrollSolver?.[event]?.(desc)
-        if (sr) ctx = { ...ctx, ...sr }
-        if (ctx.gestureUpdate != null) interpreter.applyGestureUpdate(ctx.gestureUpdate)
-        if (ctx.storeAccepted) {
-          scrollStore.getState().apply(ctx)
+        const solution = scrollSolver?.[event]?.(runtime, desc, computed)
+        if (solution?.storeAccepted) {
+          if (solution.computedUpdate != null) interpreter.applyComputedUpdate(solution.computedUpdate, desc.base.pointerId)
+          if (solution?.event) g.runtime.event = solution.event
+
+
+          scrollStore.getState().apply(solution)
         }
         break
       }
       case 'button': {
-        ctx = desc.ctx
         break
       }
-      default: { throw new Error(`Unknown descriptor type: ${type}`) }
+      default: {
+        const { type } = desc
+        throw new Error(`Unknown descriptor type: ${type}`)
+      }
     }
-
+    //TODO stores missing ID!
     /* -------------------------
        Renderer
     -------------------------- */
-    domUpdater.handle(ctx)
+    domUpdater.handle(g.runtime, desc.base.element)
 
     /* -------------------------
        Global gesture storage for tsx subscription side effects
     -------------------------- */
-    this.notifyGestureStore(ctx, desc.base.pointerId)
+    this.notifyGestureStore(desc.type, g.runtime.event, desc.base.pointerId)
   }
 }

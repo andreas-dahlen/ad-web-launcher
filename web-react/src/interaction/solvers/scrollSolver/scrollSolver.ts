@@ -6,7 +6,7 @@
 
 import type { EventType } from '../../../shared/typing/core.types.ts'
 import type { ScrollDesc } from '../../types/descriptor.types.ts'
-import type { ScrollCtxPartial } from '../../types/ctx.types.ts'
+import type { ScrollCtxPartial } from '../../types/Runtime.types.ts'
 import { scrollUtils } from './scrollUtils.ts'
 import { overflowUtils } from './overflowUtils.ts'
 

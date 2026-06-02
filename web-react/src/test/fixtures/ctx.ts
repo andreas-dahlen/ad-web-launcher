@@ -1,6 +1,6 @@
-import type { CtxBase, CtxBaseSwipe, CtxButton, CtxCarousel, CtxDrag, CtxScroll, CtxSlider } from '@interaction/types/ctx.types';
+import type { CtxBase, CtxBaseSwipe, CtxButton, CtxCarousel, CtxDrag, CtxScroll, CtxSlider } from '@interaction/types/Runtime.types';
 import type { GestureUpdate } from '@interaction/types/data.types';
-import { createEl, createElByType } from '@test/functions';
+import { createEl } from '@test/functions';
 
 export function createGestureUpdate(
   overrides: Partial<GestureUpdate> = {}
@@ -22,8 +22,6 @@ export function createCtxBase(
 ): CtxBase {
   return {
     event: "press",
-    id: "test",
-    element: createEl(),
     ...overrides
   }
 }
@@ -47,7 +45,6 @@ export function createCtxButton(
   return {
     ...createCtxBase(),
     type: "button",
-    element: createElByType('button'),
     ...overrides
   }
 }
@@ -59,7 +56,6 @@ export function createCtxCarousel(
   return {
     ...createCtxSwipe(),
     type: "carousel",
-    element: createElByType('carousel'),
     delta1D: 30,
     direction: { axis: "vertical", dir: "up" },
     ...overrides
@@ -71,7 +67,6 @@ export function createCtxSlider(
   return {
     ...createCtxSwipe(),
     type: "slider",
-    element: createElByType('slider'),
     delta1D: 30,
     gestureUpdate: createGestureUpdate(),
     ...overrides
@@ -83,7 +78,6 @@ export function createCtxScroll(
   return {
     ...createCtxSwipe(),
     type: "scroll",
-    element: createElByType('scroll'),
     delta1D: 30,
     overflowValue: 30,
     isVisible: true,
@@ -97,7 +91,6 @@ export function createCtxDrag(
   return {
     ...createCtxSwipe(),
     type: "drag",
-    element: createElByType('drag'),
     ...overrides
   }
 }

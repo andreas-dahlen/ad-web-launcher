@@ -2,7 +2,7 @@
 
 //composition layer
 
-import type { CtxType } from '@interaction/types/ctx.types'
+import type { CtxType } from '@interaction/types/Runtime.types'
 import type { SnapConfig } from '@primitives/prim.types'
 import type { Axis1D } from '@typing/core.types'
 import type { DataAttributes } from '@typing/propUtils.types'
