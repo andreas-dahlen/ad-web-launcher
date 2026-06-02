@@ -7,8 +7,7 @@ export const sliderUtils = {
 
   normalize(desc: SliderDesc): Normalized1D {
     const { axis } = desc.base
-    if (axis === 'both') return {}
-    const base = normalizeBase(desc.base, desc.ctx.delta)
+    const base = normalizeBase(desc.base, desc.base.axis, desc.ctx.delta)
     const track = vector.resolveByAxis1D(desc.data.containerSize.width, desc.data.containerSize.height, axis)
     const thumb = vector.resolveByAxis1D(desc.data.thumbSize.width, desc.data.thumbSize.height, axis)
     return {

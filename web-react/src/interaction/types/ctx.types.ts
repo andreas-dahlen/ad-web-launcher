@@ -2,7 +2,7 @@ import type { GestureUpdate } from './data.types.ts'
 import type { Direction, EventType, Vec2 } from '../../shared/typing/core.types.ts'
 
 export interface CancelData {
-  element: HTMLElement
+  readonly element: HTMLElement
   pressCancel: boolean
 }
 

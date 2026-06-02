@@ -11,8 +11,8 @@ export const gestureUtils = {
 		return {
 			left: normalizeParameter(rect.left), //needs to be subtracted with debug frame rect if ever used!
 			top: normalizeParameter(rect.top), //works
-			width: normalizeParameter(rect.width),
-			height: normalizeParameter(rect.height), //in current system these shouldn´t be normalized!? never used though... width and height...
+			width: rect.width,
+			height: rect.height, //in current system these shouldn´t be normalized!? never used though... width and height...
 		}
 	},
 
@@ -22,22 +22,6 @@ export const gestureUtils = {
 			y: normalizeParameter(delta.y)
 		}
 	},
-
-	resolveAxis(intentAxis: Axis, desc: Descriptor): Axis | null {
-		if (desc.type == 'button') return null
-		if (desc.type == 'drag' && desc.data.locked) return null
-		// desc accepts both → use intent axis
-		if (desc.base.axis === 'both') {
-			return 'both'
-		}
-		// desc is strict → must match intent
-		if (desc.base.axis === intentAxis) {
-			return intentAxis
-		}
-		// Axis not supported
-		return null
-	},
-
 	//FUTURE possible swipeThreshold dif for every type
 	swipeThresholdCalc(distance: number, instantSwipe: boolean): boolean {
 		if (instantSwipe) return true
@@ -52,6 +36,12 @@ export const gestureUtils = {
 		return distance >= screenSize * ratio
 	},
 
+	isAxisSupported(intentAxis: Axis, descAxis: Axis): boolean {
+		return (
+			descAxis === 'both' ||
+			descAxis === intentAxis
+		)
+	},
 	/* =========================
 	Descriptor utils
 	========================= */
@@ -61,7 +51,9 @@ export const gestureUtils = {
 		const { swipeable, instantSwipe } = desc.capabilities
 		if (!swipeable) return false
 		if (instantSwipe) return true
-		const axis = this.resolveAxis(intentAxis, desc)
-		return !!axis
+		return this.isAxisSupported(
+			intentAxis,
+			desc.base.axis
+		)
 	}
 }

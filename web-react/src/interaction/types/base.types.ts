@@ -8,7 +8,6 @@ export interface BaseInteraction {
 }
 export type BaseWithSwipe =
   BaseInteraction & {
-    readonly axis: Axis
     readonly grabOffset: Vec2
     readonly frame: FrameSnapshot
   }

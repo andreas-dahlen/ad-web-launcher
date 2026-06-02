@@ -27,7 +27,7 @@ export const carouselSolver: Partial<Record<EventType, (desc: CarouselDesc) => C
 
     const locked = desc.data.lockSwipeAt
       ? carouselUtils.isLocked(norm.mainDelta, desc.data?.index, desc.data?.lockSwipeAt)
-      : null
+      : false
 
     if (gated || locked) return { storeAccepted: false }
     return { delta1D: norm.mainDelta, storeAccepted: true }
@@ -44,7 +44,7 @@ export const carouselSolver: Partial<Record<EventType, (desc: CarouselDesc) => C
 
     const locked = desc.data.lockSwipeAt
       ? carouselUtils.isLocked(norm.mainDelta, desc.data?.index, desc.data?.lockSwipeAt)
-      : null
+      : false
 
     if (gated || locked) return { event: 'swipeRevert', storeAccepted: true }
 

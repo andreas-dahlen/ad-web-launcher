@@ -17,8 +17,7 @@ export function createBaseSwipe(
 ): BaseWithSwipe {
   return {
     ...createBaseInteraction(),
-    axis: 'both',
-    grabOffset: { x: 0, y: 0 },
+    grabOffset: { x: 0, y: 900 },
     frame: { left: 0, top: 0, width: 100, height: 100 },
     ...overrides,
   }

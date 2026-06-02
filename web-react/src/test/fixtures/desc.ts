@@ -4,8 +4,9 @@ import { createCtxButton, createCtxCarousel, createCtxDrag, createCtxScroll, cre
 import { createCarouselData, createDragData, createScrollData, createSliderData } from '@test/fixtures/data';
 
 export function createButtonDesc(
-  overrides: Partial<ButtonDesc> = {}): ButtonDesc {
+  overrides: Partial<ButtonDesc> = {}): { type: 'button' } & ButtonDesc {
   return {
+    type: 'button',
     base: {
       ...createBaseInteraction(),
       ...overrides.base
@@ -23,10 +24,12 @@ export function createButtonDesc(
   }
 }
 export function createCarouselDesc(
-  overrides: Partial<CarouselDesc> = {}): CarouselDesc {
+  overrides: Partial<CarouselDesc> = {}): { type: 'carousel' } & CarouselDesc {
   return {
+    type: 'carousel',
     base: {
       ...createBaseSwipe(),
+      axis: 'horizontal',
       ...overrides.base
     },
     data: {
@@ -47,10 +50,12 @@ export function createCarouselDesc(
 }
 
 export function createSliderDesc(
-  overrides: Partial<SliderDesc> = {}): SliderDesc {
+  overrides: Partial<SliderDesc> = {}): { type: 'slider' } & SliderDesc {
   return {
+    type: 'slider',
     base: {
       ...createBaseSwipe(),
+      axis: 'horizontal',
       ...overrides.base
     },
     data: {
@@ -70,10 +75,12 @@ export function createSliderDesc(
   }
 }
 export function createScrollDesc(
-  overrides: Partial<ScrollDesc> = {}): ScrollDesc {
+  overrides: Partial<ScrollDesc> = {}): { type: 'scroll' } & ScrollDesc {
   return {
+    type: 'scroll',
     base: {
       ...createBaseSwipe(),
+      axis: 'vertical',
       ...overrides.base
     },
     data: {
@@ -93,10 +100,12 @@ export function createScrollDesc(
   }
 }
 export function createDragDesc(
-  overrides: Partial<DragDesc> = {}): DragDesc {
+  overrides: Partial<DragDesc> = {}): { type: 'drag' } & DragDesc {
   return {
+    type: 'drag',
     base: {
       ...createBaseSwipe(),
+      axis: "both",
       ...overrides.base
     },
     data: {

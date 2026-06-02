@@ -1,19 +1,19 @@
 import type { CarouselData, CarouselModifiers, DragData, DragModifiers, ScrollData, SliderData } from '@interaction/types/data.types';
 
 export function createCarouselData(
-  overrides: Partial<CarouselData> = {}
+  overrides: Partial<CarouselData & CarouselModifiers> = {}
 ): CarouselData & CarouselModifiers {
   return {
     index: 3,
     sceneSize: { width: 100, height: 100 },
-    lockSwipeAt: { prev: 0, next: 3 },
+    lockSwipeAt: { prev: 0, next: 5 },
     ...overrides
   }
 }
 
 
 export function createDragData(
-  overrides: Partial<DragData> = {}
+  overrides: Partial<DragData & DragModifiers> = {}
 ): DragData & DragModifiers {
   return {
     settledOffset: { x: 0, y: 0 },

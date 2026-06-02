@@ -6,7 +6,7 @@ import type { ScrollDesc } from '../../types/descriptor.types.ts'
 export const scrollUtils = {
 
   normalize(desc: ScrollDesc): number | null {
-    const base = normalizeBase(desc.base, desc.ctx.delta)
+    const base = normalizeBase(desc.base, desc.base.axis, desc.ctx.delta)
     if (base.mainDelta == null) return null
     return base.mainDelta
   },

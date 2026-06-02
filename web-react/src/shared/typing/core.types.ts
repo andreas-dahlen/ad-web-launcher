@@ -1,13 +1,16 @@
-export type Axis = 'horizontal' | 'vertical' | 'both'
-export type Axis1D = Exclude<Axis, 'both'>
+export type Axis = Axis1D | Axis2D
+export type Axis1D = 'horizontal' | 'vertical'
+export type Axis2D = 'both'
 export type EventBridgeType = 'down' | 'move' | 'up'
-type horizontal = 'left' | 'right'
-type vertical = 'up' | 'down'
+type LeftOrRight = 'left' | 'right'
+type UpOrDown = 'up' | 'down'
 
+
+//used for carousel commit
 export type Direction =
-  | { axis: 'horizontal'; dir: horizontal }
-  | { axis: 'vertical'; dir: vertical }
-  | { axis: 'both'; dir: horizontal | vertical }
+  | { axis: 'horizontal'; dir: LeftOrRight }
+  | { axis: 'vertical'; dir: UpOrDown }
+  | { axis: 'both'; dir: LeftOrRight | UpOrDown }
 
 export type OnEdgeDir = 'left' | 'right' | 'up' | 'down'
 
@@ -48,4 +51,10 @@ export function toType(v: string | undefined): InteractionType | null {
 
 export function toOnEdgeDir(onEdgeDir: string | undefined): OnEdgeDir | null {
   return onEdgeDir != null && VALID_DIRS.has(onEdgeDir as OnEdgeDir) ? onEdgeDir as OnEdgeDir : null
+}
+
+export function assertAxis(v: string): asserts v is Axis {
+  if (!VALID_AXES.has(v as Axis)) {
+    throw new Error('Invalid axis')
+  }
 }

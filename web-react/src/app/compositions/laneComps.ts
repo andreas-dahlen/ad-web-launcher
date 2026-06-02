@@ -9,6 +9,8 @@ type BaseCompConfig = CarouselSceneProps & {
   id: string
   axis: Axis1D
   renderLayer?: LayerKey
+  lockPrevAt?: number
+  lockNextAt?: number
 }
 
 // 'id' | 'axis' | 'sceneCount' | 'scenes'
@@ -33,7 +35,9 @@ export const baseComp: BaseCompConfig[] = [
   {
     id: 'top-horizontal',
     axis: 'horizontal',
-    sceneCount: lanes.horizontal.top.length
+    sceneCount: lanes.horizontal.top.length,
+    lockNextAt: 2,
+    lockPrevAt: 0
   },
   {
     id: 'middle-horizontal',

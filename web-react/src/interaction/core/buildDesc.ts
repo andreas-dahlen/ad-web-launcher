@@ -24,43 +24,42 @@ export const buildDesc = {
   ========================= */
   resolveFromElement(el: HTMLElement, x: number, y: number, pointerId: number): Descriptor | null {
     const metaData = extractDomMeta(el)
-    console.log(metaData)
     if (!metaData) return null
-    console.log("it passed")
     const capabilities = this.buildCapabilities(metaData)
     const r = { capabilities, x, y, pointerId }
     switch (metaData.type) {
       case 'carousel': {
         const desc = this.buildCarousel(metaData, r)
-        if (desc) return { type: "carousel", ...desc }
+        if (desc) return desc
         return null
       }
       case 'slider': {
         const desc = this.buildSlider(metaData, r)
-        if (desc) return { type: "slider", ...desc }
+        if (desc) return desc
         return null
       }
       case 'drag': {
         const desc = this.buildDrag(metaData, r)
-        if (desc) return { type: "drag", ...desc }
+        if (desc) return desc
         return null
       }
       case 'scroll': {
         const desc = this.buildScroll(metaData, r)
-        if (desc) return { type: "scroll", ...desc }
+        if (desc) return desc
         return null
       }
-      case 'button': return {
-        type: "button",
-        ...this.buildButton(metaData, r)
+      case 'button': {
+        return this.buildButton(metaData, r)
       }
       default: return null
     }
   },
   buildCarousel(metaData: DomMeta, r: Builder): CarouselDesc | null {
+    if (!metaData.axis || metaData.axis === 'both') return null
     const data = this.buildCarouselData(metaData)
     if (data) return {
-      base: this.buildSwipeBase(metaData, r),
+      type: 'carousel',
+      base: { ...this.buildSwipeBase(metaData, r), axis: metaData.axis },
       data: data,
       capabilities: r.capabilities,
       ctx: this.buildCarouselCtx(metaData)
@@ -68,9 +67,11 @@ export const buildDesc = {
     return null
   },
   buildSlider(metaData: DomMeta, r: Builder): SliderDesc | null {
+    if (!metaData.axis || metaData.axis === 'both') return null
     const data = this.buildSliderData(metaData)
     if (data) return {
-      base: this.buildSwipeBase(metaData, r),
+      type: 'slider',
+      base: { ...this.buildSwipeBase(metaData, r), axis: metaData.axis },
       data: data,
       capabilities: r.capabilities,
       ctx: this.buildSliderCtx(metaData)
@@ -78,9 +79,11 @@ export const buildDesc = {
     return null
   },
   buildDrag(metaData: DomMeta, r: Builder): DragDesc | null {
+    if (!metaData.axis || metaData.axis !== 'both') return null
     const data = this.buildDragData(metaData)
     if (data) return {
-      base: this.buildSwipeBase(metaData, r),
+      type: 'drag',
+      base: { ...this.buildSwipeBase(metaData, r), axis: metaData.axis },
       data: data,
       capabilities: r.capabilities,
       ctx: this.buildDragCtx(metaData)
@@ -89,9 +92,11 @@ export const buildDesc = {
   },
 
   buildScroll(metaData: DomMeta, r: Builder): ScrollDesc | null {
+    if (!metaData.axis || metaData.axis === 'both') return null
     const data = this.buildScrollData(metaData)
     if (data) return {
-      base: this.buildSwipeBase(metaData, r),
+      type: 'scroll',
+      base: { ...this.buildSwipeBase(metaData, r), axis: metaData.axis },
       data: data,
       capabilities: r.capabilities,
       ctx: this.buildScrollCtx(metaData)
@@ -101,6 +106,7 @@ export const buildDesc = {
 
   buildButton(metaData: DomMeta, r: Builder): ButtonDesc {
     return {
+      type: 'button',
       base: this.buildBase(metaData, r.pointerId),
       capabilities: r.capabilities,
       ctx: this.buildBtnCtx(metaData)
@@ -124,7 +130,6 @@ export const buildDesc = {
     const { grabOffset, frame } = domQuery.getElSnapshot(r.x, r.y, metaData.el)
     return {
       ...base,
-      axis: metaData.axis ?? 'both',
       grabOffset: grabOffset,
       frame: frame
     }
