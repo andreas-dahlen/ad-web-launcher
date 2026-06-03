@@ -35,11 +35,13 @@ export default function Scroll({
   usePointerBridge({
     elRef: contentRef,
     disabled: !interactive,
-    // onReaction: (reaction) => {
-    //   if (reaction.detail?.event === 'swipeCommit' && onEdge && allowedEdgeOverflow) {
-    //     onEdge(overflow, allowedEdgeOverflow)
-    //   }
-    // }
+    onReaction: (reaction) => {
+      console.log('EVENT:', reaction.detail)
+      //   if (reaction.detail?.event === 'swipeCommit' && onEdge && allowedEdgeOverflow) {
+      //     onEdge(overflow, allowedEdgeOverflow)
+      //   }
+      // }
+    }
   })
 
   // ── Slider motion / styling ─────────────────────────────

@@ -6,39 +6,42 @@
 
 import type { EventType } from '../../../shared/typing/core.types.ts'
 import type { ScrollDesc } from '../../types/descriptor.types.ts'
-import type { ScrollCtxPartial } from '../../types/Runtime.types.ts'
+import type { Runtime, ScrollSolution } from '../../types/Runtime.types.ts'
 import { scrollUtils } from './scrollUtils.ts'
 import { overflowUtils } from './overflowUtils.ts'
+import type { ComputedPatch } from '@interaction/types/computed.types.ts'
 
-export const scrollSolver: Partial<Record<EventType, (desc: ScrollDesc) => ScrollCtxPartial>> = {
+export const scrollSolver: Partial<
+  Record<EventType, (runtime: Runtime, desc: ScrollDesc, computed: ComputedPatch) => ScrollSolution>
+> = {
 
-  swipeStart(desc) {
-    const delta1d = scrollUtils.normalize(desc)
+  swipeStart(runtime, desc) {
+    const delta1d = scrollUtils.normalize(desc.base, runtime.delta)
     if (delta1d == null) return { storeAccepted: false }
-    const isOverflow = overflowUtils.isOverflow(desc)
+    const isOverflow = overflowUtils.isOverflow(desc.data, runtime, desc.base.axis)
     return isOverflow
-      ? { ...overflowUtils.resolveStart(desc, isOverflow), storeAccepted: true }
+      ? { ...overflowUtils.resolveStart(desc.data, desc.base.pointerId, isOverflow), storeAccepted: true }
       : { ...scrollUtils.resolveStart(delta1d, desc, isOverflow), storeAccepted: true }
   },
 
-  swipe(desc) {
-    const delta1d = scrollUtils.normalize(desc)
-    const isOverflow = desc.ctx.gestureUpdate?.isOverflow
+  swipe(runtime, desc, computed) {
+    const delta1d = scrollUtils.normalize(desc.base, runtime.delta)
+    const isOverflow = computed.isOverflow
     if (isOverflow == null || delta1d == null) return { storeAccepted: false }
     const result = isOverflow
-      ? overflowUtils.resolveSwipe(delta1d, desc)
-      : scrollUtils.resolveSwipe(delta1d, desc)
+      ? overflowUtils.resolveSwipe(delta1d, desc.data, computed)
+      : scrollUtils.resolveSwipe(delta1d, desc.data)
     return { ...result, storeAccepted: true }
   },
 
-  swipeCommit(desc) {
-    const delta1d = scrollUtils.normalize(desc)
-    const isOverflow = desc.ctx.gestureUpdate?.isOverflow
+  swipeCommit(runtime, desc, computed) {
+    const delta1d = scrollUtils.normalize(desc.base, runtime.delta)
+    const isOverflow = computed.isOverflow
     if (isOverflow == null || delta1d == null) return { storeAccepted: false }
 
     const result = isOverflow
       ? overflowUtils.resolveEnd(delta1d, desc)
-      : scrollUtils.resolveEnd(delta1d, desc)
+      : scrollUtils.resolveEnd(delta1d, desc.data)
 
     return { ...result, storeAccepted: true }
   },

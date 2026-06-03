@@ -1,5 +1,4 @@
-import type { CtxType } from '@interaction/types/Runtime.types'
-import type { Axis1D, OnEdgeDir } from '@typing/core.types'
+import type { Axis1D, EventType, OnEdgeDir } from '@typing/core.types'
 import type { BaseProps, DataAttributes } from '@typing/propUtils.types'
 
 //discriminating unions - capabilities
@@ -27,7 +26,7 @@ export type OverflowProps =
 export type DragProps = BaseProps & SnapConfig & {
   children?: React.ReactNode
   dragDataAttrs?: DataAttributes
-  onSwipeCommit?: (detail: CtxType) => void
+  onSwipeCommit?: (detail: EventType) => void
 }
 
 export type CarouselProps = BaseProps & CarouselSceneProps & {
@@ -35,7 +34,7 @@ export type CarouselProps = BaseProps & CarouselSceneProps & {
   lockPrevAt?: number
   lockNextAt?: number
   carouselDataAttrs?: DataAttributes
-  onSwipeCommit?: (detail: CtxType) => void
+  onSwipeCommit?: (detail: EventType) => void
 }
 
 export type SliderProps = BaseProps & {
@@ -59,5 +58,5 @@ export type ButtonProps = BaseProps & {
   action?: string
   children?: React.ReactNode
   buttonDataAttrs?: DataAttributes
-  onPressRelease?: (detail: CtxType) => void
+  onPressRelease?: (detail: EventType) => void
 }

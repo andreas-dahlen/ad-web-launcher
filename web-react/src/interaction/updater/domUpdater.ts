@@ -17,6 +17,20 @@ function dispatchEvent(element: HTMLElement, event: EventType) {
   element.dispatchEvent(new CustomEvent<EventType>('reaction', { detail: event }))
 }
 
+//FUTURE SYSTEM DESIGN
+// Level 1
+// onReaction(event)
+
+// Level 2
+// filter/translate event → meaningful primitive state
+
+// Level 3
+// onValueChange(value)
+// replaceStale()
+// openApp()
+// setVolume()
+// navigate()
+
 /* -------------------------------------------------
    DOM / UI attribute handlers
 ------------------------------------------------- */

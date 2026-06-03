@@ -1,7 +1,7 @@
 import { immer } from "zustand/middleware/immer"
 import { create } from 'zustand'
-import type { Direction, Size2D } from '../../../shared/typing/core.types'
-import type { CtxCarousel } from '@interaction/types/Runtime.types'
+import type { Direction, EventType, Size2D } from '../../../shared/typing/core.types'
+import type { CarouselSolution } from '@interaction/types/Runtime.types'
 
 type Carousel = {
   //react motion
@@ -18,6 +18,8 @@ type Carousel = {
   pendingDir: Direction | null
 }
 
+type AcceptedCarousel = Extract<CarouselSolution, { storeAccepted: true }>
+
 export type CarouselStore = {
   bindings: Record<string, Carousel>
   init: (id: string) => void
@@ -29,7 +31,7 @@ export type CarouselStore = {
 
   setSettling: (id: string) => void
 
-  apply: (ctx: CtxCarousel) => void
+  apply: (id: string, event: EventType, solv: AcceptedCarousel) => void
 }
 
 export const carouselStore = create<CarouselStore>()(
@@ -106,12 +108,12 @@ export const carouselStore = create<CarouselStore>()(
       })
     },
 
-    apply: (ctx) => {
+    apply: (id, event, solv) => {
       set(state => {
-        const s = state.bindings[ctx.id]
+        const s = state.bindings[id]
         if (!s) return
 
-        switch (ctx.event) {
+        switch (event) {
           case 'swipeStart': {
             s.dragging = true
             s.settling = false
@@ -123,13 +125,13 @@ export const carouselStore = create<CarouselStore>()(
             break
           }
           case 'swipe': {
-            s.liveOffset = ctx.delta1D ?? s.liveOffset
+            s.liveOffset = solv.delta1D ?? s.liveOffset
             break
           }
           case 'swipeCommit': {
             if (s.settling) return
-            s.pendingDir = ctx.direction ?? null
-            s.liveOffset = ctx.delta1D ?? s.liveOffset
+            s.pendingDir = solv.direction ?? null
+            s.liveOffset = solv.delta1D ?? s.liveOffset
             s.dragging = false
             break
           }
@@ -139,7 +141,7 @@ export const carouselStore = create<CarouselStore>()(
             s.pendingDir = null
             break
           }
-          default: { throw new Error(`Invalid carousel event! Event: ${ctx.event}`) }
+          default: { throw new Error(`Invalid carousel event! Event: ${event}`) }
         }
       })
     }

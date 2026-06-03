@@ -38,7 +38,7 @@ export default function Drag({
     elRef: dragItemRef,
     disabled: !interactive,
     onReaction: (reaction) => {
-      if (reaction.detail?.event === 'swipeCommit' && onSwipeCommit) {
+      if (reaction.detail === 'swipeCommit' && onSwipeCommit) {
         onSwipeCommit(reaction.detail)
       }
     }

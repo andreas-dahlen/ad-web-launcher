@@ -1,6 +1,5 @@
 import type { ButtonDesc, CarouselDesc, DragDesc, ScrollDesc, SliderDesc } from '@interaction/types/descriptor.types';
 import { createBaseInteraction, createBaseSwipe } from '@test/fixtures/base';
-import { createCtxButton, createCtxCarousel, createCtxDrag, createCtxScroll, createCtxSlider } from '@test/fixtures/ctx';
 import { createCarouselData, createDragData, createScrollData, createSliderData } from '@test/fixtures/data';
 
 export function createButtonDesc(
@@ -16,10 +15,6 @@ export function createButtonDesc(
       swipeable: false,
       instantSwipe: false,
       ...overrides.capabilities
-    },
-    ctx: {
-      ...createCtxButton(),
-      ...overrides.ctx
     }
   }
 }
@@ -41,10 +36,6 @@ export function createCarouselDesc(
       swipeable: true,
       instantSwipe: false,
       ...overrides.capabilities
-    },
-    ctx: {
-      ...createCtxCarousel(),
-      ...overrides.ctx
     }
   }
 }
@@ -67,10 +58,6 @@ export function createSliderDesc(
       swipeable: true,
       instantSwipe: true,
       ...overrides.capabilities
-    },
-    ctx: {
-      ...createCtxSlider(),
-      ...overrides.ctx
     }
   }
 }
@@ -92,10 +79,6 @@ export function createScrollDesc(
       swipeable: true,
       instantSwipe: true,
       ...overrides.capabilities
-    },
-    ctx: {
-      ...createCtxScroll(),
-      ...overrides.ctx
     }
   }
 }
@@ -117,10 +100,6 @@ export function createDragDesc(
       swipeable: true,
       instantSwipe: false,
       ...overrides.capabilities
-    },
-    ctx: {
-      ...createCtxDrag(),
-      ...overrides.ctx
     }
   }
 }

@@ -4,7 +4,7 @@ import { domQuery } from './domQuery.ts'
 import type { Axis, EventType, Vec2 } from '../../shared/typing/core.types.ts'
 import type { Descriptor } from '../types/descriptor.types.ts'
 import type { Runtime } from '@interaction/types/Runtime.types.ts'
-import type { ComputedPatch } from '@interaction/types/data.types.ts'
+import type { ComputedPatch } from '@interaction/types/computed.types.ts'
 
 
 

@@ -23,7 +23,7 @@ export default function Button({
     elRef: buttonRef,
     disabled: !interactive,
     onReaction: (reaction) => {
-      const event = reaction.detail?.event
+      const event = reaction.detail
       if (!event) return
 
       if (event === 'pressRelease' && onPressRelease) {

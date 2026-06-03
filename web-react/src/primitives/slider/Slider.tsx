@@ -48,7 +48,7 @@ export default function Slider({
     elRef: sliderRef,
     disabled: !interactive,
     onReaction: (reaction) => {
-      const event = reaction.detail?.event
+      const event = reaction.detail
       if (!event) return
 
       const shouldReact =

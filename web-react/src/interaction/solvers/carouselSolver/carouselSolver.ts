@@ -8,7 +8,7 @@ import type { EventType } from '../../../shared/typing/core.types.ts'
 import type { CarouselSolution, Runtime } from '../../types/Runtime.types.ts'
 import { carouselUtils } from './carouselUtils.ts'
 import { exceedsCrossRange } from '../utils/axisUtils.ts'
-import type { ComputedPatch } from '@interaction/types/data.types.ts'
+import type { ComputedPatch } from '@interaction/types/computed.types.ts'
 
 export const carouselSolver: Partial<
   Record<EventType, (runtime: Runtime, desc: CarouselDesc, computed: ComputedPatch) => CarouselSolution>

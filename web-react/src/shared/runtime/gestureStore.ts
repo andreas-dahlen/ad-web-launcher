@@ -1,5 +1,4 @@
 import type { InteractionType } from '../typing/core.types';
-import type { CtxType } from '@interaction/types/Runtime.types';
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 
@@ -12,7 +11,7 @@ export type GestureStore = {
   activeGesture: InteractionType | 'none'
   gestureNodes: Record<number, ActiveGesture>
 
-  increment: (ctx: CtxType, id: number) => void
+  increment: (type: InteractionType, id: number) => void
   decrement: (id: number) => void
 }
 
@@ -24,15 +23,15 @@ export const gestureStore = create<GestureStore>()(
 
     activeGesture: 'none',
 
-    increment: (ctx, id) => {
+    increment: (type, id) => {
       if (get().gestureNodes[id]) return
 
       set(state => {
         state.gestureNodes[id] = {
           pointerId: id,
-          type: ctx.type
+          type: type
         }
-        state.activeGesture = ctx.type
+        state.activeGesture = type
       })
     },
 

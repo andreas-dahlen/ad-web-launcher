@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
-import type { Vec2 } from '@typing/core.types'
-import type { CtxDrag } from '@interaction/types/Runtime.types'
+import type { EventType, Vec2 } from '@typing/core.types'
+import type { DragSolution } from '@interaction/types/Runtime.types'
 import type { DragLayout } from '@interaction/types/data.types'
 import type { FrameSnapshot } from '@interaction/types/base.types'
 
@@ -18,6 +18,8 @@ type Drag = {
   frame: FrameSnapshot
 }
 
+type AcceptedDrag = Extract<DragSolution, { storeAccepted: true }>
+
 export type DragStore = {
   bindings: Record<string, Drag>
   init: (id: string) => void
@@ -28,7 +30,7 @@ export type DragStore = {
   setFrame: (id: string, frame: FrameSnapshot) => void
   setPosition: (id: string, pos: Vec2) => void
 
-  apply: (ctx: CtxDrag) => void
+  apply: (id: string, event: EventType, solv: AcceptedDrag) => void
 }
 
 export const dragStore = create<DragStore>()(
@@ -104,27 +106,27 @@ export const dragStore = create<DragStore>()(
       })
     },
 
-    apply: (ctx) => {
+    apply: (id, event, solv) => {
       set(state => {
-        const s = state.bindings[ctx.id]
+        const s = state.bindings[id]
         if (!s) return
-        switch (ctx.event) {
+        switch (event) {
           case 'swipeStart': {
             s.dragging = true
             s.liveOffset = { x: 0, y: 0 }
             break
           }
           case 'swipe': {
-            s.liveOffset = ctx.delta ?? s.liveOffset
+            s.liveOffset = solv.delta ?? s.liveOffset
             break
           }
           case 'swipeCommit': {
-            s.settledOffset = ctx.delta ?? s.settledOffset
+            s.settledOffset = solv.delta ?? s.settledOffset
             s.liveOffset = { x: 0, y: 0 }
             s.dragging = false
             break
           }
-          default: { throw new Error(`Invalid drag event! Event: ${ctx.event}`) }
+          default: { throw new Error(`Invalid drag event! Event: ${event}`) }
         }
       })
     }

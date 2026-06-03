@@ -69,22 +69,29 @@ export const pipeline = {
         if (solution?.storeAccepted) {
           if (solution?.event) g.runtime.event = solution.event
           //TODO future make runtime imutable input.. and solution is used for final event override by consumers... ?
-          carouselStore.getState().apply(solution)
+          carouselStore.getState().apply(desc.base.id, runtime.event, solution)
         }
         break
       }
       case 'slider': {
         const solution = sliderSolver?.[event]?.(runtime, desc, computed)
         if (solution?.storeAccepted) {
+
           if (solution.computedUpdate != null) interpreter.applyComputedUpdate(solution.computedUpdate, desc.base.pointerId)
-          sliderStore.getState().apply(solution)
+          sliderStore.getState().apply(desc.base.id, runtime.event, solution)
         }
         break
       }
       case 'drag': {
         const solution = dragSolver?.[event]?.(runtime, desc, computed)
         if (solution?.storeAccepted) {
-          dragStore.getState().apply(solution)
+          console.log('[drag pipeline]', {
+            id: desc.base.id,
+            event,
+            storeAccepted: solution?.storeAccepted,
+            delta: solution?.delta,
+          })
+          dragStore.getState().apply(desc.base.id, runtime.event, solution)
 
           if (g.runtime.event === 'swipeStart') {
             dragStore.getState().setFrame(desc.base.id, desc.base.frame)
@@ -99,7 +106,7 @@ export const pipeline = {
           if (solution?.event) g.runtime.event = solution.event
 
 
-          scrollStore.getState().apply(solution)
+          scrollStore.getState().apply(desc.base.id, runtime.event, solution)
         }
         break
       }

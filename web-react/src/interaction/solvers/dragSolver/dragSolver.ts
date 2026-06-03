@@ -12,7 +12,7 @@ import type { EventType } from '../../../shared/typing/core.types.ts'
 import type { DragDesc } from '../../types/descriptor.types.ts'
 import type { DragSolution, Runtime } from '../../types/Runtime.types.ts'
 import { dragUtils } from './dragUtils.ts'
-import type { ComputedPatch } from '@interaction/types/data.types.ts'
+import type { ComputedPatch } from '@interaction/types/computed.types.ts'
 
 export const dragSolver: Partial<
   Record<EventType, (runtime: Runtime, desc: DragDesc, computed: ComputedPatch) => DragSolution>

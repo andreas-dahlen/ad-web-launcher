@@ -1,6 +1,6 @@
 
 
-import type { ComputedPatch } from '@interaction/types/data.types.ts'
+import type { ComputedPatch } from '@interaction/types/computed.types.ts'
 import type { Direction, EventType, Vec2 } from '../../shared/typing/core.types.ts'
 
 export interface CancelData {
@@ -13,7 +13,6 @@ export type Runtime = {
   delta: Vec2
   cancel?: CancelData
   thresholdValue?: Vec2
-  computed?: ComputedPatch
 }
 
 export type CarouselSolution = | {
@@ -37,7 +36,7 @@ export type ScrollSolution = | {
   storeAccepted: false
 } | {
   storeAccepted: true
-  delta1D: number
+  delta1D?: number
   overflowValue?: number
   isVisible?: boolean
   computedUpdate?: ComputedPatch
@@ -116,3 +115,5 @@ export interface Normalized1D {
         Custom Event typing
     -------------------------- */
 // export type ReactionEvent = CustomEvent<CtxType>
+
+export type ReactionEvent = CustomEvent<EventType>

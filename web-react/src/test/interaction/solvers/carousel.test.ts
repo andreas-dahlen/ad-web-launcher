@@ -1,6 +1,5 @@
 import { carouselSolver } from '@interaction/solvers/carouselSolver/carouselSolver'
 import { createBaseSwipe } from '@test/fixtures/base'
-import { createCtxCarousel } from '@test/fixtures/ctx'
 import { createCarouselData } from '@test/fixtures/data'
 import { createCarouselDesc } from '@test/fixtures/desc'
 import { describe, expect, it } from 'vitest'
@@ -23,9 +22,6 @@ describe('CarosuelSolver', () => {
           lockSwipeAt: undefined,
           sceneSize: { width: 0, height: 0 }
         }),
-        ctx: createCtxCarousel({
-          delta: { x: 500, y: 500 }
-        })
       })
       const result = carouselSolver.swipe?.(desc)
       expect(result?.storeAccepted).toBe(false)
@@ -36,9 +32,6 @@ describe('CarosuelSolver', () => {
         data: createCarouselData({
           index: 3,
           lockSwipeAt: { prev: 1, next: 3 },
-        }),
-        ctx: createCtxCarousel({
-          delta: { x: 0, y: -5000 }
         })
       })
       const result = carouselSolver.swipe?.(desc)
@@ -49,9 +42,6 @@ describe('CarosuelSolver', () => {
         data: createCarouselData({
           index: 0,
           lockSwipeAt: { prev: 0, next: 3 },
-        }),
-        ctx: createCtxCarousel({
-          delta: { x: 0, y: 5000 }
         })
       })
       const result2 = carouselSolver.swipe?.(desc2)
@@ -78,9 +68,6 @@ describe('CarosuelSolver', () => {
         data: createCarouselData({
           lockSwipeAt: undefined,
           sceneSize: { width: 0, height: 0 }
-        }),
-        ctx: createCtxCarousel({
-          delta: { x: 500, y: 500 }
         })
       })
       const result = carouselSolver.swipeCommit?.(desc)
@@ -95,9 +82,6 @@ describe('CarosuelSolver', () => {
       data: createCarouselData({
         index: 3,
         lockSwipeAt: { prev: 1, next: 3 },
-      }),
-      ctx: createCtxCarousel({
-        delta: { x: 0, y: -5000 }
       })
     })
     const result = carouselSolver.swipeCommit?.(desc)
@@ -109,9 +93,6 @@ describe('CarosuelSolver', () => {
       data: createCarouselData({
         index: 0,
         lockSwipeAt: { prev: 0, next: 3 },
-      }),
-      ctx: createCtxCarousel({
-        delta: { x: 0, y: 5000 }
       })
     })
     const result2 = carouselSolver.swipeCommit?.(desc2)

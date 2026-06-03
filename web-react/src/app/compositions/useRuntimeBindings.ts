@@ -1,8 +1,8 @@
 import { useWallpaperStore } from '@hooks//useWallpaperStore'
-import type { CtxType } from '@interaction/types/Runtime.types'
+import type { EventType } from '@typing/core.types'
 
 type RuntimeBindings = {
-  onSwipeCommit?: (detail: CtxType) => void
+  onSwipeCommit?: (detail: EventType) => void
 }
 export default function useRuntimeBindings() {
 
@@ -10,7 +10,7 @@ export default function useRuntimeBindings() {
 
   const runtimeBindings: Record<string, RuntimeBindings> = {
     wallpaper: {
-      onSwipeCommit: (detail: CtxType) => {
+      onSwipeCommit: (detail: EventType) => {
         if (detail.type !== 'carousel') return
         const dir = detail.direction?.dir
 

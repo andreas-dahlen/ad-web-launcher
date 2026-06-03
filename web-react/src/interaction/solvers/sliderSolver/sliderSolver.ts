@@ -10,7 +10,7 @@ import type { EventType } from '../../../shared/typing/core.types.ts'
 import type { SliderDesc } from '../../types/descriptor.types.ts'
 import type { Runtime, SliderSolution } from '../../types/Runtime.types.ts'
 import { sliderUtils } from './sliderUtils.ts'
-import type { ComputedPatch } from '@interaction/types/data.types.ts'
+import type { ComputedPatch } from '@interaction/types/computed.types.ts'
 
 export const sliderSolver: Partial<
   Record<EventType, (runtime: Runtime, desc: SliderDesc, computed: ComputedPatch) => SliderSolution>
@@ -48,12 +48,12 @@ export const sliderSolver: Partial<
   /**
    * Handle swipe (drag) - clamp delta so thumb stays within [min, max] visually
    */
-  swipe(runtime, desc) { //need to pass computed values
+  swipe(runtime, desc, computed) { //need to pass computed values
     const norm = sliderUtils.normalize(desc.base, desc.data, runtime.delta)
     const gated = exceedsCrossRange(norm)
-    if (gated) return { storeAccepted: false }
+    if (gated || !norm?.mainDelta) return { storeAccepted: false }
     const value =
-      sliderUtils.resolveSwipe(norm, desc)
+      sliderUtils.resolveSwipe(norm.mainDelta, desc.data.constraints, computed)
     if (!value) return { storeAccepted: false }
     return { delta1D: value, storeAccepted: true }
   },
@@ -62,13 +62,13 @@ export const sliderSolver: Partial<
    * Handle swipeCommit - convert pixel delta to logical delta
    * Clamps result so position stays within [min, max]
    */
-  swipeCommit(runtime, desc) {
+  swipeCommit(runtime, desc, computed) {
     const norm = sliderUtils.normalize(desc.base, desc.data, runtime.delta)
     const gated = exceedsCrossRange(norm)
-    if (gated) return { storeAccepted: false }
+    if (gated || !norm?.mainDelta) return { storeAccepted: false }
 
     const value =
-      sliderUtils.resolveSwipe(norm, desc)
+      sliderUtils.resolveSwipe(norm.mainDelta, desc.data.constraints, computed)
     if (!value) return { storeAccepted: false }
     return { delta1D: value, storeAccepted: true }
   }

@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
-import type { Size2D } from '@typing/core.types'
-import { type CtxScroll } from '@interaction/types/Runtime.types'
+import type { EventType, Size2D } from '@typing/core.types'
+import type { ScrollSolution } from '@interaction/types/Runtime.types'
 
 type Scroll = {
   //react motion
@@ -20,6 +20,8 @@ type Scroll = {
   contentSize: Size2D
 }
 
+type AcceptedScroll = Extract<ScrollSolution, { storeAccepted: true }>
+
 export type ScrollStore = {
   bindings: Record<string, Scroll>
   init: (id: string, fallback: Scroll) => void
@@ -29,7 +31,7 @@ export type ScrollStore = {
   setContainerSize: (id: string, containerSize: Size2D) => void
   setContentSize: (id: string, contentSize: Size2D) => void
 
-  apply: (ctx: CtxScroll) => void
+  apply: (id: string, event: EventType, solv: AcceptedScroll) => void
 }
 /* -------------------------------
    scroll state functions
@@ -76,49 +78,49 @@ export const scrollStore = create<ScrollStore>()(
       })
     },
 
-    apply: (ctx) => {
+    apply: (id, event, solv) => {
       set(state => {
-        const s = state.bindings[ctx.id]
+        const s = state.bindings[id]
         if (!s) return
-        switch (ctx.event) {
+        switch (event) {
           case 'press': { //only happens during scroll
-            s.liveValue = ctx.delta1D ?? s.liveValue
+            s.liveValue = solv.delta1D ?? s.liveValue
             s.isVisible = true
             break
           }
           case 'swipeStart': {
             s.dragging = true
-            s.liveValue = ctx.delta1D ?? s.liveValue
-            s.overflowValue = ctx.overflowValue ?? s.overflowValue
-            s.isVisible = ctx.isVisible ?? s.isVisible
+            s.liveValue = solv.delta1D ?? s.liveValue
+            s.overflowValue = solv.overflowValue ?? s.overflowValue
+            s.isVisible = solv.isVisible ?? s.isVisible
             break
           }
           case 'swipe': {
-            const newValue = ctx.delta1D ?? s.liveValue
+            const newValue = solv.delta1D ?? s.liveValue
             s.velocity = newValue - s.liveValue
             s.liveValue = newValue
-            s.overflowValue = ctx.overflowValue ?? s.overflowValue
+            s.overflowValue = solv.overflowValue ?? s.overflowValue
             break
           }
           case 'swipeCommit': {
             s.dragging = false
-            s.isVisible = ctx.isVisible ?? s.isVisible
-            s.settledValue = ctx.delta1D ?? s.liveValue
-            s.liveValue = ctx.delta1D ?? s.liveValue
-            s.overflowValue = ctx.overflowValue ?? s.overflowValue
-            if (ctx.delta1D !== undefined) startMomentum(ctx.id, s.velocity)
+            s.isVisible = solv.isVisible ?? s.isVisible
+            s.settledValue = solv.delta1D ?? s.liveValue
+            s.liveValue = solv.delta1D ?? s.liveValue
+            s.overflowValue = solv.overflowValue ?? s.overflowValue
+            if (solv.delta1D !== undefined) startMomentum(id, s.velocity)
             s.velocity = 0
             break
           }
           case 'swipeRevert': {
             s.dragging = false
-            s.isVisible = ctx.isVisible ?? s.isVisible
-            s.overflowValue = ctx.overflowValue ?? s.overflowValue
+            s.isVisible = solv.isVisible ?? s.isVisible
+            s.overflowValue = solv.overflowValue ?? s.overflowValue
             s.liveValue = 0
             s.settledValue = 0
             break
           }
-          default: { throw new Error(`Invalid scroll event! Event: ${ctx.event}`) }
+          default: { throw new Error(`Invalid scroll event! Event: ${event}`) }
         }
       })
     }

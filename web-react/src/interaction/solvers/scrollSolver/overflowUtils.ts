@@ -1,54 +1,58 @@
 import { getCommitOffset } from '@interaction/solvers/utils/axisUtils'
 import { vector } from '@interaction/solvers/utils/vectorUtils'
+import type { ScrollData } from '@interaction/types/data.types'
+import type { ComputedPatch } from '@interaction/types/computed.types'
 import type { ScrollDesc } from '@interaction/types/descriptor.types'
-import type { Direction } from '@typing/core.types'
+import type { Runtime } from '@interaction/types/Runtime.types'
+import type { Axis1D, Direction } from '@typing/core.types'
 
 export const overflowUtils = {
 
-  isOverflow(desc: ScrollDesc) {
-    if (!desc.data.isVisible) return true
-    if (!desc.data.onEdgeDir || !desc.ctx.thresholdValue || desc.data.settledValue !== 0) return false
-    return vector.isThresholdDirAndOnEdgeDir(desc.data.onEdgeDir, desc.base.axis, desc.ctx.thresholdValue)
+  isOverflow(data: ScrollData, runtime: Runtime, axis: Axis1D) {
+    if (!data.isVisible) return true
+    if (!data.onEdgeDir || !runtime.thresholdValue || data.settledValue !== 0) return false
+    return vector.isThresholdDirAndOnEdgeDir(data.onEdgeDir, axis, runtime.thresholdValue)
   },
 
-  resolveStart(desc: ScrollDesc, isOverflow: boolean) {
-    const startValue = desc.data.isVisible ? 0 : desc.data.containerSize.height
+  resolveStart(data: ScrollData, pointerId: number, isOverflow: boolean) {
+    const startValue = data.isVisible ? 0 : data.containerSize.height
     return {
       //could return resolveSwipe but omition is fine aswell i guess... only one frame xD
       gestureUpdate: {
-        pointerId: desc.base.pointerId,
+        pointerId: pointerId,
         isOverflow: isOverflow,
         startOverflowValue: startValue
       }
     }
   },
 
-  resolveSwipe(mainDelta: number, desc: ScrollDesc) {
-    const start = desc.ctx.gestureUpdate?.startOverflowValue ?? 0
-    const containerSize = desc.data.containerSize.height
+  resolveSwipe(mainDelta: number, data: ScrollData, computed: ComputedPatch) {
+    const start = computed.startOverflowValue ?? 0
+    const containerSize = data.containerSize.height
     return { overflowValue: -vector.clamp(start + mainDelta, 0, containerSize) }
   },
 
   resolveEnd(mainDelta: number, desc: ScrollDesc) {
-    return vector.shouldCommit(mainDelta, desc.data.containerSize.height, desc.base.axis)
-      ? this.resolveSwipeCommit(desc)
-      : this.resolveSwipeRevert(desc)
+    const { base, data } = desc
+    return vector.shouldCommit(mainDelta, data.containerSize.height, base.axis)
+      ? this.resolveSwipeCommit(data, base.axis)
+      : this.resolveSwipeRevert(data)
   },
 
-  resolveSwipeCommit(desc: ScrollDesc) {
-    const containerSize = desc.data.containerSize.height
-    if (!desc.data.onEdgeDir) return null
-    const direction = { axis: desc.base.axis, dir: desc.data.onEdgeDir } as Direction
+  resolveSwipeCommit(data: ScrollData, axis: Axis1D) {
+    const containerSize = data.containerSize.height
+    if (!data.onEdgeDir) return null
+    const direction = { axis, dir: data.onEdgeDir } as Direction
     const distance = getCommitOffset(direction, containerSize)
-    if (!desc.data.isVisible) return {
+    if (!data.isVisible) return {
       overflowValue: 0, isVisible: true
     }
     return { overflowValue: distance, isVisible: false }
   },
 
-  resolveSwipeRevert(desc: ScrollDesc) {
-    const containerSize = desc.data.containerSize.height
-    return desc.data.isVisible
+  resolveSwipeRevert(data: ScrollData) {
+    const containerSize = data.containerSize.height
+    return data.isVisible
       ? { overflowValue: 0, isVisible: true }
       : { overflowValue: -containerSize, isVisible: false }
   }

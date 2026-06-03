@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
-import type { Size2D } from '@typing/core.types'
-import type { CtxSlider } from '@interaction/types/Runtime.types'
+import type { EventType, Size2D } from '@typing/core.types'
+import type { SliderSolution } from '@interaction/types/Runtime.types'
 
 type Slider = {
   //react motion
@@ -17,6 +17,8 @@ type Slider = {
   dragging: boolean
 }
 
+type AcceptedSlider = Extract<SliderSolution, { storeAccepted: true }>
+
 export type SliderStore = {
   bindings: Record<string, Slider>
   init: (id: string) => void
@@ -27,7 +29,7 @@ export type SliderStore = {
   setContainerSize: (id: string, containerSize: Size2D) => void
   setThumbSize: (id: string, thumbSize: Size2D) => void
 
-  apply: (ctx: CtxSlider) => void
+  apply: (id: string, event: EventType, solv: AcceptedSlider) => void
 }
 /* -------------------------------
    Slider state functions
@@ -88,30 +90,30 @@ export const sliderStore = create<SliderStore>()(
       })
     },
 
-    apply: (ctx) => {
+    apply: (id, event, solv) => {
       set(state => {
-        const s = state.bindings[ctx.id]
+        const s = state.bindings[id]
         if (!s) return
-        switch (ctx.event) {
+        switch (event) {
           case 'press': {
-            s.value = ctx.delta1D ?? s.value
+            s.value = solv.delta1D ?? s.value
             break
           }
           case 'swipeStart': {
             s.dragging = true
-            s.value = ctx.delta1D ?? s.value
+            s.value = solv.delta1D ?? s.value
             break
           }
           case 'swipe': {
-            s.value = ctx.delta1D ?? s.value
+            s.value = solv.delta1D ?? s.value
             break
           }
           case 'swipeCommit': {
             s.dragging = false
-            s.value = ctx.delta1D ?? s.value
+            s.value = solv.delta1D ?? s.value
             break
           }
-          default: { throw new Error(`Invalid slider event! Event: ${ctx.event}`) }
+          default: { throw new Error(`Invalid slider event! Event: ${event}`) }
         }
       })
     }

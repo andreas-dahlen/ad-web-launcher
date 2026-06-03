@@ -2,9 +2,9 @@
 
 //composition layer
 
-import type { CtxType } from '@interaction/types/Runtime.types'
+
 import type { SnapConfig } from '@primitives/prim.types'
-import type { Axis1D } from '@typing/core.types'
+import type { Axis1D, EventType } from '@typing/core.types'
 import type { DataAttributes } from '@typing/propUtils.types'
 
 export type DragFrameProps = SnapConfig & {
@@ -12,7 +12,7 @@ export type DragFrameProps = SnapConfig & {
   className?: string
   children?: React.ReactNode
   dragDataAttrs?: DataAttributes
-  onSwipeCommit?: (detail: CtxType) => void
+  onSwipeCommit?: (detail: EventType) => void
 }
 
 
@@ -23,8 +23,8 @@ export type DragButtonProps = SnapConfig & {
   children?: React.ReactNode
   dragDataAttrs?: DataAttributes
   buttonDataAttrs?: DataAttributes
-  onSwipeCommit?: (detail: CtxType) => void
-  onPressRelease?: (detail: CtxType) => void
+  onSwipeCommit?: (detail: EventType) => void
+  onPressRelease?: (detail: EventType) => void
 }
 
 export type DragSliderProps = SnapConfig & {
@@ -36,7 +36,7 @@ export type DragSliderProps = SnapConfig & {
   children?: React.ReactNode
   sliderDataAttrs?: DataAttributes
   dragDataAttrs?: DataAttributes
-  onSwipeCommit?: (detail: CtxType) => void
+  onSwipeCommit?: (detail: EventType) => void
   onValueChange?: (value: number) => void
 }
 
