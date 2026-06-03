@@ -44,8 +44,8 @@ export type ScrollSolution = | {
 }
 
 export type DragSolution = | {
-  storeAccepted: false
-} | {
+  //   storeAccepted: false
+  // } | {
   storeAccepted: true
   delta: Vec2
 }

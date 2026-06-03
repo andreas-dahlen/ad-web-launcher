@@ -1,7 +1,7 @@
 import { getCommitOffset } from '@interaction/solvers/utils/axisUtils'
 import { vector } from '@interaction/solvers/utils/vectorUtils'
 import type { ScrollData } from '@interaction/types/data.types'
-import type { ComputedPatch } from '@interaction/types/computed.types'
+import type { Computed } from '@interaction/types/computed.types'
 import type { ScrollDesc } from '@interaction/types/descriptor.types'
 import type { Runtime } from '@interaction/types/Runtime.types'
 import type { Axis1D, Direction } from '@typing/core.types'
@@ -26,7 +26,7 @@ export const overflowUtils = {
     }
   },
 
-  resolveSwipe(mainDelta: number, data: ScrollData, computed: ComputedPatch) {
+  resolveSwipe(mainDelta: number, data: ScrollData, computed: Computed) {
     const start = computed.startOverflowValue ?? 0
     const containerSize = data.containerSize.height
     return { overflowValue: -vector.clamp(start + mainDelta, 0, containerSize) }

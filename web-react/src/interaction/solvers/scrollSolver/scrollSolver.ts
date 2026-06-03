@@ -9,41 +9,41 @@ import type { ScrollDesc } from '../../types/descriptor.types.ts'
 import type { Runtime, ScrollSolution } from '../../types/Runtime.types.ts'
 import { scrollUtils } from './scrollUtils.ts'
 import { overflowUtils } from './overflowUtils.ts'
-import type { ComputedPatch } from '@interaction/types/computed.types.ts'
+import type { Computed } from '@interaction/types/computed.types.ts'
 
 export const scrollSolver: Partial<
-  Record<EventType, (runtime: Runtime, desc: ScrollDesc, computed: ComputedPatch) => ScrollSolution>
+  Record<EventType, (runtime: Runtime, desc: ScrollDesc, computed: Computed) => ScrollSolution>
 > = {
 
   swipeStart(runtime, desc) {
     const delta1d = scrollUtils.normalize(desc.base, runtime.delta)
-    if (delta1d == null) return { storeAccepted: false }
+    if (delta1d == null) return { storeAccepted: false } satisfies ScrollSolution
     const isOverflow = overflowUtils.isOverflow(desc.data, runtime, desc.base.axis)
     return isOverflow
-      ? { ...overflowUtils.resolveStart(desc.data, desc.base.pointerId, isOverflow), storeAccepted: true }
-      : { ...scrollUtils.resolveStart(delta1d, desc, isOverflow), storeAccepted: true }
+      ? { ...overflowUtils.resolveStart(desc.data, desc.base.pointerId, isOverflow), storeAccepted: true } satisfies ScrollSolution
+      : { ...scrollUtils.resolveStart(delta1d, desc, isOverflow), storeAccepted: true } satisfies ScrollSolution
   },
 
   swipe(runtime, desc, computed) {
     const delta1d = scrollUtils.normalize(desc.base, runtime.delta)
     const isOverflow = computed.isOverflow
-    if (isOverflow == null || delta1d == null) return { storeAccepted: false }
+    if (isOverflow == null || delta1d == null) return { storeAccepted: false } satisfies ScrollSolution
     const result = isOverflow
       ? overflowUtils.resolveSwipe(delta1d, desc.data, computed)
       : scrollUtils.resolveSwipe(delta1d, desc.data)
-    return { ...result, storeAccepted: true }
+    return { ...result, storeAccepted: true } satisfies ScrollSolution
   },
 
   swipeCommit(runtime, desc, computed) {
     const delta1d = scrollUtils.normalize(desc.base, runtime.delta)
     const isOverflow = computed.isOverflow
-    if (isOverflow == null || delta1d == null) return { storeAccepted: false }
+    if (isOverflow == null || delta1d == null) return { storeAccepted: false } satisfies ScrollSolution
 
     const result = isOverflow
       ? overflowUtils.resolveEnd(delta1d, desc)
       : scrollUtils.resolveEnd(delta1d, desc.data)
 
-    return { ...result, storeAccepted: true }
+    return { ...result, storeAccepted: true } satisfies ScrollSolution
   },
 }
 

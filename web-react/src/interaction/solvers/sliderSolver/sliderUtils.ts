@@ -3,7 +3,7 @@ import { vector } from '../utils/vectorUtils.ts'
 import type { Normalized1D } from '../../types/Runtime.types.ts'
 import type { BaseWithAxis1D } from '@interaction/types/base.types.ts'
 import type { SliderConstraints, SliderData } from '@interaction/types/data.types.ts'
-import type { ComputedPatch } from '@interaction/types/computed.types.ts'
+import type { Computed } from '@interaction/types/computed.types.ts'
 import type { Vec2 } from '@typing/core.types.ts'
 
 export const sliderUtils = {
@@ -37,7 +37,7 @@ export const sliderUtils = {
   },
 
   //constraints, computed values... norm.maindelta
-  resolveSwipe(delta: number, constraints: SliderConstraints, computed: ComputedPatch) {
+  resolveSwipe(delta: number, constraints: SliderConstraints, computed: Computed) {
     if (!computed) return
     const pixel = computed.sliderValuePerPixel
     const offset = computed.sliderStartOffset

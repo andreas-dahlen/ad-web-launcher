@@ -4,7 +4,7 @@ import { domQuery } from './domQuery.ts'
 import type { Axis, EventType, Vec2 } from '../../shared/typing/core.types.ts'
 import type { Descriptor } from '../types/descriptor.types.ts'
 import type { Runtime } from '@interaction/types/Runtime.types.ts'
-import type { ComputedPatch } from '@interaction/types/computed.types.ts'
+import type { Computed } from '@interaction/types/computed.types.ts'
 
 
 
@@ -25,7 +25,7 @@ interface SessionState {
   start: Vec2
   last: Vec2
   totalDelta: Vec2
-  computed: ComputedPatch
+  computed: Computed
 }
 export interface GestureInput {
   gesture: Readonly<Gesture>
@@ -33,7 +33,7 @@ export interface GestureInput {
 }
 type Gesture = {
   desc: Descriptor
-  computed: ComputedPatch
+  computed: Computed
 }
 /* ========================
    Public API
@@ -46,7 +46,7 @@ export const interpreter = {
   deleteGesture
 }
 
-function applyComputedUpdate(update: ComputedPatch, pointerId: number) {
+function applyComputedUpdate(update: Computed, pointerId: number) {
   const g = gestures[pointerId]
   if (!g) return
   g.state.computed = {
@@ -96,7 +96,7 @@ function onDown(x: number, y: number, pointerId: number): GestureInput | null {
         event: 'press',
         delta: { x, y }
       }
-    }
+    } satisfies GestureInput
   }
   return null
 }
@@ -148,7 +148,7 @@ function onMove(x: number, y: number, pointerId: number): GestureInput | null {
           cancel: cancel,
           thresholdValue
         }
-      }
+      } satisfies GestureInput
     }
     return null
   }
@@ -177,7 +177,7 @@ function onMove(x: number, y: number, pointerId: number): GestureInput | null {
         delta: g.state.totalDelta,
         cancel: undefined
       }
-    }
+    } satisfies GestureInput
   }
   return null
 }
@@ -213,5 +213,5 @@ function finalizeGesture(g: GestureSession, event: EventType): GestureInput | nu
       event: event,
       delta: g.state.totalDelta
     }
-  }
+  } satisfies GestureInput
 }

@@ -1,9 +1,8 @@
 import type { ButtonDesc, CarouselDesc, DragDesc, ScrollDesc, SliderDesc } from '@interaction/types/descriptor.types';
-import { createBaseInteraction, createBaseSwipe } from '@test/fixtures/base';
+import { createBaseInteraction, createBaseWithAxis1D, createBaseWithAxis2D } from '@test/fixtures/base';
 import { createCarouselData, createDragData, createScrollData, createSliderData } from '@test/fixtures/data';
-
 export function createButtonDesc(
-  overrides: Partial<ButtonDesc> = {}): { type: 'button' } & ButtonDesc {
+  overrides: Partial<ButtonDesc> = {}): ButtonDesc {
   return {
     type: 'button',
     base: {
@@ -19,12 +18,11 @@ export function createButtonDesc(
   }
 }
 export function createCarouselDesc(
-  overrides: Partial<CarouselDesc> = {}): { type: 'carousel' } & CarouselDesc {
+  overrides: Partial<CarouselDesc> = {}): CarouselDesc {
   return {
     type: 'carousel',
     base: {
-      ...createBaseSwipe(),
-      axis: 'horizontal',
+      ...createBaseWithAxis1D(),
       ...overrides.base
     },
     data: {
@@ -41,12 +39,11 @@ export function createCarouselDesc(
 }
 
 export function createSliderDesc(
-  overrides: Partial<SliderDesc> = {}): { type: 'slider' } & SliderDesc {
+  overrides: Partial<SliderDesc> = {}): SliderDesc {
   return {
     type: 'slider',
     base: {
-      ...createBaseSwipe(),
-      axis: 'horizontal',
+      ...createBaseWithAxis1D(),
       ...overrides.base
     },
     data: {
@@ -62,12 +59,11 @@ export function createSliderDesc(
   }
 }
 export function createScrollDesc(
-  overrides: Partial<ScrollDesc> = {}): { type: 'scroll' } & ScrollDesc {
+  overrides: Partial<ScrollDesc> = {}): ScrollDesc {
   return {
     type: 'scroll',
     base: {
-      ...createBaseSwipe(),
-      axis: 'vertical',
+      ...createBaseWithAxis1D(),
       ...overrides.base
     },
     data: {
@@ -83,12 +79,11 @@ export function createScrollDesc(
   }
 }
 export function createDragDesc(
-  overrides: Partial<DragDesc> = {}): { type: 'drag' } & DragDesc {
+  overrides: Partial<DragDesc> = {}): DragDesc {
   return {
     type: 'drag',
     base: {
-      ...createBaseSwipe(),
-      axis: "both",
+      ...createBaseWithAxis2D(),
       ...overrides.base
     },
     data: {
