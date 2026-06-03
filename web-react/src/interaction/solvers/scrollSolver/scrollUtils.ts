@@ -19,7 +19,7 @@ export const scrollUtils = {
     const raw = desc.data.settledValue - mainDelta
     return {
       delta1D: vector.clamp(raw, 0, maxScroll),
-      gestureUpdate: {
+      computedUpdate: {
         pointerId: desc.base.pointerId,
         isOverflow,
       }

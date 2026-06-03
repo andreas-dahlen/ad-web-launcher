@@ -203,17 +203,15 @@ function finalizeGesture(g: GestureSession, event: EventType): GestureInput | nu
     delete gestures[g.pointerId]
     return null
   }
-  const descriptor = g.desc
-  const state = g.state.computed
   delete gestures[g.pointerId]
   return {
     gesture: {
-      desc: descriptor,
-      computed: state
+      desc: g.desc,
+      computed: g.state.computed
     },
     runtime: {
       event: event,
-      delta: { x: 0, y: 0 }
+      delta: g.state.totalDelta
     }
   }
 }

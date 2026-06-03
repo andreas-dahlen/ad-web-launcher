@@ -109,6 +109,7 @@ export const carouselStore = create<CarouselStore>()(
     },
 
     apply: (id, event, solv) => {
+      // console.log('[APPLY]', { solv })
       set(state => {
         const s = state.bindings[id]
         if (!s) return

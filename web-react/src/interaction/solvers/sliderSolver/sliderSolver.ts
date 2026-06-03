@@ -34,10 +34,11 @@ export const sliderSolver: Partial<
     const norm = sliderUtils.normalize(desc.base, desc.data, runtime.delta)
     const result = sliderUtils.resolveStart(norm, desc.data.constraints)
     if (!result?.value) return { storeAccepted: false }
+    console.log("press")
     return {
       delta1D: result?.value,
       storeAccepted: true,
-      gestureUpdate: {
+      computedUpdate: {
         pointerId: desc.base.pointerId,
         sliderStartOffset: result?.value,
         sliderValuePerPixel: result?.valuePerPixel

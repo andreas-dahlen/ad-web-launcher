@@ -18,7 +18,7 @@ export const overflowUtils = {
     const startValue = data.isVisible ? 0 : data.containerSize.height
     return {
       //could return resolveSwipe but omition is fine aswell i guess... only one frame xD
-      gestureUpdate: {
+      computedUpdate: {
         pointerId: pointerId,
         isOverflow: isOverflow,
         startOverflowValue: startValue

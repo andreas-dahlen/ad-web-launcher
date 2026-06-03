@@ -43,13 +43,13 @@ export const carouselSolver: Partial<
     const norm = carouselUtils.normalize(desc.base, desc.data, runtime.delta)
     const gated = exceedsCrossRange(norm)
 
-    if (norm.mainDelta == null) return { delta1D: 0, outcome: 'revert', storeAccepted: true }
+    if (norm.mainDelta == null) return { delta1D: 0, event: 'swipeRevert', storeAccepted: true }
 
     const locked = desc.data.lockSwipeAt
-      ? carouselUtils.isLocked(norm.mainDelta, desc.data?.index, desc.data?.lockSwipeAt)
+      ? carouselUtils.isLocked(norm.mainDelta, desc.data.index, desc.data.lockSwipeAt)
       : false
 
-    if (gated || locked) return { delta1D: 0, outcome: 'revert', storeAccepted: true }
+    if (gated || locked) return { delta1D: 0, event: 'swipeRevert', storeAccepted: true }
 
     const solution = carouselUtils.resolveCommit(norm, desc.base.axis)
     if (solution) return {
@@ -57,7 +57,7 @@ export const carouselSolver: Partial<
       delta1D: solution.delta,
       storeAccepted: true
     }
-    return { delta1D: 0, outcome: 'revert', storeAccepted: true }
+    return { delta1D: 0, event: 'swipeRevert', storeAccepted: true }
   }
 }
 
