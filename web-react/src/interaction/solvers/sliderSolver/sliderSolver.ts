@@ -16,9 +16,6 @@ export const sliderSolver: Partial<
   Record<EventType, (runtime: Runtime, desc: SliderDesc, computed: Computed) => SliderSolution>
 > = {
 
-  /**
-   * Handle swipeStart - returns reaction to enable dragging
-   */
   press(runtime, desc) {
     const norm = sliderUtils.normalize(desc.base, desc.data, runtime.delta)
     const result = sliderUtils.resolveStart(norm, desc.data.constraints)
@@ -49,7 +46,7 @@ export const sliderSolver: Partial<
   /**
    * Handle swipe (drag) - clamp delta so thumb stays within [min, max] visually
    */
-  swipe(runtime, desc, computed) { //need to pass computed values
+  swipe(runtime, desc, computed) {
     const norm = sliderUtils.normalize(desc.base, desc.data, runtime.delta)
     const gated = exceedsCrossRange(norm)
     if (gated || !norm?.mainDelta) return { storeAccepted: false } satisfies SliderSolution

@@ -30,7 +30,7 @@ export default function Carousel({
 }: CarouselProps) {
 
   // ── Fully subscribe to the carousel store ─────────────────────────────
-  const { settling, index, liveOffset, count, dragging, sceneSize } = useCarouselStore(id)
+  const { settling, index, liveOffset, count, dragging, containerSize } = useCarouselStore(id)
 
   // ── Initialize count for mirror scenes ─────────────────────────────
 
@@ -40,14 +40,14 @@ export default function Carousel({
   }, [id, scenes?.length, interactive, sceneCount])
 
   // ── DOM reference & lane size ─────────────────────────────
-  const carouselRef = useRef<HTMLDivElement>(null)
-  useCarouselSizing({ elRef: carouselRef, axis, id })
+  const containerRef = useRef<HTMLDivElement>(null)
+  useCarouselSizing({ elRef: containerRef, axis, id })
 
-  const axisSize = axis === "horizontal" ? sceneSize.width : sceneSize.height
+  const axisSize = axis === "horizontal" ? containerSize.width : containerSize.height
 
   // ── Pointer forwarding for gestures ─────────────────────────────
   usePointerBridge({
-    elRef: carouselRef,
+    elRef: containerRef,
     disabled: !interactive,
     onReaction: (reaction) => {
       if (reaction.detail === 'swipeCommit' && onSwipeCommit) {
@@ -100,7 +100,7 @@ export default function Carousel({
     <div
       className={carouselCss.carousel}
       style={{ pointerEvents: interactive ? "auto" : "none" }}
-      ref={carouselRef}
+      ref={containerRef}
       {...dasx({
         id,
         type: "carousel",

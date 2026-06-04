@@ -137,7 +137,7 @@ export const buildDesc = {
     const s = carouselStore.getState().get(metaData.id)
     if (!s) return null
     const lockSwipeAt = { prev: metaData.lockPrevAt, next: metaData.lockNextAt }
-    return { index: s.index, sceneSize: s.sceneSize, lockSwipeAt }
+    return { index: s.index, containerSize: s.containerSize, lockSwipeAt }
   },
   buildSliderData(metaData: DomMeta): SliderData | null {
     const s = sliderStore.getState().get(metaData.id)

@@ -47,10 +47,10 @@ export const domQuery = {
     }
 
     const rect = frameRef.getBoundingClientRect()
+    const frame = gestureUtils.normalizeFrame(rect)
     const left = (x - rect.left)
     const top = (y - rect.top)
     const grabOffset = gestureUtils.normalizeVec2({ x: left, y: top })
-    const frame = gestureUtils.normalizeFrame(rect)
     return {
       grabOffset, frame
     }

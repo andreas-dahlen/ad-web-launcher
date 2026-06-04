@@ -8,7 +8,7 @@ const DEFAULTS = {
   count: 0,
   liveOffset: 0,
   dragging: false,
-  sceneSize: { x: 0, y: 0 },
+  containerSize: { x: 0, y: 0 },
   settling: false,
   pendingDir: null
 } as const

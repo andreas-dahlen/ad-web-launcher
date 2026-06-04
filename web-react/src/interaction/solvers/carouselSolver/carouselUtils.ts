@@ -9,7 +9,7 @@ export const carouselUtils = {
 
   normalize(base: BaseWithAxis1D, data: CarouselData, delta: Vec2): Normalized1D {
     const basics = normalizeBase(base.grabOffset, base.axis, delta)
-    const track = vector.resolveByAxis1D(data.sceneSize.width, data.sceneSize.height, base.axis)
+    const track = vector.resolveByAxis1D(data.containerSize.width, data.containerSize.height, base.axis)
     return {
       ...basics,
       mainSize: track?.main,

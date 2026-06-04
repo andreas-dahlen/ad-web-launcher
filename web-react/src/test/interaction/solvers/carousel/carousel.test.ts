@@ -42,7 +42,7 @@ describe('CarosuelSolver', () => {
           }),
           data: createCarouselData({
             lockSwipeAt: undefined,
-            sceneSize: { width: 0, height: 0 }
+            containerSize: { width: 0, height: 0 }
           })
         }
       })
@@ -117,7 +117,7 @@ describe('CarosuelSolver', () => {
         desc: {
           data: createCarouselData({
             lockSwipeAt: undefined,
-            sceneSize: { width: 0, height: 0 }
+            containerSize: { width: 0, height: 0 }
           })
         }
       })

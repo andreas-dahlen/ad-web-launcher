@@ -5,7 +5,7 @@ export function createCarouselData(
 ): CarouselData & CarouselModifiers {
   return {
     index: 3,
-    sceneSize: { width: 100, height: 100 },
+    containerSize: { width: 100, height: 100 },
     lockSwipeAt: { prev: 0, next: 5 },
     ...overrides
   }

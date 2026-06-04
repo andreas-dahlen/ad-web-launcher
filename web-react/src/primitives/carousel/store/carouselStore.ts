@@ -10,7 +10,7 @@ type Carousel = {
 
   //reactScenes
   count: number
-  sceneSize: Size2D
+  containerSize: Size2D
   dragging: boolean
 
   //read only... not used by react
@@ -27,7 +27,7 @@ export type CarouselStore = {
   delete: (id: string) => void
 
   setCount: (id: string, count: number) => void
-  setSize: (id: string, sceneSize: Size2D) => void
+  setSize: (id: string, containerSize: Size2D) => void
 
   setSettling: (id: string) => void
 
@@ -48,7 +48,7 @@ export const carouselStore = create<CarouselStore>()(
           liveOffset: 0,
 
           count: 0,
-          sceneSize: { width: 0, height: 0 },
+          containerSize: { width: 0, height: 0 },
           dragging: false,
 
           settling: false,
@@ -75,12 +75,12 @@ export const carouselStore = create<CarouselStore>()(
         s.count = Math.max(0, count)
       })
     },
-    setSize: (id, sceneSize) => {
+    setSize: (id, containerSize) => {
       set(state => {
         const s = state.bindings[id]
         if (!s) return
-        if (s.sceneSize.width === sceneSize.width && s.sceneSize.height === sceneSize.height) return
-        s.sceneSize = sceneSize
+        if (s.containerSize.width === containerSize.width && s.containerSize.height === containerSize.height) return
+        s.containerSize = containerSize
       })
     },
 

@@ -1,190 +1,200 @@
 # src Folder Structure
 
 src/
-- `App.tsx`
-- `main.tsx`
+- [App.tsx](./src/App.tsx)
+- [main.tsx](./src/main.tsx)
 - api/
-  - `wallpaper.ts`
+ - [wallpaper.ts](./src/api/wallpaper.ts)
 - app/
-  - `Root.tsx`
+  - [Root.tsx](./src/app/Root.tsx)
   - compositions/
-    - `laneComps.ts`
-    - `useRuntimeBindings.ts`
+    - [laneComps.ts](./src/app/compositions/laneComps.ts)
+    - [useRuntimeBindings.ts](./src/app/compositions/useRuntimeBindings.ts)
   - layers/
-    - `BaseLayer.tsx`
-    - `ContentLayer.tsx`
-    - `Layers.module.css`
-    - `OverlayLayer.tsx`
+    - [BaseLayer.tsx](./src/app/layers/BaseLayer.tsx)
+    - [ContentLayer.tsx](./src/app/layers/ContentLayer.tsx)
+    - [Layers.module.css](./src/app/layers/Layers.module.css)
+    - [OverlayLayer.tsx](./src/app/layers/OverlayLayer.tsx)
   - scenes/
-    - `EmptyPlaceholder.tsx`
+    - [EmptyPlaceholder.tsx](./src/app/scenes/EmptyPlaceholder.tsx)
     - bottom/
-      - `Bottom1.tsx`
-      - `Bottom2.tsx`
-      - `Bottom3.tsx`
+      - [Bottom1.tsx](./src/app/scenes/bottom/Bottom1.tsx)
+      - [Bottom2.tsx](./src/app/scenes/bottom/Bottom2.tsx)
+      - [Bottom3.tsx](./src/app/scenes/bottom/Bottom3.tsx)
     - mid/
-      - `Mid1.tsx`
-      - `Mid2.tsx`
-      - `Mid3.tsx`
+      - [Mid1.tsx](./src/app/scenes/mid/Mid1.tsx)
+      - [Mid2.tsx](./src/app/scenes/mid/Mid2.tsx)
+      - [Mid3.tsx](./src/app/scenes/mid/Mid3.tsx)
     - top/
-      - `Top1.tsx`
-      - `Top2.tsx`
-      - `Top3.tsx`
+      - [Top1.tsx](./src/app/scenes/top/Top1.tsx)
+      - [Top2.tsx](./src/app/scenes/top/Top2.tsx)
+      - [Top3.tsx](./src/app/scenes/top/Top3.tsx)
     - vertical/
-      - `Vert1.tsx`
-      - `Vert2.tsx`
-      - `Vert3.tsx`
+      - [Vert1.tsx](./src/app/scenes/vertical/Vert1.tsx)
+      - [Vert2.tsx](./src/app/scenes/vertical/Vert2.tsx)
+      - [Vert3.tsx](./src/app/scenes/vertical/Vert3.tsx)
     - wallpapers/
-      - `Wp1.tsx`
-      - `Wp2.tsx`
-      - `Wp3.tsx`
+      - [Wp1.tsx](./src/app/scenes/wallpapers/Wp1.tsx)
+      - [Wp2.tsx](./src/app/scenes/wallpapers/Wp2.tsx)
+      - [Wp3.tsx](./src/app/scenes/wallpapers/Wp3.tsx)
 - assets/
-  - `exit.svg`
-  - `grid.svg`
-  - `locked.svg`
-  - `lockOld.svg`
-  - `react.svg`
-  - `snap.svg`
-  - `unlocked.svg`
+  - [exit.svg](./src/assets/exit.svg)
+  - [grid.svg](./src/assets/grid.svg)
+  - [locked.svg](./src/assets/locked.svg)
+  - [lockOld.svg](./src/assets/lockOld.svg)
+  - [react.svg](./src/assets/react.svg)
+  - [snap.svg](./src/assets/snap.svg)
+  - [unlocked.svg](./src/assets/unlocked.svg)
 - composites/
-  - `comp.types.ts`
-  - `DragButton.tsx`
-  - `DragFrame.tsx`
-  - `DragSlider.tsx`
+  - [comp.types.ts](./src/composites/comp.types.ts)
+  - [DragButton.tsx](./src/composites/DragButton.tsx)
+  - [DragFrame.tsx](./src/composites/DragFrame.tsx)
+  - [DragSlider.tsx](./src/composites/DragSlider.tsx)
 - config/
-  - `appConfig.ts`
-  - `zIndex.ts`
+  - [appConfig.ts](./src/config/appConfig.ts)
+  - [zIndex.ts](./src/config/zIndex.ts)
 - data/
-  - `laneIndex.ts`
+  - [laneIndex.ts](./src/data/laneIndex.ts)
 - features/
   - appDrawer/
-    - `DrawerPanel.tsx`
+    - [DrawerPanel.tsx](./src/features/appDrawer/DrawerPanel.tsx)
   - buttonPanel/
-    - `ButtonPanel.tsx`
+    - [ButtonPanel.tsx](./src/features/buttonPanel/ButtonPanel.tsx)
   - dragGrid/
-    - `DragGrid.module.css`
-    - `DragGrid.tsx`
+    - [DragGrid.module.css](./src/features/dragGrid/DragGrid.module.css)
+    - [DragGrid.tsx](./src/features/dragGrid/DragGrid.tsx)
   - settingsPanel/
-    - `SettingsPanel.module.css`
-    - `SettingsPanel.tsx`
+    - [SettingsPanel.module.css](./src/features/settingsPanel/SettingsPanel.module.css)
+    - [SettingsPanel.tsx](./src/features/settingsPanel/SettingsPanel.tsx)
     - composites/
-      - `Composites.module.css`
-      - `SettingsButton.tsx`
-      - `SnapInput.tsx`
+      - [Composites.module.css](./src/features/settingsPanel/composites/Composites.module.css)
+      - [SettingsButton.tsx](./src/features/settingsPanel/composites/SettingsButton.tsx)
+      - [SnapInput.tsx](./src/features/settingsPanel/composites/SnapInput.tsx)
 - infrastructure/
-  - `DebugWrapper.tsx`
-  - `LoadingScene.tsx`
-  - `System.module.css`
-  - `Teleporter.tsx`
+  - [DebugWrapper.tsx](./src/infrastructure/DebugWrapper.tsx)
+  - [LoadingScene.tsx](./src/infrastructure/LoadingScene.tsx)
+  - [System.module.css](./src/infrastructure/System.module.css)
+  - [Teleporter.tsx](./src/infrastructure/Teleporter.tsx)
 - interaction/
   - core/
-    - `buildDesc.ts`
-    - `domMeta.ts`
-    - `domQuery.ts`
-    - `gestureUtils.ts`
-    - `interpreter.ts`
-    - `pipeline.ts`
+    - [buildDesc.ts](./src/interaction/core/buildDesc.ts)
+    - [domMeta.ts](./src/interaction/core/domMeta.ts)
+    - [domQuery.ts](./src/interaction/core/domQuery.ts)
+    - [gestureUtils.ts](./src/interaction/core/gestureUtils.ts)
+    - [interpreter.ts](./src/interaction/core/interpreter.ts)
+    - [pipeline.ts](./src/interaction/core/pipeline.ts)
   - solvers/
     - carouselSolver/
-      - `carouselSolver.ts`
-      - `carouselUtils.ts`
+      - [carouselSolver.ts](./src/interaction/solvers/carouselSolver/carouselSolver.ts)
+      - [carouselUtils.ts](./src/interaction/solvers/carouselSolver/carouselUtils.ts)
     - dragSolver/
-      - `dragSolver.ts`
-      - `dragUtils.ts`
+      - [dragSolver.ts](./src/interaction/solvers/dragSolver/dragSolver.ts)
+      - [dragUtils.ts](./src/interaction/solvers/dragSolver/dragUtils.ts)
     - scrollSolver/
-      - `overflowUtils.ts`
-      - `scrollSolver.ts`
-      - `scrollUtils.ts`
+      - [overflowUtils.ts](./src/interaction/solvers/scrollSolver/overflowUtils.ts)
+      - [scrollSolver.ts](./src/interaction/solvers/scrollSolver/scrollSolver.ts)
+      - [scrollUtils.ts](./src/interaction/solvers/scrollSolver/scrollUtils.ts)
     - sliderSolver/
-      - `sliderSolver.ts`
-      - `sliderUtils.ts`
+      - [sliderSolver.ts](./src/interaction/solvers/sliderSolver/sliderSolver.ts)
+      - [sliderUtils.ts](./src/interaction/solvers/sliderSolver/sliderUtils.ts)
     - utils/
-      - `axisUtils.ts`
-      - `vectorUtils.ts`
+      - [axisUtils.ts](./src/interaction/solvers/utils/axisUtils.ts)
+      - [vectorUtils.ts](./src/interaction/solvers/utils/vectorUtils.ts)
   - types/
-    - `base.types.ts`
-    - `ctx.types.ts`
-    - `data.types.ts`
-    - `descriptor.types.ts`
+    - [base.types.ts](./src/interaction/types/base.types.ts)
+    - [ctx.types.ts](./src/interaction/types/ctx.types.ts)
+    - [data.types.ts](./src/interaction/types/data.types.ts)
+    - [descriptor.types.ts](./src/interaction/types/descriptor.types.ts)
   - updater/
-    - `domUpdater.ts`
+    - [domUpdater.ts](./src/interaction/updater/domUpdater.ts)
 - primitives/
-  - `prim.types.ts`
+  - [prim.types.ts](./src/primitives/prim.types.ts)
   - button/
-    - `Button.module.css`
-    - `Button.tsx`
+    - [Button.module.css](./src/primitives/button/Button.module.css)
+    - [Button.tsx](./src/primitives/button/Button.tsx)
   - carousel/
-    - `Carousel.module.css`
-    - `Carousel.tsx`
+    - [Carousel.module.css](./src/primitives/carousel/Carousel.module.css)
+    - [Carousel.tsx](./src/primitives/carousel/Carousel.tsx)
     - hooks/
-      - `useAugmentedScenes.ts`
-      - `useCarouselMotion.ts`
-      - `useCarouselSizing.ts`
+      - [useAugmentedScenes.ts](./src/primitives/carousel/hooks/useAugmentedScenes.ts)
+      - [useCarouselMotion.ts](./src/primitives/carousel/hooks/useCarouselMotion.ts)
+      - [useCarouselSizing.ts](./src/primitives/carousel/hooks/useCarouselSizing.ts)
       - `useSceneContext.ts`
     - store/
-      - `carouselStore.ts`
-      - `useCarouselStore.ts`
+      - [carouselStore.ts](./src/primitives/carousel/store/carouselStore.ts)
+      - [useCarouselStore.ts](./src/primitives/carousel/store/useCarouselStore.ts)
   - drag/
-    - `Drag.module.css`
-    - `Drag.tsx`
+    - [Drag.module.css](./src/primitives/drag/Drag.module.css)
+    - [Drag.tsx](./src/primitives/drag/Drag.tsx)
     - hooks/
-      - `useDragMotion.ts`
-      - `useDragSizing.ts`
+      - [useDragMotion.ts](./src/primitives/drag/hooks/useDragMotion.ts)
+      - [useDragSizing.ts](./src/primitives/drag/hooks/useDragSizing.ts)
     - store/
-      - `dragStore.ts`
-      - `useDragStore.ts`
+      - [dragStore.ts](./src/primitives/drag/store/dragStore.ts)
+      - [useDragStore.ts](./src/primitives/drag/store/useDragStore.ts)
   - scroll/
-    - `Scroll.module.css`
-    - `Scroll.tsx`
+    - [Scroll.module.css](./src/primitives/scroll/Scroll.module.css)
+    - [Scroll.tsx](./src/primitives/scroll/Scroll.tsx)
     - hooks/
-      - `useOverflowMotion.ts`
-      - `useScrollMotion.ts`
-      - `useScrollSizing.ts`
+      - [useOverflowMotion.ts](./src/primitives/scroll/hooks/useOverflowMotion.ts)
+      - [useScrollMotion.ts](./src/primitives/scroll/hooks/useScrollMotion.ts)
+      - [useScrollSizing.ts](./src/primitives/scroll/hooks/useScrollSizing.ts)
     - store/
-      - `scrollStore.ts`
-      - `useScrollStore.ts`
+      - [scrollStore.ts](./src/primitives/scroll/store/scrollStore.ts)
+      - [useScrollStore.ts](./src/primitives/scroll/store/useScrollStore.ts)
   - slider/
-    - `Slider.module.css`
-    - `Slider.tsx`
+    - [Slider.module.css](./src/primitives/slider/Slider.module.css)
+    - [Slider.tsx](./src/primitives/slider/Slider.tsx)
     - hooks/
-      - `useSliderMotion.ts`
-      - `useSliderSizing.ts`
+      - [useSliderMotion.ts](./src/primitives/slider/hooks/useSliderMotion.ts)
+      - [useSliderSizing.ts](./src/primitives/slider/hooks/useSliderSizing.ts)
     - store/
-      - `sliderStore.ts`
-      - `useSliderStore.ts`
+      - [sliderStore.ts](./src/primitives/slider/store/sliderStore.ts)
+      - [useSliderStore.ts](./src/primitives/slider/store/useSliderStore.ts)
 - shared/
   - state/
     - hooks/
-      - `useAppStore.ts`
-      - `useGestureStore.ts`
-      - `usePointerBridge.ts`
-      - `useSettingsStore.ts`
-      - `useWallpaperStore.ts`
+      - [useAppStore.ts](./src/shared/state/hooks/useAppStore.ts)
+      - [useGestureStore.ts](./src/shared/state/hooks/useGestureStore.ts)
+      - [usePointerBridge.ts](./src/shared/state/hooks/usePointerBridge.ts)
+      - [useSettingsStore.ts](./src/shared/state/hooks/useSettingsStore.ts)
+      - [useWallpaperStore.ts](./src/shared/state/hooks/useWallpaperStore.ts)
     - stores/
-      - `appStore.ts`
-      - `settingsStore.ts`
-      - `wallpaperStore.ts`
+      - [appStore.ts](./src/shared/state/stores/appStore.ts)
+      - [settingsStore.ts](./src/shared/state/stores/settingsStore.ts)
+      - [wallpaperStore.ts](./src/shared/state/stores/wallpaperStore.ts)
   - styles/
-    - `debug.css`
-    - `index.css`
-    - `presets.css`
+    - [debug.css](./src/shared/styles/debug.css)
+    - [index.css](./src/shared/styles/index.css)
+    - [presets.css](./src/shared/styles/presets.css)
     - core/
-      - `core.css`
-      - `variables.css`
+      - [core.css](./src/shared/styles/core.css)
+      - [variables.css](./src/shared/styles/variables.css)
   - typing/
-    - `core.types.ts`
-    - `propUtils.types.ts`
-    - `svg.d.ts`
+    - [core.types.ts](./src/shared/typing/core.types.ts)
+    - [propUtils.types.ts](./src/shared/typing/propUtils.types.ts)
+    - [svg.d.ts](./src/shared/typing/svg.d.ts)
   - utils/
-    - `dataAttrs.ts`
-    - `test.ts`
+    - [dataAttrs.ts](./src/shared/utils/dataAttrs.ts)
+    - [test.ts](./src/shared/utils/test.ts)
   - runtime/
-    - `gestureStore.ts`
-    - `sizeStore.ts`
+    - [gestureStore.ts](./src/shared/runtime/gestureStore.ts)
+    - [sizeStore.ts](./src/shared/runtime/sizeStore.ts)
 - test/
-  - `debugFlags.ts`
-  - `functions.ts`
+  - fixtures/
+    - [base.ts](./src/test/fixtures/base.ts)
+    - [computed.ts](./src/test/fixtures/computed.ts)
+    - [data.ts](./src/test/fixtures/data.ts)
+    - [desc.ts](./src/test/fixtures/desc.ts)
+    - [input.ts](./src/test/fixtures/input.ts)
+    - [meta.ts](./src/test/fixtures/meta.ts)
+    - [override.types.ts](./src/test/fixtures/override.types.ts)
+    - [runtimeAndSolutions.ts](./src/test/fixtures/runtimeAndSolutions.ts)
+  - interaction/
+  - [debugFlags.ts](./src/test/debugFlags.ts)
+  - [functions.ts](./src/test/functions.ts)
 - x.mdFiles/
-  - `futureIdeas.md`
-  - `jsGuide.md`
-  - `react-explanation.md`
-  - `SYSTEM_CONTEXT.md`
+  - [futureIdeas.md](./src/x.mdFiles/futureIdeas.md)
+  - [jsGuide.md](./src/x.mdFiles/jsGuide.md)
+  - [react-explanation.md](./src/x.mdFiles/react-explanation.md)
+  - [SYSTEM_CONTEXT.md](./src/x.mdFiles/SYSTEM_CONTEXT.md)

@@ -1,10 +1,18 @@
 import type { OnEdgeDir, Size2D, Vec2 } from "../../shared/typing/core.types.ts"
 
+export interface DataSizingBase {
+  readonly deviceSize: Size2D
+  readonly frameRect: DOMRect
+  readonly grabOffset: Vec2
+  readonly containerSize: Size2D
+  readonly itemSize: Size2D
+}
+
 export type CarouselData = CarouselDataBase & CarouselModifiers
 
 interface CarouselDataBase {
   readonly index: number
-  readonly sceneSize: Size2D
+  readonly containerSize: Size2D
 }
 
 export interface CarouselModifiers {
