@@ -1,4 +1,4 @@
-import type { DragLayout } from '@interaction/types/data.types'
+import type { DragConstraints } from '@interaction/types/data.types'
 import type { Axis, Axis1D, Direction, OnEdgeDir, Vec2 } from '../../../shared/typing/core.types'
 import { APP_CONFIG } from '@config/appConfig'
 
@@ -8,7 +8,7 @@ export const vector = {
     return Math.max(min, Math.min(max, delta))
   },
 
-  clamp2D(delta: Vec2, settledOffset: Vec2, constraints: DragLayout["constraints"]) {
+  clamp2D(delta: Vec2, settledOffset: Vec2, constraints: DragConstraints) {
     const { x: dx, y: dy } = delta
     const { x: px, y: py } = settledOffset
     const { minX, maxX, minY, maxY } = constraints
@@ -18,7 +18,7 @@ export const vector = {
       y: this.clamp(py + dy, minY, maxY)
     }
   },
-  relativeClamp2D(delta: Vec2, settledOffset: Vec2, constraints: DragLayout["constraints"]) {
+  relativeClamp2D(delta: Vec2, settledOffset: Vec2, constraints: DragConstraints) {
     const clamped = this.clamp2D(delta, settledOffset, constraints)
 
     return {

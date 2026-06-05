@@ -21,8 +21,8 @@ export const dragSolver: Partial<
   /**
    * Handle swipeStart - returns reaction to enable dragging
    */
-  swipeStart() {
-    return { delta: { x: 0, y: 0 }, storeAccepted: true } satisfies DragSolution
+  swipeStart(_runtime, desc) {
+    return { delta: { x: 0, y: 0 }, frameRect: desc.base.layout.frameRect, storeAccepted: true } satisfies DragSolution
   },
 
   /**

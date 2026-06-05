@@ -1,7 +1,8 @@
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
-import type { EventType, Size2D } from '@typing/core.types'
+import type { EventType } from '@typing/core.types'
 import type { SliderSolution } from '@interaction/types/Runtime.types'
+import type { StoreLayout } from '@typing/store.types'
 
 type Slider = {
   //react motion
@@ -10,10 +11,10 @@ type Slider = {
   //react sizing
   min: number
   max: number
-  containerSize: Size2D
 
   // the optional section non reactive
-  thumbSize: Size2D
+
+  layout: StoreLayout
   dragging: boolean
 }
 
@@ -21,13 +22,13 @@ type AcceptedSlider = Extract<SliderSolution, { storeAccepted: true }>
 
 export type SliderStore = {
   bindings: Record<string, Slider>
-  init: (id: string) => void
-  get: (id: string) => Readonly<Slider> | null
+  init: (id: string, fallback: Slider) => void
+  get: (id: string) => Readonly<Slider>
   delete: (id: string) => void
 
   setConstraints: (id: string, constraints: { min: number, max: number }) => void
-  setContainerSize: (id: string, containerSize: Size2D) => void
-  setThumbSize: (id: string, thumbSize: Size2D) => void
+
+  setLayout: (id: string, packet: StoreLayout) => void
 
   apply: (id: string, event: EventType, solv: AcceptedSlider) => void
 }
@@ -39,22 +40,15 @@ export const sliderStore = create<SliderStore>()(
 
     bindings: {},
 
-    init: (id) => {
+    init: (id, fallback) => {
       if (get().bindings[id]) return
 
       set(state => {
-        state.bindings[id] = {
-          value: 0,
-          min: 0,
-          max: 100,
-          containerSize: { width: 0, height: 0 },
-          thumbSize: { width: 0, height: 0 },
-          dragging: false
-        }
+        state.bindings[id] = fallback
       })
     },
     get: (id) => {
-      return get().bindings[id] ?? null
+      return get().bindings[id]
     },
 
     delete: (id: string) => {
@@ -72,21 +66,14 @@ export const sliderStore = create<SliderStore>()(
       })
     },
 
-    setContainerSize: (id, containerSize) => {
+    setLayout(id, packet) {
       set(state => {
         const s = state.bindings[id]
         if (!s) return
-        if (s.containerSize.width === containerSize.width && s.containerSize.height === containerSize.height) return
-        s.containerSize = containerSize
-
-      })
-    },
-    setThumbSize: (id, thumbSize) => {
-      set(state => {
-        const s = state.bindings[id]
-        if (!s) return
-        if (s.thumbSize.width === thumbSize.width && s.thumbSize.height === thumbSize.height) return
-        s.thumbSize = thumbSize
+        s.layout = {
+          containerSize: packet.containerSize,
+          itemSize: packet.itemSize,
+        }
       })
     },
 

@@ -4,7 +4,7 @@ interface UseSliderMotionProps {
   position: number
   constraints: { min: number; max: number }
   axisSize: number
-  axisThumbSize: number
+  axisitemSize: number
   dragging: boolean
   horizontal: boolean
 }
@@ -13,7 +13,7 @@ export function useSliderMotion({
   position,
   constraints,
   axisSize,
-  axisThumbSize,
+  axisitemSize,
   dragging,
   horizontal
 }: UseSliderMotionProps) {
@@ -25,7 +25,7 @@ export function useSliderMotion({
     const ratio = (value - min) / range
 
     // usable space for thumb
-    const usable = Math.max(axisSize - axisThumbSize, 0)
+    const usable = Math.max(axisSize - axisitemSize, 0)
     const pos = ratio * usable
 
     return {
@@ -34,7 +34,7 @@ export function useSliderMotion({
         : `translate3d(0,${pos}px,0)`,
       transition: dragging ? "none" : "transform 150ms ease-out"
     }
-  }, [position, constraints, axisSize, axisThumbSize, dragging, horizontal])
+  }, [position, constraints, axisSize, axisitemSize, dragging, horizontal])
 
   return { thumbStyle }
 }

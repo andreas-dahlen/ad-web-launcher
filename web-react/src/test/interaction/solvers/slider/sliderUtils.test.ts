@@ -25,13 +25,13 @@ describe('SliderUtils', () => {
         const result = createNormalizeSliderInput()
         expect(typeof result.crossSize).toBe('number')
       })
-      it('returns valid thumbSize', () => {
+      it('returns valid itemSize', () => {
         const result = createNormalizeSliderInput()
-        expect(typeof result.mainThumbSize).toBe('number')
+        expect(typeof result.mainitemSize).toBe('number')
       })
-      it('returns valid thumbSize', () => {
+      it('returns valid itemSize', () => {
         const result = createNormalizeSliderInput()
-        expect(typeof result.mainThumbSize).toBe('number')
+        expect(typeof result.mainitemSize).toBe('number')
       })
     })
 

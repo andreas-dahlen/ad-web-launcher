@@ -7,7 +7,7 @@ export const dragUtils = {
 
   resolveSwipe(data: DragData, delta: Vec2) {
     const settledOffset = data.settledOffset
-    const dragConstraints = data.layout.constraints
+    const dragConstraints = data.constraints
     const clamped =
       vector.relativeClamp2D(delta, settledOffset, dragConstraints)
     const dx = clamped.x
@@ -16,14 +16,15 @@ export const dragUtils = {
   },
 
   resolveCommit(data: DragData, delta: Vec2) {
-    return vector.clamp2D(delta, data.settledOffset, data.layout.constraints)
+    return vector.clamp2D(delta, data.settledOffset, data.constraints)
   },
 
   resolveSnapAdjustment(desc: DragDesc, value: Vec2) {
     if (!desc.data?.snap) return null
     const { x: snapX, y: snapY } = desc.data.snap
 
-    const { deviceSize, itemSize, constraints } = desc.data.layout
+    const { deviceSize, itemSize } = desc.base.layout
+    const constraints = desc.data.constraints
 
 
     const snapAxis = (value: number, count: number, deviceSize: number, itemSize: number, frameOffset: number, min: number, max: number) => {
@@ -39,7 +40,7 @@ export const dragUtils = {
 
     return {
       x: snapAxis(value.x, snapX, deviceSize.width, itemSize.width, 0, constraints.minX, constraints.maxX),
-      y: snapAxis(value.y, snapY, deviceSize.height, itemSize.height, desc.base.frame.height, constraints.minY, constraints.maxY)
+      y: snapAxis(value.y, snapY, deviceSize.height, itemSize.height, desc.base.layout.frameRect.height, constraints.minY, constraints.maxY)
     }
   }
 }

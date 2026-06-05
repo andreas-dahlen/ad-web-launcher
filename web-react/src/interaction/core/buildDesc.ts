@@ -3,11 +3,12 @@ import { extractDomMeta } from './domMeta.ts'
 import { carouselStore } from '@primitives/carousel/store/carouselStore.ts'
 import { dragStore } from '@primitives/drag/store/dragStore.ts'
 import { sliderStore } from '@primitives/slider/store/sliderStore.ts'
-import type { BaseInteraction, DomMeta, Capabilities, BaseWithSwipe } from '../types/base.types.ts'
+import type { BaseInteraction, DomMeta, Capabilities, BaseWithSwipe, LayoutData } from '../types/base.types.ts'
 import type { CarouselData, DragData, ScrollData, SliderData } from '../types/data.types.ts'
 import type { CarouselDesc, SliderDesc, DragDesc, ButtonDesc, ScrollDesc } from '../types/descriptor.types.ts'
 import type { Descriptor } from '../types/descriptor.types.ts'
 import { scrollStore } from '@primitives/scroll/store/scrollStore.ts'
+import { sizeStore } from '../../shared/runtime/sizeStore.ts'
 
 interface Builder {
   capabilities: Capabilities
@@ -121,40 +122,62 @@ export const buildDesc = {
 
   buildSwipeBase(metaData: DomMeta, r: Builder): BaseWithSwipe {
     const base = this.buildBase(metaData, r.pointerId)
-    const { grabOffset, frame } = domQuery.getElSnapshot(r.x, r.y, metaData.el)
+    const layout = this.buildLayout(metaData, r)
     return {
       ...base,
-      grabOffset: grabOffset,
-      frame: frame
+      layout: layout
     }
   },
 
+  buildLayout(metaData: DomMeta, r: Builder): LayoutData {
+    const d = sizeStore.getState().device
+    const deviceSize = { width: d.width, height: d.height }
+    const { grabOffset, frame } = domQuery.getElSnapshot(r.x, r.y, metaData.el)
+    switch (metaData.type) {
+      case 'carousel': {
+        const s = carouselStore.getState().get(metaData.id)
+        return { ...s.layout, grabOffset, frameRect: frame, deviceSize }
+      }
+      case 'slider': {
+        const s = sliderStore.getState().get(metaData.id)
+        return { ...s.layout, grabOffset, frameRect: frame, deviceSize }
+      }
+
+      case 'drag': {
+        // dragStore.getState().setFrameRect(metaData.id, frame)
+        const s = dragStore.getState().get(metaData.id)
+        return { ...s?.layout, grabOffset, frameRect: frame, deviceSize }
+      }
+
+      case 'scroll': {
+        const s = scrollStore.getState().get(metaData.id)
+        return { ...s.layout, grabOffset, frameRect: frame, deviceSize }
+      }
+      default: throw new Error(`metaData.type error: ${metaData.type}`)
+    }
+  },
   /* =========================
     Build Data
   ========================= */
 
-  buildCarouselData(metaData: DomMeta): (CarouselData) | null {
+  buildCarouselData(metaData: DomMeta): (CarouselData) {
     const s = carouselStore.getState().get(metaData.id)
-    if (!s) return null
     const lockSwipeAt = { prev: metaData.lockPrevAt, next: metaData.lockNextAt }
-    return { index: s.index, containerSize: s.containerSize, lockSwipeAt }
+    return { index: s.index, lockSwipeAt }
   },
-  buildSliderData(metaData: DomMeta): SliderData | null {
+  buildSliderData(metaData: DomMeta): SliderData {
     const s = sliderStore.getState().get(metaData.id)
-    if (!s) return null
-    return { thumbSize: s.thumbSize, constraints: { min: s.min, max: s.max }, containerSize: s.containerSize }
+    return { constraints: { min: s.min, max: s.max } }
   },
   buildDragData(metaData: DomMeta): DragData | null {
     const s = dragStore.getState().get(metaData.id)
-    if (!s) return null
     const snap = (metaData.snapX != null && metaData.snapY != null) ? { x: metaData.snapX, y: metaData.snapY } : undefined
-    return { settledOffset: s.settledOffset, layout: s.layout, snap: snap }
+    return { settledOffset: s.settledOffset, snap: snap, constraints: s.constraints }
   },
   buildScrollData(metaData: DomMeta): ScrollData | null {
     const s = scrollStore.getState().get(metaData.id)
     const onEdgeDir = metaData.onEdgeDir != null ? metaData.onEdgeDir : undefined
-    if (!s) return null
-    return { onEdgeDir, containerSize: s.containerSize, contentSize: s.contentSize, settledValue: s.settledValue, isVisible: s.isVisible }
+    return { onEdgeDir, settledValue: s.settledValue, isVisible: s.isVisible }
   },
   /* =========================
       Build capabilities

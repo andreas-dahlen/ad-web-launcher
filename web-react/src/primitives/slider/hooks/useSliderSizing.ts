@@ -28,13 +28,12 @@ export function useSliderSizing({
         height: el.offsetHeight
       }
 
-      const thumbSize = {
-        width: thumbEl.offsetWidth ?? 0,
-        height: thumbEl.offsetHeight ?? 0
+      const itemSize = {
+        width: thumbEl.offsetWidth,
+        height: thumbEl.offsetHeight
       }
 
-      sliderStore.getState().setContainerSize(id, containerSize)
-      sliderStore.getState().setThumbSize(id, thumbSize)
+      sliderStore.getState().setLayout(id, { containerSize, itemSize })
     }
 
     updateLaneSize()

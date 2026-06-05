@@ -9,9 +9,11 @@ const DEFAULTS = {
   isVisible: true,
   settledValue: 0,
   velocity: 0,
-  containerSize: { width: 0, height: 0 },
-  contentSize: { width: 0, height: 0 },
-  dragging: false
+  dragging: false,
+  layout: {
+    containerSize: { width: 0, height: 0 },
+    itemSize: { width: 0, height: 0 },
+  }
 } as const
 
 const DEFAULTS_OFFSCREEN = {
@@ -20,9 +22,11 @@ const DEFAULTS_OFFSCREEN = {
   liveValue: 0,
   settledValue: 0,
   velocity: 0,
-  containerSize: { width: 0, height: 0 },
-  contentSize: { width: 0, height: 0 },
-  dragging: false
+  dragging: false,
+  layout: {
+    containerSize: { width: 0, height: 0 },
+    itemSize: { width: 0, height: 0 },
+  }
 } as const
 
 export const useScrollStore = (id: string, isInitialVisible: boolean) => {

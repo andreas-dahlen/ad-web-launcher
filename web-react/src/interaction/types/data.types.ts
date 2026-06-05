@@ -1,18 +1,9 @@
-import type { OnEdgeDir, Size2D, Vec2 } from "../../shared/typing/core.types.ts"
-
-export interface DataSizingBase {
-  readonly deviceSize: Size2D
-  readonly frameRect: DOMRect
-  readonly grabOffset: Vec2
-  readonly containerSize: Size2D
-  readonly itemSize: Size2D
-}
+import type { OnEdgeDir, Vec2 } from "../../shared/typing/core.types.ts"
 
 export type CarouselData = CarouselDataBase & CarouselModifiers
 
 interface CarouselDataBase {
   readonly index: number
-  readonly containerSize: Size2D
 }
 
 export interface CarouselModifiers {
@@ -26,13 +17,7 @@ export type DragData = DragDataBase & DragModifiers
 
 interface DragDataBase {
   readonly settledOffset: Vec2
-  readonly layout: DragLayout
-}
 
-export interface DragLayout {
-  readonly deviceSize: Size2D
-  readonly containerSize: Size2D
-  readonly itemSize: Size2D
   readonly constraints: DragConstraints
 }
 
@@ -49,9 +34,8 @@ export interface DragModifiers {
 }
 
 export interface SliderData {
-  readonly thumbSize: Size2D
   readonly constraints: SliderConstraints
-  readonly containerSize: Size2D
+
 }
 
 export interface SliderConstraints {
@@ -61,8 +45,6 @@ export interface SliderConstraints {
 
 export interface ScrollData {
   readonly settledValue: number
-  readonly containerSize: Size2D
-  readonly contentSize: Size2D
   readonly isVisible: boolean //always included but not always used... onEdgeDir drives behavior.
   readonly onEdgeDir?: OnEdgeDir
 }

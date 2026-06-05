@@ -1,7 +1,5 @@
 import { useLayoutEffect } from "react"
 import { dragStore } from '@primitives/drag/store/dragStore'
-import { sizeStore } from '../../../shared/runtime/sizeStore'
-
 
 interface UseDragSizingProps {
   elRef: React.RefObject<HTMLElement | null>
@@ -27,12 +25,6 @@ export function useDragSizing({
       const itemHeight = el.offsetHeight
       const containerWidth = containerEl.offsetWidth
       const containerHeight = containerEl.offsetHeight
-      const device = sizeStore.getState().device
-
-      const deviceSize = {
-        width: device.width,
-        height: device.height
-      }
 
       const containerSize = {
         width: containerWidth,
@@ -51,8 +43,9 @@ export function useDragSizing({
         maxY: containerHeight - itemHeight
       }
       dragStore.getState().setLayout(id, {
-        constraints, containerSize, itemSize, deviceSize
+        containerSize, itemSize
       })
+      dragStore.getState().setConstraints(id, constraints)
     }
     updateLayout()
 

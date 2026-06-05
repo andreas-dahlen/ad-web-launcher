@@ -2,8 +2,9 @@ import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 import type { EventType, Vec2 } from '@typing/core.types'
 import type { DragSolution } from '@interaction/types/Runtime.types'
-import type { DragLayout } from '@interaction/types/data.types'
+import type { DragConstraints } from '@interaction/types/data.types'
 import type { FrameSnapshot } from '@interaction/types/base.types'
+import type { StoreLayout } from '@typing/store.types'
 
 type Drag = {
   //react motion
@@ -13,21 +14,25 @@ type Drag = {
   settledOffset: Vec2
 
   // resize observer
-  layout: DragLayout
 
-  frame: FrameSnapshot
+  layout: StoreLayout
+
+  constraints: DragConstraints
+
+  frameRect: FrameSnapshot
 }
 
 type AcceptedDrag = Extract<DragSolution, { storeAccepted: true }>
 
 export type DragStore = {
   bindings: Record<string, Drag>
-  init: (id: string) => void
-  get: (id: string) => Readonly<Drag> | null
+  init: (id: string, fallback: Drag) => void
+  get: (id: string) => Readonly<Drag>
   delete: (id: string) => void
 
-  setLayout: (id: string, layout: DragLayout) => void
-  setFrame: (id: string, frame: FrameSnapshot) => void
+  setLayout: (id: string, layout: StoreLayout) => void
+  setConstraints: (id: string, constraints: DragConstraints) => void
+  setFrameRect: (id: string, frame: FrameSnapshot) => void
   setPosition: (id: string, pos: Vec2) => void
 
   apply: (id: string, event: EventType, solv: AcceptedDrag) => void
@@ -38,37 +43,16 @@ export const dragStore = create<DragStore>()(
 
     bindings: {},
     //tsx only!
-    init: (id) => {
+    init: (id, fallback) => {
       if (get().bindings[id]) return
 
       set(state => {
-        state.bindings[id] = {
-          settledOffset: { x: 0, y: 0 },
-          liveOffset: { x: 0, y: 0 },
-          dragging: false,
-          layout: {
-            constraints: {
-              minX: -Infinity,
-              maxX: Infinity,
-              minY: -Infinity,
-              maxY: Infinity
-            },
-            containerSize: { width: 0, height: 0 },
-            itemSize: { width: 0, height: 0 },
-            deviceSize: { width: 0, height: 0 }
-          },
-          frame: {
-            left: 0,
-            top: 0,
-            width: 0,
-            height: 0
-          }
-        }
+        state.bindings[id] = fallback
       })
     },
 
     get: (id) => {
-      return get().bindings[id] ?? null
+      return get().bindings[id]
     },
 
     delete: (id: string) => {
@@ -82,19 +66,25 @@ export const dragStore = create<DragStore>()(
         const s = state.bindings[id]
         if (!s) return
         s.layout = {
-          constraints: packet.constraints,
           containerSize: packet.containerSize,
           itemSize: packet.itemSize,
-          deviceSize: packet.deviceSize
         }
       })
     },
 
-    setFrame(id, packet) {
+    setConstraints: (id, constraints) => {
       set(state => {
         const s = state.bindings[id]
         if (!s) return
-        s.frame = packet
+        s.constraints = constraints
+      })
+    },
+
+    setFrameRect(id, packet) {
+      set(state => {
+        const s = state.bindings[id]
+        if (!s) return
+        s.frameRect = packet
       })
     },
 
@@ -112,6 +102,8 @@ export const dragStore = create<DragStore>()(
         if (!s) return
         switch (event) {
           case 'swipeStart': {
+            s.frameRect = solv.frameRect ?? s.frameRect
+
             s.dragging = true
             s.liveOffset = { x: 0, y: 0 }
             break

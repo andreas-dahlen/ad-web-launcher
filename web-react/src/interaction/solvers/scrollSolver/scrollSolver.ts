@@ -20,7 +20,7 @@ export const scrollSolver: Partial<
     if (delta1d == null) return { storeAccepted: false } satisfies ScrollSolution
     const isOverflow = overflowUtils.isOverflow(desc.data, runtime, desc.base.axis)
     return isOverflow
-      ? { ...overflowUtils.resolveStart(desc.data, desc.base.pointerId, isOverflow), storeAccepted: true } satisfies ScrollSolution
+      ? { ...overflowUtils.resolveStart(desc.data, desc.base, desc.base.pointerId, isOverflow), storeAccepted: true } satisfies ScrollSolution
       : { ...scrollUtils.resolveStart(delta1d, desc, isOverflow), storeAccepted: true } satisfies ScrollSolution
   },
 
@@ -29,8 +29,8 @@ export const scrollSolver: Partial<
     const isOverflow = computed.isOverflow
     if (isOverflow == null || delta1d == null) return { storeAccepted: false } satisfies ScrollSolution
     const result = isOverflow
-      ? overflowUtils.resolveSwipe(delta1d, desc.data, computed)
-      : scrollUtils.resolveSwipe(delta1d, desc.data)
+      ? overflowUtils.resolveSwipe(delta1d, desc.base, computed)
+      : scrollUtils.resolveSwipe(delta1d, desc.data, desc.base)
     return { ...result, storeAccepted: true } satisfies ScrollSolution
   },
 
@@ -41,7 +41,7 @@ export const scrollSolver: Partial<
 
     const result = isOverflow
       ? overflowUtils.resolveEnd(delta1d, desc)
-      : scrollUtils.resolveEnd(delta1d, desc.data)
+      : scrollUtils.resolveEnd(delta1d, desc.data, desc.base)
 
     return { ...result, storeAccepted: true } satisfies ScrollSolution
   },

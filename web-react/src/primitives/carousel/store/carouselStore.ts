@@ -1,7 +1,8 @@
 import { immer } from "zustand/middleware/immer"
 import { create } from 'zustand'
-import type { Direction, EventType, Size2D } from '../../../shared/typing/core.types'
+import type { Direction, EventType } from '../../../shared/typing/core.types'
 import type { CarouselSolution } from '@interaction/types/Runtime.types'
+import type { StoreLayout } from '@typing/store.types'
 
 type Carousel = {
   //react motion
@@ -10,7 +11,7 @@ type Carousel = {
 
   //reactScenes
   count: number
-  containerSize: Size2D
+  layout: StoreLayout
   dragging: boolean
 
   //read only... not used by react
@@ -22,12 +23,13 @@ type AcceptedCarousel = Extract<CarouselSolution, { storeAccepted: true }>
 
 export type CarouselStore = {
   bindings: Record<string, Carousel>
-  init: (id: string) => void
-  get: (id: string) => Readonly<Carousel> | null
+  init: (id: string, fallback: Carousel) => void
+  get: (id: string) => Readonly<Carousel>
   delete: (id: string) => void
 
   setCount: (id: string, count: number) => void
-  setSize: (id: string, containerSize: Size2D) => void
+
+  setLayout: (id: string, packet: StoreLayout) => void
 
   setSettling: (id: string) => void
 
@@ -39,27 +41,16 @@ export const carouselStore = create<CarouselStore>()(
 
     bindings: {},
 
-    init: (id) => {
+    init: (id, fallback) => { //TODO change to fallback
       if (get().bindings[id]) return
 
       set(state => {
-        state.bindings[id] = {
-          index: 0,
-          liveOffset: 0,
-
-          count: 0,
-          containerSize: { width: 0, height: 0 },
-          dragging: false,
-
-          settling: false,
-          pendingDir: null,
-          //lockPrev/lockNextAt TODO could have null values as defaults
-        }
+        state.bindings[id] = fallback
       })
     },
 
     get: (id) => {
-      return get().bindings[id] ?? null
+      return get().bindings[id]
     },
 
     delete: (id: string) => {
@@ -75,12 +66,15 @@ export const carouselStore = create<CarouselStore>()(
         s.count = Math.max(0, count)
       })
     },
-    setSize: (id, containerSize) => {
+
+    setLayout(id, packet) {
       set(state => {
         const s = state.bindings[id]
         if (!s) return
-        if (s.containerSize.width === containerSize.width && s.containerSize.height === containerSize.height) return
-        s.containerSize = containerSize
+        s.layout = {
+          containerSize: packet.containerSize,
+          itemSize: packet.itemSize,
+        }
       })
     },
 

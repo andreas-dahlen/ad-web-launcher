@@ -35,12 +35,12 @@ A custom gesture-handling pipeline intercepts raw pointer events on DOM elements
 | `types/pipelineType.ts` | Pipeline plumbing types. `PointerEventPackage`, `InterpreterFn`, `solverFn`, `SolverMap`, `CtxPartial`, `EventMap`, `CarouselFunctions`, `SliderFunctions`, `DragFunctions`. |
 | `types/gestureTypeGuards.ts` | Assertion type guards. `descIs<T>`, `isCarousel`, `isDrag`, `isSlider`, `isButton`, `isGestureType`. In production (VITE_DEBUG !== 'true'), mismatches `console.warn` instead of throwing. |
 | `types/descriptor/baseType.ts` | Descriptor base types. `BaseInteraction` (pointerId, element, id, actionId?). `BaseWithSwipe` (adds axis, baseOffset). `Reactions` (pressable, swipeable, modifiable). `Context` (el, ds, id, axis, type, laneValid, snapX, snapY, lockPrevAt, lockNextAt, locked). |
-| `types/descriptor/dataType.ts` | Per-primitive data snapshots. `CarouselData` (index, size). `CarouselModifiers` (lockSwipeAt). `DragData` (position, constraints). `DragModifiers` (snap?, locked?). `SliderData` (thumbSize, constraints, size). `GestureUpdate` (pointerId, sliderStartOffset?, sliderValuePerPixel?). |
+| `types/descriptor/dataType.ts` | Per-primitive data snapshots. `CarouselData` (index, size). `CarouselModifiers` (lockSwipeAt). `DragData` (position, constraints). `DragModifiers` (snap?, locked?). `SliderData` (itemSize, constraints, size). `GestureUpdate` (pointerId, sliderStartOffset?, sliderValuePerPixel?). |
 | `types/descriptor/descriptor.ts` | Discriminated descriptor union. `CarouselDesc` = {base: BaseWithSwipe, data: CarouselData & CarouselModifiers, reactions, ctx: CtxCarousel}. `SliderDesc`, `DragDesc`, `ButtonDesc` analogous. `Descriptor` = union of `{type: 'carousel'} & CarouselDesc | ...`. |
 | `updater/renderer.ts` | DOM attribute writer + event dispatcher. `render.handle(ctx)` applies `data-pressed`/`data-swiping` attributes via `typeHandlers` map, dispatches `CustomEvent('reaction', {detail: ctx})`. `handleExtras` processes `pressCancel` on the original press element when a swipe starts on a different lane. |
 | `zunstand/carouselState.ts` | Zustand store (immer). Shape per id: `{index, offset, count, size, dragging, settling, pendingDir}`. Methods: `init`, `get`, `setCount`, `setSize`, `setPosition` (commits index from pendingDir + rAF settling reset), `swipeStart`, `swipe`, `swipeCommit`, `swipeRevert`. Helper: `getNextIndex`. |
 | `zunstand/dragState.ts` | Zustand store (immer). Shape per id: `{position, offset, dragging, minX, maxX, minY, maxY}`. Methods: `init`, `get`, `setConstraints`, `setPosition`, `swipeStart`, `swipe`, `swipeCommit`. |
-| `zunstand/sliderState.ts` | Zustand store (immer). Shape per id: `{value, offset, min, max, size, thumbSize, dragging}`. Methods: `init`, `get`, `setConstraints`, `setSize`, `setThumbSize`, `press`, `swipeStart`, `swipe`, `swipeCommit`. |
+| `zunstand/sliderState.ts` | Zustand store (immer). Shape per id: `{value, offset, min, max, size, itemSize, dragging}`. Methods: `init`, `get`, `setConstraints`, `setSize`, `setitemSize`, `press`, `swipeStart`, `swipe`, `swipeCommit`. |
 | `zunstand/sizeState.ts` | Device/viewport scaling store. Computes `scale`, `scaledWidth`, `scaledHeight` from device dimensions (from `window.__DEVICE` or defaults) vs viewport. Exports `normalizeParameter(px)`, `getAxisSize(axis)`, `useSize()` hook (uses `useShallow`). Used by `intentUtils.normalizedDelta` and `intentUtils.swipeThresholdCalc`. |
 
 ### `components/primitives/`
@@ -61,8 +61,8 @@ A custom gesture-handling pipeline intercepts raw pointer events on DOM elements
 | `drag/hooks/useDragMotion.ts` | Computes `transform: translate3d(position + offset)` style with drag/settle transition. |
 | `slider/Slider.tsx` | Slider primitive. Renders a track + thumb. Uses `useSliderZustand`, `useSliderSizing`, `useSliderMotion`, `usePointerForwarding`. Sets `data-type="slider"`, `data-id`, `data-axis`, `data-press`, `data-react-swipe`, `data-react-swipe-start`, `data-react-swipe-commit`. Exposes `onVolumeChange` callback. Deduplicates emitted values via `lastEmitted` ref. Inverts value for vertical sliders. |
 | `slider/hooks/useSliderZustand.ts` | Calls `sliderStore.init(id)` (during render), subscribes to `sliderStore[id]` with fallback defaults. |
-| `slider/hooks/useSliderSizing.ts` | `ResizeObserver` on slider + thumb → writes track size and thumb size to `sliderStore.setSize` and `sliderStore.setThumbSize`. |
-| `slider/hooks/useSliderMotion.ts` | Computes thumb `transform` from value/min/max/laneSize/thumbSize with drag transition. |
+| `slider/hooks/useSliderSizing.ts` | `ResizeObserver` on slider + thumb → writes track size and thumb size to `sliderStore.setSize` and `sliderStore.setitemSize`. |
+| `slider/hooks/useSliderMotion.ts` | Computes thumb `transform` from value/min/max/laneSize/itemSize with drag transition. |
 
 ---
 
@@ -118,7 +118,7 @@ A custom gesture-handling pipeline intercepts raw pointer events on DOM elements
 - **`CarouselModifiers`**: `{ lockSwipeAt?: { prev, next } }`
 - **`DragData`**: `{ position: Vec2, constraints: { minX, maxX, minY, maxY } }`
 - **`DragModifiers`**: `{ snap?: Vec2, locked?: boolean }`
-- **`SliderData`**: `{ thumbSize: Vec2, constraints: { min, max }, size: Vec2 }`
+- **`SliderData`**: `{ itemSize: Vec2, constraints: { min, max }, size: Vec2 }`
 - **`GestureUpdate`**: `{ pointerId, sliderStartOffset?, sliderValuePerPixel? }` — slider-only feedback to interpreter
 
 ### Descriptors (`descriptor/descriptor.ts`)

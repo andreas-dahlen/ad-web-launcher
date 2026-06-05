@@ -1,7 +1,8 @@
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
-import type { EventType, Size2D } from '@typing/core.types'
+import type { EventType } from '@typing/core.types'
 import type { ScrollSolution } from '@interaction/types/Runtime.types'
+import type { StoreLayout } from '@typing/store.types'
 
 type Scroll = {
   //react motion
@@ -16,8 +17,8 @@ type Scroll = {
 
   // the optional section non reactive
   dragging: boolean
-  containerSize: Size2D
-  contentSize: Size2D
+
+  layout: StoreLayout
 }
 
 type AcceptedScroll = Extract<ScrollSolution, { storeAccepted: true }>
@@ -25,11 +26,10 @@ type AcceptedScroll = Extract<ScrollSolution, { storeAccepted: true }>
 export type ScrollStore = {
   bindings: Record<string, Scroll>
   init: (id: string, fallback: Scroll) => void
-  get: (id: string) => Readonly<Scroll> | null
+  get: (id: string) => Readonly<Scroll>
   delete: (id: string) => void
 
-  setContainerSize: (id: string, containerSize: Size2D) => void
-  setContentSize: (id: string, contentSize: Size2D) => void
+  setLayout: (id: string, packet: StoreLayout) => void
 
   apply: (id: string, event: EventType, solv: AcceptedScroll) => void
 }
@@ -52,7 +52,7 @@ export const scrollStore = create<ScrollStore>()(
     },
 
     get: (id) => {
-      return get().bindings[id] ?? null
+      return get().bindings[id]
     },
 
     delete: (id: string) => {
@@ -60,21 +60,15 @@ export const scrollStore = create<ScrollStore>()(
         delete state.bindings[id]
       })
     },
-    setContainerSize: (id, containerSize) => {
-      set(state => {
-        const s = state.bindings[id]
-        if (!s) return
-        if (s.containerSize.width === containerSize.width && s.containerSize.height === containerSize.height) return
-        s.containerSize = containerSize
 
-      })
-    },
-    setContentSize: (id, contentSize) => {
+    setLayout(id, packet) {
       set(state => {
         const s = state.bindings[id]
         if (!s) return
-        if (s.contentSize.width === contentSize.width && s.contentSize.height === contentSize.height) return
-        s.contentSize = contentSize
+        s.layout = {
+          containerSize: packet.containerSize,
+          itemSize: packet.itemSize,
+        }
       })
     },
 
@@ -128,28 +122,6 @@ export const scrollStore = create<ScrollStore>()(
   )
 )
 
-// function startMomentum(id: string, initialVelocity: number) {
-//   let velocity = initialVelocity
-
-//   function tick() {
-//     velocity *= 0.95  // friction — tweak this
-
-//     if (Math.abs(velocity) < 0.5) return  // done
-
-//     scrollStore.setState(state => {
-//       const s = state.bindings[id]
-//       if (!s) return
-//       const maxScroll = Math.max(0, s.contentSize.height - s.containerSize.height)
-//       s.liveValue = Math.max(0, Math.min(maxScroll, s.liveValue + velocity))
-//       s.settledValue = s.liveValue
-//     })
-
-//     requestAnimationFrame(tick)
-//   }
-
-//   requestAnimationFrame(tick)
-// }
-
 const MOMENTUM = {
   durationMs: 600,
   distanceMultiplier: 4
@@ -166,7 +138,7 @@ function startMomentum(id: string, initialVelocity: number) {
     scrollStore.setState(state => {
       const s = state.bindings[id]
       if (!s) return
-      const maxScroll = Math.max(0, s.contentSize.height - s.containerSize.height)
+      const maxScroll = Math.max(0, s.layout.itemSize.height - s.layout.containerSize.height)
       s.liveValue = Math.max(0, Math.min(maxScroll, s.liveValue + velocity))
       s.settledValue = s.liveValue
     })

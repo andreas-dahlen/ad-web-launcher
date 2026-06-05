@@ -9,13 +9,13 @@ import type { BaseWithAxis1D } from '@interaction/types/base.types.ts'
 export const scrollUtils = {
 
   normalize(base: BaseWithAxis1D, delta: Vec2): number | null {
-    const basics = normalizeBase(base.grabOffset, base.axis, delta)
+    const basics = normalizeBase(base.layout.grabOffset, base.axis, delta)
     if (basics.mainDelta == null) return null
     return basics.mainDelta
   },
 
   resolveStart(mainDelta: number, desc: ScrollDesc, isOverflow: boolean) {
-    const maxScroll = Math.max(0, desc.data.contentSize.height - desc.data.containerSize.height)
+    const maxScroll = Math.max(0, desc.base.layout.itemSize.height - desc.base.layout.containerSize.height)
     const raw = desc.data.settledValue - mainDelta
     return {
       delta1D: vector.clamp(raw, 0, maxScroll),
@@ -26,14 +26,14 @@ export const scrollUtils = {
     }
   },
 
-  resolveSwipe(mainDelta: number, data: ScrollData) {
-    const maxScroll = Math.max(0, data.contentSize.height - data.containerSize.height)
+  resolveSwipe(mainDelta: number, data: ScrollData, base: BaseWithAxis1D) {
+    const maxScroll = Math.max(0, base.layout.itemSize.height - base.layout.containerSize.height)
     const raw = data.settledValue - mainDelta
     return { delta1D: vector.clamp(raw, 0, maxScroll) }
   },
 
 
-  resolveEnd(mainDelta: number, data: ScrollData) {
-    return { ...this.resolveSwipe(mainDelta, data), isVisible: true }
+  resolveEnd(mainDelta: number, data: ScrollData, base: BaseWithAxis1D) {
+    return { ...this.resolveSwipe(mainDelta, data, base), isVisible: true }
   },
 }

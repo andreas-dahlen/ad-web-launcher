@@ -24,7 +24,7 @@ export const carouselSolver: Partial<
    * Handle swipe (drag) - clamp delta and return offset reaction
    */
   swipe(runtime, desc) {
-    const norm = carouselUtils.normalize(desc.base, desc.data, runtime.delta) //needs runtime.delta, desc.base.axis and data... so just pass desc and runtime.delta..., 
+    const norm = carouselUtils.normalize(desc.base, runtime.delta) //needs runtime.delta, desc.base.axis and data... so just pass desc and runtime.delta..., 
     const gated = exceedsCrossRange(norm)
     if (norm.mainDelta == null) return { storeAccepted: false } satisfies CarouselSolution
 
@@ -40,7 +40,7 @@ export const carouselSolver: Partial<
    * Handle swipeCommit - decide commit vs revert
    */
   swipeCommit(runtime, desc) {
-    const norm = carouselUtils.normalize(desc.base, desc.data, runtime.delta)
+    const norm = carouselUtils.normalize(desc.base, runtime.delta)
     const gated = exceedsCrossRange(norm)
 
     if (norm.mainDelta == null) return { delta1D: 0, event: 'swipeRevert', storeAccepted: true } satisfies CarouselSolution

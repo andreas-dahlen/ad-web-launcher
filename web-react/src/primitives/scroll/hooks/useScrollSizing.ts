@@ -32,13 +32,12 @@ export function useScrollSizing({
         height: containerHeight
       }
 
-      const contentSize = {
+      const itemSize = {
         width: contentWidth,
         height: contentHeight
       }
 
-      scrollStore.getState().setContainerSize(id, containerSize)
-      scrollStore.getState().setContentSize(id, contentSize)
+      scrollStore.getState().setLayout(id, { containerSize, itemSize })
     }
     updateLayout()
 

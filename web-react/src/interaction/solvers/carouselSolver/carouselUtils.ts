@@ -3,13 +3,12 @@ import { vector } from '../utils/vectorUtils.ts'
 import type { Normalized1D } from '../../types/Runtime.types.ts'
 import type { Axis, Vec2 } from '../../../shared/typing/core.types.ts'
 import type { BaseWithAxis1D } from '@interaction/types/base.types.ts'
-import type { CarouselData } from '@interaction/types/data.types.ts'
 
 export const carouselUtils = {
 
-  normalize(base: BaseWithAxis1D, data: CarouselData, delta: Vec2): Normalized1D {
-    const basics = normalizeBase(base.grabOffset, base.axis, delta)
-    const track = vector.resolveByAxis1D(data.containerSize.width, data.containerSize.height, base.axis)
+  normalize(base: BaseWithAxis1D, delta: Vec2): Normalized1D {
+    const basics = normalizeBase(base.layout.grabOffset, base.axis, delta)
+    const track = vector.resolveByAxis1D(base.layout.containerSize.width, base.layout.containerSize.height, base.axis)
     return {
       ...basics,
       mainSize: track?.main,

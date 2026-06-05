@@ -8,15 +8,19 @@ const DEFAULTS = {
   min: 0,
   max: 100,
   containerSize: { width: 0, height: 0 },
-  thumbSize: { width: 0, height: 0 },
-  dragging: false
+  itemSize: { width: 0, height: 0 },
+  dragging: false,
+  layout: {
+    containerSize: { width: 0, height: 0 },
+    itemSize: { width: 0, height: 0 },
+  }
 } as const
 
 export const useSliderStore = (id: string) => {
 
   useEffect(() => {
     debugRegisterBinding(id, 'useSliderStore')
-    sliderStore.getState().init(id)
+    sliderStore.getState().init(id, DEFAULTS)
     return () => {
       debugUnregisterBinding(id, 'useSliderStore')
       sliderStore.getState().delete(id)

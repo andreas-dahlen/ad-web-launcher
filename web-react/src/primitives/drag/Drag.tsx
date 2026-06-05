@@ -23,7 +23,7 @@ export default function Drag({
 }: DragProps) {
 
   // ── Fully subscribe to the drag store─────────────────────────────
-  const { settledOffset, liveOffset, dragging, frame, layout } = useDragStore(id)
+  const { settledOffset, liveOffset, dragging, layout, frameRect } = useDragStore(id)
   const { dragSnapX, dragSnapY, isSnapEnabled } = useSettingsStore()
 
   // ── DOM references & sizing ─────────────────────────────
@@ -84,7 +84,7 @@ export default function Drag({
           style={{
             width: layout.containerSize.width,
             height: layout.containerSize.height,
-            top: frame.top,
+            top: frameRect.top,
             // left: frame.left
           }}
         >

@@ -30,7 +30,7 @@ export default function Carousel({
 }: CarouselProps) {
 
   // ── Fully subscribe to the carousel store ─────────────────────────────
-  const { settling, index, liveOffset, count, dragging, containerSize } = useCarouselStore(id)
+  const { settling, index, liveOffset, count, dragging, layout } = useCarouselStore(id)
 
   // ── Initialize count for mirror scenes ─────────────────────────────
 
@@ -41,9 +41,10 @@ export default function Carousel({
 
   // ── DOM reference & lane size ─────────────────────────────
   const containerRef = useRef<HTMLDivElement>(null)
-  useCarouselSizing({ elRef: containerRef, axis, id })
+  const itemRef = useRef<HTMLDivElement>(null)
+  useCarouselSizing({ elRef: containerRef, sceneRef: itemRef, id })
 
-  const axisSize = axis === "horizontal" ? containerSize.width : containerSize.height
+  const axisSize = axis === "horizontal" ? layout.containerSize.width : layout.containerSize.height
 
   // ── Pointer forwarding for gestures ─────────────────────────────
   usePointerBridge({
@@ -117,6 +118,7 @@ export default function Carousel({
         return (
           <div
             key={slot.sceneIdx}
+            ref={itemRef}
             className={clsx(carouselCss.scene, interactive && setColor(slot.sceneIdx))}
             style={styleForRole(slot.role)}
             data-role={slot.role}

@@ -1,4 +1,4 @@
-import type { Vec2, Axis, InteractionType, OnEdgeDir, Axis1D, Axis2D } from "../../shared/typing/core.types.ts"
+import type { Vec2, Axis, InteractionType, OnEdgeDir, Axis1D, Axis2D, Size2D } from "../../shared/typing/core.types.ts"
 
 export interface BaseInteraction {
   readonly pointerId: number
@@ -8,9 +8,15 @@ export interface BaseInteraction {
 }
 export type BaseWithSwipe =
   BaseInteraction & {
-    readonly grabOffset: Vec2
-    readonly frame: FrameSnapshot
+    readonly layout: LayoutData
   }
+export interface LayoutData {
+  readonly deviceSize: Size2D
+  readonly frameRect: FrameSnapshot
+  readonly grabOffset: Vec2
+  readonly containerSize: Size2D
+  readonly itemSize: Size2D
+}
 
 export type BaseWithAxis1D = BaseWithSwipe & {
   axis: Axis1D

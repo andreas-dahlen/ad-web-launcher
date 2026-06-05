@@ -13,17 +13,29 @@ const DEFAULTS = {
     height: 0
   },
   dragging: false,
-  minX: -Infinity,
-  maxX: Infinity,
-  minY: -Infinity,
-  maxY: Infinity
+  constraints: {
+    minX: -Infinity,
+    maxX: Infinity,
+    minY: -Infinity,
+    maxY: Infinity
+  },
+  layout: {
+    containerSize: { width: 0, height: 0 },
+    itemSize: { width: 0, height: 0 }
+  },
+  frameRect: {
+    left: 0,
+    top: 0,
+    width: 0,
+    height: 0
+  }
 } as const
 
 export const useDragStore = (id: string) => {
 
   useEffect(() => {
     debugRegisterBinding(id, 'useDragStore')
-    dragStore.getState().init(id)
+    dragStore.getState().init(id, DEFAULTS)
     return () => {
       debugUnregisterBinding(id, 'useDragStore')
       dragStore.getState().delete(id)

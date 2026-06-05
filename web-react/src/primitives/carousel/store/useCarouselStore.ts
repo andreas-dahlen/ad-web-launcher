@@ -8,7 +8,10 @@ const DEFAULTS = {
   count: 0,
   liveOffset: 0,
   dragging: false,
-  containerSize: { x: 0, y: 0 },
+  layout: {
+    containerSize: { width: 0, height: 0 },
+    itemSize: { width: 0, height: 0 }
+  },
   settling: false,
   pendingDir: null
 } as const
@@ -17,7 +20,7 @@ export const useCarouselStore = (id: string) => {
 
   useEffect(() => {
     debugRegisterBinding(id, 'useCarouselStore')
-    carouselStore.getState().init(id)
+    carouselStore.getState().init(id, DEFAULTS)
     return () => {
       debugUnregisterBinding(id, 'useCarouselStore')
       carouselStore.getState().delete(id)

@@ -86,10 +86,6 @@ export const pipeline = {
         const solution = dragSolver?.[event]?.(runtime, desc, computed)
         if (solution?.storeAccepted) {
           dragStore.getState().apply(desc.base.id, runtime.event, solution)
-
-          if (g.runtime.event === 'swipeStart') {
-            dragStore.getState().setFrame(desc.base.id, desc.base.frame)
-          }
         }
         break
       }

@@ -3,36 +3,42 @@ import { carouselStore } from '../store/carouselStore'
 
 interface UseCarouselSizingProps {
     elRef: React.RefObject<HTMLElement | null>
-    axis: "horizontal" | "vertical"
+
+    sceneRef: React.RefObject<HTMLElement | null>
     id: string
 }
 
 export function useCarouselSizing({
     elRef,
-    axis,
+    sceneRef,
     id
 }: UseCarouselSizingProps): void {
 
     useEffect(() => {
         const el = elRef.current
+        const scene = sceneRef.current
         if (!el) return
         function updateLaneSize() {
-            if (!el) return
+            if (!el || !scene) return
 
-            const size = {
+            const containerSize = {
                 width: el.offsetWidth,
                 height: el.offsetHeight
             }
+            const itemSize = {
+                width: scene.offsetWidth,
+                height: scene.offsetHeight
+            }
 
-            carouselStore.getState().setSize(id, size)
+            carouselStore.getState().setLayout(id, { containerSize, itemSize })
         }
 
         updateLaneSize()
 
         const observer = new ResizeObserver(updateLaneSize)
-        if (el)
-            observer.observe(el)
+        if (el) observer.observe(el)
+        if (scene) observer.observe(scene)
 
         return () => observer.disconnect()
-    }, [elRef, axis, id])
+    }, [elRef, sceneRef, id])
 }

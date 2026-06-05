@@ -9,27 +9,27 @@ import type { Vec2 } from '@typing/core.types.ts'
 export const sliderUtils = {
 
   normalize(base: BaseWithAxis1D, data: SliderData, delta: Vec2): Normalized1D {
-    const basics = normalizeBase(base.grabOffset, base.axis, delta)
-    const track = vector.resolveByAxis1D(data.containerSize.width, data.containerSize.height, base.axis)
-    const thumb = vector.resolveByAxis1D(data.thumbSize.width, data.thumbSize.height, base.axis)
+    const basics = normalizeBase(base.layout.grabOffset, base.axis, delta)
+    const track = vector.resolveByAxis1D(base.layout.containerSize.width, base.layout.containerSize.height, base.axis)
+    const thumb = vector.resolveByAxis1D(base.layout.itemSize.width, base.layout.itemSize.height, base.axis)
     return {
       ...basics,
       mainSize: track.main,
       crossSize: track.cross,
-      mainThumbSize: thumb.main,
-      crossThumbSize: thumb.cross
+      mainitemSize: thumb.main,
+      crossitemSize: thumb.cross
     }
   },
 
   resolveStart(norm: Normalized1D,
     { min, max }: { min: number, max: number }) {
 
-    const { mainSize, mainOffset, mainThumbSize } = norm
-    if (mainSize == null || mainOffset == null || mainThumbSize == null) return
+    const { mainSize, mainOffset, mainitemSize } = norm
+    if (mainSize == null || mainOffset == null || mainitemSize == null) return
     const range = max - min || 1
-    const usable = mainSize - mainThumbSize
+    const usable = mainSize - mainitemSize
     // if (!usable) return
-    const ratio = (mainOffset - mainThumbSize / 2) / usable
+    const ratio = (mainOffset - mainitemSize / 2) / usable
     const value = min + vector.clamp(ratio, 0, 1) * range
     return {
       value, valuePerPixel: range / usable
