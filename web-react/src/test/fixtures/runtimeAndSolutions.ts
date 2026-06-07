@@ -1,5 +1,5 @@
 
-import type { CarouselSolution, DragSolution, Runtime, ScrollSolution, SliderSolution } from '@interaction/types/Runtime.types';
+import type { CarouselSolution, DragSolution, Runtime, ScrollSolution, SliderSolution } from '@interaction/types/runtime.types';
 import { createEl } from '@test/functions';
 
 export function createRuntime(

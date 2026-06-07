@@ -1,7 +1,7 @@
 import { DEBUG } from './debugFlags.ts'
 import type { InteractionType } from '@typing/core.types.ts'
 import { mockMetaByType } from '@test/fixtures/meta.ts'
-import { extractDomMeta } from '@interaction/core/domMeta.ts'
+import { extractDomMeta } from '@interaction/input/domMeta.ts'
 import type { DomMeta } from '@interaction/types/base.types.ts'
 
 type DebugKey = keyof typeof DEBUG.channels

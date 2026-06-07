@@ -1,8 +1,8 @@
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
-import type { EventType } from '@typing/core.types'
-import type { ScrollSolution } from '@interaction/types/Runtime.types'
+import type { ScrollOverflowSwipeCommitPayload, ScrollOverflowSwipePayload, ScrollOverflowSwipeRevertPayload, ScrollOverflowSwipeStartPayload, ScrollSwipeCommitPayload, ScrollSwipePayload, ScrollSwipeStartPayload } from '@interaction/types/solver.types'
 import type { StoreLayout } from '@typing/store.types'
+import { assertNever } from '@typing/core.types'
 
 type Scroll = {
   //react motion
@@ -21,7 +21,11 @@ type Scroll = {
   layout: StoreLayout
 }
 
-type AcceptedScroll = Extract<ScrollSolution, { storeAccepted: true }>
+export type ScrollAction =
+  | { event: 'swipeStart'; payload: ScrollSwipeStartPayload | ScrollOverflowSwipeStartPayload }
+  | { event: 'swipe'; payload: ScrollSwipePayload | ScrollOverflowSwipePayload }
+  | { event: 'swipeCommit'; payload: ScrollSwipeCommitPayload | ScrollOverflowSwipeCommitPayload }
+  | { event: 'swipeRevert'; payload: ScrollOverflowSwipeRevertPayload }
 
 export type ScrollStore = {
   bindings: Record<string, Scroll>
@@ -31,7 +35,7 @@ export type ScrollStore = {
 
   setLayout: (id: string, packet: StoreLayout) => void
 
-  apply: (id: string, event: EventType, solv: AcceptedScroll) => void
+  apply: (id: string, action: ScrollAction) => void
 }
 /* -------------------------------
    scroll state functions
@@ -72,49 +76,52 @@ export const scrollStore = create<ScrollStore>()(
       })
     },
 
-    apply: (id, event, solv) => {
+    apply: (id, action) => {
       set(state => {
         const s = state.bindings[id]
         if (!s) return
-        switch (event) {
-          case 'press': { //only happens during scroll
-            s.liveValue = solv.delta1D ?? s.liveValue
-            s.isVisible = true
-            break
-          }
+        switch (action.event) {
           case 'swipeStart': {
             s.dragging = true
-            s.liveValue = solv.delta1D ?? s.liveValue
-            s.overflowValue = solv.overflowValue ?? s.overflowValue
-            s.isVisible = solv.isVisible ?? s.isVisible
+            if (action.payload.isOverflow) {
+              // s.overflowValue = action.payload.overflowValue
+            } else {
+              s.liveValue = action.payload.delta1D
+            }
             break
           }
           case 'swipe': {
-            const newValue = solv.delta1D ?? s.liveValue
-            s.velocity = newValue - s.liveValue
-            s.liveValue = newValue
-            s.overflowValue = solv.overflowValue ?? s.overflowValue
+            if (action.payload.isOverflow) {
+              s.overflowValue = action.payload.overflowValue
+            } else {
+              const newValue = action.payload.delta1D
+              s.velocity = newValue - s.liveValue
+              s.liveValue = newValue
+            }
             break
           }
           case 'swipeCommit': {
             s.dragging = false
-            s.isVisible = solv.isVisible ?? s.isVisible
-            s.settledValue = solv.delta1D ?? s.liveValue
-            s.liveValue = solv.delta1D ?? s.liveValue
-            s.overflowValue = solv.overflowValue ?? s.overflowValue
-            if (solv.delta1D !== undefined) startMomentum(id, s.velocity)
+            s.isVisible = action.payload.isVisible
+            if (action.payload.isOverflow) {
+              s.overflowValue = action.payload.overflowValue
+            } else {
+              s.settledValue = action.payload.delta1D
+              s.liveValue = action.payload.delta1D
+              startMomentum(id, s.velocity)
+            }
             s.velocity = 0
             break
           }
           case 'swipeRevert': {
             s.dragging = false
-            s.isVisible = solv.isVisible ?? s.isVisible
-            s.overflowValue = solv.overflowValue ?? s.overflowValue
+            s.isVisible = action.payload.isVisible
+            s.overflowValue = action.payload.overflowValue
             s.liveValue = 0
             s.settledValue = 0
             break
           }
-          default: { throw new Error(`Invalid scroll event! Event: ${event}`) }
+          default: assertNever(action)
         }
       })
     }

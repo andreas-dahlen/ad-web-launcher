@@ -6,10 +6,6 @@ export interface BaseInteraction {
   readonly id: string
   readonly actionId?: string
 }
-export type BaseWithSwipe =
-  BaseInteraction & {
-    readonly layout: LayoutData
-  }
 export interface LayoutData {
   readonly deviceSize: Size2D
   readonly frameRect: FrameSnapshot
@@ -18,13 +14,16 @@ export interface LayoutData {
   readonly itemSize: Size2D
 }
 
+export type BaseWithSwipe =
+  BaseInteraction & {
+    readonly layout: LayoutData
+  }
 export type BaseWithAxis1D = BaseWithSwipe & {
   axis: Axis1D
 }
 export type BaseWithAxis2D = BaseWithSwipe & {
   axis: Axis2D
 }
-
 
 export type ElSnapshots = {
   grabOffset: Vec2

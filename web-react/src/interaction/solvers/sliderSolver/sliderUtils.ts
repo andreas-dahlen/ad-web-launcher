@@ -1,9 +1,9 @@
 import { normalizeBase } from '../utils/axisUtils.ts'
 import { vector } from '../utils/vectorUtils.ts'
-import type { Normalized1D } from '../../types/Runtime.types.ts'
+import type { Normalized1D } from '../../types/runtime.types.ts'
 import type { BaseWithAxis1D } from '@interaction/types/base.types.ts'
 import type { SliderConstraints, SliderData } from '@interaction/types/data.types.ts'
-import type { Computed } from '@interaction/types/computed.types.ts'
+import type { SliderComputed } from '@interaction/types/computed.types.ts'
 import type { Vec2 } from '@typing/core.types.ts'
 
 export const sliderUtils = {
@@ -25,7 +25,6 @@ export const sliderUtils = {
     { min, max }: { min: number, max: number }) {
 
     const { mainSize, mainOffset, mainitemSize } = norm
-    if (mainSize == null || mainOffset == null || mainitemSize == null) return
     const range = max - min || 1
     const usable = mainSize - mainitemSize
     // if (!usable) return
@@ -37,17 +36,11 @@ export const sliderUtils = {
   },
 
   //constraints, computed values... norm.maindelta
-  resolveSwipe(delta: number, constraints: SliderConstraints, computed: Computed) {
-    if (!computed) return
+  resolveSwipe(delta: number, constraints: SliderConstraints, computed: SliderComputed) {
     const pixel = computed.sliderValuePerPixel
     const offset = computed.sliderStartOffset
 
     const { min, max } = constraints
-
-    if (delta == null ||
-      pixel == null ||
-      offset == null
-    ) return
 
     const nextValue = offset + delta * pixel
     return vector.clamp(nextValue, min, max)

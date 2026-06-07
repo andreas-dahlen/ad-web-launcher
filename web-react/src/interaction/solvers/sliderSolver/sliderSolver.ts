@@ -6,41 +6,39 @@
  * - No swipeRevert reaction
  */
 import { exceedsCrossRange } from "../utils/axisUtils.ts"
-import type { EventType } from '../../../shared/typing/core.types.ts'
-import type { SliderDesc } from '../../types/descriptor.types.ts'
-import type { Runtime, SliderSolution } from '../../types/Runtime.types.ts'
 import { sliderUtils } from './sliderUtils.ts'
-import type { Computed } from '@interaction/types/computed.types.ts'
+import type { SliderSolver } from '@interaction/types/solver.types.ts'
 
-export const sliderSolver: Partial<
-  Record<EventType, (runtime: Runtime, desc: SliderDesc, computed: Computed) => SliderSolution>
-> = {
+// export const sliderSolver: Partial<
+//   Record<EventType, (runtime: Runtime, desc: SliderDesc, computed: SliderComputed) => SliderSolution>
+// > = {
+
+export const sliderSolver: SliderSolver = {
 
   press(runtime, desc) {
     const norm = sliderUtils.normalize(desc.base, desc.data, runtime.delta)
     const result = sliderUtils.resolveStart(norm, desc.data.constraints)
-    if (!result?.value) return { storeAccepted: false } satisfies SliderSolution
     return {
-      delta1D: result.value,
-      storeAccepted: true
-    } satisfies SliderSolution
+      routing: "store", solv: {
+        delta1D: result.value
+      }
+    }
   },
 
   swipeStart(runtime, desc) {
 
     const norm = sliderUtils.normalize(desc.base, desc.data, runtime.delta)
     const result = sliderUtils.resolveStart(norm, desc.data.constraints)
-    if (!result?.value) return { storeAccepted: false } satisfies SliderSolution
-    console.log("press")
     return {
-      delta1D: result?.value,
-      storeAccepted: true,
-      computedUpdate: {
-        pointerId: desc.base.pointerId,
-        sliderStartOffset: result?.value,
-        sliderValuePerPixel: result?.valuePerPixel
+      routing: "store", solv: {
+        delta1D: result.value,
+        computedUpdate: {
+          pointerId: desc.base.pointerId,
+          sliderStartOffset: result.value,
+          sliderValuePerPixel: result.valuePerPixel
+        }
       }
-    } satisfies SliderSolution
+    }
   },
 
   /**
@@ -49,11 +47,12 @@ export const sliderSolver: Partial<
   swipe(runtime, desc, computed) {
     const norm = sliderUtils.normalize(desc.base, desc.data, runtime.delta)
     const gated = exceedsCrossRange(norm)
-    if (gated || !norm?.mainDelta) return { storeAccepted: false } satisfies SliderSolution
+    if (gated) return null
     const value =
       sliderUtils.resolveSwipe(norm.mainDelta, desc.data.constraints, computed)
-    if (!value) return { storeAccepted: false } satisfies SliderSolution
-    return { delta1D: value, storeAccepted: true } satisfies SliderSolution
+    return {
+      routing: "store", solv: { delta1D: value }
+    }
   },
 
   /**
@@ -63,11 +62,12 @@ export const sliderSolver: Partial<
   swipeCommit(runtime, desc, computed) {
     const norm = sliderUtils.normalize(desc.base, desc.data, runtime.delta)
     const gated = exceedsCrossRange(norm)
-    if (gated || !norm?.mainDelta) return { storeAccepted: false } satisfies SliderSolution
+    if (gated) return null
 
     const value =
       sliderUtils.resolveSwipe(norm.mainDelta, desc.data.constraints, computed)
-    if (!value) return { storeAccepted: false } satisfies SliderSolution
-    return { delta1D: value, storeAccepted: true } satisfies SliderSolution
+    return {
+      routing: "store", solv: { delta1D: value }
+    }
   }
 }

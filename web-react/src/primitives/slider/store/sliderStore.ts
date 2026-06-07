@@ -1,7 +1,6 @@
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
-import type { EventType } from '@typing/core.types'
-import type { SliderSolution } from '@interaction/types/Runtime.types'
+import type { SliderPressPayload, SliderSwipeCommitPayload, SliderSwipePayload, SliderSwipeStartPayload } from '@interaction/types/solver.types'
 import type { StoreLayout } from '@typing/store.types'
 
 type Slider = {
@@ -18,7 +17,12 @@ type Slider = {
   dragging: boolean
 }
 
-type AcceptedSlider = Extract<SliderSolution, { storeAccepted: true }>
+export type SliderAction =
+  | { event: 'press'; payload: SliderPressPayload }
+  | { event: 'swipeStart'; payload: SliderSwipeStartPayload }
+  | { event: 'swipe'; payload: SliderSwipePayload }
+  | { event: 'swipeCommit'; payload: SliderSwipeCommitPayload }
+
 
 export type SliderStore = {
   bindings: Record<string, Slider>
@@ -30,7 +34,7 @@ export type SliderStore = {
 
   setLayout: (id: string, packet: StoreLayout) => void
 
-  apply: (id: string, event: EventType, solv: AcceptedSlider) => void
+  apply: (id: string, action: SliderAction) => void
 }
 /* -------------------------------
    Slider state functions
@@ -77,27 +81,27 @@ export const sliderStore = create<SliderStore>()(
       })
     },
 
-    apply: (id, event, solv) => {
+    apply: (id, action) => {
       set(state => {
         const s = state.bindings[id]
         if (!s) return
-        switch (event) {
+        switch (action.event) {
           case 'press': {
-            s.value = solv.delta1D ?? s.value
+            s.value = action.payload.delta1D ?? s.value
             break
           }
           case 'swipeStart': {
             s.dragging = true
-            s.value = solv.delta1D ?? s.value
+            s.value = action.payload.delta1D ?? s.value
             break
           }
           case 'swipe': {
-            s.value = solv.delta1D ?? s.value
+            s.value = action.payload.delta1D ?? s.value
             break
           }
           case 'swipeCommit': {
             s.dragging = false
-            s.value = solv.delta1D ?? s.value
+            s.value = action.payload.delta1D ?? s.value
             break
           }
           default: { throw new Error(`Invalid slider event! Event: ${event}`) }

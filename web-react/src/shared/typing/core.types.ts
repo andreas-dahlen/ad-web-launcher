@@ -1,3 +1,5 @@
+import type { Computed, ScrollComputed, SliderComputed } from '@interaction/types/computed.types'
+
 export type Axis = Axis1D | Axis2D
 export type Axis1D = 'horizontal' | 'vertical'
 export type Axis2D = 'both'
@@ -13,20 +15,31 @@ export type Direction =
   | { axis: 'both'; dir: LeftOrRight | UpOrDown }
 
 export type OnEdgeDir = 'left' | 'right' | 'up' | 'down'
-
-
 export type SceneRole = "prev" | "current" | "next"
 export type InteractionType = 'button' | 'carousel' | 'slider' | 'drag' | 'scroll'
 // export type DataKeys = Exclude<InteractionType, 'button'>;
 
 export type EventType =
+  | 'press'
   | 'swipeStart'
   | 'swipe'
   | 'swipeCommit'
   | 'swipeRevert'
-  | 'press'
   | 'pressRelease'
   | 'pressCancel'
+
+// export type InitialEventType =
+//   | 'press'
+//   | 'swipeStart'
+
+// export type SwipingEventType =
+//   | 'swipe'
+//   | 'swipeCommit'
+
+// export type SideEffectEventType =
+//   | 'swipeRevert'
+//   | 'pressRelease'
+//   | 'pressCancel'
 
 export interface Vec2 {
   x: number
@@ -58,3 +71,15 @@ export function assertAxis(v: string): asserts v is Axis {
     throw new Error('Invalid axis')
   }
 }
+
+export function assertSliderComputed(computed: Computed): asserts computed is SliderComputed {
+  if (!computed) throw new Error("computed is required for slider")
+}
+export function assertScrollComputed(computed: Computed): asserts computed is ScrollComputed {
+  if (!computed) throw new Error("computed is required for scroll")
+}
+
+export function assertNever(x: never): never {
+  throw new Error(`Unhandled case: ${JSON.stringify(x)}`)
+}
+

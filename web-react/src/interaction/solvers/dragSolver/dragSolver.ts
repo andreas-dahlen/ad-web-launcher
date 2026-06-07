@@ -8,21 +8,18 @@
  * - No swipeRevert reaction
  */
 
-import type { EventType } from '../../../shared/typing/core.types.ts'
-import type { DragDesc } from '../../types/descriptor.types.ts'
-import type { DragSolution, Runtime } from '../../types/Runtime.types.ts'
 import { dragUtils } from './dragUtils.ts'
-import type { Computed } from '@interaction/types/computed.types.ts'
+import type { DragSolver } from '@interaction/types/solver.types.ts'
 
-export const dragSolver: Partial<
-  Record<EventType, (runtime: Runtime, desc: DragDesc, computed: Computed) => DragSolution>
-> = {
+
+export const dragSolver: DragSolver
+  = {
 
   /**
    * Handle swipeStart - returns reaction to enable dragging
    */
   swipeStart(_runtime, desc) {
-    return { delta: { x: 0, y: 0 }, frameRect: desc.base.layout.frameRect, storeAccepted: true } satisfies DragSolution
+    return { routing: "store", solv: { frameRect: desc.base.layout.frameRect } }
   },
 
   /**
@@ -31,9 +28,10 @@ export const dragSolver: Partial<
   swipe(runtime, desc) {
     const delta = dragUtils.resolveSwipe(desc.data, runtime.delta)
     return {
-      delta,
-      storeAccepted: true
-    } satisfies DragSolution
+      routing: "store", solv: {
+        delta
+      }
+    }
   },
 
   /**
@@ -44,8 +42,9 @@ export const dragSolver: Partial<
     const snap = dragUtils.resolveSnapAdjustment(desc, value)
     if (snap != null) { value = snap }
     return {
-      delta: value,
-      storeAccepted: true
-    } satisfies DragSolution
+      routing: "store", solv: {
+        delta: value,
+      }
+    }
   }
 }

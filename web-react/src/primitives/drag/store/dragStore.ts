@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
-import type { EventType, Vec2 } from '@typing/core.types'
-import type { DragSolution } from '@interaction/types/Runtime.types'
+import type { Vec2 } from '@typing/core.types'
+import type { DragSwipeCommitPayload, DragSwipePayload, DragSwipeStartPayload } from '@interaction/types/solver.types'
 import type { DragConstraints } from '@interaction/types/data.types'
 import type { FrameSnapshot } from '@interaction/types/base.types'
 import type { StoreLayout } from '@typing/store.types'
@@ -22,7 +22,12 @@ type Drag = {
   frameRect: FrameSnapshot
 }
 
-type AcceptedDrag = Extract<DragSolution, { storeAccepted: true }>
+export type DragAction =
+  | { event: "swipeStart"; payload: DragSwipeStartPayload }
+  | { event: "swipe"; payload: DragSwipePayload }
+  | { event: "swipeCommit"; payload: DragSwipeCommitPayload }
+
+// type AcceptedDrag = Extract<DragSolution, { storeAccepted: true }>
 
 export type DragStore = {
   bindings: Record<string, Drag>
@@ -35,7 +40,7 @@ export type DragStore = {
   setFrameRect: (id: string, frame: FrameSnapshot) => void
   setPosition: (id: string, pos: Vec2) => void
 
-  apply: (id: string, event: EventType, solv: AcceptedDrag) => void
+  apply: (id: string, action: DragAction) => void
 }
 
 export const dragStore = create<DragStore>()(
@@ -96,24 +101,24 @@ export const dragStore = create<DragStore>()(
       })
     },
 
-    apply: (id, event, solv) => {
+    apply: (id, action) => {
       set(state => {
         const s = state.bindings[id]
         if (!s) return
-        switch (event) {
+        switch (action.event) {
           case 'swipeStart': {
-            s.frameRect = solv.frameRect ?? s.frameRect
+            s.frameRect = action.payload.frameRect ?? s.frameRect
 
             s.dragging = true
             s.liveOffset = { x: 0, y: 0 }
             break
           }
           case 'swipe': {
-            s.liveOffset = solv.delta ?? s.liveOffset
+            s.liveOffset = action.payload.delta ?? s.liveOffset
             break
           }
           case 'swipeCommit': {
-            s.settledOffset = solv.delta ?? s.settledOffset
+            s.settledOffset = action.payload.delta ?? s.settledOffset
             s.liveOffset = { x: 0, y: 0 }
             s.dragging = false
             break

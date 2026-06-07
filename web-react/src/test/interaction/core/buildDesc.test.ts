@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { extractDomMeta } from '@interaction/core/domMeta'
+import { extractDomMeta } from '@interaction/input/domMeta'
 import { createElByType } from '@test/functions'
 import type { InteractionType } from '@typing/core.types'
 

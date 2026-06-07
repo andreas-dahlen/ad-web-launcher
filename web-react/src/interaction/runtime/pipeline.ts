@@ -1,8 +1,4 @@
-import { interpreter, type GestureInput } from './interpreter.ts'
-import { carouselSolver } from '../solvers/carouselSolver/carouselSolver.ts'
-import { sliderSolver } from '../solvers/sliderSolver/sliderSolver.ts'
-import { dragSolver } from '../solvers/dragSolver/dragSolver.ts'
-import { scrollSolver } from '@interaction/solvers/scrollSolver/scrollSolver.ts'
+import { interpreter } from '../input/interpreter.ts'
 import { domUpdater } from '../updater/domUpdater.ts'
 import { dragStore } from '@primitives/drag/store/dragStore.ts'
 import { sliderStore } from '@primitives/slider/store/sliderStore.ts'
@@ -11,10 +7,13 @@ import type { EventBridgeType, EventType, InteractionType } from '../../shared/t
 import type { PointerEventPackage } from '@hooks/usePointerBridge.ts'
 import { gestureStore } from '../../shared/runtime/gestureStore.ts'
 import { scrollStore } from '@primitives/scroll/store/scrollStore.ts'
+import type { InterpreterOutput } from '@interaction/types/gesture.types.ts'
+import { router } from '@interaction/runtime/solverRouter.ts'
+
 /* =====================
         Maping
 ======================= */
-export type InterpreterFn = (x: number, y: number, pointerId: number) => GestureInput | null
+export type InterpreterFn = (x: number, y: number, pointerId: number) => InterpreterOutput | null
 
 const interpreterMap: Record<EventBridgeType, InterpreterFn> = {
   down: interpreter.onDown,
@@ -58,45 +57,45 @@ export const pipeline = {
     /* -------------------------
        Solvers and Store Mutations narrowed
     -------------------------- */
-    const { computed, desc } = g.gesture
-    const { runtime } = g
+    const { computed, desc, runtime } = g
     const event = runtime.event
     const type = desc.type
 
     switch (type) {
       case 'carousel': {
-        const solution = carouselSolver?.[event]?.(runtime, desc, computed)
-        if (solution?.storeAccepted) {
-          if (solution?.event) g.runtime.event = solution.event
-          //TODO future make runtime imutable input.. and solution is used for final event override by consumers... ?
-          carouselStore.getState().apply(desc.base.id, runtime.event, solution)
+        const solution = router.carousel(event, runtime, desc)
+        if (solution) {
+          if (solution.event) g.runtime.event = solution.event
+          carouselStore.getState().apply(desc.base.id, solution)
         }
         break
       }
       case 'slider': {
-        const solution = sliderSolver?.[event]?.(runtime, desc, computed)
-        if (solution?.storeAccepted) {
 
-          if (solution.computedUpdate != null) interpreter.applyComputedUpdate(solution.computedUpdate, desc.base.pointerId)
-          sliderStore.getState().apply(desc.base.id, runtime.event, solution)
+        const solution = router.slider(event, runtime, desc, computed)
+        if (solution) {
+          if (solution.event === "swipeStart") interpreter.applyComputedUpdate(solution.payload.computedUpdate, desc.base.pointerId)
+          sliderStore.getState().apply(desc.base.id, solution)
         }
         break
       }
       case 'drag': {
-        const solution = dragSolver?.[event]?.(runtime, desc, computed)
-        if (solution?.storeAccepted) {
-          dragStore.getState().apply(desc.base.id, runtime.event, solution)
+        const solution = router.drag(event, runtime, desc)
+        if (solution) {
+          dragStore.getState().apply(desc.base.id, solution)
         }
         break
       }
       case 'scroll': {
-        const solution = scrollSolver?.[event]?.(runtime, desc, computed)
-        if (solution?.storeAccepted) {
-          if (solution.computedUpdate != null) interpreter.applyComputedUpdate(solution.computedUpdate, desc.base.pointerId)
-          if (solution?.event) g.runtime.event = solution.event
+        const solution = router.scroll(event, runtime, desc, computed)
+        if (solution) {
+          if (solution.event === "swipeStart") {
+            interpreter.applyComputedUpdate(solution.payload.computedUpdate, desc.base.pointerId)
+          }
+          if (solution.event) g.runtime.event = solution.event
 
 
-          scrollStore.getState().apply(desc.base.id, runtime.event, solution)
+          scrollStore.getState().apply(desc.base.id, solution)
         }
         break
       }
@@ -108,7 +107,6 @@ export const pipeline = {
         throw new Error(`Unknown descriptor type: ${type}`)
       }
     }
-    //TODO stores missing ID!
     /* -------------------------
        Renderer
     -------------------------- */

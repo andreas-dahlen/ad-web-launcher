@@ -1,9 +1,9 @@
 import { getCommitOffset } from '@interaction/solvers/utils/axisUtils'
 import { vector } from '@interaction/solvers/utils/vectorUtils'
 import type { ScrollData } from '@interaction/types/data.types'
-import type { Computed } from '@interaction/types/computed.types'
+import type { ScrollComputed } from '@interaction/types/computed.types'
 import type { ScrollDesc } from '@interaction/types/descriptor.types'
-import type { Runtime } from '@interaction/types/Runtime.types'
+import type { Runtime } from '@interaction/types/runtime.types'
 import type { Axis1D, Direction } from '@typing/core.types'
 import type { BaseWithAxis1D, LayoutData } from '@interaction/types/base.types'
 
@@ -17,8 +17,8 @@ export const overflowUtils = {
 
   resolveStart(data: ScrollData, base: BaseWithAxis1D, pointerId: number, isOverflow: boolean) {
     const startValue = data.isVisible ? 0 : base.layout.containerSize.height
+    // console.log(startValue)
     return {
-      //could return resolveSwipe but omition is fine aswell i guess... only one frame xD
       computedUpdate: {
         pointerId: pointerId,
         isOverflow: isOverflow,
@@ -27,8 +27,8 @@ export const overflowUtils = {
     }
   },
 
-  resolveSwipe(mainDelta: number, base: BaseWithAxis1D, computed: Computed) {
-    const start = computed.startOverflowValue ?? 0
+  resolveSwipe(mainDelta: number, base: BaseWithAxis1D, computed: ScrollComputed) {
+    const start = computed.startOverflowValue
     const containerSize = base.layout.containerSize.height
     return { overflowValue: -vector.clamp(start + mainDelta, 0, containerSize) }
   },
@@ -36,13 +36,18 @@ export const overflowUtils = {
   resolveEnd(mainDelta: number, desc: ScrollDesc) {
     const { base, data } = desc
     return vector.shouldCommit(mainDelta, base.layout.containerSize.height, base.axis)
-      ? this.resolveSwipeCommit(data, base, base.axis)
-      : this.resolveSwipeRevert(data, base.layout)
+      ? {
+        routing: "store",
+        solv: { ...this.resolveSwipeCommit(data, base, base.axis) }
+      }
+      : {
+        routing: "replace-event",
+        solv: { ...this.resolveSwipeRevert(data, base.layout) }
+      }
   },
 
   resolveSwipeCommit(data: ScrollData, base: BaseWithAxis1D, axis: Axis1D) {
     const containerSize = base.layout.containerSize.height
-    if (!data.onEdgeDir) return null
     const direction = { axis, dir: data.onEdgeDir } as Direction
     const distance = getCommitOffset(direction, containerSize)
     if (!data.isVisible) return {

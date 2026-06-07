@@ -2,16 +2,16 @@
 import { APP_CONFIG } from '@config/appConfig.ts'
 import { vector } from "./vectorUtils.ts"
 import type { Vec2, Direction, Axis1D } from '../../../shared/typing/core.types.ts'
-import type { Normalized1D } from '../../types/Runtime.types.ts'
+import type { normalize1DBase, Normalized1D } from '../../types/runtime.types.ts'
 
-export function normalizeBase(grabOffset: Vec2, axis: Axis1D, delta: Vec2): Normalized1D {
+export function normalizeBase(grabOffset: Vec2, axis: Axis1D, delta: Vec2): normalize1DBase {
     const offset = vector.resolveByAxis1D(grabOffset.x, grabOffset.y, axis)
     const movement = vector.resolveByAxis1D(delta.x, delta.y, axis)
     return {
-        mainOffset: offset?.main,
-        crossOffset: offset?.cross,
-        mainDelta: movement?.main,
-        crossDelta: movement?.cross
+        mainOffset: offset.main,
+        crossOffset: offset.cross,
+        mainDelta: movement.main,
+        crossDelta: movement.cross
     }
 }
 

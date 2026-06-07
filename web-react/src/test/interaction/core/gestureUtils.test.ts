@@ -1,4 +1,4 @@
-import { gestureUtils } from '@interaction/core/gestureUtils'
+import { gestureUtils } from '@interaction/input/gestureUtils'
 import { createBaseSwipe } from '@test/fixtures/base'
 import { createButtonDesc, createCarouselDesc, createSliderDesc } from '@test/fixtures/desc'
 import { describe, expect, it } from 'vitest'

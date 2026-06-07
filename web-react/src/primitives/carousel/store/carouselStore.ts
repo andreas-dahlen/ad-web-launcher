@@ -1,8 +1,8 @@
 import { immer } from "zustand/middleware/immer"
 import { create } from 'zustand'
-import type { Direction, EventType } from '../../../shared/typing/core.types'
-import type { CarouselSolution } from '@interaction/types/Runtime.types'
+import { assertNever, type Direction } from '../../../shared/typing/core.types'
 import type { StoreLayout } from '@typing/store.types'
+import type { CarouselSwipeCommitPayload, CarouselSwipePayload } from '@interaction/types/solver.types'
 
 type Carousel = {
   //react motion
@@ -19,7 +19,11 @@ type Carousel = {
   pendingDir: Direction | null
 }
 
-type AcceptedCarousel = Extract<CarouselSolution, { storeAccepted: true }>
+export type CarouselAction =
+  | { event: 'swipeStart' }
+  | { event: 'swipe'; payload: CarouselSwipePayload }
+  | { event: 'swipeCommit'; payload: CarouselSwipeCommitPayload }
+  | { event: 'swipeRevert' }
 
 export type CarouselStore = {
   bindings: Record<string, Carousel>
@@ -33,7 +37,7 @@ export type CarouselStore = {
 
   setSettling: (id: string) => void
 
-  apply: (id: string, event: EventType, solv: AcceptedCarousel) => void
+  apply: (id: string, action: CarouselAction) => void
 }
 
 export const carouselStore = create<CarouselStore>()(
@@ -102,13 +106,13 @@ export const carouselStore = create<CarouselStore>()(
       })
     },
 
-    apply: (id, event, solv) => {
+    apply: (id, action) => {
       // console.log('[APPLY]', { solv })
       set(state => {
         const s = state.bindings[id]
         if (!s) return
 
-        switch (event) {
+        switch (action.event) {
           case 'swipeStart': {
             s.dragging = true
             s.settling = false
@@ -120,13 +124,13 @@ export const carouselStore = create<CarouselStore>()(
             break
           }
           case 'swipe': {
-            s.liveOffset = solv.delta1D ?? s.liveOffset
+            s.liveOffset = action.payload.delta1D
             break
           }
           case 'swipeCommit': {
             if (s.settling) return
-            s.pendingDir = solv.direction ?? null
-            s.liveOffset = solv.delta1D ?? s.liveOffset
+            s.pendingDir = action.payload.direction
+            s.liveOffset = action.payload.delta1D
             s.dragging = false
             break
           }
@@ -136,11 +140,10 @@ export const carouselStore = create<CarouselStore>()(
             s.pendingDir = null
             break
           }
-          default: { throw new Error(`Invalid carousel event! Event: ${event}`) }
+          default: assertNever(action)
         }
       })
     }
-
   })
   )
 )

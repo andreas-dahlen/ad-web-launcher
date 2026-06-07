@@ -4,13 +4,13 @@ import type { ScrollDesc } from '../../types/descriptor.types.ts'
 import type { Vec2 } from '@typing/core.types.ts'
 import type { ScrollData } from '@interaction/types/data.types.ts'
 import type { BaseWithAxis1D } from '@interaction/types/base.types.ts'
+import type { ScrollSwipeCommitPayload } from '@interaction/types/solver.types.ts'
 
 
 export const scrollUtils = {
 
-  normalize(base: BaseWithAxis1D, delta: Vec2): number | null {
+  normalize(base: BaseWithAxis1D, delta: Vec2): number {
     const basics = normalizeBase(base.layout.grabOffset, base.axis, delta)
-    if (basics.mainDelta == null) return null
     return basics.mainDelta
   },
 
@@ -22,6 +22,8 @@ export const scrollUtils = {
       computedUpdate: {
         pointerId: desc.base.pointerId,
         isOverflow,
+        startOverflowValue: 0
+        //TODO cache maxScroll (why not?)
       }
     }
   },
@@ -33,7 +35,7 @@ export const scrollUtils = {
   },
 
 
-  resolveEnd(mainDelta: number, data: ScrollData, base: BaseWithAxis1D) {
-    return { ...this.resolveSwipe(mainDelta, data, base), isVisible: true }
+  resolveEnd(mainDelta: number, data: ScrollData, base: BaseWithAxis1D): ScrollSwipeCommitPayload {
+    return { ...this.resolveSwipe(mainDelta, data, base), isVisible: true, isOverflow: false }
   },
 }
