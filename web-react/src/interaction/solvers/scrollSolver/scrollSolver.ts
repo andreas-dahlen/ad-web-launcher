@@ -75,7 +75,7 @@ export const scrollSolver: ScrollSolver = {
     //TODO pass whole containerSize for axis solving. needs a overflowUtils function that takes axis and converts it into relevent boolean using the vector function as help...
 
     const result = toCommit
-      ? overflowUtils.resolveSwipeCommit(data, base, base.axis)
+      ? overflowUtils.resolveSwipeCommit(data, base.layout, delta1d)
       : overflowUtils.resolveSwipeRevert(desc.data, base.layout)
 
     if (toCommit) {

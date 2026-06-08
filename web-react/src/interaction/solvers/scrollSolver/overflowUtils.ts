@@ -1,18 +1,25 @@
-import { getCommitOffset } from '@interaction/solvers/utils/axisUtils'
 import { vector } from '@interaction/solvers/utils/vectorUtils'
 import type { ScrollData } from '@interaction/types/data.types'
 import type { ScrollComputed } from '@interaction/types/computed.types'
-import type { ScrollDesc } from '@interaction/types/descriptor.types'
-import type { Runtime } from '@interaction/types/runtime.types'
-import type { Axis1D, Direction } from '@typing/core.types'
+import type { RuntimeSwipeStart } from '@interaction/types/runtime.types'
+import { type Axis1D } from '@typing/core.types'
 import type { BaseWithAxis1D, LayoutData } from '@interaction/types/base.types'
 
 export const overflowUtils = {
 
-  isOverflow(data: ScrollData, runtime: Runtime, axis: Axis1D) {
+  isOverflow(data: ScrollData, runtime: RuntimeSwipeStart, axis: Axis1D) {
+    //overflow confirmed if not visible.
     if (!data.isVisible) return true
-    if (!data.onEdgeDir || !runtime.thresholdValue || data.settledValue !== 0) return false
-    return vector.isThresholdDirAndOnEdgeDir(data.onEdgeDir, axis, runtime.thresholdValue)
+    //overflow disabled if onEdgeDir is NOT registered
+    if (!data.onEdgeDir) return false
+    //If we are at correct start possition we evaluate
+    //possibly give this check leeway..
+    if (data.settledValue === 0) {
+      const dir = vector.getDir(runtime.thresholdValue, axis)
+      return vector.isValidDir(dir, data.onEdgeDir)
+      // return vector.isThresholdDirAndOnEdgeDir(data.onEdgeDir, axis, runtime.thresholdValue)
+    }
+    return false
   },
 
   resolveStart(data: ScrollData, base: BaseWithAxis1D, pointerId: number, isOverflow: boolean) {
@@ -30,36 +37,24 @@ export const overflowUtils = {
   resolveSwipe(mainDelta: number, base: BaseWithAxis1D, computed: ScrollComputed) {
     const start = computed.startOverflowValue
     const containerSize = base.layout.containerSize.height
-    return { overflowValue: -vector.clamp(start + mainDelta, 0, containerSize) }
+    return { overflowValue: vector.clamp(start + mainDelta, 0, containerSize) }
   },
 
-  resolveEnd(mainDelta: number, desc: ScrollDesc) {
-    const { base, data } = desc
-    return vector.shouldCommit(mainDelta, base.layout.containerSize.height, base.axis)
-      ? {
-        routing: "store",
-        solv: { ...this.resolveSwipeCommit(data, base, base.axis) }
-      }
-      : {
-        routing: "replace-event",
-        solv: { ...this.resolveSwipeRevert(data, base.layout) }
-      }
-  },
+  resolveSwipeCommit(data: ScrollData, layout: LayoutData, mainDelta: number) {
+    const containerSize = layout.containerSize.height
+    const towardsVisibleDir = mainDelta < 0
 
-  resolveSwipeCommit(data: ScrollData, base: BaseWithAxis1D, axis: Axis1D) {
-    const containerSize = base.layout.containerSize.height
-    const direction = { axis, dir: data.onEdgeDir } as Direction
-    const distance = getCommitOffset(direction, containerSize)
-    if (!data.isVisible) return {
+    if (!data.isVisible && towardsVisibleDir) return {
       overflowValue: 0, isVisible: true
     }
-    return { overflowValue: distance, isVisible: false }
+
+    return { overflowValue: containerSize, isVisible: false }
   },
 
   resolveSwipeRevert(data: ScrollData, layout: LayoutData) {
     const containerSize = layout.containerSize.height
     return data.isVisible
       ? { overflowValue: 0, isVisible: true }
-      : { overflowValue: -containerSize, isVisible: false }
+      : { overflowValue: containerSize, isVisible: false }
   }
 }

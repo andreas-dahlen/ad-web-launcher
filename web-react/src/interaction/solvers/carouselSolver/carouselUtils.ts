@@ -1,8 +1,8 @@
 import { getCommitOffset, normalizeBase } from '../utils/axisUtils.ts'
 import { vector } from '../utils/vectorUtils.ts'
-import type { Normalized1D } from '../../types/runtime.types.ts'
-import type { Axis, Vec2 } from '../../../shared/typing/core.types.ts'
+import type { Axis1D, Vec2 } from '../../../shared/typing/core.types.ts'
 import type { BaseWithAxis1D } from '@interaction/types/base.types.ts'
+import type { Normalized1D } from '@interaction/types/solver.types.ts'
 
 export const carouselUtils = {
 
@@ -27,7 +27,7 @@ export const carouselUtils = {
     return false
   },
 
-  resolveCommit(norm: Normalized1D, axis: Axis) {
+  resolveCommit(norm: Normalized1D, axis: Axis1D) {
     const { mainSize, mainDelta } = norm
     if (mainDelta == null || mainSize == null) return
 

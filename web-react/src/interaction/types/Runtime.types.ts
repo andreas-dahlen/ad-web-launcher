@@ -1,41 +1,37 @@
-import type { EventType, Vec2 } from '../../shared/typing/core.types.ts'
+import type { delta, Vec2 } from '../../shared/typing/core.types.ts'
 
 export interface CancelData {
   readonly element: HTMLElement
   pressCancel: boolean
 }
 
-export type Runtime = {
-  event: EventType
-  delta: Vec2
+export type Runtime = RuntimePress | RuntimeSwipeStart | RuntimeSwipe | RuntimePressRelease | RuntimeSwipeCommit
+
+export type RuntimePress = delta & {
+  event: 'press'
+}
+
+export type RuntimeSwipeStart = delta & {
+  event: 'swipeStart'
   cancel?: CancelData
-  thresholdValue?: Vec2
+  thresholdValue: Vec2
 }
 
-
-export type normalize1DBase = {
-  mainDelta: number
-  crossDelta: number
-  mainOffset: number
-  crossOffset: number
+export type RuntimeSwipe = delta & {
+  event: 'swipe'
 }
 
-export type Normalized1D = normalize1DBase & {
-  mainSize: number
-  crossSize: number
-  mainitemSize: number
-  crossitemSize: number
+export type RuntimePressRelease = delta & {
+  event: 'pressRelease'
+}
+export type RuntimeSwipeCommit = delta & {
+  event: 'swipeCommit' | 'swipeRevert'
 }
 
-export type carouselNormalized1D = normalize1DBase & {
-  mainSize: number
-  crossSize: number
+export type RuntimeRevertOverride = delta & {
+  event: 'swipeRevert'
 }
 
-
-/* -------------------------
-        Custom Event typing
-    -------------------------- */
-// export type ReactionEvent = CustomEvent<CtxType>
-
-export type ReactionEvent = CustomEvent<EventType>
+export type RuntimeCancelEffect = {
+  event: 'pressCancel'
+}

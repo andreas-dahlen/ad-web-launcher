@@ -75,6 +75,7 @@ export const domUpdater = {
 }
 
 function handleExtras(runtime: Runtime) {
+  if (runtime.event !== "swipeStart") return
   const cancel = runtime.cancel
   if (!cancel?.pressCancel) return
 

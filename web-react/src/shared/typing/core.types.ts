@@ -46,6 +46,8 @@ export interface Vec2 {
   y: number
 }
 
+export type delta = { delta: Vec2 }
+
 export interface Size2D {
   width: number
   height: number

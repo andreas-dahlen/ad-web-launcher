@@ -2,7 +2,8 @@
 import { APP_CONFIG } from '@config/appConfig.ts'
 import { vector } from "./vectorUtils.ts"
 import type { Vec2, Direction, Axis1D } from '../../../shared/typing/core.types.ts'
-import type { normalize1DBase, Normalized1D } from '../../types/runtime.types.ts'
+import type { normalize1DBase, Normalized1D } from '@interaction/types/solver.types.ts'
+
 
 export function normalizeBase(grabOffset: Vec2, axis: Axis1D, delta: Vec2): normalize1DBase {
     const offset = vector.resolveByAxis1D(grabOffset.x, grabOffset.y, axis)

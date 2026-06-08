@@ -10,19 +10,21 @@ import type { DragAction } from '@primitives/drag/store/dragStore';
 import type { ScrollAction } from '@primitives/scroll/store/scrollStore';
 import type { SliderAction } from '@primitives/slider/store/sliderStore';
 
-import { assertScrollComputed, assertSliderComputed, type EventType } from '@typing/core.types';
+import { assertScrollComputed, assertSliderComputed } from '@typing/core.types';
 
 export const router = {
-  carousel(event: EventType, runtime: Runtime, desc: CarouselDesc): CarouselAction | null {
-
+  carousel(runtime: Runtime, desc: CarouselDesc): CarouselAction | null {
+    const { event } = runtime
     switch (event) {
       case 'press': return null
+      case 'pressRelease': return null
       case 'swipeStart': {
         return { event }
       }
       case 'swipe': {
         const result = carouselSolver.swipe(runtime, desc)
         if (!result) return null
+        // console.log("carousel delta: ", result.solv.delta1D)
         return { event, payload: result.solv }
       }
       case 'swipeCommit': {
@@ -37,8 +39,10 @@ export const router = {
     }
   },
 
-  slider(event: EventType, runtime: Runtime, desc: SliderDesc, computed: Computed): SliderAction | null {
+  slider(runtime: Runtime, desc: SliderDesc, computed: Computed): SliderAction | null {
+    const { event } = runtime
     switch (event) {
+      case 'pressRelease': return null
       case 'press': {
         return {
           event,
@@ -67,9 +71,11 @@ export const router = {
     }
   },
 
-  drag(event: EventType, runtime: Runtime, desc: DragDesc): DragAction | null {
+  drag(runtime: Runtime, desc: DragDesc): DragAction | null {
+    const { event } = runtime
     switch (event) {
       case 'press': return null
+      case 'pressRelease': return null
       case 'swipeStart': {
         return {
           event,
@@ -92,9 +98,11 @@ export const router = {
     }
   },
 
-  scroll(event: EventType, runtime: Runtime, desc: ScrollDesc, computed: Computed): ScrollAction | null {
+  scroll(runtime: Runtime, desc: ScrollDesc, computed: Computed): ScrollAction | null {
+    const { event } = runtime
     switch (event) {
       case 'press': return null
+      case 'pressRelease': return null
       case 'swipeStart': {
         return {
           event,
@@ -103,8 +111,14 @@ export const router = {
       }
       case 'swipe': {
         assertScrollComputed(computed)
+        // const result = scrollSolver.swipe(runtime, desc, computed).solv
+        // console.log("scroll delta: ", result.delta1D)
+        // console.log(runtime.delta)
+        // console.log("overflow delta: ", result.overflowValue)
+        // console.log("startOverflowValue: ", computed.startOverflowValue)
         return {
           event,
+          // payload: result
           payload: scrollSolver.swipe(runtime, desc, computed).solv
         }
       }

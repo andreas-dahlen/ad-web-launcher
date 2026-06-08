@@ -7,8 +7,8 @@ import type { EventBridgeType, EventType, InteractionType } from '../../shared/t
 import type { PointerEventPackage } from '@hooks/usePointerBridge.ts'
 import { gestureStore } from '../../shared/runtime/gestureStore.ts'
 import { scrollStore } from '@primitives/scroll/store/scrollStore.ts'
-import type { InterpreterOutput } from '@interaction/types/gesture.types.ts'
 import { router } from '@interaction/runtime/solverRouter.ts'
+import type { InterpreterOutput } from '@interaction/types/interpreter.types.ts'
 
 /* =====================
         Maping
@@ -57,22 +57,20 @@ export const pipeline = {
     /* -------------------------
        Solvers and Store Mutations narrowed
     -------------------------- */
-    const { computed, desc, runtime } = g
-    const event = runtime.event
+    const { desc, runtime } = g
     const type = desc.type
 
     switch (type) {
       case 'carousel': {
-        const solution = router.carousel(event, runtime, desc)
+        const solution = router.carousel(runtime, desc)
         if (solution) {
-          if (solution.event) g.runtime.event = solution.event
+          if (solution.event === "swipeRevert") g.runtime.event = solution.event
           carouselStore.getState().apply(desc.base.id, solution)
         }
         break
       }
       case 'slider': {
-
-        const solution = router.slider(event, runtime, desc, computed)
+        const solution = router.slider(runtime, desc, g.computed)
         if (solution) {
           if (solution.event === "swipeStart") interpreter.applyComputedUpdate(solution.payload.computedUpdate, desc.base.pointerId)
           sliderStore.getState().apply(desc.base.id, solution)
@@ -80,14 +78,14 @@ export const pipeline = {
         break
       }
       case 'drag': {
-        const solution = router.drag(event, runtime, desc)
+        const solution = router.drag(runtime, desc)
         if (solution) {
           dragStore.getState().apply(desc.base.id, solution)
         }
         break
       }
       case 'scroll': {
-        const solution = router.scroll(event, runtime, desc, computed)
+        const solution = router.scroll(runtime, desc, g.computed)
         if (solution) {
           if (solution.event === "swipeStart") {
             interpreter.applyComputedUpdate(solution.payload.computedUpdate, desc.base.pointerId)

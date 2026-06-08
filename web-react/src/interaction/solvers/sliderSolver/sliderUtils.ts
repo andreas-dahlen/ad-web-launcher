@@ -1,10 +1,10 @@
 import { normalizeBase } from '../utils/axisUtils.ts'
 import { vector } from '../utils/vectorUtils.ts'
-import type { Normalized1D } from '../../types/runtime.types.ts'
 import type { BaseWithAxis1D } from '@interaction/types/base.types.ts'
 import type { SliderConstraints, SliderData } from '@interaction/types/data.types.ts'
 import type { SliderComputed } from '@interaction/types/computed.types.ts'
 import type { Vec2 } from '@typing/core.types.ts'
+import type { Normalized1D } from '@interaction/types/solver.types.ts'
 
 export const sliderUtils = {
 

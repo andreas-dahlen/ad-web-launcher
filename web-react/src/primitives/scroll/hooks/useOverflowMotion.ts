@@ -12,7 +12,7 @@ export function useOverflowMotion({
   const overflowStyle = useMemo(() => {
 
     return {
-      transform: `translate3d(0,${-overflowValue}px, 0)`,
+      transform: `translate3d(0,${overflowValue}px, 0)`,
       transition: dragging ? "none" : "transform 180ms ease-out",
     }
   }, [overflowValue, dragging])

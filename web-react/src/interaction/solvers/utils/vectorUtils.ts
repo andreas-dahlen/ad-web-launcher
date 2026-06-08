@@ -36,25 +36,26 @@ export const vector = {
     }
   },
 
-  resolveDirection1D(delta: number, axis: Axis): Direction | null {
-    if (axis !== 'both') {
-      return axis === 'horizontal'
-        ? ({ axis, dir: delta > 0 ? 'right' : 'left' })
-        : ({ axis, dir: delta > 0 ? 'down' : 'up' })
-    }
-    return null
+  resolveDirection1D(delta: number, axis: Axis1D): Direction {
+    return axis === 'horizontal'
+      ? ({ axis, dir: delta > 0 ? 'right' : 'left' })
+      : ({ axis, dir: delta > 0 ? 'down' : 'up' })
   },
-  isThresholdDirAndOnEdgeDir(onEdgeDir: OnEdgeDir, axis: Axis, thresholdValue: Vec2): boolean {
-    const dirVal = axis === 'horizontal'
+
+
+  getDir(thresholdValue: Vec2, axis: Axis1D) {
+    const dir = axis === 'horizontal'
       ? thresholdValue.x
       : thresholdValue.y
-    const dir = vector.resolveDirection1D(dirVal, axis)
-    if (!dir) return false
-    const result = dir.dir == 'up' && onEdgeDir == 'down' ||
-      dir.dir == 'down' && onEdgeDir == 'up' ||
+    return this.resolveDirection1D(dir, axis)
+  },
+
+  isValidDir(dir: Direction, onEdgeDir: OnEdgeDir) {
+    const result = Boolean(
+      dir.dir === 'down' && onEdgeDir === 'up' ||
+      dir.dir == 'up' && onEdgeDir == 'down' ||
       dir.dir == 'left' && onEdgeDir == 'right' ||
-      dir.dir == 'right' && onEdgeDir == 'left' ?
-      true : false
+      dir.dir == 'right' && onEdgeDir == 'left')
     return result
   },
 

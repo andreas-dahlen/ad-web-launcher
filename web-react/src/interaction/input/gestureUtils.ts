@@ -36,24 +36,22 @@ export const gestureUtils = {
 		return distance >= screenSize * ratio
 	},
 
+	/* =========================
+	Descriptor utils
+	========================= */
 	isAxisSupported(intentAxis: Axis, descAxis: Axis): boolean {
 		return (
 			descAxis === 'both' ||
 			descAxis === intentAxis
 		)
 	},
-	/* =========================
-	Descriptor utils
-	========================= */
 
-	isSwipeableDescriptor(desc: Descriptor, intentAxis: Axis): desc is SwipeableDescriptor {
-		if (desc.type == 'button') return false
+	asSwipeableDescriptor(desc: Descriptor, intentAxis: Axis): SwipeableDescriptor | null {
+		if (desc.type == 'button') return null
 		const { swipeable, instantSwipe } = desc.capabilities
-		if (!swipeable) return false
-		if (instantSwipe) return true
-		return this.isAxisSupported(
-			intentAxis,
-			desc.base.axis
-		)
+		if (!swipeable) return null
+		if (instantSwipe) return desc
+		if (!this.isAxisSupported(intentAxis, desc.base.axis)) return null
+		return desc
 	}
 }

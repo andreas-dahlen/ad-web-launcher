@@ -42,12 +42,4 @@ export type Descriptor =
   | DragDesc
   | ButtonDesc
   | ScrollDesc
-
-// export type CarouselCtxTypes =
-//   | ({ event: 'press' } & CarouselCtxPress)
-//   | ({ event: 'swipe' } & CarouselCtxSwipe)
-//   | ({ event: 'swipeStart' } & CarouselCtxSwipeStart)
-//   | ({ event: 'swipeCommit' } & CarouselCtxSwipeCommit)
-//   | ({ event: 'swipeRevert' } & CarouselCtxSwipeRevert)
-
 export type SwipeableDescriptor = Exclude<Descriptor, { type: 'button' }>

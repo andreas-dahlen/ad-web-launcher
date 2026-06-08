@@ -1,18 +1,14 @@
-import { log } from '../../test/functions.ts'
 import { gestureUtils } from './gestureUtils.ts'
 import { domQuery } from './domQuery.ts'
-import type { Axis, EventType, Vec2 } from '../../shared/typing/core.types.ts'
+import { assertNever, type Axis, type EventType, type Vec2 } from '../../shared/typing/core.types.ts'
 import type { ComputedPatch } from '@interaction/types/computed.types.ts'
-import type { InterpreterOutput, GestureSession, PendingContext } from '@interaction/types/gesture.types.ts'
-
-
+import type { GestureSession, PendingContext, InterpreterPress, InterpreterSwipeStart, InterpreterSwipe, InterpreterSwipeCommit, InterpreterPressRelease, SwipingSession, PendingSession } from '@interaction/types/interpreter.types.ts'
 
 /* ========================
    Gesture state
 =========================== */
 type GestureMap = Partial<Record<number, GestureSession>>
 const gestures: GestureMap = {}
-
 
 /* ========================
    Public API
@@ -40,10 +36,10 @@ function deleteGesture(pointerId: number) {
 /* =====================
    Event handlers
 ======================== */
-function onDown(x: number, y: number, pointerId: number): InterpreterOutput | null {
+function onDown(x: number, y: number, pointerId: number): InterpreterPress | null {
   if (Object.keys(gestures).length > 10) {
     const entries = Object.entries(gestures)
-    const [key] = entries.find(([, g]) => g?.state.phase === 'PENDING') ?? entries[0]
+    const [key] = entries.find(([, g]) => g?.phase === 'PENDING') ?? entries[0]
     console.warn('Gesture map overflow, evicting oldest gesture')
     delete gestures[Number(key)]
   }
@@ -52,8 +48,8 @@ function onDown(x: number, y: number, pointerId: number): InterpreterOutput | nu
   if (!resolved) return null
   gestures[pointerId] = {
     pointerId: pointerId,
+    phase: 'PENDING',
     state: {
-      phase: 'PENDING',
       start: gestureUtils.normalizeVec2({ x, y }),
       last: gestureUtils.normalizeVec2({ x, y }),
       totalDelta: { x: 0, y: 0 },
@@ -68,7 +64,7 @@ function onDown(x: number, y: number, pointerId: number): InterpreterOutput | nu
   if (g.desc.capabilities.pressable) {
     return {
       desc: g.desc,
-      computed: g.computed,
+      computed: null,
       runtime: {
         event: 'press',
         delta: { x, y }
@@ -78,11 +74,11 @@ function onDown(x: number, y: number, pointerId: number): InterpreterOutput | nu
   return null
 }
 
-function onMove(x: number, y: number, pointerId: number): InterpreterOutput | null {
+function onMove(x: number, y: number, pointerId: number): InterpreterSwipeStart | InterpreterSwipe | null {
   const current = gestures[pointerId]
   if (!current) return null
   const point = gestureUtils.normalizeVec2({ x, y })
-  switch (current.state.phase) {
+  switch (current.phase) {
     case 'PENDING': {
       const pendingContext = handlePendingMove(current, point)
       if (!pendingContext) return null
@@ -106,48 +102,47 @@ function handlePendingMove(current: GestureSession, point: Vec2): PendingContext
   return { thresholdValue, intentAxis }
 }
 
-function handleSwipeStart(current: GestureSession, x: number, y: number, point: Vec2, ctx: PendingContext): InterpreterOutput | null {
-  const isValidSwipe = gestureUtils.isSwipeableDescriptor(current.gesture.desc, ctx.intentAxis)
-
-  //used for cancel if descriptor changes
-  const originalDesc = current.gesture.desc
-
-  if (isValidSwipe) {
-    current.state.phase = 'SWIPING'
+function handleSwipeStart(current: GestureSession, x: number, y: number, point: Vec2, ctx: PendingContext): InterpreterSwipeStart | null {
+  const swipeDesc = gestureUtils.asSwipeableDescriptor(current.gesture.desc, ctx.intentAxis)
+  if (swipeDesc) {
+    current.phase = 'SWIPING'
     current.state.last = point
-  } else {
-    const newDesc = domQuery.findLaneInDom(x, y, ctx.intentAxis, current.pointerId)
-    if (!newDesc) return null
-
-    gestures[current.pointerId] = {
-      pointerId: current.pointerId,
-      state: {
-        phase: 'SWIPING',
-        start: current.state.start,
-        last: point,
-        totalDelta: { x: 0, y: 0 },
-      },
-      gesture: {
-        desc: newDesc,
-        computed: null
+    return {
+      desc: swipeDesc,
+      computed: null,
+      runtime: {
+        event: 'swipeStart',
+        delta: { x, y },
+        thresholdValue: ctx.thresholdValue
       }
     }
   }
+  const newDesc = domQuery.findLaneInDom(x, y, ctx.intentAxis, current.pointerId)
+  if (!newDesc) return null
 
-  const session = gestures[current.pointerId]
-  if (!session) return null
+  const originalDesc = current.gesture.desc
 
-  const { gesture: g } = session
+  gestures[current.pointerId] = {
+    pointerId: current.pointerId,
+    phase: 'SWIPING',
+    state: {
+      start: current.state.start,
+      last: point,
+      totalDelta: { x: 0, y: 0 },
+    },
+    gesture: {
+      desc: newDesc,
+      computed: null
+    }
+  }
 
   const cancel = originalDesc.capabilities.pressable
-    && !isValidSwipe && g.desc !== originalDesc
     ? { element: originalDesc.base.element, pressCancel: true }
     : undefined
 
-
   return {
-    desc: g.desc,
-    computed: g.computed,
+    desc: newDesc,
+    computed: null,
     runtime: {
       event: 'swipeStart',
       delta: { x, y },
@@ -160,13 +155,12 @@ function handleSwipeStart(current: GestureSession, x: number, y: number, point: 
 /* ---------------------------
    Active swipe
 ----------------------------- */
-function handleSwipeMove(point: Vec2, pointerId: number): InterpreterOutput | null {
+function handleSwipeMove(point: Vec2, pointerId: number): InterpreterSwipe | null {
+  const current = gestures[pointerId]
+  if (!current) return null
 
-  const newCurrent = gestures[pointerId]
-  if (!newCurrent) return null
-
-  const { state, gesture: g } = newCurrent
-
+  if (current.phase === 'PENDING') return null
+  const { state, gesture: g } = current
   const deltaX = point.x - state.last.x
   const deltaY = point.y - state.last.y
 
@@ -176,45 +170,54 @@ function handleSwipeMove(point: Vec2, pointerId: number): InterpreterOutput | nu
   state.last.x = point.x
   state.last.y = point.y
 
-
-
   return {
     desc: g.desc,
-    computed: g.computed, //TODO find a way to ensure that it is there for slider and scroll.
+    computed: g.computed,
     runtime: {
       event: 'swipe',
       delta: state.totalDelta,
-      cancel: undefined
     }
   }
 }
 
-function onUp(_x: number, _y: number, pointerId: number): InterpreterOutput | null {
+function onUp(_x: number, _y: number, pointerId: number): InterpreterSwipeCommit | InterpreterPressRelease | null {
   const current = gestures[pointerId]
   if (!current) return null
-  const state = current.state
-  if (state.phase === 'SWIPING') return finalizeGesture(current, 'swipeCommit')
-  if (state.phase === 'PENDING') return finalizeGesture(current, 'pressRelease')
 
-  delete gestures[current.pointerId]
-  log('init', 'gesture.phase error:', state.phase)
-  return null
+  if (current.phase === 'SWIPING') return finalizeSwipe(current, "swipeCommit")
+  if (current.phase === 'PENDING') return finalizePress(current, "pressRelease")
+
+  assertNever(current)
 }
 
-function finalizeGesture(current: GestureSession, event: EventType): InterpreterOutput | null {
+function finalizeSwipe(current: SwipingSession, event: Extract<EventType, "swipeCommit">) {
   const { state, gesture: g } = current
-  if (event === 'pressRelease' && !g.desc.capabilities.pressable) {
+  if (!g.desc.capabilities.swipeable) {
     delete gestures[current.pointerId]
     return null
   }
-  if (event === 'swipeCommit' && !g.desc.capabilities.swipeable) {
+
+  return {
+    desc: g.desc,
+    computed: g.computed,
+    runtime: {
+      event: event,
+      delta: state.totalDelta
+    }
+  }
+}
+
+
+function finalizePress(current: PendingSession, event: Extract<EventType, "pressRelease">) {
+  const { state, gesture: g } = current
+  if (!g.desc.capabilities.pressable) {
     delete gestures[current.pointerId]
     return null
   }
   delete gestures[current.pointerId]
   return {
     desc: g.desc,
-    computed: g.computed,
+    computed: null,
     runtime: {
       event: event,
       delta: state.totalDelta

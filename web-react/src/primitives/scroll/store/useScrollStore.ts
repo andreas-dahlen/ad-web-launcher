@@ -17,7 +17,7 @@ const DEFAULTS = {
 } as const
 
 const DEFAULTS_OFFSCREEN = {
-  overflowValue: -800,
+  overflowValue: 800,
   isVisible: false,
   liveValue: 0,
   settledValue: 0,
