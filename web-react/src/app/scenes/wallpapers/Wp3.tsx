@@ -1,4 +1,4 @@
-import { useWallpaperStore } from '@hooks/useWallpaperStore'
+import { useWallpaperStore } from '@hooks/useWallpaperStore.hook'
 
 export default function Wp3() {
   const { wallpapers } = useWallpaperStore()

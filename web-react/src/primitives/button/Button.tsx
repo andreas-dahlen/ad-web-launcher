@@ -1,5 +1,5 @@
 import { useRef } from "react"
-import { usePointerBridge } from '@hooks/usePointerBridge.ts'
+import { usePointerBridge } from '@hooks/usePointerBridge.hook'
 
 import buttonCss from './Button.module.css'
 import clsx from 'clsx'

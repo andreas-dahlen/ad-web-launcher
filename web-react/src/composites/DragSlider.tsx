@@ -1,6 +1,6 @@
 import Drag from '../primitives/drag/Drag'
 import type { DragSliderProps } from '@composites/comp.types'
-import { useSettingsStore } from '@hooks/useSettingsStore'
+import { useSettingsStore } from '@hooks/useSettingsStore.hook'
 import Slider from '../primitives/slider/Slider'
 
 export default function DragSlider({

@@ -1,5 +1,5 @@
-import { dragSolver } from '@interaction/solvers/dragSolver/dragSolver'
-import { createDragInput } from '@test/fixtures/input'
+import { dragSolver } from '@interaction/solvers/dragSolver/drag.solver'
+import { createDragInput } from '@test/fixtures/input.fixture'
 import { describe, expect, it } from 'vitest'
 
 

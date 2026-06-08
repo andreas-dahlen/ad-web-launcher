@@ -1,5 +1,5 @@
 import Drag from '../../../primitives/drag/Drag';
-import { useSettingsStore } from '@hooks//useSettingsStore';
+import { useSettingsStore } from '@hooks/useSettingsStore.hook';
 
 export default function Vert2() {
 

@@ -1,14 +1,14 @@
 import { domQuery } from './domQuery.ts'
 import { extractDomMeta } from './domMeta.ts'
-import { carouselStore } from '@primitives/carousel/store/carouselStore.ts'
-import { dragStore } from '@primitives/drag/store/dragStore.ts'
-import { sliderStore } from '@primitives/slider/store/sliderStore.ts'
-import { scrollStore } from '@primitives/scroll/store/scrollStore.ts'
+import { carouselStore } from '@primitives/carousel/store/carousel.store.ts'
+import { dragStore } from '@primitives/drag/store/drag.store.ts'
+import { sliderStore } from '@primitives/slider/store/slider.store.ts'
+import { scrollStore } from '@primitives/scroll/store/scroll.store.ts'
 import type { BaseInteraction, DomMeta, Capabilities, BaseWithSwipe, LayoutData } from '../types/base.types.ts'
 import type { CarouselData, DragData, ScrollData, SliderData } from '../types/data.types.ts'
 import type { CarouselDesc, SliderDesc, DragDesc, ButtonDesc, ScrollDesc } from '../types/descriptor.types.ts'
 import type { Descriptor } from '../types/descriptor.types.ts'
-import { sizeStore } from '../../shared/runtime/sizeStore.ts'
+import { sizeStore } from '../../shared/stores/size.store.ts'
 
 interface Builder {
   capabilities: Capabilities

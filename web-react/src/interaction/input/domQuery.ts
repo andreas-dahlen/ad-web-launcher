@@ -1,4 +1,4 @@
-import { gestureUtils } from './gestureUtils.ts'
+import { gestureUtils } from './gesture.utils.ts'
 import { buildDesc } from './buildDesc.ts'
 import { extractDomMeta } from './domMeta.ts'
 import type { Descriptor, SwipeableDescriptor } from '../types/descriptor.types.ts'

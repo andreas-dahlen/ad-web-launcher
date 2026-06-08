@@ -1,7 +1,7 @@
 import Drag from '../primitives/drag/Drag'
 import Button from '../primitives/button/Button'
 import type { DragButtonProps } from '@composites/comp.types'
-import { useSettingsStore } from '@hooks/useSettingsStore'
+import { useSettingsStore } from '@hooks/useSettingsStore.hook'
 
 export default function DragButton({
   id,

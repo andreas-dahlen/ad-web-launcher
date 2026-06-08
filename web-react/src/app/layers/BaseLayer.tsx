@@ -1,7 +1,7 @@
 import { Z } from '@config/zIndex';
 import { baseComp } from '../compositions/laneComps';
 import Carousel from '../../primitives/carousel/Carousel';
-import useRuntimeBindings from '../compositions/useRuntimeBindings';
+import useRuntimeBindings from '../compositions/useRuntimeBindings.hook';
 import layerCss from './Layers.module.css'
 
 //Layer 1/3 scenes read inputs here!

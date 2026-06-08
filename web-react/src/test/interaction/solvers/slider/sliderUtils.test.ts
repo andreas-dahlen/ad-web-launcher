@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
 // import { createSliderInput } from '@test/fixtures/input';
 // import { sliderSolver } from '@interaction/solvers/sliderSolver/sliderSolver';
-import { createBaseWithAxis1D } from '@test/fixtures/base';
-import { createSliderData } from '@test/fixtures/data';
-import { sliderUtils } from '@interaction/solvers/sliderSolver/sliderUtils';
+import { createBaseWithAxis1D } from '@test/fixtures/base.fixture';
+import { createSliderData } from '@test/fixtures/data.fixture';
+import { sliderUtils } from '@interaction/solvers/sliderSolver/slider.utils';
 
 describe('SliderUtils', () => {
 

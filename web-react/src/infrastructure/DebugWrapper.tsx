@@ -1,4 +1,4 @@
-import { useSize } from '../shared/runtime/sizeStore'
+import { useSize } from '../shared/stores/size.store'
 import type { PropsWithChildren } from 'react'
 import systemCss from './System.module.css'
 

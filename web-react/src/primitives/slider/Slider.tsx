@@ -1,13 +1,13 @@
 import { useRef } from "react"
-import { usePointerBridge } from '@hooks/usePointerBridge.ts'
-import { useSliderSizing } from './hooks/useSliderSizing.ts'
-import { useSliderMotion } from './hooks/useSliderMotion.ts'
-import { useSliderStore } from './store/useSliderStore.ts'
+import { usePointerBridge } from '@hooks/usePointerBridge.hook.ts'
+import { useSliderSizing } from './hooks/useSliderSizing.hook.ts'
+import { useSliderMotion } from './hooks/useSliderMotion.hook.ts'
+import { useSliderStore } from './store/useSliderStore.hook.ts'
 import sliderCss from './Slider.module.css'
 import clsx from 'clsx'
 import { dasx } from '../../shared/utils/dataAttrs.ts'
 import type { SliderProps } from '@primitives/prim.types.ts'
-import { sliderStore } from '@primitives/slider/store/sliderStore.ts'
+import { sliderStore } from '@primitives/slider/store/slider.store.ts'
 
 export default function Slider({
   id,

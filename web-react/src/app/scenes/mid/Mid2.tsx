@@ -1,5 +1,5 @@
 import Button from '@primitives/button/Button'
-import { useSettingsStore } from '@hooks//useSettingsStore'
+import { useSettingsStore } from '@hooks/useSettingsStore.hook'
 
 
 export default function Mid2() {

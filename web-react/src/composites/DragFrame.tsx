@@ -1,6 +1,6 @@
 import Drag from '../primitives/drag/Drag'
 import type { DragFrameProps } from '@composites/comp.types'
-import { useSettingsStore } from '@hooks/useSettingsStore'
+import { useSettingsStore } from '@hooks/useSettingsStore.hook'
 
 export default function DragFrame({
   id,

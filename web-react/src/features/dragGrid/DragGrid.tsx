@@ -1,5 +1,5 @@
-import { useGestureStore } from '@hooks/useGestureStore'
-import { useSettingsStore } from '@hooks/useSettingsStore'
+import { useGestureStore } from '@hooks/useGestureStore.hook'
+import { useSettingsStore } from '@hooks/useSettingsStore.hook'
 import { Z } from '@config/zIndex'
 import DragGridCss from './DragGrid.module.css'
 import clsx from 'clsx'

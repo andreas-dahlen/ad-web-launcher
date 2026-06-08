@@ -1,11 +1,11 @@
 import { useRef, useEffect, useMemo } from "react"
-import { usePointerBridge } from '@hooks/usePointerBridge.ts'
-import { useCarouselMotion } from "./hooks/useCarouselMotion.ts"
-import { useCarouselSizing } from "./hooks/useCarouselSizing.ts"
-import { useAugmentedScenes } from "./hooks/useAugmentedScenes.ts"
-import { useCarouselStore } from './store/useCarouselStore.ts'
-import { carouselStore } from './store/carouselStore.ts'
-import { SceneContext } from './hooks/useSceneContext.ts'
+import { usePointerBridge } from '@hooks/usePointerBridge.hook.ts'
+import { useCarouselMotion } from "./hooks/useCarouselMotion.hook.ts"
+import { useCarouselSizing } from "./hooks/useCarouselSizing.hook.ts"
+import { useAugmentedScenes } from "./hooks/useAugmentedScenes.hook.ts"
+import { useCarouselStore } from './store/useCarouselStore.hook.ts'
+import { carouselStore } from './store/carousel.store.ts'
+import { SceneContext } from './hooks/useSceneContext.hook.ts'
 import type { SceneRole } from '../../shared/typing/core.types.ts'
 import carouselCss from './Carousel.module.css'
 import clsx from 'clsx'

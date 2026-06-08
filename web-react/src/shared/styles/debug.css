@@ -19,5 +19,5 @@
 
 .test-frame {
   height: 2000px;
-  background: linear-gradient(to bottom, hotPink, black, royalBlue, black, hotPink, black, royalBlue)
+  background: linear-gradient(to bottom, hotPink, black, royalBlue, black, hotPink, black, royalBlue) #658888
 }

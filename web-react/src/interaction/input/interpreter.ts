@@ -1,4 +1,4 @@
-import { gestureUtils } from './gestureUtils.ts'
+import { gestureUtils } from './gesture.utils.ts'
 import { domQuery } from './domQuery.ts'
 import { assertNever, type Axis, type EventType, type Vec2 } from '../../shared/typing/core.types.ts'
 import type { ComputedPatch } from '@interaction/types/computed.types.ts'

@@ -1,6 +1,6 @@
-import { gestureUtils } from '@interaction/input/gestureUtils'
-import { createBaseSwipe } from '@test/fixtures/base'
-import { createButtonDesc, createCarouselDesc, createSliderDesc } from '@test/fixtures/desc'
+import { gestureUtils } from '@interaction/input/gesture.utils'
+import { createBaseSwipe } from '@test/fixtures/base.fixture'
+import { createButtonDesc, createCarouselDesc, createSliderDesc } from '@test/fixtures/desc.fixture'
 import { describe, expect, it } from 'vitest'
 
 describe('gestureUtils', () => {

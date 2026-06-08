@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { extractDomMeta } from '@interaction/input/domMeta'
-import { createElByType } from '@test/functions'
+import { createElByType } from '@test/functions.debug'
 import type { InteractionType } from '@typing/core.types'
 
 function resolveMeta(type: InteractionType) {

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { APP_CONFIG } from '@config/appConfig.ts';
+import { APP_CONFIG } from '@config/app.config.ts';
 import DebugWrapper from './infrastructure/DebugWrapper.tsx';
 import Root from './app/Root.tsx';
 import '@styles/index.css'

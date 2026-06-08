@@ -1,5 +1,5 @@
 import SettingsPanel from '../../features/settingsPanel/SettingsPanel.js';
-import { useSettingsStore } from '@hooks//useSettingsStore.js';
+import { useSettingsStore } from '@hooks/useSettingsStore.hook.js';
 import { Z } from '@config/zIndex';
 import Scroll from '../../primitives/scroll/Scroll.js';
 import layerCss from './Layers.module.css'

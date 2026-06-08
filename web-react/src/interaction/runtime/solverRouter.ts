@@ -1,14 +1,14 @@
-import { carouselSolver } from '@interaction/solvers/carouselSolver/carouselSolver';
-import { dragSolver } from '@interaction/solvers/dragSolver/dragSolver';
-import { scrollSolver } from '@interaction/solvers/scrollSolver/scrollSolver';
-import { sliderSolver } from '@interaction/solvers/sliderSolver/sliderSolver';
+import { carouselSolver } from '@interaction/solvers/carouselSolver/carousel.solver';
+import { dragSolver } from '@interaction/solvers/dragSolver/drag.solver';
+import { scrollSolver } from '@interaction/solvers/scrollSolver/scroll.solver';
+import { sliderSolver } from '@interaction/solvers/sliderSolver/slider.solver';
 import type { Computed } from '@interaction/types/computed.types';
 import type { CarouselDesc, DragDesc, ScrollDesc, SliderDesc } from '@interaction/types/descriptor.types';
 import type { Runtime } from '@interaction/types/runtime.types';
-import type { CarouselAction } from '@primitives/carousel/store/carouselStore';
-import type { DragAction } from '@primitives/drag/store/dragStore';
-import type { ScrollAction } from '@primitives/scroll/store/scrollStore';
-import type { SliderAction } from '@primitives/slider/store/sliderStore';
+import type { CarouselAction } from '@primitives/carousel/store/carousel.store';
+import type { DragAction } from '@primitives/drag/store/drag.store';
+import type { ScrollAction } from '@primitives/scroll/store/scroll.store';
+import type { SliderAction } from '@primitives/slider/store/slider.store';
 
 import { assertScrollComputed, assertSliderComputed } from '@typing/core.types';
 

@@ -4,7 +4,7 @@ import unlocked from '@assets/unlocked.svg?react'
 import grid from '@assets/grid.svg?react'
 import snap from '@assets/snap.svg?react'
 import exit from '@assets/exit.svg?react'
-import { useSettingsStore } from '@hooks/useSettingsStore.ts';
+import { useSettingsStore } from '@hooks/useSettingsStore.hook.ts';
 import SettingsButton from './composites/SettingsButton.tsx';
 import Slider from '../../primitives/slider/Slider.tsx';
 import SnapInput from './composites/SnapInput.tsx';

@@ -1,9 +1,9 @@
 import ContentLayer from "./layers/ContentLayer.tsx"
 import OverlayLayer from "./layers/OverlayLayer.tsx"
 import BaseLayer from './layers/BaseLayer.tsx'
-import { useGestureStore } from '../shared/state/hooks/useGestureStore.ts'
+import { useGestureStore } from '../shared/state/hooks/useGestureStore.hook.ts'
 import { useLayoutEffect } from 'react'
-import { sizeStore } from '../shared/runtime/sizeStore.ts'
+import { sizeStore } from '../shared/stores/size.store.ts'
 
 export default function Root() {
 

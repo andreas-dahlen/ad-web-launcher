@@ -1,7 +1,7 @@
-import { carouselSolver } from '@interaction/solvers/carouselSolver/carouselSolver'
-import { createBaseWithAxis1D } from '@test/fixtures/base'
-import { createCarouselData } from '@test/fixtures/data'
-import { createCarouselInput } from '@test/fixtures/input'
+import { carouselSolver } from '@interaction/solvers/carouselSolver/carousel.solver'
+import { createBaseWithAxis1D } from '@test/fixtures/base.fixture'
+import { createCarouselData } from '@test/fixtures/data.fixture'
+import { createCarouselInput } from '@test/fixtures/input.fixture'
 import { describe, expect, it } from 'vitest'
 
 

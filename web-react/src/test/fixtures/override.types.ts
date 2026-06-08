@@ -1,6 +1,6 @@
 import type { Computed } from '@interaction/types/computed.types'
 import type { ButtonDesc, CarouselDesc, DragDesc, ScrollDesc, SliderDesc } from '@interaction/types/descriptor.types'
-import type { Runtime } from '@interaction/types/runtime.types'
+import type { Runtime } from '@interaction/types/runtim.types'
 
 // export type CreateButtonInputOverride = {
 //   runtime?: Partial<Runtime>
