@@ -1,8 +1,6 @@
 import { DEBUG } from './flags.debug.ts'
 import type { InteractionType } from '@typing/core.types.ts'
-import { mockMetaByType } from '@test/fixtures/meta.fixture.ts'
-import { extractDomMeta } from '@interaction/input/domMeta.ts'
-import type { DomMeta } from '@interaction/types/base.types.ts'
+import { mockMetaByType } from '@test/fixtures/domMetaInput.fixture.ts'
 
 type DebugKey = keyof typeof DEBUG.channels
 
@@ -167,12 +165,5 @@ export function createEl(overrides: MetaDataset = {}) {
   })
 
   return el
-}
-
-export function createDomMeta(type: InteractionType, overrides: MetaDataset = {}): DomMeta {
-  const el = createElByType(type, overrides)
-  const value = extractDomMeta(el)
-  if (!value) throw new Error("extract dom meta failed")
-  return extractDomMeta(el) as DomMeta
 }
 

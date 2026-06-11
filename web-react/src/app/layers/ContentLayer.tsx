@@ -11,8 +11,8 @@ export default function ContentLayer() {
       {contentComp.map(comp => {
         const oneCarousel = (
           < Carousel
-            key={`${comp.id}-content`}
             {...comp}
+            key={`${comp.id}-content`}
           />
         )
 

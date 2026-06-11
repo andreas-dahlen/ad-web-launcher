@@ -30,7 +30,6 @@ export interface DragConstraints {
 
 export interface DragModifiers {
   readonly snap?: Vec2;
-  readonly locked?: boolean
 }
 
 export interface SliderData {

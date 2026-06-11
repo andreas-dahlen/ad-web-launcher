@@ -1,55 +1,46 @@
 import { dragSolver } from '@interaction/solvers/dragSolver/drag.solver'
-import { createDragInput } from '@test/fixtures/input.fixture'
+import type { DragDesc, SwipeableDescriptor } from '@interaction/types/descriptor.types'
+import { createDragData } from '@test/builders/data.factory'
+import { createInterpreterSwipe, createInterpreterSwipeCommit, createInterpreterSwipeStart } from '@test/builders/input.factory'
+import { base_DEFAULT, event_DEFAULT } from '@test/defaults/desc.defaults'
 import { describe, expect, it } from 'vitest'
 
+function assertDragDesc(
+  desc: SwipeableDescriptor
+): asserts desc is DragDesc {
+  expect(desc.type).toBe('drag')
+}
 
 describe('DragSolver', () => {
 
-  describe('functions', () => {
-    it('confirms that all functions exist', () => {
-      expect(dragSolver.swipeStart).toBeDefined()
-      expect(dragSolver.swipe).toBeDefined()
-      expect(dragSolver.swipeCommit).toBeDefined()
-    })
-    it('confirms that press functions does NOT exist', () => {
-      expect(dragSolver.press).not.toBeDefined()
-      expect(dragSolver.pressCancel).not.toBeDefined()
-      expect(dragSolver.pressRelease).not.toBeDefined()
-      expect(dragSolver.swipeRevert).not.toBeDefined()
+  describe('swipeStart', () => {
+    it('returns frameRect', () => {
+      const { runtime, desc } = createInterpreterSwipeStart("drag")
+      assertDragDesc(desc)
+      const result = dragSolver.swipeStart(runtime, desc)
+      expect(result.solv.frameRect).toEqual(base_DEFAULT.layout.frameRect)
     })
   })
 
-  describe('output validation', () => {
-    it('returns storeAccepted: true for swipeStart', () => {
-      const { runtime, desc, computed } = createDragInput()
-      const result = dragSolver.swipeStart?.(runtime, desc, computed)
-      expect(result?.storeAccepted).toBe(true)
-    })
-    it('returns storeAccepted: true for swipe', () => {
-      const { runtime, desc, computed } = createDragInput()
-      const result = dragSolver.swipe?.(runtime, desc, computed)
-      expect(result?.storeAccepted).toBe(true)
-    })
-    it('returns storeAccepted: true for swipeCommit', () => {
-      const { runtime, desc, computed } = createDragInput()
-      const result = dragSolver.swipeCommit?.(runtime, desc, computed)
-      expect(result?.storeAccepted).toBe(true)
+  describe('swipe', () => {
+    it('returns same delta as input delta', () => {
+      const { runtime, desc } = createInterpreterSwipe("drag")
+      assertDragDesc(desc)
+      const result = dragSolver.swipe(runtime, desc)
+      expect(result.solv.delta).toEqual(event_DEFAULT.swipe.delta)
     })
 
-    it('returns delta swipeStart', () => {
-      const { runtime, desc, computed } = createDragInput()
-      const result = dragSolver.swipeStart?.(runtime, desc, computed)
-      expect(result?.delta).toBeDefined()
-    })
-    it('returns delta swipe', () => {
-      const { runtime, desc, computed } = createDragInput()
-      const result = dragSolver.swipe?.(runtime, desc, computed)
-      expect(result?.delta).toBeDefined()
-    })
-    it('returns delta swipeCommit', () => {
-      const { runtime, desc, computed } = createDragInput()
-      const result = dragSolver.swipeCommit?.(runtime, desc, computed)
-      expect(result?.delta).toBeDefined()
+  })
+  describe('swipeCommit', () => {
+    it('returns same delta as input delta with no snap', () => {
+      const { runtime, desc } = createInterpreterSwipeCommit("drag", {
+        desc: {
+          data: createDragData({ snap: undefined })
+        }
+      })
+      assertDragDesc(desc)
+      const result = dragSolver.swipeCommit(runtime, desc)
+      expect(result.solv.delta).toEqual(event_DEFAULT.swipeCommit.delta)
     })
   })
 })

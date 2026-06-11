@@ -44,7 +44,7 @@ export function useCarouselMotion({
   const styleForRole = useCallback(
     (role: Role) => {
       const multiplier = ROLE_OFFSETS[role] ?? 0
-
+      // console.log("axisSize: ", axisSize)
       return {
         transform: translate(multiplier * axisSize + delta),
         transition

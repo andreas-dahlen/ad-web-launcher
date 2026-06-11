@@ -33,12 +33,12 @@ export type InterpreterSwipeStart = {
 export type InterpreterSwipe = {
   desc: Readonly<SwipeableDescriptor>
   runtime: RuntimeSwipe
-  computed: Computed | null
+  computed: Computed
 }
 export type InterpreterSwipeCommit = {
   desc: Readonly<SwipeableDescriptor>
   runtime: RuntimeSwipeCommit | RuntimeRevertOverride
-  computed: Computed | null
+  computed: Computed
 }
 export type InterpreterPressRelease = {
   desc: Readonly<Descriptor>

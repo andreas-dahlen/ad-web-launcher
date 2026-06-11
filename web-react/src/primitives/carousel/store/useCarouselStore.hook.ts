@@ -3,7 +3,7 @@ import { useShallow } from 'zustand/shallow'
 import { carouselStore, type CarouselStore } from './carousel.store'
 import { debugRegisterBinding, debugUnregisterBinding } from '../../../test/functions.debug'
 
-const DEFAULTS = {
+export const carousel_DEFAULTS = {
   index: 0,
   count: 0,
   liveOffset: 0,
@@ -20,7 +20,7 @@ export const useCarouselStore = (id: string) => {
 
   useEffect(() => {
     debugRegisterBinding(id, 'useCarouselStore')
-    carouselStore.getState().init(id, DEFAULTS)
+    carouselStore.getState().init(id, carousel_DEFAULTS)
     return () => {
       debugUnregisterBinding(id, 'useCarouselStore')
       carouselStore.getState().delete(id)
@@ -28,6 +28,6 @@ export const useCarouselStore = (id: string) => {
   }, [id])
 
   return carouselStore(
-    useShallow((s: CarouselStore) => s.bindings[id] ?? DEFAULTS)
+    useShallow((s: CarouselStore) => s.bindings[id] ?? carousel_DEFAULTS)
   ) //TODO remove useShallow?
 }

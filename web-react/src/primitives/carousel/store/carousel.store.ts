@@ -4,7 +4,7 @@ import { assertNever, type Direction } from '../../../shared/typing/core.types'
 import type { StoreLayout } from '@typing/store.types'
 import type { CarouselSwipeCommitPayload, CarouselSwipePayload } from '@interaction/types/solver.types'
 
-type Carousel = {
+export type CarouselBinding = {
   //react motion
   index: number
   liveOffset: number
@@ -26,9 +26,9 @@ export type CarouselAction =
   | { event: 'swipeRevert' }
 
 export type CarouselStore = {
-  bindings: Record<string, Carousel>
-  init: (id: string, fallback: Carousel) => void
-  get: (id: string) => Readonly<Carousel>
+  bindings: Record<string, CarouselBinding>
+  init: (id: string, fallback: CarouselBinding) => void
+  get: (id: string) => Readonly<CarouselBinding>
   delete: (id: string) => void
 
   setCount: (id: string, count: number) => void
@@ -45,7 +45,7 @@ export const carouselStore = create<CarouselStore>()(
 
     bindings: {},
 
-    init: (id, fallback) => { //TODO change to fallback
+    init: (id, fallback) => {
       if (get().bindings[id]) return
 
       set(state => {

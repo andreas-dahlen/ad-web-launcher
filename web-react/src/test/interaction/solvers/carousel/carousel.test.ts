@@ -1,197 +1,177 @@
 import { carouselSolver } from '@interaction/solvers/carouselSolver/carousel.solver'
-import { createBaseWithAxis1D } from '@test/fixtures/base.fixture'
-import { createCarouselData } from '@test/fixtures/data.fixture'
-import { createCarouselInput } from '@test/fixtures/input.fixture'
+import type { CarouselDesc, SwipeableDescriptor } from '@interaction/types/descriptor.types'
+import { createBaseWithAxis1D } from '@test/builders/base.factory'
+import { createCarouselData } from '@test/builders/data.factory'
+import { createInterpreterSwipe, createInterpreterSwipeCommit } from '@test/builders/input.factory'
+import { createRuntimeSwipe } from '@test/builders/runtime.factory'
 import { describe, expect, it } from 'vitest'
+
+function assertCarouselDesc(
+  desc: SwipeableDescriptor
+): asserts desc is CarouselDesc {
+  expect(desc.type).toBe('carousel')
+}
 
 
 describe('CarosuelSolver', () => {
 
-  describe('functions', () => {
-    it('confirms that all functions exist', () => {
-      expect(carouselSolver.swipeStart).toBeDefined()
-      expect(carouselSolver.swipe).toBeDefined()
-      expect(carouselSolver.swipeCommit).toBeDefined()
-    })
-    it('confirms that press functions does NOT exist', () => {
-      expect(carouselSolver.press).not.toBeDefined()
-      expect(carouselSolver.pressCancel).not.toBeDefined()
-      expect(carouselSolver.pressRelease).not.toBeDefined()
-      expect(carouselSolver.swipeRevert).not.toBeDefined()
-    })
-  })
-
-  describe('swipeStart', () => {
-    it('always returns storeAccepted: true', () => {
-      const { runtime, desc, computed } = createCarouselInput()
-      const result = carouselSolver.swipeStart?.(runtime, desc, computed)
-      expect(result?.storeAccepted).toBe(true)
-    })
-  })
   describe('swipe', () => {
 
-    it('returns storeAccepted: false when swipe is gated', () => {
-
-      const { runtime, desc, computed } = createCarouselInput({
+    it('returns null when swipe is gated', () => {
+      const { runtime, desc } = createInterpreterSwipe("carousel", {
         runtime: {
-          delta: { x: 1000, y: 0 }
-        },
-        desc: {
-          base: createBaseWithAxis1D({
-            axis: 'vertical'
-          }),
-          data: createCarouselData({
-            lockSwipeAt: undefined,
-            containerSize: { width: 0, height: 0 }
-          })
+          delta: { x: 0, y: 1000 }
         }
       })
+      assertCarouselDesc(desc)
+      const result = carouselSolver.swipe(runtime, desc)
+      expect(result).toBe(null)
 
-      const result = carouselSolver.swipe?.(runtime, desc, computed)
-      expect(result?.storeAccepted).toBe(false)
     })
-    it('returns storeAccepted: false when vertical-next is locked', () => {
 
-      const { runtime, desc, computed } = createCarouselInput({
+    it('returns null when vertical-next is locked', () => {
+      const { runtime, desc } = createInterpreterSwipe("carousel", {
         runtime: {
           delta: { x: 0, y: -1000 }
         },
         desc: {
-          base: createBaseWithAxis1D({
-            axis: 'vertical'
-          }),
+          base: createBaseWithAxis1D({ axis: 'vertical' }),
           data: createCarouselData({
             index: 3,
             lockSwipeAt: { prev: 1, next: 3 },
           })
         }
       })
-
-      const result = carouselSolver.swipe?.(runtime, desc, computed)
-      expect(result?.storeAccepted).toBe(false)
+      assertCarouselDesc(desc)
+      const result = carouselSolver.swipe(runtime, desc)
+      expect(result).toBe(null)
     })
-    it('returns storeAccepted: false when horizontal-previous is locked', () => {
 
-      const { runtime, desc, computed } = createCarouselInput({
+    it('returns null when horizontal-previous is locked', () => {
+      const { runtime, desc } = createInterpreterSwipe("carousel", {
         runtime: {
           delta: { x: 1000, y: 0 }
         },
         desc: {
-          base: createBaseWithAxis1D({
-            axis: 'horizontal'
-          }),
           data: createCarouselData({
             index: 1,
             lockSwipeAt: { prev: 1, next: 3 },
           })
         }
       })
-
-      const result = carouselSolver.swipe?.(runtime, desc, computed)
-      expect(result?.storeAccepted).toBe(false)
+      assertCarouselDesc(desc)
+      const result = carouselSolver.swipe(runtime, desc)
+      expect(result).toBe(null)
     })
 
     it('returns delta1D when swipe is valid', () => {
-      const { runtime, desc, computed } = createCarouselInput({
+      const { runtime, desc } = createInterpreterSwipe("carousel", {
+        runtime: {
+          delta: { x: 100, y: 10 }
+        },
         desc: {
           data: createCarouselData({
             lockSwipeAt: undefined
           })
         }
       })
-      const result = carouselSolver.swipe?.(runtime, desc, computed)
-      expect(result?.storeAccepted).toBe(true)
-      if (result?.storeAccepted) {
-        expect(result.delta1D).toBeDefined()
-      }
+      assertCarouselDesc(desc)
+      const result = carouselSolver.swipe(runtime, desc)
+      expect(result).toBeDefined()
+      expect(result?.solv.delta1D).toBeDefined()
     })
   })
+
+  it('returns correct values for delta1D', () => {
+    const { runtime, desc } = createInterpreterSwipe("carousel", {
+      runtime: {
+        delta: { x: 100, y: 10 }
+      },
+      desc: {
+        data: createCarouselData({
+          lockSwipeAt: undefined
+        })
+      }
+    })
+
+    const runtime2 = createRuntimeSwipe({
+      event: "swipe",
+      delta: { x: -100, y: 10 }
+    })
+    assertCarouselDesc(desc)
+    const result = carouselSolver.swipe(runtime, desc)
+    const result2 = carouselSolver.swipe(runtime2, desc)
+    expect(result?.solv.delta1D).toEqual(100)
+    expect(result2?.solv.delta1D).toEqual(-100)
+  })
+
 
   describe('swipeCommit', () => {
 
     it('returns revert when swipe is gated', () => {
-      const { runtime, desc, computed } = createCarouselInput({
+      const { runtime, desc } = createInterpreterSwipeCommit("carousel", {
         runtime: {
-          delta: { x: 10, y: 10 }
+          delta: { x: 0, y: 1000 }
+        }
+      })
+      assertCarouselDesc(desc)
+      const result = carouselSolver.swipeCommit(runtime, desc)
+      expect(result?.routing).toBe("replace-event")
+    })
+
+    it('returns revert when vertical-previous swipeCommit is locked', () => {
+      const { runtime, desc } = createInterpreterSwipeCommit("carousel", {
+        runtime: {
+          delta: { x: 0, y: 1000 }
+        },
+        desc: {
+          base: createBaseWithAxis1D({ axis: "vertical" }),
+          data: createCarouselData({
+            index: 1,
+            lockSwipeAt: { prev: 1, next: 3 },
+          })
+        },
+      })
+      assertCarouselDesc(desc)
+      const result = carouselSolver.swipeCommit(runtime, desc)
+      expect(result?.routing).toBe("replace-event")
+    })
+    it('returns revert when horizontal-next swipeCommit is locked', () => {
+      const { runtime, desc } = createInterpreterSwipeCommit("carousel", {
+        runtime: {
+          delta: { x: -1000, y: 0 }
         },
         desc: {
           data: createCarouselData({
-            lockSwipeAt: undefined,
-            containerSize: { width: 0, height: 0 }
+            index: 3,
+            lockSwipeAt: { prev: 1, next: 3 },
           })
         }
       })
-      const result = carouselSolver.swipeCommit?.(runtime, desc, computed)
-      expect(result?.storeAccepted).toBe(true)
-      if (result?.storeAccepted) {
-        expect(result?.event).toBe('swipeRevert')
-      }
+      assertCarouselDesc(desc)
+      const result = carouselSolver.swipeCommit(runtime, desc)
+      expect(result?.routing).toBe("replace-event")
     })
-  })
 
-  it('returns revert when vertical-previous swipeCommit is locked', () => {
-    const { runtime, desc, computed } = createCarouselInput({
-      runtime: {
-        delta: { x: 0, y: 1000 }
-      },
-      desc: {
-        base: createBaseWithAxis1D({
-          axis: 'vertical'
-        }),
-        data: createCarouselData({
-          index: 1,
-          lockSwipeAt: { prev: 1, next: 3 },
-        })
+    it('returns delta1D and dir when swipeCommit is valid', () => {
+      const { runtime, desc } = createInterpreterSwipeCommit("carousel", {
+        runtime: {
+          delta: { x: 200, y: 0 }
+        },
+        desc: {
+          data: createCarouselData({
+            index: 3,
+            lockSwipeAt: { prev: 1, next: 3 },
+          })
+        }
+      })
+      assertCarouselDesc(desc)
+      const result = carouselSolver.swipeCommit(runtime, desc)
+      expect(result?.routing).toBe("store")
+      if (result?.routing === "store") {
+        expect(result.solv.direction).toBeDefined()
+        expect(result.solv.delta1D).toBeDefined()
       }
     })
-    const result = carouselSolver.swipeCommit?.(runtime, desc, computed)
-    expect(result?.storeAccepted).toBe(true)
-    if (result?.storeAccepted) {
-      expect(result?.event).toBe('swipeRevert')
-    }
-  })
-  it('returns revert when horizontal-next swipeCommit is locked', () => {
-    const { runtime, desc, computed } = createCarouselInput({
-      runtime: {
-        delta: { x: -1000, y: 0 }
-      },
-      desc: {
-        base: createBaseWithAxis1D({
-          axis: 'horizontal'
-        }),
-        data: createCarouselData({
-          index: 3,
-          lockSwipeAt: { prev: 1, next: 3 },
-        })
-      }
-    })
-    const result = carouselSolver.swipeCommit?.(runtime, desc, computed)
-    expect(result?.storeAccepted).toBe(true)
-    if (result?.storeAccepted) {
-      expect(result?.event).toBe('swipeRevert')
-    }
-  })
-
-  it('returns delta1D and dir when swipeCommit is valid', () => {
-    const { runtime, desc, computed } = createCarouselInput({
-      runtime: {
-        delta: { x: 200, y: 0 }
-      },
-      desc: {
-        base: createBaseWithAxis1D({
-          axis: 'horizontal'
-        }),
-        data: createCarouselData({
-          index: 3,
-          lockSwipeAt: { prev: 1, next: 3 },
-        })
-      }
-    })
-    const result = carouselSolver.swipeCommit?.(runtime, desc, computed)
-    expect(result?.storeAccepted).toBe(true)
-    if (result?.storeAccepted) {
-      expect(result.delta1D).toBeDefined()
-      expect(result.direction).toBeDefined()
-    }
   })
 })

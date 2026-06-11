@@ -45,7 +45,7 @@ export default function Carousel({
   useCarouselSizing({ elRef: containerRef, sceneRef: itemRef, id })
 
   const axisSize = axis === "horizontal" ? layout.containerSize.width : layout.containerSize.height
-
+  console.log(id, 'liveOffset:', liveOffset, 'axisSize:', axisSize, 'delta in styleForRole for current:', 0 * axisSize + liveOffset)
   // ── Pointer forwarding for gestures ─────────────────────────────
   usePointerBridge({
     elRef: containerRef,
@@ -117,7 +117,7 @@ export default function Carousel({
 
         return (
           <div
-            key={slot.sceneIdx}
+            key={slot.role}
             ref={itemRef}
             className={clsx(carouselCss.scene, interactive && setColor(slot.sceneIdx))}
             style={styleForRole(slot.role)}

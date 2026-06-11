@@ -1,6 +1,7 @@
 import { gestureUtils } from '@interaction/input/gesture.utils'
-import { createBaseSwipe } from '@test/fixtures/base.fixture'
-import { createButtonDesc, createCarouselDesc, createSliderDesc } from '@test/fixtures/desc.fixture'
+import { createBaseWithAxis1D } from '@test/builders/base.factory'
+import { createPressCapabilities } from '@test/builders/capabilities.factory'
+import { createButtonDesc, createCarouselDesc, createSliderDesc } from '@test/builders/desc.factory'
 import { describe, expect, it } from 'vitest'
 
 describe('gestureUtils', () => {
@@ -33,72 +34,67 @@ describe('gestureUtils', () => {
   })
 
   describe('isSwipeableDescriptor', () => {
-    it('returns false for button desc', () => {
+    it('returns null for button desc', () => {
       const desc = createButtonDesc()
       expect(
-        gestureUtils.isSwipeableDescriptor(
+        gestureUtils.asSwipeableDescriptor(
           desc,
           'horizontal'
         )
-      ).toBe(false)
+      ).toBe(null)
     })
-    it('returns true for slider desc', () => {
+    it('returns slider desc if axis matching', () => {
       const desc = createSliderDesc()
       expect(
-        gestureUtils.isSwipeableDescriptor(
+        gestureUtils.asSwipeableDescriptor(
           desc,
-          'horizontal'
+          desc.base.axis
         )
-      ).toBe(true)
+      ).toBe(desc)
     })
-    it('returns false for non-matching axises', () => {
+    it('returns null for non-matching axises', () => {
+      const desc = createCarouselDesc()
+      expect(
+        gestureUtils.asSwipeableDescriptor(
+          desc,
+          'vertical'
+        )
+      ).toBe(null)
+    })
+    it('returns null when swipeable capability is false', () => {
       const desc = createCarouselDesc({
-        base: { ...createBaseSwipe(), axis: 'vertical' }
+        base: createBaseWithAxis1D(),
+        capabilities: createPressCapabilities()
       })
       expect(
-        gestureUtils.isSwipeableDescriptor(
+        gestureUtils.asSwipeableDescriptor(
           desc,
-          'horizontal'
+          'vertical'
         )
-      ).toBe(false)
-    })
-    it('returns false when swipeable capability is false', () => {
-      const desc = createCarouselDesc({
-        base: { ...createBaseSwipe(), axis: 'horizontal' },
-        capabilities: {
-          pressable: true,
-          swipeable: false,
-          instantSwipe: false
-        }
-      })
-      expect(
-        gestureUtils.isSwipeableDescriptor(
-          desc,
-          'horizontal'
-        )
-      ).toBe(false)
+      ).toBe(null)
     })
     it('returns true when instantSwipe & swipeable is true', () => {
       const desc = createCarouselDesc({
-        base: { ...createBaseSwipe(), axis: 'horizontal' },
+        base: undefined,
         capabilities: {
           pressable: true,
           swipeable: true,
           instantSwipe: true
         }
       })
+
       expect(
-        gestureUtils.isSwipeableDescriptor(
+        gestureUtils.asSwipeableDescriptor(
           desc,
           'vertical'
         )
-      ).toBe(true)
+      ).toBe(desc)
     })
   })
 
   describe('swipeThresholdCalc', () => {
     it('returns true if instantSwipe is true', () => {
-      expect(gestureUtils.swipeThresholdCalc(5, true)).toBe(true)
+      expect(gestureUtils.swipeThresholdCalc(0, true)).toBe(true)
     })
   })
 })

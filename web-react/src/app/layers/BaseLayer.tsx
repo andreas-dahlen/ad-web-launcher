@@ -12,9 +12,9 @@ export default function BaseLayer() {
       {baseComp.map(comp => {
         const oneCarousel = (
           <Carousel
-            key={comp.id}
             {...runtimeBindings[comp.id]}
             {...comp}
+            key={comp.id}
           />
         )
 

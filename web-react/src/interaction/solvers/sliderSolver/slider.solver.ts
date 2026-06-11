@@ -16,7 +16,7 @@ import type { SliderSolver } from '@interaction/types/solver.types.ts'
 export const sliderSolver: SliderSolver = {
 
   press(runtime, desc) {
-    const norm = sliderUtils.normalize(desc.base, desc.data, runtime.delta)
+    const norm = sliderUtils.normalize(desc.base, runtime.delta)
     const result = sliderUtils.resolveStart(norm, desc.data.constraints)
     return {
       routing: "store", solv: {
@@ -27,7 +27,7 @@ export const sliderSolver: SliderSolver = {
 
   swipeStart(runtime, desc) {
 
-    const norm = sliderUtils.normalize(desc.base, desc.data, runtime.delta)
+    const norm = sliderUtils.normalize(desc.base, runtime.delta)
     const result = sliderUtils.resolveStart(norm, desc.data.constraints)
     return {
       routing: "store", solv: {
@@ -45,7 +45,7 @@ export const sliderSolver: SliderSolver = {
    * Handle swipe (drag) - clamp delta so thumb stays within [min, max] visually
    */
   swipe(runtime, desc, computed) {
-    const norm = sliderUtils.normalize(desc.base, desc.data, runtime.delta)
+    const norm = sliderUtils.normalize(desc.base, runtime.delta)
     const gated = exceedsCrossRange(norm)
     if (gated) return null
     const value =
@@ -60,7 +60,7 @@ export const sliderSolver: SliderSolver = {
    * Clamps result so position stays within [min, max]
    */
   swipeCommit(runtime, desc, computed) {
-    const norm = sliderUtils.normalize(desc.base, desc.data, runtime.delta)
+    const norm = sliderUtils.normalize(desc.base, runtime.delta)
     const gated = exceedsCrossRange(norm)
     if (gated) return null
 

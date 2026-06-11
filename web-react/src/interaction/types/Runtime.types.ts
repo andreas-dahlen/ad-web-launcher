@@ -32,6 +32,6 @@ export type RuntimeRevertOverride = delta & {
   event: 'swipeRevert'
 }
 
-export type RuntimeCancelEffect = {
-  event: 'pressCancel'
-}
+// export type RuntimeCancelEffect = {
+//   event: 'pressCancel'
+// }
