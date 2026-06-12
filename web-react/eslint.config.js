@@ -109,6 +109,16 @@ export default defineConfig([
     },
 
     rules: {
+  '@typescript-eslint/no-unused-vars': [
+    'error',
+    {
+      args: 'all',
+      argsIgnorePattern: '^_',
+      varsIgnorePattern: '^_',
+      caughtErrorsIgnorePattern: '^_',
+      ignoreRestSiblings: true,
+    },
+  ],
       'boundaries/dependencies': ['error', {
         default: 'disallow',
         rules: [

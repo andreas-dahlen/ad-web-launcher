@@ -4,9 +4,9 @@ import { createPressCapabilities } from '@test/builders/capabilities.factory'
 import { createButtonDesc, createCarouselDesc, createSliderDesc } from '@test/builders/desc.factory'
 import { describe, expect, it } from 'vitest'
 
-describe('gestureUtils', () => {
+describe('[GESTUREUTILS]', () => {
 
-  describe('resolveAxis', () => {
+  describe('[Resolve Axis]', () => {
     it('returns true for axis: both', () => {
       expect(
         gestureUtils.isAxisSupported(
@@ -33,7 +33,7 @@ describe('gestureUtils', () => {
     })
   })
 
-  describe('isSwipeableDescriptor', () => {
+  describe('[isSwipeableDescriptor]', () => {
     it('returns null for button desc', () => {
       const desc = createButtonDesc()
       expect(
@@ -92,7 +92,7 @@ describe('gestureUtils', () => {
     })
   })
 
-  describe('swipeThresholdCalc', () => {
+  describe('[swipeThresholdCalc]', () => {
     it('returns true if instantSwipe is true', () => {
       expect(gestureUtils.swipeThresholdCalc(0, true)).toBe(true)
     })

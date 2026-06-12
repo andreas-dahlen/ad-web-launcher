@@ -167,7 +167,7 @@ export const buildDesc = {
   },
   buildSliderData(metaData: DomMeta): SliderData {
     const s = sliderStore.getState().get(metaData.id)
-    return { constraints: { min: s.min, max: s.max } }
+    return { constraints: s.constraints }
   },
   buildDragData(metaData: DomMeta): DragData | null {
     const s = dragStore.getState().get(metaData.id)

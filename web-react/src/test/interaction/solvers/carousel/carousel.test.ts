@@ -13,9 +13,9 @@ function assertCarouselDesc(
 }
 
 
-describe('CarosuelSolver', () => {
+describe('[CAROUSELSOLVER]', () => {
 
-  describe('swipe', () => {
+  describe('[Swipe]', () => {
 
     it('returns null when swipe is gated', () => {
       const { runtime, desc } = createInterpreterSwipe("carousel", {
@@ -78,7 +78,7 @@ describe('CarosuelSolver', () => {
       assertCarouselDesc(desc)
       const result = carouselSolver.swipe(runtime, desc)
       expect(result).toBeDefined()
-      expect(result?.solv.delta1D).toBeDefined()
+      expect(result?.payload.delta1D).toBeDefined()
     })
   })
 
@@ -101,12 +101,12 @@ describe('CarosuelSolver', () => {
     assertCarouselDesc(desc)
     const result = carouselSolver.swipe(runtime, desc)
     const result2 = carouselSolver.swipe(runtime2, desc)
-    expect(result?.solv.delta1D).toEqual(100)
-    expect(result2?.solv.delta1D).toEqual(-100)
+    expect(result?.payload.delta1D).toEqual(100)
+    expect(result2?.payload.delta1D).toEqual(-100)
   })
 
 
-  describe('swipeCommit', () => {
+  describe('[SwipeCommit]', () => {
 
     it('returns revert when swipe is gated', () => {
       const { runtime, desc } = createInterpreterSwipeCommit("carousel", {
@@ -116,7 +116,7 @@ describe('CarosuelSolver', () => {
       })
       assertCarouselDesc(desc)
       const result = carouselSolver.swipeCommit(runtime, desc)
-      expect(result?.routing).toBe("replace-event")
+      expect(result?.route).toBe("revert")
     })
 
     it('returns revert when vertical-previous swipeCommit is locked', () => {
@@ -134,7 +134,7 @@ describe('CarosuelSolver', () => {
       })
       assertCarouselDesc(desc)
       const result = carouselSolver.swipeCommit(runtime, desc)
-      expect(result?.routing).toBe("replace-event")
+      expect(result?.route).toBe("revert")
     })
     it('returns revert when horizontal-next swipeCommit is locked', () => {
       const { runtime, desc } = createInterpreterSwipeCommit("carousel", {
@@ -150,7 +150,7 @@ describe('CarosuelSolver', () => {
       })
       assertCarouselDesc(desc)
       const result = carouselSolver.swipeCommit(runtime, desc)
-      expect(result?.routing).toBe("replace-event")
+      expect(result?.route).toBe("revert")
     })
 
     it('returns delta1D and dir when swipeCommit is valid', () => {
@@ -167,10 +167,10 @@ describe('CarosuelSolver', () => {
       })
       assertCarouselDesc(desc)
       const result = carouselSolver.swipeCommit(runtime, desc)
-      expect(result?.routing).toBe("store")
-      if (result?.routing === "store") {
-        expect(result.solv.direction).toBeDefined()
-        expect(result.solv.delta1D).toBeDefined()
+      expect(result?.route).toBe("default")
+      if (result?.route === "default") {
+        expect(result.payload.direction).toBeDefined()
+        expect(result.payload.delta1D).toBeDefined()
       }
     })
   })

@@ -10,77 +10,83 @@ function getTest() {
 }
 
 
-describe("carouselStore", () => {
+describe("[CAROUSELSTORE]", () => {
   beforeEach(() => {
     carouselStore.setState({
       bindings: {}
     })
     expect(Object.keys(carouselStore.getState().bindings)).toHaveLength(0)
   })
-  it('adds carousel node', () => {
-    initTest()
-    expect(getTest()).toEqual({
-      ...carousel_DEFAULTS
+
+  describe('[Base Functionality]', () => {
+    it('adds carousel node', () => {
+      initTest()
+      expect(getTest()).toEqual({
+        ...carousel_DEFAULTS
+      })
+    })
+    it('makes sure no duplicate node', () => {
+      initTest()
+      initTest()
+      const state = carouselStore.getState()
+      expect(Object.keys(state.bindings)).toHaveLength(1)
+    })
+    it('get returns same with as fetching straight up', () => {
+      initTest()
+      expect(getTest()).toEqual(carouselStore.getState().get("test"))
+    })
+    it("makes sure that delete deletes", () => {
+      initTest()
+      carouselStore.getState().init("test2", carousel_DEFAULTS)
+      carouselStore.getState().delete("test")
+      const state = carouselStore.getState()
+      expect(Object.keys(state.bindings)).toHaveLength(1)
+      expect(getTest()).toBe(undefined)
+      expect(state.bindings["test2"]).toEqual({
+        ...carousel_DEFAULTS
+      })
     })
   })
-  it('makes sure no duplicate node', () => {
-    initTest()
-    initTest()
-    const state = carouselStore.getState()
-    expect(Object.keys(state.bindings)).toHaveLength(1)
-  })
-  it('get returns same with as fetching straight up', () => {
-    initTest()
-    expect(getTest()).toEqual(carouselStore.getState().get("test"))
-  })
-  it("makes sure that delete deletes", () => {
-    initTest()
-    carouselStore.getState().init("test2", carousel_DEFAULTS)
-    carouselStore.getState().delete("test")
-    const state = carouselStore.getState()
-    expect(Object.keys(state.bindings)).toHaveLength(1)
-    expect(getTest()).toBe(undefined)
-    expect(state.bindings["test2"]).toEqual({
-      ...carousel_DEFAULTS
+
+  describe("[Domain Specific]", () => {
+    it("makes sure that count setter function sets count", () => {
+      initTest()
+      carouselStore.getState().setCount("test", 5)
+      expect(getTest().count).toEqual(5)
+    })
+    it("makes sure that setLayout setter function sets layout", () => {
+      initTest()
+
+      const packet = {
+        containerSize: { width: 50, height: 100 },
+        itemSize: { width: 100, height: 50 }
+      }
+      carouselStore.getState().setLayout("test", packet)
+      expect(getTest().layout).toEqual(packet)
+    })
+
+    it('set Settling resets liveOffset and clears settling on next frame', () => {
+      const test: CarouselBinding = { ...carousel_DEFAULTS, settling: true, pendingDir: { dir: "left", axis: "horizontal" }, liveOffset: 100 }
+
+      vi.useFakeTimers()
+
+      try {
+        initTest(test)
+
+        carouselStore.getState().setSettling('test')
+
+        expect(getTest().liveOffset).toBe(0)
+
+        vi.advanceTimersByTime(20)
+        const state2 = carouselStore.getState()
+        expect(state2.bindings["test"].settling).toBe(false)
+      } finally {
+        vi.useRealTimers()
+      }
     })
   })
-  it("makes sure that count setter function sets count", () => {
-    initTest()
-    carouselStore.getState().setCount("test", 5)
-    expect(getTest().count).toEqual(5)
-  })
-  it("makes sure that setLayout setter function sets layout", () => {
-    initTest()
 
-    const packet = {
-      containerSize: { width: 50, height: 100 },
-      itemSize: { width: 100, height: 50 }
-    }
-    carouselStore.getState().setLayout("test", packet)
-    expect(getTest().layout).toEqual(packet)
-  })
-
-  it('set Settling resets liveOffset and clears settling on next frame', () => {
-    const test: CarouselBinding = { ...carousel_DEFAULTS, settling: true, pendingDir: { dir: "left", axis: "horizontal" }, liveOffset: 100 }
-
-    vi.useFakeTimers()
-
-    try {
-      initTest(test)
-
-      carouselStore.getState().setSettling('test')
-
-      expect(getTest().liveOffset).toBe(0)
-
-      vi.advanceTimersByTime(20)
-      const state2 = carouselStore.getState()
-      expect(state2.bindings["test"].settling).toBe(false)
-    } finally {
-      vi.useRealTimers()
-    }
-  })
-
-  describe("[APPLY] stores main pipeline", () => {
+  describe("[APPLY]", () => {
 
     it('correctly modifies store at swipeStart', () => {
       const action = { event: "swipeStart" } as const

@@ -1,8 +1,9 @@
+import type { Constraints1D } from '@typing/core.types'
 import { useMemo } from "react"
 
 interface UseSliderMotionProps {
   position: number
-  constraints: { min: number; max: number }
+  constraints: Constraints1D
   axisSize: number
   axisitemSize: number
   dragging: boolean

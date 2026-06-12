@@ -1,7 +1,7 @@
 import { gestureUtils } from './gesture.utils.ts'
 import { domQuery } from './domQuery.ts'
 import { assertNever, type Axis, type EventType, type Vec2 } from '../../shared/typing/core.types.ts'
-import type { ComputedPatch } from '@interaction/types/computed.types.ts'
+import type { ComputedPackage } from '@interaction/types/computed.types.ts'
 import type { GestureSession, PendingContext, InterpreterPress, InterpreterSwipeStart, InterpreterSwipe, InterpreterSwipeCommit, InterpreterPressRelease, SwipingSession, PendingSession } from '@interaction/types/interpreter.types.ts'
 
 /* ========================
@@ -21,8 +21,8 @@ export const interpreter = {
   deleteGesture
 }
 
-function applyComputedUpdate(update: ComputedPatch, pointerId: number) {
-  const g = gestures[pointerId]
+function applyComputedUpdate(update: ComputedPackage) {
+  const g = gestures[update.pointerId]
   if (!g) return
   g.gesture.computed = update
   //TODO possibly assert something here... computed is no longer null!

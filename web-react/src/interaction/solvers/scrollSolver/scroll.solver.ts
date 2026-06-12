@@ -18,17 +18,17 @@ export const scrollSolver: ScrollSolver = {
     if (isOverflow) {
       const result = overflowUtils.resolveStart(desc.data, desc.base, desc.base.pointerId, isOverflow)
       return {
-        routing: "store", solv: {
-          computedUpdate: result.computedUpdate,
-          isOverflow: true
-        }
+        route: "default",
+        payload: { isOverflow: true },
+        computedUpdate: result.computedUpdate
       }
     }
     const result = scrollUtils.resolveStart(delta1d, desc, isOverflow)
     return {
-      routing: "store", solv: {
+      route: "default",
+      computedUpdate: result.computedUpdate,
+      payload: {
         delta1D: result.delta1D,
-        computedUpdate: result.computedUpdate,
         isOverflow: false
       }
     }
@@ -40,7 +40,8 @@ export const scrollSolver: ScrollSolver = {
     if (computed.isOverflow) {
       const result = overflowUtils.resolveSwipe(delta1d, desc.base, computed)
       return {
-        routing: "store", solv: {
+        route: "default",
+        payload: {
           overflowValue: result.overflowValue,
           isOverflow: true
         }
@@ -48,7 +49,8 @@ export const scrollSolver: ScrollSolver = {
     }
     const result = scrollUtils.resolveSwipe(delta1d, desc.data, desc.base)
     return {
-      routing: "store", solv: {
+      route: "default",
+      payload: {
         delta1D: result.delta1D,
         isOverflow: false
       }
@@ -61,7 +63,8 @@ export const scrollSolver: ScrollSolver = {
     if (!computed.isOverflow) {
       const result = scrollUtils.resolveEnd(delta1d, data, base)
       return {
-        routing: "store", solv: {
+        route: "default",
+        payload: {
           isVisible: true,
           delta1D: result.delta1D,
           isOverflow: false
@@ -80,7 +83,8 @@ export const scrollSolver: ScrollSolver = {
 
     if (toCommit) {
       return {
-        routing: "store", solv: {
+        route: "default",
+        payload: {
           overflowValue: result.overflowValue,
           isVisible: result.isVisible,
           isOverflow: true
@@ -88,8 +92,8 @@ export const scrollSolver: ScrollSolver = {
       }
     } else {
       return {
-        routing: "replace-event",
-        event: "swipeRevert", solv: {
+        route: "revert",
+        payload: {
           overflowValue: result.overflowValue,
           isVisible: result.isVisible
         }

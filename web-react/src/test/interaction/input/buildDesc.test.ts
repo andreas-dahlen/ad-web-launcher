@@ -15,7 +15,7 @@ function resolveMeta(type: InteractionType) {
   return result
 }
 
-describe('extractDomMeta', () => {
+describe('[EXTRACT DOMMETA]', () => {
   it('[CAROUSEL] meta package extracted', () => {
     const result = resolveMeta('carousel')
 

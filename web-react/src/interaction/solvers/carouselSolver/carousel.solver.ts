@@ -26,7 +26,10 @@ export const carouselSolver: CarouselSolver = {
       : false
 
     if (gated || locked) return null
-    return { routing: "store", solv: { delta1D: norm.mainDelta } }
+    return {
+      route: "default",
+      payload: { delta1D: norm.mainDelta }
+    }
   },
 
   /**
@@ -40,17 +43,17 @@ export const carouselSolver: CarouselSolver = {
       ? carouselUtils.isLocked(norm.mainDelta, desc.data.index, desc.data.lockSwipeAt)
       : false
 
-    if (gated || locked) return { routing: "replace-event", event: 'swipeRevert' }
+    if (gated || locked) return { route: "revert" }
 
     const solution = carouselUtils.resolveCommit(norm, desc.base.axis)
     if (solution) return {
-      routing: "store",
-      solv: {
+      route: "default",
+      payload: {
         direction: solution.direction,
-        delta1D: solution.delta,
+        delta1D: solution.delta
       }
     }
-    return { routing: 'replace-event', event: 'swipeRevert' }
+    return { route: 'revert' }
   }
 }
 

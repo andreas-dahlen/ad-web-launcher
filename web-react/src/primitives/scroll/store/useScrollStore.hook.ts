@@ -3,7 +3,7 @@ import { useShallow } from 'zustand/shallow'
 import { debugRegisterBinding, debugUnregisterBinding } from '@test/functions.debug'
 import { scrollStore, type ScrollStore } from './scroll.store'
 
-const DEFAULTS = {
+export const scroll_DEFAULTS = {
   overflowValue: 0,
   liveValue: 0,
   isVisible: true,
@@ -16,7 +16,7 @@ const DEFAULTS = {
   }
 } as const
 
-const DEFAULTS_OFFSCREEN = {
+export const scroll_DEFAULTS_OFFSCREEN = {
   overflowValue: 800,
   isVisible: false,
   liveValue: 0,
@@ -33,7 +33,7 @@ export const useScrollStore = (id: string, isInitialVisible: boolean) => {
 
   useEffect(() => {
     debugRegisterBinding(id, 'useScrollStore')
-    scrollStore.getState().init(id, isInitialVisible ? DEFAULTS : DEFAULTS_OFFSCREEN)
+    scrollStore.getState().init(id, isInitialVisible ? scroll_DEFAULTS : scroll_DEFAULTS_OFFSCREEN)
     return () => {
       debugUnregisterBinding(id, 'useScrollStore')
       scrollStore.getState().delete(id)
@@ -43,6 +43,6 @@ export const useScrollStore = (id: string, isInitialVisible: boolean) => {
 
   return scrollStore(
     useShallow((s: ScrollStore) => s.bindings[id] ??
-      (isInitialVisible ? DEFAULTS : DEFAULTS_OFFSCREEN))
+      (isInitialVisible ? scroll_DEFAULTS : scroll_DEFAULTS_OFFSCREEN))
   ) //TODO remove useShallow?
 }

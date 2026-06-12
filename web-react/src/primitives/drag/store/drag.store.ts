@@ -1,12 +1,11 @@
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
-import type { Vec2 } from '@typing/core.types'
-import type { DragSwipeCommitPayload, DragSwipePayload, DragSwipeStartPayload } from '@interaction/types/solver.types'
-import type { DragConstraints } from '@interaction/types/data.types'
+import type { Constraints2D, Vec2 } from '@typing/core.types'
 import type { FrameSnapshot } from '@interaction/types/base.types'
 import type { StoreLayout } from '@typing/store.types'
+import type { DragAction } from '@interaction/types/action.types'
 
-type Drag = {
+export type DragBinding = {
   //react motion
   liveOffset: Vec2
   dragging: boolean
@@ -17,26 +16,19 @@ type Drag = {
 
   layout: StoreLayout
 
-  constraints: DragConstraints
+  constraints: Constraints2D
 
   frameRect: FrameSnapshot
 }
 
-export type DragAction =
-  | { event: "swipeStart"; payload: DragSwipeStartPayload }
-  | { event: "swipe"; payload: DragSwipePayload }
-  | { event: "swipeCommit"; payload: DragSwipeCommitPayload }
-
-// type AcceptedDrag = Extract<DragSolution, { storeAccepted: true }>
-
 export type DragStore = {
-  bindings: Record<string, Drag>
-  init: (id: string, fallback: Drag) => void
-  get: (id: string) => Readonly<Drag>
+  bindings: Record<string, DragBinding>
+  init: (id: string, fallback: DragBinding) => void
+  get: (id: string) => Readonly<DragBinding>
   delete: (id: string) => void
 
   setLayout: (id: string, layout: StoreLayout) => void
-  setConstraints: (id: string, constraints: DragConstraints) => void
+  setConstraints: (id: string, constraints: Constraints2D) => void
   setFrameRect: (id: string, frame: FrameSnapshot) => void
   setPosition: (id: string, pos: Vec2) => void
 

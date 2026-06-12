@@ -1,4 +1,4 @@
-import type { RuntimePress, RuntimePressRelease, RuntimeRevertOverride, RuntimeSwipe, RuntimeSwipeCommit, RuntimeSwipeStart } from '@interaction/types/runtime.types';
+import type { RuntimePress, RuntimePressRelease, RuntimeRevert, RuntimeSwipe, RuntimeCommit, RuntimeStart } from '@interaction/types/runtime.types';
 import { merge } from '@test/builders/factory.utils';
 import { event_DEFAULT } from '@test/defaults/desc.defaults';
 
@@ -9,7 +9,7 @@ export function createRuntimePress(
 }
 export function createRuntimeswipeStart(
   overrides: Record<string, unknown> = {}
-): RuntimeSwipeStart {
+): RuntimeStart {
   return merge(event_DEFAULT.swipeStart, overrides)
 }
 export function createRuntimeSwipe(
@@ -19,7 +19,7 @@ export function createRuntimeSwipe(
 }
 export function createRuntimeSwipeCommit(
   overrides: Record<string, unknown> = {}
-): RuntimeSwipeCommit | RuntimeRevertOverride {
+): RuntimeCommit | RuntimeRevert {
   return merge(event_DEFAULT.swipeCommit, overrides)
 }
 export function createRuntimePressRelease(

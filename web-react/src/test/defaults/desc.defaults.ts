@@ -1,6 +1,6 @@
 
 import type { BaseInteraction, LayoutData } from '@interaction/types/base.types'
-import type { RuntimePress, RuntimePressRelease, RuntimeRevertOverride, RuntimeSwipe, RuntimeSwipeCommit, RuntimeSwipeStart } from '@interaction/types/runtime.types'
+import type { RuntimePress, RuntimePressRelease, RuntimeRevert, RuntimeSwipe, RuntimeCommit, RuntimeStart } from '@interaction/types/runtime.types'
 import { createEl } from '@test/functions.debug'
 
 export const computed_DEFAULT = {
@@ -81,11 +81,11 @@ export const capabilities_DEFAULT = {
 
 export const event_DEFAULT: {
   press: RuntimePress
-  swipeStart: RuntimeSwipeStart
+  swipeStart: RuntimeStart
   swipe: RuntimeSwipe
   pressRelease: RuntimePressRelease
-  swipeCommit: RuntimeSwipeCommit
-  swipeRevert: RuntimeRevertOverride
+  swipeCommit: RuntimeCommit
+  swipeRevert: RuntimeRevert
 } = {
   press: {
     event: "press",

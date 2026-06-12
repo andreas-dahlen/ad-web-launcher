@@ -1,126 +1,132 @@
 import type { FrameSnapshot } from '@interaction/types/base.types'
-import type { ComputedPackage, ScrollComputed, SliderComputed } from '@interaction/types/computed.types'
+import type { ScrollComputed, SliderComputed } from '@interaction/types/computed.types'
 import type { CarouselDesc, DragDesc, ScrollDesc, SliderDesc } from '@interaction/types/descriptor.types'
-import type { Direction, Vec2 } from '@typing/core.types'
-import type { RuntimePress, RuntimeSwipe, RuntimeSwipeCommit, RuntimeSwipeStart } from '@interaction/types/runtime.types'
-type StoreEffect<T> =
-  {
-    routing: 'store'
-    solv: T
-  }
+import type { Delta, Direction } from '@typing/core.types'
+import type { RuntimePress, RuntimeSwipe, RuntimeCommit, RuntimeStart } from './runtime.types'
 
-type RevertEffect =
-  {
-    routing: 'replace-event'
-    event: "swipeRevert"
-  }
+type Payload<T> = {
+  payload: T
+}
+
+type Cache<T> = {
+  computedUpdate: T
+}
+
+type Standard = {
+  route: "default"
+}
+
+type Revert = {
+  route: "revert"
+}
 /*
 ---------
 CAROUSEL
 ---------
 */
 export type CarouselSolver = {
-  swipe(r: RuntimeSwipe, d: CarouselDesc): StoreEffect<CarouselSwipePayload> | null
-  swipeCommit(r: RuntimeSwipeCommit, d: CarouselDesc): StoreEffect<CarouselSwipeCommitPayload> | RevertEffect
-}
+  swipe(r: RuntimeSwipe, d: CarouselDesc):
+    (Standard & CarouselSwipe) | null
 
-export type CarouselSwipePayload = {
-  delta1D: number
+  swipeCommit(r: RuntimeCommit, d: CarouselDesc):
+    (Standard & CarouselCommit) | Revert
 }
-export type CarouselSwipeCommitPayload = {
-  delta1D: number
-  direction: Direction
-}
+export type CarouselSwipe = Payload<{ delta1D: number }>
+export type CarouselCommit = Payload<{ delta1D: number; direction: Direction }>
+
 /*
 ---------
 SLIDER
 ---------
 */
 export type SliderSolver = {
-  press(r: RuntimePress, d: SliderDesc): StoreEffect<SliderPressPayload>
-  swipeStart(r: RuntimeSwipeStart, d: SliderDesc): StoreEffect<SliderSwipeStartPayload>
+  press(r: RuntimePress, d: SliderDesc):
+    Standard & SliderPress
 
-  swipe(r: RuntimeSwipe, d: SliderDesc, c: SliderComputed): StoreEffect<SliderSwipePayload> | null
-  swipeCommit(r: RuntimeSwipeCommit, d: SliderDesc, c: SliderComputed): StoreEffect<SliderSwipeCommitPayload> | null
+  swipeStart(r: RuntimeStart, d: SliderDesc):
+    (Standard & SliderStart & Cache<SliderComputed>)
+
+  swipe(r: RuntimeSwipe, d: SliderDesc, c: SliderComputed):
+    (Standard & SliderSwipe) | null
+  swipeCommit(r: RuntimeCommit, d: SliderDesc, c: SliderComputed):
+    (Standard & SliderCommit) | null
 }
-export type SliderPressPayload = {
-  delta1D: number
-}
-export type SliderSwipeStartPayload = {
-  delta1D: number
-  computedUpdate: ComputedPackage
-}
-export type SliderSwipePayload = {
-  delta1D: number
-}
-export type SliderSwipeCommitPayload = {
-  delta1D: number
-}
+export type SliderPress = Payload<{ delta1D: number }>
+export type SliderStart = Payload<{ delta1D: number }>
+export type SliderSwipe = Payload<{ delta1D: number }>
+export type SliderCommit = Payload<{ delta1D: number }>
+
 /*
 ---------
 DRAG
 ---------
 */
 export type DragSolver = {
-  swipeStart(r: RuntimeSwipeStart, d: DragDesc): StoreEffect<DragSwipeStartPayload>
-  swipe(r: RuntimeSwipe, d: DragDesc): StoreEffect<DragSwipePayload>
-  swipeCommit(r: RuntimeSwipeCommit, d: DragDesc): StoreEffect<DragSwipeCommitPayload>
+  swipeStart(r: RuntimeStart, d: DragDesc):
+    Standard & DragStart
+  swipe(r: RuntimeSwipe, d: DragDesc):
+    Standard & DragSwipe
+  swipeCommit(r: RuntimeCommit, d: DragDesc):
+    Standard & DragCommit
 }
-export type DragSwipeStartPayload = {
-  frameRect: FrameSnapshot
-}
-export type DragSwipePayload = {
-  delta: Vec2
-}
-export type DragSwipeCommitPayload = {
-  delta: Vec2
-}
+export type DragStart = Payload<{ frameRect: FrameSnapshot }>
+export type DragSwipe = Payload<Delta>
+export type DragCommit = Payload<Delta>
 /*
 ---------
-Scroll
+SCROLL
 ---------
 */
 export type ScrollSolver = {
-  swipeStart(r: RuntimeSwipeStart, d: ScrollDesc): StoreEffect<ScrollSwipeStartPayload | ScrollOverflowSwipeStartPayload>
+  swipeStart(r: RuntimeStart, d: ScrollDesc):
+    (Standard & Cache<ScrollComputed> & ScrollStart) |
+    (Standard & Cache<ScrollComputed> & ScrollOverflowStart)
 
-  swipe(r: RuntimeSwipe, d: ScrollDesc, c: ScrollComputed): StoreEffect<ScrollSwipePayload | ScrollOverflowSwipePayload>
+  swipe(r: RuntimeSwipe, d: ScrollDesc, c: ScrollComputed):
+    Standard &
+    (ScrollSwipe | ScrollOverflowSwipe)
 
-  swipeCommit(r: RuntimeSwipeCommit, d: ScrollDesc, c: ScrollComputed): StoreEffect<ScrollSwipeCommitPayload | ScrollOverflowSwipeCommitPayload> | (RevertEffect & { solv: ScrollOverflowSwipeRevertPayload })
+  swipeCommit(r: RuntimeCommit, d: ScrollDesc, c: ScrollComputed):
+    (Standard &
+      (ScrollCommit | ScrollOverflowCommit))
+    |
+    (Revert &
+      ScrollOverflowRevert)
 }
 
-export type ScrollSwipeStartPayload = {
-  computedUpdate: ComputedPackage
+export type ScrollStart = Payload<{
   delta1D: number
   isOverflow: false
-}
-export type ScrollOverflowSwipeStartPayload = {
-  computedUpdate: ComputedPackage
+}>
+
+export type ScrollOverflowStart = Payload<{
   isOverflow: true
-}
-export type ScrollSwipePayload = {
+}>
+export type ScrollSwipe = Payload<{
   delta1D: number
   isOverflow: false
-}
+}>
 
-export type ScrollOverflowSwipePayload = {
+export type ScrollOverflowSwipe = Payload<{
   overflowValue: number
   isOverflow: true
-}
-export type ScrollSwipeCommitPayload = {
+}>
+export type ScrollCommit = Payload<{
   isVisible: true
   delta1D: number
   isOverflow: false
-}
+}>
 
-export type ScrollOverflowSwipeCommitPayload = {
+export type ScrollOverflowCommit = Payload<{
   isVisible: boolean
   overflowValue: number
   isOverflow: true
-}
-export type ScrollOverflowSwipeRevertPayload = {
+}>
+export type ScrollOverflowRevert = Payload<{
   isVisible: boolean
   overflowValue: number
-}
+}>
+
 /*
 ---------------
 NORMALIZATION
@@ -144,7 +150,3 @@ export type carouselNormalized1D = normalize1DBase & {
   mainSize: number
   crossSize: number
 }
-
-
-
-

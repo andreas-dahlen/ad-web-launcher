@@ -28,6 +28,12 @@ export type EventType =
   | 'pressRelease'
   | 'pressCancel'
 
+export type Press = { event: "press" }
+export type SwipeStart = { event: "swipeStart" }
+export type Swipe = { event: "swipe" }
+export type SwipeCommit = { event: "swipeCommit" }
+export type SwipeRevert = { event: "swipeRevert" }
+
 // export type InitialEventType =
 //   | 'press'
 //   | 'swipeStart'
@@ -46,12 +52,25 @@ export interface Vec2 {
   y: number
 }
 
-export type delta = { delta: Vec2 }
+export type Delta = { delta: Vec2 }
 
 export interface Size2D {
   width: number
   height: number
 }
+
+export type Constraints1D = {
+  min: number
+  max: number
+}
+export type Constraints2D = {
+  minX: number
+  maxX: number
+  minY: number
+  maxY: number
+}
+
+
 export const VALID_DIRS = new Set<OnEdgeDir>(['left', 'right', 'up', 'down'])
 
 export const VALID_AXES = new Set<Axis>(['horizontal', 'vertical', 'both'])

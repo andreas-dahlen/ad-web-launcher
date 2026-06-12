@@ -7,9 +7,9 @@ export const dragUtils = {
 
   resolveSwipe(data: DragData, delta: Vec2) {
     const settledOffset = data.settledOffset
-    const dragConstraints = data.constraints
+    const constraints = data.constraints
     const clamped =
-      vector.relativeClamp2D(delta, settledOffset, dragConstraints)
+      vector.relativeClamp2D(delta, settledOffset, constraints)
     const dx = clamped.x
     const dy = clamped.y
     return { x: dx, y: dy }

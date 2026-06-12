@@ -2,7 +2,7 @@ import { immer } from "zustand/middleware/immer"
 import { create } from 'zustand'
 import { assertNever, type Direction } from '../../../shared/typing/core.types'
 import type { StoreLayout } from '@typing/store.types'
-import type { CarouselSwipeCommitPayload, CarouselSwipePayload } from '@interaction/types/solver.types'
+import type { CarouselAction } from '@interaction/types/action.types'
 
 export type CarouselBinding = {
   //react motion
@@ -18,12 +18,6 @@ export type CarouselBinding = {
   settling: boolean
   pendingDir: Direction | null
 }
-
-export type CarouselAction =
-  | { event: 'swipeStart' }
-  | { event: 'swipe'; payload: CarouselSwipePayload }
-  | { event: 'swipeCommit'; payload: CarouselSwipeCommitPayload }
-  | { event: 'swipeRevert' }
 
 export type CarouselStore = {
   bindings: Record<string, CarouselBinding>
@@ -107,7 +101,6 @@ export const carouselStore = create<CarouselStore>()(
     },
 
     apply: (id, action) => {
-      // console.log('[APPLY]', { solv })
       set(state => {
         const s = state.bindings[id]
         if (!s) return

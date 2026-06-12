@@ -3,7 +3,7 @@ import { useShallow } from 'zustand/shallow'
 import { dragStore, type DragStore } from '@primitives/drag/store/drag.store'
 import { debugRegisterBinding, debugUnregisterBinding } from '@test/functions.debug'
 
-const DEFAULTS = {
+export const drag_DEFAULTS = {
   settledOffset: { x: 0, y: 0 },
   liveOffset: { x: 0, y: 0 },
   frame: {
@@ -35,7 +35,7 @@ export const useDragStore = (id: string) => {
 
   useEffect(() => {
     debugRegisterBinding(id, 'useDragStore')
-    dragStore.getState().init(id, DEFAULTS)
+    dragStore.getState().init(id, drag_DEFAULTS)
     return () => {
       debugUnregisterBinding(id, 'useDragStore')
       dragStore.getState().delete(id)
@@ -43,6 +43,6 @@ export const useDragStore = (id: string) => {
   }, [id])
 
   return dragStore(
-    useShallow((s: DragStore) => s.bindings[id] ?? DEFAULTS)
+    useShallow((s: DragStore) => s.bindings[id] ?? drag_DEFAULTS)
   ) //TODO remove useShallow?
 }

@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import { gestureStore } from '../../shared/stores/gesture.store'
 
-describe("gestureStore", () => {
+describe("[GESTURESTORE]", () => {
   beforeEach(() => {
     gestureStore.setState({
       activeGesture: 'none',

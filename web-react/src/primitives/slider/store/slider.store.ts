@@ -1,15 +1,13 @@
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
-import type { SliderPressPayload, SliderSwipeCommitPayload, SliderSwipePayload, SliderSwipeStartPayload } from '@interaction/types/solver.types'
 import type { StoreLayout } from '@typing/store.types'
-
-type Slider = {
+import type { Constraints1D } from '@typing/core.types'
+import type { SliderAction } from '@interaction/types/action.types'
+export type SliderBinding = {
   //react motion
   value: number         // logical position
 
-  //react sizing
-  min: number
-  max: number
+  constraints: Constraints1D
 
   // the optional section non reactive
 
@@ -17,20 +15,13 @@ type Slider = {
   dragging: boolean
 }
 
-export type SliderAction =
-  | { event: 'press'; payload: SliderPressPayload }
-  | { event: 'swipeStart'; payload: SliderSwipeStartPayload }
-  | { event: 'swipe'; payload: SliderSwipePayload }
-  | { event: 'swipeCommit'; payload: SliderSwipeCommitPayload }
-
-
 export type SliderStore = {
-  bindings: Record<string, Slider>
-  init: (id: string, fallback: Slider) => void
-  get: (id: string) => Readonly<Slider>
+  bindings: Record<string, SliderBinding>
+  init: (id: string, fallback: SliderBinding) => void
+  get: (id: string) => Readonly<SliderBinding>
   delete: (id: string) => void
 
-  setConstraints: (id: string, constraints: { min: number, max: number }) => void
+  setConstraints: (id: string, constraints: Constraints1D) => void
 
   setLayout: (id: string, packet: StoreLayout) => void
 
@@ -65,8 +56,7 @@ export const sliderStore = create<SliderStore>()(
       set(state => {
         const s = state.bindings[id]
         if (!s) return
-        s.min = constraints.min;
-        s.max = constraints.max;
+        s.constraints = constraints
       })
     },
 

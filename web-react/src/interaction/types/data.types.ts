@@ -1,4 +1,4 @@
-import type { OnEdgeDir, Vec2 } from "../../shared/typing/core.types.ts"
+import type { Constraints1D, Constraints2D, OnEdgeDir, Vec2 } from "../../shared/typing/core.types.ts"
 
 export type CarouselData = CarouselDataBase & CarouselModifiers
 
@@ -18,29 +18,19 @@ export type DragData = DragDataBase & DragModifiers
 interface DragDataBase {
   readonly settledOffset: Vec2
 
-  readonly constraints: DragConstraints
+  readonly constraints: Constraints2D
 }
 
-export interface DragConstraints {
-  readonly minX: number
-  readonly maxX: number
-  readonly minY: number
-  readonly maxY: number
-}
 
 export interface DragModifiers {
   readonly snap?: Vec2;
 }
 
 export interface SliderData {
-  readonly constraints: SliderConstraints
+  readonly constraints: Constraints1D
 
 }
 
-export interface SliderConstraints {
-  readonly min: number
-  readonly max: number
-}
 
 export interface ScrollData {
   readonly settledValue: number

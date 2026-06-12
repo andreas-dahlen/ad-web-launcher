@@ -1,10 +1,10 @@
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
-import type { ScrollOverflowSwipeCommitPayload, ScrollOverflowSwipePayload, ScrollOverflowSwipeRevertPayload, ScrollOverflowSwipeStartPayload, ScrollSwipeCommitPayload, ScrollSwipePayload, ScrollSwipeStartPayload } from '@interaction/types/solver.types'
 import type { StoreLayout } from '@typing/store.types'
 import { assertNever } from '@typing/core.types'
+import type { ScrollAction } from '@interaction/types/action.types'
 
-type Scroll = {
+export type ScrollBinding = {
   //react motion
   overflowValue: number
   isVisible: boolean
@@ -21,16 +21,10 @@ type Scroll = {
   layout: StoreLayout
 }
 
-export type ScrollAction =
-  | { event: 'swipeStart'; payload: ScrollSwipeStartPayload | ScrollOverflowSwipeStartPayload }
-  | { event: 'swipe'; payload: ScrollSwipePayload | ScrollOverflowSwipePayload }
-  | { event: 'swipeCommit'; payload: ScrollSwipeCommitPayload | ScrollOverflowSwipeCommitPayload }
-  | { event: 'swipeRevert'; payload: ScrollOverflowSwipeRevertPayload }
-
 export type ScrollStore = {
-  bindings: Record<string, Scroll>
-  init: (id: string, fallback: Scroll) => void
-  get: (id: string) => Readonly<Scroll>
+  bindings: Record<string, ScrollBinding>
+  init: (id: string, fallback: ScrollBinding) => void
+  get: (id: string) => Readonly<ScrollBinding>
   delete: (id: string) => void
 
   setLayout: (id: string, packet: StoreLayout) => void
@@ -132,7 +126,7 @@ export const scrollStore = create<ScrollStore>()(
 const MOMENTUM = {
   durationMs: 600,
   distanceMultiplier: 4
-} as const
+} as const //TODO move to settings or whatever... consts app settings
 
 function startMomentum(id: string, initialVelocity: number) {
   const friction = Math.exp(-76.7 / MOMENTUM.durationMs)

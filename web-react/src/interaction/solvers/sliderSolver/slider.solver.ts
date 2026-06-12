@@ -19,9 +19,8 @@ export const sliderSolver: SliderSolver = {
     const norm = sliderUtils.normalize(desc.base, runtime.delta)
     const result = sliderUtils.resolveStart(norm, desc.data.constraints)
     return {
-      routing: "store", solv: {
-        delta1D: result.value
-      }
+      route: "default",
+      payload: { delta1D: result.value }
     }
   },
 
@@ -30,13 +29,12 @@ export const sliderSolver: SliderSolver = {
     const norm = sliderUtils.normalize(desc.base, runtime.delta)
     const result = sliderUtils.resolveStart(norm, desc.data.constraints)
     return {
-      routing: "store", solv: {
-        delta1D: result.value,
-        computedUpdate: {
-          pointerId: desc.base.pointerId,
-          sliderStartOffset: result.value,
-          sliderValuePerPixel: result.valuePerPixel
-        }
+      route: "default",
+      payload: { delta1D: result.value },
+      computedUpdate: {
+        pointerId: desc.base.pointerId,
+        sliderStartOffset: result.value,
+        sliderValuePerPixel: result.valuePerPixel
       }
     }
   },
@@ -51,7 +49,8 @@ export const sliderSolver: SliderSolver = {
     const value =
       sliderUtils.resolveSwipe(norm.mainDelta, desc.data.constraints, computed)
     return {
-      routing: "store", solv: { delta1D: value }
+      route: "default",
+      payload: { delta1D: value }
     }
   },
 
@@ -67,7 +66,8 @@ export const sliderSolver: SliderSolver = {
     const value =
       sliderUtils.resolveSwipe(norm.mainDelta, desc.data.constraints, computed)
     return {
-      routing: "store", solv: { delta1D: value }
+      route: "default",
+      payload: { delta1D: value }
     }
   }
 }

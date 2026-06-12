@@ -4,7 +4,7 @@ import type { ScrollDesc } from '../../types/descriptor.types.ts'
 import type { Vec2 } from '@typing/core.types.ts'
 import type { ScrollData } from '@interaction/types/data.types.ts'
 import type { BaseWithAxis1D } from '@interaction/types/base.types.ts'
-import type { ScrollSwipeCommitPayload } from '@interaction/types/solver.types.ts'
+import type { ScrollCommit } from '@interaction/types/solver.types.ts'
 
 
 export const scrollUtils = {
@@ -35,7 +35,7 @@ export const scrollUtils = {
   },
 
 
-  resolveEnd(mainDelta: number, data: ScrollData, base: BaseWithAxis1D): ScrollSwipeCommitPayload {
+  resolveEnd(mainDelta: number, data: ScrollData, base: BaseWithAxis1D): ScrollCommit["payload"] {
     return { ...this.resolveSwipe(mainDelta, data, base), isVisible: true, isOverflow: false }
   },
 }

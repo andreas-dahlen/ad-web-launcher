@@ -19,7 +19,10 @@ export const dragSolver: DragSolver
    * Handle swipeStart - returns reaction to enable dragging
    */
   swipeStart(_runtime, desc) {
-    return { routing: "store", solv: { frameRect: desc.base.layout.frameRect } }
+    return {
+      route: "default",
+      payload: { frameRect: desc.base.layout.frameRect }
+    }
   },
 
   /**
@@ -28,9 +31,8 @@ export const dragSolver: DragSolver
   swipe(runtime, desc) {
     const delta = dragUtils.resolveSwipe(desc.data, runtime.delta)
     return {
-      routing: "store", solv: {
-        delta
-      }
+      route: "default",
+      payload: { delta }
     }
   },
 
@@ -42,9 +44,8 @@ export const dragSolver: DragSolver
     const snap = dragUtils.resolveSnapAdjustment(desc, value)
     if (snap != null) { value = snap }
     return {
-      routing: "store", solv: {
-        delta: value,
-      }
+      route: "default",
+      payload: { delta: value }
     }
   }
 }

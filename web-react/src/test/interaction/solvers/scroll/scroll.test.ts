@@ -15,9 +15,9 @@ function assertScrollDesc(
   expect(desc.type).toBe('scroll')
 }
 
-describe('ScrollSolver', () => {
+describe('[SCROLLSOLVER]', () => {
 
-  describe('swipeStart overflow', () => {
+  describe('[SwipeStart Overflow]', () => {
     it('uses overflow resolver when scroll is overflowing', () => {
       const { runtime, desc } = createInterpreterSwipeStart("scroll", {
         runtime: {
@@ -35,8 +35,8 @@ describe('ScrollSolver', () => {
       assertScrollDesc(desc)
       const result = scrollSolver.swipeStart(runtime, desc)
 
-      expect(result.routing).toBe('store')
-      expect(result.solv.isOverflow).toBe(true)
+      expect(result.route).toBe('default')
+      expect(result.payload.isOverflow).toBe(true)
     })
     it('uses overflow resolver when isVisible is false', () => {
       const { runtime, desc } = createInterpreterSwipeStart("scroll", {
@@ -56,8 +56,8 @@ describe('ScrollSolver', () => {
       assertScrollDesc(desc)
       const result = scrollSolver.swipeStart(runtime, desc)
 
-      expect(result.routing).toBe('store')
-      expect(result.solv.isOverflow).toBe(true)
+      expect(result.route).toBe('default')
+      expect(result.payload.isOverflow).toBe(true)
     })
   })
 
@@ -65,7 +65,7 @@ describe('ScrollSolver', () => {
   /* ----------------
     normal path
   -------------- */
-  describe('swipeStart normal', () => {
+  describe('[SwipeStart Normal]', () => {
     it('uses scroll resolver when axis is wrong', () => {
       const { runtime, desc } = createInterpreterSwipeStart("scroll", {
         runtime: {
@@ -76,8 +76,8 @@ describe('ScrollSolver', () => {
       assertScrollDesc(desc)
       const result = scrollSolver.swipeStart(runtime, desc)
 
-      expect(result.routing).toBe('store')
-      expect(result.solv.isOverflow).toBe(false)
+      expect(result.route).toBe('default')
+      expect(result.payload.isOverflow).toBe(false)
     })
 
     it('uses scroll resolver when onEdgeDir is false/undefined', () => {
@@ -95,15 +95,15 @@ describe('ScrollSolver', () => {
       assertScrollDesc(desc)
       const result = scrollSolver.swipeStart(runtime, desc)
 
-      expect(result.routing).toBe('store')
-      expect(result.solv.isOverflow).toBe(false)
+      expect(result.route).toBe('default')
+      expect(result.payload.isOverflow).toBe(false)
     })
   })
 
   /* ----------------
           swipe
   -------------------- */
-  describe('swipe overflow', () => {
+  describe('[Swipe Overflow]', () => {
     it('user overflow resolver when isOverflow is true', () => {
       const { runtime, desc } = createInterpreterSwipe("scroll")
       const computed = createComputedScroll({ isOverflow: true })
@@ -111,17 +111,17 @@ describe('ScrollSolver', () => {
       assertScrollDesc(desc)
       const result = scrollSolver.swipe(runtime, desc, computed)
 
-      expect(result.routing).toBe('store')
-      expect(result.solv.isOverflow).toBe(true)
+      expect(result.route).toBe('default')
+      expect(result.payload.isOverflow).toBe(true)
 
-      if (result.solv.isOverflow === false) {
+      if (result.payload.isOverflow === false) {
         throw new Error("wont ever throw xD")
       }
-      expect(result.solv.overflowValue).toBeDefined()
+      expect(result.payload.overflowValue).toBeDefined()
     })
   })
 
-  describe('swipe normal', () => {
+  describe('[Swipe Normal]', () => {
     it('user normal resolver when isOverflow is false', () => {
       const { runtime, desc } = createInterpreterSwipe("scroll")
       const computed = createComputedScroll({ isOverflow: false })
@@ -129,13 +129,13 @@ describe('ScrollSolver', () => {
       assertScrollDesc(desc)
       const result = scrollSolver.swipe(runtime, desc, computed)
 
-      expect(result.routing).toBe('store')
-      expect(result.solv.isOverflow).toBe(false)
+      expect(result.route).toBe('default')
+      expect(result.payload.isOverflow).toBe(false)
 
-      if (result.solv.isOverflow === true) {
+      if (result.payload.isOverflow === true) {
         throw new Error("wont ever throw xD")
       }
-      expect(result.solv.delta1D).toBeDefined()
+      expect(result.payload.delta1D).toBeDefined()
     })
   })
 
@@ -144,7 +144,7 @@ describe('ScrollSolver', () => {
           swipeCommit
   --------------------- */
 
-  describe('swipeCommit overflow', () => {
+  describe('[SwipeCommit Overflow]', () => {
     it('uses overflow resolver when isOverflow is true', () => {
       const { runtime, desc } = createInterpreterSwipeCommit("scroll")
       const computed = createComputedScroll({ isOverflow: true })
@@ -152,11 +152,11 @@ describe('ScrollSolver', () => {
       assertScrollDesc(desc)
       const result = scrollSolver.swipeCommit(runtime, desc, computed)
 
-      expect(result.routing).toBe('store')
-      if (result.routing !== "store") {
+      expect(result.route).toBe('default')
+      if (result.route !== "default") {
         throw new Error("wrong path")
       }
-      expect(result.solv.isOverflow).toBe(true)
+      expect(result.payload.isOverflow).toBe(true)
     })
     it('overflow commits when delta is big enough', () => {
       const { runtime, desc } = createInterpreterSwipeCommit("scroll", {
@@ -174,11 +174,11 @@ describe('ScrollSolver', () => {
       assertScrollDesc(desc)
       const result = scrollSolver.swipeCommit(runtime, desc, computed)
 
-      expect(result.routing).toBe('store')
-      if (result.routing !== "store") {
+      expect(result.route).toBe('default')
+      if (result.route !== "default") {
         throw new Error("wrong path")
       }
-      expect(result.solv.isOverflow).toBe(true)
+      expect(result.payload.isOverflow).toBe(true)
     })
     it('overflow reverts when delta is 0', () => {
       const { runtime, desc } = createInterpreterSwipeCommit("scroll", {
@@ -196,7 +196,7 @@ describe('ScrollSolver', () => {
       assertScrollDesc(desc)
       const result = scrollSolver.swipeCommit(runtime, desc, computed)
 
-      expect(result.routing).toBe('replace-event')
+      expect(result.route).toBe('revert')
     })
     it('throws an error if isOverflow and onEdgeDir is undefined', () => {
       const { runtime, desc } = createInterpreterSwipeCommit("scroll", {
@@ -223,7 +223,7 @@ describe('ScrollSolver', () => {
     -------------- */
 
   })
-  describe('swipeCommit normal', () => {
+  describe('[SwipeCommit Normal]', () => {
     it('uses normal resolver when isOverflow is false', () => {
       const { runtime, desc } = createInterpreterSwipeCommit("scroll")
       const computed = createComputedScroll({ isOverflow: false })
@@ -231,11 +231,11 @@ describe('ScrollSolver', () => {
       assertScrollDesc(desc)
       const result = scrollSolver.swipeCommit(runtime, desc, computed)
 
-      expect(result.routing).toBe('store')
-      if (result.routing !== "store") {
+      expect(result.route).toBe('default')
+      if (result.route !== "default") {
         throw new Error("wrong path")
       }
-      expect(result.solv.isOverflow).toBe(false)
+      expect(result.payload.isOverflow).toBe(false)
     })
   })
 

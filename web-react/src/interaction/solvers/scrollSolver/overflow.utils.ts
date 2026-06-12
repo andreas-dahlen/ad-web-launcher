@@ -1,13 +1,13 @@
 import { vector } from '@interaction/solvers/utils/vector.utils'
 import type { ScrollData } from '@interaction/types/data.types'
 import type { ScrollComputed } from '@interaction/types/computed.types'
-import type { RuntimeSwipeStart } from '@interaction/types/runtime.types'
+import type { RuntimeStart } from '@interaction/types/runtime.types'
 import { type Axis1D } from '@typing/core.types'
 import type { BaseWithAxis1D, LayoutData } from '@interaction/types/base.types'
 
 export const overflowUtils = {
 
-  isOverflow(data: ScrollData, runtime: RuntimeSwipeStart, axis: Axis1D) {
+  isOverflow(data: ScrollData, runtime: RuntimeStart, axis: Axis1D) {
     //overflow confirmed if not visible.
     if (!data.isVisible) return true
     //overflow disabled if onEdgeDir is NOT registered

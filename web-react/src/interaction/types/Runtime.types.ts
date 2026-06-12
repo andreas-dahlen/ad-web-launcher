@@ -1,34 +1,34 @@
-import type { delta, Vec2 } from '../../shared/typing/core.types.ts'
+import type { Delta, Vec2 } from '../../shared/typing/core.types.ts'
 
 export interface CancelData {
   readonly element: HTMLElement
   pressCancel: boolean
 }
 
-export type Runtime = RuntimePress | RuntimeSwipeStart | RuntimeSwipe | RuntimePressRelease | RuntimeSwipeCommit
+export type Runtime = RuntimePress | RuntimeStart | RuntimeSwipe | RuntimePressRelease | RuntimeCommit
 
-export type RuntimePress = delta & {
+export type RuntimePress = Delta & {
   event: 'press'
 }
 
-export type RuntimeSwipeStart = delta & {
+export type RuntimeStart = Delta & {
   event: 'swipeStart'
   cancel?: CancelData
   thresholdValue: Vec2
 }
 
-export type RuntimeSwipe = delta & {
+export type RuntimeSwipe = Delta & {
   event: 'swipe'
 }
 
-export type RuntimePressRelease = delta & {
+export type RuntimePressRelease = Delta & {
   event: 'pressRelease'
 }
-export type RuntimeSwipeCommit = delta & {
+export type RuntimeCommit = Delta & {
   event: 'swipeCommit' | 'swipeRevert'
 }
 
-export type RuntimeRevertOverride = delta & {
+export type RuntimeRevert = Delta & {
   event: 'swipeRevert'
 }
 

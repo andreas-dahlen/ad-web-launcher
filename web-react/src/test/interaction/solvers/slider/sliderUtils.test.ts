@@ -8,7 +8,7 @@ import { createComputedSlider } from '@test/builders/computed.factory';
 import type { Normalized1D } from '@interaction/types/solver.types';
 import { merge } from '@test/builders/factory.utils';
 
-describe('SliderUtils', () => {
+describe('[SLIDERUTLS]', () => {
 
   function createNormalizeSliderInput(overrides?: Partial<Normalized1D>) {
     const base = createBaseWithAxis1D()
@@ -20,7 +20,7 @@ describe('SliderUtils', () => {
       layout
     }
   }
-  describe('normalize', () => {
+  describe('[Normalize]', () => {
     it('returns valid mainSize', () => {
       const result = createNormalizeSliderInput()
       expect(result.norm.mainSize).toEqual(result.layout.deviceSize.width)
@@ -39,7 +39,7 @@ describe('SliderUtils', () => {
     })
   })
 
-  describe('resolveStart', () => {
+  describe('[Resolve Start]', () => {
     it('resolves correct initial slider value', () => {
       const { norm } = createNormalizeSliderInput()
       const constraints = data_DEFAULT.slider.constraints
@@ -73,7 +73,7 @@ describe('SliderUtils', () => {
 
 
 
-  describe('resolveSwipe', () => {
+  describe('[Resolve Swipe]', () => {
     it('returns value', () => {
       const computed = createComputedSlider()
       const delta = 0
@@ -82,64 +82,62 @@ describe('SliderUtils', () => {
       expect(result).toBe(30)
     })
 
-    describe('resolveSwipe', () => {
-      it('returns start offset when delta is 0', () => {
-        const computed = createComputedSlider()
-        const constraints = data_DEFAULT.slider.constraints
-        const result = sliderUtils.resolveSwipe(
-          0,
-          constraints,
-          computed
-        )
+    it('returns start offset when delta is 0', () => {
+      const computed = createComputedSlider()
+      const constraints = data_DEFAULT.slider.constraints
+      const result = sliderUtils.resolveSwipe(
+        0,
+        constraints,
+        computed
+      )
 
-        expect(result).toBe(30)
+      expect(result).toBe(30)
+    })
+
+    it('applies delta using valuePerPixel', () => {
+      const computed = createComputedSlider({
+        sliderStartOffset: 30,
+        sliderValuePerPixel: 3
       })
+      const constraints = data_DEFAULT.slider.constraints
 
-      it('applies delta using valuePerPixel', () => {
-        const computed = createComputedSlider({
-          sliderStartOffset: 30,
-          sliderValuePerPixel: 3
-        })
-        const constraints = data_DEFAULT.slider.constraints
+      const result = sliderUtils.resolveSwipe(
+        5,
+        constraints,
+        computed
+      )
+      expect(result).toBe(45)
+    })
 
-        const result = sliderUtils.resolveSwipe(
-          5,
-          constraints,
-          computed
-        )
-        expect(result).toBe(45)
+    it('clamps to min', () => {
+      const computed = createComputedSlider({
+        sliderStartOffset: 30,
+        sliderValuePerPixel: 3
       })
+      const constraints = data_DEFAULT.slider.constraints
+      const result = sliderUtils.resolveSwipe(
+        -100,
+        constraints,
+        computed
+      )
 
-      it('clamps to min', () => {
-        const computed = createComputedSlider({
-          sliderStartOffset: 30,
-          sliderValuePerPixel: 3
-        })
-        const constraints = data_DEFAULT.slider.constraints
-        const result = sliderUtils.resolveSwipe(
-          -100,
-          constraints,
-          computed
-        )
+      expect(result).toBe(0)
+    })
 
-        expect(result).toBe(0)
+    it('clamps to max', () => {
+      const computed = createComputedSlider({
+        sliderStartOffset: 30,
+        sliderValuePerPixel: 3
       })
+      const constraints = data_DEFAULT.slider.constraints
 
-      it('clamps to max', () => {
-        const computed = createComputedSlider({
-          sliderStartOffset: 30,
-          sliderValuePerPixel: 3
-        })
-        const constraints = data_DEFAULT.slider.constraints
+      const result = sliderUtils.resolveSwipe(
+        100,
+        constraints,
+        computed
+      )
 
-        const result = sliderUtils.resolveSwipe(
-          100,
-          constraints,
-          computed
-        )
-
-        expect(result).toBe(99)
-      })
+      expect(result).toBe(99)
     })
   })
 })

@@ -11,27 +11,27 @@ function assertDragDesc(
   expect(desc.type).toBe('drag')
 }
 
-describe('DragSolver', () => {
+describe('[DRAGSOLVER]', () => {
 
-  describe('swipeStart', () => {
+  describe('[SwipeStart]', () => {
     it('returns frameRect', () => {
       const { runtime, desc } = createInterpreterSwipeStart("drag")
       assertDragDesc(desc)
       const result = dragSolver.swipeStart(runtime, desc)
-      expect(result.solv.frameRect).toEqual(base_DEFAULT.layout.frameRect)
+      expect(result.payload.frameRect).toEqual(base_DEFAULT.layout.frameRect)
     })
   })
 
-  describe('swipe', () => {
+  describe('[Swipe]', () => {
     it('returns same delta as input delta', () => {
       const { runtime, desc } = createInterpreterSwipe("drag")
       assertDragDesc(desc)
       const result = dragSolver.swipe(runtime, desc)
-      expect(result.solv.delta).toEqual(event_DEFAULT.swipe.delta)
+      expect(result.payload.delta).toEqual(event_DEFAULT.swipe.delta)
     })
 
   })
-  describe('swipeCommit', () => {
+  describe('[SwipeCommit]', () => {
     it('returns same delta as input delta with no snap', () => {
       const { runtime, desc } = createInterpreterSwipeCommit("drag", {
         desc: {
@@ -40,7 +40,7 @@ describe('DragSolver', () => {
       })
       assertDragDesc(desc)
       const result = dragSolver.swipeCommit(runtime, desc)
-      expect(result.solv.delta).toEqual(event_DEFAULT.swipeCommit.delta)
+      expect(result.payload.delta).toEqual(event_DEFAULT.swipeCommit.delta)
     })
   })
 })

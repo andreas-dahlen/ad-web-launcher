@@ -15,7 +15,7 @@ import type { InterpreterOutput } from '@interaction/types/interpreter.types.ts'
 ======================= */
 export type InterpreterFn = (x: number, y: number, pointerId: number) => InterpreterOutput | null
 
-const interpreterMap: Record<EventBridgeType, InterpreterFn> = {
+export const interpreterMap: Record<EventBridgeType, InterpreterFn> = {
   down: interpreter.onDown,
   move: interpreter.onMove,
   up: interpreter.onUp
@@ -47,8 +47,7 @@ export const pipeline = {
     const interpreterFn = interpreterMap[eventType]
 
     if (!interpreterFn) {
-      console.warn('Unknown eventType', eventType)
-      return null
+      throw new Error(`Unknown eventType for interpreter: ${eventType}`)
     }
 
     const g = interpreterFn(x, y, pointerId)
@@ -64,36 +63,36 @@ export const pipeline = {
       case 'carousel': {
         const solution = router.carousel(runtime, desc)
         if (solution) {
-          if (solution.event === "swipeRevert") g.runtime.event = solution.event
-          carouselStore.getState().apply(desc.base.id, solution)
+          if (solution.effects?.eventOverride) g.runtime.event = solution.effects.eventOverride
+          carouselStore.getState().apply(desc.base.id, solution.action)
         }
         break
       }
       case 'slider': {
         const solution = router.slider(runtime, desc, g.computed)
         if (solution) {
-          if (solution.event === "swipeStart") interpreter.applyComputedUpdate(solution.payload.computedUpdate, desc.base.pointerId)
-          sliderStore.getState().apply(desc.base.id, solution)
+          if (solution.effects?.computedUpdate) interpreter.applyComputedUpdate(solution.effects.computedUpdate)
+          sliderStore.getState().apply(desc.base.id, solution.action)
         }
         break
       }
       case 'drag': {
         const solution = router.drag(runtime, desc)
         if (solution) {
-          dragStore.getState().apply(desc.base.id, solution)
+          dragStore.getState().apply(desc.base.id, solution.action)
         }
         break
       }
       case 'scroll': {
         const solution = router.scroll(runtime, desc, g.computed)
         if (solution) {
-          if (solution.event === "swipeStart") {
-            interpreter.applyComputedUpdate(solution.payload.computedUpdate, desc.base.pointerId)
+          if (solution.effects?.computedUpdate) {
+            interpreter.applyComputedUpdate(solution.effects.computedUpdate)
           }
-          if (solution.event) g.runtime.event = solution.event
+          if (solution.effects?.eventOverride) g.runtime.event = solution.effects.eventOverride
 
 
-          scrollStore.getState().apply(desc.base.id, solution)
+          scrollStore.getState().apply(desc.base.id, solution.action)
         }
         break
       }
@@ -102,7 +101,7 @@ export const pipeline = {
       }
       default: {
         const { type } = desc
-        throw new Error(`Unknown descriptor type: ${type}`)
+        throw new Error(`Unknown descriptor type for solver calls: ${type}`)
       }
     }
     /* -------------------------
