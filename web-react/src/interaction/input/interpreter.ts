@@ -10,6 +10,19 @@ import type { GestureSession, PendingContext, InterpreterPress, InterpreterSwipe
 type GestureMap = Partial<Record<number, GestureSession>>
 const gestures: GestureMap = {}
 
+export function returnGesturesForTests() {
+  return gestures
+}
+export function resetGesturesForTests() {
+  for (const key in gestures) {
+    delete gestures[key]
+  }
+}
+
+export function modifyGestureForTests(id: number, any: GestureSession) {
+  gestures[id] = { ...any }
+}
+
 /* ========================
    Public API
 =========================== */
