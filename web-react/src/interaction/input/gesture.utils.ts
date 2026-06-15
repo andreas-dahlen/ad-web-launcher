@@ -11,10 +11,12 @@ export const gestureUtils = {
 		return {
 			left: normalizeParameter(rect.left), //needs to be subtracted with debug frame rect if ever used!
 			top: normalizeParameter(rect.top), //works
-			width: rect.width,
-			height: rect.height, //in current system these shouldn´t be normalized!? never used though... width and height...
+			// width: normalizeParameter(rect.width),
+			// height: normalizeParameter(rect.height), 
 		}
 	},
+	// Bounding rect data used by gesture coordinate translation.
+	// Width/height intentionally come from sizeStore.
 
 	normalizeVec2(delta: Vec2): Vec2 {
 		return {

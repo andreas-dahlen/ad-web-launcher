@@ -1,8 +1,8 @@
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
 import type { StoreLayout } from '@typing/store.types'
-import { assertNever } from '@typing/core.types'
 import type { ScrollAction } from '@interaction/types/action.types'
+import { assertNever } from '@utils/assersions'
 
 export type ScrollBinding = {
   //react motion
@@ -119,8 +119,7 @@ export const scrollStore = create<ScrollStore>()(
         }
       })
     }
-  })
-  )
+  }))
 )
 
 const MOMENTUM = {

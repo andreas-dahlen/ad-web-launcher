@@ -119,7 +119,5 @@ export const dragStore = create<DragStore>()(
         }
       })
     }
-
-  })
-  )
+  }))
 )

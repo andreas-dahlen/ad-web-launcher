@@ -44,6 +44,5 @@ export const wallpaperStore = create<WallpaperStore>()(
         s.wallpapers[staleIdx] = pick
       })
     }
-  })
-  )
+  }))
 ) 

@@ -1,8 +1,9 @@
 import { immer } from "zustand/middleware/immer"
 import { create } from 'zustand'
-import { assertNever, type Direction } from '../../../shared/typing/core.types'
+import type { Direction } from '../../../shared/typing/core.types'
 import type { StoreLayout } from '@typing/store.types'
 import type { CarouselAction } from '@interaction/types/action.types'
+import { assertNever } from '@utils/assersions'
 
 export type CarouselBinding = {
   //react motion
@@ -137,8 +138,7 @@ export const carouselStore = create<CarouselStore>()(
         }
       })
     }
-  })
-  )
+  }))
 )
 
 function getNextIndex(currentIndex: number, direction: Direction | null, count: number): number {

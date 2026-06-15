@@ -1,6 +1,6 @@
 import type { RuntimePress, RuntimePressRelease, RuntimeRevert, RuntimeSwipe, RuntimeCommit, RuntimeStart } from '@interaction/types/runtime.types';
-import { merge } from '@test/builders/factory.utils';
-import { event_DEFAULT } from '@test/defaults/desc.defaults';
+import { merge } from '@test/utils/factory.utils';
+import { event_DEFAULT } from '@test/fixtures/runtimeEvents.fixture';
 
 export function createRuntimePress(
   overrides: Record<string, unknown> = {}

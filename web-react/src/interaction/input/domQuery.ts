@@ -37,7 +37,7 @@ export const domQuery = {
   /* ============================
      DOM offset Resolution
   =============================== */
-  /** static start poisition inside of FRAME at x, y. Used to calculate pointers positioning (grabOffset) aswell as returning frame position (rect)... used for teleporting and other stuff i believe*/
+  /** static start poisition inside of FRAME at x, y. Used to calculate pointers positioning (grabOffset) aswell as returning frame position (rect)... used for teleporting and other stuff*/
   getElSnapshot(x: number, y: number, element: Element): ElSnapshots {
 
     const frameRef = element.closest('[data-frame]')

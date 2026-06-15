@@ -24,7 +24,6 @@ export const overflowUtils = {
 
   resolveStart(data: ScrollData, base: BaseWithAxis1D, pointerId: number, isOverflow: boolean) {
     const startValue = data.isVisible ? 0 : base.layout.containerSize.height
-    // console.log(startValue)
     return {
       computedUpdate: {
         pointerId: pointerId,

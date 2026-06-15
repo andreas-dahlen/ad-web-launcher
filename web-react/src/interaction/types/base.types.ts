@@ -33,8 +33,8 @@ export type ElSnapshots = {
 export interface FrameSnapshot {
   left: number
   top: number
-  width: number
-  height: number
+  // width: number
+  // height: number
 }
 
 export interface Capabilities {

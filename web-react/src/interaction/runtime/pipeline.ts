@@ -59,6 +59,7 @@ export const pipeline = {
     const { desc, runtime } = g
     const type = desc.type
 
+
     switch (type) {
       case 'carousel': {
         const solution = router.carousel(runtime, desc)

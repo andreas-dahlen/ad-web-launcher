@@ -5,7 +5,7 @@ import { createScrollData } from '@test/builders/data.factory'
 import { createScrollDesc } from '@test/builders/desc.factory'
 import { createInterpreterSwipe, createInterpreterSwipeCommit, createInterpreterSwipeStart } from '@test/builders/input.factory'
 import { createRuntimeSwipeCommit } from '@test/builders/runtime.factory'
-import { base_DEFAULT } from '@test/defaults/desc.defaults'
+import { base_DEFAULT } from '@test/fixtures/base.fixture'
 import { it, describe, expect } from 'vitest'
 
 

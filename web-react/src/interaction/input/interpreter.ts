@@ -1,15 +1,9 @@
 import { gestureUtils } from './gesture.utils.ts'
 import { domQuery } from './domQuery.ts'
-import { assertNever, type Axis, type EventType, type Vec2 } from '../../shared/typing/core.types.ts'
 import type { ComputedPackage } from '@interaction/types/computed.types.ts'
 import type { GestureSession, PendingContext, InterpreterPress, InterpreterSwipeStart, InterpreterSwipe, InterpreterSwipeCommit, InterpreterPressRelease, SwipingSession, PendingSession } from '@interaction/types/interpreter.types.ts'
-
-/* ========================
-   Gesture state
-=========================== */
-type GestureMap = Partial<Record<number, GestureSession>>
-const gestures: GestureMap = {}
-
+import type { Axis, EventType, Vec2 } from '@typing/core.types.ts'
+import { assertNever } from '@utils/assersions.ts'
 export function returnGesturesForTests() {
   return gestures
 }
@@ -18,10 +12,16 @@ export function resetGesturesForTests() {
     delete gestures[key]
   }
 }
-
 export function modifyGestureForTests(id: number, any: GestureSession) {
   gestures[id] = { ...any }
 }
+
+/* ========================
+   Gesture state
+=========================== */
+type GestureMap = Partial<Record<number, GestureSession>>
+const gestures: GestureMap = {}
+
 
 /* ========================
    Public API
@@ -209,7 +209,7 @@ function finalizeSwipe(current: SwipingSession, event: Extract<EventType, "swipe
     delete gestures[current.pointerId]
     return null
   }
-
+  delete gestures[current.pointerId]
   return {
     desc: g.desc,
     computed: g.computed,

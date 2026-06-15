@@ -1,22 +1,19 @@
-import { describe, it, expect, beforeEach } from 'vitest'
+import { describe, it, expect, afterEach } from 'vitest'
 import { scrollStore, type ScrollBinding } from '@primitives/scroll/store/scroll.store'
 import { scroll_DEFAULTS } from '@primitives/scroll/store/useScrollStore.hook'
+import { getStoreByType, seedStoreByType } from '@test/utils/storeSeed.utils'
+import { resetInteractionStores } from '@test/utils/storeReset.utils'
 function initTest(data: ScrollBinding = scroll_DEFAULTS) {
-  scrollStore.getState().init("test", data)
+  seedStoreByType("scroll", "test", data)
 }
 
 function getTest() {
-  return scrollStore.getState().bindings["test"]
+  return getStoreByType("scroll") as ScrollBinding
 }
 
 
 describe("[SCROLLSTORE]", () => {
-  beforeEach(() => {
-    scrollStore.setState({
-      bindings: {}
-    })
-    expect(Object.keys(scrollStore.getState().bindings)).toHaveLength(0)
-  })
+  afterEach(() => { resetInteractionStores() })
 
 
   describe('[Base Functionality]', () => {

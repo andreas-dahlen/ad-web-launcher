@@ -1,5 +1,5 @@
 
-const mockMetaCarouselEl = {
+const metaCarouselSeed = {
   id: 'test',
   axis: 'horizontal',
   type: 'carousel',
@@ -7,7 +7,7 @@ const mockMetaCarouselEl = {
   lockPrevAt: '0',
 }
 
-const mockMetaDragEl = {
+const metaDragSeed = {
   id: 'test',
   axis: 'both',
   type: 'drag',
@@ -15,14 +15,14 @@ const mockMetaDragEl = {
   snapY: '20',
 }
 
-const mockMetaSliderEl = {
+const metaSliderSeed = {
   id: 'test',
   axis: 'horizontal',
   type: 'slider',
   instantSwipe: 'true'
 }
 
-const mockMetaScrollEl = {
+const metaScrollSeed = {
   id: 'test',
   axis: 'vertical',
   type: 'scroll',
@@ -30,21 +30,21 @@ const mockMetaScrollEl = {
   instantSwipe: 'true',
 }
 
-const mockMetaButtonEl = {
+const metaButtonSeed = {
   id: 'test',
   type: 'button'
 }
 
-const mockMetaDefaultEl = {
+const metaDefaultSeed = {
   id: 'test',
   type: 'carousel',
   axis: 'horizontal',
 }
-export const mockMetaByType = {
-  carousel: mockMetaCarouselEl,
-  drag: mockMetaDragEl,
-  slider: mockMetaSliderEl,
-  scroll: mockMetaScrollEl,
-  button: mockMetaButtonEl,
-  default: mockMetaDefaultEl
+export const metaSeedByType = {
+  carousel: metaCarouselSeed,
+  drag: metaDragSeed,
+  slider: metaSliderSeed,
+  scroll: metaScrollSeed,
+  button: metaButtonSeed,
+  default: metaDefaultSeed
 } as const

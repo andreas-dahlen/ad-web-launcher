@@ -6,7 +6,7 @@ import type { CarouselAction, DragAction, RouterPackage, ScrollAction, SliderAct
 import type { Computed } from '@interaction/types/computed.types';
 import type { CarouselDesc, DragDesc, ScrollDesc, SliderDesc } from '@interaction/types/descriptor.types';
 import type { Runtime } from '@interaction/types/runtime.types';
-import { assertScrollComputed, assertSliderComputed } from '@typing/core.types';
+import { assertScrollComputed, assertSliderComputed } from '@utils/assersions';
 
 export const router = {
   carousel(runtime: Runtime, desc: CarouselDesc): RouterPackage<CarouselAction> | null {

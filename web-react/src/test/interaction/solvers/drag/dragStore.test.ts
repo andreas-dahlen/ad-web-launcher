@@ -1,22 +1,20 @@
-import { describe, it, expect, beforeEach } from 'vitest'
+import { describe, it, expect, afterEach } from 'vitest'
 import { dragStore, type DragBinding } from '@primitives/drag/store/drag.store'
 import { drag_DEFAULTS } from '@primitives/drag/store/useDragStore.hook'
+import { getStoreByType, seedStoreByType } from '@test/utils/storeSeed.utils'
+import { resetInteractionStores } from '@test/utils/storeReset.utils'
+
 function initTest(data: DragBinding = drag_DEFAULTS) {
-  dragStore.getState().init("test", data)
+  seedStoreByType("drag", "test", data)
 }
 
 function getTest() {
-  return dragStore.getState().bindings["test"]
+  return getStoreByType("drag") as DragBinding
 }
 
 
 describe("[DRAGSTORE]", () => {
-  beforeEach(() => {
-    dragStore.setState({
-      bindings: {}
-    })
-    expect(Object.keys(dragStore.getState().bindings)).toHaveLength(0)
-  })
+  afterEach(() => { resetInteractionStores() })
 
 
   describe('[Base Functionality]', () => {

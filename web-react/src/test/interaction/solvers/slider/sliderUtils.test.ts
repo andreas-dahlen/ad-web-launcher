@@ -1,12 +1,11 @@
 import { describe, expect, it } from 'vitest';
-// import { createSliderInput } from '@test/fixtures/input';
-// import { sliderSolver } from '@interaction/solvers/sliderSolver/sliderSolver';
 import { createBaseWithAxis1D } from '@test/builders/base.factory';
 import { sliderUtils } from '@interaction/solvers/sliderSolver/slider.utils';
-import { base_DEFAULT, data_DEFAULT } from '@test/defaults/desc.defaults';
 import { createComputedSlider } from '@test/builders/computed.factory';
 import type { Normalized1D } from '@interaction/types/solver.types';
-import { merge } from '@test/builders/factory.utils';
+import { merge } from '@test/utils/factory.utils';
+import { data_DEFAULT } from '@test/fixtures/data.fixture';
+import { base_DEFAULT } from '@test/fixtures/base.fixture';
 
 describe('[SLIDERUTLS]', () => {
 

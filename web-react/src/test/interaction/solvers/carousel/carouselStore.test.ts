@@ -1,22 +1,21 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest'
+import { describe, it, expect, vi, afterEach } from 'vitest'
 import { carouselStore, type CarouselBinding } from '@primitives/carousel/store/carousel.store'
 import { carousel_DEFAULTS } from '@primitives/carousel/store/useCarouselStore.hook'
+
+import { getStoreByType, seedStoreByType } from '@test/utils/storeSeed.utils'
+import { resetInteractionStores } from '@test/utils/storeReset.utils'
+
 function initTest(data: CarouselBinding = carousel_DEFAULTS) {
-  carouselStore.getState().init("test", data)
+  seedStoreByType("carousel", "test", data)
 }
 
 function getTest() {
-  return carouselStore.getState().bindings["test"]
+  return getStoreByType("carousel") as CarouselBinding
 }
 
 
 describe("[CAROUSELSTORE]", () => {
-  beforeEach(() => {
-    carouselStore.setState({
-      bindings: {}
-    })
-    expect(Object.keys(carouselStore.getState().bindings)).toHaveLength(0)
-  })
+  afterEach(() => { resetInteractionStores() })
 
   describe('[Base Functionality]', () => {
     it('adds carousel node', () => {

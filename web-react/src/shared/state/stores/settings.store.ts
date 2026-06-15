@@ -79,8 +79,7 @@ export const settingsStore = create<SettingsStore>()(
       get: () => {
         return get().settings
       }
-    })
-    ),
+    })),
     { name: 'settings' }
   )
 )

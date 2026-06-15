@@ -23,7 +23,7 @@ export const dragUtils = {
     if (!desc.data?.snap) return null
     const { x: snapX, y: snapY } = desc.data.snap
 
-    const { deviceSize, itemSize } = desc.base.layout
+    const { deviceSize, itemSize, containerSize } = desc.base.layout
     const constraints = desc.data.constraints
 
 
@@ -40,7 +40,7 @@ export const dragUtils = {
 
     return {
       x: snapAxis(value.x, snapX, deviceSize.width, itemSize.width, 0, constraints.minX, constraints.maxX),
-      y: snapAxis(value.y, snapY, deviceSize.height, itemSize.height, desc.base.layout.frameRect.height, constraints.minY, constraints.maxY)
+      y: snapAxis(value.y, snapY, deviceSize.height, itemSize.height, containerSize.height, constraints.minY, constraints.maxY)
     }
   }
 }

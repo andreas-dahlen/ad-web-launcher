@@ -1,0 +1,266 @@
+{
+	// Place your ad-web-launcher workspace snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and 
+	// description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope 
+	// is left empty or omitted, the snippet gets applied to all languages. The prefix is what is 
+	// used to trigger the snippet and the body will be expanded and inserted. Possible variables are: 
+	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders. 
+	// Placeholders with the same ids are connected.
+	// Example:
+	// "Print to console": {
+	// 	"scope": "javascript,typescript",
+	// 	"prefix": "log",
+	// 	"body": [
+	// 		"console.log('$1');",
+	// 		"$2"
+	// 	],
+	// 	"description": "Log output to console"
+	// }
+	//
+	// You can also restrict snippets to specific files using include/exclude patterns:
+	// "Test snippet": {
+	// 	"scope": "javascript,typescript",
+	// 	"prefix": "test",
+	// 	"body": "test('$1', () => {\n\t$0\n});",
+	// 	"include": ["**/*.test.ts", "*.spec.ts"],
+	// 	"exclude": ["**/temp/*.ts"],
+	// 	"description": "Insert test block"
+	// }
+	/*------------------------
+			UTIL SNIPPETZ
+	-------------------------*/
+	".setTimeout": {
+		"prefix": "-setT",
+		"body": [
+			"setTimeout(() => {",
+			"  $0",
+			"}, ${1:1000})"
+		],
+		"description": "setTimeout block"
+	},
+	".setInterval": {
+		"prefix": "-setI",
+		"body": [
+			"setInterval(() => {",
+			"  $0",
+			"}, ${1:1000})"
+		],
+		"description": "setInterval block"
+	},
+	".switch Case": {
+		"prefix": "-switch",
+		"body": [
+			"switch (${1:condition}) {",
+			"case \"${2:case}\": {",
+			"$0",
+			"}",
+			"}",
+		],
+		"description": "creates a basic switch case"
+	},
+	/*------------------------
+			TEST SNIPPETZ
+	-------------------------*/
+	"It block": {
+		"prefix": "t-it",
+		"body": [
+			"it(\"${1:should ...}\", () => {",
+			"  $0",
+			"})"
+		],
+		"include": [
+			"**/*.test.ts",
+			"**/*.spec.ts"
+		],
+		// 	"exclude": ["**/EVERYTHING ELSE??/*.ts"],
+	},
+	"Describe block": {
+		"prefix": "t-desc",
+		"body": [
+			"describe(\"${1:feature}\", () => {",
+			"  $0",
+			"})"
+		],
+		"include": [
+			"**/*.test.ts",
+			"**/*.spec.ts"
+		],
+		// 	"exclude": ["**/EVERYTHING ELSE??/*.ts"],
+	},
+	".it.each": {
+		"prefix": "t-it.e",
+		"body": [
+			"it.each<[${1:Input}, ${2:Expected}]>([",
+			"  [${3:input}, ${4:expected}],",
+			"  [${5:input2}, ${6:expected2}],",
+			"])(\"${7:should ...} (%s)\", (input, expected) => {",
+			"  $0",
+			"})"
+		],
+		"description": "it.each with input/expected tuple"
+	},
+	/*------------------------
+			REACT SNIPPETZ
+	-------------------------*/
+	"React Component": {
+		"prefix": "r-exp",
+		"body": [
+			"export default function ${1:Component}() {",
+			"  return (",
+			"    <div>",
+			"      $0",
+			"    </div>",
+			"  )",
+			"}"
+		],
+		"include": [
+			"**/*.tsx",
+			"**/*.jsx"
+		],
+	},
+	"useEffect": {
+		"prefix": "r-useE",
+		"body": [
+			"useEffect(() => {",
+			"  $0",
+			"}, [${1:deps}])"
+		]
+	},
+	"useCallback": {
+		"prefix": "r-useC",
+		"body": [
+			"useCallback(() => {",
+			"  $0",
+			"}, [${1:deps}])"
+		]
+	},
+	"useMemo": {
+		"prefix": "r-useM",
+		"body": [
+			"useMemo(() => {",
+			"  $0",
+			"}, [${1:deps}])"
+		]
+	},
+	/*------------------------
+			STORE SNIPPETZ
+	-------------------------*/
+	"Zustand create": {
+		"prefix": "s-zus",
+		"body": [
+			"export type ${1:Binding} = {",
+			"",
+			"}",
+			"",
+			"export type ${2:Store} = {",
+			"",
+			"}",
+			"",
+			"export const use${2:Store} = create<${3:State}>()(",
+			"  immer((set, get) => ({",
+			"    $0",
+			"  }))",
+			")"
+		],
+	},
+	"Zustand persist immer": {
+		"prefix": "s-zusp",
+		"body": [
+			"export type ${1:Binding} = {",
+			"",
+			"}",
+			"",
+			"export type ${2:Store} = {",
+			"",
+			"}",
+			"",
+			"export const ${2:Store} = create<${2:Store}>()(",
+			"  persist(",
+			"    immer((set, get) => ({",
+			"      $0",
+			"    })),",
+			"     { name: \"${2:store-name}\"}",
+			"  )",
+			")"
+		],
+		"include": [
+			"**/*.store.ts"
+		]
+	},
+	"Zustand default content": {
+		"prefix": "s-zusc",
+		"body": [
+			"bindings: {},",
+			"init: (id, fallback) => {",
+			"if (get().bindings[id]) return",
+			" set(state => {",
+			"   state.bindings[id] = fallback",
+			"   })",
+			" },",
+			"  get: (id) => {",
+			"  return get().bindings[id]",
+			" },",
+			" delete: (id: string) => {",
+			"  set(state => {",
+			"   delete state.bindings[id]",
+			"   })",
+			" },",
+			" setConstraints: (id, constraints) => {",
+			"  set(state => {",
+			"   const s = state.bindings[id]",
+			"    if (!s) return",
+			"   s.constraints = constraints",
+			"    })",
+			"  },",
+			"",
+			"  setLayout(id, packet) {",
+			"   set(state => {",
+			"    const s = state.bindings[id]",
+			"    if (!s) return",
+			"    s.layout = {",
+			"    containerSize: ,",
+			"     itemSize: ",
+			"    }",
+			"  })",
+			" },",
+			"apply: (id, action) => {",
+			"  set(state => {",
+			"    const s = state.bindings[id]",
+			"     if (!s) return",
+			"     switch (action.event) {",
+			"       case 'press': {",
+			"$0",
+			" }",
+			"      default: { throw new Error(\"Invalid store event\") }",
+			"     }",
+			"})",
+			" }"
+		],
+		"include": [
+			"**/*.store.ts"
+		]
+	},
+	"Zustand typescript": {
+		"prefix": "s-zust",
+		"body": [
+			"export type ${1:Binding} = {",
+			"value: number",
+			"constraints: Constraints1D",
+			"layout: StoreLayout",
+			" dragging: boolean",
+			"$0",
+			"} ",
+			"export type ${1:Store} = {",
+			"bindings: Record<string, ${1:Binding}>",
+			"init: (id: string, fallback: _DEFAULT) => void",
+			" get: (id: string) => Readonly<${1:Binding}>",
+			"delete: (id: string) => void",
+			" setConstraints: (id: string, constraints: Constraints1D) => void",
+			" setLayout: (id: string, packet: StoreLayout) => void",
+			"apply: (id: string, action: ??) => void",
+			"} ",
+		],
+		"include": [
+			"**/*.store.ts"
+		]
+	},
+}

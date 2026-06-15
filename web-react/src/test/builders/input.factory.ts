@@ -1,7 +1,9 @@
 import { createButtonDesc, createCarouselDesc, createDragDesc, createScrollDesc, createSliderDesc } from '@test/builders/desc.factory'
-import type { DescriptorMap, DescriptorSwipeMap, InterpreterPressOverrides, InterpreterPressReleaseOverrides, InterpreterSwipeCommitOverrides, InterpreterSwipeOverrides, InterpreterSwipeStartOverrides, SwipeTypeMap, TypeMap } from '@test/fixtures/override.types'
-import type { InterpreterPress, InterpreterPressRelease, InterpreterSwipe, InterpreterSwipeCommit, InterpreterSwipeStart } from '@interaction/types/interpreter.types'
+import type { DescriptorMap, DescriptorSwipeMap, InterpreterPressOverrides, InterpreterPressReleaseOverrides, InterpreterSwipeCommitOverrides, InterpreterSwipeOverrides, InterpreterSwipeStartOverrides, SwipeTypeMap, TypeMap } from '@test/override.types'
+import type { InterpreterPress, InterpreterPressRelease, InterpreterSwipe, InterpreterSwipeCommit, InterpreterSwipeStart, SwipingSession } from '@interaction/types/interpreter.types'
 import { createRuntimePress, createRuntimePressRelease, createRuntimeSwipe, createRuntimeSwipeCommit, createRuntimeswipeStart } from '@test/builders/runtime.factory'
+import { modifyGestureForTests } from '@interaction/input/interpreter'
+import { createComputedSlider } from '@test/builders/computed.factory'
 
 const typeMap: TypeMap = {
   carousel: createCarouselDesc,
@@ -88,4 +90,22 @@ export function createInterpreterSwipeCommit<T extends keyof DescriptorSwipeMap>
     desc: createSwipeDesc(type, overrides.desc),
     computed: overrides.computed ?? null
   }
+}
+
+export function seedGesture(
+  phase: "PENDING" | "SWIPING",
+  pointerId = 1) {
+  modifyGestureForTests(pointerId, {
+    phase,
+    pointerId,
+    state: {
+      start: { x: 0, y: 0 },
+      last: { x: 0, y: 0 },
+      totalDelta: { x: 0, y: 0 }
+    },
+    gesture: {
+      desc: createCarouselDesc(),
+      computed: createComputedSlider()
+    }
+  } as SwipingSession)
 }

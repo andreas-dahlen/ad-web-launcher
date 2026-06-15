@@ -56,36 +56,33 @@ export const buildDesc = {
   },
   buildCarousel(metaData: DomMeta, r: Builder): CarouselDesc | null {
     if (!metaData.axis || metaData.axis === 'both') return null
-    const data = this.buildCarouselData(metaData)
-    if (data) return {
+    const data = buildDesc.buildCarouselData(metaData)
+    return {
       type: 'carousel',
-      base: { ...this.buildSwipeBase(metaData, r), axis: metaData.axis },
+      base: { ...buildDesc.buildSwipeBase(metaData, r), axis: metaData.axis },
       data: data,
       capabilities: r.capabilities
     }
-    return null
   },
   buildSlider(metaData: DomMeta, r: Builder): SliderDesc | null {
     if (!metaData.axis || metaData.axis === 'both') return null
     const data = this.buildSliderData(metaData)
-    if (data) return {
+    return {
       type: 'slider',
       base: { ...this.buildSwipeBase(metaData, r), axis: metaData.axis },
       data: data,
       capabilities: r.capabilities
     }
-    return null
   },
   buildDrag(metaData: DomMeta, r: Builder): DragDesc | null {
     if (!metaData.axis || metaData.axis !== 'both') return null
     const data = this.buildDragData(metaData)
-    if (data) return {
+    return {
       type: 'drag',
       base: { ...this.buildSwipeBase(metaData, r), axis: metaData.axis },
       data: data,
       capabilities: r.capabilities
     }
-    return null
   },
 
   buildScroll(metaData: DomMeta, r: Builder): ScrollDesc | null {
@@ -144,7 +141,6 @@ export const buildDesc = {
       }
 
       case 'drag': {
-        // dragStore.getState().setFrameRect(metaData.id, frame)
         const s = dragStore.getState().get(metaData.id)
         return { ...s?.layout, grabOffset, frameRect: frame, deviceSize }
       }
@@ -169,12 +165,12 @@ export const buildDesc = {
     const s = sliderStore.getState().get(metaData.id)
     return { constraints: s.constraints }
   },
-  buildDragData(metaData: DomMeta): DragData | null {
+  buildDragData(metaData: DomMeta): DragData {
     const s = dragStore.getState().get(metaData.id)
     const snap = (metaData.snapX != null && metaData.snapY != null) ? { x: metaData.snapX, y: metaData.snapY } : undefined
     return { settledOffset: s.settledOffset, snap: snap, constraints: s.constraints }
   },
-  buildScrollData(metaData: DomMeta): ScrollData | null {
+  buildScrollData(metaData: DomMeta): ScrollData {
     const s = scrollStore.getState().get(metaData.id)
     const onEdgeDir = metaData.onEdgeDir != null ? metaData.onEdgeDir : undefined
     return { onEdgeDir, settledValue: s.settledValue, isVisible: s.isVisible }

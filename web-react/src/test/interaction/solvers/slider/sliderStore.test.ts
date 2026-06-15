@@ -1,22 +1,19 @@
-import { describe, it, expect, beforeEach } from 'vitest'
+import { describe, it, expect, afterEach } from 'vitest'
 import { sliderStore, type SliderBinding } from '@primitives/slider/store/slider.store'
 import { slider_DEFAULTS } from '@primitives/slider/store/useSliderStore.hook'
+import { getStoreByType, seedStoreByType } from '@test/utils/storeSeed.utils'
+import { resetInteractionStores } from '@test/utils/storeReset.utils'
 function initTest(data: SliderBinding = slider_DEFAULTS) {
-  sliderStore.getState().init("test", data)
+  seedStoreByType("slider", "test", data)
 }
 
 function getTest() {
-  return sliderStore.getState().bindings["test"]
+  return getStoreByType("slider") as SliderBinding
 }
 
 
 describe("[SLIDERSTORE]", () => {
-  beforeEach(() => {
-    sliderStore.setState({
-      bindings: {}
-    })
-    expect(Object.keys(sliderStore.getState().bindings)).toHaveLength(0)
-  })
+  afterEach(() => { resetInteractionStores() })
 
 
   describe('[Base Functionality]', () => {

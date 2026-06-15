@@ -2,11 +2,77 @@ import { gestureUtils } from '@interaction/input/gesture.utils'
 import { createBaseWithAxis1D } from '@test/builders/base.factory'
 import { createPressCapabilities } from '@test/builders/capabilities.factory'
 import { createButtonDesc, createCarouselDesc, createSliderDesc } from '@test/builders/desc.factory'
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
+import { sizeStore } from '../../../shared/stores/size.store'
+import { APP_CONFIG } from '@config/app.config'
+
+function mockDeviceSize(width = 400, height = 800) {
+  const current = sizeStore.getState()
+
+  const mockValue = {
+    ...current,
+    device: {
+      width: width,
+      height: height,
+      density: 0
+    }
+  }
+
+  vi.spyOn(sizeStore, 'getState').mockReturnValue(mockValue)
+
+  return mockValue.device
+}
 
 describe('[GESTUREUTILS]', () => {
+  describe('[swipeThresholdCalc]', () => {
+    it('returns true if instantSwipe is true', () => {
+      expect(gestureUtils.swipeThresholdCalc(0, true)).toBe(true)
+    })
 
-  describe('[Resolve Axis]', () => {
+    it('returns false below threshold', () => {
+      mockDeviceSize(400, 800)
+
+      const threshold =
+        Math.min(400, 800) * APP_CONFIG.swipeThresholdRatio
+
+      expect(
+        gestureUtils.swipeThresholdCalc(threshold - 1, false)
+      ).toBe(false)
+    })
+
+    it('returns false when distance is below threshold', () => {
+      const device = mockDeviceSize(400, 800)
+      const screenSize = Math.min(device.width, device.height)
+      const threshold = screenSize * APP_CONFIG.swipeThresholdRatio
+
+      expect(
+        gestureUtils.swipeThresholdCalc(threshold - 1, false)
+      ).toBe(false)
+    })
+
+    it('returns true at threshold', () => {
+      mockDeviceSize(400, 800)
+
+      const threshold =
+        Math.min(400, 800) * APP_CONFIG.swipeThresholdRatio
+
+      expect(
+        gestureUtils.swipeThresholdCalc(threshold, false)
+      ).toBe(true)
+    })
+
+    it('returns true above threshold', () => {
+      mockDeviceSize(400, 800)
+
+      const threshold =
+        Math.min(400, 800) * APP_CONFIG.swipeThresholdRatio
+
+      expect(
+        gestureUtils.swipeThresholdCalc(threshold + 1, false)
+      ).toBe(true)
+    })
+  })
+  describe('[isAxisSupported]', () => {
     it('returns true for axis: both', () => {
       expect(
         gestureUtils.isAxisSupported(
@@ -33,7 +99,7 @@ describe('[GESTUREUTILS]', () => {
     })
   })
 
-  describe('[isSwipeableDescriptor]', () => {
+  describe('[asSwipeableDescriptor]', () => {
     it('returns null for button desc', () => {
       const desc = createButtonDesc()
       expect(
@@ -92,9 +158,4 @@ describe('[GESTUREUTILS]', () => {
     })
   })
 
-  describe('[swipeThresholdCalc]', () => {
-    it('returns true if instantSwipe is true', () => {
-      expect(gestureUtils.swipeThresholdCalc(0, true)).toBe(true)
-    })
-  })
 })

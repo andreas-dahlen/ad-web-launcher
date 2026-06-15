@@ -98,6 +98,5 @@ export const sliderStore = create<SliderStore>()(
         }
       })
     }
-  })
-  )
+  }))
 )
