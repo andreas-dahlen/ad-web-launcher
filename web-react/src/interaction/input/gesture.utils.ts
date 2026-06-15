@@ -41,19 +41,22 @@ export const gestureUtils = {
 	/* =========================
 	Descriptor utils
 	========================= */
-	isAxisSupported(intentAxis: Axis, descAxis: Axis): boolean {
-		return (
-			descAxis === 'both' ||
-			descAxis === intentAxis
-		)
-	},
 
 	asSwipeableDescriptor(desc: Descriptor, intentAxis: Axis): SwipeableDescriptor | null {
 		if (desc.type == 'button') return null
 		const { swipeable, instantSwipe } = desc.capabilities
 		if (!swipeable) return null
 		if (instantSwipe) return desc
-		if (!this.isAxisSupported(intentAxis, desc.base.axis)) return null
+		if (!isAxisSupported(intentAxis, desc.base.axis)) return null
 		return desc
 	}
 }
+
+function isAxisSupported(intentAxis: Axis, descAxis: Axis): boolean {
+	return (
+		descAxis === 'both' ||
+		descAxis === intentAxis
+	)
+}
+
+export const __TEST_ONLY_API = { isAxisSupported }

@@ -127,6 +127,7 @@ function handleSwipeStart(current: GestureSession, x: number, y: number, point: 
         event: 'swipeStart',
         delta: { x, y },
         thresholdValue: ctx.thresholdValue
+        //<<<---- here it is added and resolved
       }
     }
   }

@@ -1,10 +1,12 @@
-import { gestureUtils } from '@interaction/input/gesture.utils'
-import { createBaseWithAxis1D } from '@test/builders/base.factory'
-import { createPressCapabilities } from '@test/builders/capabilities.factory'
-import { createButtonDesc, createCarouselDesc, createSliderDesc } from '@test/builders/desc.factory'
 import { describe, expect, it, vi } from 'vitest'
 import { sizeStore } from '../../../shared/stores/size.store'
 import { APP_CONFIG } from '@config/app.config'
+import { gestureUtils } from '@interaction/input/gesture.utils'
+import { testGestureUtils } from '@test/testAPI'
+import { createButtonDesc, createCarouselDesc, createSliderDesc } from '@test/builders/desc.factory'
+import { createBaseWithAxis1D } from '@test/builders/base.factory'
+import { createPressCapabilities } from '@test/builders/capabilities.factory'
+
 
 function mockDeviceSize(width = 400, height = 800) {
   const current = sizeStore.getState()
@@ -75,7 +77,7 @@ describe('[GESTUREUTILS]', () => {
   describe('[isAxisSupported]', () => {
     it('returns true for axis: both', () => {
       expect(
-        gestureUtils.isAxisSupported(
+        testGestureUtils.isAxisSupported(
           'horizontal',
           'both'
         )
@@ -83,7 +85,7 @@ describe('[GESTUREUTILS]', () => {
     })
     it('returns true for equality in axies', () => {
       expect(
-        gestureUtils.isAxisSupported(
+        testGestureUtils.isAxisSupported(
           'horizontal',
           'horizontal'
         )
@@ -91,7 +93,7 @@ describe('[GESTUREUTILS]', () => {
     })
     it('returns false for axis not being same', () => {
       expect(
-        gestureUtils.isAxisSupported(
+        testGestureUtils.isAxisSupported(
           'horizontal',
           'vertical'
         )

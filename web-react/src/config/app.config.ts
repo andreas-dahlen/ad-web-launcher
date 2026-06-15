@@ -1,13 +1,13 @@
 /* -------------------------------------------------
    App-level constants
 ------------------------------------------------- */
-export interface RawPhoneValues {
+interface RawPhoneValues {
   width: number
   height: number
   density: number
 }
 
-export interface AppConfig {
+interface AppConfig {
   debugMode: boolean
   rawPhoneValues: RawPhoneValues
   swipeAnimationMs: number

@@ -1,7 +1,6 @@
 import { domQuery } from '@interaction/input/domQuery'
 import { gestureUtils } from '@interaction/input/gesture.utils'
 import { resetGesturesForTests, interpreter, returnGesturesForTests } from '@interaction/input/interpreter'
-import { interpreterMap } from '@interaction/runtime/pipeline'
 import type { Descriptor, SwipeableDescriptor } from '@interaction/types/descriptor.types'
 import type { RuntimeStart } from '@interaction/types/runtime.types'
 import { createCarouselDesc, createDragDesc, createScrollDesc } from '@test/builders/desc.factory'
@@ -9,6 +8,7 @@ import { createInterpreterPress, createInterpreterSwipeStart, seedGesture } from
 import { createRuntimeswipeStart } from '@test/builders/runtime.factory'
 import { computed_DEFAULT } from '@test/fixtures/computed.fixture'
 import type { EventBridgeType } from '@typing/core.types'
+import { testPipeline } from '@test/testAPI'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
 const x = 0
@@ -56,7 +56,7 @@ describe("[INTERPRETER]", () => {
           : vi.spyOn(domQuery, 'findLaneInDom')
 
         spy.mockReturnValue(null)
-        const interpreterFn = interpreterMap[eventType as EventBridgeType]
+        const interpreterFn = testPipeline.interpreterMap[eventType as EventBridgeType]
 
         const result = interpreterFn(x, y, pointerId)
 

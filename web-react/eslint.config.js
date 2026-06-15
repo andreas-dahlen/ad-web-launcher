@@ -109,16 +109,17 @@ export default defineConfig([
     },
 
     rules: {
-  '@typescript-eslint/no-unused-vars': [
-    'error',
-    {
-      args: 'all',
-      argsIgnorePattern: '^_',
-      varsIgnorePattern: '^_',
-      caughtErrorsIgnorePattern: '^_',
-      ignoreRestSiblings: true,
-    },
-  ],
+
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          args: 'all',
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+          ignoreRestSiblings: true,
+        },
+      ],
       'boundaries/dependencies': ['error', {
         default: 'disallow',
         rules: [
@@ -216,8 +217,23 @@ export default defineConfig([
             allow: [
               { to: { type: 'interaction-pipeline' } },
             ]
-          },
+          }
         ]
       }]
     }
-  }])
+  },
+  // ─── test-only API enforcement ─────────────────────────────────
+  {
+    files: ['src/**/*.{ts,tsx}'],
+    ignores: ['src/test/**/*'],
+    rules: {
+      'no-restricted-imports': ['error', {
+        patterns: [{
+          regex: '.*',
+          importNames: ['__TEST_ONLY_API'],
+          message: '__TEST_ONLY_API is for tests only'
+        }]
+      }]
+    }
+  }
+])

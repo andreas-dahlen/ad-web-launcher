@@ -13,14 +13,9 @@ export function createInteractionElement(type: InteractionType, overrides: MetaD
   return el
 }
 
-export function createEl(overrides: MetaDataset = {}) {
-  const el = document.createElement('div')
+export function createEl() {
+  return document.createElement('div')
 
-  Object.assign(el.dataset, {
-    ...overrides
-  })
-
-  return el
 }
 
 export function createMetaByType(type: InteractionType) {

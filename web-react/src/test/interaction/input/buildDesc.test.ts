@@ -1,132 +1,218 @@
-import { buildDesc } from '@interaction/input/buildDesc'
+import { testBuildDesc } from '@test/testAPI'
 import { domQuery } from '@interaction/input/domQuery'
-import type { BaseWithSwipe, DomMeta } from '@interaction/types/base.types'
-import type { Descriptor } from '@interaction/types/descriptor.types'
-import { createInteractionElement } from '@test/builders/domAndMeta.factory'
+import type { DomMeta } from '@interaction/types/base.types'
+import { createMetaByType } from '@test/builders/domAndMeta.factory'
 import { createMetaContext } from '@test/utils/createTestContext.utils'
 import { getStoreByType, seedStoreByType } from '@test/utils/storeSeed.utils'
 import type { InteractionType } from '@typing/core.types'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { sizeStore } from '../../../shared/stores/size.store'
+import type { CarouselBinding } from '@primitives/carousel/store/carousel.store'
+import type { SliderBinding } from '@primitives/slider/store/slider.store'
+import type { DragBinding } from '@primitives/drag/store/drag.store'
+import type { ScrollBinding } from '@primitives/scroll/store/scroll.store'
+import { compileDescriptor } from '@interaction/input/buildDesc'
 type BuildFn =
   | "buildCarousel"
   | "buildSlider"
   | "buildDrag"
   | "buildScroll"
 
-type BuildDataFn =
-  | "buildCarouselData"
-  | "buildSliderData"
-  | "buildDragData"
-  | "buildScrollData"
-
 afterEach(() => {
   vi.restoreAllMocks()
 })
 
+function mockFrameRect() {
+  vi.spyOn(domQuery, "getElSnapshot").mockReturnValue({ grabOffset: { x: 0, y: 0 }, frame: { top: 0, left: 0 } })
+}
+
 describe("[BUILD DESC]", () => {
 
-  describe("Resolve From Element", () => {
+  describe("[Compile Descriptor]", () => {
     it.each([
-      ["drag", "buildDrag"],
-      ["slider", "buildSlider"],
-      ["carousel", "buildCarousel"],
-      ["scroll", "buildScroll"],
-      ["button", "buildButton"]
+      ["drag", "drag"],
+      ["slider", "slider"],
+      ["carousel", "carousel"],
+      ["scroll", "scroll"],
+      ["button", "button"],
     ])(
-      "%s -> routes correctly",
-      (eventType, route) => {
+      "%s -> returns correct descriptor type",
+      (metaType, expectedType) => {
+        mockFrameRect()
 
-        const spy = vi.spyOn(buildDesc, route as "buildDrag" | "buildSlider" | "buildCarousel" | "buildScroll" | "buildButton").mockReturnValue({} as Descriptor)
+        if (metaType !== "button") {
+          seedStoreByType(metaType as Exclude<InteractionType, "button">)
+        }
 
-        const el = createInteractionElement(eventType as InteractionType)
+        const result = compileDescriptor(
+          0,
+          0,
+          1,
+          createMetaByType(metaType as InteractionType)
+        )
 
-        buildDesc.resolveFromElement(el, 0, 0, 0)
-
-        expect(spy).toHaveBeenCalledTimes(1)
+        expect(result?.type).toBe(expectedType)
       }
     )
   })
 
   describe("[Main Builders]", () => {
-    it.each<[string, Exclude<InteractionType, "button">, BuildFn, BuildDataFn, unknown, boolean]>([
-      ["Carousel Horizontal success", "carousel", "buildCarousel", "buildCarouselData", "horizontal", true],
-      ["Carousel Vertical success", "carousel", "buildCarousel", "buildCarouselData", "vertical", true],
-      ["Carousel Both fail", "carousel", "buildCarousel", "buildCarouselData", "both", false],
+    it.each<[string, Exclude<InteractionType, "button">, BuildFn, unknown, boolean]>([
+      ["Carousel Horizontal success", "carousel", "buildCarousel", "horizontal", true],
+      ["Carousel Vertical success", "carousel", "buildCarousel", "vertical", true],
+      ["Carousel Both fail", "carousel", "buildCarousel", "both", false],
 
-      ["Slider Horizontal success", "slider", "buildSlider", "buildSliderData", "horizontal", true],
-      ["Slider Vertical success", "slider", "buildSlider", "buildSliderData", "vertical", true],
-      ["Slider Both fail", "slider", "buildSlider", "buildSliderData", "both", false],
+      ["Slider Horizontal success", "slider", "buildSlider", "horizontal", true],
+      ["Slider Vertical success", "slider", "buildSlider", "vertical", true],
+      ["Slider Both fail", "slider", "buildSlider", "both", false],
 
-      ["Scroll Horizontal success", "scroll", "buildScroll", "buildScrollData", "horizontal", true],
-      ["Scroll Vertical success", "scroll", "buildScroll", "buildScrollData", "vertical", true],
-      ["Scroll Both fail", "scroll", "buildScroll", "buildScrollData", "both", false],
+      ["Scroll Horizontal success", "scroll", "buildScroll", "horizontal", true],
+      ["Scroll Vertical success", "scroll", "buildScroll", "vertical", true],
+      ["Scroll Both fail", "scroll", "buildScroll", "both", false],
 
-      ["Drag Horizontal fail", "drag", "buildDrag", "buildDragData", "horizontal", false],
-      ["Drag Vertical fail", "drag", "buildDrag", "buildDragData", "vertical", false],
-      ["Drag Both success", "drag", "buildDrag", "buildDragData", "both", true],
+      ["Drag Horizontal fail", "drag", "buildDrag", "horizontal", false],
+      ["Drag Vertical fail", "drag", "buildDrag", "vertical", false],
+      ["Drag Both success", "drag", "buildDrag", "both", true],
 
     ])(
 
       "%s",
-      (_, type, mainFn, dataFn, axis, expected) => {
+      (_, type, mainFn, axis, expected) => {
 
         const { meta, builder } = createMetaContext(type)
 
-        const spy = vi.spyOn(buildDesc, dataFn)
-        vi.spyOn(buildDesc, "buildSwipeBase").mockReturnValue(null as unknown as BaseWithSwipe)
+        mockFrameRect()
 
         const newMeta = {
           ...meta,
           axis: axis
         } as DomMeta
 
-        const result = buildDesc[mainFn](newMeta, builder)
+        const result = testBuildDesc[mainFn](newMeta, builder)
 
-        if (expected) {
-          expect(spy).toHaveBeenCalled()
-          expect(result).toBeTruthy()
-        } else {
-          expect(result).toBe(null)
-          expect(spy).not.toHaveBeenCalled()
-        }
+        expect(Boolean(result)).toBe(expected)
       }
     )
   })
 
-  describe("buildLayout", () => {
-    describe("buildLayout", () => {
-      it.each([
-        ["carousel"],
-        ["slider"],
-        ["drag"],
-        ["scroll"],
-      ] as const)(
-        "builds %s correctly",
-        (type) => {
-          vi.spyOn(domQuery, "getElSnapshot").mockReturnValue({ grabOffset: { x: 10, y: 10 }, frame: { top: 50, left: 50 } })
+  describe("[BuildLayout]", () => {
+    it.each([
+      ["carousel"],
+      ["slider"],
+      ["drag"],
+      ["scroll"],
+    ] as const)(
+      "builds %s correctly",
+      (type) => {
+        vi.spyOn(domQuery, "getElSnapshot").mockReturnValue({ grabOffset: { x: 10, y: 10 }, frame: { top: 50, left: 50 } })
 
-          seedStoreByType(type)
-          sizeStore.setState({
-            device: { width: 100, height: 100, density: 1 }
-          })
-
-          const { meta, builder } = createMetaContext(type)
-
-          const result = buildDesc.buildLayout(meta, builder)
-
-          const storeValues = getStoreByType(type)
-
-          expect(result).toEqual(
-            expect.objectContaining({
-              grabOffset: { x: 10, y: 10 },
-              frameRect: { top: 50, left: 50 },
-              containerSize: storeValues.layout.containerSize,
-              itemSize: storeValues.layout.itemSize,
-              deviceSize: { width: 100, height: 100 },
-            })
-          )
+        seedStoreByType(type)
+        sizeStore.setState({
+          device: { width: 100, height: 100, density: 1 }
         })
+
+        const { meta, builder } = createMetaContext(type)
+
+        const result = testBuildDesc.buildLayout(meta, builder)
+
+        const storeValues = getStoreByType(type)
+
+        expect(result).toEqual(
+          expect.objectContaining({
+            grabOffset: { x: 10, y: 10 },
+            frameRect: { top: 50, left: 50 },
+            containerSize: storeValues.layout.containerSize,
+            itemSize: storeValues.layout.itemSize,
+            deviceSize: { width: 100, height: 100 },
+          })
+        )
+      })
+  })
+
+  describe("[buildData]", () => {
+    it("returns carousel-specific data", () => {
+      const { meta } = createMetaContext("carousel")
+      const result = testBuildDesc.buildCarouselData(meta)
+      const store = getStoreByType("carousel") as CarouselBinding
+
+      const expected = {
+        index: store.index,
+        lockSwipeAt: {
+          prev: meta.lockPrevAt,
+          next: meta.lockNextAt,
+        }
+      }
+      expect(result).toEqual(expected)
     })
+
+
+    it("returns slider-specific data", () => {
+      const { meta } = createMetaContext("slider")
+      const result = testBuildDesc.buildSliderData(meta)
+      const store = getStoreByType("slider") as SliderBinding
+
+      const expected = {
+        constraints: store.constraints
+      }
+      expect(result).toEqual(expected)
+    })
+
+
+    it("returns drag-specific data", () => {
+      const { meta } = createMetaContext("drag")
+      const result = testBuildDesc.buildDragData(meta)
+      const store = getStoreByType("drag") as DragBinding
+
+      const expected = {
+        settledOffset: store.settledOffset,
+        constraints: store.constraints,
+        snap: {
+          x: meta.snapX,
+          y: meta.snapY
+        }
+      }
+      expect(result).toEqual(expected)
+    })
+
+
+    it("returns scroll-specific data", () => {
+      const { meta } = createMetaContext("scroll")
+      const result = testBuildDesc.buildScrollData(meta)
+      const store = getStoreByType("scroll") as ScrollBinding
+
+      const expected = {
+        settledValue: store.settledValue,
+        isVisible: store.isVisible,
+        onEdgeDir: meta.onEdgeDir
+      }
+      expect(result).toEqual(expected)
+    })
+  })
+
+  describe("[build capabilities]", () => {
+    it.each([
+      [false, undefined, true, true, false],
+      [true, undefined, false, false, true],
+      [false, "someAction", false, false, true],
+    ])(
+      "pressable=%s action=%s => %s",
+      (pressable, action, swipeable, instantSwipe, expected) => {
+
+        const meta = {
+          pressable,
+          swipeable,
+          instantSwipe,
+          ds: { action }
+        } as unknown as DomMeta
+
+        const result = testBuildDesc.buildCapabilities(meta)
+
+        expect(result).toEqual({
+          pressable: expected,
+          swipeable,
+          instantSwipe,
+        })
+      }
+    )
   })
 })

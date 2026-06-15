@@ -20,7 +20,7 @@ const swipeTypeMap: SwipeTypeMap = {
   drag: createDragDesc
 } as const
 
-function createDesc<T extends keyof DescriptorMap>(
+export function createDesc<T extends keyof DescriptorMap>(
   type: T,
   overrides?: Partial<DescriptorMap[T]>
 ): DescriptorMap[T] {
@@ -33,9 +33,6 @@ function createSwipeDesc<T extends keyof DescriptorSwipeMap>(
 ): DescriptorSwipeMap[T] {
   return swipeTypeMap[type](overrides)
 }
-
-createSwipeDesc("carousel")
-createInterpreterSwipe("carousel")
 
 export function createInterpreterPress<T extends keyof DescriptorMap>(
   type: T,

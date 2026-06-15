@@ -1,4 +1,4 @@
-import { buildDesc } from '@interaction/input/buildDesc'
+import { testBuildDesc } from '../testAPI'
 import { createMetaByType } from '@test/builders/domAndMeta.factory'
 import { resetInteractionStores } from '@test/utils/storeReset.utils'
 
@@ -14,5 +14,5 @@ export function createMetaContext(type: Exclude<InteractionType, "button">) {
 
   const meta = createMetaByType(type)
 
-  return { id, meta, builder: { capabilities: buildDesc.buildCapabilities(meta), x: 0, y: 0, pointerId: 0 } }
+  return { id, meta, builder: { capabilities: testBuildDesc.buildCapabilities(meta), x: 0, y: 0, pointerId: 0 } }
 }

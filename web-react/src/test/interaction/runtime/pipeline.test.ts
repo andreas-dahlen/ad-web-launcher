@@ -1,8 +1,9 @@
 import type { PointerEventPackage } from '@hooks/usePointerBridge.hook'
 import { interpreter } from '@interaction/input/interpreter'
-import { interpreterMap, pipeline } from '@interaction/runtime/pipeline'
+import { pipeline } from '@interaction/runtime/pipeline'
 import { router } from '@interaction/runtime/solverRouter'
 import type { InterpreterOutput } from '@interaction/types/interpreter.types'
+import { testPipeline } from '@test/testAPI'
 import { domUpdater } from '@interaction/updater/domUpdater'
 import { createBaseInteraction } from '@test/builders/base.factory'
 import { createComputedScroll, createComputedSlider } from '@test/builders/computed.factory'
@@ -28,9 +29,9 @@ describe("[PIPELINE]", () => {
 
   describe("[Interpreter Calls]", () => {
     it('routes events to the correct function', () => {
-      const downSpy = vi.spyOn(interpreterMap, 'down').mockReturnValue(null)
-      const moveSpy = vi.spyOn(interpreterMap, 'move').mockReturnValue(null)
-      const upSpy = vi.spyOn(interpreterMap, 'up').mockReturnValue(null)
+      const downSpy = vi.spyOn(testPipeline.interpreterMap, 'down').mockReturnValue(null)
+      const moveSpy = vi.spyOn(testPipeline.interpreterMap, 'move').mockReturnValue(null)
+      const upSpy = vi.spyOn(testPipeline.interpreterMap, 'up').mockReturnValue(null)
 
 
       pipeline.orchestrate(pipeline_DEFAULT)
@@ -59,7 +60,7 @@ describe("[PIPELINE]", () => {
   })
 
   it("returns null when the function returns nothing", () => {
-    vi.spyOn(interpreterMap, 'down').mockReturnValue(null)
+    vi.spyOn(testPipeline.interpreterMap, 'down').mockReturnValue(null)
 
     const domSpy = vi.spyOn(domUpdater, 'handle')
 
@@ -81,7 +82,7 @@ describe("[PIPELINE]", () => {
         computed: null
       } as unknown as InterpreterOutput
       const domSpy = vi.spyOn(domUpdater, 'handle')
-      const spy = vi.spyOn(interpreterMap, 'down').mockReturnValue(mock)
+      const spy = vi.spyOn(testPipeline.interpreterMap, 'down').mockReturnValue(mock)
 
       expect(() =>
         pipeline.orchestrate(pipeline_DEFAULT)
@@ -100,7 +101,7 @@ describe("[PIPELINE]", () => {
       "%s -> routes correctly",
       (eventType, mock) => {
 
-        vi.spyOn(interpreterMap, "move").mockReturnValue(mock)
+        vi.spyOn(testPipeline.interpreterMap, "move").mockReturnValue(mock)
         const routerSpy = vi.spyOn(router, eventType as "drag" | "slider" | "carousel" | "scroll")
 
         pipeline.orchestrate({
@@ -125,7 +126,7 @@ describe("[PIPELINE]", () => {
       "%s -> correctly needs computedUpdate",
       (eventType, mock) => {
 
-        vi.spyOn(interpreterMap, "move").mockReturnValue(mock)
+        vi.spyOn(testPipeline.interpreterMap, "move").mockReturnValue(mock)
         const routerSpy = vi.spyOn(router, eventType as "slider" | "scroll")
 
         pipeline.orchestrate({
@@ -153,7 +154,7 @@ describe("[PIPELINE]", () => {
       (descType, expectedRouter) => {
         const mock = createInterpreterPressRelease(descType as "carousel" | "slider" | "drag" | "scroll")
 
-        vi.spyOn(interpreterMap, "up").mockReturnValue(mock)
+        vi.spyOn(testPipeline.interpreterMap, "up").mockReturnValue(mock)
         const routerSpy = vi.spyOn(router, expectedRouter as "carousel" | "slider" | "drag" | "scroll")
 
         pipeline.orchestrate({
@@ -173,7 +174,7 @@ describe("[PIPELINE]", () => {
     it("slider swipeStart returns computed update", () => {
       const mock = createInterpreterSwipeStart("slider")
 
-      vi.spyOn(interpreterMap, "move").mockReturnValue(mock)
+      vi.spyOn(testPipeline.interpreterMap, "move").mockReturnValue(mock)
       const spy = vi.spyOn(interpreter, "applyComputedUpdate")
 
       pipeline.orchestrate({
@@ -188,7 +189,7 @@ describe("[PIPELINE]", () => {
     it("scroll swipeStart returns computed update", () => {
       const mock = createInterpreterSwipeStart("scroll")
 
-      vi.spyOn(interpreterMap, "move").mockReturnValue(mock)
+      vi.spyOn(testPipeline.interpreterMap, "move").mockReturnValue(mock)
       const spy = vi.spyOn(interpreter, "applyComputedUpdate")
 
       pipeline.orchestrate({
@@ -219,7 +220,7 @@ describe("[PIPELINE]", () => {
       "%s -> routes to domUpdater",
       (_, eventType, mock) => {
 
-        vi.spyOn(interpreterMap, eventType as "up" | "down" | "move").mockReturnValue(mock)
+        vi.spyOn(testPipeline.interpreterMap, eventType as "up" | "down" | "move").mockReturnValue(mock)
         const domSpy = vi.spyOn(domUpdater, "handle")
 
         pipeline.orchestrate({
