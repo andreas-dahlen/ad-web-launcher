@@ -90,12 +90,12 @@ export default function Carousel({
     id
   })
 
-  const setColor = (index: number) => {
-    const sceneCount = 3
-    const colorIndex = (index % sceneCount) + 1
-    if (axis === 'horizontal') return `scene-col-${colorIndex}`
-    return `wall-col-${colorIndex}`
-  }
+  // const setColor = (index: number) => {
+  //   const sceneCount = 3
+  //   const colorIndex = (index % sceneCount) + 1
+  //   if (axis === 'horizontal') return `scene-col-${colorIndex}`
+  //   return `wall-col-${colorIndex}`
+  // }
 
   return (
     <div
@@ -119,7 +119,7 @@ export default function Carousel({
           <div
             key={slot.role}
             ref={itemRef}
-            className={clsx(carouselCss.scene, interactive && setColor(slot.sceneIdx))}
+            className={clsx(carouselCss.scene, /*interactive && setColor(slot.sceneIdx)*/)}
             style={styleForRole(slot.role)}
             data-role={slot.role}
             onTransitionEnd={onTransitionEnd}

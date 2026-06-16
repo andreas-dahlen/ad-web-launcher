@@ -7,30 +7,33 @@ export interface CancelData {
 
 export type Runtime = RuntimePress | RuntimeStart | RuntimeSwipe | RuntimePressRelease | RuntimeCommit
 
-export type RuntimePress = Delta & {
-  event: 'press'
+type GestureState = {
+  isLongPress: boolean
 }
 
-export type RuntimeStart = Delta & {
+export type RuntimePress = Delta & {
+  event: 'press'
+  isLongPress: false
+}
+
+export type RuntimeStart = Delta & GestureState & {
   event: 'swipeStart'
   cancel?: CancelData
   thresholdValue: Vec2
 }
 
-export type RuntimeSwipe = Delta & {
+export type RuntimeSwipe = Delta & GestureState & {
   event: 'swipe'
 }
 
-export type RuntimePressRelease = Delta & {
+export type RuntimePressRelease = Delta & GestureState & {
   event: 'pressRelease'
 }
-export type RuntimeCommit = Delta & {
+export type RuntimeCommit = Delta & GestureState & {
   event: 'swipeCommit' | 'swipeRevert'
 }
 
-export type RuntimeRevert = Delta & {
-  event: 'swipeRevert'
-}
+
 
 // export type RuntimeCancelEffect = {
 //   event: 'pressCancel'

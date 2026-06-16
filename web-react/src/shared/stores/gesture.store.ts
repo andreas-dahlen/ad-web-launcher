@@ -5,14 +5,17 @@ import { immer } from 'zustand/middleware/immer';
 type ActiveGesture = {
   pointerId: number
   type: InteractionType
+  isLongPress: boolean
 }
 
 export type GestureStore = {
-  activeGesture: InteractionType | 'none'
   gestureNodes: Record<number, ActiveGesture>
+
+  activeGesture: InteractionType | 'none'
 
   increment: (type: InteractionType, id: number) => void
   decrement: (id: number) => void
+  setLongPress: (id: number) => void
 }
 
 
@@ -29,7 +32,8 @@ export const gestureStore = create<GestureStore>()(
       set(state => {
         state.gestureNodes[id] = {
           pointerId: id,
-          type: type
+          type: type,
+          isLongPress: false
         }
         state.activeGesture = type
       })
@@ -39,11 +43,18 @@ export const gestureStore = create<GestureStore>()(
       set(state => {
         delete state.gestureNodes[id]
         const remaining = Object.values(state.gestureNodes)
-
         state.activeGesture =
           remaining[0]?.type ?? 'none'
       })
-    }
+    },
+
+    setLongPress: (id) => {
+      set(state => {
+        const s = state.gestureNodes[id]
+        if (!s) return
+        s.isLongPress = true
+      })
+    },
   })
   )
 )

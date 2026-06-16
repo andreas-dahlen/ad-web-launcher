@@ -66,21 +66,23 @@ function onDown(x: number, y: number, pointerId: number): InterpreterPress | nul
       start: gestureUtils.normalizeVec2({ x, y }),
       last: gestureUtils.normalizeVec2({ x, y }),
       totalDelta: { x: 0, y: 0 },
+      isLongPress: false
     },
     gesture: {
       desc: resolved,
       computed: null
     }
   }
+  // if(resolved.desc.base.isLongPressable) startGestureSession(pointerId)
   const g = gestures[pointerId].gesture
-
   if (g.desc.capabilities.pressable) {
     return {
       desc: g.desc,
       computed: null,
       runtime: {
         event: 'press',
-        delta: { x, y }
+        delta: { x, y },
+        isLongPress: false
       }
     }
   }
@@ -126,8 +128,8 @@ function handleSwipeStart(current: GestureSession, x: number, y: number, point: 
       runtime: {
         event: 'swipeStart',
         delta: { x, y },
-        thresholdValue: ctx.thresholdValue
-        //<<<---- here it is added and resolved
+        thresholdValue: ctx.thresholdValue,
+        isLongPress: current.state.isLongPress
       }
     }
   }
@@ -143,6 +145,7 @@ function handleSwipeStart(current: GestureSession, x: number, y: number, point: 
       start: current.state.start,
       last: point,
       totalDelta: { x: 0, y: 0 },
+      isLongPress: current.state.isLongPress
     },
     gesture: {
       desc: newDesc,
@@ -161,7 +164,8 @@ function handleSwipeStart(current: GestureSession, x: number, y: number, point: 
       event: 'swipeStart',
       delta: { x, y },
       cancel,
-      thresholdValue: ctx.thresholdValue
+      thresholdValue: ctx.thresholdValue,
+      isLongPress: current.state.isLongPress
     }
   }
 }
@@ -190,6 +194,7 @@ function handleSwipeMove(point: Vec2, pointerId: number): InterpreterSwipe | nul
     runtime: {
       event: 'swipe',
       delta: state.totalDelta,
+      isLongPress: state.isLongPress
     }
   }
 }
@@ -216,7 +221,8 @@ function finalizeSwipe(current: SwipingSession, event: Extract<EventType, "swipe
     computed: g.computed,
     runtime: {
       event: event,
-      delta: state.totalDelta
+      delta: state.totalDelta,
+      isLongPress: state.isLongPress
     }
   }
 }
@@ -234,7 +240,8 @@ function finalizePress(current: PendingSession, event: Extract<EventType, "press
     computed: null,
     runtime: {
       event: event,
-      delta: state.totalDelta
+      delta: state.totalDelta,
+      isLongPress: state.isLongPress
     }
   }
 }

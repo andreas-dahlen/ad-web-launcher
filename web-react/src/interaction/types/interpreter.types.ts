@@ -1,6 +1,6 @@
 import type { Computed } from '@interaction/types/computed.types'
 import type { Descriptor, SwipeableDescriptor } from '@interaction/types/descriptor.types'
-import type { RuntimePress, RuntimePressRelease, RuntimeRevert, RuntimeSwipe, RuntimeCommit, RuntimeStart } from '@interaction/types/runtime.types'
+import type { RuntimePress, RuntimePressRelease, RuntimeSwipe, RuntimeCommit, RuntimeStart } from '@interaction/types/runtime.types'
 import type { Axis, Vec2 } from '@typing/core.types'
 /*
   UTILS
@@ -37,7 +37,7 @@ export type InterpreterSwipe = {
 }
 export type InterpreterSwipeCommit = {
   desc: Readonly<SwipeableDescriptor>
-  runtime: RuntimeCommit | RuntimeRevert
+  runtime: RuntimeCommit
   computed: Computed
 }
 export type InterpreterPressRelease = {
@@ -75,4 +75,6 @@ interface SessionState {
   start: Vec2
   last: Vec2
   totalDelta: Vec2
+
+  isLongPress: boolean
 }

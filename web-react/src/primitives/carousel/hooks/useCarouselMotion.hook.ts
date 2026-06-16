@@ -56,6 +56,7 @@ export function useCarouselMotion({
   const onTransitionEnd = useCallback((e: React.TransitionEvent) => {
     if (e.target !== e.currentTarget) return
     if (e.propertyName !== 'transform') return
+    console.log("settling")
     carouselStore.getState().setSettling(id)
   }, [id])
 

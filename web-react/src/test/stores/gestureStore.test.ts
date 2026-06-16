@@ -13,7 +13,8 @@ describe("[GESTURESTORE]", () => {
     const state = gestureStore.getState()
     expect(state.gestureNodes[1]).toEqual({
       pointerId: 1,
-      type: 'carousel'
+      type: 'carousel',
+      isLongPress: false
     })
     expect(state.activeGesture).toBe('carousel')
   })
@@ -48,5 +49,15 @@ describe("[GESTURESTORE]", () => {
     const state = gestureStore.getState()
 
     expect(state.activeGesture).toBe('drag')
+  })
+
+  it('sets long press', () => {
+    gestureStore.getState().increment('carousel', 1)
+    gestureStore.getState().setLongPress(1)
+
+    const gesture = gestureStore.getState().gestureNodes[1]
+
+    expect(gesture.isLongPress).toBe(true)
+
   })
 })

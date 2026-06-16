@@ -12,14 +12,14 @@ export default function ContentLayer() {
         const oneCarousel = (
           < Carousel
             {...comp}
-            key={`${comp.id}-content`}
+            key={`${comp.id}-carousel`}
           />
         )
 
         if (comp.renderLayer) {
           return (
             <div
-              key={`${comp.id}-content-layer`}
+              key={`${comp.id}-content`}
               className={layerCss.layer}
               style={{ zIndex: Z[comp.renderLayer] }}
             >

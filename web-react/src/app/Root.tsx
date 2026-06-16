@@ -7,7 +7,7 @@ import { sizeStore } from '../shared/stores/size.store.ts'
 
 export default function Root() {
 
-  const { activeGesture } = useGestureStore()
+  const { activeGesture, isLongPress } = useGestureStore()
 
   useLayoutEffect(() => {
     const observer = new ResizeObserver(([entry]) => {
@@ -20,7 +20,12 @@ export default function Root() {
   }, [])
 
   return (
-    <div className="theme" data-theme="default" data-active-gesture={activeGesture}>
+    <div className="theme"
+      data-theme="default"
+      data-active-gesture={activeGesture}
+      data-active-long-press={isLongPress}
+    >
+
       <BaseLayer />
       <ContentLayer />
       <OverlayLayer />

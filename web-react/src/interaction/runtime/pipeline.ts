@@ -34,10 +34,15 @@ function abortGesture(pointerId: number) {
   gestureStore.getState().decrement(pointerId) // ← or reset to 0 if you're feeling paranoid
 }
 
-function notifyGestureStore(type: InteractionType, event: EventType, pointerId: number) {
+function notifyGestureStore(type: InteractionType, event: EventType, isLongPress: boolean, pointerId: number) {
   if (event === 'swipeStart') gestureStore.getState().increment(type, pointerId)
 
-  if (event === 'swipeCommit') gestureStore.getState().decrement(pointerId)
+  if (event === 'swipeCommit' ||
+    event === 'swipeRevert' ||
+    event === 'pressRelease'
+  ) gestureStore.getState().decrement(pointerId)
+
+  if (isLongPress && event === 'press') { gestureStore.getState().setLongPress(pointerId) }
 }
 
 function orchestrate(eventPackage: PointerEventPackage) {
@@ -116,7 +121,7 @@ function orchestrate(eventPackage: PointerEventPackage) {
   /* -------------------------
      Global gesture storage for tsx subscription side effects
   -------------------------- */
-  notifyGestureStore(desc.type, g.runtime.event, desc.base.pointerId)
+  notifyGestureStore(desc.type, g.runtime.event, g.runtime.isLongPress, desc.base.pointerId)
 }
 
 export const __TEST_ONLY_API = {
