@@ -4,8 +4,26 @@ import type { Direction } from '../../../shared/typing/core.types'
 import type { StoreLayout } from '@typing/store.types'
 import type { CarouselAction } from '@interaction/types/action.types'
 import { assertNever } from '@utils/assersions'
+export type NodeIdx = 0 | 1 | 2
 
+export type NodeBinding = {
+  nodeIdx: NodeIdx
+  sceneIdx: number
+}
+
+export type RingState = {
+  nodes: [NodeBinding, NodeBinding, NodeBinding]
+  currentNode: NodeIdx
+}
+
+// export type RingAction = {
+//   type: 'commit'
+//   direction: Direction
+//   total: number
+// }
 export type CarouselBinding = {
+
+  ring: RingState
   //react motion
   index: number
   liveOffset: number
@@ -88,7 +106,12 @@ export const carouselStore = create<CarouselStore>()(
         const s = state.bindings[id]
         if (!s?.pendingDir) return
         s.settling = true
+        console.log("index before:", s.index)
         s.index = getNextIndex(s.index, s.pendingDir, s.count)
+        console.log("index after:", s.index)
+        console.log("before ring current node:", s.ring.currentNode)
+        commitRingImmer(s)
+        console.log("after ring current node:", s.ring.currentNode)
         s.liveOffset = 0
         s.pendingDir = null
       })
@@ -111,6 +134,7 @@ export const carouselStore = create<CarouselStore>()(
             s.dragging = true
             s.settling = false
             if (s.pendingDir !== null) {
+              commitRingImmer(s)
               s.index = getNextIndex(s.index, s.pendingDir, s.count)
               s.liveOffset = 0
               s.pendingDir = null
@@ -153,4 +177,19 @@ function getNextIndex(currentIndex: number, direction: Direction | null, count: 
     default:
       return currentIndex
   }
+}
+
+function commitRingImmer(s: CarouselBinding) {
+  if (!s.pendingDir) return
+  const dir = s.pendingDir
+  const total = s.count
+  const { currentNode, nodes } = s.ring
+  const isNext = dir.dir === 'left' || dir.dir === 'up'
+  const leadingNode = ((currentNode + (isNext ? 1 : 2)) % 3) as 0 | 1 | 2
+  const staleNode = ((currentNode + (isNext ? 2 : 1)) % 3) as 0 | 1 | 2
+  const newSceneIdx = isNext
+    ? (nodes[leadingNode].sceneIdx + 1) % total
+    : (nodes[leadingNode].sceneIdx - 1 + total) % total
+  s.ring.nodes[staleNode].sceneIdx = newSceneIdx
+  s.ring.currentNode = leadingNode
 }

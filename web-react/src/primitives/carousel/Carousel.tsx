@@ -1,4 +1,4 @@
-import { useRef, useEffect, useMemo } from "react"
+import { useRef, useEffect } from "react"
 import { usePointerBridge } from '@hooks/usePointerBridge.hook.ts'
 import { useCarouselMotion } from "./hooks/useCarouselMotion.hook.ts"
 import { useCarouselSizing } from "./hooks/useCarouselSizing.hook.ts"
@@ -6,16 +6,77 @@ import { useAugmentedScenes } from "./hooks/useAugmentedScenes.hook.ts"
 import { useCarouselStore } from './store/useCarouselStore.hook.ts'
 import { carouselStore } from './store/carousel.store.ts'
 import { SceneContext } from './hooks/useSceneContext.hook.ts'
-import type { SceneRole } from '../../shared/typing/core.types.ts'
 import carouselCss from './Carousel.module.css'
 import clsx from 'clsx'
 import { dasx } from '../../shared/utils/dataAttrs.ts'
 import type { CarouselProps } from '@primitives/prim.types.ts'
+import type { SceneRole } from '@typing/core.types.ts'
 
-interface Slot {
-  sceneIdx: number
-  role: SceneRole
+// ── Ring buffer types ────────────────────────────────────────────────
+type NodeIdx = 0 | 1 | 2
+
+// type NodeBinding = {
+//   nodeIdx: NodeIdx
+//   sceneIdx: number
+// }
+
+// type RingState = {
+//   nodes: [NodeBinding, NodeBinding, NodeBinding]
+//   currentNode: NodeIdx
+// }
+
+// type RingAction = {
+//   type: 'commit'
+//   direction: Direction
+//   total: number
+// }
+function deriveRole(nodeIdx: NodeIdx, currentNode: NodeIdx): SceneRole {
+  if (nodeIdx === currentNode) return 'current'
+  if (nodeIdx === ((currentNode + 1) % 3) as NodeIdx) return 'next'
+  return 'prev'
 }
+
+// function ringReducer(state: RingState, action: RingAction): RingState {
+//   console.log('ringReducer called', state, action)
+//   const { currentNode, nodes } = state
+//   const isNext = action.direction.dir === 'right' || action.direction.dir === 'down'
+
+//   // which node is leading edge (about to become current)
+//   const leadingNode = (isNext
+//     ? (currentNode + 1) % 3
+//     : (currentNode + 2) % 3) as NodeIdx
+
+//   // which node is stale (just left the visible window)
+//   const staleNode = (isNext
+//     ? (currentNode + 2) % 3
+//     : (currentNode + 1) % 3) as NodeIdx
+
+//   // new scene for stale node = one step beyond leading edge
+//   const newSceneIdx = isNext
+//     ? (nodes[leadingNode].sceneIdx + 1) % action.total
+//     : (nodes[leadingNode].sceneIdx - 1 + action.total) % action.total
+
+//   const newCurrentNode = leadingNode
+
+//   const newNodes = nodes.map(n =>
+//     n.nodeIdx === staleNode
+//       ? { ...n, sceneIdx: newSceneIdx }
+//       : n
+//   ) as [NodeBinding, NodeBinding, NodeBinding]
+//   const result = { nodes: newNodes, currentNode: newCurrentNode }
+//   console.log('reducer returning', result)
+//   return result
+// }
+
+// const initialRingState: RingState = {
+//   nodes: [
+//     { nodeIdx: 0, sceneIdx: 0 },
+//     { nodeIdx: 1, sceneIdx: 1 },
+//     { nodeIdx: 2, sceneIdx: 2 },
+//   ],
+//   currentNode: 1
+// }
+
 
 export default function Carousel({
   id,
@@ -30,9 +91,10 @@ export default function Carousel({
 }: CarouselProps) {
 
   // ── Fully subscribe to the carousel store ─────────────────────────────
-  const { settling, index, liveOffset, count, dragging, layout } = useCarouselStore(id)
+  const { settling, liveOffset, count, dragging, layout, ring } = useCarouselStore(id)
 
   // ── Initialize count for mirror scenes ─────────────────────────────
+
 
   useEffect(() => {
     if (!interactive && scenes?.length)
@@ -59,25 +121,10 @@ export default function Carousel({
 
   // ── Augmented scenes & stable slot management ─────────────────────────────
   const augmentedScenes = useAugmentedScenes(scenes ?? [], count)
-  const total = augmentedScenes.length
 
-  const slots: Slot[] = useMemo(() => {
-    if (total === 0) return []
-    const prevIdx = (index - 1 + total) % total
-    const nextIdx = (index + 1) % total
-    return [
-      { sceneIdx: prevIdx, role: "prev" as const },
-      { sceneIdx: index, role: "current" as const },
-      { sceneIdx: nextIdx, role: "next" as const },
-    ]
-  }, [index, total])
+  // ── Ring buffer ──────────────────────────────────────────────────
+  // const [ring, dispatchRing] = useReducer(ringReducer, initialRingState)
 
-  // Sort by sceneIdx so React keys stay in stable DOM order.
-  // Prevents DOM reordering which resets CSS animations on moved nodes.
-  const renderSlots = useMemo(
-    () => [...slots].sort((a, b) => a.sceneIdx - b.sceneIdx),
-    [slots]
-  )
 
   // ── Carousel motion / styling ─────────────────────────────
   const {
@@ -89,13 +136,6 @@ export default function Carousel({
     axisSize,
     id
   })
-
-  // const setColor = (index: number) => {
-  //   const sceneCount = 3
-  //   const colorIndex = (index % sceneCount) + 1
-  //   if (axis === 'horizontal') return `scene-col-${colorIndex}`
-  //   return `wall-col-${colorIndex}`
-  // }
 
   return (
     <div
@@ -112,20 +152,21 @@ export default function Carousel({
         ...carouselDataAttrs
       })}
     >
-      {renderSlots.map((slot) => {
-        const Scene = augmentedScenes[slot.sceneIdx]
-
+      {ring && ring.nodes.map((node) => {
+        const role = deriveRole(node.nodeIdx as NodeIdx, ring.currentNode)
+        const Scene = augmentedScenes[node.sceneIdx]
+        // console.log("ring.nodes: ", ring.nodes, "currentNode: ", ring.currentNode)
         return (
           <div
-            key={slot.role}
+            key={node.nodeIdx}
             ref={itemRef}
             className={clsx(carouselCss.scene, /*interactive && setColor(slot.sceneIdx)*/)}
-            style={styleForRole(slot.role)}
-            data-role={slot.role}
+            style={styleForRole(role)}
+            data-role={role}
             onTransitionEnd={onTransitionEnd}
           >
-            <SceneContext.Provider value={{ sceneIndex: slot.sceneIdx, carouselId: id }}>
-              <Scene />
+            <SceneContext.Provider value={{ sceneIndex: node.sceneIdx, carouselId: id }}>
+              {Scene && <Scene />}
             </SceneContext.Provider>
           </div>
         )
