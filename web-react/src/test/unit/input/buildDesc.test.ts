@@ -134,9 +134,10 @@ describe("[BUILD DESC]", () => {
       const { meta } = createMetaContext("carousel")
       const result = testBuildDesc.buildCarouselData(meta)
       const store = getStoreByType("carousel") as CarouselBinding
+      const currentScene = store.nodeBindings.nodes[store.nodeBindings.currentNode].sceneIdx
 
       const expected = {
-        index: store.index,
+        currentScene,
         lockSwipeAt: {
           prev: meta.lockPrevAt,
           next: meta.lockNextAt,

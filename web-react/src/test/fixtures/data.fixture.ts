@@ -1,6 +1,6 @@
 export const data_DEFAULT = {
   carousel: {
-    index: 3, lockSwipeAt: { prev: 0, next: 5 }
+    currentScene: 3, lockSwipeAt: { prev: 0, next: 5 }
   },
   drag: {
     settledOffset: { x: 0, y: 0 },

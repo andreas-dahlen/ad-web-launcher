@@ -13,11 +13,14 @@ type DataString = `data-${string}`
 type DataAttrsResult = Record<DataString, string>
 
 function toKebab(str: string): string {
-  return str.replace(/[A-Z]/g, (m) => '-' + m.toLowerCase())
+  return str
+    .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
+    .toLowerCase();
 }
 
 function toDataAttr(key: string): `data-${string}` {
-  return `data-${toKebab(key)}`
+  const kebab = toKebab(key)
+  return kebab.startsWith('data-') ? kebab as DataString : `data-${kebab}`
 }
 
 /** converts object into data-attrs */
@@ -27,14 +30,12 @@ export function dasx(state: DataState = {}) {
   for (const [key, value] of Object.entries(state)) {
     if (value == null || key == null) continue
 
-    const resolved = value
 
-    if (resolved == null) continue
-    if (typeof resolved === "boolean") {
-      result[toDataAttr(key)] = resolved ? "true" : "false"
-    }
+    // if (typeof value === "boolean") {
+    //   result[toDataAttr(key)] = value ? "true" : "false"
+    // }
 
-    result[toDataAttr(key)] = String(resolved)
+    result[toDataAttr(key)] = String(value)
   }
   return result
 }

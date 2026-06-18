@@ -3,7 +3,7 @@ import type { Constraints1D, Constraints2D, OnEdgeDir, Vec2 } from "../../shared
 export type CarouselData = CarouselDataBase & CarouselModifiers
 
 interface CarouselDataBase {
-  readonly index: number
+  readonly currentScene: number
 }
 
 export interface CarouselModifiers {

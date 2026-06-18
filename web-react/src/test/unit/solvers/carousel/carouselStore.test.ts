@@ -90,7 +90,7 @@ describe("[CAROUSELSTORE]", () => {
     it('correctly modifies store at swipeStart', () => {
       const action = { event: "swipeStart" } as const
       const test = { ...carousel_DEFAULTS, settling: true, pendingDir: { dir: "left", axis: "horizontal" }, liveOffset: 100, count: 3 } as const
-      const result = { ...carousel_DEFAULTS, settling: false, pendingDir: null, liveOffset: 0, count: 3, dragging: true, index: 1 }
+      const result = { ...carousel_DEFAULTS, settling: false, pendingDir: null, liveOffset: 0, count: 3, dragging: true }
 
       initTest(test)
       carouselStore.getState().apply("test", action)

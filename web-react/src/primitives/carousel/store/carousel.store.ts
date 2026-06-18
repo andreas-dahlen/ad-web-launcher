@@ -4,36 +4,31 @@ import type { Direction } from '../../../shared/typing/core.types'
 import type { StoreLayout } from '@typing/store.types'
 import type { CarouselAction } from '@interaction/types/action.types'
 import { assertNever } from '@utils/assersions'
-export type NodeIdx = 0 | 1 | 2
+export type NodeId = 0 | 1 | 2
 
-export type NodeBinding = {
-  nodeIdx: NodeIdx
+export type Node = {
+  nodeId: NodeId
   sceneIdx: number
 }
 
-export type RingState = {
-  nodes: [NodeBinding, NodeBinding, NodeBinding]
-  currentNode: NodeIdx
+export type NodeBindings = {
+  nodes: [Node, Node, Node]
+  currentNode: NodeId
 }
 
-// export type RingAction = {
-//   type: 'commit'
-//   direction: Direction
-//   total: number
-// }
 export type CarouselBinding = {
 
-  ring: RingState
   //react motion
-  index: number
   liveOffset: number
 
   //reactScenes
+  nodeBindings: NodeBindings
   count: number
   layout: StoreLayout
   dragging: boolean
 
   //read only... not used by react
+
   settling: boolean
   pendingDir: Direction | null
 }
@@ -47,6 +42,8 @@ export type CarouselStore = {
   setCount: (id: string, count: number) => void
 
   setLayout: (id: string, packet: StoreLayout) => void
+
+  getCurrentScene: (id: string) => number | undefined
 
   setSettling: (id: string) => void
 
@@ -95,6 +92,13 @@ export const carouselStore = create<CarouselStore>()(
       })
     },
 
+    getCurrentScene(id) {
+      const s = get().bindings[id]
+      if (!s) return
+      const { nodes, currentNode } = s.nodeBindings
+      return nodes[currentNode].sceneIdx
+    },
+
     /**
  * Commits pendingDir → index immediately after the swipe animation completes.
  * Without this, index only updates on the next swipeStart — fine visually,
@@ -106,12 +110,9 @@ export const carouselStore = create<CarouselStore>()(
         const s = state.bindings[id]
         if (!s?.pendingDir) return
         s.settling = true
-        console.log("index before:", s.index)
-        s.index = getNextIndex(s.index, s.pendingDir, s.count)
-        console.log("index after:", s.index)
-        console.log("before ring current node:", s.ring.currentNode)
-        commitRingImmer(s)
-        console.log("after ring current node:", s.ring.currentNode)
+
+        applyCommit(s)
+
         s.liveOffset = 0
         s.pendingDir = null
       })
@@ -133,9 +134,10 @@ export const carouselStore = create<CarouselStore>()(
           case 'swipeStart': {
             s.dragging = true
             s.settling = false
+
+            //cleanup safety
             if (s.pendingDir !== null) {
-              commitRingImmer(s)
-              s.index = getNextIndex(s.index, s.pendingDir, s.count)
+              // applyCommit(s)
               s.liveOffset = 0
               s.pendingDir = null
             }
@@ -165,31 +167,19 @@ export const carouselStore = create<CarouselStore>()(
   }))
 )
 
-function getNextIndex(currentIndex: number, direction: Direction | null, count: number): number {
-  if (!count || !direction) return currentIndex
-  switch (direction.dir) {
-    case 'right':
-    case 'down':
-      return (currentIndex - 1 + count) % count
-    case 'left':
-    case 'up':
-      return (currentIndex + 1) % count
-    default:
-      return currentIndex
-  }
-}
-
-function commitRingImmer(s: CarouselBinding) {
+function applyCommit(s: CarouselBinding) {
   if (!s.pendingDir) return
   const dir = s.pendingDir
   const total = s.count
-  const { currentNode, nodes } = s.ring
+  const { currentNode, nodes } = s.nodeBindings
   const isNext = dir.dir === 'left' || dir.dir === 'up'
   const leadingNode = ((currentNode + (isNext ? 1 : 2)) % 3) as 0 | 1 | 2
-  const staleNode = ((currentNode + (isNext ? 2 : 1)) % 3) as 0 | 1 | 2
+  const staleNode = ((currentNode + (isNext ? 2 : 1)) % 3)
+
   const newSceneIdx = isNext
     ? (nodes[leadingNode].sceneIdx + 1) % total
     : (nodes[leadingNode].sceneIdx - 1 + total) % total
-  s.ring.nodes[staleNode].sceneIdx = newSceneIdx
-  s.ring.currentNode = leadingNode
+
+  s.nodeBindings.nodes[staleNode].sceneIdx = newSceneIdx
+  s.nodeBindings.currentNode = leadingNode
 }

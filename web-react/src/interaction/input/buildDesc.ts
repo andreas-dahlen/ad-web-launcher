@@ -152,10 +152,11 @@ function buildLayout(metaData: DomMeta, r: Builder): LayoutData {
   Build Data
 ========================= */
 
+//TODO expose a store API that gives a specific selection of exposed getters. Not the whole Store..
 function buildCarouselData(metaData: DomMeta): (CarouselData) {
-  const s = carouselStore.getState().get(metaData.id)
+  const currentScene = carouselStore.getState().getCurrentScene(metaData.id)
   const lockSwipeAt = { prev: metaData.lockPrevAt, next: metaData.lockNextAt }
-  return { index: s.index, lockSwipeAt }
+  return { currentScene: currentScene ?? 0, lockSwipeAt }
 }
 function buildSliderData(metaData: DomMeta): SliderData {
   const s = sliderStore.getState().get(metaData.id)

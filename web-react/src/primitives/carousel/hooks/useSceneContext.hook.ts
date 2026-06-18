@@ -1,12 +1,12 @@
 import { createContext, useContext } from 'react';
 
 interface SceneContextValue {
-  sceneIndex: number
+  sceneIdx: number
   carouselId: string
 }
 
 export const SceneContext = createContext<SceneContextValue>({
-  sceneIndex: -1,
+  sceneIdx: -1,
   carouselId: ''
 })
 

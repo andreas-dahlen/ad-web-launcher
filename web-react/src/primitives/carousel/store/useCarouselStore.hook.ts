@@ -1,11 +1,11 @@
 import { useEffect } from 'react'
 import { useShallow } from 'zustand/shallow'
-import { carouselStore, type CarouselBinding, type CarouselStore, type RingState } from './carousel.store'
+import { carouselStore, type CarouselBinding, type CarouselStore, type NodeBindings } from './carousel.store'
 import { debugRegisterBinding, debugUnregisterBinding } from '../../../test/functions.debug'
 
-const NODE_1 = { nodeIdx: 0, sceneIdx: 0 }
-const NODE_2 = { nodeIdx: 1, sceneIdx: 1 }
-const NODE_3 = { nodeIdx: 2, sceneIdx: 2 }
+const NODE_1 = { nodeId: 0, sceneIdx: 0 }
+const NODE_2 = { nodeId: 1, sceneIdx: 1 }
+const NODE_3 = { nodeId: 2, sceneIdx: 2 }
 const NODES = {
   nodes: [
     NODE_1,
@@ -15,7 +15,6 @@ const NODES = {
 }
 
 export const carousel_DEFAULTS = {
-  index: 0,
   count: 0,
   liveOffset: 0,
   dragging: false,
@@ -25,10 +24,10 @@ export const carousel_DEFAULTS = {
   },
   settling: false,
   pendingDir: null,
-  ring: {
+  nodeBindings: {
     ...NODES,
     currentNode: 0
-  } as RingState
+  } as NodeBindings
 } satisfies CarouselBinding
 
 export const useCarouselStore = (id: string) => {

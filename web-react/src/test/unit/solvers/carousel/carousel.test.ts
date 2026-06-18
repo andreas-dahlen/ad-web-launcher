@@ -37,7 +37,7 @@ describe('[CAROUSELSOLVER]', () => {
         desc: {
           base: createBaseWithAxis1D({ axis: 'vertical' }),
           data: createCarouselData({
-            index: 3,
+            currentScene: 3,
             lockSwipeAt: { prev: 1, next: 3 },
           })
         }
@@ -54,7 +54,7 @@ describe('[CAROUSELSOLVER]', () => {
         },
         desc: {
           data: createCarouselData({
-            index: 1,
+            currentScene: 1,
             lockSwipeAt: { prev: 1, next: 3 },
           })
         }
@@ -127,7 +127,7 @@ describe('[CAROUSELSOLVER]', () => {
         desc: {
           base: createBaseWithAxis1D({ axis: "vertical" }),
           data: createCarouselData({
-            index: 1,
+            currentScene: 1,
             lockSwipeAt: { prev: 1, next: 3 },
           })
         },
@@ -143,7 +143,7 @@ describe('[CAROUSELSOLVER]', () => {
         },
         desc: {
           data: createCarouselData({
-            index: 3,
+            currentScene: 3,
             lockSwipeAt: { prev: 1, next: 3 },
           })
         }
@@ -160,7 +160,7 @@ describe('[CAROUSELSOLVER]', () => {
         },
         desc: {
           data: createCarouselData({
-            index: 3,
+            currentScene: 3,
             lockSwipeAt: { prev: 1, next: 3 },
           })
         }

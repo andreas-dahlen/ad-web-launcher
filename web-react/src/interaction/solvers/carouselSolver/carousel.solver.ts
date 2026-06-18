@@ -22,7 +22,7 @@ export const carouselSolver: CarouselSolver = {
     const gated = exceedsCrossRange(norm)
 
     const locked = desc.data.lockSwipeAt
-      ? carouselUtils.isLocked(norm.mainDelta, desc.data?.index, desc.data?.lockSwipeAt)
+      ? carouselUtils.isLocked(norm.mainDelta, desc.data?.currentScene, desc.data?.lockSwipeAt)
       : false
 
     if (gated || locked) return null
@@ -40,7 +40,7 @@ export const carouselSolver: CarouselSolver = {
     const gated = exceedsCrossRange(norm)
 
     const locked = desc.data.lockSwipeAt
-      ? carouselUtils.isLocked(norm.mainDelta, desc.data.index, desc.data.lockSwipeAt)
+      ? carouselUtils.isLocked(norm.mainDelta, desc.data.currentScene, desc.data.lockSwipeAt)
       : false
 
     if (gated || locked) return { route: "revert" }
