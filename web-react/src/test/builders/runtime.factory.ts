@@ -1,4 +1,4 @@
-import type { RuntimePress, RuntimePressRelease, RuntimeSwipe, RuntimeCommit, RuntimeStart } from '@interaction/types/runtime.types';
+import type { RuntimePress, RuntimePressRelease, RuntimeSwipe, RuntimeCommit, RuntimeStart } from '@interaction/types/runtimeStuff.types';
 import { merge } from '@test/utils/factory.utils';
 import { event_DEFAULT } from '@test/fixtures/runtimeEvents.fixture';
 

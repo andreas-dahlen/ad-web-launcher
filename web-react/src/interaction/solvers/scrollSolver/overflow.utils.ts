@@ -1,7 +1,7 @@
 import { vector } from '@interaction/solvers/utils/vector.utils'
 import type { ScrollData } from '@interaction/types/data.types'
 import type { ScrollComputed } from '@interaction/types/computed.types'
-import type { RuntimeStart } from '@interaction/types/runtime.types'
+import type { RuntimeStart } from '@interaction/types/runtimeStuff.types'
 import { type Axis1D } from '@typing/core.types'
 import type { BaseWithAxis1D, LayoutData } from '@interaction/types/base.types'
 

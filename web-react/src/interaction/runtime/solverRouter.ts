@@ -5,7 +5,7 @@ import { sliderSolver } from '@interaction/solvers/sliderSolver/slider.solver';
 import type { CarouselAction, DragAction, RouterPackage, ScrollAction, SliderAction } from '@interaction/types/action.types';
 import type { Computed } from '@interaction/types/computed.types';
 import type { CarouselDesc, DragDesc, ScrollDesc, SliderDesc } from '@interaction/types/descriptor.types';
-import type { Runtime } from '@interaction/types/runtime.types';
+import type { Runtime } from '@interaction/types/runtimeStuff.types';
 import { assertScrollComputed, assertSliderComputed } from '@utils/assersions';
 
 export const router = {

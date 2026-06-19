@@ -2,7 +2,7 @@ import type { FrameSnapshot } from '@interaction/types/base.types'
 import type { ScrollComputed, SliderComputed } from '@interaction/types/computed.types'
 import type { CarouselDesc, DragDesc, ScrollDesc, SliderDesc } from '@interaction/types/descriptor.types'
 import type { Delta, Direction } from '@typing/core.types'
-import type { RuntimePress, RuntimeSwipe, RuntimeCommit, RuntimeStart } from './runtime.types'
+import type { RuntimePress, RuntimeSwipe, RuntimeCommit, RuntimeStart } from './runtimeStuff.types'
 
 type Payload<T> = {
   payload: T
