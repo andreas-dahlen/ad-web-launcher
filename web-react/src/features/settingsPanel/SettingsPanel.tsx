@@ -12,17 +12,8 @@ import SettingsPanelCss from './SettingsPanel.module.css'
 export default function SettingsPanel() {
 
   const {
-    setSettingsPanelOpen,
-    isLayoutEditMode,
-    setLayoutEditMode,
-    isGridEnabled,
-    setGridEnabled,
-    dragSnapX,
-    setDragSnapX,
-    dragSnapY,
-    setDragSnapY,
-    isSnapEnabled,
-    setSnapEnabled
+    update,
+    settings
   } = useSettingsStore()
 
   const [sliderOne, setSliderOne] = useState(0)
@@ -33,41 +24,41 @@ export default function SettingsPanel() {
       <SettingsButton
         id="close-settings"
         className={SettingsPanelCss.close}
-        setValue={() => setSettingsPanelOpen(false)}
+        setValue={() => update("panelOpen", false)}
         ReactImg={exit}
       />
       <div className={SettingsPanelCss.row}>
         <SettingsButton
           id='lock-drag-item'
-          value={isLayoutEditMode}
+          value={settings.dragEnabled}
           setValue={() =>
-            setLayoutEditMode(!isLayoutEditMode)}
+            update("dragEnabled", !settings.dragEnabled)}
           msg={'Drag'}
-          ReactImg={isLayoutEditMode ? unlocked : locked} />
+          ReactImg={settings.dragEnabled ? unlocked : locked} />
 
         <SettingsButton
           id='snap'
-          value={isSnapEnabled}
+          value={settings.snapEnabled}
           setValue={() =>
-            setSnapEnabled(!isSnapEnabled)}
+            update("snapEnabled", !settings.snapEnabled)}
           msg={'Snap'}
           ReactImg={snap} />
 
         <SettingsButton
           id='drag-grid'
-          value={isGridEnabled}
+          value={settings.gridVisible}
           setValue={() =>
-            setGridEnabled(!isGridEnabled)}
+            update("gridVisible", !settings.gridVisible)}
           msg={'Grid'}
           ReactImg={grid} />
 
 
-        <SnapInput id="snapX" min={8} max={18} step={1} value={dragSnapX} enabled={isSnapEnabled} onChange={(v) => {
-          setDragSnapX(v)
+        <SnapInput id="snapX" min={8} max={18} step={1} value={settings.dragSnapX} enabled={settings.snapEnabled} onChange={(v) => {
+          update("dragSnapX", v)
         }} />
 
-        <SnapInput id="snapY" min={16} max={36} step={2} value={dragSnapY} enabled={isSnapEnabled} onChange={(v) => {
-          setDragSnapY(v)
+        <SnapInput id="snapY" min={16} max={36} step={2} value={settings.dragSnapY} enabled={settings.snapEnabled} onChange={(v) => {
+          update("dragSnapY", v)
         }} />
       </div >
 

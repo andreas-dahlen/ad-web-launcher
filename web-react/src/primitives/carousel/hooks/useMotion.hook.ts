@@ -19,7 +19,7 @@ interface UseCarouselMotionProps {
 
 const ROLE_OFFSETS = { prev: -1, current: 0, next: 1 } as const
 
-export function useCarouselMotion({
+export function useMotion({
   store,
   axisSize,
   horizontal,

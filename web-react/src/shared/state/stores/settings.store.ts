@@ -9,76 +9,45 @@ import { persist } from 'zustand/middleware'
 ------------------------------------------------- */
 
 type ReactiveSettings = {
-  isSettingsPanelOpen: boolean
-  isLayoutEditMode: boolean
-  isGridEnabled: boolean
-  isSnapEnabled: boolean
+  //ui
+  layoutManagerEnabled: boolean
+  panelOpen: boolean
+  //editing
+  dragEnabled: boolean
+  gridVisible: boolean
+  snapEnabled: boolean
+
   dragSnapX: number
   dragSnapY: number
 }
 
 export type SettingsStore = {
   settings: ReactiveSettings
-  setSettingsPanelOpen: (value: boolean) => void
-  setLayoutEditMode: (value: boolean) => void
-  setGridEnabled: (value: boolean) => void
-  setSnapEnabled: (value: boolean) => void
-  setDragSnapX: (value: number) => void
-  setDragSnapY: (value: number) => void
-  get: () => unknown
+  update: <K extends keyof ReactiveSettings>(key: K, value: ReactiveSettings[K]) => void
 }
 
 export const settingsStore = create<SettingsStore>()(
   persist(
-    immer((set, get) => ({
+    immer((set) => ({
 
       settings: {
-        isSettingsPanelOpen: false,
-        isLayoutEditMode: false,
+        layoutManagerEnabled: false,
+        panelOpen: false,
         //drag specifics
-        isGridEnabled: false,
-        isSnapEnabled: true,
+        dragEnabled: false,
+        gridVisible: false,
+        snapEnabled: true,
         dragSnapX: 8,
         dragSnapY: 16
       },
 
-      setSettingsPanelOpen: (value) => {
-        set(s => {
-          s.settings.isSettingsPanelOpen = value
+      update: (key, value) => {
+        set((s) => {
+          s.settings[key] = value
         })
       },
 
-      setLayoutEditMode: (value) => {
-        set(s => {
-          s.settings.isLayoutEditMode = value
-        })
-      },
-      setGridEnabled: (value) => {
-        set(s => {
-          s.settings.isGridEnabled = value
-        })
-      },
 
-      setSnapEnabled: (value) => {
-        set(s => {
-          s.settings.isSnapEnabled = value
-        })
-      },
-
-      setDragSnapX: (value) => {
-        set(s => {
-          s.settings.dragSnapX = value
-        })
-      },
-      setDragSnapY: (value) => {
-        set(s => {
-          s.settings.dragSnapY = value
-        })
-      },
-
-      get: () => {
-        return get().settings
-      }
     })),
     { name: 'settings' }
   )

@@ -3,9 +3,9 @@ import { useSettingsStore } from '@hooks/useSettingsStore.hook'
 
 
 export default function Mid2() {
-  const { isSettingsPanelOpen, setSettingsPanelOpen } = useSettingsStore()
+  const { settings, update } = useSettingsStore()
   const setValue = () => {
-    setSettingsPanelOpen(!isSettingsPanelOpen)
+    update("panelOpen", !settings.panelOpen)
   }
 
   return (

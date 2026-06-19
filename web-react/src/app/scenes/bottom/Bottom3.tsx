@@ -4,9 +4,9 @@ import { useSettingsStore } from '@hooks/useSettingsStore.hook';
 
 export default function Bottom3() {
 
-  const { isSettingsPanelOpen, setSettingsPanelOpen } = useSettingsStore()
+  const { update, settings } = useSettingsStore()
   const setValue = () => {
-    setSettingsPanelOpen(!isSettingsPanelOpen)
+    update("panelOpen", !settings.panelOpen)
   }
 
   return (

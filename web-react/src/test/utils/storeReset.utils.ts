@@ -16,11 +16,12 @@ export function resetInteractionStores() {
   wallpaperStore.setState({ wallpapers: [], pool: [] })
   settingsStore.setState({
     settings: {
-      isSettingsPanelOpen: false,
-      isLayoutEditMode: false,
+      layoutManagerEnabled: false,
+      panelOpen: false,
+      dragEnabled: false,
       //drag specifics
-      isGridEnabled: false,
-      isSnapEnabled: false,
+      gridVisible: false,
+      snapEnabled: false,
       dragSnapX: 8,
       dragSnapY: 16
     }

@@ -24,7 +24,7 @@ export default function Drag({
 
   // ── Fully subscribe to the drag store─────────────────────────────
   const { settledOffset, liveOffset, dragging, layout, frameRect } = useDragStore(id)
-  const { dragSnapX, dragSnapY, isSnapEnabled } = useSettingsStore()
+  const { settings } = useSettingsStore()
 
   // ── DOM references & sizing ─────────────────────────────
   const containerRef = useRef<HTMLDivElement>(null)
@@ -51,8 +51,8 @@ export default function Drag({
     dragging
   })
 
-  const resolvedSnapX = isSnapEnabled && useSettingsSnap ? dragSnapX : snapX
-  const resolvedSnapY = isSnapEnabled && useSettingsSnap ? dragSnapY : snapY
+  const resolvedSnapX = settings.snapEnabled && useSettingsSnap ? settings.dragSnapX : snapX
+  const resolvedSnapY = settings.snapEnabled && useSettingsSnap ? settings.dragSnapY : snapY
 
   return (
     <>

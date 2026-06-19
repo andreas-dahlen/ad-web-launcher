@@ -10,15 +10,15 @@ export default function DragFrame({
   onSwipeCommit,
 }: DragFrameProps) {
 
-  const { isLayoutEditMode, isSnapEnabled } = useSettingsStore()
+  const { settings } = useSettingsStore()
 
   return (
 
     <Drag
       id={`${id}-frame`}
       className={className}
-      useSettingsSnap={isSnapEnabled}
-      interactive={isLayoutEditMode}
+      useSettingsSnap={settings.snapEnabled}
+      interactive={settings.dragEnabled}
       onSwipeCommit={onSwipeCommit}
       dragDataAttrs={dragDataAttrs}
     >

@@ -10,17 +10,17 @@ function snapPositions(count: number) {
 }
 
 export default function DragGrid() {
-  const { dragSnapX, dragSnapY, isGridEnabled } = useSettingsStore()
+  const { settings } = useSettingsStore()
 
   const { activeGesture } = useGestureStore()
 
   const shouldRender =
-    isGridEnabled || activeGesture === 'drag'
+    settings.gridVisible || activeGesture === 'drag'
 
   if (!shouldRender) return null
 
-  const xPositions = snapPositions(dragSnapX)
-  const yPositions = snapPositions(dragSnapY)
+  const xPositions = snapPositions(settings.dragSnapX)
+  const yPositions = snapPositions(settings.dragSnapY)
 
   return (
     <div className={DragGridCss.grid} style={{ zIndex: Z.dragGrid }}>

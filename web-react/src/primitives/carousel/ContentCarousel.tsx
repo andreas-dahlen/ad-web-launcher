@@ -1,7 +1,5 @@
 import { useRef, useEffect } from "react"
-import { usePointerBridge } from '@hooks/usePointerBridge.hook.ts'
 import { useMotion } from "./hooks/useMotion.hook.ts"
-import { useCarouselSizing } from "./hooks/useCarouselSizing.hook.ts"
 import { useCarouselStore } from './store/useCarouselStore.hook.ts'
 import { carouselStore, type NodeId } from './store/carousel.store.ts'
 import { SceneContext } from './hooks/useSceneContext.hook.ts'
@@ -10,6 +8,7 @@ import clsx from 'clsx'
 import { dasx } from '../../shared/utils/dataAttrs.ts'
 import type { CarouselProps } from '@primitives/prim.types.ts'
 import type { SceneRole } from '@typing/core.types.ts'
+import { useItemSizing } from '@primitives/carousel/hooks/useItemSizing.hook.ts'
 
 
 
@@ -19,50 +18,29 @@ function deriveRole(nodeId: NodeId, currentNode: NodeId): SceneRole {
   return 'prev'
 }
 
-export default function Carousel({
+export default function ContentCarousel({
   id,
   axis,
   scenes,
-  sceneCount,
-  lockPrevAt,
-  lockNextAt,
-  onSwipeCommit,
-  carouselDataAttrs,
-  interactive = true
+  carouselDataAttrs
 }: CarouselProps) {
 
   // ── Fully subscribe to the carousel store ────────────────────────────────────────
-  const { settling, liveOffset, dragging, layout, nodeBindings } = useCarouselStore(id)
+  const { settling, liveOffset, dragging, layout, count, nodeBindings } = useCarouselStore(id)
 
   // ── Initialize count for mirror scenes ────────────────────────────────────────
 
 
   useEffect(() => {
-    if (!interactive && scenes?.length)
-      carouselStore.getState().setCount(id, scenes.length ?? sceneCount)
-  }, [id, scenes?.length, interactive, sceneCount])
+    if (scenes?.length)
+      carouselStore.getState().setCount(id, scenes.length ?? count)
+  }, [id, scenes?.length, count])
 
   // ── DOM reference & lane size ──────────────────────────────────────
-  const containerRef = useRef<HTMLDivElement>(null)
   const itemRef = useRef<HTMLDivElement>(null)
-  useCarouselSizing({ elRef: containerRef, sceneRef: itemRef, id })
+  useItemSizing({ itemRef: itemRef, id })
 
   const axisSize = axis === "horizontal" ? layout.containerSize.width : layout.containerSize.height
-
-  // ── Pointer forwarding for gestures ──────────────────────────────────────
-  usePointerBridge({
-    elRef: containerRef,
-    disabled: !interactive,
-    onReaction: (reaction) => {
-      if (reaction.detail === 'swipeCommit' && onSwipeCommit) {
-        onSwipeCommit(reaction.detail)
-      }
-    }
-  })
-
-  // // ── Augmented scenes & stable slot management ───────────────────────────────────────────────
-  // const augmentedScenes = useAugmentedScenes(scenes ?? [], count)
-
 
   // ── Carousel motion  ───────────────────────────────────────────────
   const {
@@ -78,19 +56,15 @@ export default function Carousel({
   return (
     <div
       className={carouselCss.carousel}
-      style={{ pointerEvents: interactive ? "auto" : "none" }}
-      ref={containerRef}
+      style={{ pointerEvents: "none" }}
       {...dasx({
         id,
         type: "carousel",
         axis,
-        frame: "carousel",
-        lockNextAt,
-        lockPrevAt,
         ...carouselDataAttrs
       })}
     >
-      {!interactive && nodeBindings && nodeBindings.nodes.map((node) => {
+      {nodeBindings && nodeBindings.nodes.map((node) => {
         const role = deriveRole(node.nodeId, nodeBindings.currentNode)
         const Scene = scenes ? scenes[node.sceneIdx] : undefined
         return (
@@ -108,8 +82,6 @@ export default function Carousel({
           </div>
         )
       })}
-      {interactive && <div className={carouselCss.scene}> </div>
-      }
     </div>
   )
 }

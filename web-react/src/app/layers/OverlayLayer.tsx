@@ -6,11 +6,11 @@ import layerCss from './Layers.module.css'
 /** LAYER 3/3! */
 export default function OverlayLayer() {
 
-  const { isSettingsPanelOpen } = useSettingsStore()
+  const { settings } = useSettingsStore()
   return (
     <>
       <div className={layerCss.layer} style={{ zIndex: Z.overlay }}>
-        {isSettingsPanelOpen ? <SettingsPanel /> : ''}
+        {settings.panelOpen ? <SettingsPanel /> : ''}
 
 
         <Scroll

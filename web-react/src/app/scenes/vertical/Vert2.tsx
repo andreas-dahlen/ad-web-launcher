@@ -3,13 +3,13 @@ import { useSettingsStore } from '@hooks/useSettingsStore.hook';
 
 export default function Vert2() {
 
-  const { isLayoutEditMode } = useSettingsStore()
+  const { settings } = useSettingsStore()
 
   return (
     <div>
       <Drag
         id='wp2-drag-with-lock'
-        interactive={isLayoutEditMode}
+        interactive={settings.dragEnabled}
       >
         <p>lockbtn</p>
       </Drag>

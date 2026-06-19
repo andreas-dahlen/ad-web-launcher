@@ -1,8 +1,8 @@
-import Carousel from '../../primitives/carousel/Carousel.tsx'
 import DragGrid from '@features/dragGrid/DragGrid.tsx'
 import { Z } from '@config/zIndex.ts'
 import { contentComp } from '../compositions/laneComps.ts'
 import layerCss from './Layers.module.css'
+import ContentCarousel from '@primitives/carousel/ContentCarousel.tsx'
 /** LAYER 2/3! Interactive=false carousel. Contents are mounted inside!
  * The carousel swipes are handled by baseLayer. */
 export default function ContentLayer() {
@@ -10,7 +10,7 @@ export default function ContentLayer() {
     <div className={layerCss.layer} style={{ zIndex: Z.content }}>
       {contentComp.map(comp => {
         const oneCarousel = (
-          < Carousel
+          < ContentCarousel
             {...comp}
             key={`${comp.id}-carousel`}
           />

@@ -15,20 +15,20 @@ export default function DragButton({
   onPressRelease,
 }: DragButtonProps) {
 
-  const { isLayoutEditMode, isSnapEnabled } = useSettingsStore()
+  const { settings } = useSettingsStore()
 
   return (
 
     <Drag
       id={`${id}-drag`}
-      useSettingsSnap={isSnapEnabled}
-      interactive={isLayoutEditMode}
+      useSettingsSnap={settings.snapEnabled}
+      interactive={settings.dragEnabled}
       onSwipeCommit={onSwipeCommit}
       dragDataAttrs={dragDataAttrs}
     >
       <Button
         id={`${id}-button`}
-        interactive={!isLayoutEditMode}
+        interactive={!settings.dragEnabled}
         className={className}
         action={action}
         onPressRelease={onPressRelease}

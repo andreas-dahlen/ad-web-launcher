@@ -1,6 +1,6 @@
 import { immer } from "zustand/middleware/immer"
 import { create } from 'zustand'
-import type { Direction } from '../../../shared/typing/core.types'
+import type { Direction, Size2D } from '../../../shared/typing/core.types'
 import type { StoreLayout } from '@typing/store.types'
 import type { CarouselAction } from '@interaction/types/action.types'
 import { assertNever } from '@utils/assersions'
@@ -42,6 +42,10 @@ export type CarouselStore = {
   setCount: (id: string, count: number) => void
 
   setLayout: (id: string, packet: StoreLayout) => void
+
+  setContainerSize: (id: string, size: Size2D) => void
+
+  setItemSize: (id: string, size: Size2D) => void
 
   getCurrentScene: (id: string) => number | undefined
 
@@ -90,6 +94,24 @@ export const carouselStore = create<CarouselStore>()(
           itemSize: packet.itemSize,
         }
       })
+    }, //TODO delete this function
+
+
+
+    setContainerSize(id, size) {
+      set(state => {
+        const s = state.bindings[id]
+        if (!s) return
+        s.layout.itemSize = size
+      })
+    },
+    setItemSize(id, size) {
+      set(state => {
+        const s = state.bindings[id]
+        if (!s) return
+        s.layout.containerSize = size
+
+      })
     },
 
     getCurrentScene(id) {
@@ -137,6 +159,7 @@ export const carouselStore = create<CarouselStore>()(
 
             //cleanup safety
             if (s.pendingDir !== null) {
+              console.warn("technically pendingDir cleanup should never happen")
               // applyCommit(s)
               s.liveOffset = 0
               s.pendingDir = null

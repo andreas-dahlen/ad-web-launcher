@@ -19,7 +19,7 @@ import Wp3 from '@app/scenes/wallpapers/Wp3'
 
 const top = [Top1, Top2, Top3]
 
-const mid = [Mid1, Mid2, Mid3]
+const mid = [Mid1, Mid2, Mid3, Bottom1, Bottom2, Bottom3]
 
 const bottom = [Bottom1, Bottom2, Bottom3]
 
