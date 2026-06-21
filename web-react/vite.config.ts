@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
-import { viteSingleFile } from 'vite-plugin-singleFile'
+import { viteSingleFile } from 'vite-plugin-singlefile'
 import path from 'path'
 import svgr from "vite-plugin-svgr";
 

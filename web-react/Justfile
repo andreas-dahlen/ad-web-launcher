@@ -1,0 +1,40 @@
+install:
+  npm install
+
+dev:
+  npm run dev
+
+test:
+  npm run test
+
+test-file file:
+  npm run test {{file}}
+
+lint:
+ npm run lint
+
+build:
+  tsc -b
+  vite build
+  node scripts/deploy.js
+
+build-prod:
+  vite build --mode production
+  node scripts/deploy.js
+
+preview:
+  npm run preview
+
+help:
+  @echo ""
+  @echo "==================== COMMAND SURFACE ===================="
+  @echo ""
+
+  @echo "[JUST] orchestration layer"
+  @echo "→ just"
+  @just --list
+
+  @echo ""
+  @echo "[NPM] legacy script layer"
+  @echo "→ npm run"
+  @npm pkg get scripts
