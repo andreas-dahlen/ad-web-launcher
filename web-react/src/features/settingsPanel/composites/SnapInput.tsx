@@ -1,6 +1,6 @@
 import Button from '@primitives/button/Button'
 import { useState } from 'react'
-import compositeCss from './Composites.module.css'
+import css from './Composites.module.css'
 
 interface SnapInput {
   value: number
@@ -29,16 +29,16 @@ export default function SnapInput(pr: SnapInput) {
   }
 
   return (
-    <div className={compositeCss.panel}>
+    <div className={css.panel}>
       <span>{pr.value}</span>
-      <div className={compositeCss.wrapper}>
-        <Button className={compositeCss.button} id={`more-${pr.id}`}
+      <div className={css.wrapper}>
+        <Button className={css.button} id={`more-${pr.id}`}
           onPressRelease={() => handleChange(true)}
           buttonDataAttrs={{ 'enabled': moreEnabled }}
           interactive={moreEnabled}
         >▲</Button>
 
-        <Button className={compositeCss.button} id={`less-${pr.id}`}
+        <Button className={css.button} id={`less-${pr.id}`}
           onPressRelease={() => handleChange(false)}
           buttonDataAttrs={{ 'enabled': lessEnabled }}
           interactive={lessEnabled}

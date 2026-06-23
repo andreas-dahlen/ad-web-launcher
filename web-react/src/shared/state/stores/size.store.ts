@@ -1,7 +1,6 @@
-import { log } from '../../test/functions.debug'
+import { log } from '../../../test/functions.debug'
 import { immer } from 'zustand/middleware/immer'
 import { create } from 'zustand'
-import { useShallow } from 'zustand/shallow'
 import { APP_CONFIG } from '@config/app.config'
 
 /* -------------------------
@@ -113,14 +112,4 @@ function computeScale(dev: Device, vw: number, vh: number) {
  */
 export function normalizeParameter(parameter: number) {
   return sizeStore.getState().normalizeParameter(parameter)
-}
-
-//for react components
-export const useSize = () => {
-  return sizeStore(
-    useShallow(s => ({
-      scale: s.scale,
-      device: s.device
-    }))
-  )
 }

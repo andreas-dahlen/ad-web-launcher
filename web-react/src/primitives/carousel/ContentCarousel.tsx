@@ -3,10 +3,10 @@ import { useMotion } from "./hooks/useMotion.hook.ts"
 import { useCarouselStore } from './store/useCarouselStore.hook.ts'
 import { carouselStore, type NodeId } from './store/carousel.store.ts'
 import { SceneContext } from './hooks/useSceneContext.hook.ts'
-import carouselCss from './Carousel.module.css'
+import css from './Carousel.module.css'
 import clsx from 'clsx'
 import { dasx } from '../../shared/utils/dataAttrs.ts'
-import type { CarouselProps } from '@primitives/prim.types.ts'
+import type { ContentCarouselProps } from '@primitives/prim.types.ts'
 import type { SceneRole } from '@typing/core.types.ts'
 import { useItemSizing } from '@primitives/carousel/hooks/useItemSizing.hook.ts'
 
@@ -23,7 +23,7 @@ export default function ContentCarousel({
   axis,
   scenes,
   carouselDataAttrs
-}: CarouselProps) {
+}: ContentCarouselProps) {
 
   // ── Fully subscribe to the carousel store ────────────────────────────────────────
   const { settling, liveOffset, dragging, layout, count, nodeBindings } = useCarouselStore(id)
@@ -55,7 +55,7 @@ export default function ContentCarousel({
 
   return (
     <div
-      className={carouselCss.carousel}
+      className={css.carousel}
       style={{ pointerEvents: "none" }}
       {...dasx({
         id,
@@ -71,13 +71,13 @@ export default function ContentCarousel({
           <div
             key={node.nodeId}
             ref={itemRef}
-            className={clsx(carouselCss.scene)}
+            className={clsx(css.scene)}
             style={styleForRole(role)}
             data-role={role}
             onTransitionEnd={onTransitionEnd}
           >
             <SceneContext.Provider value={{ sceneIdx: node.sceneIdx, carouselId: id }}>
-              {Scene && <Scene />}
+              {Scene}
             </SceneContext.Provider>
           </div>
         )

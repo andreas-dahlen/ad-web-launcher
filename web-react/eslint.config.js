@@ -157,6 +157,7 @@ export default defineConfig([
               { to: { type: 'primitives' } },
               { to: { type: 'composites' } },
               { to: { type: 'features' } },
+              { to: { type: 'app-scenes' } },
             ]
           },
           // app (compositions catchall) — only gets the * implicit rules

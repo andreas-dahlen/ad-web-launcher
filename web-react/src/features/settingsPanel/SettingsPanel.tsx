@@ -1,63 +1,118 @@
 import { useState } from 'react';
-import locked from '@assets/locked.svg?react'
-import unlocked from '@assets/unlocked.svg?react'
+import Bomb from '@assets/bomb.svg?react'
+import managerH from '@assets/horizontalmanager.svg?react'
+import managerInactiveH from '@assets/horizontalmanagerinactive.svg?react'
+import managerV from '@assets/verticalmanager.svg?react'
+import managerInactiveV from '@assets/verticalmanagerinactive.svg?react'
+import dragUnlocked from '@assets/dragunlocked.svg?react'
+import dragLocked from '@assets/draglocked.svg?react'
 import grid from '@assets/grid.svg?react'
 import snap from '@assets/snap.svg?react'
 import exit from '@assets/exit.svg?react'
-import { useSettingsStore } from '@hooks/useSettingsStore.hook.ts';
 import SettingsButton from './composites/SettingsButton.tsx';
 import Slider from '../../primitives/slider/Slider.tsx';
 import SnapInput from './composites/SnapInput.tsx';
-import SettingsPanelCss from './SettingsPanel.module.css'
+import Button from '@primitives/button/Button.tsx';
+import css from './SettingsPanel.module.css'
+import { layout_DEFAULTS } from '@app/compositions/dataGenerator.ts';
+import clsx from 'clsx';
+import { alertStore } from '@stores/alert.store.ts';
+import { settingsStore } from '@stores/settings.store.ts';
+import { layoutStore } from '@app/compositions/layout.store.ts';
 export default function SettingsPanel() {
 
-  const {
-    update,
-    settings
-  } = useSettingsStore()
+  const layoutManagerH = settingsStore(s => s.settings.layoutManagerH)
+  const layoutManagerV = settingsStore(s => s.settings.layoutManagerV)
+  const dragEnabled = settingsStore(s => s.settings.dragEnabled)
+  const snapEnabled = settingsStore(s => s.settings.snapEnabled)
+  const gridVisible = settingsStore(s => s.settings.gridVisible)
+  const dragSnapX = settingsStore(s => s.settings.dragSnapX)
+  const dragSnapY = settingsStore(s => s.settings.dragSnapY)
+
+  const update = settingsStore.getState().update
+
+  const override = layoutStore.getState().overrideToDefaults
 
   const [sliderOne, setSliderOne] = useState(0)
   const [sliderTwo, setSliderTwo] = useState(0)
   return (
-    <div className={SettingsPanelCss.panel}>
+    <div className={css.panel}>
 
       <SettingsButton
         id="close-settings"
-        className={SettingsPanelCss.close}
+        className={css.close}
         setValue={() => update("panelOpen", false)}
         ReactImg={exit}
       />
-      <div className={SettingsPanelCss.row}>
+      <div className={css.row}>
+        <SettingsButton
+          id='enableManagerhorizontal'
+          value={layoutManagerH}
+          setValue={() => {
+            update("layoutManagerH", !layoutManagerH)
+            if (!layoutManagerH) update("layoutManagerV", false)
+          }}
+          msg={"horizontal config"}
+          ReactImg={layoutManagerH ? managerH : managerInactiveH}
+        />
+
+        <SettingsButton
+          id='enableManagervertical'
+          value={layoutManagerV}
+          setValue={() => {
+            update("layoutManagerV", !layoutManagerV)
+            if (!layoutManagerV) update("layoutManagerH", false)
+          }}
+          msg={"vertical config"}
+          ReactImg={layoutManagerV ? managerV : managerInactiveV}
+        />
+        <Button
+          id="override"
+          onPressRelease={() => {
+            alertStore.getState().show({
+              message: "Reset all layout settings?",
+              onConfirm: () => override(layout_DEFAULTS),
+              onCancel: () => console.log("Cancelled"),
+            })
+          }}
+        >
+          <Bomb className={clsx(css.svg, css.red)} />
+        </Button>
+
+      </div>
+
+
+      <div className={css.row}>
         <SettingsButton
           id='lock-drag-item'
-          value={settings.dragEnabled}
+          value={dragEnabled}
           setValue={() =>
-            update("dragEnabled", !settings.dragEnabled)}
+            update("dragEnabled", !dragEnabled)}
           msg={'Drag'}
-          ReactImg={settings.dragEnabled ? unlocked : locked} />
+          ReactImg={dragEnabled ? dragUnlocked : dragLocked} />
 
         <SettingsButton
           id='snap'
-          value={settings.snapEnabled}
+          value={snapEnabled}
           setValue={() =>
-            update("snapEnabled", !settings.snapEnabled)}
+            update("snapEnabled", !snapEnabled)}
           msg={'Snap'}
           ReactImg={snap} />
 
         <SettingsButton
           id='drag-grid'
-          value={settings.gridVisible}
+          value={gridVisible}
           setValue={() =>
-            update("gridVisible", !settings.gridVisible)}
+            update("gridVisible", !gridVisible)}
           msg={'Grid'}
           ReactImg={grid} />
 
 
-        <SnapInput id="snapX" min={8} max={18} step={1} value={settings.dragSnapX} enabled={settings.snapEnabled} onChange={(v) => {
+        <SnapInput id="snapX" min={8} max={18} step={1} value={dragSnapX} enabled={snapEnabled} onChange={(v) => {
           update("dragSnapX", v)
         }} />
 
-        <SnapInput id="snapY" min={16} max={36} step={2} value={settings.dragSnapY} enabled={settings.snapEnabled} onChange={(v) => {
+        <SnapInput id="snapY" min={16} max={36} step={2} value={dragSnapY} enabled={snapEnabled} onChange={(v) => {
           update("dragSnapY", v)
         }} />
       </div >

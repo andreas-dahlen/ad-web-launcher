@@ -23,3 +23,8 @@
   border: 1px solid black;
   overflow: hidden;
 }
+
+.hotpink {
+  --button-col: hotPink;
+  background: hotpink;
+}

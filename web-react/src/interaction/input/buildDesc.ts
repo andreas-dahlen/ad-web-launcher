@@ -7,7 +7,7 @@ import type { BaseInteraction, DomMeta, Capabilities, BaseWithSwipe, LayoutData 
 import type { CarouselData, DragData, ScrollData, SliderData } from '../types/data.types.ts'
 import type { CarouselDesc, SliderDesc, DragDesc, ButtonDesc, ScrollDesc } from '../types/descriptor.types.ts'
 import type { Descriptor } from '../types/descriptor.types.ts'
-import { sizeStore } from '../../shared/stores/size.store.ts'
+import { sizeStore } from '../../shared/state/stores/size.store.ts'
 
 interface Builder {
   capabilities: Capabilities

@@ -1,6 +1,6 @@
 import Drag from '../primitives/drag/Drag'
 import type { DragFrameProps } from '@composites/comp.types'
-import { useSettingsStore } from '@hooks/useSettingsStore.hook'
+import { settingsStore } from '@stores/settings.store'
 
 export default function DragFrame({
   id,
@@ -10,15 +10,17 @@ export default function DragFrame({
   onSwipeCommit,
 }: DragFrameProps) {
 
-  const { settings } = useSettingsStore()
+
+  const snapEnabled = settingsStore(s => s.settings.snapEnabled)
+  const dragEnabled = settingsStore(s => s.settings.dragEnabled)
 
   return (
 
     <Drag
       id={`${id}-frame`}
       className={className}
-      useSettingsSnap={settings.snapEnabled}
-      interactive={settings.dragEnabled}
+      useSettingsSnap={snapEnabled}
+      interactive={dragEnabled}
       onSwipeCommit={onSwipeCommit}
       dragDataAttrs={dragDataAttrs}
     >

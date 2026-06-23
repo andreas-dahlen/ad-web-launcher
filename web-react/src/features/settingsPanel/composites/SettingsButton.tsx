@@ -1,5 +1,5 @@
 import Button from '@primitives/button/Button';
-import compositeCss from './Composites.module.css'
+import css from './Composites.module.css'
 import clsx from 'clsx';
 
 type SettingsButtonProps = {
@@ -23,12 +23,12 @@ export default function SettingsButton({
 ) {
 
   return (
-    <div className={compositeCss.item}>
+    <div className={css.item}>
 
       <span>{msg}</span>
       <Button
         id={id}
-        className={clsx(compositeCss.button, className)}
+        className={clsx(css.button, className)}
         onPressRelease={setValue}
         interactive={isEnabled}
         buttonDataAttrs={{
@@ -37,9 +37,9 @@ export default function SettingsButton({
           'state': 'released'
         }}
       >
-        <ReactImg className={clsx(compositeCss.svg,
-          value === undefined && compositeCss.default,
-          value ? compositeCss.dark : compositeCss.bright)}
+        <ReactImg className={clsx(css.svg,
+          value === undefined && css.default,
+          value ? css.dark : css.bright)}
         />
       </Button>
     </div>

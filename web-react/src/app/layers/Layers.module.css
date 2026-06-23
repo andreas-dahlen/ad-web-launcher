@@ -1,3 +1,11 @@
+.forvertical {
+  flex-direction: row;
+}
+
+.forhorizontal {
+  flex-direction: column;
+}
+
 .layer {
   position: absolute;
   inset: 0;
@@ -5,5 +13,4 @@
   height: 100%;
   pointer-events: none;
   display: flex;
-  flex-direction: column;
 }

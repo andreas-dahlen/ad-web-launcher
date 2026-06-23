@@ -1,7 +1,7 @@
 import { useRef } from "react"
 import { usePointerBridge } from '@hooks/usePointerBridge.hook'
 
-import buttonCss from './Button.module.css'
+import css from './Button.module.css'
 import clsx from 'clsx'
 import { dasx } from '@utils/dataAttrs'
 import type { ButtonProps } from '@primitives/prim.types'
@@ -34,7 +34,7 @@ export default function Button({
 
   return (
     <div
-      className={clsx(buttonCss.button, className)}
+      className={clsx(css.button, className)}
       style={{ pointerEvents: interactive ? "auto" : "none" }}
       ref={buttonRef}
       {...dasx({

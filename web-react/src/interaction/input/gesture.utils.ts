@@ -1,5 +1,5 @@
 import { APP_CONFIG } from '@config/app.config.ts'
-import { normalizeParameter, sizeStore } from '../../shared/stores/size.store.ts'
+import { normalizeParameter, sizeStore } from '../../shared/state/stores/size.store.ts'
 import type { Vec2 } from '../../shared/typing/core.types.ts'
 import type { Axis } from '../../shared/typing/core.types.ts'
 import type { Descriptor, SwipeableDescriptor } from '../types/descriptor.types.ts'

@@ -1,8 +1,8 @@
 import { useRef } from "react"
 import { usePointerBridge } from '@hooks/usePointerBridge.hook.ts'
-import carouselCss from './Carousel.module.css'
+import css from './Carousel.module.css'
 import { dasx } from '../../shared/utils/dataAttrs.ts'
-import type { CarouselProps } from '@primitives/prim.types.ts'
+import type { InputCarouselProps } from '@primitives/prim.types.ts'
 import { useContainerSizing } from '@primitives/carousel/hooks/useContainerSizing.hook.ts'
 
 export default function InputCarousel({
@@ -10,9 +10,8 @@ export default function InputCarousel({
   axis,
   lockPrevAt,
   lockNextAt,
-  onSwipeCommit,
-  carouselDataAttrs
-}: CarouselProps) {
+  onSwipeCommit
+}: InputCarouselProps) {
 
   // ── DOM reference & lane size ──────────────────────────────────────
   const containerRef = useRef<HTMLDivElement>(null)
@@ -33,7 +32,7 @@ export default function InputCarousel({
 
   return (
     <div
-      className={carouselCss.carousel}
+      className={css.carousel}
       style={{ pointerEvents: "auto" }}
       ref={containerRef}
       {...dasx({
@@ -43,10 +42,10 @@ export default function InputCarousel({
         frame: "carousel",
         lockNextAt,
         lockPrevAt,
-        ...carouselDataAttrs
+        // ...carouselDataAttrs
       })}
     >
-      <div className={carouselCss.scene} />
+      <div className={css.scene} />
     </div>
   )
 }

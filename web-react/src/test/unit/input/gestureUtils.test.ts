@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from 'vitest'
-import { sizeStore } from '../../../shared/stores/size.store'
+import { sizeStore } from '../../../shared/state/stores/size.store'
 import { APP_CONFIG } from '@config/app.config'
 import { gestureUtils } from '@interaction/input/gesture.utils'
 import { testGestureUtils } from '@test/testAPI'

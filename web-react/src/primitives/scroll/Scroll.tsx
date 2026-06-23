@@ -4,7 +4,7 @@ import { useScrollSizing } from './hooks/useScrollSizing.hook.ts'
 import { useScrollStore } from '@primitives/scroll/store/useScrollStore.hook.ts'
 import { useScrollMotion } from './hooks/useScrollMotion.hook.ts'
 import { useOverflowMotion } from './hooks/useOverflowMotion.hook.ts'
-import scrollCss from './Scroll.module.css'
+import css from './Scroll.module.css'
 import clsx from 'clsx'
 import { dasx } from '../../shared/utils/dataAttrs.ts'
 import type { ScrollProps } from '@primitives/prim.types.ts'
@@ -56,14 +56,14 @@ export default function Scroll({
 
   return (
     <div
-      className={scrollCss.container}
+      className={css.container}
       style={onEdgeDir ? overflowStyle : undefined}
       ref={containerRef}
       data-frame="scroll"
     >
 
       <div
-        className={clsx(scrollCss.scroll, className)}
+        className={clsx(css.scroll, className)}
         style={{ ...contentStyle, pointerEvents: interactive ? 'auto' : 'none' }}
         ref={contentRef}
         {...dasx({
@@ -76,7 +76,7 @@ export default function Scroll({
         })}
       >
         {onEdgeDir &&
-          <div className={scrollCss.knob}
+          <div className={css.knob}
             {...dasx({
               type: "scroll",
               id,

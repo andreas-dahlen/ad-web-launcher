@@ -1,8 +1,8 @@
-import { useGestureStore } from '@hooks/useGestureStore.hook'
-import { useSettingsStore } from '@hooks/useSettingsStore.hook'
 import { Z } from '@config/zIndex'
-import DragGridCss from './DragGrid.module.css'
+import css from './DragGrid.module.css'
 import clsx from 'clsx'
+import { gestureStore } from '../../shared/state/stores/gesture.store'
+import { settingsStore } from '@stores/settings.store'
 
 function snapPositions(count: number) {
   if (!count || count <= 0) return []
@@ -10,9 +10,8 @@ function snapPositions(count: number) {
 }
 
 export default function DragGrid() {
-  const { settings } = useSettingsStore()
-
-  const { activeGesture } = useGestureStore()
+  const settings = settingsStore(s => s.settings)
+  const activeGesture = gestureStore(s => s.activeGesture)
 
   const shouldRender =
     settings.gridVisible || activeGesture === 'drag'
@@ -23,12 +22,12 @@ export default function DragGrid() {
   const yPositions = snapPositions(settings.dragSnapY)
 
   return (
-    <div className={DragGridCss.grid} style={{ zIndex: Z.dragGrid }}>
+    <div className={css.grid} style={{ zIndex: Z.dragGrid }}>
       {xPositions.map(n => (
-        <div key={`v-${n}`} className={clsx(DragGridCss.line, DragGridCss.vertical)} style={{ left: `${n}%` }} />
+        <div key={`v-${n}`} className={clsx(css.line, css.vertical)} style={{ left: `${n}%` }} />
       ))}
       {yPositions.map(n => (
-        <div key={`h-${n}`} className={clsx(DragGridCss.line, DragGridCss.horizontal)} style={{ top: `${n}%` }} />
+        <div key={`h-${n}`} className={clsx(css.line, css.horizontal)} style={{ top: `${n}%` }} />
       ))}
     </div>
   )

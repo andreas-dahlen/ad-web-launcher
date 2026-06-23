@@ -1,16 +1,25 @@
 import SettingsPanel from '../../features/settingsPanel/SettingsPanel.js';
-import { useSettingsStore } from '@hooks/useSettingsStore.hook.js';
 import { Z } from '@config/zIndex';
 import Scroll from '../../primitives/scroll/Scroll.js';
-import layerCss from './Layers.module.css'
+import css from './Layers.module.css'
+import Button from '@primitives/button/Button.js';
+import { settingsStore } from '@stores/settings.store.js';
 /** LAYER 3/3! */
 export default function OverlayLayer() {
 
-  const { settings } = useSettingsStore()
+  const panelOpen = settingsStore(s => s.settings.panelOpen)
+  const update = settingsStore.getState().update
+
+
   return (
     <>
-      <div className={layerCss.layer} style={{ zIndex: Z.overlay }}>
-        {settings.panelOpen ? <SettingsPanel /> : ''}
+      <Button
+        id='settings'
+        onPressRelease={() => update("panelOpen", !panelOpen)}>settings</Button>
+
+
+      <div className={css.layer} style={{ zIndex: Z.overlay }}>
+        {panelOpen ? <SettingsPanel /> : ''}
 
 
         <Scroll
@@ -20,14 +29,8 @@ export default function OverlayLayer() {
           isInitialVisible={false}
         >
           <div className='test-frame'></div>
-
         </Scroll>
-
       </div>
-
-
     </>
-
-
   )
 }

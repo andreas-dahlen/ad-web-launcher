@@ -1,7 +1,7 @@
 import Drag from '../primitives/drag/Drag'
 import Button from '../primitives/button/Button'
 import type { DragButtonProps } from '@composites/comp.types'
-import { useSettingsStore } from '@hooks/useSettingsStore.hook'
+import { settingsStore } from '@stores/settings.store'
 
 export default function DragButton({
   id,
@@ -15,20 +15,21 @@ export default function DragButton({
   onPressRelease,
 }: DragButtonProps) {
 
-  const { settings } = useSettingsStore()
+  const snapEnabled = settingsStore(s => s.settings.snapEnabled)
+  const dragEnabled = settingsStore(s => s.settings.dragEnabled)
 
   return (
 
     <Drag
       id={`${id}-drag`}
-      useSettingsSnap={settings.snapEnabled}
-      interactive={settings.dragEnabled}
+      useSettingsSnap={snapEnabled}
+      interactive={dragEnabled}
       onSwipeCommit={onSwipeCommit}
       dragDataAttrs={dragDataAttrs}
     >
       <Button
         id={`${id}-button`}
-        interactive={!settings.dragEnabled}
+        interactive={!dragEnabled}
         className={className}
         action={action}
         onPressRelease={onPressRelease}

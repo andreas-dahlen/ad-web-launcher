@@ -1,5 +1,6 @@
 import type { Axis1D, EventType, OnEdgeDir } from '@typing/core.types'
 import type { BaseProps, DataAttributes } from '@typing/propUtils.types'
+import type React from 'react'
 
 //discriminating unions - capabilities
 export type SnapConfig = //default is false
@@ -29,12 +30,16 @@ export type DragProps = BaseProps & SnapConfig & {
   onSwipeCommit?: (detail: EventType) => void
 }
 
-export type CarouselProps = BaseProps & CarouselSceneProps & {
+export type InputCarouselProps = BaseProps & {
   axis: Axis1D
   lockPrevAt?: number
   lockNextAt?: number
-  carouselDataAttrs?: DataAttributes
   onSwipeCommit?: (detail: EventType) => void
+}
+export type ContentCarouselProps = BaseProps & {
+  axis: Axis1D
+  scenes: React.ReactNode[]
+  carouselDataAttrs?: DataAttributes
 }
 
 export type SliderProps = BaseProps & {

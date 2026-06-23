@@ -3,7 +3,7 @@ import { usePointerBridge } from '@hooks/usePointerBridge.hook.ts'
 import { useSliderSizing } from './hooks/useSliderSizing.hook.ts'
 import { useSliderMotion } from './hooks/useSliderMotion.hook.ts'
 import { useSliderStore } from './store/useSliderStore.hook.ts'
-import sliderCss from './Slider.module.css'
+import css from './Slider.module.css'
 import clsx from 'clsx'
 import { dasx } from '../../shared/utils/dataAttrs.ts'
 import type { SliderProps } from '@primitives/prim.types.ts'
@@ -83,7 +83,7 @@ export default function Slider({
 
   return (
     <div
-      className={clsx(sliderCss.slider, className)}
+      className={clsx(css.slider, className)}
       style={{ pointerEvents: interactive ? 'auto' : 'none' }}
       ref={sliderRef}
       {...dasx({
@@ -96,11 +96,11 @@ export default function Slider({
       })}
     >
       <div
-        className={clsx(sliderCss.track, trackClassName)}>
+        className={clsx(css.track, trackClassName)}>
       </div>
 
       <div
-        className={clsx(sliderCss.thumb, thumbClassName)}
+        className={clsx(css.thumb, thumbClassName)}
         style={{
           ...thumbStyle,
           ...(horizontal ? { left: 0 } : { top: 0 })

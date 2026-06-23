@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import { gestureStore } from '../../../shared/stores/gesture.store'
+import { gestureStore } from '../../../shared/state/stores/gesture.store'
 
 describe("[GESTURESTORE]", () => {
   beforeEach(() => {

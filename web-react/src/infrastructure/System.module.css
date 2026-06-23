@@ -35,13 +35,3 @@
 .fade {
   opacity: 0;
 }
-
-.sceneconfig {
-  position: absolute;
-  width: var(--scene-size);
-  height: var(--scene-size);
-
-  p {
-    color: white;
-  }
-}

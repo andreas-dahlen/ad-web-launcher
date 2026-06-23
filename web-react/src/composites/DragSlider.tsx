@@ -1,7 +1,7 @@
 import Drag from '../primitives/drag/Drag'
 import type { DragSliderProps } from '@composites/comp.types'
-import { useSettingsStore } from '@hooks/useSettingsStore.hook'
 import Slider from '../primitives/slider/Slider'
+import { settingsStore } from '@stores/settings.store'
 
 export default function DragSlider({
   id,
@@ -16,21 +16,23 @@ export default function DragSlider({
   onValueChange
 }: DragSliderProps) {
 
-  const { settings } = useSettingsStore()
+
+  const snapEnabled = settingsStore(s => s.settings.snapEnabled)
+  const dragEnabled = settingsStore(s => s.settings.dragEnabled)
 
   return (
 
     <Drag
       id={`${id}-drag`}
-      useSettingsSnap={settings.snapEnabled}
-      interactive={settings.dragEnabled}
+      useSettingsSnap={snapEnabled}
+      interactive={dragEnabled}
       onSwipeCommit={onSwipeCommit}
       dragDataAttrs={dragDataAttrs}
     >
       <Slider
         id={`${id}-slider`}
         axis={axis}
-        interactive={!settings.dragEnabled}
+        interactive={!dragEnabled}
         className={className}
         trackClassName={trackClassName}
         thumbClassName={thumbClassName}

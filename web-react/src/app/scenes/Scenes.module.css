@@ -1,0 +1,45 @@
+.sceneconfig {
+  position: absolute;
+  width: var(--scene-size);
+  height: var(--scene-size);
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  /* align-items: center; */
+
+  &::before {
+    position: absolute;
+    content: "";
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(45deg, black, white, black, white);
+    opacity: 10%;
+  }
+
+  p {
+    position: absolute;
+    color: white;
+  }
+}
+
+
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.horizontal {
+  flex-direction: row;
+  margin-bottom: 20px;
+}
+
+.vertical {
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.buttonrow {
+  display: flex;
+}

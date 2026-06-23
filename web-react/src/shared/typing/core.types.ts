@@ -6,6 +6,7 @@ export type EventBridgeType = 'down' | 'move' | 'up'
 type LeftOrRight = 'left' | 'right'
 type UpOrDown = 'up' | 'down'
 
+export type PlusMinusOne = 1 | -1
 
 //used for carousel commit
 export type Direction =

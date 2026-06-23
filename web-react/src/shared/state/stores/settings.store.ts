@@ -10,7 +10,8 @@ import { persist } from 'zustand/middleware'
 
 type ReactiveSettings = {
   //ui
-  layoutManagerEnabled: boolean
+  layoutManagerV: boolean
+  layoutManagerH: boolean
   panelOpen: boolean
   //editing
   dragEnabled: boolean
@@ -31,7 +32,8 @@ export const settingsStore = create<SettingsStore>()(
     immer((set) => ({
 
       settings: {
-        layoutManagerEnabled: false,
+        layoutManagerV: false,
+        layoutManagerH: false,
         panelOpen: false,
         //drag specifics
         dragEnabled: false,

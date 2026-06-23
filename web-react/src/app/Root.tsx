@@ -1,13 +1,16 @@
 import ContentLayer from "./layers/ContentLayer.tsx"
 import OverlayLayer from "./layers/OverlayLayer.tsx"
 import BaseLayer from './layers/BaseLayer.tsx'
-import { useGestureStore } from '../shared/state/hooks/useGestureStore.hook.ts'
 import { useLayoutEffect } from 'react'
-import { sizeStore } from '../shared/stores/size.store.ts'
+import { sizeStore } from '../shared/state/stores/size.store.ts'
+import AlertLayer from '@app/layers/AlartLayer.tsx'
+import { gestureStore } from '../shared/state/stores/gesture.store.ts'
 
 export default function Root() {
 
-  const { activeGesture, isLongPress } = useGestureStore()
+  const activeGesture = gestureStore(s => s.activeGesture)
+  const isLongPress = gestureStore(s => s.isLongPress)
+
 
   useLayoutEffect(() => {
     const observer = new ResizeObserver(([entry]) => {
@@ -29,6 +32,7 @@ export default function Root() {
       <BaseLayer />
       <ContentLayer />
       <OverlayLayer />
+      <AlertLayer />
     </div>
   )
 }

@@ -68,3 +68,7 @@
     height: 30px;
   }
 }
+
+.red {
+  fill: rgb(82, 0, 0);
+}

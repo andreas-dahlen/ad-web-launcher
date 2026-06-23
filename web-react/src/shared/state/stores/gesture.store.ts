@@ -1,4 +1,4 @@
-import type { InteractionType } from '../typing/core.types';
+import type { InteractionType } from '../../typing/core.types';
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 
@@ -13,6 +13,8 @@ export type GestureStore = {
 
   activeGesture: InteractionType | 'none'
 
+  isLongPress: boolean
+
   increment: (type: InteractionType, id: number) => void
   decrement: (id: number) => void
   setLongPress: (id: number) => void
@@ -25,6 +27,8 @@ export const gestureStore = create<GestureStore>()(
     gestureNodes: {},
 
     activeGesture: 'none',
+
+    isLongPress: false,
 
     increment: (type, id) => {
       if (get().gestureNodes[id]) return
@@ -45,6 +49,8 @@ export const gestureStore = create<GestureStore>()(
         const remaining = Object.values(state.gestureNodes)
         state.activeGesture =
           remaining[0]?.type ?? 'none'
+
+        state.isLongPress = remaining.some(g => g.isLongPress)
       })
     },
 
@@ -53,8 +59,10 @@ export const gestureStore = create<GestureStore>()(
         const s = state.gestureNodes[id]
         if (!s) return
         s.isLongPress = true
+
+        state.isLongPress = true
       })
-    },
+    }
   })
   )
 )

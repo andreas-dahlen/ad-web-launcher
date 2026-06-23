@@ -1,4 +1,4 @@
-import { useWallpaperStore } from '@hooks/useWallpaperStore.hook'
+import { wallpaperStore } from '@stores/wallpaper.store'
 import type { EventType } from '@typing/core.types'
 
 type RuntimeBindings = {
@@ -6,7 +6,7 @@ type RuntimeBindings = {
 }
 export default function useRuntimeBindings() {
 
-  const { replaceStale } = useWallpaperStore()
+  const replaceStale = wallpaperStore.getState().replaceStale
 
   const runtimeBindings: Record<string, RuntimeBindings> = {
     wallpaper: {

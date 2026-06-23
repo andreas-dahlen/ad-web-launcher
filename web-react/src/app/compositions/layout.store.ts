@@ -1,102 +1,168 @@
+import { createLane, layout_DEFAULTS } from '@app/compositions/dataGenerator'
+import type { Axis1D, PlusMinusOne } from '@typing/core.types'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
 
 export type Scene = {
-  id: string
+  sceneId: string
+  type?: string
   props?: Record<string, unknown>
 }
 
-type Lane = {
-  id: string
+export type Lane = {
+  laneId: string
   axis: "horizontal" | "vertical"
 
-  scenes: Record<string, Scene>
-  sceneOrder: string[]
+  scenes: Record<string, Scene> // keys = sceneId
+  sceneOrder: string[]          // array of sceneIds
 
   lockNextAt?: number
   lockPrevAt?: number
 }
 
 export type LaneSystem = {
-  lanes: Record<string, Lane>
-  laneOrder: string[]
+  lanes: Record<string, Lane> // keys = laneId
+  laneOrder: string[]         // array of laneIds
 }
 
 export type LayoutStore = {
   vertical: LaneSystem
   horizontal: LaneSystem
-  // verticalLanes: Record<string, HorizontalLane>
-  init: (defaults: { vertical: LaneSystem, horizontal: LaneSystem }) => void
-  deleteHorizontal: (id: string) => void
-  addHorizontal: () => void
-  moveHorizontalScene: (id: string, from: number, to: number) => void
+
+  // init: (defaults: { vertical: LaneSystem, horizontal: LaneSystem }) => void
+  overrideToDefaults: (defaults: { vertical: LaneSystem, horizontal: LaneSystem }) => void
+
+  addLane: (axis: Axis1D) => void
+  deleteLane: (axis: Axis1D, laneId: string) => void
+  moveLane: (axis: Axis1D, laneId: string, dir: PlusMinusOne) => void
+
+  addScene: (axis: Axis1D, laneId: string) => void
+  deleteScene: (axis: Axis1D, laneId: string, sceneId: string) => void
+  moveScene: (axis: Axis1D, laneId: string, sceneId: string, dir: PlusMinusOne) => void
 }
-
-
 
 export const layoutStore = create<LayoutStore>()(
   persist(
-    immer((set, get) => ({
+    immer((set) => ({
 
       vertical: { lanes: {}, laneOrder: [] },
       horizontal: { lanes: {}, laneOrder: [] },
 
-      init: (defaults) => {
+      // init: (defaults) => {
+      //   set(s => {
+      //     s.vertical = defaults.vertical
+      //     s.horizontal = defaults.horizontal
+      //   })
+      // },
 
-        const hasAny =
-          Object.keys(get().vertical.lanes).length > 0 ||
-          Object.keys(get().horizontal.lanes).length > 0
-
-        if (hasAny) return
-
+      overrideToDefaults: (defaults) => {
         set(s => {
           s.vertical = defaults.vertical
           s.horizontal = defaults.horizontal
         })
       },
-      deleteHorizontal: (id) => {
-        set(s => {
-          delete s.horizontal.lanes[id]
-          s.horizontal.laneOrder = s.horizontal.laneOrder.filter(x => x !== id)
-        })
-      },
-      addHorizontal: () => {
-        const id = createLaneId()
-        set(s => {
 
-          s.horizontal.lanes[id] = {
-            id,
-            axis: "horizontal",
-            scenes: {},
-            sceneOrder: []
+      addLane: (axis) => {
+        const newLane = createLane(axis)
+        set(s => {
+          const sys = getSystem(s, axis)
+
+          sys.lanes[newLane.laneId] = {
+            laneId: newLane.laneId,
+            axis,
+            scenes: newLane.scenes,
+            sceneOrder: newLane.sceneOrder
           }
-          s.horizontal.laneOrder.push(id)
+
+          sys.laneOrder.push(newLane.laneId)
         })
       },
-      moveHorizontalScene: (id, from, to) => {
+      // addLane: (axis) => {
+      //   const laneId = createId()
+      //   set(s => {
+      //     const sys = getSystem(s, axis)
+
+      //     sys.lanes[laneId] = {
+      //       laneId,
+      //       axis,
+      //       scenes: {},
+      //       sceneOrder: []
+      //     }
+
+      //     sys.laneOrder.push(laneId)
+      //   })
+      // },
+
+      deleteLane: (axis, laneId) => {
         set(s => {
-          const lane = s.horizontal.lanes[id]
+          const sys = getSystem(s, axis)
+          if (sys.laneOrder.length <= 1) return
+          delete sys.lanes[laneId]
+          sys.laneOrder = sys.laneOrder.filter(x => x !== laneId)
+        })
+      },
+
+      moveLane: (axis, laneId, dir) => {
+        set(s => {
+          const sys = getSystem(s, axis)
+          moveByDir(sys.laneOrder, laneId, dir)
+        })
+      },
+
+      addScene: (axis, laneId) => {
+        const sceneId = createId()
+        set(s => {
+          const sys = getSystem(s, axis)
+          const lane = sys.lanes[laneId]
           if (!lane) return
 
-          const order = lane.sceneOrder
+          lane.scenes[sceneId] = { sceneId }
+          lane.sceneOrder.push(sceneId)
+        })
+      },
 
-          if (
-            from < 0 ||
-            from >= order.length ||
-            to < 0 ||
-            to >= order.length
-          ) {
-            return
-          }
+      deleteScene: (axis, laneId, sceneId) => {
+        set(s => {
+          const sys = getSystem(s, axis)
+          const lane = sys.lanes[laneId]
+          if (!lane) return
+          if (lane.sceneOrder.length <= 1) return
 
-          const [sceneId] = order.splice(from, 1)
-          order.splice(to, 0, sceneId)
+          delete lane.scenes[sceneId]
+          lane.sceneOrder = lane.sceneOrder.filter(x => x !== sceneId)
+        })
+      },
+
+      moveScene: (axis, laneId, sceneId, dir) => {
+        set(s => {
+          const sys = getSystem(s, axis)
+          const lane = sys.lanes[laneId]
+          if (!lane) return
+
+          moveByDir(lane.sceneOrder, sceneId, dir)
         })
       }
+
     })),
-    { name: "Layout" }
+    {
+      name: "Layout",
+    }
   )
 )
 
-const createLaneId = () => crypto.randomUUID()
+const createId = () => crypto.randomUUID()
+
+const getSystem = (s: LayoutStore, axis: Axis1D) =>
+  axis === "horizontal" ? s.horizontal : s.vertical
+
+const moveByDir = (order: string[], id: string, dir: PlusMinusOne) => {
+  const index = order.indexOf(id)
+  if (index === -1) return
+
+  const newIndex = index + dir
+  if (newIndex < 0 || newIndex >= order.length) return
+
+  order.splice(index, 1)
+  order.splice(newIndex, 0, id)
+}
