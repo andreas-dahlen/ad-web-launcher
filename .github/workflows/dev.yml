@@ -54,23 +54,25 @@ jobs:
       - name: Determine next version
         id: versioning
         run: |
-          # Get latest tag or default to v1.0.0
+          # Get latest tag or fallback
           TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v1.0.0")
-
           echo "Latest tag: $TAG"
 
-          # Strip v prefix
-          VERSION=${TAG#v}
+          # Validate tag format: must match vX.Y.Z
+          if [[ ! "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Tag $TAG is invalid semver. Resetting to v1.0.0"
+            TAG="v1.0.0"
+          fi
 
+          VERSION=${TAG#v}
           IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
 
-          # Increment PATCH for dev branch
           PATCH=$((PATCH + 1))
-
           NEW_VERSION="v$MAJOR.$MINOR.$PATCH"
-          echo "New version: $NEW_VERSION"
 
+          echo "New version: $NEW_VERSION"
           echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+
 
       # Create GitHub Release
       - name: Create Release
