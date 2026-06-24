@@ -14,9 +14,7 @@ lint:
  npm run lint
 
 build:
-  tsc -b
-  vite build
-  node scripts/deploy.js
+ npm run build
 
 build-prod:
   vite build --mode production
