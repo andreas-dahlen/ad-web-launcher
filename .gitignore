@@ -35,4 +35,3 @@ google-services.json
 
 # --- Extra for web assets 
 node_modules/
-dist/
