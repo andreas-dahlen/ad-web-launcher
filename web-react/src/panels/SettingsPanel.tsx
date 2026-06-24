@@ -53,7 +53,7 @@ export default function SettingsPanel() {
             update("layoutManagerH", !layoutManagerH)
             if (!layoutManagerH) update("layoutManagerV", false)
           }}
-          msg={"horizontal config - weehuu"}
+          msg={"horizontal config - woopee"}
           ReactImg={layoutManagerH ? managerH : managerInactiveH}
         />
 
