@@ -1,8 +1,4 @@
-<<<<<<< HEAD:ADWebWallpaper/app/src/main/java/com/ad/webwallpaper/JSBridge.kt
-package com.ad.webwallpaper  // launcher host package
-=======
 package com.ad.launcher
->>>>>>> dev:android/app/src/main/java/com/ad/launcher/JSBridge.kt
 
 import android.content.Context
 import android.content.Intent
@@ -24,7 +20,6 @@ class JSBridge(private val context: Context) {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(intent)
         } else {
-<<<<<<< HEAD:ADWebWallpaper/app/src/main/java/com/ad/webwallpaper/JSBridge.kt
             // Optional debug hook
             Log.w("JSBridge", "No launch intent for package: $packageName")
         }
@@ -42,9 +37,7 @@ class JSBridge(private val context: Context) {
         when (action) {
             "openApp" -> payload?.let { openApp(it) }
             // future: "openSettings", "showRecents", etc.
-=======
             Log.w("JSBridge", "No launch intent for package: $packageName")
->>>>>>> dev:android/app/src/main/java/com/ad/launcher/JSBridge.kt
         }
     }
 }

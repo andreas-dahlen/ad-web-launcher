@@ -1,5 +1,5 @@
 import { dragSolver } from '@interaction/solvers/dragSolver/drag.solver'
-import type { DragDesc, SwipeableDescriptor } from '@interaction/types/descriptor.types'
+import type { DragDesc, SwipeableDescriptor } from '@interaction/types/descriptor/descriptor.types'
 import { createDragData } from '@test/builders/data.factory'
 import { createInterpreterSwipe, createInterpreterSwipeCommit, createInterpreterSwipeStart } from '@test/builders/input.factory'
 import { base_DEFAULT } from '@test/fixtures/base.fixture'

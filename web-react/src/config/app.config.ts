@@ -7,7 +7,7 @@ interface RawPhoneValues {
   density: number
 }
 
-interface AppConfig {
+export interface AppConfig {
   debugMode: boolean
   rawPhoneValues: RawPhoneValues
   swipeAnimationMs: number

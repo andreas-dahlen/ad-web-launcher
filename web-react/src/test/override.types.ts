@@ -1,6 +1,6 @@
-import type { Computed } from '@interaction/types/computed.types'
-import type { ButtonDesc, CarouselDesc, DragDesc, ScrollDesc, SliderDesc } from '@interaction/types/descriptor.types'
-import type { RuntimePress, RuntimePressRelease, RuntimeSwipe, RuntimeCommit, RuntimeStart } from '@interaction/types/runtimeStuff.types'
+import type { Computed } from '@interaction/types/runtime/computed.types'
+import type { ButtonDesc, CarouselDesc, DragDesc, ScrollDesc, SliderDesc } from '@interaction/types/descriptor/descriptor.types'
+import type { RuntimePress, RuntimePressRelease, RuntimeSwipe, RuntimeCommit, RuntimeStart } from '@interaction/types/runtime/runtime.types'
 
 export type DescriptorMap = {
   carousel: CarouselDesc

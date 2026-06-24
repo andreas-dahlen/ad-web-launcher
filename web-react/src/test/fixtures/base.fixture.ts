@@ -1,4 +1,4 @@
-import type { BaseInteraction, LayoutData } from '@interaction/types/base.types'
+import type { BaseInteraction, LayoutData } from '@interaction/types/descriptor/base.types'
 import { createEl } from '@test/builders/domAndMeta.factory'
 
 export const base_DEFAULT: {

@@ -1,9 +1,9 @@
 import { normalizeBase } from '../utils/axis.utils.ts'
 import { vector } from '../utils/vector.utils.ts'
-import type { BaseWithAxis1D } from '@interaction/types/base.types.ts'
-import type { SliderComputed } from '@interaction/types/computed.types.ts'
 import type { Constraints1D, Vec2 } from '@typing/core.types.ts'
-import type { Normalized1D } from '@interaction/types/solver.types.ts'
+import type { BaseWithAxis1D } from '../../types/descriptor/base.types.ts'
+import type { SliderComputed } from '../../types/runtime/computed.types.ts'
+import type { Normalized1D } from '../../types/solver.types.ts'
 
 export const sliderUtils = {
 

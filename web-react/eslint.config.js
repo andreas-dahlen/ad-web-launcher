@@ -76,14 +76,18 @@ export default defineConfig([
       'boundaries/elements': [
         // app
         { type: 'app-compositions', pattern: '**/src/app/compositions/**/*', mode: 'full' },
-        { type: 'app-root', pattern: '**/src/app/Root.tsx', mode: 'full' },
+        // { type: 'app-root', pattern: '**/src/app/Root.tsx', mode: 'full' },
         { type: 'app-layers', pattern: '**/src/app/layers/**/*', mode: 'full' },
         { type: 'app-scenes', pattern: '**/src/app/scenes/**/*', mode: 'full' },
         { type: 'app', pattern: '**/src/app/**/*', mode: 'full' },
 
         // ui
         { type: 'features', pattern: '**/src/features/**/*', mode: 'full' },
-        { type: 'composites', pattern: '**/src/composites/**/*', mode: 'full' },
+
+        // composites
+        { type: 'composites-structural', pattern: '**/src/composites/structural/**/*', mode: 'full' },
+        { type: 'composites-controls', pattern: '**/src/composites/controls/**/*', mode: 'full' },
+
         { type: 'primitives', pattern: '**/src/primitives/**/*', mode: 'full' },
         { type: 'infrastructure', pattern: '**/src/infrastructure/**/*', mode: 'full' },
 
@@ -101,8 +105,8 @@ export default defineConfig([
 
       // IGNORE
       'boundaries/ignore': [
-        '**/src/App.tsx',
-        '**/src/main.tsx',
+        // '**/src/App.tsx',
+        // '**/src/main.tsx',
         '**/src/test/**/*',
         '**/src/assets/**/*',
       ],
@@ -137,8 +141,9 @@ export default defineConfig([
 
           // ─── app ───────────────────────────────────────────────────────
           {
-            from: [{ type: 'app-root' }],
+            from: [{ type: 'app' }],
             allow: [
+              { to: { type: 'app' } },
               { to: { type: 'app-layers' } },
             ]
           },
@@ -172,9 +177,18 @@ export default defineConfig([
             ]
           },
           {
-            from: [{ type: 'composites' }],
+            from: [{ type: 'composites-structural' }],
             allow: [
               { to: { type: 'primitives' } },
+              { to: { type: 'infrastructure' } },
+              { to: { type: 'composites-controls' } },
+              { to: { type: 'composites-structural' } },
+            ]
+          },
+          {
+            from: [{ type: 'composites-controls' }],
+            allow: [
+              { to: { type: 'composites-controls' } },
               { to: { type: 'infrastructure' } },
             ]
           },

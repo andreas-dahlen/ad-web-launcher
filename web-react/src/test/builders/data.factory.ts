@@ -1,4 +1,4 @@
-import type { CarouselData, DragData, ScrollData, SliderData } from '@interaction/types/data.types';
+import type { CarouselData, DragData, ScrollData, SliderData } from '@interaction/types/descriptor/data.types';
 import { merge } from '@test/utils/factory.utils';
 import { data_DEFAULT } from '@test/fixtures/data.fixture';
 

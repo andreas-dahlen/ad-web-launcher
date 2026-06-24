@@ -1,4 +1,4 @@
-import type { BaseInteraction, BaseWithAxis1D, BaseWithAxis2D, BaseWithSwipe, LayoutData } from '@interaction/types/base.types';
+import type { BaseInteraction, BaseWithAxis1D, BaseWithAxis2D, BaseWithSwipe, LayoutData } from '@interaction/types/descriptor/base.types';
 import { merge } from '@test/utils/factory.utils';
 import { base_DEFAULT, baseSwipe_DEFAULT } from '@test/fixtures/base.fixture';
 

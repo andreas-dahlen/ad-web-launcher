@@ -1,10 +1,10 @@
 import { Z } from '@config/zIndex.ts'
 import css from './Layers.module.css'
-import ContentCarousel from '@primitives/carousel/ContentCarousel.tsx'
+import ContentCarousel from '@primitives/Carousel/ContentCarousel'
 import { Scenes } from '@app/scenes/Scenes'
 import clsx from 'clsx'
 import React from 'react'
-import { layoutStore } from '@app/compositions/layout.store'
+import { layoutStore } from '@stores/layout.store'
 import type { Axis1D } from '@typing/core.types'
 /** LAYER 2/3! Interactive=false carousel. Contents are mounted inside!
  * The carousel swipes are handled by baseLayer. */
@@ -74,14 +74,14 @@ export default function ContentLayer() {
   return (
     <>
       {/* Horizontal */}
-      <div className={clsx(css.layer, css.forhorizontal)} style={{ zIndex: Z.content }}>
+      <div className={clsx(css.layer, css.forhorizontal, "center")} style={{ zIndex: Z.content }}>
         {horizontalLaneOrder.map(laneId => (
           <LaneRenderer key={laneId} axis="horizontal" laneId={laneId} />
         ))}
       </div>
 
       {/* Vertical */}
-      <div className={clsx(css.layer, css.forvertical)} style={{ zIndex: Z.content }}>
+      <div className={clsx(css.layer, css.forvertical, "center")} style={{ zIndex: Z.content }}>
         {verticalLaneOrder.map(laneId => (
           <LaneRenderer key={laneId} axis="vertical" laneId={laneId} />
         ))}
@@ -89,67 +89,3 @@ export default function ContentLayer() {
     </>
   )
 }
-
-// export default function ContentLayer() {
-//   useLayoutStoreInit()
-
-//   return (
-//     <>
-//       <div className={clsx(css.layer, css.forhorizontal)} style={{ zIndex: Z.content }}>
-//         {horizontal.laneOrder.map(id => {
-//           const lane = horizontal.lanes[id]
-
-//           const orderedScenes = lane.sceneOrder.map((id, index) => {
-//             const scene = lane.scenes[id]
-//             return () => (
-//               <Scenes
-//                 scene={scene}
-//                 sceneIdx={index}
-//                 laneId={lane.laneId}
-//                 axis={lane.axis}
-//               />
-//             )
-//           })
-//           return (
-//             <ContentCarousel
-//               key={id}
-//               id={lane.laneId}
-//               axis={lane.axis}
-//               scenes={orderedScenes}
-//             />
-//           )
-//         })}
-//       </div>
-
-//       <div
-//         className={clsx(css.layer, css.forvertical)}
-//         style={{ zIndex: Z.content }}
-//       >
-//         {vertical.laneOrder.map(id => {
-//           const lane = vertical.lanes[id]
-
-//           const orderedScenes = lane.sceneOrder.map((id, index) => {
-//             const scene = lane.scenes[id]
-//             return () => (
-//               <Scenes
-//                 scene={scene}
-//                 sceneIdx={index}
-//                 laneId={lane.laneId}
-//                 axis={lane.axis}
-//               />
-//             )
-//           })
-//           return (
-
-//             <ContentCarousel
-//               key={lane.laneId}
-//               id={lane.laneId}
-//               axis={lane.axis}
-//               scenes={orderedScenes}
-//             />
-//           )
-//         })}
-//       </div>
-//     </>
-//   )
-// }

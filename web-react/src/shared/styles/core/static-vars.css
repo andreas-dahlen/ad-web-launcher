@@ -1,0 +1,12 @@
+:root {
+  --border-radius: 20px;
+  --padding: 1rem;
+  --margin-top: 1.3rem;
+  --blur: blur(8px);
+  --gap: 10px;
+  --viewport-max: 90%;
+  --box-shadow: 0px 1px 10px 5px;
+
+  /* font: var(--font); */
+  /* font-size: var(--font-m); */
+}

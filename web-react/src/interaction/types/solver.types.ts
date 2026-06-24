@@ -1,8 +1,8 @@
-import type { FrameSnapshot } from '@interaction/types/base.types'
-import type { ScrollComputed, SliderComputed } from '@interaction/types/computed.types'
-import type { CarouselDesc, DragDesc, ScrollDesc, SliderDesc } from '@interaction/types/descriptor.types'
+import type { FrameSnapshot } from './descriptor/base.types'
+import type { ScrollComputed, SliderComputed } from './runtime/computed.types'
+import type { CarouselDesc, DragDesc, ScrollDesc, SliderDesc } from './descriptor/descriptor.types'
 import type { Delta, Direction } from '@typing/core.types'
-import type { RuntimePress, RuntimeSwipe, RuntimeCommit, RuntimeStart } from './runtimeStuff.types'
+import type { RuntimePress, RuntimeSwipe, RuntimeCommit, RuntimeStart } from './runtime/runtime.types'
 
 type Payload<T> = {
   payload: T

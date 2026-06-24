@@ -1,10 +1,10 @@
+
+import { toAxis, toOnEdgeDir, toType } from '@utils/assertions.ts'
+import type { DomMeta } from '../types/descriptor/base.types.ts'
+
 /* =========================
 Context Builder
 ========================= */
-
-import { toAxis, toOnEdgeDir, toType } from '@utils/assersions.ts'
-import type { DomMeta } from '../types/base.types.ts'
-
 export function extractDomMeta(el: HTMLElement): DomMeta | null {
   const ds = el.dataset
   const id = ds.id ?? ''

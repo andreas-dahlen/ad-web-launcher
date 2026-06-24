@@ -1,0 +1,87 @@
+name: Dev Build (Debug APK)
+
+on:
+  push:
+    branches: [ dev ]
+    paths:
+      - 'web-react/dist/index.html'
+  workflow_dispatch:
+
+jobs:
+  build-dev-apk:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout repo
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # required for versioning
+
+      # Setup Node
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # Install dependencies + build web-react
+      - name: Install dependencies
+        working-directory: web-react
+        run: npm install
+
+      - name: Build web-react
+        working-directory: web-react
+        run: npm run build
+
+      # Copy dist/index.html → android assets
+      - name: Copy web build into Android assets
+        run: |
+          cp web-react/dist/index.html android/app/src/main/assets/index.html
+
+      # Setup Java + Android SDK
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      # Build Debug APK
+      - name: Build Debug APK
+        working-directory: android
+        run: ./gradlew assembleDebug
+
+      # Extract version + increment PATCH
+      - name: Determine next version
+        id: versioning
+        run: |
+          # Get latest tag or default to v1.0.0
+          TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v1.0.0")
+
+          echo "Latest tag: $TAG"
+
+          # Strip v prefix
+          VERSION=${TAG#v}
+
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
+
+          # Increment PATCH for dev branch
+          PATCH=$((PATCH + 1))
+
+          NEW_VERSION="v$MAJOR.$MINOR.$PATCH"
+          echo "New version: $NEW_VERSION"
+
+          echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+
+      # Create GitHub Release
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.versioning.outputs.new_version }}
+          name: Dev Build ${{ steps.versioning.outputs.new_version }}
+          body: |
+            Automated dev build  
+            Timestamp: $(date -u +"%Y-%m-%d %H:%M UTC")  
+            Commit: ${{ github.sha }}
+          files: android/app/build/outputs/apk/debug/app-debug.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

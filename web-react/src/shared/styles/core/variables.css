@@ -1,22 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap');
+
 :root {
   /* global defaults */
-  --_col: oklch(0% 0 0);
-  --_text-col: oklch(77.311% 0.00009 271.152);
+  --_font-xs: 0.75rem;
+  --_font-s: 0.875rem;
+  --_font-m: 1rem;
+  --_font-l: 1.125rem;
+  --_font-xl: 1.25rem;
 
-  /* scene colors */
-  --_h-scene-1a: oklch(95.145% 0.20428 107.337);
-  --_h-scene-1b: oklch(62.793% 0.25768 29.223);
-  --_h-scene-2a: oklch(62.793% 0.25768 29.223);
-  --_h-scene-2b: oklch(78.558% 0.14794 224.301);
-  --_h-scene-3a: oklch(89.605% 0.16245 180.152);
-  --_h-scene-3b: oklch(92.486% 0.19429 102.902);
+  /* text */
+  --_font-inter: "Inter", system-ui, sans-serif;
+  --_font-jetbrains: "JetBrains Mono", monospace;
+  --_font-satoshi: "Satoshi", "Inter", sans-serif;
+  --_font-urbanist: "Urbanist", sans-serif;
+  --_font-manrope: "Manrope", sans-serif;
+  --_font-grotesk: "Space Grotesk", sans-serif;
 
-  --_v-wallp-1a: oklch(0% 0 0 / 0);
-  --_v-wallp-1b: oklch(59.31% 0.00007 271.152);
-  --_v-wallp-2a: oklch(0% 0 0 / 0);
-  --_v-wallp-2b: oklch(59.987% 0.00007 271.152);
-  --_v-wallp-3a: oklch(0% 0 0 / 0);
-  --_v-wallp-3b: oklch(59.31% 0.00007 271.152);
+  --_text-col-default: oklch(0% 0 0);
 
   /* component colors */
   --_color-panel-1: oklch(45.657% 0.08415 46.431);
@@ -34,30 +38,6 @@
   --_gradient-deg-sub-panel: 135deg;
   --_gradient-deg-button: 135deg;
 
-  --_h-scene-1: linear-gradient(var(--_gradient-deg-h),
-      var(--_h-scene-1a),
-      var(--_h-scene-1b));
-
-  --_h-scene-2: linear-gradient(var(--_gradient-deg-h),
-      var(--_h-scene-2a),
-      var(--_h-scene-2b));
-
-  --_h-scene-3: linear-gradient(var(--_gradient-deg-h),
-      var(--_h-scene-3a),
-      var(--_h-scene-3b));
-
-  --_v-scene-1: linear-gradient(var(--_gradient-deg-v),
-      var(--_v-wallp-1a),
-      var(--_v-wallp-1b));
-
-  --_v-scene-2: linear-gradient(var(--_gradient-deg-v),
-      var(--_v-wallp-2a),
-      var(--_v-wallp-2b));
-
-  --_v-scene-3: linear-gradient(var(--_gradient-deg-v),
-      var(--_v-wallp-3a),
-      var(--_v-wallp-3b));
-
   /* components */
   --_panel-col: linear-gradient(var(--_gradient-deg-panel),
       var(--_color-panel-1),
@@ -71,9 +51,9 @@
       var(--_color-button-1),
       var(--_color-button-2));
 
-  --_panel-border: 1px solid oklch(0% 0 0);
-  --_sub-panel-border: 1px solid oklch(0% 0 0);
+  --_border: 1px solid oklch(0% 0 0);
   --_button-border: 1px solid oklch(0% 0 0);
+  --_box-shadow-col: rgba(0, 0, 0, 0.742);
 
   --_panel-radius: 10px;
   --_sub-panel-radius: 10px;
@@ -94,18 +74,42 @@
   justify-content: center;
   width: 100%;
   height: 100%;
+  /* setters */
+  font-family: var(--font);
+  color: var(--text-col);
+  font-size: var(--font-s);
+
+  h1 {
+    font-size: var(--font-xl);
+  }
+
+  h2 {
+    font-size: var(--font-l);
+  }
+
+  h3 {
+    font-size: var(--font-m);
+  }
+
+  p {
+    font-size: var(--font-s);
+  }
+
+  span {
+    font-size: var(--font-xs);
+  }
 }
 
 [data-theme="default"] {
-  --text-col: var(--_text-col);
+  /* text */
+  --text-col: var(--_text-col-default);
+  --font: var(--_font-inter);
 
-  /* scenes */
-  /* --h-scene-1: var(--_h-scene-1);
-    --h-scene-2: var(--_h-scene-2);
-    --h-scene-3: var(--_h-scene-3);
-    --v-scene-1: var(--_v-scene-1);
-    --v-scene-2: var(--_v-scene-2);
-    --v-scene-3: var(--_v-scene-3); */
+  --font-xs: var(--_font-xs);
+  --font-s: var(--_font-s);
+  --font-m: var(--_font-m);
+  --font-l: var(--_font-l);
+  --font-xl: var(--_font-xl);
 
   /* components */
   --panel-col: var(--_panel-col);
@@ -116,9 +120,9 @@
   --color-overlay: var(--_color-overlay-black);
 
   /* borders */
-  --panel-border: var(--_panel-border);
-  --sub-panel-border: var(--_sub-panel-border);
+  --border: var(--_panel-border);
   --button-border: var(--_button-border);
+  --box-shadow-col: var(--_box-shadow-col);
 
   /* border radius */
   --panel-radius: var(--_panel-radius);
@@ -154,8 +158,4 @@
   /* Motion - slightly faster for snappier feel on Android */
   --touch-transition-fast: 120ms;
   --touch-transition-normal: 200ms;
-
-
-
-
 }

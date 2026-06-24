@@ -1,14 +1,14 @@
 import { interpreter } from '../input/interpreter.ts'
 import { domUpdater } from '../updater/domUpdater.ts'
-import { dragStore } from '@primitives/drag/store/drag.store.ts'
-import { sliderStore } from '@primitives/slider/store/slider.store.ts'
-import { carouselStore } from '@primitives/carousel/store/carousel.store.ts'
+import { dragStore } from '@primitives/Drag/store/drag.store.ts'
+import { sliderStore } from '@primitives/Slider/store/slider.store.ts'
+import { carouselStore } from '@primitives/Carousel/store/carousel.store.ts'
 import type { EventBridgeType, EventType, InteractionType } from '../../shared/typing/core.types.ts'
 import type { PointerEventPackage } from '@hooks/usePointerBridge.hook.ts'
 import { gestureStore } from '../../shared/state/stores/gesture.store.ts'
-import { scrollStore } from '@primitives/scroll/store/scroll.store.ts'
+import { scrollStore } from '@primitives/Scroll/store/scroll.store.ts'
 import { router } from '@interaction/runtime/solverRouter.ts'
-import type { InterpreterOutput } from '@interaction/types/interpreter.types.ts'
+import type { InterpreterOutput } from '@interaction/types/runtime/interpreter.types.ts'
 
 /* =====================
         Maping

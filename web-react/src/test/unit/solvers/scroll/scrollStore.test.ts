@@ -1,6 +1,6 @@
 import { describe, it, expect, afterEach } from 'vitest'
-import { scrollStore, type ScrollBinding } from '@primitives/scroll/store/scroll.store'
-import { scroll_DEFAULTS } from '@primitives/scroll/store/useScrollStore.hook'
+import { scrollStore, type ScrollBinding } from '@primitives/Scroll/store/scroll.store'
+import { scroll_DEFAULTS } from '@primitives/Scroll/store/useScrollStore.hook'
 import { getStoreByType, seedStoreByType } from '@test/utils/storeSeed.utils'
 import { resetInteractionStores } from '@test/utils/storeReset.utils'
 function initTest(data: ScrollBinding = scroll_DEFAULTS) {

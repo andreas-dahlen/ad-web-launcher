@@ -1,4 +1,4 @@
-import type { Capabilities } from '@interaction/types/base.types';
+import type { Capabilities } from '@interaction/types/descriptor/base.types';
 import { merge } from '@test/utils/factory.utils';
 import { capabilities_DEFAULT } from '@test/fixtures/capabilities.fixture';
 

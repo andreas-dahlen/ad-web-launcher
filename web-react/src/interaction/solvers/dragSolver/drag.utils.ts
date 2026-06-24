@@ -1,7 +1,7 @@
 import { vector } from '../utils/vector.utils.ts'
-import type { DragDesc } from '../../types/descriptor.types.ts'
+import type { DragDesc } from '../../types/descriptor/descriptor.types.ts'
 import type { Vec2 } from '../../../shared/typing/core.types.ts'
-import type { DragData } from '@interaction/types/data.types.ts'
+import type { DragData } from '@interaction/types/descriptor/data.types.ts'
 
 export const dragUtils = {
 

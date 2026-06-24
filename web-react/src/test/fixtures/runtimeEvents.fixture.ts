@@ -1,4 +1,4 @@
-import type { RuntimePress, RuntimePressRelease, RuntimeSwipe, RuntimeCommit, RuntimeStart } from '@interaction/types/runtimeStuff.types'
+import type { RuntimePress, RuntimePressRelease, RuntimeSwipe, RuntimeCommit, RuntimeStart } from '@interaction/types/runtime/runtime.types'
 import { createEl } from '@test/builders/domAndMeta.factory'
 
 export const event_DEFAULT: {

@@ -2,11 +2,11 @@ import * as buildDesc from '@interaction/input/buildDesc'
 import * as extract from '@interaction/input/domMeta'
 import { domQuery } from '@interaction/input/domQuery'
 import { gestureUtils } from '@interaction/input/gesture.utils'
-import type { Descriptor } from '@interaction/types/descriptor.types'
+import type { Descriptor } from '@interaction/types/descriptor/descriptor.types'
 import { createInteractionElement, createEl } from '@test/builders/domAndMeta.factory'
 import { createDesc } from '@test/builders/input.factory'
 import type { Axis, InteractionType } from '@typing/core.types'
-import { toType } from '@utils/assersions'
+import { toType } from '@utils/assertions'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
 function initDomTest(opts: { validAt: number; type?: string }) {

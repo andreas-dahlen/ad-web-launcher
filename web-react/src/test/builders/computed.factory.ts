@@ -1,4 +1,4 @@
-import type { ScrollComputed, SliderComputed } from '@interaction/types/computed.types'
+import type { ScrollComputed, SliderComputed } from '@interaction/types/runtime/computed.types'
 import { merge } from '@test/utils/factory.utils'
 import { computed_DEFAULT } from '@test/fixtures/computed.fixture'
 

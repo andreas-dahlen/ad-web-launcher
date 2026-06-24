@@ -1,0 +1,4 @@
+.base {
+  color: var(--text-col);
+  font: var(--font)
+}

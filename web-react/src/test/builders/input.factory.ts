@@ -1,6 +1,6 @@
 import { createButtonDesc, createCarouselDesc, createDragDesc, createScrollDesc, createSliderDesc } from '@test/builders/desc.factory'
 import type { DescriptorMap, DescriptorSwipeMap, InterpreterPressOverrides, InterpreterPressReleaseOverrides, InterpreterSwipeCommitOverrides, InterpreterSwipeOverrides, InterpreterSwipeStartOverrides, SwipeTypeMap, TypeMap } from '@test/override.types'
-import type { InterpreterPress, InterpreterPressRelease, InterpreterSwipe, InterpreterSwipeCommit, InterpreterSwipeStart, SwipingSession } from '@interaction/types/interpreter.types'
+import type { InterpreterPress, InterpreterPressRelease, InterpreterSwipe, InterpreterSwipeCommit, InterpreterSwipeStart, SwipingSession } from '@interaction/types/runtime/interpreter.types'
 import { createRuntimePress, createRuntimePressRelease, createRuntimeSwipe, createRuntimeSwipeCommit, createRuntimeswipeStart } from '@test/builders/runtime.factory'
 import { modifyGestureForTests } from '@interaction/input/interpreter'
 import { createComputedSlider } from '@test/builders/computed.factory'

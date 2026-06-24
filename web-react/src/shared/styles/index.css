@@ -1,4 +1,6 @@
+@import './core/static-vars.css';
 @import './core/variables.css';
 @import './core/core.css';
+@import './core/utils.css';
 @import './presets.css';
 @import './debug.css';

@@ -1,5 +1,5 @@
 import { scrollSolver } from '@interaction/solvers/scrollSolver/scroll.solver'
-import type { ScrollDesc, SwipeableDescriptor } from '@interaction/types/descriptor.types'
+import type { ScrollDesc, SwipeableDescriptor } from '@interaction/types/descriptor/descriptor.types'
 import { createComputedScroll } from '@test/builders/computed.factory'
 import { createScrollData } from '@test/builders/data.factory'
 import { createScrollDesc } from '@test/builders/desc.factory'

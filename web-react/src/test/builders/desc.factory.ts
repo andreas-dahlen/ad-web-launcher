@@ -1,4 +1,4 @@
-import type { ButtonDesc, CarouselDesc, DragDesc, ScrollDesc, SliderDesc } from '@interaction/types/descriptor.types';
+import type { ButtonDesc, CarouselDesc, DragDesc, ScrollDesc, SliderDesc } from '@interaction/types/descriptor/descriptor.types';
 import { createBaseInteraction, createBaseWithAxis1D, createBaseWithAxis2D } from '@test/builders/base.factory';
 import { createCarouselData, createDragData, createScrollData, createSliderData } from '@test/builders/data.factory';
 import { createInstantCapabilities, createPressCapabilities, createSwipeCapabilities } from '@test/builders/capabilities.factory';

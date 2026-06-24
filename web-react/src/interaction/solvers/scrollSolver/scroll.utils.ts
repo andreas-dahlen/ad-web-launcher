@@ -1,10 +1,10 @@
 import { normalizeBase } from '../utils/axis.utils.ts'
 import { vector } from '../utils/vector.utils.ts'
-import type { ScrollDesc } from '../../types/descriptor.types.ts'
 import type { Vec2 } from '@typing/core.types.ts'
-import type { ScrollData } from '@interaction/types/data.types.ts'
-import type { BaseWithAxis1D } from '@interaction/types/base.types.ts'
-import type { ScrollCommit } from '@interaction/types/solver.types.ts'
+import type { ScrollDesc } from '../../types/descriptor/descriptor.types.ts'
+import type { ScrollData } from '../../types/descriptor/data.types.ts'
+import type { BaseWithAxis1D } from '../../types/descriptor/base.types.ts'
+import type { ScrollCommit } from '../../types/solver.types.ts'
 
 
 export const scrollUtils = {

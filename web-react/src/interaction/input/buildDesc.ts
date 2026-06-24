@@ -1,13 +1,12 @@
 import { domQuery } from './domQuery.ts'
-import { carouselStore } from '@primitives/carousel/store/carousel.store.ts'
-import { dragStore } from '@primitives/drag/store/drag.store.ts'
-import { sliderStore } from '@primitives/slider/store/slider.store.ts'
-import { scrollStore } from '@primitives/scroll/store/scroll.store.ts'
-import type { BaseInteraction, DomMeta, Capabilities, BaseWithSwipe, LayoutData } from '../types/base.types.ts'
-import type { CarouselData, DragData, ScrollData, SliderData } from '../types/data.types.ts'
-import type { CarouselDesc, SliderDesc, DragDesc, ButtonDesc, ScrollDesc } from '../types/descriptor.types.ts'
-import type { Descriptor } from '../types/descriptor.types.ts'
+import { carouselStore } from '@primitives/Carousel/store/carousel.store.ts'
+import { dragStore } from '@primitives/Drag/store/drag.store.ts'
+import { sliderStore } from '@primitives/Slider/store/slider.store.ts'
+import { scrollStore } from '@primitives/Scroll/store/scroll.store.ts'
 import { sizeStore } from '../../shared/state/stores/size.store.ts'
+import type { BaseInteraction, DomMeta, Capabilities, BaseWithSwipe, LayoutData } from '../types/descriptor/base.types.ts'
+import type { CarouselData, DragData, ScrollData, SliderData } from '../types/descriptor/data.types.ts'
+import type { CarouselDesc, SliderDesc, DragDesc, ButtonDesc, ScrollDesc, Descriptor } from '../types/descriptor/descriptor.types.ts'
 
 interface Builder {
   capabilities: Capabilities

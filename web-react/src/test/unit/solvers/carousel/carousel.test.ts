@@ -1,5 +1,5 @@
 import { carouselSolver } from '@interaction/solvers/carouselSolver/carousel.solver'
-import type { CarouselDesc, SwipeableDescriptor } from '@interaction/types/descriptor.types'
+import type { CarouselDesc, SwipeableDescriptor } from '@interaction/types/descriptor/descriptor.types'
 import { createBaseWithAxis1D } from '@test/builders/base.factory'
 import { createCarouselData } from '@test/builders/data.factory'
 import { createInterpreterSwipe, createInterpreterSwipeCommit } from '@test/builders/input.factory'

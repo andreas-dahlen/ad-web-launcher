@@ -1,5 +1,5 @@
-import type { Scene } from '@app/compositions/layout.store'
-import SceneLayoutOverlay from '@app/scenes/SceneLayoutOverlay'
+import type { Scene } from '@stores/layout.store'
+import SceneLayoutPanel from '../../panels/SceneLayoutPanel'
 import { settingsStore } from '@stores/settings.store'
 import type { Axis1D } from '@typing/core.types'
 import clsx from 'clsx'
@@ -20,7 +20,7 @@ export function Scenes({
   return (
     <div key={scene.sceneId}>
       <div className={clsx(axis === "horizontal" && "spin-box")}></div>
-      {showOverlay && <SceneLayoutOverlay
+      {showOverlay && <SceneLayoutPanel
         scene={scene}
         sceneIdx={sceneIdx}
         laneId={laneId}

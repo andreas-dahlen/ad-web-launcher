@@ -1,9 +1,9 @@
 import { vector } from '@interaction/solvers/utils/vector.utils'
-import type { ScrollData } from '@interaction/types/data.types'
-import type { ScrollComputed } from '@interaction/types/computed.types'
-import type { RuntimeStart } from '@interaction/types/runtimeStuff.types'
+import type { ScrollData } from '../../types/descriptor/data.types'
+import type { ScrollComputed } from '../../types/runtime/computed.types'
+import type { RuntimeStart } from '../../types/runtime/runtime.types'
+import type { BaseWithAxis1D, LayoutData } from '../../types/descriptor/base.types'
 import { type Axis1D } from '@typing/core.types'
-import type { BaseWithAxis1D, LayoutData } from '@interaction/types/base.types'
 
 export const overflowUtils = {
 

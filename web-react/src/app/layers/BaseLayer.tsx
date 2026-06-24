@@ -1,9 +1,9 @@
 import { Z } from '@config/zIndex';
 // import useRuntimeBindings from '../compositions/useRuntimeBindings.hook';
 import css from './Layers.module.css'
-import InputCarousel from '@primitives/carousel/InputCarousel';
+import InputCarousel from '@primitives/Carousel/InputCarousel';
 import clsx from 'clsx';
-import { layoutStore } from '@app/compositions/layout.store';
+import { layoutStore } from '@stores/layout.store';
 import React from 'react';
 import type { Axis1D } from '@typing/core.types';
 
@@ -36,57 +36,17 @@ export default function BaseLayer() {
 
   return (
     <>
-      <div className={clsx(css.layer, css.forvertical)} style={{ zIndex: Z.base }}>
+      <div className={clsx(css.layer, css.forvertical, "center")} style={{ zIndex: Z.base }}>
         {verticalLaneOrder.map(laneId => (
           <LaneInputRenderer key={laneId} axis="vertical" laneId={laneId} />
         ))}
       </div>
 
-      <div className={clsx(css.layer, css.forhorizontal)} style={{ zIndex: Z.base }}>
+      <div className={clsx(css.layer, css.forhorizontal, "center")} style={{ zIndex: Z.base }}>
         {horizontalLaneOrder.map(laneId => (
           <LaneInputRenderer key={laneId} axis="horizontal" laneId={laneId} />
         ))}
       </div>
     </>
   )
-}
-// return (
-//   <>
-//     <div
-//       className={clsx(css.layer, css.forvertical)}
-//       style={{ zIndex: Z.base }}
-//     >
-//       {vertical.laneOrder.map(laneId => {
-//         const lane = vertical.lanes[laneId]
-//         const lock = lane.sceneOrder.length === 1 ? true : false
-//         return <InputCarousel
-//           key={lane.laneId}
-//           id={lane.laneId}
-//           axis={lane.axis}
-//           lockNextAt={lock ? 0 : lane.lockNextAt}
-//           lockPrevAt={lock ? 0 : lane.lockPrevAt}
-//         />
-//       })}
-//     </div>
-
-//     <div
-//       className={clsx(css.layer, css.forhorizontal)}
-//       style={{ zIndex: Z.base }}
-//     >
-//       {horizontal.laneOrder.map(laneId => {
-//         const lane = horizontal.lanes[laneId]
-//         const lock = lane.sceneOrder.length === 1 ? true : false
-//         return (
-//           <InputCarousel
-//             key={lane.laneId}
-//             id={lane.laneId}
-//             axis={lane.axis}
-//             lockNextAt={lock ? 0 : lane.lockNextAt}
-//             lockPrevAt={lock ? 0 : lane.lockPrevAt}
-//           //TODO later add onSwipeCommit
-//           />
-//         )
-//       })}
-//     </div>
-//   </>
-// )
+} //TODO add swipeCommit?

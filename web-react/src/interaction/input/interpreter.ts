@@ -1,9 +1,9 @@
 import { gestureUtils } from './gesture.utils.ts'
 import { domQuery } from './domQuery.ts'
-import type { ComputedPackage } from '@interaction/types/computed.types.ts'
-import type { GestureSession, PendingContext, InterpreterPress, InterpreterSwipeStart, InterpreterSwipe, InterpreterSwipeCommit, InterpreterPressRelease, SwipingSession, PendingSession } from '@interaction/types/interpreter.types.ts'
+import type { ComputedPackage } from '@interaction/types/runtime/computed.types.ts'
+import type { GestureSession, PendingContext, InterpreterPress, InterpreterSwipeStart, InterpreterSwipe, InterpreterSwipeCommit, InterpreterPressRelease, SwipingSession, PendingSession } from '@interaction/types/runtime/interpreter.types.ts'
 import type { Axis, EventType, Vec2 } from '@typing/core.types.ts'
-import { assertNever } from '@utils/assersions.ts'
+import { assertNever } from '@utils/assertions.ts'
 export function returnGesturesForTests() {
   return gestures
 }
