@@ -1,3 +1,0 @@
-com.ad.webwallpaper.test
-style WhiteBackgroundDialogTheme
-style WhiteBackgroundTheme
