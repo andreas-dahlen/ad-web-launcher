@@ -1,38 +1,58 @@
+# ==================== SETTINGS & VARIABLES ====================
+# Force bash to execute the commands cleanly inside WSL
+set shell := ["bash", "-c"]
+
+# Path to the workspace file relative to this web-react folder
+workspace := "../ad-web-launcher.code-workspace"
+
+
+# ==================== RECIPES ====================
+# Runs help on just
+default: help
+
 install:
-  npm install
+    npm install
 
 dev:
-  npm run dev
+    npm run dev
 
 test:
-  npm run test
+    npm run test
 
 test-file file:
-  npm run test {{file}}
+    npm run test {{file}}
 
 lint:
- npm run lint
+    npm run lint
 
 build:
- npm run build
+    npm run build
 
 build-prod:
-  vite build --mode production
-  node scripts/deploy.js
+    vite build --mode production
+    node scripts/deploy.js
 
 preview:
-  npm run preview
+    npm run preview
+
+# Open the parent folder's VS Code workspace file from WSL
+open:
+    @echo "🤖 Opening workspace from WSL..."
+    code {{workspace}}
+
+# Optional: Open the workspace in a totally new VS Code window
+open-new:
+    @echo "🤖 Opening workspace in a new window..."
+    code -n {{workspace}}
 
 help:
-  @echo ""
-  @echo "==================== COMMAND SURFACE ===================="
-  @echo ""
-
-  @echo "[JUST] orchestration layer"
-  @echo "→ just"
-  @just --list
-
-  @echo ""
-  @echo "[NPM] legacy script layer"
-  @echo "→ npm run"
-  @npm pkg get scripts
+    @echo ""
+    @echo "==================== COMMAND SURFACE ===================="
+    @echo ""
+    @echo "[JUST] orchestration layer"
+    @echo "→ just"
+    @just --list
+    @echo ""
+    @echo "[NPM] legacy script layer"
+    @echo "→ npm run"
+    @npm pkg get scripts

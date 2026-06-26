@@ -36,6 +36,7 @@ jobs:
       # Copy dist/index.html → android assets
       - name: Copy web build into Android assets
         run: |
+          mkdir -p android/app/src/main/assets
           cp web-react/dist/index.html android/app/src/main/assets/index.html
 
       # Setup Java + Android SDK
@@ -82,7 +83,6 @@ jobs:
           name: Dev Build ${{ steps.versioning.outputs.new_version }}
           body: |
             Automated dev build  
-            Timestamp: $(date -u +"%Y-%m-%d %H:%M UTC")  
             Commit: ${{ github.sha }}
           files: android/app/build/outputs/apk/debug/app-debug.apk
         env:

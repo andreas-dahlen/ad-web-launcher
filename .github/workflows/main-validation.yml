@@ -1,0 +1,100 @@
+name: Main Branch Validation (CI)
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  validate-frontend:
+    runs-on: ubuntu-latest
+    outputs:
+      new_version: ${{ steps.versioning.outputs.new_version }}
+
+    steps:
+      # 1. Checkout codebase
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Required to see git tags for versioning
+          
+      # 2. Setup Node environment
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: 'npm' # Automatically caches node_modules for blazing fast runs
+
+      # 3. Clean Install Dependencies
+      - name: Install dependencies
+        working-directory: web-react
+        run: npm ci # 'npm ci' is faster and stricter than 'npm install' for CI pipelines
+
+      # 4. Run Linter (ESLint)
+      - name: Run ESLint
+        working-directory: web-react
+        run: npm run lint
+
+      # 5. Run Unit Tests
+      - name: Run Tests
+        working-directory: web-react
+        run: npm run test
+
+# 6. Build Production Bundle (Single File)
+      - name: Build Production Bundle
+        working-directory: web-react
+        run: npm run build
+
+      # 7. Copy single-file build -> android assets directory
+      # "if false" is used to STOP building.. need to config android stuff before i allow building from main push
+      - name: Copy web build into Android assets
+        if: false
+        run: |
+          mkdir -p android/app/src/main/assets
+          cp web-react/dist/index.html android/app/src/main/assets/index.html
+
+      # 8. Setup Java + Android SDK
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      # 9. Build Production Release APK
+      - name: Build Release APK
+        working-directory: android
+        run: ./gradlew assembleRelease
+
+      # 10. Determine next production version (Increments MINOR version like v1.1.0)
+      - name: Determine next production version
+        id: versioning
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v1.0.0")
+          echo "Latest tag: $TAG"
+
+          VERSION=${TAG#v}
+          IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
+
+          # For main branch production pushes, increment the MINOR version (X.Y.0)
+          MINOR=$((MINOR + 1))
+          NEW_VERSION="v$MAJOR.$MINOR.0"
+
+          echo "New production version: $NEW_VERSION"
+          echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+
+      # 11. Create Official Production GitHub Release
+      - name: Create Production Release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.versioning.outputs.new_version }}
+          name: Production Release ${{ steps.versioning.outputs.new_version }}
+          body: |
+            Official Production Build.
+            Commit: ${{ github.sha }}
+          files: android/app/build/outputs/apk/release/app-release.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
