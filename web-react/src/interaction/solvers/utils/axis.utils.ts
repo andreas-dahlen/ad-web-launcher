@@ -1,7 +1,7 @@
 
 import { APP_CONFIG } from '@config/app.config.ts'
 import { vector } from "./vector.utils.ts"
-import type { Vec2, Direction, Axis1D } from '../../../shared/typing/core.types.ts'
+import type { Vec2, AxisDirection, Axis1D } from '../../../shared/typing/core.types.ts'
 import type { normalize1DBase, Normalized1D } from '@interaction/types/solver.types.ts'
 
 
@@ -22,7 +22,7 @@ export function exceedsCrossRange(norm: Normalized1D) {
     return currentPos < -APP_CONFIG.hysteresis || currentPos > crossSize + APP_CONFIG.hysteresis
 }
 
-export function getCommitOffset(direction: Direction, laneSize: number) {
+export function getCommitOffset(direction: AxisDirection, laneSize: number) {
     if (laneSize == null) return 0
 
     if (direction.dir === 'right' || direction.dir === 'down') return laneSize

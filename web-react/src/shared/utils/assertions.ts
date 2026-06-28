@@ -1,7 +1,7 @@
 import type { Computed, ScrollComputed, SliderComputed } from '@interaction/types/runtime/computed.types'
-import type { Axis, InteractionType, OnEdgeDir } from '@typing/core.types'
+import type { Axis, InteractionType, BoxSide } from '@typing/core.types'
 
-export const VALID_DIRS = new Set<OnEdgeDir>(['left', 'right', 'up', 'down'])
+export const VALID_DIRS = new Set<BoxSide>(['left', 'right', 'top', 'bottom'])
 
 export const VALID_AXES = new Set<Axis>(['horizontal', 'vertical', 'both'])
 export const VALID_TYPES = new Set<InteractionType>(['button', 'carousel', 'slider', 'drag', 'scroll'])
@@ -13,8 +13,8 @@ export function toType(v: string | undefined): InteractionType | null {
   return v != null && VALID_TYPES.has(v as InteractionType) ? v as InteractionType : null
 }
 
-export function toOnEdgeDir(onEdgeDir: string | undefined): OnEdgeDir | null {
-  return onEdgeDir != null && VALID_DIRS.has(onEdgeDir as OnEdgeDir) ? onEdgeDir as OnEdgeDir : null
+export function toOverflowSide(overflowSide: string | undefined): BoxSide | null {
+  return overflowSide != null && VALID_DIRS.has(overflowSide as BoxSide) ? overflowSide as BoxSide : null
 }
 
 export function assertAxis(v: string): asserts v is Axis {

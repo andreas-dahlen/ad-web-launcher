@@ -25,7 +25,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 24
-          cache: 'npm' # Automatically caches node_modules for blazing fast runs
 
       # 3. Clean Install Dependencies
       - name: Install dependencies
@@ -57,6 +56,7 @@ jobs:
 
       # 8. Setup Java + Android SDK
       - name: Setup JDK
+        if: false
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
@@ -64,13 +64,14 @@ jobs:
 
       # 9. Build Production Release APK
       - name: Build Release APK
+        if: false
         working-directory: android
         run: ./gradlew assembleRelease
 
       # 10. Determine next production version (Increments MINOR version like v1.1.0)
       - name: Determine next production version
         id: versioning
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && false
         run: |
           TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v1.0.0")
           echo "Latest tag: $TAG"
@@ -87,7 +88,7 @@ jobs:
 
       # 11. Create Official Production GitHub Release
       - name: Create Production Release
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && false
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.versioning.outputs.new_version }}

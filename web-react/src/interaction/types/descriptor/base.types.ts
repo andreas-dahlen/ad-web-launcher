@@ -1,4 +1,4 @@
-import type { Axis, Axis1D, Axis2D, InteractionType, OnEdgeDir, Size2D, Vec2 } from '@typing/core.types'
+import type { Axis, Axis1D, Axis2D, InteractionType, BoxSide, Size2D, Vec2 } from '@typing/core.types'
 
 
 export interface BaseInteraction {
@@ -53,5 +53,5 @@ export type DomMeta = Capabilities & {
   readonly snapY: number | null
   readonly lockPrevAt: number | null
   readonly lockNextAt: number | null
-  readonly onEdgeDir: OnEdgeDir | null
+  readonly overflowSide: BoxSide | null
 }

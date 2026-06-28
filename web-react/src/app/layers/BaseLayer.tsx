@@ -1,7 +1,7 @@
 import { Z } from '@config/zIndex';
 // import useRuntimeBindings from '../compositions/useRuntimeBindings.hook';
 import css from './Layers.module.css'
-import InputCarousel from '@primitives/Carousel/InputCarousel';
+import InputCarouselPrim from '@primitives/CarouselPrim/InputCarouselPrim';
 import clsx from 'clsx';
 import { layoutStore } from '@stores/layout.store';
 import React from 'react';
@@ -22,7 +22,7 @@ const LaneInputRenderer = React.memo(function LaneInputRenderer({
   const lock = sceneCount === 1
 
   return (
-    <InputCarousel
+    <InputCarouselPrim
       id={laneId}
       axis={axis}
       lockNextAt={lock ? 0 : lockNextAt}

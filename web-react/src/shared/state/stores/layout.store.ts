@@ -6,7 +6,6 @@ import { immer } from 'zustand/middleware/immer'
 
 export type Scene = {
   sceneId: string
-  type?: string
   props?: Record<string, unknown>
 }
 
@@ -49,13 +48,6 @@ export const layoutStore = create<LayoutStore>()(
       vertical: { lanes: {}, laneOrder: [] },
       horizontal: { lanes: {}, laneOrder: [] },
 
-      // init: (defaults) => {
-      //   set(s => {
-      //     s.vertical = defaults.vertical
-      //     s.horizontal = defaults.horizontal
-      //   })
-      // },
-
       overrideToDefaults: (defaults) => {
         set(s => {
           s.vertical = defaults.vertical
@@ -78,21 +70,6 @@ export const layoutStore = create<LayoutStore>()(
           sys.laneOrder.push(newLane.laneId)
         })
       },
-      // addLane: (axis) => {
-      //   const laneId = createId()
-      //   set(s => {
-      //     const sys = getSystem(s, axis)
-
-      //     sys.lanes[laneId] = {
-      //       laneId,
-      //       axis,
-      //       scenes: {},
-      //       sceneOrder: []
-      //     }
-
-      //     sys.laneOrder.push(laneId)
-      //   })
-      // },
 
       deleteLane: (axis, laneId) => {
         set(s => {

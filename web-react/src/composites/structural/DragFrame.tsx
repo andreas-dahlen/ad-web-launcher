@@ -1,5 +1,5 @@
-import Drag from '@primitives/Drag/Drag'
-import type { DragFrameProps } from '@composites/structural/comp.types'
+import DragPrim from '@primitives/DragPrim/DragPrim'
+import type { DragFrameProps } from '@composites/comp.types'
 import { settingsStore } from '@stores/settings.store'
 
 export default function DragFrame({
@@ -16,7 +16,7 @@ export default function DragFrame({
 
   return (
 
-    <Drag
+    <DragPrim
       id={`${id}-frame`}
       className={className}
       useSettingsSnap={snapEnabled}
@@ -25,7 +25,7 @@ export default function DragFrame({
       dragDataAttrs={dragDataAttrs}
     >
       {children}
-    </Drag>
+    </DragPrim>
   )
 
 }

@@ -41,7 +41,7 @@ describe('[EXTRACT DOMMETA]', () => {
     expect(result.id).toBe('test')
     expect(result.axis).toBe('vertical')
     expect(result.type).toBe('scroll')
-    expect(result.onEdgeDir).toBe('left')
+    expect(result.overflowSide).toBe('left')
     expect(result.instantSwipe).toBe(true)
     expect(result.pressable).toBe(true)
     expect(result.swipeable).toBe(true)

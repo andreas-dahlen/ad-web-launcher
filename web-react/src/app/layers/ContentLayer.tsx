@@ -1,11 +1,12 @@
 import { Z } from '@config/zIndex.ts'
 import css from './Layers.module.css'
-import ContentCarousel from '@primitives/Carousel/ContentCarousel'
+import ContentCarouselPrim from '@primitives/CarouselPrim/ContentCarouselPrim'
 import { Scenes } from '@app/scenes/Scenes'
 import clsx from 'clsx'
 import React from 'react'
 import { layoutStore } from '@stores/layout.store'
 import type { Axis1D } from '@typing/core.types'
+import { SceneContext } from '@primitives/CarouselPrim/hooks/useSceneContext.hook'
 /** LAYER 2/3! Interactive=false carousel. Contents are mounted inside!
  * The carousel swipes are handled by baseLayer. */
 
@@ -23,15 +24,28 @@ const SceneRenderer = React.memo(function SceneRenderer({
   sceneId: string
   index: number
 }) {
-  const scene = layoutStore(s => s[axis].lanes[laneId].scenes[sceneId])
+  // const _scene = layoutStore(s => s[axis].lanes[laneId].scenes[sceneId])
+  const laneCount = layoutStore(s =>
+    s[axis].laneOrder.length
+  )
 
+  const sceneCount = layoutStore(s =>
+    s[axis].lanes[laneId]?.sceneOrder.length ?? 0
+  )
   return (
-    <Scenes
-      scene={scene}
-      sceneIdx={index}
-      laneId={laneId}
-      axis={axis}
-    />
+    <SceneContext.Provider value={{
+      sceneIdx: index,
+      laneId: laneId,
+      axis: axis,
+      sceneId: sceneId,
+      laneCount: laneCount,
+      sceneCount: sceneCount
+    }}>
+
+      <Scenes
+        axis={axis}
+      />
+    </SceneContext.Provider>
   )
 })
 
@@ -49,7 +63,7 @@ const LaneRenderer = React.memo(function LaneRenderer({
     s => s[axis].lanes[laneId].sceneOrder)
 
   return (
-    <ContentCarousel
+    <ContentCarouselPrim
       id={laneId}
       axis={axis}
       scenes={sceneOrder.map((sceneId, index) => (

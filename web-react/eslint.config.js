@@ -8,7 +8,6 @@ import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
   globalIgnores(['dist']),
-
   {
     files: ['src/**/*.{ts,tsx}'],
 
@@ -28,92 +27,51 @@ export default defineConfig([
       globals: globals.browser,
     },
 
-
-
-
-    //design API:::
-
-    //current ignore list..         
-    // "src/App.tsx",
-    // "src/main.tsx",
-    // "src/api/**/*",
-    // "src/test/**/*",
-    // "src/assets/**/*",
-    // "src/test/**/*"
-
-    //* (all): data, config, shared 
-
-    //data: ignore OR app-scenes
-    //config: ignore
-    //shared: TODO needs expansion! but yeah itself and everyone can use...
-
-    //app-compositions none! except for the *
-
-    // App-root: layers*, external
-    //app-scenes: (NOT from itself) primitives, composites, features, external
-    //app-layers: (itself but only needs module), composition, primitives, features, external
-
-    //interaction-core: itself, and pipeline
-    //interaction-pipeline.tsx or interaction-pipeline: needs everything from interaction.. "NOT itself" also needs primitives-zustandStores
-    //interaction-solvers: itself, or more explicitly every child folder uses only itself... and pipeline. and utils inside of solvers/utils.
-    //interaction-updater: needs only pipeline
-
-    //composites:(maybe itself? but lets go with NOT) primitives, infrastructure
-
-    //all primitives-child (each:): (itself only) and external
-
-    //feature- all children (each:): (only itself), primitives, infrastructure,
-
-    //infrastructure: NOTHING except external..
-
-
-
-    //
-
-
     settings: {
       // ELEMENTS
       'boundaries/elements': [
-        // app
-        { type: 'app-compositions', pattern: '**/src/app/compositions/**/*', mode: 'full' },
-        // { type: 'app-root', pattern: '**/src/app/Root.tsx', mode: 'full' },
+        // App Architecture
         { type: 'app-layers', pattern: '**/src/app/layers/**/*', mode: 'full' },
         { type: 'app-scenes', pattern: '**/src/app/scenes/**/*', mode: 'full' },
+        { type: 'infrastructure', pattern: '**/src/app/infrastructure/**/*', mode: 'full' },
         { type: 'app', pattern: '**/src/app/**/*', mode: 'full' },
 
-        // ui
+        // UI Modules
+        { type: 'panels', pattern: '**/src/panels/**/*', mode: 'full' },
         { type: 'features', pattern: '**/src/features/**/*', mode: 'full' },
-
-        // composites
-        { type: 'composites-structural', pattern: '**/src/composites/structural/**/*', mode: 'full' },
-        { type: 'composites-controls', pattern: '**/src/composites/controls/**/*', mode: 'full' },
-
+        { type: 'composites', pattern: '**/src/composites/**/*', mode: 'full' },
+        { type: 'composites-internal', pattern: '**/src/composites/internals/**/*', mode: 'full' },
+        { type: 'blocks', pattern: '**/src/blocks/**/*', mode: 'full' },
         { type: 'primitives', pattern: '**/src/primitives/**/*', mode: 'full' },
-        { type: 'infrastructure', pattern: '**/src/infrastructure/**/*', mode: 'full' },
+        { type: 'primitives-store', pattern: '**/src/primitives/store/**/*', mode: 'full' },
 
-        // shared infra
+        // Shared & Data Infra
         { type: 'shared', pattern: '**/src/shared/**/*', mode: 'full' },
         { type: 'config', pattern: '**/src/config/**/*', mode: 'full' },
-        { type: 'data', pattern: '**/src/api/**/*', mode: 'full' },
+        { type: 'data', pattern: '**/src/data/**/*', mode: 'full' },
+        { type: 'api', pattern: '**/src/api/**/*', mode: 'full' },
 
-        // interaction — pipeline before core so it gets its own type
-        { type: 'interaction-pipeline', pattern: '**/src/interaction/core/pipeline.ts', mode: 'full' },
-        { type: 'interaction-core', pattern: '**/src/interaction/core/**/*', mode: 'full' },
+        // Interaction Engine
+        { type: 'interaction-interpreter', pattern: '**/src/interaction/input/interpreter.ts', mode: 'full' },
+        { type: 'interaction-buildDesc', pattern: '**/src/interaction/input/buildDesc.ts', mode: 'full' },
+        { type: 'interaction-input', pattern: '**/src/interaction/input/**/*', mode: 'full' },
+        { type: 'interaction-pipeline', pattern: '**/src/interaction/runtime/pipeline.ts', mode: 'full' },
+        { type: 'interaction-solver-router', pattern: '**/src/interaction/runtime/solverRouter.ts', mode: 'full' },
+        { type: 'interaction-runtime', pattern: '**/src/interaction/runtime/**/*', mode: 'full' },
+        { type: 'interaction-solvers-utils', pattern: '**/src/interaction/solvers/utils/**/*', mode: 'full' },
         { type: 'interaction-solvers', pattern: '**/src/interaction/solvers/**/*', mode: 'full' },
         { type: 'interaction-updater', pattern: '**/src/interaction/updater/**/*', mode: 'full' },
+        { type: 'interaction', pattern: '**/src/interaction/**/*', mode: 'full' },
       ],
 
       // IGNORE
       'boundaries/ignore': [
-        // '**/src/App.tsx',
-        // '**/src/main.tsx',
         '**/src/test/**/*',
         '**/src/assets/**/*',
       ],
     },
 
     rules: {
-
       '@typescript-eslint/no-unused-vars': [
         'error',
         {
@@ -127,127 +85,122 @@ export default defineConfig([
       'boundaries/dependencies': ['error', {
         default: 'disallow',
         rules: [
+          // ─── STRICT OVERRIDES (Exceptions to the rule) ─────────────────
+          { from: [{ type: 'panels' }], disallow: [{ to: { type: 'panels' } }] },
+          { from: [{ type: 'primitives' }], disallow: [{ to: { type: 'primitives' } }] },
+          { from: [{ type: 'blocks' }], disallow: [{ to: { type: 'blocks' } }] },
+          { from: [{ type: 'composites' }], disallow: [{ to: { type: 'composites' } }] },
+          { from: [{ type: 'interaction-solvers' }], disallow: [{ to: { type: 'interaction-solvers' } }] },
 
-          // ─── implicit for everything ───────────────────────────────────
+          // ─── Global & Shared Defaults ─────────────────────────────────
           {
             from: [{ type: '*' }],
             allow: [
+              { to: { type: '{{from.type}}' } }, // Fixed template warning
               { to: { type: 'shared' } },
               { to: { type: 'config' } },
               { to: { type: 'data' } },
+              { to: { type: 'api' } },
               { to: { origin: 'external' } },
             ]
           },
 
-          // ─── app ───────────────────────────────────────────────────────
+          // ─── Interaction Engine Boundaries ───────────────────────────
           {
-            from: [{ type: 'app' }],
+            // Solves 'interaction-solvers', 'interaction-input', etc., looking up to root level shared files (e.g., interaction/types.ts)
+            from: [{ type: 'interaction*' }],
             allow: [
-              { to: { type: 'app' } },
-              { to: { type: 'app-layers' } },
+              { to: { type: 'interaction' } },
+              { to: { type: 'interaction-solvers-utils' } }
             ]
           },
           {
-            from: [{ type: 'app-layers' }],
+            from: [{ type: 'interaction-input' }],
             allow: [
-              { to: { type: 'app-layers' } },     // modules within layers
-              { to: { type: 'primitives' } },
-              { to: { type: 'features' } },
-              { to: { type: "app-compositions" } },
+              { to: { type: 'interaction-buildDesc' } }
             ]
           },
           {
-            from: [{ type: 'app-scenes' }],
+            from: [{ type: 'interaction-buildDesc' }],
             allow: [
-              { to: { type: 'primitives' } },
-              { to: { type: 'composites' } },
-              { to: { type: 'features' } },
-              { to: { type: 'app-scenes' } },
-            ]
-          },
-          // app (compositions catchall) — only gets the * implicit rules
-
-          // ─── ui building blocks ────────────────────────────────────────
-          {
-            from: [{ type: 'features' }],
-            allow: [
-              { to: { type: 'features' } },       // self — subfolders within a feature
-              { to: { type: 'primitives' } },
-              { to: { type: 'infrastructure' } },
+              { to: { type: 'interaction-input' } },
             ]
           },
           {
-            from: [{ type: 'composites-structural' }],
+            from: [{ type: 'interaction-interpreter' }],
             allow: [
-              { to: { type: 'primitives' } },
-              { to: { type: 'infrastructure' } },
-              { to: { type: 'composites-controls' } },
-              { to: { type: 'composites-structural' } },
-            ]
-          },
-          {
-            from: [{ type: 'composites-controls' }],
-            allow: [
-              { to: { type: 'composites-controls' } },
-              { to: { type: 'infrastructure' } },
-            ]
-          },
-          {
-            from: [{ type: 'primitives' }],
-            allow: [
-              { to: { type: 'primitives' } },     // self — hooks/utils within a primitive
-            ]
-          },
-          {
-            from: [{ type: 'infrastructure' }],
-            allow: [
-              { to: { type: 'infrastructure' } },     // self — hooks/utils within a primitive
-            ]
-          },
-
-          // ─── interaction ───────────────────────────────────────────────
-          {
-            from: [{ type: 'interaction-core' }],
-            allow: [
-              { to: { type: 'interaction-core' } }, // self — contained within core
+              { to: { type: 'interaction-input' } },
             ]
           },
           {
             from: [{ type: 'interaction-pipeline' }],
             allow: [
-              { to: { type: 'interaction-core' } },
-              { to: { type: 'interaction-solvers' } },
               { to: { type: 'interaction-updater' } },
-              { to: { type: 'primitives' } },       // zustand stores — TODO: narrow further?
+              { to: { type: 'interaction-interpreter' } },
+            ]
+          },
+
+          // ─── App Layer Rules ──────────────────────────────────────────
+          {
+            from: [{ type: 'app' }],
+            allow: [
+              { to: { type: 'app-layers' } },
+              { to: { type: 'infrastructure' } } // Clears App.tsx/main.tsx loading core infra setups
             ]
           },
           {
-            from: [{ type: 'interaction-solvers' }],
+            from: [{ type: 'app-layers' }],
             allow: [
-              { to: { type: 'interaction-solvers' } }, // self — solver utils
+              { to: { type: 'panels' } },
             ]
           },
+
+          // ─── UI Building Blocks & Panels ──────────────────────────────
           {
-            from: [{ type: 'interaction-updater' }],
+            from: [{ type: 'panels' }],
             allow: [
-              { to: { type: 'interaction-pipeline' } },
+              { to: { type: 'composites' } },
+              { to: { type: 'blocks' } },
             ]
-          }
+          },
+          // {
+          //   from: [{ type: 'features' }],
+          //   allow: [
+          //     { to: { type: 'blocks' } },
+          //     { to: { type: 'infrastructure' } },
+          //   ]
+          // },
+          // {
+          //   from: [{ type: 'composites' }],
+          //   allow: [
+          //     { to: { type: 'primitives' } },
+          //     { to: { type: 'infrastructure' } },
+          //     { to: { type: 'composites-internal' } },
+          //   ]
+          // },
         ]
       }]
     }
   },
-  // ─── test-only API enforcement ─────────────────────────────────
+  // ─── Test-Only API & Cross-CSS Restrictions ──────────────────────
   {
     files: ['src/**/*.{ts,tsx}'],
     ignores: ['src/test/**/*'],
     rules: {
       'no-restricted-imports': ['error', {
-        patterns: [{
-          regex: '.*',
-          importNames: ['__TEST_ONLY_API'],
-          message: '__TEST_ONLY_API is for tests only'
-        }]
+        // flat-config matches schemas cleanly using direct objects array or specific group paths
+        // paths: [],
+        patterns: [
+          {
+            regex: '^(?!\\.\\/).*\\.module\\.css$',
+            message: 'CSS Modules must be imported locally from their own folder. No cross-folder CSS imports allowed.'
+          },
+          {
+            group: ['**/*'],
+            importNames: ['__TEST_ONLY_API'],
+            message: '__TEST_ONLY_API is for tests only'
+          }
+        ]
       }]
     }
   }

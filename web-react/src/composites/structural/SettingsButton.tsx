@@ -1,4 +1,4 @@
-import Button from '@primitives/Button/Button';
+import ButtonPrim from '@primitives/ButtonPrim/ButtonPrim';
 import css from './Composites.module.css'
 import clsx from 'clsx';
 
@@ -26,7 +26,7 @@ export default function SettingsButton({
     <div className={css.item}>
 
       <span>{msg}</span>
-      <Button
+      <ButtonPrim
         id={id}
         className={clsx(css.button, className)}
         onPressRelease={setValue}
@@ -41,7 +41,7 @@ export default function SettingsButton({
           value === undefined && css.default,
           value ? css.dark : css.bright)}
         />
-      </Button>
+      </ButtonPrim>
     </div>
   )
 }

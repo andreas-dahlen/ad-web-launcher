@@ -1,4 +1,4 @@
-import type { Axis, Axis1D, Constraints2D, Direction, OnEdgeDir, Vec2 } from '../../../shared/typing/core.types'
+import type { Axis, Axis1D, Constraints2D, AxisDirection, BoxSide, Vec2 } from '../../../shared/typing/core.types'
 import { APP_CONFIG } from '@config/app.config'
 
 export const vector = {
@@ -35,7 +35,7 @@ export const vector = {
     }
   },
 
-  resolveDirection1D(delta: number, axis: Axis1D): Direction {
+  resolveDirection1D(delta: number, axis: Axis1D): AxisDirection {
     return axis === 'horizontal'
       ? ({ axis, dir: delta > 0 ? 'right' : 'left' })
       : ({ axis, dir: delta > 0 ? 'down' : 'up' })
@@ -49,12 +49,12 @@ export const vector = {
     return this.resolveDirection1D(dir, axis)
   },
 
-  isValidDir(dir: Direction, onEdgeDir: OnEdgeDir) {
+  isValidDir(dir: AxisDirection, overflowSide: BoxSide) {
     const result = Boolean(
-      dir.dir === 'down' && onEdgeDir === 'up' ||
-      dir.dir == 'up' && onEdgeDir == 'down' ||
-      dir.dir == 'left' && onEdgeDir == 'right' ||
-      dir.dir == 'right' && onEdgeDir == 'left')
+      dir.dir === 'down' && overflowSide === 'top' ||
+      dir.dir == 'up' && overflowSide == 'bottom' ||
+      dir.dir == 'left' && overflowSide == 'right' ||
+      dir.dir == 'right' && overflowSide == 'left')
     return result
   },
 

@@ -1,6 +1,6 @@
-import Drag from '../../primitives/Drag/Drag'
-import type { DragSliderProps } from '@composites/structural/comp.types'
-import Slider from '../../primitives/Slider/Slider'
+import DragPrim from '@primitives/DragPrim/DragPrim'
+import SliderPrim from '@primitives/SliderPrim/SliderPrim'
+import type { DragSliderProps } from '@composites/comp.types'
 import { settingsStore } from '@stores/settings.store'
 
 export default function DragSlider({
@@ -22,14 +22,14 @@ export default function DragSlider({
 
   return (
 
-    <Drag
+    <DragPrim
       id={`${id}-drag`}
       useSettingsSnap={snapEnabled}
       interactive={dragEnabled}
       onSwipeCommit={onSwipeCommit}
       dragDataAttrs={dragDataAttrs}
     >
-      <Slider
+      <SliderPrim
         id={`${id}-slider`}
         axis={axis}
         interactive={!dragEnabled}
@@ -41,8 +41,8 @@ export default function DragSlider({
       >
         {children}
 
-      </Slider>
-    </Drag>
+      </SliderPrim>
+    </DragPrim>
   )
 
 }

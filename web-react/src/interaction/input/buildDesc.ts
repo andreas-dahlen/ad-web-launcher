@@ -1,8 +1,8 @@
 import { domQuery } from './domQuery.ts'
-import { carouselStore } from '@primitives/Carousel/store/carousel.store.ts'
-import { dragStore } from '@primitives/Drag/store/drag.store.ts'
-import { sliderStore } from '@primitives/Slider/store/slider.store.ts'
-import { scrollStore } from '@primitives/Scroll/store/scroll.store.ts'
+import { carouselStore } from '@primitives/CarouselPrim/store/carousel.store.ts'
+import { dragStore } from '@primitives/DragPrim/store/drag.store.ts'
+import { sliderStore } from '@primitives/SliderPrim/store/slider.store.ts'
+import { scrollStore } from '@primitives/ScrollPrim/store/scroll.store.ts'
 import { sizeStore } from '../../shared/state/stores/size.store.ts'
 import type { BaseInteraction, DomMeta, Capabilities, BaseWithSwipe, LayoutData } from '../types/descriptor/base.types.ts'
 import type { CarouselData, DragData, ScrollData, SliderData } from '../types/descriptor/data.types.ts'
@@ -168,8 +168,8 @@ function buildDragData(metaData: DomMeta): DragData {
 }
 function buildScrollData(metaData: DomMeta): ScrollData {
   const s = scrollStore.getState().get(metaData.id)
-  const onEdgeDir = metaData.onEdgeDir != null ? metaData.onEdgeDir : undefined
-  return { onEdgeDir, settledValue: s.settledValue, isVisible: s.isVisible }
+  const overflowSide = metaData.overflowSide != null ? metaData.overflowSide : undefined
+  return { overflowSide, settledValue: s.settledValue, isVisible: s.isVisible }
 }
 /* =========================
     Build capabilities

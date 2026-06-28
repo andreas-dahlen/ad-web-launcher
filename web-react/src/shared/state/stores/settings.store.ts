@@ -6,13 +6,18 @@ import { persist } from 'zustand/middleware'
 
 /* -------------------------------------------------
    User-modifiable reactive settings
-------------------------------------------------- */
+   ------------------------------------------------- */
+type SettingsMode = "default" | "layout" // 📦 The main structural tabs
+type LayoutMode = "lanes" | "scenes" | "locks" // 🎬 The active canvas tool
 
 type ReactiveSettings = {
-  //ui
+  panelOpen: boolean
+  settingsMode: SettingsMode
+
+  layoutMode: LayoutMode
   layoutManagerV: boolean
   layoutManagerH: boolean
-  panelOpen: boolean
+
   //editing
   dragEnabled: boolean
   gridVisible: boolean
@@ -32,9 +37,12 @@ export const settingsStore = create<SettingsStore>()(
     immer((set) => ({
 
       settings: {
+        panelOpen: false,
+        settingsMode: "default",
+
+        layoutMode: "scenes",
         layoutManagerV: false,
         layoutManagerH: false,
-        panelOpen: false,
         //drag specifics
         dragEnabled: false,
         gridVisible: false,

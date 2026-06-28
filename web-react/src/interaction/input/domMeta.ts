@@ -1,5 +1,5 @@
 
-import { toAxis, toOnEdgeDir, toType } from '@utils/assertions.ts'
+import { toAxis, toOverflowSide, toType } from '@utils/assertions.ts'
 import type { DomMeta } from '../types/descriptor/base.types.ts'
 
 /* =========================
@@ -11,7 +11,7 @@ export function extractDomMeta(el: HTMLElement): DomMeta | null {
 
   const axis = toAxis(ds.axis)
   const type = toType(ds.type)
-  const onEdgeDir = toOnEdgeDir(ds.onEdgeDir)
+  const overflowSide = toOverflowSide(ds.overflowSide)
 
   if (!type) return null
   if (type !== 'button' && !axis) return null
@@ -24,7 +24,7 @@ export function extractDomMeta(el: HTMLElement): DomMeta | null {
   const snapY = parseNumber(ds.snapY)
   const lockPrevAt = parseNumber(ds.lockPrevAt)
   const lockNextAt = parseNumber(ds.lockNextAt)
-  return { el, ds, id, axis, type, swipeable, pressable, snapX, snapY, lockPrevAt, lockNextAt, onEdgeDir, instantSwipe }
+  return { el, ds, id, axis, type, swipeable, pressable, snapX, snapY, lockPrevAt, lockNextAt, overflowSide, instantSwipe }
 }
 
 function parseNumber(value: string | undefined): number | null {

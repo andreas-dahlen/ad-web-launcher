@@ -1,4 +1,4 @@
-import Button from '@primitives/Button/Button'
+import ButtonPrim from '@primitives/ButtonPrim/ButtonPrim'
 import { useState } from 'react'
 import css from './Composites.module.css'
 
@@ -32,17 +32,17 @@ export default function SnapInput(pr: SnapInput) {
     <div className={css.panel}>
       <span>{pr.value}</span>
       <div className={css.wrapper}>
-        <Button className={css.button} id={`more-${pr.id}`}
+        <ButtonPrim className={css.button} id={`more-${pr.id}`}
           onPressRelease={() => handleChange(true)}
           buttonDataAttrs={{ 'enabled': moreEnabled }}
           interactive={moreEnabled}
-        >▲</Button>
+        >▲</ButtonPrim>
 
-        <Button className={css.button} id={`less-${pr.id}`}
+        <ButtonPrim className={css.button} id={`less-${pr.id}`}
           onPressRelease={() => handleChange(false)}
           buttonDataAttrs={{ 'enabled': lessEnabled }}
           interactive={lessEnabled}
-        >▼</Button>
+        >▼</ButtonPrim>
       </div>
     </div>
   )

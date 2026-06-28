@@ -72,7 +72,7 @@ export const scrollSolver: ScrollSolver = {
       }
     }
 
-    if (!data.onEdgeDir) throw new Error(`"isOverflow is true in swipeCommit but onEdgeDir is: ${data.onEdgeDir}`)
+    if (!data.overflowSide) throw new Error(`"isOverflow is true in swipeCommit but overflowSide is: ${data.overflowSide}`)
 
     const toCommit = vector.shouldCommit(delta1d, base.layout.containerSize.height, base.axis)
     //TODO pass whole containerSize for axis solving. needs a overflowUtils function that takes axis and converts it into relevent boolean using the vector function as help...

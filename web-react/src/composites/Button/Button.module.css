@@ -1,0 +1,64 @@
+[data-active='true'] {
+  --button-col: var(--debug-button-on);
+}
+
+[data-active='false'] {
+  --button-col: var(--debug-button-off);
+}
+
+[data-interactive='true'] {
+  opacity: 1;
+}
+
+[data-interactive='false'] {
+  opacity: 0.4;
+  pointer-events: none;
+  --svg-default: rgb(0, 0, 0);
+}
+
+.flipY {
+  transform: scaleY(-1);
+}
+
+
+.svg {
+
+  path {
+    fill: var(--svg-default);
+  }
+
+  &[data-active="true"] path {
+    fill: var(--svg-dark);
+  }
+
+  &[data-active="false"] path {
+    fill: var(--svg-bright);
+  }
+
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  backface-visibility: hidden;
+}
+
+span {
+  position: absolute;
+}
+
+.bottom {
+  --label-height: var(--button-height);
+  top: var(--label-height);
+}
+
+.top {
+  --label-height: var(--button-height);
+  bottom: var(--label-height);
+}
+
+.left {
+  --label-height: var(--button-height);
+  right: var(--label-height);
+}
+
+.right {
+  --label-height: var(--button-height);
+  left: var(--label-height);
+}

@@ -1,20 +1,21 @@
+export type PlusMinusOne = 1 | -1
 
 export type Axis = Axis1D | Axis2D
 export type Axis1D = 'horizontal' | 'vertical'
 export type Axis2D = 'both'
+
+
 export type EventBridgeType = 'down' | 'move' | 'up'
 type LeftOrRight = 'left' | 'right'
 type UpOrDown = 'up' | 'down'
 
-export type PlusMinusOne = 1 | -1
-
-//used for carousel commit
-export type Direction =
+type Dir = LeftOrRight | UpOrDown
+export type AxisDirection =
   | { axis: 'horizontal'; dir: LeftOrRight }
   | { axis: 'vertical'; dir: UpOrDown }
-  | { axis: 'both'; dir: LeftOrRight | UpOrDown }
+  | { axis: 'both'; dir: Dir }
 
-export type OnEdgeDir = 'left' | 'right' | 'up' | 'down'
+export type BoxSide = 'left' | 'right' | 'top' | 'bottom'
 export type SceneRole = "prev" | "current" | "next"
 export type InteractionType = 'button' | 'carousel' | 'slider' | 'drag' | 'scroll'
 // export type SwipeType = Exclude<InteractionType, 'button'>;

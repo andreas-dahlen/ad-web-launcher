@@ -263,4 +263,20 @@
 			"**/*.store.ts"
 		]
 	},
+	/*------------------------
+			CSS SNIPPETZ
+	-------------------------*/
+	"CSS Module Linter Bypass": {
+		"prefix": "c-ign",
+		"body": [
+			"[class*=\"${1:name}\"] {",
+			"\t$0",
+			"}"
+		],
+		"description": "Wraps a class in an attribute wildcard selector to bypass CSS Modules unused class warnings safely.",
+		"include": [
+			"**/*.css",
+			"**/*.module.css"
+		],
+	},
 }

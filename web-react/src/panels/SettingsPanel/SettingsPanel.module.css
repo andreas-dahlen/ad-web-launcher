@@ -1,0 +1,61 @@
+.layoutClass {
+  position: relative;
+}
+
+
+.settingsPanel {
+  margin-top: var(--margin-top);
+}
+
+[data-active-gesture="drag"] .panel {
+  opacity: 0.3;
+}
+
+/* move to panel */
+
+.row {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  /* min-width: 7em; */
+  padding: 15px;
+  /* background: rgba(0, 0, 0, 0.379); */
+  border-radius: 20px;
+  /* width: 100%; */
+  /* gap: 8px; */
+}
+
+.close {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  /* width: 30px;
+  height: 30px; */
+  background: none;
+  border: none;
+  box-shadow: none;
+  --button-width: 30px;
+  --button-height: 30px;
+
+
+  --button-col: black;
+  --button-radius: none;
+  --button-border: none;
+
+  &[data-state='pressed'] {
+    box-shadow: none;
+  }
+
+  .svg {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+.red {
+  fill: rgb(82, 0, 0);
+}
+
+.deadest {
+  background-color: blue;
+}

@@ -1,8 +1,8 @@
-import SettingsPanel from '../../panels/SettingsPanel.js';
+import SettingsPanel from '../../panels/SettingsPanel/SettingsPanel.js';
 import { Z } from '@config/zIndex';
-import Scroll from '../../primitives/Scroll/Scroll.js';
+import ScrollPrim from '../../primitives/ScrollPrim/ScrollPrim.js';
 import css from './Layers.module.css'
-import Button from '@primitives/Button/Button.js';
+import ButtonPrim from '@primitives/ButtonPrim/ButtonPrim.js';
 import { settingsStore } from '@stores/settings.store.js';
 import clsx from 'clsx';
 /** LAYER 3/3! */
@@ -14,23 +14,23 @@ export default function OverlayLayer() {
 
   return (
     <div className={clsx(css.layer, "center")} style={{ zIndex: Z.overlay }}>
-      <Button
+      <ButtonPrim
         id='settings'
-        onPressRelease={() => update("panelOpen", !panelOpen)}>settings</Button>
+        onPressRelease={() => update("panelOpen", !panelOpen)}>settings</ButtonPrim>
 
 
       <div className={clsx(css.layer, "center")} style={{ zIndex: Z.overlay }}>
         {panelOpen ? <SettingsPanel /> : ''}
 
 
-        <Scroll
+        <ScrollPrim
           id='testing-scroll'
           axis='vertical'
-          onEdgeDir='up'
+          overflowSide='top'
           isInitialVisible={false}
         >
           <div className='test-frame'></div>
-        </Scroll>
+        </ScrollPrim>
       </div>
     </div>
   )

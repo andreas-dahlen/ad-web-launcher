@@ -10,14 +10,14 @@ export const overflowUtils = {
   isOverflow(data: ScrollData, runtime: RuntimeStart, axis: Axis1D) {
     //overflow confirmed if not visible.
     if (!data.isVisible) return true
-    //overflow disabled if onEdgeDir is NOT registered
-    if (!data.onEdgeDir) return false
+    //overflow disabled if overflowSide is NOT registered
+    if (!data.overflowSide) return false
     //If we are at correct start possition we evaluate
     //possibly give this check leeway..
     if (data.settledValue === 0) {
       const dir = vector.getDir(runtime.thresholdValue, axis)
-      return vector.isValidDir(dir, data.onEdgeDir)
-      // return vector.isThresholdDirAndOnEdgeDir(data.onEdgeDir, axis, runtime.thresholdValue)
+      return vector.isValidDir(dir, data.overflowSide)
+      // return vector.isThresholdDirAndoverflowSide(data.overflowSide, axis, runtime.thresholdValue)
     }
     return false
   },

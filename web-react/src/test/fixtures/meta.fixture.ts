@@ -26,7 +26,7 @@ const metaScrollSeed = {
   id: 'test',
   axis: 'vertical',
   type: 'scroll',
-  onEdgeDir: 'left',
+  overflowSide: 'left',
   instantSwipe: 'true',
 }
 

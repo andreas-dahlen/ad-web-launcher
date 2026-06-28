@@ -1,4 +1,4 @@
-import Button from '@primitives/Button/Button'
+import ButtonPrim from '@primitives/ButtonPrim/ButtonPrim'
 
 const buttons = [
   { id: 1, label: '1', type: 'spotify', package: 'com.spotify.music' },
@@ -19,14 +19,14 @@ export default function ButtonGrid() {
   return (
     <div className="button-grid">
       {buttons.map(item => (
-        <Button
+        <ButtonPrim
           key={item.id}
           id={`grid-btn-${item.id}`}
           className="grid-button"
           onPressRelease={() => onPressRelease(item)}
         >
           <span>{item.label}</span>
-        </Button>
+        </ButtonPrim>
       ))}
     </div>
   )

@@ -7,10 +7,10 @@ import { getStoreByType, seedStoreByType } from '@test/utils/storeSeed.utils'
 import type { InteractionType } from '@typing/core.types'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { sizeStore } from '../../../shared/state/stores/size.store'
-import type { CarouselBinding } from '@primitives/Carousel/store/carousel.store'
-import type { SliderBinding } from '@primitives/Slider/store/slider.store'
-import type { DragBinding } from '@primitives/Drag/store/drag.store'
-import type { ScrollBinding } from '@primitives/Scroll/store/scroll.store'
+import type { CarouselBinding } from '@primitives/CarouselPrim/store/carousel.store'
+import type { SliderBinding } from '@primitives/SliderPrim/store/slider.store'
+import type { DragBinding } from '@primitives/DragPrim/store/drag.store'
+import type { ScrollBinding } from '@primitives/ScrollPrim/store/scroll.store'
 import { compileDescriptor } from '@interaction/input/buildDesc'
 type BuildFn =
   | "buildCarousel"
@@ -184,7 +184,7 @@ describe("[BUILD DESC]", () => {
       const expected = {
         settledValue: store.settledValue,
         isVisible: store.isVisible,
-        onEdgeDir: meta.onEdgeDir
+        overflowSide: meta.overflowSide
       }
       expect(result).toEqual(expected)
     })

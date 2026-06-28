@@ -80,7 +80,7 @@ describe('[SCROLLSOLVER]', () => {
       expect(result.payload.isOverflow).toBe(false)
     })
 
-    it('uses scroll resolver when onEdgeDir is false/undefined', () => {
+    it('uses scroll resolver when overflowSide is false/undefined', () => {
       const { runtime, desc } = createInterpreterSwipeStart("scroll", {
         runtime: {
           delta: { x: 0, y: 100 },
@@ -88,7 +88,7 @@ describe('[SCROLLSOLVER]', () => {
         },
         desc: createScrollDesc({
           data: createScrollData({
-            onEdgeDir: undefined
+            overflowSide: undefined
           })
         })
       })
@@ -198,7 +198,7 @@ describe('[SCROLLSOLVER]', () => {
 
       expect(result.route).toBe('revert')
     })
-    it('throws an error if isOverflow and onEdgeDir is undefined', () => {
+    it('throws an error if isOverflow and overflowSide is undefined', () => {
       const { runtime, desc } = createInterpreterSwipeCommit("scroll", {
         runtime: createRuntimeSwipeCommit({ delta: { x: 0, y: 0 } }),
         desc: createScrollDesc({
@@ -207,7 +207,7 @@ describe('[SCROLLSOLVER]', () => {
             layout: base_DEFAULT.layout,
             axis: "vertical"
           },
-          data: createScrollData({ onEdgeDir: undefined })
+          data: createScrollData({ overflowSide: undefined })
         })
       })
       const computed = createComputedScroll({ isOverflow: true })

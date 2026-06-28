@@ -1,4 +1,4 @@
-import type { Constraints1D, Constraints2D, OnEdgeDir, Vec2 } from '@typing/core.types'
+import type { Constraints1D, Constraints2D, BoxSide, Vec2 } from '@typing/core.types'
 
 export type CarouselData = CarouselDataBase & CarouselModifiers
 
@@ -34,6 +34,6 @@ export interface SliderData {
 
 export interface ScrollData {
   readonly settledValue: number
-  readonly isVisible: boolean //always included but not always used... onEdgeDir drives behavior.
-  readonly onEdgeDir?: OnEdgeDir
+  readonly isVisible: boolean //always included but not always used... overflowSide drives behavior.
+  readonly overflowSide?: BoxSide
 }

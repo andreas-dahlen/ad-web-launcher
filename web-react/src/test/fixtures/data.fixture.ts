@@ -18,6 +18,6 @@ export const data_DEFAULT = {
   scroll: {
     settledValue: 0,
     isVisible: true,
-    onEdgeDir: 'up'
+    overflowSide: 'top'
   }
 } as const

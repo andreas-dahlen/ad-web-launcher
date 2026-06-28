@@ -1,4 +1,4 @@
-import type { Axis1D, EventType, OnEdgeDir } from '@typing/core.types'
+import type { Axis1D, EventType, BoxSide } from '@typing/core.types'
 import type { BaseProps, DataAttributes } from '@typing/propUtils.types'
 import type React from 'react'
 
@@ -20,8 +20,8 @@ export type CarouselSceneProps =
   | { sceneCount: number; scenes?: never }
 
 export type OverflowProps =
-  | { onEdgeDir: OnEdgeDir; isInitialVisible: boolean }
-  | { onEdgeDir: never; isInitialVisible: never }
+  | { overflowSide: BoxSide; isInitialVisible: boolean }
+  | { overflowSide: never; isInitialVisible: never }
 
 //domain layer
 export type DragProps = BaseProps & SnapConfig & {
