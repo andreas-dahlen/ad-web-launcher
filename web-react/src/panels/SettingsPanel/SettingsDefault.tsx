@@ -2,14 +2,10 @@ import Button from '@composites/Button/Button'
 import { settingsStore } from '@stores/settings.store'
 import { useState } from 'react'
 import css from './SettingsPanel.module.css'
-import dragUnlocked from '@assets/dragunlocked.svg?react'
-import dragLocked from '@assets/draglocked.svg?react'
-import snap from '@assets/snap.svg?react'
-import grid from '@assets/grid.svg?react'
 import SnapInput from '@composites/structural/SnapInput'
 import SliderPrim from '@primitives/SliderPrim/SliderPrim'
 import clsx from 'clsx'
-import { systemIcons } from '@data/icons/system'
+import { Icons } from '@data/icons/index'
 
 export default function SettingsDefault() {
 
@@ -32,7 +28,8 @@ export default function SettingsDefault() {
             update("settingsMode", 'layout')
           }}
           label={'Edit Layout'}
-          Icon={systemIcons.GridNineIcon}
+          Icon={Icons.gridNine}
+          adjustIcon={{ rotate: 90 }}
         >
 
         </Button>
@@ -44,21 +41,21 @@ export default function SettingsDefault() {
           onPressRelease={() =>
             update("dragEnabled", !dragEnabled)}
           label={'Drag'}
-          Icon={dragEnabled ? dragUnlocked : dragLocked} />
+          Icon={dragEnabled ? Icons.dragUnlocked : Icons.draglocked} />
 
         <Button
           isActive={snapEnabled}
           onPressRelease={() =>
             update("snapEnabled", !snapEnabled)}
           label={'Snap'}
-          Icon={snap} />
+          Icon={Icons.snap} />
 
         <Button
           isActive={gridVisible}
           onPressRelease={() =>
             update("gridVisible", !gridVisible)}
           label={'Grid'}
-          Icon={grid} />
+          Icon={Icons.grid} />
 
 
         <SnapInput id="snapX" min={8} max={18} step={1} value={dragSnapX} enabled={snapEnabled} onChange={(v) => {

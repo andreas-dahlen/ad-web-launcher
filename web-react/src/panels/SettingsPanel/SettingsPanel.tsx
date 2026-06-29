@@ -1,4 +1,3 @@
-import exit from '@assets/exit.svg?react'
 import css from './SettingsPanel.module.css'
 import { settingsStore } from '@stores/settings.store.ts';
 import { PanelBase } from '../../blocks/Panel/PanelBase.tsx';
@@ -6,6 +5,7 @@ import SettingsDefault from './SettingsDefault.tsx';
 import SettingsLayout from './SettingsLayout.tsx';
 import Button from '@composites/Button/Button.tsx';
 import clsx from 'clsx';
+import { Icons } from '@data/icons/index.ts';
 export default function SettingsPanel() {
 
   const update = settingsStore.getState().update
@@ -18,7 +18,7 @@ export default function SettingsPanel() {
       <Button
         className={css.close}
         onPressRelease={() => update("panelOpen", false)}
-        Icon={exit}
+        Icon={Icons.exit}
       />
 
       {settingsmode === "default" && <SettingsDefault />}

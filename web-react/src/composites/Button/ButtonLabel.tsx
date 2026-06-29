@@ -12,6 +12,14 @@ export default function ButtonLabel({ msg, position }: LabelProps) {
   const positioning = position ? position : "bottom"
 
   return (
-    <span className={clsx(css[positioning])}>{msg}</span>
+    <span className={clsx(
+      positioning === "bottom" && css.bottom,
+      positioning === "top" && css.top,
+      positioning === "left" && css.left,
+      positioning === "right" && css.right,
+
+    )}>
+      {msg}
+    </span>
   )
 }

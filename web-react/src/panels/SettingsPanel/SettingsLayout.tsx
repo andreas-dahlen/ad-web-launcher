@@ -1,16 +1,11 @@
 import { settingsStore } from '@stores/settings.store'
 import css from './SettingsPanel.module.css'
 import Button from '@composites/Button/Button'
-import managerH from '@assets/horizontalmanager.svg?react'
-import managerInactiveH from '@assets/horizontalmanagerinactive.svg?react'
-import managerV from '@assets/horizontalmanager.svg?react'
-import managerInactiveV from '@assets/verticalmanagerinactive.svg?react'
-import bomb from '@assets/bomb.svg?react'
 import { alertStore } from '@stores/alert.store'
 import { layoutStore } from '@stores/layout.store'
 import { layout_DEFAULTS } from '@data/dataGenerator'
 import clsx from 'clsx'
-import { systemIcons } from '@data/icons/system'
+import { Icons } from '@data/icons/index'
 
 
 export default function SettingsLayout() {
@@ -30,7 +25,7 @@ export default function SettingsLayout() {
           if (!layoutManagerH) update("layoutManagerV", false)
         }}
         label={"horizontal config"}
-        Icon={layoutManagerH ? managerH : managerInactiveH}
+        Icon={layoutManagerH ? Icons.managerOnH : Icons.managerOffH}
       />
 
       <Button
@@ -40,7 +35,7 @@ export default function SettingsLayout() {
           if (!layoutManagerV) update("layoutManagerH", false)
         }}
         label={"vertical config"}
-        Icon={layoutManagerV ? managerV : managerInactiveV}
+        Icon={layoutManagerV ? Icons.managerOnV : Icons.managerOffV}
       />
       <Button
         onPressRelease={() => {
@@ -51,7 +46,7 @@ export default function SettingsLayout() {
           })
         }}
         label={"reset layout"}
-        Icon={bomb}
+        Icon={Icons.bomb}
       >
       </Button>
 
@@ -83,7 +78,7 @@ export default function SettingsLayout() {
       <Button
         onPressRelease={() => update("settingsMode", "default")}
         label={"back"}
-        Icon={systemIcons.BackspaceIcon}
+        Icon={Icons.backspace}
       />
 
     </div>

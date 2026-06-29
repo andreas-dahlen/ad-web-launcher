@@ -59,13 +59,13 @@ export default function Button({
       >
         {/* The new isolated icon component handles the rest */}
         {Icon && <ButtonIcon Icon={Icon} isActive={isActive} adjust={adjustIcon} />}
+        {label && <ButtonLabel
+          msg={label}
+          position={labelSide}
+        />}
 
       </ButtonPrim>
 
-      {label && <ButtonLabel
-        msg={label}
-        position={labelSide}
-      />}
     </>
   )
 
@@ -82,36 +82,4 @@ export default function Button({
     </DragPrim>
   )
   return button
-  // return (
-  //   <DragPrim
-  //     id={dragId}
-  //     useSettingsSnap={snapEnabled}
-  //     interactive={isDragOn}
-  //     onSwipeCommit={onSwipeCommit}
-  //     dragDataAttrs={dataAttrs}
-  //     className={clsx(!isDragOn && layoutClass)}
-  //   >
-  //     <ButtonPrim
-  //       id={buttonId}
-  //       interactive={(!dragEnabled || !isMovable) && interactive}
-  //       className={className}
-  //       onPressRelease={onPressRelease}
-  //       buttonDataAttrs={{
-  //         ...dataAttrs,
-  //         "active": isActive,
-  //         "interactive": interactive,
-  //         "state": "released"
-  //       }}
-  //     >
-  //       {/* The new isolated icon component handles the rest */}
-  //       {Icon && <ButtonIcon Icon={Icon} isActive={isActive} />}
-
-  //     </ButtonPrim>
-
-  //     {label && <ButtonLabel
-  //       msg={label}
-  //       position={labelSide}
-  //     />}
-  //   </DragPrim>
-  // )
 }

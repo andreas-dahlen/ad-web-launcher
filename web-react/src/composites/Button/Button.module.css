@@ -48,6 +48,8 @@
   transform: var(--flip-x, scaleX(1)) var(--flip-y, scaleY(1)) var(--rotate, rotate(0deg));
   transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   backface-visibility: hidden;
+  width: var(--svg-width, 40px);
+  height: var(--svg-height, 40px);
 
   path {
     fill: var(--svg-default);

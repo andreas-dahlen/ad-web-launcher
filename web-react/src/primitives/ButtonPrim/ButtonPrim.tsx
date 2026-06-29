@@ -44,7 +44,9 @@ export default function ButtonPrim({
         ...buttonDataAttrs
       })}
     >
-      {children}
+      <div className={css.content}>
+        {children}
+      </div>
     </div>
   )
 }
