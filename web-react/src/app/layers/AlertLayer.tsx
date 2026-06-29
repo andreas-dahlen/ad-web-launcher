@@ -1,4 +1,4 @@
-import { Z } from '@config/zIndex'
+import { Z } from '@config/zIndex.config.ts'
 import css from './Layers.module.css'
 import AlertPanel from '../../panels/AlertPanel.tsx'
 import clsx from 'clsx'

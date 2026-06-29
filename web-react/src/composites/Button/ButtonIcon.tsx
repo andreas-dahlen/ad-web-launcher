@@ -3,37 +3,39 @@ import css from './Button.module.css';
 import type { Icon } from '@phosphor-icons/react';
 import type { DynamicIconComponent } from '@typing/svg';
 
-interface ButtonIconProps {
+export interface ButtonIconProps {
   // Accepts any standard Phosphor Icon component
   Icon: Icon | DynamicIconComponent
   isActive?: boolean;
   isPending?: boolean // Could map to an animation state (like a spinner or light weight)
-
-  flipX?: boolean
-  flipY?: boolean
+  adjust?: {
+    flipX?: boolean;
+    flipY?: boolean;
+    rotate?: 90 | 180 | 270;
+  };
 }
 
 export default function ButtonIcon({
   Icon,
   isActive,
   isPending = false,
-  flipX = false,
-  flipY = false
+  adjust = {}
 }: ButtonIconProps) {
+  const { flipX, flipY, rotate } = adjust
 
   const activeWeight = isPending ? "light" : isActive ? "duotone" : "regular";
 
   return (
     <Icon
       size={40} // Your standardized grid dimension
-      weight={activeWeight} // Automatically leverages Phosphor's strength!
-      mirrored={flipX}
+      weight={activeWeight}
       className={clsx(
         css.svg,
-        isActive === undefined && css.default,
-        isActive ? css.dark : css.bright,
-
-        flipY && css.flipY
+        flipY && css.flipY,
+        flipX && css.flipX,
+        rotate === 90 && css.rotate90,
+        rotate === 180 && css.rotate180,
+        rotate === 270 && css.rotate270
       )}
     />
   )

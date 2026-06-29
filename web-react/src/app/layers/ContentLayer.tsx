@@ -1,4 +1,4 @@
-import { Z } from '@config/zIndex.ts'
+import { Z } from '@config/zIndex.config'
 import css from './Layers.module.css'
 import ContentCarouselPrim from '@primitives/CarouselPrim/ContentCarouselPrim'
 import { Scenes } from '@app/scenes/Scenes'

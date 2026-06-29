@@ -60,12 +60,12 @@ export default function DragPrim({
     <>
       <div
         ref={containerRef}
-        className={css.container}
+        className={clsx(css.container, className)}
         data-frame='drag'
       >
         <div
-          className={clsx(css.drag, className)}
-          style={{ ...motionStyle, pointerEvents: interactive ? 'auto' : 'none', background: "hotPink" }}
+          className={clsx(css.drag)}
+          style={{ ...motionStyle, pointerEvents: interactive ? 'auto' : 'none' }}
           ref={dragItemRef}
           {...dasx({
             id,

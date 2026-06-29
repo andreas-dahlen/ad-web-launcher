@@ -8,6 +8,8 @@ import snap from '@assets/snap.svg?react'
 import grid from '@assets/grid.svg?react'
 import SnapInput from '@composites/structural/SnapInput'
 import SliderPrim from '@primitives/SliderPrim/SliderPrim'
+import clsx from 'clsx'
+import { systemIcons } from '@data/icons/system'
 
 export default function SettingsDefault() {
 
@@ -24,7 +26,19 @@ export default function SettingsDefault() {
   return (
 
     <>
-      <div className={css.row}>
+      <div>
+        <Button
+          onPressRelease={() => {
+            update("settingsMode", 'layout')
+          }}
+          label={'Edit Layout'}
+          Icon={systemIcons.GridNineIcon}
+        >
+
+        </Button>
+      </div>
+
+      <div className={clsx(css.row)}>
         <Button
           isActive={dragEnabled}
           onPressRelease={() =>

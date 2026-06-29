@@ -1,4 +1,4 @@
-import { Z } from '@config/zIndex';
+import { Z } from '@config/zIndex.config';
 // import useRuntimeBindings from '../compositions/useRuntimeBindings.hook';
 import css from './Layers.module.css'
 import InputCarouselPrim from '@primitives/CarouselPrim/InputCarouselPrim';

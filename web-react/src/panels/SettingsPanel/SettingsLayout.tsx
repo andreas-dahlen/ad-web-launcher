@@ -9,20 +9,22 @@ import bomb from '@assets/bomb.svg?react'
 import { alertStore } from '@stores/alert.store'
 import { layoutStore } from '@stores/layout.store'
 import { layout_DEFAULTS } from '@data/dataGenerator'
+import clsx from 'clsx'
+import { systemIcons } from '@data/icons/system'
 
 
 export default function SettingsLayout() {
   const update = settingsStore.getState().update
+  const override = layoutStore.getState().overrideToDefaults
 
   const layoutManagerH = settingsStore(s => s.settings.layoutManagerH)
   const layoutManagerV = settingsStore(s => s.settings.layoutManagerV)
-  const override = layoutStore(s => s.overrideToDefaults)
+  const layoutMode = settingsStore(s => s.settings.layoutMode)
 
   return (
-    <div className={css.panel}>
+    <div className={clsx(css.panel)}>
       <Button
         isActive={layoutManagerH}
-        layoutClass={css.layoutClass}
         onPressRelease={() => {
           update("layoutManagerH", !layoutManagerH)
           if (!layoutManagerH) update("layoutManagerV", false)
@@ -52,6 +54,37 @@ export default function SettingsLayout() {
         Icon={bomb}
       >
       </Button>
+
+      <Button
+        isActive={layoutMode === 'scenes'}
+        onPressRelease={() => {
+          update("layoutMode", "scenes")
+        }}
+        label={"scenes"}
+      // Icon={""}
+      />
+      <Button
+        isActive={layoutMode === 'lanes'}
+        onPressRelease={() => {
+          update("layoutMode", "lanes")
+        }}
+        label={"lanes"}
+      // Icon={""}
+      />
+      <Button
+        isActive={layoutMode === 'locks'}
+        onPressRelease={() => {
+          update("layoutMode", "locks")
+        }}
+        label={"locks"}
+      // Icon={""}
+      />
+
+      <Button
+        onPressRelease={() => update("settingsMode", "default")}
+        label={"back"}
+        Icon={systemIcons.BackspaceIcon}
+      />
 
     </div>
   )

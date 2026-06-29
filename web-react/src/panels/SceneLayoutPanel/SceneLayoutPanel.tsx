@@ -5,7 +5,7 @@ import { layoutStore } from '@stores/layout.store';
 // import type { Axis1D } from '@typing/core.types';
 import { PanelBase } from '../../blocks/Panel/PanelBase';
 import Button from '@composites/Button/Button';
-import { systemIcons } from '@data/systemIcons';
+import { systemIcons } from '@data/icons/system';
 
 // type SceneLayoutPanel = {
 //   scene: Scene,

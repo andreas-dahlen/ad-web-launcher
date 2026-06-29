@@ -1,4 +1,4 @@
-import { Z } from '@config/zIndex'
+import { Z } from '@config/zIndex.config'
 import css from './DragGrid.module.css'
 import clsx from 'clsx'
 import { gestureStore } from '../../shared/state/stores/gesture.store'

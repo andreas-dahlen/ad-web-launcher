@@ -3,6 +3,7 @@
 //composition layer
 
 
+import type { ButtonIconProps } from '@composites/Button/ButtonIcon'
 import type { Icon } from '@phosphor-icons/react'
 import type { SnapConfig } from '@primitives/prim.types'
 import type { Axis1D, BoxSide, EventType } from '@typing/core.types'
@@ -20,15 +21,16 @@ export type DragFrameProps = SnapConfig & {
 
 export type ButtonProps = SnapConfig & {
   className?: string
-  layoutClass?: string
   dataAttrs?: DataAttributes
 
   interactive?: boolean
   isMovable?: boolean
+  isInFlow?: boolean
 
   label?: string
   labelSide?: BoxSide
   Icon?: Icon | DynamicIconComponent
+  adjustIcon?: ButtonIconProps["adjust"]
 
   isActive?: boolean
   // action?: string

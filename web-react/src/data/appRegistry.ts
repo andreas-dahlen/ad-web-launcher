@@ -1,14 +1,14 @@
-import { TelevisionIcon, GlobeIcon, GearIcon, YoutubeLogoIcon, GameControllerIcon, type Icon } from "@phosphor-icons/react";
+import type { IconName } from '@data/icons/registry';
 
 export interface AppRegistryItem {
   label: string;
-  icon: Icon;
+  iconName: IconName;
 }
 
 export const appRegistry: Record<string, AppRegistryItem> = {
-  "com.google.android.youtube": { label: "YouTube", icon: YoutubeLogoIcon },
-  "com.android.settings": { label: "Settings", icon: GearIcon },
-  "com.android.chrome": { label: "Browser", icon: GlobeIcon },
-  "com.netflix.mediaclient": { label: "Netflix", icon: TelevisionIcon },
-  "com.mojang.minecraftpe": { label: "Minecraft", icon: GameControllerIcon },
+  "com.google.android.youtube": { label: "YouTube", iconName: "youtube" },
+  "com.android.chrome": { label: "Browser", iconName: "chrome" },
+  "com.android.settings": { label: "Settings", iconName: "settings" },
+  //   "com.netflix.mediaclient": { label: "Netflix", icon: TelevisionIcon },
+  //   "com.mojang.minecraftpe": { label: "Minecraft", icon: GameControllerIcon },
 };

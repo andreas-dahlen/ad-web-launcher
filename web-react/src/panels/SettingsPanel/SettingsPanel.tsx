@@ -5,6 +5,7 @@ import { PanelBase } from '../../blocks/Panel/PanelBase.tsx';
 import SettingsDefault from './SettingsDefault.tsx';
 import SettingsLayout from './SettingsLayout.tsx';
 import Button from '@composites/Button/Button.tsx';
+import clsx from 'clsx';
 export default function SettingsPanel() {
 
   const update = settingsStore.getState().update
@@ -12,10 +13,10 @@ export default function SettingsPanel() {
   const settingsmode = settingsStore(s => s.settings.settingsMode)
 
   return (
-    <PanelBase className={css.settingsPanel}>
+    <PanelBase className={clsx(css.settingsPanel)}>
 
       <Button
-        layoutClass={css.close}
+        className={css.close}
         onPressRelease={() => update("panelOpen", false)}
         Icon={exit}
       />

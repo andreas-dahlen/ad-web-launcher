@@ -1,5 +1,5 @@
 import SettingsPanel from '../../panels/SettingsPanel/SettingsPanel.js';
-import { Z } from '@config/zIndex';
+import { Z } from '@config/zIndex.config.js';
 import ScrollPrim from '../../primitives/ScrollPrim/ScrollPrim.js';
 import css from './Layers.module.css'
 import ButtonPrim from '@primitives/ButtonPrim/ButtonPrim.js';

@@ -1,3 +1,11 @@
+.isInFlow {
+  --drag-position: relative;
+}
+
+.notInFlow {
+  --button-position: absolute;
+}
+
 [data-active='true'] {
   --button-col: var(--debug-button-on);
 }
@@ -17,11 +25,29 @@
 }
 
 .flipY {
-  transform: scaleY(-1);
+  --flip-y: scaleY(-1);
 }
 
+.flipX {
+  --flip-x: scaleX(-1);
+}
+
+.rotate90 {
+  --rotate: rotate(90deg)
+}
+
+.rotate180 {
+  --rotate: rotate(180deg)
+}
+
+.rotate270 {
+  --rotate: rotate(270deg)
+}
 
 .svg {
+  transform: var(--flip-x, scaleX(1)) var(--flip-y, scaleY(1)) var(--rotate, rotate(0deg));
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  backface-visibility: hidden;
 
   path {
     fill: var(--svg-default);
@@ -34,9 +60,6 @@
   &[data-active="false"] path {
     fill: var(--svg-bright);
   }
-
-  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  backface-visibility: hidden;
 }
 
 span {

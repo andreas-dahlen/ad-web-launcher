@@ -1,4 +1,4 @@
-import { systemIcons } from '@data/systemIcons'
+import { systemIcons } from '@data/icons/system'
 
 type sceneLayoutPanel = {
   scene: Scene,

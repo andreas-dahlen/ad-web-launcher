@@ -6,19 +6,21 @@ import { createId } from '@utils/idGenerator'
 import ButtonLabel from './ButtonLabel'
 import ButtonIcon from './ButtonIcon'
 import clsx from 'clsx'
+import css from './Button.module.css'
 
 export default function Button({
   // useSettingsSnap = false,
   className,
-  layoutClass,
   dataAttrs,
 
   interactive = true,
   isMovable = false,
+  isInFlow = true,
 
   label,
   labelSide,
   Icon,
+  adjustIcon,
 
   isActive,
   // action, //later integration for Android usage...
@@ -38,19 +40,15 @@ export default function Button({
 
   const isDragOn = dragEnabled && interactive && isMovable
 
-  return (
-    <DragPrim
-      id={dragId}
-      useSettingsSnap={snapEnabled}
-      interactive={isDragOn}
-      onSwipeCommit={onSwipeCommit}
-      dragDataAttrs={dataAttrs}
-      className={clsx(!isDragOn && layoutClass)}
-    >
+  const buttonNotInFlow = !isMovable && !isInFlow
+
+  const button = (
+    <>
       <ButtonPrim
         id={buttonId}
+        // interactive={(!dragEnabled || !isMovable) && interactive}
         interactive={(!dragEnabled || !isMovable) && interactive}
-        className={className}
+        className={clsx(className, buttonNotInFlow && css.notInFlow)}
         onPressRelease={onPressRelease}
         buttonDataAttrs={{
           ...dataAttrs,
@@ -60,7 +58,7 @@ export default function Button({
         }}
       >
         {/* The new isolated icon component handles the rest */}
-        {Icon && <ButtonIcon Icon={Icon} isActive={isActive} />}
+        {Icon && <ButtonIcon Icon={Icon} isActive={isActive} adjust={adjustIcon} />}
 
       </ButtonPrim>
 
@@ -68,6 +66,52 @@ export default function Button({
         msg={label}
         position={labelSide}
       />}
+    </>
+  )
+
+  if (isMovable) return (
+    <DragPrim
+      id={dragId}
+      useSettingsSnap={snapEnabled}
+      interactive={isDragOn}
+      onSwipeCommit={onSwipeCommit}
+      dragDataAttrs={dataAttrs}
+      className={clsx(isInFlow && css.isInFlow)}
+    >
+      {button}
     </DragPrim>
   )
+  return button
+  // return (
+  //   <DragPrim
+  //     id={dragId}
+  //     useSettingsSnap={snapEnabled}
+  //     interactive={isDragOn}
+  //     onSwipeCommit={onSwipeCommit}
+  //     dragDataAttrs={dataAttrs}
+  //     className={clsx(!isDragOn && layoutClass)}
+  //   >
+  //     <ButtonPrim
+  //       id={buttonId}
+  //       interactive={(!dragEnabled || !isMovable) && interactive}
+  //       className={className}
+  //       onPressRelease={onPressRelease}
+  //       buttonDataAttrs={{
+  //         ...dataAttrs,
+  //         "active": isActive,
+  //         "interactive": interactive,
+  //         "state": "released"
+  //       }}
+  //     >
+  //       {/* The new isolated icon component handles the rest */}
+  //       {Icon && <ButtonIcon Icon={Icon} isActive={isActive} />}
+
+  //     </ButtonPrim>
+
+  //     {label && <ButtonLabel
+  //       msg={label}
+  //       position={labelSide}
+  //     />}
+  //   </DragPrim>
+  // )
 }
