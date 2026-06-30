@@ -5,7 +5,7 @@ import css from './SettingsPanel.module.css'
 import SnapInput from '@composites/structural/SnapInput'
 import SliderPrim from '@primitives/SliderPrim/SliderPrim'
 import clsx from 'clsx'
-import { Icons } from '@data/icons/index'
+import * as Icons from '@data/icons/';
 
 export default function SettingsDefault() {
 

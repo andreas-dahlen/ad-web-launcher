@@ -5,7 +5,7 @@ import { alertStore } from '@stores/alert.store'
 import { layoutStore } from '@stores/layout.store'
 import { layout_DEFAULTS } from '@data/dataGenerator'
 import clsx from 'clsx'
-import { Icons } from '@data/icons/index'
+import * as Icons from '@data/icons/';
 
 
 export default function SettingsLayout() {

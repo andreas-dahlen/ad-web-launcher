@@ -4,6 +4,7 @@ import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 import tseslint from 'typescript-eslint'
 import boundaries from 'eslint-plugin-boundaries'
+import unicorn from 'eslint-plugin-unicorn'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
@@ -12,7 +13,8 @@ export default defineConfig([
     files: ['src/**/*.{ts,tsx}'],
 
     plugins: {
-      boundaries
+      boundaries,
+      unicorn
     },
 
     extends: [
@@ -20,6 +22,7 @@ export default defineConfig([
       tseslint.configs.recommended,
       reactHooks.configs.flat.recommended,
       reactRefresh.configs.vite,
+      unicorn.configs.recommended
     ],
 
     languageOptions: {
@@ -72,6 +75,10 @@ export default defineConfig([
     },
 
     rules: {
+
+      'unicorn/no-unused-properties': 'warn',
+      'unicorn/filename-case': 'off',
+
       '@typescript-eslint/no-unused-vars': [
         'error',
         {
@@ -182,10 +189,37 @@ export default defineConfig([
       }]
     }
   },
+
+  // ─── Unicorn folder naming rules ──────────────────────
+  // 2. STRICT RULE: React Components, SVGs, and CSS Modules MUST be PascalCase
+  {
+    files: ['src/**/*.tsx', 'src/**/*.jsx', 'src/**/*.module.css', 'src/assets/icons/**/*.svg'],
+    rules: {
+      'unicorn/filename-case': ['error', {
+        case: 'pascalCase'
+      }]
+    }
+  },
+
+  // 3. STRICT RULE: Standard TypeScript/JavaScript logic files MUST be camelCase
+  {
+    files: ['src/**/*.ts', 'src/**/*.js'],
+    // Exclude component test files or files that intentionally use PascalCase if necessary
+    ignores: ['src/**/*.tsx', 'src/test/**/*'],
+    rules: {
+      'unicorn/filename-case': ['error', {
+        case: 'camelCase'
+      }]
+    }
+  },
+
+
   // ─── Test-Only API & Cross-CSS Restrictions ──────────────────────
   {
     files: ['src/**/*.{ts,tsx}'],
-    ignores: ['src/test/**/*'],
+    ignores: [
+      'src/test/**/*'
+    ],
     rules: {
       'no-restricted-imports': ['error', {
         // flat-config matches schemas cleanly using direct objects array or specific group paths
@@ -197,6 +231,9 @@ export default defineConfig([
           },
           {
             group: ['**/*'],
+            ignoreChoice: {
+              paths: ['@data/icons', 'src/data/icons/**/*']
+            },
             importNames: ['__TEST_ONLY_API'],
             message: '__TEST_ONLY_API is for tests only'
           }

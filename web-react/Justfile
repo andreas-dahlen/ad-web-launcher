@@ -25,6 +25,9 @@ test-file file:
 lint:
     npm run lint
 
+knip:
+    npx knip --no-exit-code
+
 build:
     npm run build
 

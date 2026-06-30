@@ -1,49 +1,30 @@
-import { GearIcon, HouseIcon, ShieldCheckIcon, UserIcon, TrashIcon, RowsPlusBottomIcon, GridNineIcon, BackspaceIcon, ControlIcon, CaretDownIcon } from "@phosphor-icons/react";
-import BombIcon from '@assets/system/BombIcon.svg?react'
-import ExitIcon from '@assets/system/ExitIcon.svg?react'
-import GridIcon from '@assets/system/GridIcon.svg?react'
-import DragLockedIcon from '@assets/system/DragLockedIcon.svg?react'
-import DragUnlockedIcon from '@assets/system/DragUnlockedIcon.svg?react'
-import LockNextIcon from '@assets/system/LockNextIcon.svg?react'
-import LockPrevIcon from '@assets/system/LockPrevIcon.svg?react'
-import SnapIcon from '@assets/system/SnapIcon.svg?react'
-import ManagerOnHIcon from '@assets/system/ManagerOnHIcon.svg?react'
-import ManagerOffHIcon from '@assets/system/ManagerOffHIcon.svg?react'
-import ManagerOnVIcon from '@assets/system/ManagerOnVIcon.svg?react'
-import ManagerOffVIcon from '@assets/system/ManagerOffVIcon.svg?react'
 
+//phosphor
+export {
+  GearIcon as settings,
+  HouseIcon as home,
+  ShieldCheckIcon as security,
+  UserIcon as profile,
+  TrashIcon as trash,
+  RowsPlusBottomIcon as addBottom,
+  GridNineIcon as gridNine,
+  BackspaceIcon as backspace,
+  ControlIcon as control,
+  CaretDownIcon as caretDown
+} from "@phosphor-icons/react";
 
-const local = {
-  bomb: BombIcon,
-  exit: ExitIcon,
-  grid: GridIcon,
+//local
+export { default as bomb } from '@assets/system/BombIcon.svg?react';
+export { default as exit } from '@assets/system/ExitIcon.svg?react';
+export { default as grid } from '@assets/system/GridIcon.svg?react';
 
-  draglocked: DragLockedIcon,
-  dragUnlocked: DragUnlockedIcon,
-  locknextat: LockNextIcon,
-  lockprevat: LockPrevIcon,
-  snap: SnapIcon,
+export { default as draglocked } from '@assets/system/DragLockedIcon.svg?react';
+export { default as dragUnlocked } from '@assets/system/DragUnlockedIcon.svg?react';
+export { default as locknextat } from '@assets/system/LockNextIcon.svg?react';
+export { default as lockprevat } from '@assets/system/LockPrevIcon.svg?react';
+export { default as snap } from '@assets/system/SnapIcon.svg?react';
 
-  managerOnH: ManagerOnHIcon,
-  managerOffH: ManagerOffHIcon,
-  managerOnV: ManagerOnVIcon,
-  managerOffV: ManagerOffVIcon
-}
-
-const phosphor = {
-  settings: GearIcon,
-  home: HouseIcon,
-  security: ShieldCheckIcon,
-  profile: UserIcon,
-  trash: TrashIcon,
-  addBottom: RowsPlusBottomIcon,
-  gridNine: GridNineIcon,
-  backspace: BackspaceIcon,
-  control: ControlIcon,
-  caretDown: CaretDownIcon
-} as const;
-
-export const system = {
-  ...phosphor,
-  ...local
-}
+export { default as managerOnH } from '@assets/system/ManagerOnHIcon.svg?react';
+export { default as managerOffH } from '@assets/system/ManagerOffHIcon.svg?react';
+export { default as managerOnV } from '@assets/system/ManagerOnVIcon.svg?react';
+export { default as managerOffV } from '@assets/system/ManagerOffVIcon.svg?react';

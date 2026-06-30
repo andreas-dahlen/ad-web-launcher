@@ -1,18 +1,11 @@
+//phonsphor
+export {
+  YoutubeLogoIcon as youtube,
+  GlobeIcon as globe,
+  TelevisionIcon as television,
+  GameControllerIcon as gameController,
+  PhoneCallIcon as phone
+} from "@phosphor-icons/react";
 
-import { YoutubeLogoIcon, GlobeIcon, TelevisionIcon, GameControllerIcon, PhoneCallIcon } from "@phosphor-icons/react";
-
-const local = {
-  phone: PhoneCallIcon, //TODO placeholder for custom
-} as const
-
-const phosphor = {
-  youtube: YoutubeLogoIcon,
-  chrome: GlobeIcon,
-  netflix: TelevisionIcon,
-  minecraft: GameControllerIcon,
-} as const;
-
-export const external = {
-  ...phosphor,
-  ...local
-} as const
+//local
+// export { default as example } from '@assets/external/EXAMPLE.svg?react';
