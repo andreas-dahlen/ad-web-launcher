@@ -2,10 +2,11 @@ import Button from '@composites/Button/Button'
 import { settingsStore } from '@stores/settings.store'
 import { useState } from 'react'
 import css from './SettingsPanel.module.css'
-import SnapInput from '@composites/structural/SnapInput'
 import SliderPrim from '@primitives/SliderPrim/SliderPrim'
 import clsx from 'clsx'
 import * as Icons from '@data/icons/';
+import ButtonPair from '../../blocks/ButtonPair/ButtonPair'
+import { useSnapInput } from './hooks/useSnapInput'
 
 export default function SettingsDefault() {
 
@@ -19,6 +20,24 @@ export default function SettingsDefault() {
 
   const [sliderOne, setSliderOne] = useState(0)
   const [sliderTwo, setSliderTwo] = useState(0)
+
+  const snapX = useSnapInput({
+    value: dragSnapX,
+    min: 8,
+    max: 18,
+    step: 1,
+    enabled: snapEnabled,
+    onChange: (v) => update("dragSnapX", v)
+  })
+  const snapY = useSnapInput({
+    value: dragSnapY,
+    min: 16,
+    max: 36,
+    step: 2,
+    enabled: snapEnabled,
+    onChange: (v) => update("dragSnapY", v)
+  })
+
   return (
 
     <>
@@ -29,42 +48,31 @@ export default function SettingsDefault() {
           }}
           label={'Edit Layout'}
           Icon={Icons.gridNine}
-          adjustIcon={{ rotate: 90 }}
-        >
-
-        </Button>
+          iconSettings={{ adjust: { rotate: 90 }, variant: "fill" }}
+        />
       </div>
 
       <div className={clsx(css.row)}>
         <Button
-          isActive={dragEnabled}
+          mode={dragEnabled}
           onPressRelease={() =>
             update("dragEnabled", !dragEnabled)}
           label={'Drag'}
           Icon={dragEnabled ? Icons.dragUnlocked : Icons.draglocked} />
-
         <Button
-          isActive={snapEnabled}
+          mode={snapEnabled}
           onPressRelease={() =>
             update("snapEnabled", !snapEnabled)}
           label={'Snap'}
           Icon={Icons.snap} />
-
         <Button
-          isActive={gridVisible}
+          mode={gridVisible}
           onPressRelease={() =>
             update("gridVisible", !gridVisible)}
           label={'Grid'}
-          Icon={Icons.grid} />
-
-
-        <SnapInput id="snapX" min={8} max={18} step={1} value={dragSnapX} enabled={snapEnabled} onChange={(v) => {
-          update("dragSnapX", v)
-        }} />
-
-        <SnapInput id="snapY" min={16} max={36} step={2} value={dragSnapY} enabled={snapEnabled} onChange={(v) => {
-          update("dragSnapY", v)
-        }} />
+          Icon={Icons.gridNine}
+          iconSettings={{ adjust: { rotate: 90 }, variant: "light", size: 44 }}
+        />
       </div >
 
       <div className='settings-slider-frame'>
@@ -73,8 +81,6 @@ export default function SettingsDefault() {
           axis='horizontal'
           onValueChange={setSliderOne}
         >
-
-          {/* <div></div> */}
         </SliderPrim>
         <span>snap X: {sliderOne}</span>
       </div>
@@ -84,11 +90,38 @@ export default function SettingsDefault() {
           axis='horizontal'
           onValueChange={setSliderTwo}
         >
-
-          {/* <div></div> */}
         </SliderPrim>
         <span>snap Y {sliderTwo}</span>
       </div>
+
+      <ButtonPair axis="vertical" label="snapX">
+        <Button
+          onPressRelease={snapX.increment}
+          mode={snapX.canIncrement ? "default" : "disabled"}
+          Icon={Icons.caretDown}
+          iconSettings={{ adjust: { flipY: true } }}
+          label={String(dragSnapX)}
+        />
+        <Button
+          onPressRelease={snapX.decrement}
+          mode={snapX.canDecrement ? "default" : "disabled"}
+          Icon={Icons.caretDown}
+        />
+      </ButtonPair>
+      <ButtonPair axis="horizontal" label="snapY">
+        <Button
+          onPressRelease={snapY.increment}
+          mode={snapY.canIncrement ? "default" : "disabled"}
+          Icon={Icons.caretDown}
+          iconSettings={{ adjust: { flipY: true } }}
+          label={String(dragSnapY)}
+        />
+        <Button
+          onPressRelease={snapY.decrement}
+          mode={snapY.canDecrement ? "default" : "disabled"}
+          Icon={Icons.caretDown}
+        />
+      </ButtonPair>
     </>
   )
 }

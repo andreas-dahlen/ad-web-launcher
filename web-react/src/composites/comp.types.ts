@@ -2,13 +2,9 @@
 
 //composition layer
 
-
-import type { ButtonIconProps } from '@composites/Button/ButtonIcon'
-import type { Icon } from '@phosphor-icons/react'
 import type { SnapConfig } from '@primitives/prim.types'
-import type { Axis1D, BoxSide, EventType } from '@typing/core.types'
+import type { Axis1D, EventType } from '@typing/core.types'
 import type { DataAttributes } from '@typing/propUtils.types'
-import type { DynamicIconComponent } from '@typing/svg'
 
 export type DragFrameProps = SnapConfig & {
   id: string
@@ -16,26 +12,6 @@ export type DragFrameProps = SnapConfig & {
   children?: React.ReactNode
   dragDataAttrs?: DataAttributes
   onSwipeCommit?: (detail: EventType) => void
-}
-
-
-export type ButtonProps = SnapConfig & {
-  className?: string
-  dataAttrs?: DataAttributes
-
-  interactive?: boolean
-  isMovable?: boolean
-  isInFlow?: boolean
-
-  label?: string
-  labelSide?: BoxSide
-  Icon?: Icon | DynamicIconComponent
-  adjustIcon?: ButtonIconProps["adjust"]
-
-  isActive?: boolean
-  // action?: string
-  onSwipeCommit?: (detail: EventType) => void
-  onPressRelease?: (detail: EventType) => void
 }
 
 export type DragSliderProps = SnapConfig & {

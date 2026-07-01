@@ -104,11 +104,13 @@
 	"React Component": {
 		"prefix": "r-exp",
 		"body": [
-			"export default function ${1:Component}() {",
+			"export default function ${1:Component}({",
+			"${2:Props}",
+			"}):${3:type}{",
 			"  return (",
-			"    <div>",
+			"    <>",
 			"      $0",
-			"    </div>",
+			"    </>",
 			"  )",
 			"}"
 		],

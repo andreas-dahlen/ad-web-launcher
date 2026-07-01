@@ -19,23 +19,23 @@ export default function SettingsLayout() {
   return (
     <div className={clsx(css.panel)}>
       <Button
-        isActive={layoutManagerH}
+        mode={layoutManagerH}
         onPressRelease={() => {
           update("layoutManagerH", !layoutManagerH)
           if (!layoutManagerH) update("layoutManagerV", false)
         }}
         label={"horizontal config"}
-        Icon={layoutManagerH ? Icons.managerOnH : Icons.managerOffH}
+        Icon={layoutManagerH ? Icons.onManagerH : Icons.offManagerH}
       />
 
       <Button
-        isActive={layoutManagerV}
+        mode={layoutManagerV}
         onPressRelease={() => {
           update("layoutManagerV", !layoutManagerV)
           if (!layoutManagerV) update("layoutManagerH", false)
         }}
         label={"vertical config"}
-        Icon={layoutManagerV ? Icons.managerOnV : Icons.managerOffV}
+        Icon={layoutManagerV ? Icons.onManagerV : Icons.offManagerV}
       />
       <Button
         onPressRelease={() => {
@@ -51,7 +51,7 @@ export default function SettingsLayout() {
       </Button>
 
       <Button
-        isActive={layoutMode === 'scenes'}
+        mode={layoutMode === 'scenes'}
         onPressRelease={() => {
           update("layoutMode", "scenes")
         }}
@@ -59,7 +59,7 @@ export default function SettingsLayout() {
       // Icon={""}
       />
       <Button
-        isActive={layoutMode === 'lanes'}
+        mode={layoutMode === 'lanes'}
         onPressRelease={() => {
           update("layoutMode", "lanes")
         }}
@@ -67,7 +67,7 @@ export default function SettingsLayout() {
       // Icon={""}
       />
       <Button
-        isActive={layoutMode === 'locks'}
+        mode={layoutMode === 'locks'}
         onPressRelease={() => {
           update("layoutMode", "locks")
         }}

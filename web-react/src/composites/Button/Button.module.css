@@ -6,11 +6,11 @@
   --button-position: absolute;
 }
 
-[data-active='true'] {
+[data-mode='on'] {
   --button-col: var(--debug-button-on);
 }
 
-[data-active='false'] {
+[data-mode='off'] {
   --button-col: var(--debug-button-off);
 }
 
@@ -51,16 +51,21 @@
   width: var(--svg-width, 40px);
   height: var(--svg-height, 40px);
 
-  path {
-    fill: var(--svg-default);
+  &[data-mode="default"] path {
+    fill: var(--svg-current-color, var(--svg-default, currentColor));
   }
 
-  &[data-active="true"] path {
-    fill: var(--svg-dark);
+  &[data-mode="on"] path {
+    fill: var(--svg-current-color, var(--svg-dark, currentColor));
   }
 
-  &[data-active="false"] path {
-    fill: var(--svg-bright);
+  &[data-mode="off"] path {
+    fill: var(--svg-current-color, var(--svg-bright, currentColor));
+  }
+
+  &.isFilledVariant,
+  &.isFilledVariant path {
+    fill: var(--svg-current-color, currentColor) !important;
   }
 }
 
@@ -79,11 +84,11 @@ span {
 }
 
 .left {
-  --label-height: var(--button-height);
-  right: var(--label-height);
+  --label-width: var(--button-width);
+  right: var(--label-width);
 }
 
 .right {
-  --label-height: var(--button-height);
-  left: var(--label-height);
+  --label-width: var(--button-width);
+  left: var(--label-width);
 }

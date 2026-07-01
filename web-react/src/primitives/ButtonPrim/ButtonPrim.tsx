@@ -3,7 +3,7 @@ import { usePointerBridge } from '@hooks/usePointerBridge.hook'
 import css from './ButtonPrim.module.css'
 import clsx from 'clsx'
 import { dasx } from '@utils/dataAttrs'
-import type { ButtonProps } from '@primitives/prim.types'
+import type { ButtonPrimProps } from '@primitives/prim.types'
 
 
 export default function ButtonPrim({
@@ -14,7 +14,7 @@ export default function ButtonPrim({
   onPressRelease,
   children,
   buttonDataAttrs
-}: ButtonProps & React.HTMLAttributes<HTMLDivElement>) {
+}: ButtonPrimProps & React.HTMLAttributes<HTMLDivElement>) {
 
   const buttonRef = useRef<HTMLDivElement>(null)
 

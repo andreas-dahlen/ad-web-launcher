@@ -7,6 +7,7 @@ declare module '*.svg' {
 export type DynamicIconComponent = ComponentType<
   SVGProps<SVGSVGElement> & {
     size?: string | number;
+    color?: string;
     weight?: string;
     mirrored?: boolean;
   }

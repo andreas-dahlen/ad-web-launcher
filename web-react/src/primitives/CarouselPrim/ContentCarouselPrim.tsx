@@ -6,7 +6,7 @@ import { carouselStore, type NodeId } from './store/carousel.store.ts'
 import css from './CarouselPrim.module.css'
 import { dasx } from '@utils/dataAttrs.ts'
 import clsx from 'clsx'
-import type { ContentCarouselProps } from '@primitives/prim.types.ts'
+import type { ContentCarouselPrimProps } from '@primitives/prim.types.ts'
 import type { SceneRole } from '@typing/core.types.ts'
 
 
@@ -22,7 +22,7 @@ export default function ContentCarouselPrim({
   axis,
   scenes,
   carouselDataAttrs
-}: ContentCarouselProps) {
+}: ContentCarouselPrimProps) {
 
   // ── Fully subscribe to the carousel store ────────────────────────────────────────
   const { settling, liveOffset, dragging, layout, count, nodeBindings } = useCarouselStore(id)

@@ -24,25 +24,25 @@ export type OverflowProps =
   | { overflowSide: never; isInitialVisible: never }
 
 //domain layer
-export type DragProps = BaseProps & SnapConfig & {
+export type DragPrimProps = BaseProps & SnapConfig & {
   children?: React.ReactNode
   dragDataAttrs?: DataAttributes
   onSwipeCommit?: (detail: EventType) => void
 }
 
-export type InputCarouselProps = BaseProps & {
+export type InputCarouselPrimProps = BaseProps & {
   axis: Axis1D
   lockPrevAt?: number
   lockNextAt?: number
   onSwipeCommit?: (detail: EventType) => void
 }
-export type ContentCarouselProps = BaseProps & {
+export type ContentCarouselPrimProps = BaseProps & {
   axis: Axis1D
   scenes: React.ReactNode[]
   carouselDataAttrs?: DataAttributes
 }
 
-export type SliderProps = BaseProps & {
+export type SliderPrimProps = BaseProps & {
   axis: Axis1D
   instantSwipe?: boolean
   trackClassName?: string
@@ -52,14 +52,14 @@ export type SliderProps = BaseProps & {
   onValueChange?: (value: number) => void
 }
 
-export type ScrollProps = BaseProps & OverflowProps & {
+export type ScrollPrimProps = BaseProps & OverflowProps & {
   axis: Axis1D
   instantSwipe?: boolean
   children?: React.ReactNode
   scrollDataAttrs?: DataAttributes
 }
 
-export type ButtonProps = BaseProps & {
+export type ButtonPrimProps = BaseProps & {
   action?: string
   children?: React.ReactNode
   buttonDataAttrs?: DataAttributes

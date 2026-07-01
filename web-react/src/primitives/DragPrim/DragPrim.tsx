@@ -8,7 +8,7 @@ import { createPortal } from 'react-dom'
 import css from './DragPrim.module.css'
 import clsx from 'clsx'
 import { dasx } from '@utils/dataAttrs.ts'
-import type { DragProps } from '@primitives/prim.types.ts'
+import type { DragPrimProps } from '@primitives/prim.types.ts'
 
 export default function DragPrim({
   id,
@@ -20,7 +20,7 @@ export default function DragPrim({
   children,
   className,
   dragDataAttrs
-}: DragProps) {
+}: DragPrimProps) {
 
   // ── Fully subscribe to the drag store─────────────────────────────
   const { settledOffset, liveOffset, dragging, layout, frameRect } = useDragStore(id)

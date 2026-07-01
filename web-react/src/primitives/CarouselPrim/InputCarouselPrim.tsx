@@ -3,7 +3,7 @@ import { usePointerBridge } from '@hooks/usePointerBridge.hook.ts'
 import { useContainerSizing } from './hooks/useContainerSizing.hook.ts'
 import css from './CarouselPrim.module.css'
 import { dasx } from '../../shared/utils/dataAttrs.ts'
-import type { InputCarouselProps } from '@primitives/prim.types.ts'
+import type { InputCarouselPrimProps } from '@primitives/prim.types.ts'
 
 export default function InputCarouselPrim({
   id,
@@ -11,7 +11,7 @@ export default function InputCarouselPrim({
   lockPrevAt,
   lockNextAt,
   onSwipeCommit
-}: InputCarouselProps) {
+}: InputCarouselPrimProps) {
 
   // ── DOM reference & lane size ──────────────────────────────────────
   const containerRef = useRef<HTMLDivElement>(null)

@@ -1,37 +1,44 @@
 import clsx from 'clsx';
 import css from './Button.module.css';
-import type { Icon } from '@phosphor-icons/react';
-import type { DynamicIconComponent } from '@typing/svg';
 import { dasx } from '@utils/dataAttrs';
-
-export interface ButtonIconProps {
-  // Accepts any standard Phosphor Icon component
-  Icon: Icon | DynamicIconComponent
-
-  isActive?: boolean
-  adjust?: {
-    flipX?: boolean;
-    flipY?: boolean;
-    rotate?: 90 | 180 | 270;
-  };
-}
+import type { IconProps } from '@composites/Button/Button.types';
+import type { CSSProperties } from 'react';
 
 export default function ButtonIcon({
   Icon,
-  isActive,
+  mode,
+  variant = "bold",
+  color,
+  size = 40,
   adjust = {}
-}: ButtonIconProps) {
+}: IconProps) {
   const { flipX, flipY, rotate } = adjust
+
+  const isPhosphorIcon = Icon.displayName !== undefined;
+
+  const computedColor = color && mode in color
+    ? color[mode as keyof typeof color]
+    : (color?.default || undefined);
+
+  const customStyles: CSSProperties = {
+    '--svg-width': `${size}px`,
+    '--svg-height': `${size}px`,
+    '--svg-current-color': computedColor,
+  } as CSSProperties;
 
   return (
     <Icon
-      size={40} // Your standardized grid dimension
-      weight="fill"
-      {...dasx({ active: isActive })}
+      size={size}
+      color={computedColor || "currentColor"}
+      weight={variant}
+      mirrored={isPhosphorIcon ? flipX : undefined}
+      {...dasx({ mode: mode })}
+      style={customStyles}
       className={clsx(
         css.svg,
+        !isPhosphorIcon && variant === 'fill' && css.isFilledVariant,
         flipY && css.flipY,
-        flipX && css.flipX,
+        flipX && !isPhosphorIcon && css.flipX,
         rotate === 90 && css.rotate90,
         rotate === 180 && css.rotate180,
         rotate === 270 && css.rotate270

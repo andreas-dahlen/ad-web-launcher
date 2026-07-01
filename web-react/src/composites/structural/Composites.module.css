@@ -1,19 +1,9 @@
-.item {
-  display: flex;
-  flex-direction: column-reverse;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  pointer-events: none;
-}
-
-/* DELETE ITEM! */
-
 .panel {
   display: flex;
   align-items: center;
   gap: 5px;
 }
+
 
 .wrapper {
   display: flex;

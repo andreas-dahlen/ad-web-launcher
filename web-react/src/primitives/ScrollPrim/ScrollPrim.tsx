@@ -7,7 +7,7 @@ import { useScrollStore } from './store/useScrollStore.hook.ts'
 import css from './ScrollPrim.module.css'
 import clsx from 'clsx'
 import { dasx } from '@utils/dataAttrs.ts'
-import type { ScrollProps } from '@primitives/prim.types.ts'
+import type { ScrollPrimProps } from '@primitives/prim.types.ts'
 
 export default function ScrollPrim({
   id,
@@ -19,7 +19,7 @@ export default function ScrollPrim({
   scrollDataAttrs,
   overflowSide,
   isInitialVisible = false
-}: ScrollProps) {
+}: ScrollPrimProps) {
 
   // ── Fully subscribe to the slider store ─────────────────────────────
   const { overflowValue, liveValue, dragging } = useScrollStore(id, isInitialVisible)

@@ -7,7 +7,7 @@ import { sliderStore } from './store/slider.store.ts'
 import css from './SliderPrim.module.css'
 import clsx from 'clsx'
 import { dasx } from '@utils/dataAttrs.ts'
-import type { SliderProps } from '@primitives/prim.types.ts'
+import type { SliderPrimProps } from '@primitives/prim.types.ts'
 
 export default function SliderPrim({
   id,
@@ -21,7 +21,7 @@ export default function SliderPrim({
   sliderDataAttrs,
   //TODO add initialValue
   onValueChange
-}: SliderProps) {
+}: SliderPrimProps) {
 
   // ── Fully subscribe to the slider store ─────────────────────────────
   const { value, constraints, layout, dragging } = useSliderStore(id)

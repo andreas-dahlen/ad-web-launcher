@@ -1,4 +1,3 @@
-
 type DataValue =
   | string
   | number
