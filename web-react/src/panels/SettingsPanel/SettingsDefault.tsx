@@ -107,13 +107,13 @@ export default function SettingsDefault() {
         <span>snap Y {sliderTwo}</span>
       </div>
 
-      <Label msg="Snap X" position='top'>
+      <Label msg="Snap X" position='bottom'>
         <ButtonPair axis="vertical" middle={dragSnapX}>
           <Button
             mode={snapX.canIncrement ? "default" : "disabled"}
             button={{
               onPressRelease: snapX.increment,
-              styleVars: { border: "10px solid black" }
+              styleVars: { width: "40px", height: "40px" }
             }}
             icon={{
               Svg: Icons.caretDown,
@@ -122,26 +122,41 @@ export default function SettingsDefault() {
           />
           <Button
             mode={snapX.canDecrement ? "default" : "disabled"}
-            button={{ onPressRelease: snapX.decrement }}
-            icon={{ Svg: Icons.caretDown }}
+            button={{
+              onPressRelease: snapX.decrement,
+              styleVars: { width: "40px", height: "40px" }
+            }}
+            icon={{
+              Svg: Icons.caretDown,
+              settings: { size: 30 }
+            }}
           />
         </ButtonPair>
       </Label>
 
-      <Label msg="Snap Y" position='top'>
-        <ButtonPair axis="horizontal" middle={dragSnapY}>
+      <Label msg="Snap Y" position='bottom'>
+        <ButtonPair axis="vertical" middle={dragSnapY}>
           <Button
             mode={snapY.canIncrement ? "default" : "disabled"}
-            button={{ onPressRelease: snapY.increment }}
+            button={{
+              onPressRelease: snapY.increment,
+              styleVars: { width: "40px", height: "40px" }
+            }}
             icon={{
               Svg: Icons.caretDown,
-              settings: { adjust: { flipY: true } }
+              settings: { adjust: { flipY: true }, size: 30 }
             }}
           />
           <Button
             mode={snapY.canDecrement ? "default" : "disabled"}
-            button={{ onPressRelease: snapY.decrement }}
-            icon={{ Svg: Icons.caretDown }}
+            button={{
+              onPressRelease: snapY.decrement,
+              styleVars: { width: "40px", height: "40px" }
+            }}
+            icon={{
+              Svg: Icons.caretDown,
+              settings: { size: 30 }
+            }}
           />
         </ButtonPair>
       </Label>

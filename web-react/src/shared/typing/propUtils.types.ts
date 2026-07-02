@@ -6,6 +6,8 @@ export type DataAttributes = {
   undefined
 }
 
+export type Mode = "default" | "on" | "off" | "disabled"
+
 //base
 export type BaseProps = {
   id: string

@@ -1,16 +1,6 @@
-import type { BoxSide } from '@typing/core.types'
-import { calcWeight, type LabelWeight } from '@typing/propUtils.types'
+import { calcWeight } from '@typing/propUtils.types'
 import React from 'react'
-import type { JSX } from 'react/jsx-runtime'
-
-type Label = {
-  msg: string
-  MsgElement?: keyof JSX.IntrinsicElements
-  position?: BoxSide
-  weight?: LabelWeight
-  spacing?: number
-  children?: React.ReactNode
-}
+import type { Label } from './Label.types'
 
 export default function Label({
   msg,

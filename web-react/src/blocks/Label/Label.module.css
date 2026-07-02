@@ -1,0 +1,23 @@
+.bottom {
+  --label-height: var(--button-height);
+  top: var(--label-height);
+}
+
+.top {
+  --label-height: var(--button-height);
+  bottom: var(--label-height);
+}
+
+.left {
+  --label-width: var(--button-width);
+  right: var(--label-width);
+}
+
+.right {
+  --label-width: var(--button-width);
+  left: var(--label-width);
+}
+
+span {
+  position: absolute;
+}

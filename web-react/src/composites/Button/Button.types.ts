@@ -1,7 +1,9 @@
 import type { Icon } from '@phosphor-icons/react'
 import type { ButtonStyleOverrides } from '@primitives/ButtonPrim/ButtonPrim.vars'
-import type { BoxSide, EventType } from '@typing/core.types'
+import type { EventType } from '@typing/core.types'
+import type { Mode } from '@typing/propUtils.types'
 import type { DynamicIconComponent } from '@typing/svg'
+import type { LabelSettings } from '../../blocks/Label/Label.types'
 
 export type IconSettings = {
   variant?: 'bold' | 'thin' | 'light' | 'regular' | 'fill' | 'duotone'
@@ -18,9 +20,7 @@ export type IconSettings = {
     rotate?: 90 | 180 | 270;
   };
 }
-export type LabelSettings = {
-  position?: BoxSide
-}
+
 type DragSettings = {
   snapX?: number
   snapY?: number
@@ -49,13 +49,3 @@ export type ButtonProps = {
   button?: ButtonSettings
   drag?: DragSettings
 }
-
-export type IconProps = IconSettings & {
-  Svg: Icon | DynamicIconComponent
-  mode: Mode
-}
-export type LabelProps = LabelSettings & {
-  msg: string
-  mode: Mode
-}
-export type Mode = "default" | "on" | "off" | "disabled"

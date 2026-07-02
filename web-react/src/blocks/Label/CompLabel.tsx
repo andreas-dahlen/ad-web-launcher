@@ -1,7 +1,7 @@
 import clsx from 'clsx'
-import css from './Button.module.css'
-import type { LabelProps } from '@composites/Button/Button.types'
-export default function ButtonLabel({ msg, position, mode }: LabelProps) {
+import css from './Label.module.css'
+import type { LabelProps } from './Label.types'
+export default function CompLabel({ msg, position, mode }: LabelProps) {
   //use mode to drive colors?
   const positioning = position ? position : "bottom"
 

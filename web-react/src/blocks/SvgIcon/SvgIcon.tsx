@@ -1,10 +1,10 @@
 import clsx from 'clsx';
-import css from './Button.module.css';
 import { dasx } from '@utils/dasx';
-import type { IconProps } from '@composites/Button/Button.types';
+import type { IconProps } from './SvgIcon.types';
 import type { CSSProperties } from 'react';
+import css from './SvgIcon.module.css'
 
-export default function ButtonIcon({
+export default function SvgIcon({
   Svg,
   mode,
   variant = "fill",

@@ -3,10 +3,10 @@ import ButtonPrim from '@primitives/ButtonPrim/ButtonPrim'
 import DragPrim from '@primitives/DragPrim/DragPrim'
 import { settingsStore } from '@stores/settings.store'
 import { createId } from '@utils/idGenerator'
+import ButtonLabel from './SliderLabel'
+import SliderIcon from './SliderIcon'
 import clsx from 'clsx'
-import css from './Button.module.css'
-import CompLabel from '../../blocks/Label/CompLabel'
-import SvgIcon from '../../blocks/SvgIcon/SvgIcon'
+import css from './Slider.module.css'
 
 export default function Button({
   mode,
@@ -61,13 +61,13 @@ export default function Button({
         }}
       >
         {/* The new isolated icon component handles the rest */}
-        {icon && <SvgIcon
+        {icon && <ButtonIcon
           Svg={icon.Svg}
           mode={resolvedMode}
           {...icon.settings}
         />}
 
-        {label && <CompLabel
+        {label && <ButtonLabel
           msg={label.msg}
           mode={resolvedMode}
           {...label.settings}
