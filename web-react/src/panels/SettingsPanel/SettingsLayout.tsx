@@ -20,67 +20,79 @@ export default function SettingsLayout() {
     <div className={clsx(css.panel)}>
       <Button
         mode={layoutManagerH}
-        onPressRelease={() => {
-          update("layoutManagerH", !layoutManagerH)
-          if (!layoutManagerH) update("layoutManagerV", false)
+        button={{
+          onPressRelease: () => {
+            update("layoutManagerH", !layoutManagerH)
+            if (!layoutManagerH) update("layoutManagerV", false)
+          }
         }}
-        label={"horizontal config"}
-        Icon={layoutManagerH ? Icons.onManagerH : Icons.offManagerH}
+        label={{ msg: "horizontal config" }}
+        icon={{ Svg: layoutManagerH ? Icons.onManagerH : Icons.offManagerH }}
       />
 
       <Button
         mode={layoutManagerV}
-        onPressRelease={() => {
-          update("layoutManagerV", !layoutManagerV)
-          if (!layoutManagerV) update("layoutManagerH", false)
+        button={{
+          onPressRelease: () => {
+            update("layoutManagerV", !layoutManagerV)
+            if (!layoutManagerV) update("layoutManagerH", false)
+          }
         }}
-        label={"vertical config"}
-        Icon={layoutManagerV ? Icons.onManagerV : Icons.offManagerV}
+        label={{ msg: "vertical config" }}
+        icon={{ Svg: layoutManagerV ? Icons.onManagerV : Icons.offManagerV }}
       />
       <Button
-        onPressRelease={() => {
-          alertStore.getState().show({
-            message: "Reset all layout settings?",
-            onConfirm: () => override(layout_DEFAULTS),
-            onCancel: () => console.log("Cancelled"),
-          })
+        button={{
+          onPressRelease: () => {
+            alertStore.getState().show({
+              message: "Reset all layout settings?",
+              onConfirm: () => override(layout_DEFAULTS),
+              onCancel: () => console.log("Cancelled"),
+            })
+          }
         }}
-        label={"reset layout"}
-        Icon={Icons.bomb}
-      >
-      </Button>
+        label={{ msg: "reset layout" }}
+        icon={{ Svg: Icons.bomb }}
+      />
 
       <Button
         mode={layoutMode === 'scenes'}
-        onPressRelease={() => {
-          update("layoutMode", "scenes")
+        button={{
+          onPressRelease: () => {
+            update("layoutMode", "scenes")
+          }
         }}
-        label={"scenes"}
+        label={{ msg: "scenes" }}
       // Icon={""}
       />
       <Button
         mode={layoutMode === 'lanes'}
-        onPressRelease={() => {
-          update("layoutMode", "lanes")
+        button={{
+          onPressRelease: () => {
+            update("layoutMode", "lanes")
+          }
         }}
-        label={"lanes"}
+        label={{ msg: "lanes" }}
       // Icon={""}
       />
       <Button
         mode={layoutMode === 'locks'}
-        onPressRelease={() => {
-          update("layoutMode", "locks")
+        button={{
+          onPressRelease: () => {
+            update("layoutMode", "locks")
+          }
         }}
-        label={"locks"}
+        label={{ msg: "locks" }}
       // Icon={""}
       />
 
       <Button
-        onPressRelease={() => update("settingsMode", "default")}
-        label={"back"}
-        Icon={Icons.backspace}
+        button={{
+          onPressRelease: () => update("settingsMode", "default")
+        }}
+        label={{ msg: "back" }}
+        icon={{ Svg: Icons.backspace }}
       />
-
     </div>
   )
 }

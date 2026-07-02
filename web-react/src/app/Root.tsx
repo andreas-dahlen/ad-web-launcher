@@ -5,7 +5,6 @@ import { useLayoutEffect } from 'react'
 import { sizeStore } from '../shared/state/stores/size.store.ts'
 import AlertLayer from '@app/layers/AlertLayer.tsx'
 import { gestureStore } from '../shared/state/stores/gesture.store.ts'
-
 export default function Root() {
 
   const activeGesture = gestureStore(s => s.activeGesture)

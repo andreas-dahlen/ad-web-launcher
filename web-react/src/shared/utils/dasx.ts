@@ -17,7 +17,7 @@ function toKebab(str: string): string {
     .toLowerCase();
 }
 
-function toDataAttr(key: string): `data-${string}` {
+function toDataAttr(key: string): DataString {
   const kebab = toKebab(key)
   return kebab.startsWith('data-') ? kebab as DataString : `data-${kebab}`
 }
@@ -28,12 +28,6 @@ export function dasx(state: DataState = {}) {
 
   for (const [key, value] of Object.entries(state)) {
     if (value == null || key == null) continue
-
-
-    // if (typeof value === "boolean") {
-    //   result[toDataAttr(key)] = value ? "true" : "false"
-    // }
-
     result[toDataAttr(key)] = String(value)
   }
   return result

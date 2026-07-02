@@ -6,19 +6,22 @@ import { useOverflowMotion } from './hooks/useOverflowMotion.hook.ts'
 import { useScrollStore } from './store/useScrollStore.hook.ts'
 import css from './ScrollPrim.module.css'
 import clsx from 'clsx'
-import { dasx } from '@utils/dataAttrs.ts'
+import { dasx } from '@utils/dasx.ts'
+import { stsx } from '@utils/slsx.ts'
 import type { ScrollPrimProps } from '@primitives/prim.types.ts'
+import { scrollVars } from '@primitives/ScrollPrim/ScrollPrim.vars.ts'
 
 export default function ScrollPrim({
   id,
   axis,
+  overflowSide,
+  isInitialVisible = false,
   interactive = true,
   instantSwipe = true,
   className,
   children,
   scrollDataAttrs,
-  overflowSide,
-  isInitialVisible = false
+  styleVars
 }: ScrollPrimProps) {
 
   // ── Fully subscribe to the slider store ─────────────────────────────
@@ -64,7 +67,7 @@ export default function ScrollPrim({
 
       <div
         className={clsx(css.scroll, className)}
-        style={{ ...contentStyle, pointerEvents: interactive ? 'auto' : 'none' }}
+        style={{ ...contentStyle, pointerEvents: interactive ? 'auto' : 'none', ...stsx(styleVars ?? {}, scrollVars) }}
         ref={contentRef}
         {...dasx({
           type: "scroll",

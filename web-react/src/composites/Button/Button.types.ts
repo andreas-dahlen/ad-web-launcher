@@ -1,7 +1,6 @@
 import type { Icon } from '@phosphor-icons/react'
-import type { SnapConfig } from '@primitives/prim.types'
+import type { ButtonStyleOverrides } from '@primitives/ButtonPrim/ButtonPrim.vars'
 import type { BoxSide, EventType } from '@typing/core.types'
-import type { DataAttributes } from '@typing/propUtils.types'
 import type { DynamicIconComponent } from '@typing/svg'
 
 export type IconSettings = {
@@ -23,38 +22,40 @@ export type LabelSettings = {
   position?: BoxSide
 }
 type DragSettings = {
-  useSettingsSnap?: boolean
   snapX?: number
   snapY?: number
+  useSettingsSnap?: boolean
+  onSwipeCommit?: (detail: EventType) => void
 }
+type ButtonSettings = {
+  movable?: boolean
+  inFlow?: boolean
+  className?: string
+  styleVars?: ButtonStyleOverrides
+  onPressRelease?: (detail: EventType) => void
+}
+export type ModeInput = Mode | boolean
+//new guide
+export type ButtonProps = {
+  mode?: ModeInput
+  icon?: {
+    Svg: Icon | DynamicIconComponent
+    settings?: IconSettings
+  }
+  label?: {
+    msg: string
+    settings?: LabelSettings
+  }
+  button?: ButtonSettings
+  drag?: DragSettings
+}
+
 export type IconProps = IconSettings & {
-  Icon: Icon | DynamicIconComponent
+  Svg: Icon | DynamicIconComponent
   mode: Mode
 }
 export type LabelProps = LabelSettings & {
-  label: string
+  msg: string
   mode: Mode
 }
 export type Mode = "default" | "on" | "off" | "disabled"
-
-export type ModeProp = Mode | boolean
-
-export type ButtonProps = SnapConfig & {
-  className?: string
-  dataAttrs?: DataAttributes
-
-  isMovable?: boolean
-  isInFlow?: boolean
-  mode?: ModeProp
-
-  iconSettings?: IconSettings
-  labelSettings?: LabelSettings
-  dragSettings?: DragSettings
-
-  label?: string
-  Icon?: Icon | DynamicIconComponent
-
-  // action?: string
-  onSwipeCommit?: (detail: EventType) => void
-  onPressRelease?: (detail: EventType) => void
-}

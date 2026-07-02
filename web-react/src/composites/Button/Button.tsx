@@ -9,31 +9,27 @@ import clsx from 'clsx'
 import css from './Button.module.css'
 
 export default function Button({
-  // useSettingsSnap = false,
-  className,
-  dataAttrs,
-
-  // interactive = true,
-  isMovable = false,
-  isInFlow = true,
   mode,
-
-  Icon,
+  icon,
   label,
-
-  iconSettings,
-  labelSettings,
-
-  // action, //later integration for Android usage...
-  onSwipeCommit,
-  onPressRelease
+  button,
+  drag
 }: ButtonProps) {
+
+  const {
+    movable = false,
+    inFlow = true,
+    className,
+    styleVars,
+    onPressRelease
+  } = button ?? {}
+
   const snapEnabled = settingsStore(s => s.settings.snapEnabled)
   const dragEnabled = settingsStore(s => s.settings.dragEnabled)
 
   const id = createId();
 
-  const componentId = label ? `${label.toLowerCase()}_${id}` : `item_${id}`;
+  const componentId = label ? `${label.msg.toLowerCase()}_${id}` : `item_${id}`;
 
   const dragId = `drag_${componentId}`;
   const buttonId = `button_${componentId}`;
@@ -46,51 +42,50 @@ export default function Button({
 
   const interactive = resolvedMode !== "disabled"
 
-  const isDragOn = dragEnabled && interactive && isMovable
-  const buttonNotInFlow = !isMovable && !isInFlow
+  const isDragOn = dragEnabled && interactive && movable
+  const buttonNotInFlow = !movable && !inFlow
 
-  const button = (
+  const Button = (
     <>
       <ButtonPrim
         id={buttonId}
         // interactive={(!dragEnabled || !isMovable) && interactive}
-        interactive={(!dragEnabled || !isMovable) && interactive}
+        interactive={(!dragEnabled || !movable) && interactive}
         className={clsx(className, buttonNotInFlow && css.notInFlow)}
         onPressRelease={onPressRelease}
+        styleVars={styleVars}
         buttonDataAttrs={{
-          ...dataAttrs,
           "mode": resolvedMode,
           "interactive": interactive,
           "state": "released"
         }}
       >
         {/* The new isolated icon component handles the rest */}
-        {Icon && <ButtonIcon
-          Icon={Icon}
+        {icon && <ButtonIcon
+          Svg={icon.Svg}
           mode={resolvedMode}
-          {...iconSettings}
+          {...icon.settings}
         />}
 
         {label && <ButtonLabel
-          label={label}
+          msg={label.msg}
           mode={resolvedMode}
-          {...labelSettings}
+          {...label.settings}
         />}
       </ButtonPrim>
     </>
   )
 
-  if (isMovable) return (
+  if (movable) return (
     <DragPrim
       id={dragId}
       useSettingsSnap={snapEnabled}
       interactive={isDragOn}
-      onSwipeCommit={onSwipeCommit}
-      dragDataAttrs={dataAttrs}
-      className={clsx(isInFlow && css.isInFlow)}
+      onSwipeCommit={drag?.onSwipeCommit && drag.onSwipeCommit}
+      className={clsx(inFlow && css.isInFlow)}
     >
-      {button}
+      {Button}
     </DragPrim>
   )
-  return button
+  return Button
 }

@@ -7,6 +7,7 @@ import clsx from 'clsx'
 import * as Icons from '@data/icons/';
 import ButtonPair from '../../blocks/ButtonPair/ButtonPair'
 import { useSnapInput } from './hooks/useSnapInput'
+import Label from '../../blocks/Label/Label'
 
 export default function SettingsDefault() {
 
@@ -43,35 +44,47 @@ export default function SettingsDefault() {
     <>
       <div>
         <Button
-          onPressRelease={() => {
-            update("settingsMode", 'layout')
+          button={{
+            onPressRelease: () => {
+              update("settingsMode", 'layout')
+            }
           }}
-          label={'Edit Layout'}
-          Icon={Icons.gridNine}
-          iconSettings={{ adjust: { rotate: 90 }, variant: "fill" }}
+          label={{ msg: 'Edit Layout' }}
+          icon={{
+            Svg: Icons.gridNine,
+            settings: { adjust: { rotate: 90 }, variant: "fill" }
+          }}
         />
       </div>
 
       <div className={clsx(css.row)}>
         <Button
           mode={dragEnabled}
-          onPressRelease={() =>
-            update("dragEnabled", !dragEnabled)}
-          label={'Drag'}
-          Icon={dragEnabled ? Icons.dragUnlocked : Icons.draglocked} />
+          button={{
+            onPressRelease: () =>
+              update("dragEnabled", !dragEnabled)
+          }}
+          label={{ msg: 'Drag' }}
+          icon={{ Svg: dragEnabled ? Icons.dragUnlocked : Icons.draglocked }} />
         <Button
           mode={snapEnabled}
-          onPressRelease={() =>
-            update("snapEnabled", !snapEnabled)}
-          label={'Snap'}
-          Icon={Icons.snap} />
+          button={{
+            onPressRelease: () =>
+              update("snapEnabled", !snapEnabled)
+          }}
+          label={{ msg: 'Snap' }}
+          icon={{ Svg: Icons.snap }} />
         <Button
           mode={gridVisible}
-          onPressRelease={() =>
-            update("gridVisible", !gridVisible)}
-          label={'Grid'}
-          Icon={Icons.gridNine}
-          iconSettings={{ adjust: { rotate: 90 }, variant: "light", size: 44 }}
+          button={{
+            onPressRelease: () =>
+              update("gridVisible", !gridVisible)
+          }}
+          label={{ msg: 'Grid' }}
+          icon={{
+            Svg: Icons.gridNine,
+            settings: { adjust: { rotate: 90 }, variant: "light", size: 44 }
+          }}
         />
       </div >
 
@@ -94,34 +107,44 @@ export default function SettingsDefault() {
         <span>snap Y {sliderTwo}</span>
       </div>
 
-      <ButtonPair axis="vertical" label="snapX">
-        <Button
-          onPressRelease={snapX.increment}
-          mode={snapX.canIncrement ? "default" : "disabled"}
-          Icon={Icons.caretDown}
-          iconSettings={{ adjust: { flipY: true } }}
-          label={String(dragSnapX)}
-        />
-        <Button
-          onPressRelease={snapX.decrement}
-          mode={snapX.canDecrement ? "default" : "disabled"}
-          Icon={Icons.caretDown}
-        />
-      </ButtonPair>
-      <ButtonPair axis="horizontal" label="snapY">
-        <Button
-          onPressRelease={snapY.increment}
-          mode={snapY.canIncrement ? "default" : "disabled"}
-          Icon={Icons.caretDown}
-          iconSettings={{ adjust: { flipY: true } }}
-          label={String(dragSnapY)}
-        />
-        <Button
-          onPressRelease={snapY.decrement}
-          mode={snapY.canDecrement ? "default" : "disabled"}
-          Icon={Icons.caretDown}
-        />
-      </ButtonPair>
+      <Label msg="Snap X" position='top'>
+        <ButtonPair axis="vertical" middle={dragSnapX}>
+          <Button
+            mode={snapX.canIncrement ? "default" : "disabled"}
+            button={{
+              onPressRelease: snapX.increment,
+              styleVars: { border: "10px solid black" }
+            }}
+            icon={{
+              Svg: Icons.caretDown,
+              settings: { adjust: { flipY: true }, size: 30 }
+            }}
+          />
+          <Button
+            mode={snapX.canDecrement ? "default" : "disabled"}
+            button={{ onPressRelease: snapX.decrement }}
+            icon={{ Svg: Icons.caretDown }}
+          />
+        </ButtonPair>
+      </Label>
+
+      <Label msg="Snap Y" position='top'>
+        <ButtonPair axis="horizontal" middle={dragSnapY}>
+          <Button
+            mode={snapY.canIncrement ? "default" : "disabled"}
+            button={{ onPressRelease: snapY.increment }}
+            icon={{
+              Svg: Icons.caretDown,
+              settings: { adjust: { flipY: true } }
+            }}
+          />
+          <Button
+            mode={snapY.canDecrement ? "default" : "disabled"}
+            button={{ onPressRelease: snapY.decrement }}
+            icon={{ Svg: Icons.caretDown }}
+          />
+        </ButtonPair>
+      </Label>
     </>
   )
 }

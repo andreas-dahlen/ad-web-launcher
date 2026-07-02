@@ -6,8 +6,10 @@ import { useSliderStore } from './store/useSliderStore.hook.ts'
 import { sliderStore } from './store/slider.store.ts'
 import css from './SliderPrim.module.css'
 import clsx from 'clsx'
-import { dasx } from '@utils/dataAttrs.ts'
+import { dasx } from '@utils/dasx.ts'
+import { stsx } from '@utils/slsx.ts'
 import type { SliderPrimProps } from '@primitives/prim.types.ts'
+import { sliderVars } from '@primitives/SliderPrim/SliderPrim.vars.ts'
 
 export default function SliderPrim({
   id,
@@ -19,6 +21,7 @@ export default function SliderPrim({
   thumbClassName,
   children,
   sliderDataAttrs,
+  styleVars,
   //TODO add initialValue
   onValueChange
 }: SliderPrimProps) {
@@ -84,7 +87,10 @@ export default function SliderPrim({
   return (
     <div
       className={clsx(css.slider, className)}
-      style={{ pointerEvents: interactive ? 'auto' : 'none' }}
+      style={{
+        pointerEvents: interactive ? 'auto' : 'none',
+        ...stsx(styleVars ?? {}, sliderVars)
+      }}
       ref={sliderRef}
       {...dasx({
         id,

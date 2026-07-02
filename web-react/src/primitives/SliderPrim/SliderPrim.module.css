@@ -28,9 +28,9 @@
   justify-content: center;
   align-items: center;
 
-  border-radius: var(--extreme-radius);
-  background: var(--color-overlay);
-  opacity: var(--opacity-low);
+  border-radius: var(--track-radius, var(--extreme-radius));
+  background: var(--rack-col, var(--color-overlay));
+  opacity: var(--track-opacity, var(--opacity-low));
 
   &[data-axis="horizontal"] {
     width: var(--track-width, var(--slider-width));
@@ -51,9 +51,9 @@
 
   width: var(--thumb-width);
   height: var(--thumb-height);
-  background: var(--button-col);
-  border-radius: var(--button-radius);
-  border: var(--button-border);
+  background: var(--thumb-col, var(--button-col));
+  border-radius: var(--thumb-radius, var(--button-radius));
+  border: var(--thumb-border, var(--button-border));
   will-change: transform;
   position: absolute;
 }

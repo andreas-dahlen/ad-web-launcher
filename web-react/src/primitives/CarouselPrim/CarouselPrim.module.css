@@ -1,7 +1,8 @@
 .carousel {
-  --scene-size: 100%;
-  width: var(--scene-size);
-  height: var(--scene-size);
+  --scene-width: 100%;
+  --scene-height: 100%;
+  width: var(--scene-width);
+  height: var(--scene-height);
   position: relative;
   overflow: hidden;
   /* transform: translateZ(0); */
@@ -9,8 +10,8 @@
 
 .scene {
   position: absolute;
-  width: var(--scene-size);
-  height: var(--scene-size);
+  width: var(--scene-width);
+  height: var(--scene-height);
   will-change: transform;
   /* Prevent layout thrashing */
   contain: paint;
@@ -19,8 +20,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: var(--scene-size);
-    height: var(--scene-size);
+    width: var(--scene-width);
+    height: var(--scene-height);
   }
 }
 

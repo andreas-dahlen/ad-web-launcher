@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { dasx } from '@utils/dataAttrs'
+import { dasx } from '@utils/dasx'
 
 describe('[DASX]', () => {
   it('should convert camelCase to kebab-case with data-prefix', () => {

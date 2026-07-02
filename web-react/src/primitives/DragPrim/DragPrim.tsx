@@ -7,7 +7,7 @@ import { useDragStore } from './store/useDragStore.hook.ts'
 import { createPortal } from 'react-dom'
 import css from './DragPrim.module.css'
 import clsx from 'clsx'
-import { dasx } from '@utils/dataAttrs.ts'
+import { dasx } from '@utils/dasx.ts'
 import type { DragPrimProps } from '@primitives/prim.types.ts'
 
 export default function DragPrim({

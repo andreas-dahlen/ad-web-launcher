@@ -1,3 +1,7 @@
+import type { ButtonStyleOverrides } from '@primitives/ButtonPrim/ButtonPrim.vars'
+import type { CarouselStyleOverrides } from '@primitives/CarouselPrim/CarouselPrim.vars'
+import type { ScrollStyleOverrides } from '@primitives/ScrollPrim/ScrollPrim.vars'
+import type { SliderStyleOverrides } from '@primitives/SliderPrim/SliderPrim.vars'
 import type { Axis1D, EventType, BoxSide } from '@typing/core.types'
 import type { BaseProps, DataAttributes } from '@typing/propUtils.types'
 import type React from 'react'
@@ -14,10 +18,6 @@ export type SnapConfig = //default is false
     snapX?: number
     snapY?: number
   }
-
-export type CarouselSceneProps =
-  | { scenes: React.ComponentType[]; sceneCount?: never }
-  | { sceneCount: number; scenes?: never }
 
 export type OverflowProps =
   | { overflowSide: BoxSide; isInitialVisible: boolean }
@@ -40,6 +40,7 @@ export type ContentCarouselPrimProps = BaseProps & {
   axis: Axis1D
   scenes: React.ReactNode[]
   carouselDataAttrs?: DataAttributes
+  styleVars?: CarouselStyleOverrides
 }
 
 export type SliderPrimProps = BaseProps & {
@@ -49,6 +50,7 @@ export type SliderPrimProps = BaseProps & {
   thumbClassName?: string
   children?: React.ReactNode
   sliderDataAttrs?: DataAttributes
+  styleVars?: SliderStyleOverrides
   onValueChange?: (value: number) => void
 }
 
@@ -57,11 +59,13 @@ export type ScrollPrimProps = BaseProps & OverflowProps & {
   instantSwipe?: boolean
   children?: React.ReactNode
   scrollDataAttrs?: DataAttributes
+  styleVars?: ScrollStyleOverrides
 }
 
 export type ButtonPrimProps = BaseProps & {
   action?: string
   children?: React.ReactNode
   buttonDataAttrs?: DataAttributes
+  styleVars?: ButtonStyleOverrides
   onPressRelease?: (detail: EventType) => void
 }

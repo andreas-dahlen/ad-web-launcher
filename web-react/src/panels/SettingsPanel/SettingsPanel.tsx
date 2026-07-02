@@ -16,9 +16,11 @@ export default function SettingsPanel() {
     <PanelBase className={clsx(css.settingsPanel)}>
 
       <Button
-        className={css.close}
-        onPressRelease={() => update("panelOpen", false)}
-        Icon={Icons.exit}
+        button={{
+          className: css.close,
+          onPressRelease: () => update("panelOpen", false)
+        }}
+        icon={{ Svg: Icons.exit }}
       />
 
       {settingsmode === "default" && <SettingsDefault />}

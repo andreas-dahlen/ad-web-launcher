@@ -1,9 +1,7 @@
 import clsx from 'clsx'
 import css from './Button.module.css'
 import type { LabelProps } from '@composites/Button/Button.types'
-export default function ButtonLabel({ label, position, mode }: LabelProps) {
-
-
+export default function ButtonLabel({ msg, position, mode }: LabelProps) {
   //use mode to drive colors?
   const positioning = position ? position : "bottom"
 
@@ -15,7 +13,7 @@ export default function ButtonLabel({ label, position, mode }: LabelProps) {
       positioning === "right" && css.right,
 
     )}>
-      {label}
+      {msg}
     </span>
   )
 }

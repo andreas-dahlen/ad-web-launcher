@@ -1,0 +1,6 @@
+@import './core/static-vars.global.css';
+@import './core/variables.global.css';
+@import './core/core.global.css';
+@import './core/utils.global.css';
+@import './presets.global.css';
+@import './debug.global.css';

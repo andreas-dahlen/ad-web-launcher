@@ -4,10 +4,12 @@ import { useItemSizing } from './hooks/useItemSizing.hook.ts'
 import { useCarouselStore } from './store/useCarouselStore.hook.ts'
 import { carouselStore, type NodeId } from './store/carousel.store.ts'
 import css from './CarouselPrim.module.css'
-import { dasx } from '@utils/dataAttrs.ts'
+import { dasx } from '@utils/dasx.ts'
 import clsx from 'clsx'
+import { stsx } from '@utils/slsx.ts'
 import type { ContentCarouselPrimProps } from '@primitives/prim.types.ts'
 import type { SceneRole } from '@typing/core.types.ts'
+import { carouselVars } from '@primitives/CarouselPrim/CarouselPrim.vars.ts'
 
 
 
@@ -21,6 +23,7 @@ export default function ContentCarouselPrim({
   id,
   axis,
   scenes,
+  styleVars,
   carouselDataAttrs
 }: ContentCarouselPrimProps) {
 
@@ -71,7 +74,7 @@ export default function ContentCarouselPrim({
             key={node.nodeId}
             ref={itemRef}
             className={clsx(css.scene)}
-            style={styleForRole(role)}
+            style={{ ...styleForRole(role), ...stsx(styleVars ?? {}, carouselVars) }}
             data-role={role}
             onTransitionEnd={onTransitionEnd}
           >

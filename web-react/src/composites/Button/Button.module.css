@@ -63,9 +63,8 @@
     fill: var(--svg-current-color, var(--svg-bright, currentColor));
   }
 
-  &.isFilledVariant,
-  &.isFilledVariant path {
-    fill: var(--svg-current-color, currentColor) !important;
+  &[data-mode="disabled"] path {
+    fill: var(--svg-current-color, var(--svg-disabled, currentColor));
   }
 }
 

@@ -2,8 +2,10 @@ import { useRef } from "react"
 import { usePointerBridge } from '@hooks/usePointerBridge.hook'
 import css from './ButtonPrim.module.css'
 import clsx from 'clsx'
-import { dasx } from '@utils/dataAttrs'
+import { dasx } from '@utils/dasx'
 import type { ButtonPrimProps } from '@primitives/prim.types'
+import { stsx } from '@utils/slsx'
+import { buttonVars } from '@primitives/ButtonPrim/ButtonPrim.vars'
 
 
 export default function ButtonPrim({
@@ -13,7 +15,8 @@ export default function ButtonPrim({
   interactive = true,
   onPressRelease,
   children,
-  buttonDataAttrs
+  buttonDataAttrs,
+  styleVars
 }: ButtonPrimProps & React.HTMLAttributes<HTMLDivElement>) {
 
   const buttonRef = useRef<HTMLDivElement>(null)
@@ -34,7 +37,10 @@ export default function ButtonPrim({
   return (
     <div
       className={clsx(css.button, className)}
-      style={{ pointerEvents: interactive ? "auto" : "none" }}
+      style={{
+        pointerEvents: interactive ? "auto" : "none",
+        ...stsx(styleVars ?? {}, buttonVars)
+      }}
       ref={buttonRef}
       {...dasx({
         type: "button",

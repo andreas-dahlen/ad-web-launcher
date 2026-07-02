@@ -1,14 +1,16 @@
 .container {
   position: absolute;
   inset: 0;
-  min-height: 100%;
+  --scroll-height: 100%;
+  --scroll-width: 100%;
+  min-height: var(--scroll-height);
 }
 
 .scroll {
   position: relative;
-  min-height: 100%;
-  min-width: 100%;
-  opacity: 90%;
+  min-height: var(--scroll-height);
+  min-width: var(--scroll-width);
+  opacity: var(--scroll-opacity, 90%);
   background: linear-gradient(to bottom, rgb(0, 0, 0), rgb(255, 255, 255));
 
 }
@@ -22,7 +24,7 @@
 .knob {
   position: absolute;
   background: yellowgreen;
-  width: 100%;
+  width: var(--knob-width, 100%);
   --knob-height: 200px;
   height: var(--knob-height);
   top: calc(-1*var(--knob-height));
