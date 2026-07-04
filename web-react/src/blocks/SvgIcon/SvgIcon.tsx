@@ -1,9 +1,9 @@
 import clsx from 'clsx';
 import { dasx } from '@utils/dasx';
-import { IconSettings } from '../blocks.types';
+import type { IconSettings } from '../blocks.types';
 import css from './SvgIcon.module.css'
 import { stsx } from '@utils/slsx';
-import { svgIconVars } from '../styleVars/SvgIcon.vars';
+import { svgIconVars } from './SvgIcon.vars';
 
 export default function SvgIcon({
   Svg,

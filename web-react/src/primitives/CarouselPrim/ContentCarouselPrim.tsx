@@ -9,7 +9,7 @@ import clsx from 'clsx'
 import { stsx } from '@utils/slsx.ts'
 import type { ContentCarouselPrimProps } from '@primitives/prim.types.ts'
 import type { SceneRole } from '@typing/core.types.ts'
-import { carouselVars } from '@primitives/CarouselPrim/CarouselPrim.vars.ts'
+import { carouselVars } from '@composites/styleVars/CarouselPrim.vars.ts'
 
 
 

@@ -6,9 +6,8 @@ import css from '../comp.module.css'
 import Label from '../../blocks/Label/Label'
 import SvgIcon from '../../blocks/SvgIcon/SvgIcon'
 import type { ButtonSettings, Directive, DragSettings } from '@composites/comp.types'
-import type { IconSettings } from '../../blocks/SvgIcon/SvgIcon.types'
-import type { LabelSettings } from '../../blocks/Label/Label.types'
 import { useBehaviorState } from '@composites/hooks/useBehaviorState.hook'
+import type { IconSettings, LabelSettings } from '../../blocks/blocks.types'
 type ButtonProps = {
   directive?: Directive
   icon?: IconSettings

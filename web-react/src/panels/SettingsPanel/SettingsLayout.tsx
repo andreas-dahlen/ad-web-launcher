@@ -1,10 +1,8 @@
 import { settingsStore } from '@stores/settings.store'
-import css from './SettingsPanel.module.css'
 import Button from '@composites/Button/Button'
 import { alertStore } from '@stores/alert.store'
 import { layoutStore } from '@stores/layout.store'
 import { layout_DEFAULTS } from '@data/dataGenerator'
-import clsx from 'clsx'
 import * as Icons from '@data/icons/';
 import Frame from '@composites/Frame/Frame'
 import Label from '../../blocks/Label/Label'

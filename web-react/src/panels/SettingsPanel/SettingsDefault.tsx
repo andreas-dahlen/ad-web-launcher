@@ -1,13 +1,10 @@
 import Button from '@composites/Button/Button'
 import { settingsStore } from '@stores/settings.store'
 import { useState } from 'react'
-import css from './SettingsPanel.module.css'
 import SliderPrim from '@primitives/SliderPrim/SliderPrim'
-import clsx from 'clsx'
 import * as Icons from '@data/icons/';
 import ButtonPair from '../../blocks/ButtonPair/ButtonPair'
 import { useSnapInput } from './hooks/useSnapInput'
-import Label from '../../blocks/Label/Label'
 import Frame from '@composites/Frame/Frame'
 
 export default function SettingsDefault() {

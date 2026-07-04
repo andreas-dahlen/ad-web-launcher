@@ -5,7 +5,7 @@ import clsx from 'clsx'
 import { dasx } from '@utils/dasx'
 import type { ButtonPrimProps } from '@primitives/prim.types'
 import { stsx } from '@utils/slsx'
-import { buttonVars } from '@primitives/ButtonPrim/ButtonPrim.vars'
+import { buttonVars } from '@composites/styleVars/ButtonPrim.vars'
 
 
 export default function ButtonPrim({
@@ -17,7 +17,7 @@ export default function ButtonPrim({
   children,
   buttonDataAttrs,
   styleVars
-}: ButtonPrimProps & React.HTMLAttributes<HTMLDivElement>) {
+}: ButtonPrimProps) {
 
   const buttonRef = useRef<HTMLDivElement>(null)
 
@@ -50,9 +50,9 @@ export default function ButtonPrim({
         ...buttonDataAttrs
       })}
     >
-      <div className={css.content}>
-        {children}
-      </div>
+
+      {children}
+
     </div>
   )
 }

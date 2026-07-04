@@ -9,7 +9,7 @@ import clsx from 'clsx'
 import { dasx } from '@utils/dasx.ts'
 import { stsx } from '@utils/slsx.ts'
 import type { SliderPrimProps } from '@primitives/prim.types.ts'
-import { sliderVars } from '@primitives/SliderPrim/SliderPrim.vars.ts'
+import { sliderVars } from '@composites/styleVars/SliderPrim.vars.ts'
 
 export default function SliderPrim({
   id,
