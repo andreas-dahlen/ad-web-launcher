@@ -4,18 +4,18 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #323232;
+  background: var(--_col-neutral-dark-1);
   overflow: hidden;
 }
 
 .frame {
   border-radius: 28px;
   box-shadow:
-    0 18px 48px rgb(116, 116, 116),
-    0 0 0 10px rgb(0, 0, 0);
+    0 0 0px 10px var(--_col-neutral-dark-2);
   overflow: hidden;
   display: flex;
   justify-content: center;
+  background: var(--fallback-ui-bg);
 }
 
 .loading {

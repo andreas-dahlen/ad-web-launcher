@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 import css from './Surface.module.css'
 import { stsx } from '@utils/slsx'
-import { surfaceVars, type PresetMap, type SurfaceStyleOverrides } from './Surface.vars'
+import { surfaceVars, type PresetMap, type SurfaceStyleOverrides } from '../styleVars/Surface.vars'
 import type { Mode } from '@composites/comp.types'
 type PanelBaseProps = {
   children: React.ReactNode

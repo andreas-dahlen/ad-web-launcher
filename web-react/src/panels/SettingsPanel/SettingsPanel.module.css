@@ -12,7 +12,8 @@
   --button-position: absolute;
   right: 15px;
 
-  --button-col: none;
+  --theme-button-bg: none;
+  --fallback-button-bg: none;
 
   --button-width: 30px;
   --button-height: 30px;
@@ -21,8 +22,4 @@
   &[data-state='pressed'] {
     box-shadow: none;
   }
-}
-
-.red {
-  fill: rgb(82, 0, 0);
 }

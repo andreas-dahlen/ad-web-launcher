@@ -5,6 +5,7 @@ import { useLayoutEffect } from 'react'
 import { sizeStore } from '../shared/state/stores/size.store.ts'
 import AlertLayer from '@app/layers/AlertLayer.tsx'
 import { gestureStore } from '../shared/state/stores/gesture.store.ts'
+import css from './RootTheme.module.css'
 export default function Root() {
 
   const activeGesture = gestureStore(s => s.activeGesture)
@@ -21,8 +22,9 @@ export default function Root() {
   }, [])
 
   return (
-    <div className="theme"
+    <div className={css.theme}
       data-theme="default"
+      //TODO add theme switching support
       data-active-gesture={activeGesture}
       data-active-long-press={isLongPress}
     >

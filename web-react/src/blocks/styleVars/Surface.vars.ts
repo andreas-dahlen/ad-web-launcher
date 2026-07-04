@@ -15,7 +15,7 @@ export const surfaceVars = {
   boxShadow: "--surface-box-shadow",
   blur: "--surface-blur",
   opacity: "--surface-opacity",
-}
+} as const
 
 export type SurfaceVarKey = keyof typeof surfaceVars
 export type SurfaceStyleOverrides = Partial<Record<SurfaceVarKey, string | number>>

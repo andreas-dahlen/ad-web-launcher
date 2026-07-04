@@ -6,18 +6,18 @@
   height: var(--svg-height, 40px);
 
   &[data-mode="default"] path {
-    fill: var(--svg-default, var(--svg-theme-default, currentColor));
+    fill: var(--svg-default, var(--theme-svg-default, var(--fallback-svg-default, currentColor)));
   }
 
   &[data-mode="on"] path {
-    fill: var(--svg-on var(--svg-theme-on, currentColor));
+    fill: var(--svg-on var(--theme-svg-on, var(--fallback-svg-on, currentColor)));
   }
 
   &[data-mode="off"] path {
-    fill: var(--svg-off, var(--svg-theme-off, currentColor));
+    fill: var(--svg-off, var(--theme-svg-off, var(--fallback-svg-off, currentColor)));
   }
 
   &[data-mode="disabled"] path {
-    fill: var(--svg-disabled, var(--svg-theme-disabled, currentColor));
+    fill: var(--svg-disabled, var(--theme-svg-disabled, var(--fallback-svg-disabled, currentColor)));
   }
 }

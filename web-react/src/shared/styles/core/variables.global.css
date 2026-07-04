@@ -5,163 +5,59 @@
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap');
 
 :root {
-  /* global defaults */
-  --_font-xs: 1rem;
-  --_font-s: 1rem;
-  --_font-m: 1rem;
-  --_font-l: 1.1rem;
-  --_font-xl: 1.2rem;
-
-  /* text */
-  --_font-inter: "Inter", system-ui, sans-serif;
-  --_font-jetbrains: "JetBrains Mono", monospace;
-  --_font-satoshi: "Satoshi", "Inter", sans-serif;
-  --_font-urbanist: "Urbanist", sans-serif;
-  --_font-manrope: "Manrope", sans-serif;
-  --_font-grotesk: "Space Grotesk", sans-serif;
-
-  --_text-col-default: oklch(0% 0 0);
-
-  /* component colors */
-  --_color-panel-1: oklch(45.657% 0.08415 46.431);
-  --_color-panel-2: oklch(72.471% 0.07795 79.956);
-  --_color-sub-panel-1: oklch(46.31% 0.0457 84.176);
-  --_color-sub-panel-2: oklch(48.237% 0.08785 105.977);
-  --_color-button-1: oklch(74.763% 0.00008 271.152);
-  --_color-button-2: oklch(43.861% 0.00005 271.152);
-  --_color-overlay-black: oklch(0% 0 0);
-
-  /* gradients */
-  --_gradient-deg-h: 125deg;
-  --_gradient-deg-v: 145deg;
-  --_gradient-deg-panel: 135deg;
-  --_gradient-deg-sub-panel: 135deg;
-  --_gradient-deg-button: 135deg;
-
-  /* components */
-  --_panel-col: linear-gradient(var(--_gradient-deg-panel),
-      var(--_color-panel-1),
-      var(--_color-panel-2));
-
-  --_sub-panel-col: linear-gradient(var(--_gradient-deg-sub-panel),
-      var(--_color-sub-panel-1),
-      var(--_color-sub-panel-2));
-
-  --_button-col: linear-gradient(var(--_gradient-deg-button),
-      var(--_color-button-1),
-      var(--_color-button-2));
-
-  --_border: 1px solid oklch(0% 0 0);
-  --_button-border: 1px solid oklch(0% 0 0);
-  --_box-shadow-col: rgba(0, 0, 0, 0.742);
-
-  --_panel-radius: 10px;
-  --_sub-panel-radius: 10px;
-  --_button-radius: 10px;
-  --_extreme-radius: 100em;
-
-  --_color-on: oklch(78.261% 0.00009 271.152);
-  --_color-off: oklch(43.861% 0.00005 271.152);
-  --_color-pressed: oklch(65.176% 0.06012 47.733);
-  --_color-swipe: oklch(73.765% 0.09829 91.22);
-
-  --_opacity-low: 0.3;
-  --_h-opacity: 1;
-}
-
-.theme {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  /* setters */
-  font-family: var(--font);
-  color: var(--text-col);
-  font-size: var(--font-s);
-
-  h1 {
-    font-size: var(--font-xl);
-    font-weight: normal;
-  }
-
-  h2 {
-    font-size: var(--font-l);
-    font-weight: normal;
-  }
-
-  h3 {
-    font-size: var(--font-m);
-    font-weight: normal;
-  }
-
-  p {
-    font-size: var(--font-s);
-    font-weight: normal;
-  }
-
-  span {
-    font-size: var(--font-xs);
-    font-weight: normal;
-  }
-}
-
-[data-theme="default"] {
-  /* text */
-  --text-col: var(--_text-col-default);
-  --font: var(--_font-inter);
-
-  --font-xs: var(--_font-xs);
-  --font-s: var(--_font-s);
-  --font-m: var(--_font-m);
-  --font-l: var(--_font-l);
-  --font-xl: var(--_font-xl);
-
-  /* components */
-  --panel-col: var(--_panel-col);
-  --sub-panel-col: var(--_sub-panel-col);
-  --button-col: var(--_button-col);
-
   /* colors */
-  --color-overlay: var(--_color-overlay-black);
+  --_col-a1: oklch(45.657% 0.08415 46.431);
+  --_col-a2: oklch(72.471% 0.07795 79.956);
+  --_col-b1: oklch(46.31% 0.0457 84.176);
+  --_col-b2: oklch(48.237% 0.08785 105.977);
 
-  /* borders */
-  --border: var(--_panel-border);
-  --button-border: var(--_button-border);
-  --box-shadow-col: var(--_box-shadow-col);
+  --_button-col-a1: oklch(74.763% 0.00008 271.152);
+  --_button-col-a2: oklch(43.861% 0.00005 271.152);
 
-  /* border radius */
-  --panel-radius: var(--_panel-radius);
-  --sub-panel-radius: var(--_sub-panel-radius);
-  --button-radius: var(--_button-radius);
-  --extreme-radius: var(--_extreme-radius);
+  --_col-on: oklch(78.261% 0.00009 271.152);
+  --_col-off: oklch(43.861% 0.00005 271.152);
+  --_col-pressed: oklch(65.176% 0.06012 47.733);
+  --_col-swipe: oklch(73.765% 0.09829 91.22);
 
-  /* state driven color changes */
-  --state-color-on: var(--_color-on);
-  --state-color-off: var(--_color-off);
-  --state-color-pressed: var(--_color-pressed);
-  --state-color-swipe: var(--_color-swipe);
+  --_text-col: oklch(0% 0 0);
 
-  /* opacity */
-  --opacity-low: var(--_opacity-low);
-  --h-opacity: var(--_h-opacity);
-  /* settings-panel */
-  --gradient-debug-frame-1: rgb(51, 51, 51);
-  --gradient-debug-frame-2: rgb(209, 209, 209);
+  --_deg: 135deg;
 
-  --debug-slider: linear-gradient(135deg, var(--debug-button-off), var(--debug-button-on));
-  --color-off: linear-gradient(135deg, #e25555, #b92b2b);
+  /* global defaults */
+  --font-size-xs: 1rem;
+  --font-size-s: 1rem;
+  --font-size-m: 1rem;
+  --font-size-l: 1.1rem;
+  --font-size-xl: 1.2rem;
 
-  --label-gray: rgb(204, 204, 204);
+  --border-radius-xs: 10px;
+  --border-radius-s: 15px;
+  --border-radius-m: 20px;
+  --border-radius-l: 25px;
+  --border-radius-xl: 30px;
 
-  --svg-off: rgb(206, 206, 206);
-  --svg-on: rgb(74, 74, 74);
-  --svg-default: rgb(188, 188, 188);
-  --svg-disabled: rgb(188, 188, 188);
+  /* text */
+  --font-inter: "Inter", system-ui, sans-serif;
+  --font-jetbrains: "JetBrains Mono", monospace;
+  --font-satoshi: "Satoshi", "Inter", sans-serif;
+  --font-urbanist: "Urbanist", sans-serif;
+  --font-manrope: "Manrope", sans-serif;
+  --font-grotesk: "Space Grotesk", sans-serif;
 
-  --debug-button-off: rgb(101, 101, 101);
-  --debug-button-on: rgb(209, 209, 209);
+  /* FALLBACKS */
+  --fallback-border: 1px solid oklch(0% 0 0);
+  --fallback-box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.742);
 
-  /* Motion - slightly faster for snappier feel on Android */
-  --touch-transition-fast: 120ms;
-  --touch-transition-normal: 200ms;
+
+  --fallback-bg-1: linear-gradient(var(--_deg),
+      var(--_col-a1),
+      var(--_col-a2));
+
+  --fallback-bg-2: linear-gradient(var(--_deg),
+      var(--_col-b1),
+      var(--_col-b2));
+
+  --fallback-button-bg: linear-gradient(var(--_deg),
+      var(--_button-col-a1),
+      var(--_button-col-a2));
 }

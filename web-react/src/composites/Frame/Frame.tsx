@@ -1,5 +1,5 @@
 import type { Directive, DragSettings } from '@composites/comp.types'
-import type { PresetMap, SurfaceStyleOverrides } from '../../blocks/Surface/Surface.vars'
+import type { PresetMap, SurfaceStyleOverrides } from '../../blocks/styleVars/Surface.vars'
 import type React from 'react'
 import type { LabelSettings } from '../../blocks/Label/Label.types'
 import { createId, generateId } from '@utils/idGenerator'

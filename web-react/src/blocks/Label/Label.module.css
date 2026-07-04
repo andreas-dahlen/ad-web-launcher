@@ -1,20 +1,20 @@
 .bottom {
-  --label-height: var(--button-height);
+  --label-height: var(--button-height, var(--fallback-button-size));
   top: var(--label-height);
 }
 
 .top {
-  --label-height: var(--button-height);
+  --label-height: var(--button-height, var(--fallback-button-size));
   bottom: var(--label-height);
 }
 
 .left {
-  --label-width: var(--button-width);
+  --label-width: var(--button-width, var(--fallback-button-size));
   right: var(--label-width);
 }
 
 .right {
-  --label-width: var(--button-width);
+  --label-width: var(--button-width, var(--fallback-button-size));
   left: var(--label-width);
 }
 

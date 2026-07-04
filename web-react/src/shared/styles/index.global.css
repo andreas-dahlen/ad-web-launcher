@@ -1,6 +1,6 @@
-@import './core/static-vars.global.css';
-@import './core/variables.global.css';
 @import './core/core.global.css';
+@import './tokens/primitives.global.css';
+@import './tokens/fallback.global.css';
+@import './tokens/default.theme.css';
 @import './core/utils.global.css';
-@import './presets.global.css';
 @import './debug.global.css';

@@ -1,0 +1,45 @@
+[data-theme="default"] {
+  /* components */
+  /* --theme-bg: linear-gradient(var(--_deg),
+      var(--_col-a1),
+      var(--_col-a2)); */
+  /* --sub-panel-bg: var(--_sub-panel-col); */
+  /* --button-bg: var(--_button-col); */
+
+  /* colors */
+  /* --color-overlay: var(--_color-overlay-black); */
+
+  /* borders */
+  /* --border: var(--_panel-border); */
+  /* --button-border: var(--_button-border); */
+  /* --box-shadow-col: var(--_box-shadow-col); */
+
+  /* border radius */
+  /* --panel-radius: var(--_panel-radius); */
+  /* --sub-panel-radius: var(--_sub-panel-radius); */
+  /* --button-radius: var(--_button-radius); */
+  /* --extreme-radius: var(--_extreme-radius); */
+
+  /* state driven color changes */
+  /* --state-color-on: var(--_color-on); */
+  /* --state-color-off: var(--_color-off); */
+  /* --state-color-pressed: var(--_color-pressed); */
+  /* --state-color-swipe: var(--_color-swipe); */
+
+  /* opacity */
+  /* --opacity-low: var(--_opacity-low); */
+  /* --h-opacity: var(--_h-opacity); */
+  /* settings-panel */
+  /* --gradient-debug-frame-1: rgb(51, 51, 51); */
+  /* --gradient-debug-frame-2: rgb(209, 209, 209); */
+
+  /* --debug-slider: linear-gradient(135deg, var(--debug-button-off), var(--debug-button-on)); */
+  /* --color-off: linear-gradient(135deg, #e25555, #b92b2b); */
+
+  /* --label-gray: rgb(204, 204, 204); */
+
+  /* --debug-button-off: rgb(101, 101, 101); */
+  /* --debug-button-on: rgb(209, 209, 209); */
+
+  /* Motion - slightly faster for snappier feel on Android */
+}

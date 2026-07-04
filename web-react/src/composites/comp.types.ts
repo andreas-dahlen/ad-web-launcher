@@ -1,4 +1,4 @@
-import type { ButtonStyleOverrides } from '@primitives/ButtonPrim/ButtonPrim.vars'
+import type { ButtonStyleOverrides } from '@composites/styleVars/ButtonPrim.vars'
 import type { SnapConfig } from '@primitives/prim.types'
 import type { EventType } from '@typing/core.types'
 

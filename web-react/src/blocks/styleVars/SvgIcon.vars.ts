@@ -11,4 +11,4 @@ export const svgIconVars = {
 } as const
 
 export type SvgIconVarKey = keyof typeof svgIconVars
-export type ButtonStyleOverrides = Partial<Record<SvgIconVarKey, string | number>>
+export type SvgStyleOverrides = Partial<Record<SvgIconVarKey, string | number>>

@@ -12,14 +12,14 @@
     box-shadow 140ms cubic-bezier(0.2, 0.8, 0.2, 1),
     opacity 140ms ease;
 
-  transform: scale(1);
+  /* transform: scale(1); */
 
-  width: var(--button-width);
-  height: var(--button-height);
+  width: var(--button-width, 50px);
+  height: var(--button-height, 50px);
 
 
-  background: var(--button-col);
-  border-radius: var(--button-radius);
+  background: var(--button-bg, var(--theme-button-bg, var(--fallback-button-bg)));
+  border-radius: var(--button-radius, var(--theme-button-radius, var(--fallback-button-radius)));
   border: var(--button-border)
 }
 
