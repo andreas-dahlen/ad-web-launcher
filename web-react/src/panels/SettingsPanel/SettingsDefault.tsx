@@ -8,6 +8,7 @@ import * as Icons from '@data/icons/';
 import ButtonPair from '../../blocks/ButtonPair/ButtonPair'
 import { useSnapInput } from './hooks/useSnapInput'
 import Label from '../../blocks/Label/Label'
+import Frame from '@composites/Frame/Frame'
 
 export default function SettingsDefault() {
 
@@ -42,7 +43,7 @@ export default function SettingsDefault() {
   return (
 
     <>
-      <div>
+      <Frame>
         <Button
           button={{
             onPressRelease: () => {
@@ -52,14 +53,18 @@ export default function SettingsDefault() {
           label={{ msg: 'Edit Layout' }}
           icon={{
             Svg: Icons.gridNine,
-            settings: { adjust: { rotate: 90 }, variant: "fill" }
+            variant: "fill",
+            styleVars: {
+              svgRotate: "rotate(90deg)",
+            }
+            // settings: {adjust: {rotate: 90 }, variant: "fill" }
           }}
         />
-      </div>
+      </Frame>
 
-      <div className={clsx(css.row)}>
+      <Frame presets={["row"]}>
         <Button
-          mode={dragEnabled}
+          directive={{ mode: dragEnabled }}
           button={{
             onPressRelease: () =>
               update("dragEnabled", !dragEnabled)
@@ -67,7 +72,7 @@ export default function SettingsDefault() {
           label={{ msg: 'Drag' }}
           icon={{ Svg: dragEnabled ? Icons.dragUnlocked : Icons.draglocked }} />
         <Button
-          mode={snapEnabled}
+          directive={{ mode: snapEnabled }}
           button={{
             onPressRelease: () =>
               update("snapEnabled", !snapEnabled)
@@ -75,7 +80,7 @@ export default function SettingsDefault() {
           label={{ msg: 'Snap' }}
           icon={{ Svg: Icons.snap }} />
         <Button
-          mode={gridVisible}
+          directive={{ mode: gridVisible }}
           button={{
             onPressRelease: () =>
               update("gridVisible", !gridVisible)
@@ -83,10 +88,65 @@ export default function SettingsDefault() {
           label={{ msg: 'Grid' }}
           icon={{
             Svg: Icons.gridNine,
-            settings: { adjust: { rotate: 90 }, variant: "light", size: 44 }
+            variant: "light",
+            phosphorSize: 40,
+            styleVars: {
+              svgRotate: "rotate(90deg)",
+            }
           }}
         />
-      </div >
+        <ButtonPair axis="vertical" middle={dragSnapX}>
+          <Button
+            directive={{ mode: snapX.canIncrement ? "default" : "disabled" }}
+            button={{
+              onPressRelease: snapX.increment,
+              styleVars: { width: "40px", height: "40px" }
+            }}
+            icon={{
+              Svg: Icons.caretDown,
+              phosphorSize: 30,
+              styleVars: { svgFlipY: "scaleY(-1)" }
+            }}
+          />
+          <Button
+            directive={{ mode: snapX.canDecrement ? "default" : "disabled" }}
+            button={{
+              onPressRelease: snapX.decrement,
+              styleVars: { width: "40px", height: "40px" }
+            }}
+            icon={{
+              Svg: Icons.caretDown,
+              phosphorSize: 30
+            }}
+          />
+        </ButtonPair>
+
+        <ButtonPair axis="vertical" middle={dragSnapY}>
+          <Button
+            directive={{ mode: snapY.canIncrement ? "default" : "disabled" }}
+            button={{
+              onPressRelease: snapY.increment,
+              styleVars: { width: "40px", height: "40px" }
+            }}
+            icon={{
+              Svg: Icons.caretDown,
+              phosphorSize: 30,
+              styleVars: { svgFlipY: "ScaleY(-1)" }
+            }}
+          />
+          <Button
+            directive={{ mode: snapY.canDecrement ? "default" : "disabled" }}
+            button={{
+              onPressRelease: snapY.decrement,
+              styleVars: { width: "40px", height: "40px" }
+            }}
+            icon={{
+              Svg: Icons.caretDown,
+              phosphorSize: 30
+            }}
+          />
+        </ButtonPair>
+      </Frame >
 
       <div className='settings-slider-frame'>
         <SliderPrim
@@ -107,59 +167,6 @@ export default function SettingsDefault() {
         <span>snap Y {sliderTwo}</span>
       </div>
 
-      <Label msg="Snap X" position='bottom'>
-        <ButtonPair axis="vertical" middle={dragSnapX}>
-          <Button
-            mode={snapX.canIncrement ? "default" : "disabled"}
-            button={{
-              onPressRelease: snapX.increment,
-              styleVars: { width: "40px", height: "40px" }
-            }}
-            icon={{
-              Svg: Icons.caretDown,
-              settings: { adjust: { flipY: true }, size: 30 }
-            }}
-          />
-          <Button
-            mode={snapX.canDecrement ? "default" : "disabled"}
-            button={{
-              onPressRelease: snapX.decrement,
-              styleVars: { width: "40px", height: "40px" }
-            }}
-            icon={{
-              Svg: Icons.caretDown,
-              settings: { size: 30 }
-            }}
-          />
-        </ButtonPair>
-      </Label>
-
-      <Label msg="Snap Y" position='bottom'>
-        <ButtonPair axis="vertical" middle={dragSnapY}>
-          <Button
-            mode={snapY.canIncrement ? "default" : "disabled"}
-            button={{
-              onPressRelease: snapY.increment,
-              styleVars: { width: "40px", height: "40px" }
-            }}
-            icon={{
-              Svg: Icons.caretDown,
-              settings: { adjust: { flipY: true }, size: 30 }
-            }}
-          />
-          <Button
-            mode={snapY.canDecrement ? "default" : "disabled"}
-            button={{
-              onPressRelease: snapY.decrement,
-              styleVars: { width: "40px", height: "40px" }
-            }}
-            icon={{
-              Svg: Icons.caretDown,
-              settings: { size: 30 }
-            }}
-          />
-        </ButtonPair>
-      </Label>
     </>
   )
 }

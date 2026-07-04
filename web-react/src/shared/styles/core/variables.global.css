@@ -153,8 +153,8 @@
 
   --label-gray: rgb(204, 204, 204);
 
-  --svg-bright: rgb(206, 206, 206);
-  --svg-dark: rgb(74, 74, 74);
+  --svg-off: rgb(206, 206, 206);
+  --svg-on: rgb(74, 74, 74);
   --svg-default: rgb(188, 188, 188);
   --svg-disabled: rgb(188, 188, 188);
 

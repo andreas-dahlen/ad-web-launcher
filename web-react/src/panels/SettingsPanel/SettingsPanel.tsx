@@ -1,10 +1,9 @@
 import css from './SettingsPanel.module.css'
 import { settingsStore } from '@stores/settings.store.ts';
-import { PanelBase } from '../../blocks/Panel/PanelBase.tsx';
+import Frame from '@composites/Frame/Frame.tsx';
 import SettingsDefault from './SettingsDefault.tsx';
 import SettingsLayout from './SettingsLayout.tsx';
 import Button from '@composites/Button/Button.tsx';
-import clsx from 'clsx';
 import * as Icons from '@data/icons/';
 export default function SettingsPanel() {
 
@@ -13,7 +12,9 @@ export default function SettingsPanel() {
   const settingsmode = settingsStore(s => s.settings.settingsMode)
 
   return (
-    <PanelBase className={clsx(css.settingsPanel)}>
+    <Frame
+      presets={["bg", "frame"]}
+    >
 
       <Button
         button={{
@@ -26,6 +27,6 @@ export default function SettingsPanel() {
       {settingsmode === "default" && <SettingsDefault />}
       {settingsmode === "layout" && <SettingsLayout />}
 
-    </PanelBase>
+    </Frame>
   )
 }

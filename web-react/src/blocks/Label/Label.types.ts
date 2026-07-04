@@ -1,21 +1,12 @@
 import type { BoxSide } from '@typing/core.types'
-import type { LabelWeight, Mode } from '@typing/propUtils.types'
-import type { JSX } from 'react/jsx-runtime'
-
-export type LabelProps = LabelSettings & {
-  msg: string
-  mode: Mode
-}
+import type { LabelStyleOverrides } from './Label.vars'
+import type { Mode } from '@composites/comp.types'
 
 export type LabelSettings = {
-  position?: BoxSide
-}
-
-export type Label = {
   msg: string
-  MsgElement?: keyof JSX.IntrinsicElements
-  position?: BoxSide
-  weight?: LabelWeight
-  spacing?: number
-  children?: React.ReactNode
+  mode?: Mode
+  el?: string
+  position?: BoxSide | "center"
+  styleVars?: LabelStyleOverrides
+  classPreset?: string
 }

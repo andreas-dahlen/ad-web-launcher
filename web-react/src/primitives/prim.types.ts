@@ -3,7 +3,7 @@ import type { CarouselStyleOverrides } from '@primitives/CarouselPrim/CarouselPr
 import type { ScrollStyleOverrides } from '@primitives/ScrollPrim/ScrollPrim.vars'
 import type { SliderStyleOverrides } from '@primitives/SliderPrim/SliderPrim.vars'
 import type { Axis1D, EventType, BoxSide } from '@typing/core.types'
-import type { BaseProps, DataAttributes } from '@typing/propUtils.types'
+import type { DataAttributes } from '@typing/utils.types'
 import type React from 'react'
 
 //discriminating unions - capabilities
@@ -46,7 +46,6 @@ export type ContentCarouselPrimProps = BaseProps & {
 export type SliderPrimProps = BaseProps & {
   axis: Axis1D
   instantSwipe?: boolean
-  trackClassName?: string
   thumbClassName?: string
   children?: React.ReactNode
   sliderDataAttrs?: DataAttributes
@@ -68,4 +67,11 @@ export type ButtonPrimProps = BaseProps & {
   buttonDataAttrs?: DataAttributes
   styleVars?: ButtonStyleOverrides
   onPressRelease?: (detail: EventType) => void
+}
+
+
+export type BaseProps = { //TODO should make it BasePrimProps
+  id: string
+  className?: string
+  interactive?: boolean
 }

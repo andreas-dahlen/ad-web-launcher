@@ -1,24 +1,12 @@
 import type { Icon } from '@phosphor-icons/react'
-import type { Mode } from '@typing/propUtils.types'
+import type { Mode } from '@composites/comp.types'
 import type { DynamicIconComponent } from '@typing/svg'
+import type { ButtonStyleOverrides } from './SvgIcon.vars'
 
 export type IconSettings = {
-  variant?: 'bold' | 'thin' | 'light' | 'regular' | 'fill' | 'duotone'
-  color?: {
-    default: string
-    on?: string
-    off?: string
-    disabled?: string
-  }
-  size?: string | number
-  adjust?: {
-    flipX?: boolean;
-    flipY?: boolean;
-    rotate?: 90 | 180 | 270;
-  };
-}
-
-export type IconProps = IconSettings & {
   Svg: Icon | DynamicIconComponent
-  mode: Mode
+  mode?: Mode
+  variant?: 'bold' | 'thin' | 'light' | 'regular' | 'fill' | 'duotone'
+  phosphorSize?: number
+  styleVars?: ButtonStyleOverrides
 }

@@ -1,6 +1,6 @@
 import { alertStore } from '@stores/alert.store';
 import ButtonPrim from '@primitives/ButtonPrim/ButtonPrim';
-import { PanelBase } from '../blocks/Panel/PanelBase';
+import Frame from '@composites/Frame/Frame';
 
 export default function AlertPanel() {
   const { open, message, onConfirm, onCancel, hide } = alertStore()
@@ -8,20 +8,24 @@ export default function AlertPanel() {
   if (!open) return null
 
   return (
-    <PanelBase>
+    <Frame presets={["frame", "bg"]}>
       <p>{message}</p>
 
-      <ButtonPrim
-        id='confirmAlart'
-        onPressRelease={() => { onConfirm?.(); hide() }}>
-        Yes
-      </ButtonPrim>
+      <Frame presets={["row"]}>
 
-      <ButtonPrim
-        id='cancelAlart'
-        onPressRelease={() => { onCancel?.(); hide() }}>
-        Cancel
-      </ButtonPrim>
-    </PanelBase>
+
+        <ButtonPrim
+          id='confirmAlart'
+          onPressRelease={() => { onConfirm?.(); hide() }}>
+          Yes
+        </ButtonPrim>
+
+        <ButtonPrim
+          id='cancelAlart'
+          onPressRelease={() => { onCancel?.(); hide() }}>
+          Cancel
+        </ButtonPrim>
+      </Frame>
+    </Frame>
   )
 }

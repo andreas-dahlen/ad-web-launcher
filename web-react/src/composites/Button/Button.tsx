@@ -1,76 +1,69 @@
-import type { ButtonProps } from '@composites/Button/Button.types'
 import ButtonPrim from '@primitives/ButtonPrim/ButtonPrim'
 import DragPrim from '@primitives/DragPrim/DragPrim'
-import { settingsStore } from '@stores/settings.store'
-import { createId } from '@utils/idGenerator'
+import { createId, generateId } from '@utils/idGenerator'
 import clsx from 'clsx'
-import css from './Button.module.css'
-import CompLabel from '../../blocks/Label/CompLabel'
+import css from '../comp.module.css'
+import Label from '../../blocks/Label/Label'
 import SvgIcon from '../../blocks/SvgIcon/SvgIcon'
-
+import type { ButtonSettings, Directive, DragSettings } from '@composites/comp.types'
+import type { IconSettings } from '../../blocks/SvgIcon/SvgIcon.types'
+import type { LabelSettings } from '../../blocks/Label/Label.types'
+import { useBehaviorState } from '@composites/hooks/useBehaviorState.hook'
+type ButtonProps = {
+  directive?: Directive
+  icon?: IconSettings
+  label?: LabelSettings
+  button?: ButtonSettings
+  drag?: DragSettings
+}
 export default function Button({
-  mode,
+  directive,
   icon,
   label,
   button,
   drag
 }: ButtonProps) {
 
+  const { className, styleVars, onPressRelease } = button ?? {}
+
   const {
-    movable = false,
-    inFlow = true,
-    className,
-    styleVars,
-    onPressRelease
-  } = button ?? {}
+    mode,
+    movable,
+    interactive,
+    isDragInteractive,
+    isCompInteractive,
+    inFlow
+  } = useBehaviorState({ ...directive })
 
-  const snapEnabled = settingsStore(s => s.settings.snapEnabled)
-  const dragEnabled = settingsStore(s => s.settings.dragEnabled)
-
-  const id = createId();
-
-  const componentId = label ? `${label.msg.toLowerCase()}_${id}` : `item_${id}`;
-
-  const dragId = `drag_${componentId}`;
-  const buttonId = `button_${componentId}`;
-
-  const resolvedMode =
-    mode === true ? "on" :
-      mode === false ? "off" :
-        mode === undefined ? "default" :
-          mode
-
-  const interactive = resolvedMode !== "disabled"
-
-  const isDragOn = dragEnabled && interactive && movable
-  const buttonNotInFlow = !movable && !inFlow
+  const id = generateId();
+  const buttonId = createId("button", id, label?.msg)
+  const dragId = createId("drag", id, label?.msg)
 
   const Button = (
     <>
       <ButtonPrim
         id={buttonId}
-        // interactive={(!dragEnabled || !isMovable) && interactive}
-        interactive={(!dragEnabled || !movable) && interactive}
-        className={clsx(className, buttonNotInFlow && css.notInFlow)}
+        interactive={isCompInteractive}
+        className={clsx(className, !inFlow && css.notInFlow)}
         onPressRelease={onPressRelease}
         styleVars={styleVars}
         buttonDataAttrs={{
-          "mode": resolvedMode,
+          "mode": mode,
           "interactive": interactive,
           "state": "released"
         }}
       >
-        {/* The new isolated icon component handles the rest */}
         {icon && <SvgIcon
           Svg={icon.Svg}
-          mode={resolvedMode}
-          {...icon.settings}
+          mode={mode}
+          variant={icon.variant}
+          styleVars={icon.styleVars}
         />}
 
-        {label && <CompLabel
+        {label && <Label
           msg={label.msg}
-          mode={resolvedMode}
-          {...label.settings}
+          mode={mode}
+          position={label.position}
         />}
       </ButtonPrim>
     </>
@@ -79,10 +72,12 @@ export default function Button({
   if (movable) return (
     <DragPrim
       id={dragId}
-      useSettingsSnap={snapEnabled}
-      interactive={isDragOn}
+      useSettingsSnap={drag?.useSettingsSnap}
+      interactive={isDragInteractive}
       onSwipeCommit={drag?.onSwipeCommit && drag.onSwipeCommit}
       className={clsx(inFlow && css.isInFlow)}
+      snapX={drag?.useSettingsSnap ? drag?.snapX : undefined}
+      snapY={drag?.useSettingsSnap ? drag?.snapY : undefined}
     >
       {Button}
     </DragPrim>

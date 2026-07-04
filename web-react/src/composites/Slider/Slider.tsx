@@ -27,7 +27,7 @@ export default function Button({
   const snapEnabled = settingsStore(s => s.settings.snapEnabled)
   const dragEnabled = settingsStore(s => s.settings.dragEnabled)
 
-  const id = createId();
+  const id = createId("slider");
 
   const componentId = label ? `${label.msg.toLowerCase()}_${id}` : `item_${id}`;
 

@@ -3,7 +3,7 @@ import css from './Scenes.module.css'
 import ButtonPrim from '@primitives/ButtonPrim/ButtonPrim';
 import { layoutStore } from '@stores/layout.store';
 // import type { Axis1D } from '@typing/core.types';
-import { PanelBase } from '../../blocks/Panel/PanelBase';
+import { PanelBase } from '../../blocks/Surface/Surface';
 import Button from '@composites/Button/Button';
 import { systemIcons } from '@data/icons/system';
 
@@ -30,9 +30,8 @@ export default function SceneLayoutPanel() {
   // const horizontal = axis === "horizontal"
   return (
     <>
-      <PanelBase>
-        <div></div>
-        {/* <p>current: {sceneIdx}</p>
+      <div></div>
+      {/* <p>current: {sceneIdx}</p>
         <div className={clsx(horizontal && css.vertical, !horizontal && css.vertical)}>
           <div className={clsx(css.buttonrow, horizontal && css.horizontal, !horizontal && css.vertical)}>
             <Button
@@ -85,7 +84,6 @@ export default function SceneLayoutPanel() {
             </ButtonPrim>
           </div>
         </div> */}
-      </PanelBase>
     </>
   )
 }

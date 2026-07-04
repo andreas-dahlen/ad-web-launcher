@@ -1,23 +1,3 @@
-.flipY {
-  --flip-y: scaleY(-1);
-}
-
-.flipX {
-  --flip-x: scaleX(-1);
-}
-
-.rotate90 {
-  --rotate: rotate(90deg)
-}
-
-.rotate180 {
-  --rotate: rotate(180deg)
-}
-
-.rotate270 {
-  --rotate: rotate(270deg)
-}
-
 .svg {
   transform: var(--flip-x, scaleX(1)) var(--flip-y, scaleY(1)) var(--rotate, rotate(0deg));
   transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -26,18 +6,18 @@
   height: var(--svg-height, 40px);
 
   &[data-mode="default"] path {
-    fill: var(--svg-current-color, var(--svg-default, currentColor));
+    fill: var(--svg-default, var(--svg-theme-default, currentColor));
   }
 
   &[data-mode="on"] path {
-    fill: var(--svg-current-color, var(--svg-dark, currentColor));
+    fill: var(--svg-on var(--svg-theme-on, currentColor));
   }
 
   &[data-mode="off"] path {
-    fill: var(--svg-current-color, var(--svg-bright, currentColor));
+    fill: var(--svg-off, var(--svg-theme-off, currentColor));
   }
 
   &[data-mode="disabled"] path {
-    fill: var(--svg-current-color, var(--svg-disabled, currentColor));
+    fill: var(--svg-disabled, var(--svg-theme-disabled, currentColor));
   }
 }

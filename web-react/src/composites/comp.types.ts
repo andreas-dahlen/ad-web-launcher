@@ -1,28 +1,25 @@
-
-
-//composition layer
-
+import type { ButtonStyleOverrides } from '@primitives/ButtonPrim/ButtonPrim.vars'
 import type { SnapConfig } from '@primitives/prim.types'
-import type { Axis1D, EventType } from '@typing/core.types'
-import type { DataAttributes } from '@typing/propUtils.types'
+import type { EventType } from '@typing/core.types'
 
-export type DragFrameProps = SnapConfig & {
-  id: string
-  className?: string
-  children?: React.ReactNode
-  dragDataAttrs?: DataAttributes
-  onSwipeCommit?: (detail: EventType) => void
+// `directive` contains high-level orchestration flags that determine
+// how the composite exists in the UI. These are not drag or button
+// mechanics — they are semantic directives that govern layout,
+// interactivity, and behavioral capabilities.
+export type Directive = {
+  mode?: ModeInput
+  movable?: boolean
+  inFlow?: boolean
 }
 
-export type DragSliderProps = SnapConfig & {
-  id: string
-  axis: Axis1D
-  className?: string
-  trackClassName?: string
-  thumbClassName?: string
-  children?: React.ReactNode
-  sliderDataAttrs?: DataAttributes
-  dragDataAttrs?: DataAttributes
+export type ModeInput = Mode | boolean
+export type Mode = "default" | "on" | "off" | "disabled"
+
+export type DragSettings = SnapConfig & {
   onSwipeCommit?: (detail: EventType) => void
-  onValueChange?: (value: number) => void
+}
+export type ButtonSettings = {
+  className?: string
+  styleVars?: ButtonStyleOverrides
+  onPressRelease?: (detail: EventType) => void
 }

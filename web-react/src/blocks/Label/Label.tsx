@@ -1,32 +1,33 @@
-import { calcWeight } from '@typing/propUtils.types'
 import React from 'react'
-import type { Label } from './Label.types'
+import type { LabelSettings } from './Label.types'
+import { stsx } from '@utils/slsx'
+import { labelVars } from './Label.vars'
+import clsx from 'clsx'
+import css from './Label.module.css'
 
 export default function Label({
   msg,
-  MsgElement = "p",
-  position = "top",
-  weight = "regular",
-  spacing = 0,
-  children
-}: Label) {
-
-  const solvedWeight = calcWeight(weight)
-
-  const direction =
-    position === "left" ? "row" :
-      position === "right" ? "row-reverse" :
-        position === "bottom" ? "column-reverse" :
-          "column"
+  el = "span",
+  position = "bottom",
+  styleVars,
+  classPreset
+}: LabelSettings) {
 
   return (
-    <div style={{ display: "flex", flexDirection: direction, gap: spacing }}>
+    <div className={clsx(css.labelwrapper,
+      position === "left" ? css.left
+        : position === "right" ? css.right
+          : position === "top" ? css.top
+            : position === "center" ? css.center
+              : css.bottom,
+      classPreset)}
+      style={stsx(styleVars ?? {}, labelVars)}>
+
       {React.createElement(
-        MsgElement,
-        { style: { fontWeight: solvedWeight } },
+        el,
+        { className: css.label },
         msg
       )}
-      {children}
     </div>
   )
 }

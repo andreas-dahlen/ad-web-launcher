@@ -1,5 +1,6 @@
 import { createLane } from '@data/dataGenerator'
 import type { Axis1D, PlusMinusOne } from '@typing/core.types'
+import { createId } from '@utils/idGenerator'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'
@@ -88,7 +89,7 @@ export const layoutStore = create<LayoutStore>()(
       },
 
       addScene: (axis, laneId) => {
-        const sceneId = createId()
+        const sceneId = createId("scene")
         set(s => {
           const sys = getSystem(s, axis)
           const lane = sys.lanes[laneId]
@@ -127,8 +128,6 @@ export const layoutStore = create<LayoutStore>()(
     }
   )
 )
-
-const createId = () => crypto.randomUUID()
 
 const getSystem = (s: LayoutStore, axis: Axis1D) =>
   axis === "horizontal" ? s.horizontal : s.vertical

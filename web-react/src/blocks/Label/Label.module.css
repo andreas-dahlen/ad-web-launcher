@@ -18,6 +18,16 @@
   left: var(--label-width);
 }
 
-span {
-  position: absolute;
+.center {
+  --label-width: unset;
+  --label-height: unset;
+  --label-position: unset;
+}
+
+.labelwrapper {
+  position: var(--label-position, absolute);
+}
+
+.label {
+  text-align: center;
 }

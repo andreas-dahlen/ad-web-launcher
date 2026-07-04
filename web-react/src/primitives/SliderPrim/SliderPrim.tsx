@@ -17,7 +17,6 @@ export default function SliderPrim({
   interactive = true,
   instantSwipe = true,
   className,
-  trackClassName,
   thumbClassName,
   children,
   sliderDataAttrs,
@@ -101,9 +100,6 @@ export default function SliderPrim({
         ...sliderDataAttrs
       })}
     >
-      <div
-        className={clsx(css.track, trackClassName)}>
-      </div>
 
       <div
         className={clsx(css.thumb, thumbClassName)}

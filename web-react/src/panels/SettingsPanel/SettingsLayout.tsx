@@ -6,6 +6,8 @@ import { layoutStore } from '@stores/layout.store'
 import { layout_DEFAULTS } from '@data/dataGenerator'
 import clsx from 'clsx'
 import * as Icons from '@data/icons/';
+import Frame from '@composites/Frame/Frame'
+import Label from '../../blocks/Label/Label'
 
 
 export default function SettingsLayout() {
@@ -17,46 +19,54 @@ export default function SettingsLayout() {
   const layoutMode = settingsStore(s => s.settings.layoutMode)
 
   return (
-    <div className={clsx(css.panel)}>
-      <Button
-        mode={layoutManagerH}
-        button={{
-          onPressRelease: () => {
-            update("layoutManagerH", !layoutManagerH)
-            if (!layoutManagerH) update("layoutManagerV", false)
-          }
-        }}
-        label={{ msg: "horizontal config" }}
-        icon={{ Svg: layoutManagerH ? Icons.onManagerH : Icons.offManagerH }}
-      />
+    <>
+      <Label
+        msg={"editing"}
+        el={"h1"}
+        position={"center"}
+        styleVars={{ position: "relative" }} />
+      <Frame presets={["row"]}>
+        <Button
+          directive={{ mode: layoutManagerH }}
+          button={{
+            onPressRelease: () => {
+              update("layoutManagerH", !layoutManagerH)
+              if (!layoutManagerH) update("layoutManagerV", false)
+            }
+          }}
+          label={{ msg: "horizontal config" }}
+          icon={{ Svg: layoutManagerH ? Icons.onManagerH : Icons.offManagerH }}
+        />
 
-      <Button
-        mode={layoutManagerV}
-        button={{
-          onPressRelease: () => {
-            update("layoutManagerV", !layoutManagerV)
-            if (!layoutManagerV) update("layoutManagerH", false)
-          }
-        }}
-        label={{ msg: "vertical config" }}
-        icon={{ Svg: layoutManagerV ? Icons.onManagerV : Icons.offManagerV }}
-      />
-      <Button
-        button={{
-          onPressRelease: () => {
-            alertStore.getState().show({
-              message: "Reset all layout settings?",
-              onConfirm: () => override(layout_DEFAULTS),
-              onCancel: () => console.log("Cancelled"),
-            })
-          }
-        }}
-        label={{ msg: "reset layout" }}
-        icon={{ Svg: Icons.bomb }}
-      />
+        <Button
+          directive={{ mode: layoutManagerV }}
+          button={{
+            onPressRelease: () => {
+              update("layoutManagerV", !layoutManagerV)
+              if (!layoutManagerV) update("layoutManagerH", false)
+            }
+          }}
+          label={{ msg: "vertical config" }}
+          icon={{ Svg: layoutManagerV ? Icons.onManagerV : Icons.offManagerV }}
+        />
 
+        <Button
+          button={{
+            onPressRelease: () => {
+              alertStore.getState().show({
+                message: "Reset all layout settings?",
+                onConfirm: () => override(layout_DEFAULTS),
+                onCancel: () => console.log("Cancelled"),
+              })
+            }
+          }}
+          label={{ msg: "reset layout" }}
+          icon={{ Svg: Icons.bomb }}
+        />
+
+      </Frame>
       <Button
-        mode={layoutMode === 'scenes'}
+        directive={{ mode: layoutMode === 'scenes' }}
         button={{
           onPressRelease: () => {
             update("layoutMode", "scenes")
@@ -66,7 +76,7 @@ export default function SettingsLayout() {
       // Icon={""}
       />
       <Button
-        mode={layoutMode === 'lanes'}
+        directive={{ mode: layoutMode === 'lanes' }}
         button={{
           onPressRelease: () => {
             update("layoutMode", "lanes")
@@ -76,7 +86,7 @@ export default function SettingsLayout() {
       // Icon={""}
       />
       <Button
-        mode={layoutMode === 'locks'}
+        directive={{ mode: layoutMode === 'locks' }}
         button={{
           onPressRelease: () => {
             update("layoutMode", "locks")
@@ -93,6 +103,7 @@ export default function SettingsLayout() {
         label={{ msg: "back" }}
         icon={{ Svg: Icons.backspace }}
       />
-    </div>
+
+    </>
   )
 }

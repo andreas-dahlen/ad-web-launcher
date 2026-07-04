@@ -1,6 +1,5 @@
 import type { Axis1D } from '@typing/core.types'
 import React from 'react'
-import css from './ButtonPair.module.css'
 
 type ButtonPairProps = {
   children: React.ReactNode
@@ -12,7 +11,7 @@ type ButtonPairProps = {
 export default function ButtonPair({
   children,
   axis,
-  spacing = 24,
+  spacing = 0,
   middle
 }: ButtonPairProps) {
 
@@ -27,7 +26,6 @@ export default function ButtonPair({
   return (
     <>
       <div
-        className={css.pairPanel}
         style={{ gap: spacing, flexDirection: direction }}
       >
         {childArray[0]}
