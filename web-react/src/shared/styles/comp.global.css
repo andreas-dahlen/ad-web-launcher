@@ -1,0 +1,7 @@
+.isInFlow {
+  --drag-position: relative;
+}
+
+.notInFlow {
+  --button-position: absolute;
+}

@@ -1,50 +1,54 @@
   :root {
-    --fallback-border: 1px solid var(--_col-neutral-dark-1);
-    --fallback-box-shadow: 0px 0px 10px var(--_col-neutral-dark-1);
-    --fallback-button-radius: var(--_border-radius-xs);
-    --fallback-radius: var(--_border-radius-xl);
+      --fallback-border: 1px solid var(--_col-neutral-dark-1);
+      --fallback-box-shadow: 0px 0px 10px var(--_col-neutral-dark-1);
+      --fallback-button-radius: var(--_border-radius-xs);
+      --fallback-radius: var(--_border-radius-xl);
 
-    --fallback-deg: var(--_deg);
+      --fallback-deg: var(--_deg);
 
-    --fallback-bg: linear-gradient(var(--fallback-deg),
-        var(--_col-neutral-light-1),
-        var(--_col-neutral-light-1));
+      --fallback-bg: linear-gradient(var(--fallback-deg),
+              var(--_col-neutral-light-1),
+              var(--_col-neutral-light-1));
 
-    --fallback-button-bg: linear-gradient(var(--fallback-deg),
-        var(--_col-neutral-dark-1),
-        var(--_col-neutral-mid-1));
+      --fallback-button-bg: linear-gradient(var(--fallback-deg),
+              var(--_col-neutral-dark-1),
+              var(--_col-neutral-mid-1));
 
-    --fallback-ui-bg: linear-gradient(var(--fallback-deg),
-        var(--_col-neutral-dark-1),
-        var(--_col-neutral-dark-2));
+      --fallback-ui-bg: linear-gradient(var(--fallback-deg),
+              var(--_col-neutral-dark-1),
+              var(--_col-neutral-dark-2));
 
-    --fallback-button-size: var(--_button-size-l);
-    /* --fallback-button-size-m: var(--_button-size-xl); */
-    /* --fallback-button-size-l: var(--_button-size-l);
+      --fallback-button-bg-on: var(--_col-neutral-light-1);
+
+      --fallback-button-size: var(--_button-size-l);
+      /* --fallback-button-size-m: var(--_button-size-xl); */
+      /* --fallback-button-size-l: var(--_button-size-l);
     --fallback-button-size-m: var(--_button-size-m);
     --fallback-button-size-s: var(--_button-size-s);
     --fallback-button-size-xs: var(--_button-size-xs); */
 
-    --fallback-svg-off: var(--_col-neutral-light-1);
-    --fallback-svg-on: var(--_col-neutral-dark-1);
-    --fallback-svg-default: var(--_col-neutral-mid-1);
-    --fallback-svg-disabled: var(--_col-neutral-mid-1);
 
-    --fallback-text-heading-col: var(--_text-col);
-    --fallback-text-body-col: var(--_text-col);
 
-    --fallback-font-body: var(--_font-inter);
-    --fallback-font-heading: var(--_font-grotesk);
+      --fallback-svg-off: var(--_col-neutral-light-1);
+      --fallback-svg-on: var(--_col-neutral-dark-1);
+      --fallback-svg-default: var(--_col-neutral-mid-1);
+      --fallback-svg-disabled: var(--_col-neutral-mid-1);
 
-    --fallback-font-heading-size-xl: var(--_font-size-xl);
-    --fallback-font-heading-size-l: var(--_font-size-l);
-    --fallback-font-heading-size-m: var(--_font-size-m);
-    --fallback-font-body-size-s: var(--_font-size-s);
-    --fallback-font-body-size-xs: var(--_font-size-xs);
+      --fallback-text-heading-col: var(--_text-col);
+      --fallback-text-body-col: var(--_text-col);
 
-    --fallback-font-weight-xl: var(--_font-weight-xl);
-    --fallback-font-weight-l: var(--_font-weight-l);
-    --fallback-font-weight-m: var(--_font-weight-m);
-    --fallback-font-weight-s: var(--_font-weight-s);
-    --fallback-font-weight-xs: var(--_font-weight-xs);
+      --fallback-font-body: var(--_font-inter);
+      --fallback-font-heading: var(--_font-grotesk);
+
+      --fallback-font-heading-size-xl: var(--_font-size-xl);
+      --fallback-font-heading-size-l: var(--_font-size-l);
+      --fallback-font-heading-size-m: var(--_font-size-m);
+      --fallback-font-body-size-s: var(--_font-size-s);
+      --fallback-font-body-size-xs: var(--_font-size-xs);
+
+      --fallback-font-weight-xl: var(--_font-weight-xl);
+      --fallback-font-weight-l: var(--_font-weight-l);
+      --fallback-font-weight-m: var(--_font-weight-m);
+      --fallback-font-weight-s: var(--_font-weight-s);
+      --fallback-font-weight-xs: var(--_font-weight-xs);
   }

@@ -9,6 +9,7 @@ export function Scenes({
 
   const layoutManagerV = settingsStore(s => s.settings.layoutManagerV)
   const layoutManagerH = settingsStore(s => s.settings.layoutManagerH)
+  const layoutMode = settingsStore(s => s.settings.layoutMode)
 
   const showOverlay =
     (axis === "vertical" && layoutManagerV) ||
@@ -17,7 +18,7 @@ export function Scenes({
   return (
     <div>
       <div className={clsx(axis === "horizontal" && "spin-box")}></div>
-      {showOverlay && <SceneLayoutPanel />}
+      {showOverlay && layoutMode === "lanes" && <SceneLayoutPanel />}
     </div>
   )
 }

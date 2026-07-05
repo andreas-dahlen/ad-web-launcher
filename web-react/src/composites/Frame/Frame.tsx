@@ -4,7 +4,6 @@ import type React from 'react'
 import type { LabelSettings } from '../../blocks/blocks.types'
 import { createId, generateId } from '@utils/idGenerator'
 import DragPrim from '@primitives/DragPrim/DragPrim'
-import sharedCss from '../comp.module.css'
 import { useBehaviorState } from '@composites/hooks/useBehaviorState.hook'
 import clsx from 'clsx'
 import { Surface } from '../../blocks/Surface/Surface'
@@ -45,7 +44,7 @@ export default function Frame({
     <>
       <Surface
         mode={mode}
-        className={clsx(className, !inFlow && sharedCss.notInFlow)}
+        className={clsx(className, !inFlow && "notInFlow")}
         styleVars={styleVars}
         presets={presets}
       >
@@ -66,7 +65,7 @@ export default function Frame({
       useSettingsSnap={drag?.useSettingsSnap}
       interactive={isDragInteractive}
       onSwipeCommit={drag?.onSwipeCommit && drag.onSwipeCommit}
-      className={clsx(inFlow && sharedCss.isInFlow)}
+      className={clsx(inFlow && "isInFlow")}
       snapX={drag?.useSettingsSnap ? drag?.snapX : undefined}
       snapY={drag?.useSettingsSnap ? drag?.snapY : undefined}
     >

@@ -1,7 +1,22 @@
+/* :host {
+  --svg-default: var(--theme-svg-default, var(--fallback-svg-default, currentColor));
+  --svg-on: var(--theme-svg-on, var(--fallback-svg-on, currentColor));
+  --svg-off: var(--theme-svg-off, var(--fallback-svg-off, currentColor));
+  --svg-disabled: var(--theme-svg-disabled, var(--fallback-svg-disabled, currentColor));
+} */
+
 .svg {
   transform: var(--flip-x, scaleX(1)) var(--flip-y, scaleY(1)) var(--rotate, rotate(0deg));
   transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   backface-visibility: hidden;
+  --svg-width: initial;
+  --svg-height: initial;
+  --svg-default: initial;
+  --svg-on: initial;
+  --svg-off: initial;
+  --svg-disabled: initial;
+
+
   width: var(--svg-width, 40px);
   height: var(--svg-height, 40px);
 
@@ -10,7 +25,7 @@
   }
 
   &[data-mode="on"] path {
-    fill: var(--svg-on var(--theme-svg-on, var(--fallback-svg-on, currentColor)));
+    fill: var(--svg-on, var(--theme-svg-on, var(--fallback-svg-on, currentColor)));
   }
 
   &[data-mode="off"] path {

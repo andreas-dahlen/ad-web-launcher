@@ -1,0 +1,25 @@
+.button {
+  --button-bg: initial;
+  --button-col: initial;
+  --button-opacity: initial;
+  --svg-default: initial;
+}
+
+
+.button[data-mode='on'] {
+  --button-bg: var(--theme-button-bg-on, var(--fallback-button-bg-on));
+}
+
+.button[data-mode='off'] {
+  --button-col: var(--debug-button-off);
+}
+
+.button[data-interactive='true'] {
+  --button-opacity: initial;
+}
+
+.button[data-interactive='false'] {
+  --button-opacity: 0.4;
+  pointer-events: none;
+  --svg-default: rgb(0, 0, 0);
+}

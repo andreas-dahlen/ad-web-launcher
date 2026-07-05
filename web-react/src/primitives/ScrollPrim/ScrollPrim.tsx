@@ -9,7 +9,7 @@ import clsx from 'clsx'
 import { dasx } from '@utils/dasx.ts'
 import { stsx } from '@utils/slsx.ts'
 import type { ScrollPrimProps } from '@primitives/prim.types.ts'
-import { scrollVars } from '@primitives/ScrollPrim/ScrollPrim.vars.ts'
+import { scrollVars } from '@composites/styleVars/ScrollPrim.vars.ts'
 
 export default function ScrollPrim({
   id,

@@ -1,14 +1,9 @@
 export const sliderVars = {
-  panelWidth: "--slider-width",
-  panelHeight: "--slider-height",
-  panelBg: "--panel-col",
-  panelRadius: "--panel-radius",
-
-  trackRadius: "--track-radius",
-  trackOpacity: "--track-opacity",
-  trackBg: "--track-col",
-  trackWidth: "--track-width",
-  trackHeight: "--track-height",
+  width: "--slider-width",
+  height: "--slider-height",
+  bg: "--slider-col",
+  radius: "--slider-radius",
+  opacity: "--slider-opacity",
 
   thumbWidth: "--thumb-width",
   thumbHeight: "--thumb-height",

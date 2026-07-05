@@ -2,7 +2,7 @@ export const buttonVars = {
   position: "--button-position",
   width: "--button-width",
   height: "--button-height",
-  bg: "--button-color",
+  bg: "--button-bg",
   radius: "--button-radius",
   border: "--button-border",
 } as const

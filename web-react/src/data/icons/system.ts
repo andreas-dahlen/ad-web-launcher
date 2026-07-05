@@ -14,7 +14,10 @@ export {
   ArrowsInLineHorizontalIcon as offManagerH,
   ArrowsInLineVerticalIcon as offManagerV,
   ArrowsOutLineHorizontalIcon as onManagerH,
-  ArrowsOutLineVerticalIcon as onManagerV
+  ArrowsOutLineVerticalIcon as onManagerV,
+  PlusIcon as plus,
+  ArrowFatLinesLeftIcon as moveLeft,
+  ArrowFatLinesRightIcon as moveRight
 
 } from "@phosphor-icons/react";
 

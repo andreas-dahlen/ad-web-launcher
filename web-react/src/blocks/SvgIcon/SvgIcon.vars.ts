@@ -8,6 +8,7 @@ export const svgIconVars = {
   svgRotate: "--rotate",
   svgFlipX: "--flip-x",
   svgFlipY: "--flip-y",
+  //TODO missing svg-* prefix
 } as const
 
 export type SvgIconVarKey = keyof typeof svgIconVars

@@ -50,8 +50,11 @@ export default function ButtonPrim({
         ...buttonDataAttrs
       })}
     >
+      <div className={css.transformWrapper} />
 
-      {children}
+      <div className={css.contentWrapper}>
+        {children}
+      </div>
 
     </div>
   )

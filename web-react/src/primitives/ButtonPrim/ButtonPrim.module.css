@@ -8,22 +8,45 @@
   -webkit-tap-highlight-color: transparent;
 
   transition:
-    transform 90ms cubic-bezier(0.2, 0.8, 0.2, 1),
-    box-shadow 140ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    /* transform 90ms cubic-bezier(0.2, 0.8, 0.2, 1), */
+    /* box-shadow 140ms cubic-bezier(0.2, 0.8, 0.2, 1), */
     opacity 140ms ease;
 
-  /* transform: scale(1); */
+  opacity: var(--button-opacity);
 
-  width: var(--button-width, 50px);
-  height: var(--button-height, 50px);
+  width: var(--button-width, var(--fallback-button-size));
+  height: var(--button-height, var(--fallback-button-size));
 
+
+  /* background: var(--button-bg, var(--theme-button-bg, var(--fallback-button-bg)));
+  border-radius: var(--button-radius, var(--theme-button-radius, var(--fallback-button-radius)));
+  border: var(--button-border) */
+}
+
+.transformWrapper {
+  width: var(--button-width, var(--fallback-button-size));
+  height: var(--button-height, var(--fallback-button-size));
 
   background: var(--button-bg, var(--theme-button-bg, var(--fallback-button-bg)));
   border-radius: var(--button-radius, var(--theme-button-radius, var(--fallback-button-radius)));
-  border: var(--button-border)
+  border: var(--button-border);
+
+  transition:
+    transform 90ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 140ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-.button[data-state="pressed"] {
+.contentWrapper {
+  position: absolute;
+  inset: 0;
+  width: var(--button-height, var(--fallback-button-size));
+  height: var(--button-height, var(--fallback-button-size));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button[data-state="pressed"] .transformWrapper {
   transform: scale(0.98);
   box-shadow:
     0 2px 6px rgba(0, 0, 0, 0.25),
@@ -31,11 +54,17 @@
   filter: brightness(0.95);
 }
 
-.button[data-state='released'] {
+.button[data-state='released'] .transformWrapper {
   transform: scale(1);
 }
 
-.button[data-state='cancelled'] {
+.button[data-state='cancelled'] .transformWrapper {
   transform: scale(1);
-  opacity: 0.95;
+  /* opacity: 0.95; */
 }
+
+.button[data-state='cancelled'] {
+  --button-opacity: 0.5;
+}
+
+/* TODO cancel opacity does nothing due to  */

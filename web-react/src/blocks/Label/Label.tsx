@@ -1,5 +1,5 @@
 import React from 'react'
-import type { LabelSettings } from './Label.types'
+import type { LabelSettings } from '../blocks.types'
 import { stsx } from '@utils/slsx'
 import { labelVars } from './Label.vars'
 import clsx from 'clsx'

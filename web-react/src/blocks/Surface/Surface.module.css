@@ -45,7 +45,6 @@
 
 .bg {
   --surface-overflow: hidden;
-  --surface-blur: 10px;
   --surface-border-radius: 10px;
   --surface-opacity: 50%;
   --surface-blur: blur(15px);
@@ -80,7 +79,7 @@
 
 .empty-row {
   --surface-direction: row;
-  --surface-col: none;
+  --surface-bg: none;
   --surface-box-shadow: none;
   --surface-position: relative;
 }

@@ -2,7 +2,7 @@ import ButtonPrim from '@primitives/ButtonPrim/ButtonPrim'
 import DragPrim from '@primitives/DragPrim/DragPrim'
 import { createId, generateId } from '@utils/idGenerator'
 import clsx from 'clsx'
-import css from '../comp.module.css'
+import css from './Button.module.css'
 import Label from '../../blocks/Label/Label'
 import SvgIcon from '../../blocks/SvgIcon/SvgIcon'
 import type { ButtonSettings, Directive, DragSettings } from '@composites/comp.types'
@@ -43,7 +43,7 @@ export default function Button({
       <ButtonPrim
         id={buttonId}
         interactive={isCompInteractive}
-        className={clsx(className, !inFlow && css.notInFlow)}
+        className={clsx(className, css.button, !inFlow && "notInFlow")}
         onPressRelease={onPressRelease}
         styleVars={styleVars}
         buttonDataAttrs={{
@@ -74,7 +74,7 @@ export default function Button({
       useSettingsSnap={drag?.useSettingsSnap}
       interactive={isDragInteractive}
       onSwipeCommit={drag?.onSwipeCommit && drag.onSwipeCommit}
-      className={clsx(inFlow && css.isInFlow)}
+      className={clsx(inFlow && "isInFlow")}
       snapX={drag?.useSettingsSnap ? drag?.snapX : undefined}
       snapY={drag?.useSettingsSnap ? drag?.snapY : undefined}
     >
