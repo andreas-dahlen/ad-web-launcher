@@ -1,91 +1,84 @@
-import type { ButtonProps } from '@composites/Button/Button.types'
-import ButtonPrim from '@primitives/ButtonPrim/ButtonPrim'
 import DragPrim from '@primitives/DragPrim/DragPrim'
-import { settingsStore } from '@stores/settings.store'
-import { createId } from '@utils/idGenerator'
-import ButtonLabel from './SliderLabel'
-import SliderIcon from './SliderIcon'
-import clsx from 'clsx'
-import css from './Slider.module.css'
+import { createId, generateId } from '@utils/idGenerator'
+import SliderPrim from '@primitives/SliderPrim/SliderPrim'
+import Label, { type LabelSettings } from '../../blocks/Label/Label'
+import SvgIcon, { type IconSettings } from '../../blocks/SvgIcon/SvgIcon'
+import { useBehaviorState } from '@composites/hooks/useBehaviorState.hook'
+import type { Directive, DragSettings, SliderSettings } from '@composites/comp.types'
 
-export default function Button({
-  mode,
+type SliderProps = {
+  directive?: Directive
+  icon?: IconSettings
+  label?: LabelSettings
+  slider: SliderSettings
+  drag?: DragSettings
+}
+export default function Slider({
+  directive,
   icon,
   label,
-  button,
+  slider,
   drag
-}: ButtonProps) {
+}: SliderProps) {
+
+  const { presets, styleVars, onValueChange, axis } = slider ?? {}
 
   const {
-    movable = false,
-    inFlow = true,
-    className,
-    styleVars,
-    onPressRelease
-  } = button ?? {}
+    mode,
+    movable,
+    interactive,
+    isDragInteractive,
+    isCompInteractive,
+    isInFlow
+  } = useBehaviorState({ ...directive })
 
-  const snapEnabled = settingsStore(s => s.settings.snapEnabled)
-  const dragEnabled = settingsStore(s => s.settings.dragEnabled)
+  const id = generateId();
+  const sliderId = createId("button", id, label?.msg)
+  const dragId = createId("drag", id, label?.msg)
 
-  const id = createId("slider");
-
-  const componentId = label ? `${label.msg.toLowerCase()}_${id}` : `item_${id}`;
-
-  const dragId = `drag_${componentId}`;
-  const buttonId = `button_${componentId}`;
-
-  const resolvedMode =
-    mode === true ? "on" :
-      mode === false ? "off" :
-        mode === undefined ? "default" :
-          mode
-
-  const interactive = resolvedMode !== "disabled"
-
-  const isDragOn = dragEnabled && interactive && movable
-  const buttonNotInFlow = !movable && !inFlow
-
-  const Button = (
+  const Slider = (
     <>
-      <ButtonPrim
-        id={buttonId}
-        // interactive={(!dragEnabled || !isMovable) && interactive}
-        interactive={(!dragEnabled || !movable) && interactive}
-        className={clsx(className, buttonNotInFlow && css.notInFlow)}
-        onPressRelease={onPressRelease}
+      <SliderPrim
+        id={sliderId}
+        axis={axis}
+        interactive={isCompInteractive}
+        isInFlow={isInFlow}
+        presets={presets}
+        onValueChange={onValueChange}
         styleVars={styleVars}
-        buttonDataAttrs={{
-          "mode": resolvedMode,
+        sliderDataAttrs={{
+          "mode": mode,
           "interactive": interactive,
           "state": "released"
         }}
       >
-        {/* The new isolated icon component handles the rest */}
-        {icon && <ButtonIcon
+        {icon && <SvgIcon
           Svg={icon.Svg}
-          mode={resolvedMode}
-          {...icon.settings}
+          mode={mode}
+          variant={icon.variant}
+          styleVars={icon.styleVars}
         />}
 
-        {label && <ButtonLabel
+        {label && <Label
           msg={label.msg}
-          mode={resolvedMode}
-          {...label.settings}
+          mode={mode}
+          position={label.position}
         />}
-      </ButtonPrim>
+      </SliderPrim>
     </>
   )
 
   if (movable) return (
     <DragPrim
       id={dragId}
-      useSettingsSnap={snapEnabled}
-      interactive={isDragOn}
+      useSettingsSnap={drag?.useSettingsSnap}
+      interactive={isDragInteractive}
       onSwipeCommit={drag?.onSwipeCommit && drag.onSwipeCommit}
-      className={clsx(inFlow && css.isInFlow)}
+      snapX={drag?.useSettingsSnap ? drag?.snapX : undefined}
+      snapY={drag?.useSettingsSnap ? drag?.snapY : undefined}
     >
-      {Button}
+      {Slider}
     </DragPrim>
   )
-  return Button
+  return Slider
 }

@@ -31,3 +31,7 @@
 .label {
   text-align: center;
 }
+
+.sexy {
+  --preset-label-col: hotPink;
+}

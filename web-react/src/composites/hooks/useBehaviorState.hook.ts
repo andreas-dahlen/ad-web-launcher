@@ -4,7 +4,7 @@ import { settingsStore } from '@stores/settings.store'
 export function useBehaviorState({
   mode: inputMode,
   movable = false,
-  inFlow: inputInFlow = true
+  isInFlow: inputIsInFlow = true
 }: Directive) {
 
   const dragEnabled = settingsStore(s => s.settings.dragEnabled)
@@ -20,7 +20,7 @@ export function useBehaviorState({
   const isDragInteractive = dragEnabled && interactive && movable
   const isCompInteractive = (!dragEnabled || !movable) && interactive
 
-  const inFlow = movable ? true : inputInFlow
+  const isInFlow = movable ? true : inputIsInFlow
 
   return {
     mode,
@@ -28,6 +28,6 @@ export function useBehaviorState({
     movable,
     isDragInteractive,
     isCompInteractive,
-    inFlow,
+    isInFlow,
   }
 }

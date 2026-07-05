@@ -7,9 +7,10 @@ import { useScrollStore } from './store/useScrollStore.hook.ts'
 import css from './ScrollPrim.module.css'
 import clsx from 'clsx'
 import { dasx } from '@utils/dasx.ts'
-import { stsx } from '@utils/slsx.ts'
+import { svsx } from '@utils/svsx.ts'
 import type { ScrollPrimProps } from '@primitives/prim.types.ts'
-import { scrollVars } from '@composites/styleVars/ScrollPrim.vars.ts'
+import { scrollAlwaysAllowed, scrollPresetMap, scrollVars } from '@composites/styleVars/ScrollPrim.vars.ts'
+import { cpsx } from '@utils/cpsx.ts'
 
 export default function ScrollPrim({
   id,
@@ -18,7 +19,8 @@ export default function ScrollPrim({
   isInitialVisible = false,
   interactive = true,
   instantSwipe = true,
-  className,
+  isInFlow = false,
+  presets,
   children,
   scrollDataAttrs,
   styleVars
@@ -60,14 +62,22 @@ export default function ScrollPrim({
   return (
     <div
       className={css.container}
-      style={overflowSide ? overflowStyle : undefined}
+      // style={overflowSide ? overflowStyle : undefined}
+      style={{
+        transform: overflowStyle ? overflowStyle.transform : undefined,
+        transition: overflowStyle ? overflowStyle.transition : undefined,
+        position: isInFlow ? "relative" : "absolute"
+      }}
       ref={containerRef}
       data-frame="scroll"
     >
 
       <div
-        className={clsx(css.scroll, className)}
-        style={{ ...contentStyle, pointerEvents: interactive ? 'auto' : 'none', ...stsx(styleVars ?? {}, scrollVars) }}
+        className={clsx(css.scroll, ...cpsx(presets, scrollPresetMap))}
+        style={{
+          ...contentStyle, pointerEvents: interactive ? 'auto' : 'none',
+          ...svsx(styleVars ?? {}, scrollVars, scrollAlwaysAllowed)
+        }}
         ref={contentRef}
         {...dasx({
           type: "scroll",

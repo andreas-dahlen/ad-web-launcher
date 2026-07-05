@@ -1,21 +1,23 @@
 import clsx from 'clsx'
 import css from './Surface.module.css'
-import { stsx } from '@utils/slsx'
-import { surfaceVars, type PresetMap, type SurfaceStyleOverrides } from './Surface.vars'
-import type { Mode } from '@composites/comp.types'
+import { svsx } from '@utils/svsx'
+import { surfaceVars, surfacePresetMap, surfaceAlwaysAllowed } from './Surface.vars'
+import type { SurfacePreset, SurfaceStyleOverrides } from './Surface.vars'
+// import type { Mode } from '@composites/comp.types'
+import { cpsx } from '@utils/cpsx'
 type PanelBaseProps = {
   children: React.ReactNode
   styleVars?: SurfaceStyleOverrides
-  mode?: Mode
-  presets?: PresetMap[]
-  className?: string
+  // mode?: Mode
+  presets?: SurfacePreset[]
+  isInFlow?: boolean
 }
 
-export function Surface({ children, styleVars, presets, className, mode }: PanelBaseProps) {
+export function Surface({ children, styleVars, presets, isInFlow = true }: PanelBaseProps) {
   return (
     <div
-      className={clsx(className, css.surface, presets?.map(preset => css[preset]))}
-      style={{ ...stsx(styleVars ?? {}, surfaceVars) }}
+      className={clsx(css.surface, ...cpsx(presets, surfacePresetMap))}
+      style={{ position: isInFlow ? "relative" : "absolute", ...svsx(styleVars ?? {}, surfaceVars, surfaceAlwaysAllowed) }}
     >
       {children}
     </div>

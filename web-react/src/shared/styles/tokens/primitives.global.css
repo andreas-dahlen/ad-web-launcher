@@ -127,3 +127,11 @@ neutral = greys / blacks / whites  */
   fill: currentColor;
   /* Smoothly inherits --final-fg automatically! */
 }
+
+/* override
+interactive
+state
+mode
+preset
+theme
+fallback */

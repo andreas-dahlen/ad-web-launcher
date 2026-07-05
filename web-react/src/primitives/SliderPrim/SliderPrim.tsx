@@ -7,17 +7,18 @@ import { sliderStore } from './store/slider.store.ts'
 import css from './SliderPrim.module.css'
 import clsx from 'clsx'
 import { dasx } from '@utils/dasx.ts'
-import { stsx } from '@utils/slsx.ts'
+import { svsx } from '@utils/svsx.ts'
 import type { SliderPrimProps } from '@primitives/prim.types.ts'
-import { sliderVars } from '@composites/styleVars/SliderPrim.vars.ts'
+import { sliderAlwaysAllowed, sliderPresetMap, sliderVars } from '@composites/Slider/SliderPrim.vars.ts'
+import { cpsx } from '@utils/cpsx.ts'
 
 export default function SliderPrim({
   id,
   axis,
   interactive = true,
   instantSwipe = true,
-  className,
-  thumbClassName,
+  isInFlow = true,
+  presets,
   children,
   sliderDataAttrs,
   styleVars,
@@ -85,10 +86,11 @@ export default function SliderPrim({
 
   return (
     <div
-      className={clsx(css.slider, className)}
+      className={clsx(css.slider, ...cpsx(presets, sliderPresetMap))}
       style={{
         pointerEvents: interactive ? 'auto' : 'none',
-        ...stsx(styleVars ?? {}, sliderVars)
+        position: isInFlow ? "relative" : "absolute",
+        ...svsx(styleVars ?? {}, sliderVars, sliderAlwaysAllowed)
       }}
       ref={sliderRef}
       {...dasx({
@@ -102,7 +104,7 @@ export default function SliderPrim({
     >
 
       <div
-        className={clsx(css.thumb, thumbClassName)}
+        className={clsx(css.thumb)}
         style={{
           ...thumbStyle,
           ...(horizontal ? { left: 0 } : { top: 0 })

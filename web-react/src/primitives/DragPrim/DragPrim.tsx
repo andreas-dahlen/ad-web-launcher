@@ -16,9 +16,9 @@ export default function DragPrim({
   snapY,
   useSettingsSnap = false,
   interactive = true,
+  isInFlow = false,
   onSwipeCommit,
   children,
-  className,
   dragDataAttrs
 }: DragPrimProps) {
 
@@ -60,7 +60,8 @@ export default function DragPrim({
     <>
       <div
         ref={containerRef}
-        className={clsx(css.container, className)}
+        className={clsx(css.container)}
+        style={{ position: isInFlow ? "relative" : "absolute" }}
         data-frame='drag'
       >
         <div
@@ -84,6 +85,7 @@ export default function DragPrim({
           className={css.container}
           data-frame='drag'
           style={{
+            position: isInFlow ? "relative" : "absolute",
             width: layout.containerSize.width,
             height: layout.containerSize.height,
             top: frameRect.top,
@@ -92,7 +94,7 @@ export default function DragPrim({
         >
           <div
             style={{ ...motionStyle, pointerEvents: 'none' }}
-            className={clsx(css.drag, className)}
+            className={clsx(css.drag)}
             {...dragDataAttrs}
           >
             {children}

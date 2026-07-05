@@ -1,6 +1,7 @@
-import type { ButtonStyleOverrides } from '@composites/styleVars/ButtonPrim.vars'
+import type { ButtonPreset, ButtonStyleOverrides } from '@composites/Button/ButtonPrim.vars'
+import type { SliderPreset, SliderStyleOverrides } from '@composites/Slider/SliderPrim.vars'
 import type { SnapConfig } from '@primitives/prim.types'
-import type { EventType } from '@typing/core.types'
+import type { Axis1D, EventType } from '@typing/core.types'
 
 // `directive` contains high-level orchestration flags that determine
 // how the composite exists in the UI. These are not drag or button
@@ -9,7 +10,7 @@ import type { EventType } from '@typing/core.types'
 export type Directive = {
   mode?: ModeInput
   movable?: boolean
-  inFlow?: boolean
+  isInFlow?: boolean
 }
 
 export type ModeInput = Mode | boolean
@@ -19,7 +20,14 @@ export type DragSettings = SnapConfig & {
   onSwipeCommit?: (detail: EventType) => void
 }
 export type ButtonSettings = {
-  className?: string
   styleVars?: ButtonStyleOverrides
+  presets?: ButtonPreset[]
   onPressRelease?: (detail: EventType) => void
+}
+
+export type SliderSettings = {
+  axis: Axis1D
+  styleVars?: SliderStyleOverrides
+  presets?: SliderPreset[]
+  onValueChange?: (value: number) => void
 }

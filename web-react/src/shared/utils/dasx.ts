@@ -22,7 +22,7 @@ function toDataAttr(key: string): DataString {
   return kebab.startsWith('data-') ? kebab as DataString : `data-${kebab}`
 }
 
-/** converts object into data-attrs */
+/** Transforms an object into data-attribute entries */
 export function dasx(state: DataState = {}) {
   const result: DataAttrsResult = {}
 

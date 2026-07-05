@@ -6,10 +6,11 @@ import { carouselStore, type NodeId } from './store/carousel.store.ts'
 import css from './CarouselPrim.module.css'
 import { dasx } from '@utils/dasx.ts'
 import clsx from 'clsx'
-import { stsx } from '@utils/slsx.ts'
+import { svsx } from '@utils/svsx.ts'
 import type { ContentCarouselPrimProps } from '@primitives/prim.types.ts'
 import type { SceneRole } from '@typing/core.types.ts'
-import { carouselVars } from '@composites/styleVars/CarouselPrim.vars.ts'
+import { carouselAlwaysAllowed, carouselPresetMap, carouselVars } from '@composites/styleVars/CarouselPrim.vars.ts'
+import { cpsx } from '@utils/cpsx.ts'
 
 
 
@@ -24,6 +25,7 @@ export default function ContentCarouselPrim({
   axis,
   scenes,
   styleVars,
+  presets,
   carouselDataAttrs
 }: ContentCarouselPrimProps) {
 
@@ -73,8 +75,8 @@ export default function ContentCarouselPrim({
           <div
             key={node.nodeId}
             ref={itemRef}
-            className={clsx(css.scene)}
-            style={{ ...styleForRole(role), ...stsx(styleVars ?? {}, carouselVars) }}
+            className={clsx(css.scene, cpsx(presets, carouselPresetMap))}
+            style={{ ...styleForRole(role), ...svsx(styleVars ?? {}, carouselVars, carouselAlwaysAllowed) }}
             data-role={role}
             onTransitionEnd={onTransitionEnd}
           >

@@ -4,15 +4,17 @@ import css from './ButtonPrim.module.css'
 import clsx from 'clsx'
 import { dasx } from '@utils/dasx'
 import type { ButtonPrimProps } from '@primitives/prim.types'
-import { stsx } from '@utils/slsx'
-import { buttonVars } from '@composites/styleVars/ButtonPrim.vars'
+import { svsx } from '@utils/svsx'
+import { buttonAlwaysAllowed, buttonPresetMap, buttonVars } from '@composites/Button/ButtonPrim.vars'
+import { cpsx } from '@utils/cpsx'
 
 
 export default function ButtonPrim({
   id,
-  className,
+  presets,
   action,
   interactive = true,
+  isInFlow = true,
   onPressRelease,
   children,
   buttonDataAttrs,
@@ -36,10 +38,11 @@ export default function ButtonPrim({
 
   return (
     <div
-      className={clsx(css.button, className)}
+      className={clsx(css.button, ...cpsx(presets, buttonPresetMap))}
       style={{
         pointerEvents: interactive ? "auto" : "none",
-        ...stsx(styleVars ?? {}, buttonVars)
+        position: isInFlow ? "relative" : "absolute",
+        ...svsx(styleVars ?? {}, buttonVars, buttonAlwaysAllowed)
       }}
       ref={buttonRef}
       {...dasx({

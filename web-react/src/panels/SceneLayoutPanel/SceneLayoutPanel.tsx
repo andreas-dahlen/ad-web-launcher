@@ -39,9 +39,9 @@ export default function SceneLayoutPanel() {
         <div className={clsx(css.buttonrow, horizontal && css.horizontal, !horizontal && css.vertical)}> */}
       <Frame presets={["bg", "frame"]}>
 
-        <Label msg={`Lane: ${sceneIdx}`} styleVars={{ position: "relative" }} position={"center"}></Label>
+        <Label msg={`Scene: ${sceneIdx}`} styleVars={{ position: "relative" }} position={"center"}></Label>
 
-        <Frame presets={["row"]}>
+        <Frame presets={["row"]} styleVars={{ gap: "1rem" }}>
 
           <Button
             //  directive={{ mode: laneCount === 1 ? "disabled" : "default" }}
@@ -61,6 +61,10 @@ export default function SceneLayoutPanel() {
             label={{ msg: "delete" }}
             icon={{ Svg: Icons.trash }}
           />
+        </Frame>
+
+        <Frame presets={["row"]} styleVars={{ gap: "1rem" }}>
+
           <Button
             directive={{ mode: sceneCount === 1 ? "disabled" : "default" }}
             button={{ onPressRelease: () => moveScene(axis, laneId, sceneId, -1) }}
@@ -73,8 +77,6 @@ export default function SceneLayoutPanel() {
             label={{ msg: "move right" }}
             icon={{ Svg: Icons.moveRight }}
           />
-          {/* </div>
-      </div> */}
         </Frame>
       </Frame>
     </>

@@ -6,20 +6,3 @@
 [data-active-gesture="drag"] .panel {
   --panel-opacity: 0.3;
 }
-
-.close {
-  filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.614));
-  --button-position: absolute;
-  right: 15px;
-
-  --theme-button-bg: none;
-  --fallback-button-bg: none;
-
-  --button-width: 30px;
-  --button-height: 30px;
-  --button-border: none;
-
-  &[data-state='pressed'] {
-    box-shadow: none;
-  }
-}

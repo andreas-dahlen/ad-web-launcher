@@ -1,20 +1,17 @@
 import type { Directive, DragSettings } from '@composites/comp.types'
-import type { PresetMap, SurfaceStyleOverrides } from '../../blocks/Surface/Surface.vars'
+import type { SurfacePreset, SurfaceStyleOverrides } from '../../blocks/Surface/Surface.vars'
 import type React from 'react'
-import type { LabelSettings } from '../../blocks/blocks.types'
 import { createId, generateId } from '@utils/idGenerator'
 import DragPrim from '@primitives/DragPrim/DragPrim'
 import { useBehaviorState } from '@composites/hooks/useBehaviorState.hook'
-import clsx from 'clsx'
 import { Surface } from '../../blocks/Surface/Surface'
-import Label from '../../blocks/Label/Label'
+import Label, { type LabelSettings } from '../../blocks/Label/Label'
 
 type FrameProps = {
   directive?: Directive
   drag?: DragSettings
   styleVars?: SurfaceStyleOverrides
-  presets?: PresetMap[]
-  className?: string
+  presets?: SurfacePreset[]
   label?: LabelSettings
   children: React.ReactNode
 }
@@ -24,7 +21,6 @@ export default function Frame({
   drag,
   styleVars,
   presets,
-  className,
   label,
   children
 }: FrameProps) {
@@ -33,7 +29,7 @@ export default function Frame({
     mode,
     movable,
     isDragInteractive,
-    inFlow
+    isInFlow
   } = useBehaviorState({ ...directive })
 
   const id = generateId()
@@ -43,8 +39,7 @@ export default function Frame({
   const Frame = (
     <>
       <Surface
-        mode={mode}
-        className={clsx(className, !inFlow && "notInFlow")}
+        isInFlow={isInFlow}
         styleVars={styleVars}
         presets={presets}
       >
@@ -64,8 +59,8 @@ export default function Frame({
       id={dragId}
       useSettingsSnap={drag?.useSettingsSnap}
       interactive={isDragInteractive}
+      isInFlow={isInFlow}
       onSwipeCommit={drag?.onSwipeCommit && drag.onSwipeCommit}
-      className={clsx(inFlow && "isInFlow")}
       snapX={drag?.useSettingsSnap ? drag?.snapX : undefined}
       snapY={drag?.useSettingsSnap ? drag?.snapY : undefined}
     >
