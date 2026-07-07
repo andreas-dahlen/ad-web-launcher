@@ -1,16 +1,16 @@
+import type { StyleFromVars, VarDef } from '@utils/svsx.types'
 import css from './carousel.module.css'
 export const carouselVars = {
-  width: { name: "scene-width", allowed: [] as const },
-  height: { name: "scene-height", allowed: [] as const },
-} as const
+  width: { name: "width", allowed: [] as const },
+  height: { name: "height", allowed: [] as const },
+} as Record<string, VarDef>
 
-export const carouselAlwaysAllowed = ["override", "preset"] as const
+export const carouselAlwaysAllowed = ["o", "p"] as const
 
-export type CarouselVarKey = keyof typeof carouselVars
-export type CarouselStyleOverrides = Partial<Record<CarouselVarKey, string | number>>
+export type CarouselStyle = StyleFromVars<typeof carouselVars, typeof carouselAlwaysAllowed>
 
-export const carouselPresetMap = {
+export const carouselPreset = {
   default: css.carouselPreset
 } as const
 
-export type CarouselPreset = keyof typeof carouselPresetMap
+export type CarouselPreset = keyof typeof carouselPreset

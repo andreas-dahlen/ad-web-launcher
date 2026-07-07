@@ -2,7 +2,8 @@ import clsx from 'clsx';
 import { dasx } from '@utils/dasx';
 import css from './SvgIcon.module.css'
 import { svsx } from '@utils/svsx';
-import { svgIconAlwaysAllowed, svgIconPresetMap, svgIconVars, type svgIconPreset, type SvgIconStyleOverrides } from './SvgIcon.vars';
+import { svgIconAlwaysAllowed, svgIconPreset, svgIconVars } from './SvgIcon.vars';
+import type { SvgIconStyle, SvgIconPreset } from './SvgIcon.vars';
 import { cpsx } from '@utils/cpsx';
 import type { DynamicIconComponent } from '@typing/svg';
 import type { Icon } from '@phosphor-icons/react';
@@ -13,8 +14,8 @@ export type IconSettings = {
   mode?: Mode
   variant?: 'bold' | 'thin' | 'light' | 'regular' | 'fill' | 'duotone'
   phosphorSize?: number
-  styleVars?: SvgIconStyleOverrides
-  presets?: svgIconPreset[]
+  styleVars?: SvgIconStyle
+  presets?: SvgIconPreset[]
 }
 export default function SvgIcon({
   Svg,
@@ -49,8 +50,8 @@ export default function SvgIcon({
       weight={variant}
       mirrored={isPhosphorIcon && svgFlipX ? true : undefined}
       {...dasx({ mode: mode })}
-      style={{ ...svsx(styleVars ?? {}, svgIconVars, svgIconAlwaysAllowed) }}
-      className={clsx(css.svg, ...cpsx(presets, svgIconPresetMap))}
+      style={{ ...svsx(styleVars ?? {}, svgIconVars, svgIconAlwaysAllowed, "svg") }}
+      className={clsx(css.svg, ...cpsx(presets, svgIconPreset))}
     />
   )
 }

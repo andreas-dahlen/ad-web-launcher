@@ -1,3 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap');
+
 :root {
   /* colors */
 
@@ -57,81 +63,3 @@ neutral = greys / blacks / whites  */
   --_font-manrope: "Manrope", sans-serif;
   --_font-grotesk: "Space Grotesk", sans-serif;
 }
-
-
-/* TODO implement the system bellow...  */
-/* ============================================================
-   REFINED PRIMITIVE PRIORITY SYSTEM
-   ============================================================ */
-
-.primitive-button {
-  /* 1. Reset/Isolate variables locally on the boundary component.
-     Do NOT use 'initial' here. By keeping them explicitly undefined 
-     or using 'revert', the fallback chain remains operational. */
-  --override-bg: revert;
-  --interactive-bg: revert;
-  --state-bg: revert;
-  --mode-bg: revert;
-
-  /* 2. Establish baseline defaults for the base layers */
-  --theme-bg: var(--theme-button-bg);
-  --fallback-bg: var(--fallback-button-bg);
-
-  /* Establish a parallel track for Foreground Elements so text doesn't vanish */
-  --theme-fg: var(--theme-button-fg);
-  --fallback-fg: var(--fallback-button-fg);
-
-  /* 3. Build the final priority chains */
-  --final-bg: var(--override-bg, var(--interactive-bg, var(--state-bg, var(--mode-bg, var(--theme-bg, var(--fallback-bg))))));
-  --final-fg: var(--override-fg, var(--interactive-fg, var(--state-fg, var(--mode-fg, var(--theme-fg, var(--fallback-fg))))));
-
-  /* 4. Apply resolved outputs straight to the primitive container */
-  background-color: var(--final-bg);
-  color: var(--final-fg);
-}
-
-/* 5. Connect each data-attribute cleanly to its respective slot */
-
-/* Interactive Layer */
-.primitive-button[data-interactive='false'] {
-  --interactive-bg: var(--button-disabled-bg);
-  --interactive-fg: var(--button-disabled-fg);
-}
-
-/* State Layer (Source order makes pressed beat hover) */
-.primitive-button[data-state='hover'] {
-  --state-bg: var(--button-hover-bg);
-  --state-fg: var(--button-hover-fg);
-}
-
-.primitive-button[data-state='pressed'] {
-  --state-bg: var(--button-pressed-bg);
-  --state-fg: var(--button-pressed-fg);
-}
-
-/* Mode Layer */
-.primitive-button[data-mode='on'] {
-  --mode-bg: var(--button-on-bg);
-}
-
-.primitive-button[data-mode='off'] {
-  --mode-bg: var(--button-off-bg);
-}
-
-.primitive-button[data-mode='default'] {
-  --mode-bg: var(--button-default-bg);
-}
-
-/* 6. Children leverage the coordinated foreground variables */
-.primitive-button path {
-  fill: currentColor;
-  /* Smoothly inherits --final-fg automatically! */
-}
-
-/* override
-interactive
-state
-mode
-preset
-theme
-fallback */

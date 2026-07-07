@@ -1,11 +1,12 @@
 import { useRef } from "react"
 import { usePointerBridge } from '@hooks/usePointerBridge.hook'
 import css from './ButtonPrim.module.css'
+import compiler from './buttonCompiler.module.css'
 import clsx from 'clsx'
 import { dasx } from '@utils/dasx'
 import type { ButtonPrimProps } from '@primitives/prim.types'
 import { svsx } from '@utils/svsx'
-import { buttonAlwaysAllowed, buttonPresetMap, buttonVars } from '@composites/Button/ButtonPrim.vars'
+import { buttonAlwaysAllowed, buttonPreset, buttonVars } from '@composites/Button/ButtonPrim.vars'
 import { cpsx } from '@utils/cpsx'
 
 
@@ -38,11 +39,11 @@ export default function ButtonPrim({
 
   return (
     <div
-      className={clsx(css.button, ...cpsx(presets, buttonPresetMap))}
+      className={clsx(compiler.vars, css.button, ...cpsx(presets, buttonPreset))}
       style={{
         pointerEvents: interactive ? "auto" : "none",
         position: isInFlow ? "relative" : "absolute",
-        ...svsx(styleVars ?? {}, buttonVars, buttonAlwaysAllowed)
+        ...svsx(styleVars ?? {}, buttonVars, buttonAlwaysAllowed, "button")
       }}
       ref={buttonRef}
       {...dasx({

@@ -1,7 +1,7 @@
-import type { ButtonPreset, ButtonStyleOverrides } from '@composites/Button/ButtonPrim.vars'
-import type { CarouselPreset, CarouselStyleOverrides } from '@composites/styleVars/CarouselPrim.vars'
-import type { ScrollPreset, ScrollStyleOverrides } from '@composites/styleVars/ScrollPrim.vars'
-import type { SliderPreset, SliderStyleOverrides } from '@composites/Slider/SliderPrim.vars'
+import type { ButtonPreset, ButtonStyle } from '@composites/Button/ButtonPrim.vars'
+import type { CarouselPreset, CarouselStyle } from '@composites/styleVars/CarouselPrim.vars'
+import type { ScrollPreset, ScrollStyle } from '@composites/styleVars/ScrollPrim.vars'
+import type { SliderPreset, SliderStyle } from '@composites/Slider/SliderPrim.vars'
 import type { Axis1D, EventType, BoxSide } from '@typing/core.types'
 import type { DataAttributes } from '@typing/utils.types'
 import type React from 'react'
@@ -40,7 +40,7 @@ export type ContentCarouselPrimProps = BasePrimProps & {
   axis: Axis1D
   scenes: React.ReactNode[]
   carouselDataAttrs?: DataAttributes
-  styleVars?: CarouselStyleOverrides
+  styleVars?: CarouselStyle
   presets?: CarouselPreset[]
 }
 
@@ -49,7 +49,7 @@ export type SliderPrimProps = BasePrimProps & {
   instantSwipe?: boolean
   children?: React.ReactNode
   sliderDataAttrs?: DataAttributes
-  styleVars?: SliderStyleOverrides
+  styleVars?: SliderStyle
   presets?: SliderPreset[]
   onValueChange?: (value: number) => void
 }
@@ -59,7 +59,7 @@ export type ScrollPrimProps = BasePrimProps & OverflowProps & {
   instantSwipe?: boolean
   children?: React.ReactNode
   scrollDataAttrs?: DataAttributes
-  styleVars?: ScrollStyleOverrides
+  styleVars?: ScrollStyle
   presets?: ScrollPreset[]
 }
 
@@ -67,7 +67,7 @@ export type ButtonPrimProps = BasePrimProps & {
   action?: string
   children?: React.ReactNode
   buttonDataAttrs?: DataAttributes
-  styleVars?: ButtonStyleOverrides
+  styleVars?: ButtonStyle
   presets?: ButtonPreset[]
   onPressRelease?: (detail: EventType) => void
 }

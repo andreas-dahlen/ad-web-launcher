@@ -1,0 +1,29 @@
+.vars {
+  --final-label-col:
+    var(--o-label-col,
+      var(--p-label-col,
+        var(--t-label-col,
+          var(--f-label-col))));
+
+  --final-label-width:
+    var(--o-label-width,
+      var(--p-label-width,
+        var(--f-label-width)));
+
+  --final-label-height:
+    var(--o-label-height,
+      var(--p-label-height,
+        var(--f-label-height)));
+
+  --final-label-position:
+    var(--o-label-position,
+      var(--p-label-position,
+        var(--f-label-position)));
+
+  --final-label-align:
+    var(--o-label-align,
+      var(--p-label-align,
+        var(--f-label-align)));
+}
+
+/* --o-: var(--s-, var(--m-, var(--p-, var(--t-, var(--f-))))); */

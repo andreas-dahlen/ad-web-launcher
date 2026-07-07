@@ -1,6 +1,0 @@
-import type { BoxSide } from '@typing/core.types'
-import type { Mode } from '@composites/comp.types'
-import type { Icon } from '@phosphor-icons/react'
-import type { DynamicIconComponent } from '@typing/svg'
-import type { SvgIconStyleOverrides } from './SvgIcon/SvgIcon.vars'
-import type { LabelStyleOverrides } from './Label/Label.vars'

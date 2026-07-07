@@ -1,6 +1,6 @@
 import React from 'react'
 import { svsx } from '@utils/svsx'
-import { labelAlwaysAllowed, labelPresetMap, labelVars, type LabelPreset, type LabelStyleOverrides } from './Label.vars'
+import { labelAlwaysAllowed, labelPreset, labelVars, type LabelPreset, type LabelStyle } from './Label.vars'
 import clsx from 'clsx'
 import css from './Label.module.css'
 import type { Mode } from '@composites/comp.types'
@@ -12,7 +12,7 @@ export type LabelSettings = {
   mode?: Mode
   el?: string
   position?: BoxSide | "center"
-  styleVars?: LabelStyleOverrides
+  styleVars?: LabelStyle
   presets?: LabelPreset[]
 }
 export default function Label({
@@ -30,8 +30,8 @@ export default function Label({
           : position === "top" ? css.top
             : position === "center" ? css.center
               : css.bottom,
-      ...cpsx(presets, labelPresetMap))}
-      style={svsx(styleVars ?? {}, labelVars, labelAlwaysAllowed)}>
+      ...cpsx(presets, labelPreset))}
+      style={svsx(styleVars ?? {}, labelVars, labelAlwaysAllowed, "label")}>
 
       {React.createElement(
         el,

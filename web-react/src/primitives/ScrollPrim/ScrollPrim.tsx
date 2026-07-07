@@ -9,7 +9,7 @@ import clsx from 'clsx'
 import { dasx } from '@utils/dasx.ts'
 import { svsx } from '@utils/svsx.ts'
 import type { ScrollPrimProps } from '@primitives/prim.types.ts'
-import { scrollAlwaysAllowed, scrollPresetMap, scrollVars } from '@composites/styleVars/ScrollPrim.vars.ts'
+import { scrollAlwaysAllowed, scrollPreset, scrollVars } from '@composites/styleVars/ScrollPrim.vars.ts'
 import { cpsx } from '@utils/cpsx.ts'
 
 export default function ScrollPrim({
@@ -73,10 +73,10 @@ export default function ScrollPrim({
     >
 
       <div
-        className={clsx(css.scroll, ...cpsx(presets, scrollPresetMap))}
+        className={clsx(css.scroll, ...cpsx(presets, scrollPreset))}
         style={{
           ...contentStyle, pointerEvents: interactive ? 'auto' : 'none',
-          ...svsx(styleVars ?? {}, scrollVars, scrollAlwaysAllowed)
+          ...svsx(styleVars ?? {}, scrollVars, scrollAlwaysAllowed, "scroll")
         }}
         ref={contentRef}
         {...dasx({

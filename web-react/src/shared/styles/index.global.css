@@ -3,5 +3,4 @@
 @import './tokens/fallback.global.css';
 @import './tokens/default.theme.css';
 @import './core/utils.global.css';
-@import './comp.global.css';
 @import './debug.global.css';

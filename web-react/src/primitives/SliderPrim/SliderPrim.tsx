@@ -9,7 +9,7 @@ import clsx from 'clsx'
 import { dasx } from '@utils/dasx.ts'
 import { svsx } from '@utils/svsx.ts'
 import type { SliderPrimProps } from '@primitives/prim.types.ts'
-import { sliderAlwaysAllowed, sliderPresetMap, sliderVars } from '@composites/Slider/SliderPrim.vars.ts'
+import { sliderAlwaysAllowed, sliderPreset, sliderVars } from '@composites/Slider/SliderPrim.vars.ts'
 import { cpsx } from '@utils/cpsx.ts'
 
 export default function SliderPrim({
@@ -86,11 +86,11 @@ export default function SliderPrim({
 
   return (
     <div
-      className={clsx(css.slider, ...cpsx(presets, sliderPresetMap))}
+      className={clsx(css.slider, ...cpsx(presets, sliderPreset))}
       style={{
         pointerEvents: interactive ? 'auto' : 'none',
         position: isInFlow ? "relative" : "absolute",
-        ...svsx(styleVars ?? {}, sliderVars, sliderAlwaysAllowed)
+        ...svsx(styleVars ?? {}, sliderVars, sliderAlwaysAllowed, "slider")
       }}
       ref={sliderRef}
       {...dasx({

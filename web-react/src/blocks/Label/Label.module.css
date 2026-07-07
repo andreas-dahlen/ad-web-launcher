@@ -1,37 +1,36 @@
+.sexy {
+  --p-label-col: var(--_col-warm-dark-1);
+}
+
 .bottom {
-  --label-height: var(--button-height, var(--fallback-button-size));
-  top: var(--label-height);
+  --f-label-height: var(--final-button-size);
+  top: var(--final-label-height);
 }
 
 .top {
-  --label-height: var(--button-height, var(--fallback-button-size));
-  bottom: var(--label-height);
+  --f-label-height: var(--final-button-size);
+  bottom: var(--final-label-height);
 }
 
 .left {
-  --label-width: var(--button-width, var(--fallback-button-size));
-  right: var(--label-width);
+  --f-label-width: var(--final-button-size);
+  right: var(--final-label-width);
 }
 
 .right {
-  --label-width: var(--button-width, var(--fallback-button-size));
-  left: var(--label-width);
+  --f-label-width: var(--final-button-size);
+  left: var(--final-label-width);
 }
 
-.center {
-  --label-width: unset;
-  --label-height: unset;
-  --label-position: unset;
-}
 
 .labelwrapper {
-  position: var(--label-position, absolute);
+  --f-label-position: absolute;
+  position: var(--final-label-position);
 }
 
-.label {
-  text-align: center;
+.base {
+  --f-label-align: center;
+  text-align: var(--final-label-align);
 }
 
-.sexy {
-  --preset-label-col: hotPink;
-}
+/* --o-: var(--s-, var(--m-, var(--p-, var(--t-, var(--f-))))); */

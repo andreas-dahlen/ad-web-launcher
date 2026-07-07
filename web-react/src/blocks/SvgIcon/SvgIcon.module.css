@@ -6,33 +6,48 @@
 } */
 
 .svg {
-  transform: var(--flip-x, scaleX(1)) var(--flip-y, scaleY(1)) var(--rotate, rotate(0deg));
+
+  --f-svg-mode-off-col: var(--_col-neutral-light-1);
+  --f-svg-mode-on-col: var(--_col-neutral-dark-1);
+  --f-svg-mode-default-col: var(--_col-neutral-mid-1);
+  --f-svg-mode-disabled-col: var(--_col-neutral-mid-1);
+
+  --f-svg-width: 40px;
+  --f-svg-height: 40px;
+
+  --p-svg-width: initial;
+  --p-svg-height: initial;
+
+  --p-svg-flip-x: scaleX(1);
+  --p-svg-flip-y: scaleY(1);
+  --p-svg-rotate: rotate(0deg);
+
+  --m-svg-mode-default-col: initial;
+  --m-svg-mode-on-col: initial;
+  --m-svg-mode-off-col: initial;
+  --m-svg-mode-disabled-col: initial;
+
+
+  width: var(--final-svg-width);
+  height: var(--final-svg-height);
+
+  transform: var(--final-svg-flip-x) var(--final-svg-flip-y) var(--final-svg-rotate);
   transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   backface-visibility: hidden;
-  --svg-width: initial;
-  --svg-height: initial;
-  --svg-default: initial;
-  --svg-on: initial;
-  --svg-off: initial;
-  --svg-disabled: initial;
-
-
-  width: var(--svg-width, 40px);
-  height: var(--svg-height, 40px);
 
   &[data-mode="default"] path {
-    fill: var(--svg-default, var(--theme-svg-default, var(--fallback-svg-default, currentColor)));
+    fill: var(--final-svg-mode-default-col, currentColor);
   }
 
   &[data-mode="on"] path {
-    fill: var(--svg-on, var(--theme-svg-on, var(--fallback-svg-on, currentColor)));
+    fill: var(--final-svg-mode-on-col, currentColor);
   }
 
   &[data-mode="off"] path {
-    fill: var(--svg-off, var(--theme-svg-off, var(--fallback-svg-off, currentColor)));
+    fill: var(--final-svg-mode-off-col, currentColor);
   }
 
   &[data-mode="disabled"] path {
-    fill: var(--svg-disabled, var(--theme-svg-disabled, var(--fallback-svg-disabled, currentColor)));
+    fill: var(--final-svg-mode-disabled-col, currentColor);
   }
 }

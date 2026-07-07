@@ -9,7 +9,7 @@ import clsx from 'clsx'
 import { svsx } from '@utils/svsx.ts'
 import type { ContentCarouselPrimProps } from '@primitives/prim.types.ts'
 import type { SceneRole } from '@typing/core.types.ts'
-import { carouselAlwaysAllowed, carouselPresetMap, carouselVars } from '@composites/styleVars/CarouselPrim.vars.ts'
+import { carouselAlwaysAllowed, carouselPreset, carouselVars } from '@composites/styleVars/CarouselPrim.vars.ts'
 import { cpsx } from '@utils/cpsx.ts'
 
 
@@ -75,8 +75,8 @@ export default function ContentCarouselPrim({
           <div
             key={node.nodeId}
             ref={itemRef}
-            className={clsx(css.scene, cpsx(presets, carouselPresetMap))}
-            style={{ ...styleForRole(role), ...svsx(styleVars ?? {}, carouselVars, carouselAlwaysAllowed) }}
+            className={clsx(css.scene, cpsx(presets, carouselPreset))}
+            style={{ ...styleForRole(role), ...svsx(styleVars ?? {}, carouselVars, carouselAlwaysAllowed, "scene") }}
             data-role={role}
             onTransitionEnd={onTransitionEnd}
           >

@@ -14,6 +14,7 @@ export default function SettingsPanel() {
   return (
     <Frame
       presets={["bg", "frame"]}
+      styleVars={{ bg: "black", "t:bg": "blue" }}
     >
 
       <Button

@@ -1,70 +1,88 @@
 .button {
-  position: var(--button-position, relative);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  --f-button-position: relative;
+  --f-button-display: flex;
+  --f-button-align: center;
+  --f-button-justify: center;
+
+  --f-button-opacity: 1;
+
+  --f-button-width: 50px;
+  --f-button-height: 50px;
+  --f-button-radius: var(--_border-radius-xs);
+  --f-button-border: none;
+
+  --f-button-state-pressed-scale: scale(0.98);
+  --f-button-state-released-scale: scale(1);
+  --f-button-state-cancelled-scale: scale(1);
+  --f-button-state-cancelled-opacity: 0.5;
+  --f-button-state-pressed-filter: brightness(0.95);
+
+  --f-button-shadow: 0px 0px 10px var(--_col-neutral-dark-1);
 
   user-select: none;
   -webkit-tap-highlight-color: transparent;
 
-  transition:
-    /* transform 90ms cubic-bezier(0.2, 0.8, 0.2, 1), */
-    /* box-shadow 140ms cubic-bezier(0.2, 0.8, 0.2, 1), */
-    opacity 140ms ease;
+  position: var(--final-button-position);
+  display: var(--final-button-display);
+  align-items: var(--final-button-align);
+  justify-content: var(--final-button-justify);
 
-  opacity: var(--button-opacity);
+  opacity: var(--final-button-opacity);
 
-  width: var(--button-width, var(--fallback-button-size));
-  height: var(--button-height, var(--fallback-button-size));
+  width: var(--final-button-width);
+  height: var(--final-button-height);
 
-
-  /* background: var(--button-bg, var(--theme-button-bg, var(--fallback-button-bg)));
-  border-radius: var(--button-radius, var(--theme-button-radius, var(--fallback-button-radius)));
-  border: var(--button-border) */
+  transition: opacity 140ms ease;
 }
 
 .transformWrapper {
-  width: var(--button-width, var(--fallback-button-size));
-  height: var(--button-height, var(--fallback-button-size));
+  --f-button-width: 40px;
+  --f-button-height: 40px;
+  width: var(--final-button-width);
+  height: var(--final-button-height);
 
-  background: var(--button-bg, var(--theme-button-bg, var(--fallback-button-bg)));
-  border-radius: var(--button-radius, var(--theme-button-radius, var(--fallback-button-radius)));
-  border: var(--button-border);
+  background: var(--final-button-bg);
+  border-radius: var(--final-button-radius);
+
+  border: var(--final-button-border);
+  filter: var(--final-button-filter);
+  box-shadow: var(--final-button-shadow);
 
   transition:
+    filter 100ms cubic-bezier(0.2, 0.8, 0.2, 1),
     transform 90ms cubic-bezier(0.2, 0.8, 0.2, 1),
     box-shadow 140ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .contentWrapper {
+  --f-button-width: 40px;
+  --f-button-height: 40px;
   position: absolute;
   inset: 0;
-  width: var(--button-height, var(--fallback-button-size));
-  height: var(--button-height, var(--fallback-button-size));
+  width: var(--final-button-width);
+  height: var(--final-button-height);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .button[data-state="pressed"] .transformWrapper {
-  transform: scale(0.98);
-  box-shadow:
+  transform: var(--final-button-state-pressed-scale);
+  /* box-shadow:
     0 2px 6px rgba(0, 0, 0, 0.25),
-    inset 0 0 6px rgba(0, 0, 0, 0.25);
-  filter: brightness(0.95);
+    inset 0 0 6px rgba(0, 0, 0, 0.25); */
+  --s-button-shadow: var(--final-button-state-pressed-shadow);
+  --s-button-filter: var(--final-button-state-pressed-filter);
 }
 
 .button[data-state='released'] .transformWrapper {
-  transform: scale(1);
+  transform: var(--final-button-state-released-scale);
 }
 
 .button[data-state='cancelled'] .transformWrapper {
-  transform: scale(1);
-  /* opacity: 0.95; */
+  transform: var(--final-button-state-cancelled-scale);
 }
 
 .button[data-state='cancelled'] {
-  --button-opacity: 0.5;
+  --s-button-opacity: var(--f-button-state-cancelled-opacity);
 }
-
-/* TODO cancel opacity does nothing due to  */

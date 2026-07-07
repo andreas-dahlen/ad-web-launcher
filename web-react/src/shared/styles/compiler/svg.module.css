@@ -1,0 +1,51 @@
+.vars {
+  --final-svg-flip-x:
+    var(--o-svg-flip-x,
+      var(--p-svg-flip-x,
+        var(--f-svg-flip-x)));
+
+  --final-svg-flip-y:
+    var(--o-svg-flip-y,
+      var(--p-svg-flip-y,
+        var(--f-svg-flip-y)));
+
+  --final-svg-rotate:
+    var(--o-svg-rotate,
+      var(--p-svg-rotate,
+        var(--f-svg-rotate)));
+
+  --final-svg-width:
+    var(--o-svg-width,
+      var(--p-svg-width,
+        var(--f-svg-width)));
+
+  --final-svg-height:
+    var(--o-svg-height,
+      var(--p-svg-height,
+        var(--f-svg-height)));
+
+  --final-svg-mode-default-col:
+    var(--o-svg-mode-default-col,
+      var(--m-svg-mode-default-col,
+        var(--p-svg-mode-default-col,
+          var(--f-svg-mode-default-col))));
+
+  --final-svg-mode-on-col:
+    var(--o-svg-mode-on-col,
+      var(--m-svg-mode-on-col,
+        var(--p-svg-mode-on-col,
+          var(--f-svg-mode-on-col))));
+
+  --final-svg-mode-off-col:
+    var(--o-svg-mode-off-col,
+      var(--m-svg-mode-off-col,
+        var(--p-svg-mode-off-col,
+          var(--f-svg-mode-off-col))));
+
+  --final-svg-mode-disabled-col:
+    var(--o-svg-mode-disabled-col,
+      var(--m-svg-mode-disabled-col,
+        var(--p-svg-mode-disabled-col,
+          var(--f-svg-mode-disabled-col))));
+
+}

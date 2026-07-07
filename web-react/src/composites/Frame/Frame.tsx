@@ -1,5 +1,5 @@
 import type { Directive, DragSettings } from '@composites/comp.types'
-import type { SurfacePreset, SurfaceStyleOverrides } from '../../blocks/Surface/Surface.vars'
+import type { SurfacePreset, SurfaceStyle } from '../../blocks/Surface/Surface.vars'
 import type React from 'react'
 import { createId, generateId } from '@utils/idGenerator'
 import DragPrim from '@primitives/DragPrim/DragPrim'
@@ -10,7 +10,7 @@ import Label, { type LabelSettings } from '../../blocks/Label/Label'
 type FrameProps = {
   directive?: Directive
   drag?: DragSettings
-  styleVars?: SurfaceStyleOverrides
+  styleVars?: SurfaceStyle
   presets?: SurfacePreset[]
   label?: LabelSettings
   children: React.ReactNode
