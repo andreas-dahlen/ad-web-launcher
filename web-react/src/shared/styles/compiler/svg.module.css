@@ -1,4 +1,4 @@
-.vars {
+/* .vars {
   --final-svg-flip-x:
     var(--o-svg-flip-x,
       var(--p-svg-flip-x,
@@ -48,4 +48,4 @@
         var(--p-svg-mode-disabled-col,
           var(--f-svg-mode-disabled-col))));
 
-}
+} */

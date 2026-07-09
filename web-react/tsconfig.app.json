@@ -30,6 +30,8 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
+    /* json */
+    "resolveJsonModule": true
   },
   "include": [
     "src/**/*.ts",

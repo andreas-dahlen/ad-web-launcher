@@ -1,4 +1,4 @@
-.vars {
+/* .vars {
   --final-label-col:
     var(--o-label-col,
       var(--p-label-col,
@@ -24,6 +24,6 @@
     var(--o-label-align,
       var(--p-label-align,
         var(--f-label-align)));
-}
+} */
 
 /* --o-: var(--s-, var(--m-, var(--p-, var(--t-, var(--f-))))); */

@@ -15,6 +15,7 @@
   --f-surface-gap: 0;
   --f-surface-margin: 0;
   --f-surface-padding: 0px;
+
   --f-surface-border: none;
   --f-surface-radius: 0;
   --f-surface-shadow: none;
@@ -46,6 +47,7 @@
   --p-surface-before-content: var(--f-surface-before-content);
   --p-surface-opacity: var(--f-surface-opacity);
 
+
   position: var(--final-surface-position);
   display: var(--final-surface-display);
 
@@ -75,7 +77,8 @@
   --p-surface-before-content: "";
 
   &::before {
-    content: var(--final-surface-before-content, "");
+    /* content: var(--final-surface-before-content, ""); */
+    content: "";
     inset: 0;
     position: absolute;
     opacity: var(--final-surface-opacity, 50%);

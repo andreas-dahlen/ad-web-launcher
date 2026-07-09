@@ -1,4 +1,4 @@
-.vars {
+/* .vars {
   --final-surface-bg:
     var(--o-surface-bg,
       var(--s-surface-bg,
@@ -91,6 +91,6 @@
     var(--o-surface-opacity,
       var(--p-surface-opacity,
         var(--f-surface-opacity)));
-}
+} */
 
 /* --o-: var(--s-, var(--m-, var(--p-, var(--t-, var(--f-))))); */

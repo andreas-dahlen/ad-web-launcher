@@ -1,0 +1,34 @@
+{
+  "component": "surface",
+  "inFix": "surface",
+
+  "alwaysAllowed": ["o", "p", "f"],
+  "vars": {
+    "bg": { "allowed": ["t"], "values": {
+      "f": "hotPink;"
+    }},
+
+    "position": { "name": "position", "allowed": [] },
+    "display": { "name": "display", "allowed": [] },
+    "justify": { "name": "justify", "allowed": [] },
+    "align": { "name": "align", "allowed": [] },
+
+    "overflow": { "name": "overflow", "allowed": [] },
+
+    "width": { "name": "width", "allowed": [] },
+    "height": { "name": "height", "allowed": [] },
+
+    "gap": { "name": "gap", "allowed": [] },
+    "margin": { "name": "margin", "allowed": [] },
+    "padding": { "name": "padding", "allowed": [] },
+
+    "border": { "name": "border", "allowed": [] },
+    "radius": { "name": "radius", "allowed": [] },
+    "shadow": { "name": "shadow", "allowed": [] },
+
+    "blur": { "name": "blur", "allowed": [] },
+
+    "before-content": {},
+    "opacity": {}
+  }
+}

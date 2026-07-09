@@ -1,10 +1,10 @@
 import clsx from 'clsx'
 import css from './Surface.module.css'
 import { svsx } from '@utils/svsx'
-import { surfaceVars, surfacePreset, surfaceAlwaysAllowed } from './Surface.vars'
-import type { SurfacePreset, SurfaceStyle } from './Surface.vars'
-// import type { Mode } from '@composites/comp.types'
+import { surfacePreset, type SurfacePreset, type SurfaceStyle } from './Surface.vars'
 import { cpsx } from '@utils/cpsx'
+import { surface } from '../../shared/styleSystem/schema'
+import vars from '../../shared/styleSystem/tokens.module.css'
 type PanelBaseProps = {
   children: React.ReactNode
   styleVars?: SurfaceStyle
@@ -16,8 +16,9 @@ type PanelBaseProps = {
 export function Surface({ children, styleVars, presets, isInFlow = true }: PanelBaseProps) {
   return (
     <div
-      className={clsx(css.surface, ...cpsx(presets, surfacePreset))}
-      style={{ position: isInFlow ? "relative" : "absolute", ...svsx(styleVars ?? {}, surfaceVars, surfaceAlwaysAllowed, "surface") }}
+      className={clsx(vars.surfaceCompiler, css.surface,
+        ...cpsx(presets, surfacePreset))}
+      style={{ position: isInFlow ? "relative" : "absolute", ...svsx(styleVars ?? {}, surface.vars, surface.alwaysAllowed, surface.inFix) }}
     >
       {children}
     </div>
