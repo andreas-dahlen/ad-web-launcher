@@ -1,12 +1,9 @@
 
 
-module.exports = function validateDefinition(prefix, allowed, alwaysAllowed, value, prefixPriority) {
+module.exports = function validateDefinition(prefix, effectiveAllowed, value, prefixPriority) {
 
-  // 1. Prefix must be allowed
-  const prefixAllowed =
-    allowed.includes(prefix) || alwaysAllowed.includes(prefix);
-
-  if (!prefixAllowed) return false;
+  // 1. Prefix must be allowed (after merging + excluding)
+  if (!effectiveAllowed.includes(prefix)) return false;
 
   // 2. Value cannot map to itself
   if (value === prefix) return false;
@@ -19,7 +16,7 @@ module.exports = function validateDefinition(prefix, allowed, alwaysAllowed, val
   const isPrefixMapping = prefixPriority.includes(value);
   if (isPrefixMapping) {
     // The target prefix must also be allowed
-    return allowed.includes(value) || alwaysAllowed.includes(value);
+    return effectiveAllowed.includes(value);
   }
 
   // 5. Anything else is invalid

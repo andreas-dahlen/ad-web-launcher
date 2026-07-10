@@ -1,9 +1,14 @@
 module.exports = function buildCascade(rule, component, variable, constants) {
-  const { name, allowed } = variable;
+  const { name, allowed, exclude } = variable;
   const baseName = `${component.name}-${name}`;
 
-  const prefixes = [...component.alwaysAllowed, ...allowed];
-  const sorted = constants.prefixPriority.filter(p => prefixes.includes(p));
+
+  const effectiveAllowed = [
+    ...allowed,
+    ...component.alwaysAllowed
+  ].filter(p => !exclude.includes(p));
+
+  const sorted = constants.prefixPriority.filter(p => effectiveAllowed.includes(p));
 
   const chain = sorted.reduceRight(
     (acc, curr) =>

@@ -4,20 +4,24 @@
       "@api/*": ["./src/api/*"],
       "@app/*": ["./src/app/*"],
       "@assets/*": ["./src/assets/*"],
+      "@blocks/*": ["./src/blocks/*"],
+      "@composites/*": ["./src/composites/*"],
       "@config/*": ["./src/config/*"],
       "@data/*": ["./src/data/*"],
       "@features/*": ["./src/features/*"],
       "@interaction/*": ["./src/interaction/*"],
+      "@panels/*": ["./src/panels/*"],
       "@primitives/*": ["./src/primitives/*"],
-      "@composites/*": ["./src/composites/*"],
 
       "@stores/*": ["./src/shared/state/stores/*"],
       "@hooks/*": ["./src/shared/state/hooks/*"],
       "@typing/*": ["./src/shared/typing/*"],
       "@styles/*": ["./src/shared/styles/*"],
       "@utils/*": ["./src/shared/utils/*"],
+      
+      "@tokens/*": ["./src/styleSystem/tokens/*"],
+      "@schema/*": ["./src/styleSystem/schema/*"],
 
-      "@infrastructure/*": ["./src/infrastructure/*"],
       "@test/*": ["./src/test/*"]
     }
   }

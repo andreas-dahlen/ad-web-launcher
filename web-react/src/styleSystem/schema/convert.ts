@@ -1,5 +1,4 @@
-import surfaceJson from "./tokens/surface.json";
-import type { ValidPrefix, VarDef } from "../utils/svsx.types";
+import type { ValidPrefix, VarDef } from '@utils/svsx.types'
 
 // Runtime guard: ensure prefix is valid
 function toValidPrefix(p: string): ValidPrefix {
@@ -11,7 +10,7 @@ function toValidPrefix(p: string): ValidPrefix {
 }
 
 // Convert JSON vars → TS VarDef objects
-function convertVars(vars: Record<string, { name?: string; allowed?: string[] }>):
+function convertVars(vars: Record<string, { name?: string; allowed?: string[]; exclude?: string[] }>):
   Record<string, VarDef> {
 
   const result: Record<string, VarDef> = {};
@@ -27,9 +26,14 @@ function convertVars(vars: Record<string, { name?: string; allowed?: string[] }>
       ? def.allowed.map(toValidPrefix)
       : []
 
+    const exclude = Array.isArray(def.exclude)
+      ? def.exclude.map(toValidPrefix)
+      : [];
+
     result[key] = {
       name,
-      allowed
+      allowed,
+      exclude
     };
   }
 
@@ -37,11 +41,11 @@ function convertVars(vars: Record<string, { name?: string; allowed?: string[] }>
 }
 
 // Convert one component JSON file → TS structure
-function convertComponent(json: {
+export function convertJson(json: {
   component: string;
   inFix?: string;
   alwaysAllowed?: string[];
-  vars: Record<string, { name?: string; allowed?: string[] }>;
+  vars: Record<string, { name?: string; allowed?: string[]; exclude?: string[] }>;
 }) {
   return {
     component: json.component,
@@ -52,13 +56,3 @@ function convertComponent(json: {
     vars: convertVars(json.vars)
   };
 }
-
-// Export converted components
-export const surface = convertComponent(surfaceJson);
-
-// If you add button.json later:
-// import buttonJson from "./tokens/button.json";
-// export const button = convertComponent(buttonJson);
-
-// export const designTokens = tokens;
-// export type DesignTokens = typeof tokens;

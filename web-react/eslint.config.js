@@ -31,53 +31,77 @@ export default defineConfig([
     },
 
     settings: {
-      // ELEMENTS
       'boundaries/elements': [
-        // App Architecture
-        { type: 'app-layers', pattern: '**/src/app/layers/**/*', mode: 'full' },
-        { type: 'app-scenes', pattern: '**/src/app/scenes/**/*', mode: 'full' },
-        { type: 'infrastructure', pattern: '**/src/app/infrastructure/**/*', mode: 'full' },
-        { type: 'app', pattern: '**/src/app/**/*', mode: 'full' },
+        { type: 'app-layers', pattern: '**/src/app/layers/**/*' },
+        { type: 'app-scenes', pattern: '**/src/app/scenes/**/*' },
+        { type: 'infrastructure', pattern: '**/src/app/infrastructure/**/*' },
+        { type: 'app', pattern: '**/src/app/**/*' },
 
-        // UI Modules
-        { type: 'panels', pattern: '**/src/panels/**/*', mode: 'full' },
-        { type: 'features', pattern: '**/src/features/**/*', mode: 'full' },
-        { type: 'composites', pattern: '**/src/composites/**/*', mode: 'full' },
-        { type: 'composites-internal', pattern: '**/src/composites/internals/**/*', mode: 'full' },
-        { type: 'blocks', pattern: '**/src/blocks/**/*', mode: 'full' },
-        { type: 'primitives', pattern: '**/src/primitives/**/*', mode: 'full' },
-        { type: 'primitives-store', pattern: '**/src/primitives/store/**/*', mode: 'full' },
+        { type: 'panels', pattern: '**/src/panels/**/*' },
+        { type: 'features', pattern: '**/src/features/**/*' },
+        { type: 'composites', pattern: '**/src/composites/**/*' },
+        { type: 'composites-internal', pattern: '**/src/composites/internals/**/*' },
+        { type: 'blocks', pattern: '**/src/blocks/**/*' },
+        { type: 'primitives', pattern: '**/src/primitives/**/*' },
+        { type: 'primitives-store', pattern: '**/src/primitives/store/**/*' },
 
-        // Shared & Data Infra
-        { type: 'shared', pattern: '**/src/shared/**/*', mode: 'full' },
-        { type: 'config', pattern: '**/src/config/**/*', mode: 'full' },
-        { type: 'data', pattern: '**/src/data/**/*', mode: 'full' },
-        { type: 'api', pattern: '**/src/api/**/*', mode: 'full' },
+        { type: 'shared', pattern: '**/src/shared/**/*' },
 
-        // Interaction Engine
-        { type: 'interaction-interpreter', pattern: '**/src/interaction/input/interpreter.ts', mode: 'full' },
-        { type: 'interaction-buildDesc', pattern: '**/src/interaction/input/buildDesc.ts', mode: 'full' },
-        { type: 'interaction-input', pattern: '**/src/interaction/input/**/*', mode: 'full' },
-        { type: 'interaction-pipeline', pattern: '**/src/interaction/runtime/pipeline.ts', mode: 'full' },
-        { type: 'interaction-solver-router', pattern: '**/src/interaction/runtime/solverRouter.ts', mode: 'full' },
-        { type: 'interaction-runtime', pattern: '**/src/interaction/runtime/**/*', mode: 'full' },
-        { type: 'interaction-solvers-utils', pattern: '**/src/interaction/solvers/utils/**/*', mode: 'full' },
-        { type: 'interaction-solvers', pattern: '**/src/interaction/solvers/**/*', mode: 'full' },
-        { type: 'interaction-updater', pattern: '**/src/interaction/updater/**/*', mode: 'full' },
-        { type: 'interaction', pattern: '**/src/interaction/**/*', mode: 'full' },
+        { type: 'compiler', pattern: '**/src/styleSystem/compiler/**/*' },
+        { type: 'schema', pattern: '**/src/styleSystem/schema/**/*' },
+        { type: 'tokens', pattern: '**/src/styleSystem/tokens/**/*' },
+
+        { type: 'config', pattern: '**/src/config/**/*' },
+        { type: 'data', pattern: '**/src/data/**/*' },
+        { type: 'api', pattern: '**/src/api/**/*' },
+
+        // Interaction folders
+        { type: 'interaction-input', pattern: '**/src/interaction/input/**/*' },
+        { type: 'interaction-runtime', pattern: '**/src/interaction/runtime/**/*' },
+        { type: 'interaction-solvers-utils', pattern: '**/src/interaction/solvers/utils/**/*' },
+        { type: 'interaction-solvers', pattern: '**/src/interaction/solvers/**/*' },
+        { type: 'interaction-updater', pattern: '**/src/interaction/updater/**/*' },
+        { type: 'interaction', pattern: '**/src/interaction/**/*' },
+
+        // Interaction single-file elements
+        { type: 'interaction-interpreter', pattern: '**/src/interaction/input/interpreter.*' },
+        { type: 'interaction-buildDesc', pattern: '**/src/interaction/input/buildDesc.*' },
+        { type: 'interaction-pipeline', pattern: '**/src/interaction/runtime/pipeline.*' },
+        { type: 'interaction-solver-router', pattern: '**/src/interaction/runtime/solverRouter.*' }
       ],
 
-      // IGNORE
+
       'boundaries/ignore': [
         '**/src/test/**/*',
-        '**/src/assets/**/*',
-      ],
+        '**/src/assets/**/*'
+      ]
     },
+
+
 
     rules: {
 
       'unicorn/no-unused-properties': 'warn',
       'unicorn/filename-case': 'off',
+      'unicorn/prevent-abbreviations': 'off',
+      'unicorn/name-replacements': 'off',
+      'unicorn/switch-case-braces': 'off',
+      'unicorn/consistent-function-scoping': 'off',
+      'unicorn/numeric-separators-style': 'off',
+      'unicorn/no-computed-property-existence-check': 'off',
+      'unicorn/no-array-callback-reference': 'off',
+      'unicorn/no-break-in-nested-loop': 'off',
+      'unicorn/prefer-global-this': 'off',
+
+      'unicorn/prefer-module': 'off',
+      'unicorn/no-null': 'off',
+      'unicorn/no-array-reduce': 'off',
+      'unicorn/prefer-top-level-await': 'off',
+      'unicorn/prefer-export-from': 'off',
+      'unicorn/prefer-ternary': 'off',
+      'unicorn/prefer-switch': 'off',
+      'unicorn/prefer-object-from-entries': 'off',
+      'unicorn/prefer-string-replace-all': 'off',
 
       '@typescript-eslint/no-unused-vars': [
         'error',
@@ -91,154 +115,264 @@ export default defineConfig([
       ],
       'boundaries/dependencies': ['error', {
         default: 'disallow',
-        rules: [
-          // ─── STRICT OVERRIDES (Exceptions to the rule) ─────────────────
-          { from: [{ type: 'panels' }], disallow: [{ to: { type: 'panels' } }] },
-          { from: [{ type: 'primitives' }], disallow: [{ to: { type: 'primitives' } }] },
-          { from: [{ type: 'blocks' }], disallow: [{ to: { type: 'blocks' } }] },
-          { from: [{ type: 'composites' }], disallow: [{ to: { type: 'composites' } }] },
-          { from: [{ type: 'interaction-solvers' }], disallow: [{ to: { type: 'interaction-solvers' } }] },
 
-          // ─── Global & Shared Defaults ─────────────────────────────────
+        // MIGRATED: "rules" → "policies"
+        policies: [
+
+          // ─── STRICT OVERRIDES ───────────────────────────────
           {
-            from: [{ type: '*' }],
-            allow: [
-              { to: { type: '{{from.type}}' } }, // Fixed template warning
-              { to: { type: 'shared' } },
-              { to: { type: 'config' } },
-              { to: { type: 'data' } },
-              { to: { type: 'api' } },
-              { to: { origin: 'external' } },
-            ]
+            from: [{ element: { type: 'panels' } }],
+            disallow: [{ element: { type: 'panels' } }]
+          },
+          {
+            from: [{ element: { type: 'primitives' } }],
+            disallow: [{ element: { type: 'primitives' } }]
+          },
+          {
+            from: [{ element: { type: 'blocks' } }],
+            disallow: [{ element: { type: 'blocks' } }]
+          },
+          {
+            from: [{ element: { type: 'composites' } }],
+            disallow: [{ element: { type: 'composites' } }]
+          },
+          {
+            from: [{ element: { type: 'interaction-solvers' } }],
+            disallow: [{ element: { type: 'interaction-solvers' } }]
           },
 
-          // ─── Interaction Engine Boundaries ───────────────────────────
+          // ─── STYLE SYSTEM PROTECTION ─────────────────────────
           {
-            // Solves 'interaction-solvers', 'interaction-input', etc., looking up to root level shared files (e.g., interaction/types.ts)
-            from: [{ type: 'interaction*' }],
-            allow: [
-              { to: { type: 'interaction' } },
-              { to: { type: 'interaction-solvers-utils' } }
-            ]
+            from: [{ element: { type: 'compiler' } }],
+            disallow: [{ element: { type: 'blocks' } }]
           },
           {
-            from: [{ type: 'interaction-input' }],
-            allow: [
-              { to: { type: 'interaction-buildDesc' } }
-            ]
+            from: [{ element: { type: 'schema' } }],
+            disallow: [{ element: { type: 'blocks' } }]
           },
           {
-            from: [{ type: 'interaction-buildDesc' }],
-            allow: [
-              { to: { type: 'interaction-input' } },
-            ]
+            from: [{ element: { type: 'tokens' } }],
+            disallow: [{ element: { type: 'blocks' } }]
           },
+
+          // ─── GLOBAL DEFAULTS ─────────────────────────────────
           {
-            from: [{ type: 'interaction-interpreter' }],
+            from: [{ element: { type: '*' } }],
             allow: [
-              { to: { type: 'interaction-input' } },
-            ]
-          },
-          {
-            from: [{ type: 'interaction-pipeline' }],
-            allow: [
-              { to: { type: 'interaction-updater' } },
-              { to: { type: 'interaction-interpreter' } },
+              { element: { type: '{{from.element.type}}' } },
+              { element: { type: 'shared' } },
+              { element: { type: 'config' } },
+              { element: { type: 'data' } },
+              { element: { type: 'api' } },
+              { origin: 'external' }
             ]
           },
 
-          // ─── App Layer Rules ──────────────────────────────────────────
+          // ─── INTERACTION ENGINE ──────────────────────────────
           {
-            from: [{ type: 'app' }],
+            from: [{ element: { type: 'interaction' } }],
             allow: [
-              { to: { type: 'app-layers' } },
-              { to: { type: 'infrastructure' } } // Clears App.tsx/main.tsx loading core infra setups
+              { element: { type: 'interaction' } },
+              { element: { type: 'interaction-solvers-utils' } }
             ]
           },
           {
-            from: [{ type: 'app-layers' }],
+            from: [{ element: { type: 'interaction-input' } }],
             allow: [
-              { to: { type: 'panels' } },
+              { element: { type: 'interaction-buildDesc' } }
+            ]
+          },
+          {
+            from: [{ element: { type: 'interaction-buildDesc' } }],
+            allow: [
+              { element: { type: 'interaction-input' } }
+            ]
+          },
+          {
+            from: [{ element: { type: 'interaction-interpreter' } }],
+            allow: [
+              { element: { type: 'interaction-input' } }
+            ]
+          },
+          {
+            from: [{ element: { type: 'interaction-pipeline' } }],
+            allow: [
+              { element: { type: 'interaction-updater' } },
+              { element: { type: 'interaction-interpreter' } }
             ]
           },
 
-          // ─── UI Building Blocks & Panels ──────────────────────────────
+          // ─── APP LAYERS ───────────────────────────────────────
           {
-            from: [{ type: 'panels' }],
+            from: [{ element: { type: 'app' } }],
             allow: [
-              { to: { type: 'composites' } },
-              { to: { type: 'blocks' } },
+              { element: { type: 'app-layers' } },
+              { element: { type: 'infrastructure' } }
             ]
           },
-          // {
-          //   from: [{ type: 'features' }],
-          //   allow: [
-          //     { to: { type: 'blocks' } },
-          //     { to: { type: 'infrastructure' } },
-          //   ]
-          // },
-          // {
-          //   from: [{ type: 'composites' }],
-          //   allow: [
-          //     { to: { type: 'primitives' } },
-          //     { to: { type: 'infrastructure' } },
-          //     { to: { type: 'composites-internal' } },
-          //   ]
-          // },
+          {
+            from: [{ element: { type: 'app-layers' } }],
+            allow: [
+              { element: { type: 'panels' } }
+            ]
+          },
+
+          // ─── UI BUILDING BLOCKS ──────────────────────────────
+          {
+            from: [{ element: { type: 'panels' } }],
+            allow: [
+              { element: { type: 'composites' } },
+              { element: { type: 'blocks' } }
+            ]
+          }
         ]
       }]
     }
   },
-
   // ─── Unicorn folder naming rules ──────────────────────
+
+  {
+    files: ['src/test/**/*.{ts,tsx}'],
+    rules: {
+      'unicorn/no-useless-spread': 'off',
+      'unicorn/prefer-early-return': 'off',
+      'unicorn/prefer-dom-node-append': 'off'
+    }
+  },
+
+
   // 2. STRICT RULE: React Components, SVGs, and CSS Modules MUST be PascalCase
   {
-    files: ['src/**/*.tsx', 'src/**/*.jsx', 'src/**/*.module.css', 'src/assets/icons/**/*.svg'],
+    files: ['**.tsx', '**.jsx', '**.module.css', '**.svg'],
+    ignores: [
+      '**/vite.config.*',
+      '**/vite.*.ts',
+      '**/scripts/**/*',
+      '**/dist/**/*',
+      '**/node_modules/**/*',
+      '**/.*',
+      '!src/**/*'
+    ],
+    plugins: { unicorn },
     rules: {
       'unicorn/filename-case': ['error', {
-        case: 'pascalCase'
+        case: 'pascalCase',
       }]
     }
   },
 
   // 3. STRICT RULE: Standard TypeScript/JavaScript logic files MUST be camelCase
   {
-    files: ['src/**/*.ts', 'src/**/*.js'],
+    files: ['**.ts', '**.js'],
     // Exclude component test files or files that intentionally use PascalCase if necessary
-    ignores: ['src/**/*.tsx', 'src/test/**/*'],
+    ignores: [
+      '**/*.tsx',
+      '**/test/**/*',
+      '**/vite.config.*',
+      '**/vite.*.ts',
+      '**/scripts/**/*',
+      '**/dist/**/*',
+      '**/node_modules/**/*',
+      '**/.*',
+      '!src/**/*'
+    ],
+    plugins: { unicorn },
     rules: {
       'unicorn/filename-case': ['error', {
-        case: 'camelCase'
+        case: 'camelCase',
       }]
     }
   },
 
 
+
   // ─── Test-Only API & Cross-CSS Restrictions ──────────────────────
+
   {
     files: ['src/**/*.{ts,tsx}'],
-    ignores: [
-      'src/test/**/*'
-    ],
     rules: {
-      'no-restricted-imports': ['error', {
-        // flat-config matches schemas cleanly using direct objects array or specific group paths
-        // paths: [],
-        patterns: [
-          {
-            regex: '^(?!\\.\\/).*\\.module\\.css$',
-            message: 'CSS Modules must be imported locally from their own folder. No cross-folder CSS imports allowed.'
-          },
-          {
-            group: ['**/*'],
-            ignoreChoice: {
-              paths: ['@data/icons', 'src/data/icons/**/*']
-            },
-            importNames: ['__TEST_ONLY_API'],
-            message: '__TEST_ONLY_API is for tests only'
-          }
-        ]
-      }]
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['**/*.module.css'],
+              message: 'CSS Modules must be imported locally from their own folder. No cross-folder CSS imports allowed.',
+              allowImportNames: ['styleSystem']
+            }
+          ]
+        }
+      ]
+    }
+  },
+  {
+    files: ['src/**/*.{ts,tsx}'],
+    ignores: ['src/test/**/*'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: '__TEST_ONLY_API',
+              message: '__TEST_ONLY_API is for tests only'
+            }
+          ]
+        }
+      ]
     }
   }
 ])
+//   {
+//     files: ['src/**/*.{ts,tsx}'],
+//     rules: {
+//       'no-restricted-imports': ['error', {
+//         regex: '^(?!\\.\\/).*\\.module\\.css$',
+//         message: 'CSS Modules must be imported locally from their own folder. No cross-folder CSS imports allowed.'
+//       }]
+//     }
+//   },
+// ])
+// {
+//   files: ['src/**/*.{ts,tsx}'],
+//   rules: {
+//     'no-restricted-imports': ['error', {
+//       group: ['**/*'],
+//       importNames: ['__TEST_ONLY_API'],
+//       message: "__TEST_ONLY_API is for tests only"
+//     }]
+//   }
+//
+
+
+
+
+//     files: ['src/**/*.{ts,tsx}'],
+//     ignores: [
+//       'src/test/**/*'
+//     ],
+//     rules: {
+//       'no-restricted-imports': ['error',
+//         // {
+//         // flat-config matches schemas cleanly using direct objects array or specific group paths
+//         // paths: [],
+//         // patterns: 
+//         [
+//           {
+//             regex: '^(?!\\.\\/).*\\.module\\.css$',
+//             message: 'CSS Modules must be imported locally from their own folder. No cross-folder CSS imports allowed.'
+//           },
+//           {
+//             group: ['**/*'],
+//             // ignoreChoice: {
+//             //   paths: ['@data/icons', 'src/data/icons/**/*']
+//             // },
+//             importNames: ['__TEST_ONLY_API'],
+//             message: '__TEST_ONLY_API is for tests only'
+//           }
+//         ]
+//         // }
+//       ]
+//     }
+//   }
+// ])

@@ -1,8 +1,12 @@
 export type ValidPrefix = "o" | "s" | "m" | "p" | "t" | "f";
 
-export type VarDef<A extends readonly ValidPrefix[] = readonly ValidPrefix[]> = {
+export type VarDef<
+  A extends readonly ValidPrefix[] = readonly ValidPrefix[],
+  E extends readonly ValidPrefix[] = readonly ValidPrefix[]
+> = {
   name: string;
   allowed: A;
+  exclude: E;
 };
 
 type AllPrefixesFor<
@@ -10,7 +14,10 @@ type AllPrefixesFor<
   Always extends readonly ValidPrefix[],
   K extends Extract<keyof V, string>
 > =
-  V[K]["allowed"][number] | Always[number]; // always allowed short prefixes
+  Exclude<
+    V[K]["allowed"][number] | Always[number],
+    V[K]["exclude"][number]
+  >;
 
 type PrefixedKeys<
   V extends Record<string, VarDef>,

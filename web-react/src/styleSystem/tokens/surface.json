@@ -4,12 +4,12 @@
 
   "alwaysAllowed": ["o", "p", "f"],
   "vars": {
-    "bg": { "allowed": ["t"], "values": {
+        "bg": { "allowed": ["t"], "values": {
       "f": "hotPink;"
     }},
 
-    "position": { "name": "position", "allowed": [] },
-    "display": { "name": "display", "allowed": [] },
+    "position": {},
+    "display": {},
     "justify": { "name": "justify", "allowed": [] },
     "align": { "name": "align", "allowed": [] },
 

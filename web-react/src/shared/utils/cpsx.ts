@@ -14,7 +14,7 @@ export function cpsx<P extends string>(
 
 /** [USAGE]: mergePresets( buttonPresetMap, presets, !conditional && "presetClassName") */
 export function mergePresets<
-  PresetMap extends Record<string, any>
+  PresetMap extends Record<string, unknown>
 >(
   map: PresetMap,
   base: (keyof PresetMap)[] | undefined,

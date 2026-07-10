@@ -31,6 +31,7 @@ module.exports = function loadTokens(tokensDir) {
             ? def.name.trim()
             : key,
           allowed: Array.isArray(def.allowed) ? def.allowed : [],
+          exclude: Array.isArray(def.exclude) ? def.exclude : [],
           values: def.values || {}
         };
       })

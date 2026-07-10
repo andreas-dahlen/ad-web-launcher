@@ -145,14 +145,47 @@ src/
       - [settings.store.ts](./src/shared/state/stores/settings.store.ts)
       - [size.store.ts](./src/shared/state/stores/size.store.ts)
       - [wallpaper.store.ts](./src/shared/state/stores/wallpaper.store.ts)
+  - styleSystem/
+    - [schema.ts](./src/shared/styleSystem/schema.ts)
+    - [tokens.module.css](./src/shared/styleSystem/tokens.module.css)
+    - compiler/
+      - [buildCascade.cjs](./src/shared/styleSystem/compiler/buildCascade.cjs)
+      - [buildVarDefinitions.cjs](./src/shared/styleSystem/compiler/buildVarDefinitions.cjs)
+      - [consoleLog.cjs](./src/shared/styleSystem/compiler/consoleLog.cjs)
+      - [constants.cjs](./src/shared/styleSystem/compiler/constants.cjs)
+      - [designTokensPlugin.cjs](./src/shared/styleSystem/compiler/designTokensPlugin.cjs)
+      - [index.cjs](./src/shared/styleSystem/compiler/index.cjs)
+      - [loadTokens.cjs](./src/shared/styleSystem/compiler/loadTokens.cjs)
+      - [validateDefinition.cjs](./src/shared/styleSystem/compiler/validateDefinition.cjs)
+    - tokens/
+      - [surface.json](./src/shared/styleSystem/tokens/surface.json)
+      - [test.json](./src/shared/styleSystem/tokens/test.json)
+  - styles/
+    - [debug.global.css](./src/shared/styles/debug.global.css)
+    - [index.global.css](./src/shared/styles/index.global.css)
+    - compiler/
+      - [label.module.css](./src/shared/styles/compiler/label.module.css)
+      - [surface-old.module.css](./src/shared/styles/compiler/surface-old.module.css)
+      - [svg.module.css](./src/shared/styles/compiler/svg.module.css)
+    - core/
+      - [core.global.css](./src/shared/styles/core/core.global.css)
+      - [utils.global.css](./src/shared/styles/core/utils.global.css)
+    - tokens/
+      - [default.theme.css](./src/shared/styles/tokens/default.theme.css)
+      - [fallback.global.css](./src/shared/styles/tokens/fallback.global.css)
+      - [primitives.global.css](./src/shared/styles/tokens/primitives.global.css)
   - typing/
     - [core.types.ts](./src/shared/typing/core.types.ts)
-    - [propUtils.types.ts](./src/shared/typing/propUtils.types.ts)
     - [store.types.ts](./src/shared/typing/store.types.ts)
     - [svg.d.ts](./src/shared/typing/svg.d.ts)
+    - [utils.types.ts](./src/shared/typing/utils.types.ts)
   - utils/
-    - [assersions.ts](./src/shared/utils/assersions.ts)
-    - [dataAttrs.ts](./src/shared/utils/dataAttrs.ts)
+    - [assertions.ts](./src/shared/utils/assertions.ts)
+    - [cpsx.ts](./src/shared/utils/cpsx.ts)
+    - [dasx.ts](./src/shared/utils/dasx.ts)
+    - [idGenerator.ts](./src/shared/utils/idGenerator.ts)
+    - [svsx.ts](./src/shared/utils/svsx.ts)
+    - [svsx.types.ts](./src/shared/utils/svsx.types.ts)
 - test/
   - [flags.debug.ts](./src/test/flags.debug.ts)
   - [functions.debug.ts](./src/test/functions.debug.ts)

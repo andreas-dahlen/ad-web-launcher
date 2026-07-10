@@ -2,8 +2,8 @@ module.exports = {
   plugins: [
     require('postcss-import'),
     require('postcss-nested'),
-    require('./src/shared/styleSystem/compiler/index.cjs')({
-      tokensDir: './src/shared/styleSystem/tokens'
+    require('./src/styleSystem/compiler/index.cjs')({
+      tokensDir: './src/styleSystem/tokens'
     })
   ]
 }

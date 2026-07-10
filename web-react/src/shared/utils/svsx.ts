@@ -7,24 +7,21 @@ function toKebab(str: string): string {
     .toLowerCase()
 }
 
-function toStyleVar(first: string, second: string, third?: string): StyleString {
-  const kebabFirst = toKebab(first)
-  const kebabSecond = toKebab(second)
-  const kebabThird = third ? `-${toKebab(third)}` : ""
-  return `--${kebabFirst}-${kebabSecond}${kebabThird}`
+function toStyleVar(first: string, second: string, third: string): StyleString {
+  return `--${toKebab(first)}-${toKebab(second)}-${toKebab(third)}`
 }
 
 /** Transforms an object into CSS style-variable entries */
-export function svsx<
-  VarsMap extends Record<string, VarDef>,
-  AlwaysAllowed extends readonly ValidPrefix[]
->(
-  input: Record<string, any>,
-  definitions: VarsMap,
-  alwaysAllowed: AlwaysAllowed = [] as unknown as AlwaysAllowed,
-  namespace?: string
+export function svsx(
+  input: Record<string, unknown>,
+  component: {
+    vars: Record<string, VarDef>;
+    alwaysAllowed: readonly ValidPrefix[];
+    inFix: string;
+  }
 ) {
   const output: Record<string, string> = {};
+  const { vars: definitions, alwaysAllowed, inFix } = component;
 
   for (const [key, value] of Object.entries(input)) {
     if (value == null) continue
@@ -48,17 +45,17 @@ export function svsx<
         console.warn(`[svsx] Unknown variable "${varKey}".`);
         continue
       }
-      const prefixAllowed =
-        alwaysAllowed?.includes(prefixKey) || def.allowed.includes(prefixKey)
+      const effectiveAllowed = [
+        ...def.allowed,
+        ...alwaysAllowed
+      ].filter(p => !def.exclude.includes(p));
 
-      if (!prefixAllowed) {
+      if (!effectiveAllowed.includes(prefixKey)) {
         console.warn(`[svsx] Prefix "${prefixKey}" not allowed for "${varKey}".`);
         continue;
       }
 
-      const cssVar = namespace
-        ? toStyleVar(prefixKey, namespace, def.name)
-        : toStyleVar(prefixKey, def.name)
+      const cssVar = toStyleVar(prefixKey, inFix, def.name);
 
       output[cssVar] = String(value)
       continue
@@ -69,10 +66,7 @@ export function svsx<
     // -----------------------------------------------------
     const def = definitions[key];
     if (def) {
-      const cssVar = namespace
-        ? toStyleVar("p", namespace, def.name)
-        : toStyleVar("p", def.name)
-
+      const cssVar = toStyleVar("p", inFix, def.name)
       output[cssVar] = String(value);
       continue;
     }
@@ -89,10 +83,10 @@ export function mergeStyles<
   VarsMap extends Record<string, VarDef>
 >(
   map: VarsMap,
-  base: Record<string, any> | undefined,
-  ...additions: (Record<string, any> | false | null | undefined)[]
+  base: Record<string, unknown> | undefined,
+  ...additions: (Record<string, unknown> | false | null | undefined)[]
 ) {
-  const out: Record<string, any> = { ...(base ?? {}) };
+  const out: Record<string, unknown> = { ...(base) };
 
   for (const add of additions) {
     if (!add) continue;

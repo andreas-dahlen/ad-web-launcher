@@ -27,8 +27,8 @@ export const wallpaperStore = create<WallpaperStore>()(
           s.wallpapers = images.slice(0, 3)
           // console.log('pool: ', s.pool)
         })
-      } catch (err) {
-        console.warn('Failed to fetch wallpapers', err)
+      } catch (error) {
+        console.warn('Failed to fetch wallpapers', error)
         // later: set an error state, show fallback, etc.
       }
     },

@@ -37,7 +37,7 @@
     "src/**/*.ts",
     "src/**/*.tsx",
     "src/vite-env.d.ts"
-  ],
+, "vite.token-watcher.ts"  ],
   "exclude": [
     "node_modules",
     "dist",
