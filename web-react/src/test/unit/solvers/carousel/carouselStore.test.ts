@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, afterEach } from 'vitest'
-import { carouselStore, type CarouselBinding } from '@primitives/CarouselPrim/store/carousel.store'
-import { carousel_DEFAULTS } from '@primitives/CarouselPrim/store/useCarouselStore.hook'
+import { carouselStore, type CarouselBinding } from '@primitives/Carousel/store/carousel.store'
+import { carousel_DEFAULTS } from '@primitives/Carousel/store/useCarouselStore.hook'
 
 import { getStoreByType, seedStoreByType } from '@test/utils/storeSeed.utils'
 import { resetInteractionStores } from '@test/utils/storeReset.utils'

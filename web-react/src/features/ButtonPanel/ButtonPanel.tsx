@@ -1,4 +1,4 @@
-import ButtonPrim from '@primitives/ButtonPrim/ButtonPrim'
+import ButtonPrim from '@primitives/Button/ButtonPrim'
 
 const buttons = [
   { id: 1, label: '1', type: 'spotify', package: 'com.spotify.music' },

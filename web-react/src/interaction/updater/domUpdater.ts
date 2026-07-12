@@ -5,16 +5,24 @@ import type { EventType } from '../../shared/typing/core.types.ts'
    DOM helpers
 ------------------------------------------------- */
 function setAttr(element: HTMLElement, key: string, value: unknown) {
-  if (value === null || value === undefined || value === false) {
-    element.removeAttribute(key)
-  } else {
+
+  const shouldHaveAttr =
+    value !== null &&
+    value !== undefined &&
+    value !== false
+
+  element.toggleAttribute(key, shouldHaveAttr)
+
+  if (shouldHaveAttr) {
     element.setAttribute(key, String(value))
   }
 }
 
 //TODO rename emitReaction?? and also 
 function dispatchEvent(element: HTMLElement, event: EventType) {
-  element.dispatchEvent(new CustomEvent<EventType>('reaction', { detail: event }))
+  element.dispatchEvent(
+    new CustomEvent<EventType>('reaction', { detail: event })
+  )
 }
 
 //FUTURE SYSTEM DESIGN

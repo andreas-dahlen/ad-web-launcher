@@ -1,5 +1,5 @@
-import DragPrim from '@primitives/DragPrim/DragPrim'
-import type { DragFrameProps } from '@composites/comp.types'
+import DragPrim from '@primitives/Drag/DragPrim'
+import type { DragFrameProps } from '@composites/types/comp.types'
 import { settingsStore } from '@stores/settings.store'
 
 export default function DragFrame({

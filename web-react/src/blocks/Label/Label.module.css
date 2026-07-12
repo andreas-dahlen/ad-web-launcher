@@ -22,6 +22,10 @@
   left: var(--final-label-width);
 }
 
+.center {
+  --f-label-width: 0;
+}
+
 
 .labelwrapper {
   --f-label-position: absolute;

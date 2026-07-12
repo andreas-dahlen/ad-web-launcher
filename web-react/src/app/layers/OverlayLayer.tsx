@@ -1,8 +1,8 @@
 import SettingsPanel from '../../panels/SettingsPanel/SettingsPanel.js';
 import { Z } from '@config/zIndex.config.js';
-import ScrollPrim from '../../primitives/ScrollPrim/ScrollPrim.js';
+import ScrollPrim from '../../primitives/Scroll/ScrollPrim.js';
 import css from './Layers.module.css'
-import ButtonPrim from '@primitives/ButtonPrim/ButtonPrim.js';
+import ButtonPrim from '@primitives/Button/ButtonPrim.js';
 import { settingsStore } from '@stores/settings.store.js';
 import clsx from 'clsx';
 /** LAYER 3/3! */

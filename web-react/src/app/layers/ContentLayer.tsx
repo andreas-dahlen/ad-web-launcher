@@ -1,12 +1,12 @@
 import { Z } from '@config/zIndex.config'
 import css from './Layers.module.css'
-import ContentCarouselPrim from '@primitives/CarouselPrim/ContentCarouselPrim'
+import ContentCarouselPrim from '@primitives/Carousel/ContentCarouselPrim'
 import { Scenes } from '@app/scenes/Scenes'
 import clsx from 'clsx'
 import React from 'react'
 import { layoutStore } from '@stores/layout.store'
 import type { Axis1D } from '@typing/core.types'
-import { SceneContext } from '@primitives/CarouselPrim/hooks/useSceneContext.hook'
+import { SceneContext } from '@primitives/Carousel/hooks/useSceneContext.hook'
 /** LAYER 2/3! Interactive=false carousel. Contents are mounted inside!
  * The carousel swipes are handled by baseLayer. */
 

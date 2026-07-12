@@ -1,9 +1,9 @@
 import { useRef } from "react"
-import { usePointerBridge } from '@hooks/usePointerBridge.hook.ts'
+import { usePointerBridge } from '@interaction/adapter/usePointerBridge.hook.ts'
 import { useContainerSizing } from './hooks/useContainerSizing.hook.ts'
 import css from './CarouselPrim.module.css'
 import { dasx } from '../../shared/utils/dasx.ts'
-import type { InputCarouselPrimProps } from '@primitives/prim.types.ts'
+import type { InputCarouselPrimProps } from '@primitives/types/prim.types.ts'
 
 export default function InputCarouselPrim({
   id,

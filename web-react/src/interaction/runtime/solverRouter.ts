@@ -123,11 +123,10 @@ export const router = {
             action: { event, payload: result.payload },
             effects: { computedUpdate }
           }
-        } else {
-          return {
-            action: { event, payload: result.payload },
-            effects: { computedUpdate }
-          }
+        }
+        return {
+          action: { event, payload: result.payload },
+          effects: { computedUpdate }
         }
       }
       case 'swipe': {
@@ -143,10 +142,15 @@ export const router = {
         const solution = scrollSolver.swipeCommit(runtime, desc, computed)
         if (solution.route === 'default' && solution.payload.isOverflow) {
           return { action: { event, payload: solution.payload } }
-        } else if (solution.route === 'default' && !solution.payload.isOverflow) {
+        }
+        if (solution.route === 'default' && !solution.payload.isOverflow) {
           return { action: { event, payload: solution.payload } }
-        } else if (solution.route === "revert") {
-          return { action: { event: "swipeRevert", payload: solution.payload }, effects: { eventOverride: "swipeRevert" } }
+        }
+        if (solution.route === "revert") {
+          return {
+            action: { event: "swipeRevert", payload: solution.payload },
+            effects: { eventOverride: "swipeRevert" }
+          }
         }
         throw new Error(`Unknown carousel solution from swipeCommit: ${solution}`)
       }

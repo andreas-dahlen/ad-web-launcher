@@ -1,6 +1,6 @@
 import { useRef } from "react"
 import { settingsStore } from '@stores/settings.store.ts'
-import { usePointerBridge } from '@hooks/usePointerBridge.hook.ts'
+import { usePointerBridge } from '@interaction/adapter/usePointerBridge.hook.ts'
 import { useDragSizing } from './hooks/useDragSizing.hook.ts'
 import { useDragMotion } from './hooks/useDragMotion.hook.ts'
 import { useDragStore } from './store/useDragStore.hook.ts'
@@ -8,7 +8,7 @@ import { createPortal } from 'react-dom'
 import css from './DragPrim.module.css'
 import clsx from 'clsx'
 import { dasx } from '@utils/dasx.ts'
-import type { DragPrimProps } from '@primitives/prim.types.ts'
+import type { DragPrimProps } from '@primitives/types/prim.types.ts'
 
 export default function DragPrim({
   id,

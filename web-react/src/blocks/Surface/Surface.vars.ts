@@ -1,11 +1,4 @@
-import type { StyleFromVars } from '@utils/svsx.types';
 import css from './Surface.module.css';
-import { surface } from '../../styleSystem/schema/components';
-import tokens from '../../styleSystem/tokens/surface.json';
-import { convertJson } from '../../styleSystem/schema/convert';
-export type SurfaceStyle = StyleFromVars<typeof surface.vars, typeof surface.alwaysAllowed>;
-
-convertJson(tokens)
 export const surfacePreset = {
   bg: css.bg,
   frame: css.frame,

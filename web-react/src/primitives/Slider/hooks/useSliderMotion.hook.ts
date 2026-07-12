@@ -7,7 +7,7 @@ interface UseSliderMotionProps {
   axisSize: number
   axisitemSize: number
   dragging: boolean
-  horizontal: boolean
+  isHorizontal: boolean
 }
 
 export function useSliderMotion({
@@ -16,7 +16,7 @@ export function useSliderMotion({
   axisSize,
   axisitemSize,
   dragging,
-  horizontal
+  isHorizontal
 }: UseSliderMotionProps) {
   const thumbStyle = useMemo(() => {
     const { min, max } = constraints
@@ -30,12 +30,12 @@ export function useSliderMotion({
     const pos = ratio * usable
 
     return {
-      transform: horizontal
+      transform: isHorizontal
         ? `translate3d(${pos}px,0,0)`
         : `translate3d(0,${pos}px,0)`,
       transition: dragging ? "none" : "transform 150ms ease-out"
     }
-  }, [position, constraints, axisSize, axisitemSize, dragging, horizontal])
+  }, [position, constraints, axisSize, axisitemSize, dragging, isHorizontal])
 
   return { thumbStyle }
 }

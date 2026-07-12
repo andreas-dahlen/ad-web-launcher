@@ -16,8 +16,8 @@ export function useCarouselSizing({
 
     useEffect(() => {
         const el = elRef.current
-        const scene = sceneRef.current
         if (!el) return
+        const scene = sceneRef.current
         function updateLaneSize() {
             if (!el || !scene) return
 

@@ -1,4 +1,4 @@
-import type { Directive } from '@composites/comp.types'
+import type { Directive } from '@composites/types/comp.types'
 import { settingsStore } from '@stores/settings.store'
 
 export function useBehaviorState({
@@ -9,22 +9,24 @@ export function useBehaviorState({
 
   const dragEnabled = settingsStore(s => s.settings.dragEnabled)
 
-  const mode =
-    inputMode === true ? "on" :
-      inputMode === false ? "off" :
-        inputMode === undefined ? "default" :
-          inputMode
+  const mode = ({
+    true: "on",
+    false: "off",
+    default: "default"
+  })[
+    inputMode === undefined ? "default" : String(inputMode)
+  ]
 
-  const interactive = mode !== "disabled"
+  const isInteractive = mode !== "disabled"
 
-  const isDragInteractive = dragEnabled && interactive && movable
-  const isCompInteractive = (!dragEnabled || !movable) && interactive
+  const isDragInteractive = dragEnabled && isInteractive && movable
+  const isCompInteractive = (!dragEnabled || !movable) && isInteractive
 
   const isInFlow = movable ? true : inputIsInFlow
 
   return {
     mode,
-    interactive,
+    isInteractive,
     movable,
     isDragInteractive,
     isCompInteractive,

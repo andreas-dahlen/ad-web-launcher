@@ -75,7 +75,7 @@ function onDown(x: number, y: number, pointerId: number): InterpreterPress | nul
   }
   // if(resolved.desc.base.isLongPressable) startGestureSession(pointerId)
   const g = gestures[pointerId].gesture
-  if (g.desc.capabilities.pressable) {
+  if (g.desc.capabilities.isPressable) {
     return {
       desc: g.desc,
       computed: null,
@@ -111,7 +111,7 @@ function handlePendingMove(current: GestureSession, point: Vec2): PendingContext
   const absX = Math.abs(point.x - state.start.x)
   const absY = Math.abs(point.y - state.start.y)
   const biggest = Math.max(absX, absY)
-  if (!gestureUtils.swipeThresholdCalc(biggest, g.desc.capabilities.instantSwipe)) return null
+  if (!gestureUtils.swipeThresholdCalc(biggest, g.desc.capabilities.isInstantSwipe)) return null
   const intentAxis: Axis = absX > absY ? 'horizontal' : 'vertical'
   const thresholdValue = { x: point.x - state.last.x, y: point.y - state.last.y }
   return { thresholdValue, intentAxis }
@@ -153,7 +153,7 @@ function handleSwipeStart(current: GestureSession, x: number, y: number, point: 
     }
   }
 
-  const cancel = originalDesc.capabilities.pressable
+  const cancel = originalDesc.capabilities.isPressable
     ? { element: originalDesc.base.element, pressCancel: true }
     : undefined
 
@@ -211,7 +211,7 @@ function onUp(_x: number, _y: number, pointerId: number): InterpreterSwipeCommit
 
 function finalizeSwipe(current: SwipingSession, event: Extract<EventType, "swipeCommit">) {
   const { state, gesture: g } = current
-  if (!g.desc.capabilities.swipeable) {
+  if (!g.desc.capabilities.isSwipeable) {
     delete gestures[current.pointerId]
     return null
   }
@@ -230,7 +230,7 @@ function finalizeSwipe(current: SwipingSession, event: Extract<EventType, "swipe
 
 function finalizePress(current: PendingSession, event: Extract<EventType, "pressRelease">) {
   const { state, gesture: g } = current
-  if (!g.desc.capabilities.pressable) {
+  if (!g.desc.capabilities.isPressable) {
     delete gestures[current.pointerId]
     return null
   }

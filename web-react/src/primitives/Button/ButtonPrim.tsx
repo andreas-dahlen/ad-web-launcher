@@ -1,10 +1,10 @@
 import { useRef } from "react"
-import { usePointerBridge } from '@hooks/usePointerBridge.hook'
+import { usePointerBridge } from '@interaction/adapter/usePointerBridge.hook'
 import css from './ButtonPrim.module.css'
 import compiler from './buttonCompiler.module.css'
 import clsx from 'clsx'
 import { dasx } from '@utils/dasx'
-import type { ButtonPrimProps } from '@primitives/prim.types'
+import type { ButtonPrimProps } from '@primitives/types/prim.types'
 import { svsx } from '@utils/svsx'
 import { buttonAlwaysAllowed, buttonPreset, buttonVars } from '@composites/Button/ButtonPrim.vars'
 import { cpsx } from '@utils/cpsx'

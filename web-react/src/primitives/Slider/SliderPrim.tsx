@@ -1,5 +1,5 @@
 import { useRef } from "react"
-import { usePointerBridge } from '@hooks/usePointerBridge.hook.ts'
+import { usePointerBridge } from '@interaction/adapter/usePointerBridge.hook.ts'
 import { useSliderSizing } from './hooks/useSliderSizing.hook.ts'
 import { useSliderMotion } from './hooks/useSliderMotion.hook.ts'
 import { useSliderStore } from './store/useSliderStore.hook.ts'
@@ -8,7 +8,7 @@ import css from './SliderPrim.module.css'
 import clsx from 'clsx'
 import { dasx } from '@utils/dasx.ts'
 import { svsx } from '@utils/svsx.ts'
-import type { SliderPrimProps } from '@primitives/prim.types.ts'
+import type { SliderPrimProps } from '@primitives/types/prim.types.ts'
 import { sliderAlwaysAllowed, sliderPreset, sliderVars } from '@composites/Slider/SliderPrim.vars.ts'
 import { cpsx } from '@utils/cpsx.ts'
 
@@ -29,9 +29,9 @@ export default function SliderPrim({
   // ── Fully subscribe to the slider store ─────────────────────────────
   const { value, constraints, layout, dragging } = useSliderStore(id)
 
-  const horizontal = axis === 'horizontal'
-  const axisSize = horizontal ? layout.containerSize.width : layout.containerSize.height
-  const axisitemSize = horizontal ? layout.itemSize.width : layout.itemSize.height
+  const isHorizontal = axis === 'horizontal'
+  const axisSize = isHorizontal ? layout.containerSize.width : layout.containerSize.height
+  const axisitemSize = isHorizontal ? layout.itemSize.width : layout.itemSize.height
   const { min, max } = constraints
 
   // ── DOM references & sizing ─────────────────────────────
@@ -54,18 +54,14 @@ export default function SliderPrim({
       const event = reaction.detail
       if (!event) return
 
-      const shouldReact =
-        (event === 'press') ||
-        (event === 'swipe') ||
-        (event === 'swipeStart') ||
-        (event === 'swipeCommit')
+      const shouldReact = ['press', 'swipe', 'swipeStart', 'swipeCommit'].includes(event)
 
       if (!shouldReact) return
 
 
       const currentValue = sliderStore.getState().get(id)?.value ?? 0
       let emitValue = Math.round(currentValue)
-      if (!horizontal) {
+      if (!isHorizontal) {
         emitValue = max - (emitValue - min)
       }
       if (emitValue === lastEmitted.current) return
@@ -81,7 +77,7 @@ export default function SliderPrim({
     axisSize,
     axisitemSize,
     dragging: dragging,
-    horizontal
+    isHorizontal
   })
 
   return (
@@ -107,7 +103,7 @@ export default function SliderPrim({
         className={clsx(css.thumb)}
         style={{
           ...thumbStyle,
-          ...(horizontal ? { left: 0 } : { top: 0 })
+          ...(isHorizontal ? { left: 0 } : { top: 0 })
         }}
         ref={thumbRef}
       >

@@ -1,8 +1,8 @@
 import type { Constraints1D, Constraints2D, BoxSide, Vec2 } from '@typing/core.types'
 
-export type CarouselData = CarouselDataBase & CarouselModifiers
+export type CarouselData = CarouselDatabase & CarouselModifiers
 
-interface CarouselDataBase {
+interface CarouselDatabase {
   readonly currentScene: number
 }
 
@@ -13,9 +13,9 @@ export interface CarouselModifiers {
   }
 }
 
-export type DragData = DragDataBase & DragModifiers
+export type DragData = DragDatabase & DragModifiers
 
-interface DragDataBase {
+interface DragDatabase {
   readonly settledOffset: Vec2
 
   readonly constraints: Constraints2D

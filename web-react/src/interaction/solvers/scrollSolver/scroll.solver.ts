@@ -90,13 +90,13 @@ export const scrollSolver: ScrollSolver = {
           isOverflow: true
         }
       }
-    } else {
-      return {
-        route: "revert",
-        payload: {
-          overflowValue: result.overflowValue,
-          isVisible: result.isVisible
-        }
+    }
+
+    return {
+      route: "revert",
+      payload: {
+        overflowValue: result.overflowValue,
+        isVisible: result.isVisible
       }
     }
   }

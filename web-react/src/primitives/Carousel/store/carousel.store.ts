@@ -144,8 +144,8 @@ export const carouselStore = create<CarouselStore>()(
         const nextNode = ((currentNode + 1) % 3) as NodeId
 
         const wasCurrent = nodes[currentNode].sceneIdx === targetSceneIdx
-        const prevWasTarget = nodes[prevNode].sceneIdx === targetSceneIdx
-        const nextWasTarget = nodes[nextNode].sceneIdx === targetSceneIdx
+        const wasPrevTarget = nodes[prevNode].sceneIdx === targetSceneIdx
+        const wasNextTarget = nodes[nextNode].sceneIdx === targetSceneIdx
 
         // Renumber anything past the deleted index. Nodes that WERE the
         // deleted scene are left alone here and fixed explicitly below.
@@ -167,8 +167,8 @@ export const carouselStore = create<CarouselStore>()(
         } else {
           // Current is untouched — just patch whichever neighbor pointed at the deleted scene.
           const currentIdx = nodes[currentNode].sceneIdx
-          if (prevWasTarget) nodes[prevNode].sceneIdx = (currentIdx - 1 + newCount) % newCount
-          if (nextWasTarget) nodes[nextNode].sceneIdx = (currentIdx + 1) % newCount
+          if (wasPrevTarget) nodes[prevNode].sceneIdx = (currentIdx - 1 + newCount) % newCount
+          if (wasNextTarget) nodes[nextNode].sceneIdx = (currentIdx + 1) % newCount
         }
 
         s.liveOffset = 0

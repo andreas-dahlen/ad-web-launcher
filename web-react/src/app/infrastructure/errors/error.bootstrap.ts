@@ -40,22 +40,27 @@ function normalizeError(error: CapturedError): NormalizedError {
   };
 }
 
-/**
- * Single extension point for your system
- */
-let errorHandler: ((err: NormalizedError) => void) | null = null;
+function createErrorSystem() {
+  let handler: ((err: NormalizedError) => void) | null = null;
 
-export function setErrorHandler(fn: (err: NormalizedError) => void) {
-  errorHandler = fn;
+  return {
+    set(fn: (err: NormalizedError) => void) {
+      handler = fn;
+    },
+    dispatch(error: NormalizedError) {
+      if (handler) {
+        handler(error);
+      } else {
+        console.log("[APP ERROR]", error);
+      }
+    }
+  };
 }
 
-function dispatchError(error: NormalizedError) {
-  if (errorHandler) {
-    errorHandler(error);
-  } else {
-    console.log("[APP ERROR]", error);
-  }
-}
+const errorSystem = createErrorSystem();
+
+export const setErrorHandler = errorSystem.set;
+export const dispatchError = errorSystem.dispatch
 
 export function bootstrapApp(debugMode: AppConfig["debugMode"]) {
   if (debugMode) {

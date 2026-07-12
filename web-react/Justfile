@@ -19,11 +19,10 @@ dev:
 test:
     npm run test
 
-test-file file:
-    npm run test {{file}}
+lint *args:
+    if [ -z "{{args}}" ]; then npm run lint; else npx eslint {{args}}; fi
 
-lint:
-    npm run lint
+eslint: lint
 
 knip:
     npx knip --no-exit-code

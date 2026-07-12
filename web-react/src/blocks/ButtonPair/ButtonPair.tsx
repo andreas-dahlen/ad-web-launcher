@@ -15,10 +15,11 @@ export default function ButtonPair({
   middle
 }: ButtonPairProps) {
 
-  const direction =
-    axis === "horizontal" ? "row" :
-      axis === "vertical" ? "column" :
-        "row"
+  const directionMap: Record<Axis1D, "row" | "column"> = ({
+    horizontal: "row",
+    vertical: "column"
+  })
+  const direction = directionMap[axis ?? "horizontal"]
 
   const childArray = React.Children.toArray(children)
   const isPrimitive = typeof middle === "string" || typeof middle === "number"

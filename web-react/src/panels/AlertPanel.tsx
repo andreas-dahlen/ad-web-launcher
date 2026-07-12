@@ -1,5 +1,5 @@
 import { alertStore } from '@stores/alert.store';
-import ButtonPrim from '@primitives/ButtonPrim/ButtonPrim';
+import ButtonPrim from '@primitives/Button/ButtonPrim';
 import Frame from '@composites/Frame/Frame';
 
 export default function AlertPanel() {

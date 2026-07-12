@@ -2,7 +2,7 @@ import { settingsStore } from '@stores/settings.store'
 import Button from '@composites/Button/Button'
 import { alertStore } from '@stores/alert.store'
 import { layoutStore } from '@stores/layout.store'
-import { layout_DEFAULTS } from '@data/dataGenerator'
+import { layout_DEFAULTS } from '@data/generators/dataGenerator'
 import * as Icons from '@data/icons/';
 import Frame from '@composites/Frame/Frame'
 import Label from '../../blocks/Label/Label'

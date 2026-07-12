@@ -1,6 +1,6 @@
 import type { Lane, LaneSystem } from '@stores/layout.store'
 import type { Axis1D } from '@typing/core.types'
-import { createId } from '@utils/idGenerator'
+import { createId } from '@data/generators/idGenerator'
 
 export const layout_DEFAULTS = {
   vertical: createLaneSystem("vertical"),

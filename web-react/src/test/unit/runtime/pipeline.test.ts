@@ -1,4 +1,4 @@
-import type { PointerEventPackage } from '@hooks/usePointerBridge.hook'
+import type { PointerEventPackage } from '@interaction/adapter/usePointerBridge.hook'
 import { interpreter } from '@interaction/input/interpreter'
 import { pipeline } from '@interaction/runtime/pipeline'
 import { router } from '@interaction/runtime/solverRouter'

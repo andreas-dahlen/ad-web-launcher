@@ -17,10 +17,10 @@ export const domQuery = {
     for (const el of elements) {
       if (!(el instanceof HTMLElement)) continue
 
-      const metaData = extractDomMeta(el)
-      if (!metaData) continue
+      const metadata = extractDomMeta(el)
+      if (!metadata) continue
 
-      const desc = compileDescriptor(x, y, pointerId, metaData)
+      const desc = compileDescriptor(x, y, pointerId, metadata)
       if (desc) return desc
     }
     return null
@@ -33,12 +33,12 @@ export const domQuery = {
     for (const el of elements) {
       if (!(el instanceof HTMLElement)) continue
 
-      const metaData = extractDomMeta(el)
-      if (!metaData) continue
+      const metadata = extractDomMeta(el)
+      if (!metadata) continue
 
-      if (metaData.axis !== inputAxis && metaData.axis !== 'both') continue
+      if (metadata.axis !== inputAxis && metadata.axis !== 'both') continue
 
-      const desc = compileDescriptor(x, y, pointerId, metaData)
+      const desc = compileDescriptor(x, y, pointerId, metadata)
 
       if (desc && desc.type !== 'button') return desc
     }

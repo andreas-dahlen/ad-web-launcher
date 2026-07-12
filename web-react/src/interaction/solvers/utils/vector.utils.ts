@@ -50,12 +50,14 @@ export const vector = {
   },
 
   isValidDir(dir: AxisDirection, overflowSide: BoxSide) {
-    const result = Boolean(
-      dir.dir === 'down' && overflowSide === 'top' ||
-      dir.dir == 'up' && overflowSide == 'bottom' ||
-      dir.dir == 'left' && overflowSide == 'right' ||
-      dir.dir == 'right' && overflowSide == 'left')
-    return result
+    const pairs: Record<AxisDirection['dir'], BoxSide> = {
+      down: 'top',
+      up: 'bottom',
+      left: 'right',
+      right: 'left'
+    }
+
+    return pairs[dir.dir] === overflowSide
   },
 
   shouldCommit(delta: number, laneSize: number, axis: Axis) {

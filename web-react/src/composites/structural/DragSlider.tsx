@@ -1,6 +1,6 @@
-import DragPrim from '@primitives/DragPrim/DragPrim'
-import SliderPrim from '@primitives/SliderPrim/SliderPrim'
-import type { DragSliderProps } from '@composites/comp.types'
+import DragPrim from '@primitives/Drag/DragPrim'
+import SliderPrim from '@primitives/Slider/SliderPrim'
+import type { DragSliderProps } from '@composites/types/comp.types'
 import { settingsStore } from '@stores/settings.store'
 
 export default function DragSlider({

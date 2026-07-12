@@ -1,9 +1,9 @@
-import ButtonPrim from '@primitives/ButtonPrim/ButtonPrim'
-import DragPrim from '@primitives/DragPrim/DragPrim'
-import { createId, generateId } from '@utils/idGenerator'
+import ButtonPrim from '@primitives/Button/ButtonPrim'
+import DragPrim from '@primitives/Drag/DragPrim'
+import { createId, generateId } from '@data/generators/idGenerator'
 import Label, { type LabelSettings } from '../../blocks/Label/Label'
 import SvgIcon, { type IconSettings } from '../../blocks/SvgIcon/SvgIcon'
-import type { ButtonSettings, Directive, DragSettings } from '@composites/comp.types'
+import type { ButtonSettings, Directive, DragSettings } from '@composites/types/comp.types'
 import { useBehaviorState } from '@composites/hooks/useBehaviorState.hook'
 type ButtonProps = {
   directive?: Directive

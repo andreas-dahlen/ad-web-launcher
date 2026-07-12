@@ -41,9 +41,9 @@ export const overflowUtils = {
 
   resolveSwipeCommit(data: ScrollData, layout: LayoutData, mainDelta: number) {
     const containerSize = layout.containerSize.height
-    const towardsVisibleDir = mainDelta < 0
+    const isTowardsVisibleDir = mainDelta < 0
 
-    if (!data.isVisible && towardsVisibleDir) return {
+    if (!data.isVisible && isTowardsVisibleDir) return {
       overflowValue: 0, isVisible: true
     }
 

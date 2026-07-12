@@ -1,4 +1,4 @@
-import css from './SettingsPanel.module.css'
+// import css from './SettingsPanel.module.css'
 import { settingsStore } from '@stores/settings.store.ts';
 import Frame from '@composites/Frame/Frame.tsx';
 import SettingsDefault from './SettingsDefault.tsx';

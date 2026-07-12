@@ -7,7 +7,7 @@ import type { SvgIconStyle, SvgIconPreset } from './SvgIcon.vars';
 import { cpsx } from '@utils/cpsx';
 import type { DynamicIconComponent } from '@typing/svg';
 import type { Icon } from '@phosphor-icons/react';
-import type { Mode } from '@composites/comp.types';
+import type { Mode } from '@composites/types/comp.types';
 
 export type IconSettings = {
   Svg: Icon | DynamicIconComponent
@@ -34,11 +34,12 @@ export default function SvgIcon({
     svgDisabledCol
   } = styleVars ?? {}
 
-  const computedColor =
-    mode === "disabled" ? svgDisabledCol :
-      mode === "on" ? svgOnCol :
-        mode === "off" ? svgOffCol :
-          svgDefaultCol
+  const computedColor = ({
+    disabled: svgDisabledCol,
+    on: svgOnCol,
+    off: svgOffCol,
+    default: svgDefaultCol
+  })[mode ?? "default"]
 
 
   const isPhosphorIcon = Svg.displayName !== undefined;

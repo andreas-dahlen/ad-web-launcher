@@ -52,8 +52,14 @@ export default function SceneLayoutPanel({
             </ButtonPrim>
             <ButtonPrim
               id="move-more-lane"
-              onPressRelease={() => moveLane(axis, laneId, +1)}
+              onPressRelease={() => moveLane(axis, laneId, 1)}
             >
               reduce Lane
             </ButtonPrim>
           </div>
+        </div>
+      </PanelBase>
+    </>
+  )
+
+}

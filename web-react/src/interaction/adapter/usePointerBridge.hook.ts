@@ -38,8 +38,8 @@ export function usePointerBridge({ elRef, onReaction, disabled }: PointerForward
           if (el.hasPointerCapture(activePointerId.current)) {
             el.releasePointerCapture(activePointerId.current)
           }
-        } catch (err) {
-          console.warn('Failed to release pointer capture', err)
+        } catch (error) {
+          console.warn('Failed to release pointer capture', error)
         }
       }
     }
@@ -59,8 +59,8 @@ export function usePointerBridge({ elRef, onReaction, disabled }: PointerForward
 
       try {
         el?.setPointerCapture(e.pointerId)
-      } catch (err) {
-        console.warn('Failed to set pointer capture', err)
+      } catch (error) {
+        console.warn('Failed to set pointer capture', error)
       }
 
       activePointerId.current = e.pointerId

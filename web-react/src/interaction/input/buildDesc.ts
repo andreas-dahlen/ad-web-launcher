@@ -1,8 +1,8 @@
 import { domQuery } from './domQuery.ts'
-import { carouselStore } from '@primitives/CarouselPrim/store/carousel.store.ts'
-import { dragStore } from '@primitives/DragPrim/store/drag.store.ts'
-import { sliderStore } from '@primitives/SliderPrim/store/slider.store.ts'
-import { scrollStore } from '@primitives/ScrollPrim/store/scroll.store.ts'
+import { carouselStore } from '@primitives/Carousel/store/carousel.store.ts'
+import { dragStore } from '@primitives/Drag/store/drag.store.ts'
+import { sliderStore } from '@primitives/Slider/store/slider.store.ts'
+import { scrollStore } from '@primitives/Scroll/store/scroll.store.ts'
 import { sizeStore } from '../../shared/state/stores/size.store.ts'
 import type { BaseInteraction, DomMeta, Capabilities, BaseWithSwipe, LayoutData } from '../types/descriptor/base.types.ts'
 import type { CarouselData, DragData, ScrollData, SliderData } from '../types/descriptor/data.types.ts'
@@ -17,32 +17,32 @@ interface Builder {
 /* =========================
 Entry point and Type descrimination
 ========================= */
-export function compileDescriptor(x: number, y: number, pointerId: number, metaData: DomMeta): Descriptor | null {
-  const capabilities = buildCapabilities(metaData)
+export function compileDescriptor(x: number, y: number, pointerId: number, metadata: DomMeta): Descriptor | null {
+  const capabilities = buildCapabilities(metadata)
   const r = { capabilities, x, y, pointerId }
-  switch (metaData.type) {
+  switch (metadata.type) {
     case 'carousel': {
-      const desc = buildCarousel(metaData, r)
+      const desc = buildCarousel(metadata, r)
       if (desc) return desc
       return null
     }
     case 'slider': {
-      const desc = buildSlider(metaData, r)
+      const desc = buildSlider(metadata, r)
       if (desc) return desc
       return null
     }
     case 'drag': {
-      const desc = buildDrag(metaData, r)
+      const desc = buildDrag(metadata, r)
       if (desc) return desc
       return null
     }
     case 'scroll': {
-      const desc = buildScroll(metaData, r)
+      const desc = buildScroll(metadata, r)
       if (desc) return desc
       return null
     }
     case 'button': {
-      return buildButton(metaData, r)
+      return buildButton(metadata, r)
     }
     default: return null
   }
@@ -50,52 +50,52 @@ export function compileDescriptor(x: number, y: number, pointerId: number, metaD
 
 
 
-function buildCarousel(metaData: DomMeta, r: Builder): CarouselDesc | null {
-  if (!metaData.axis || metaData.axis === 'both') return null
-  const data = buildCarouselData(metaData)
+function buildCarousel(metadata: DomMeta, r: Builder): CarouselDesc | null {
+  if (!metadata.axis || metadata.axis === 'both') return null
+  const data = buildCarouselData(metadata)
   return {
     type: 'carousel',
-    base: { ...buildSwipeBase(metaData, r), axis: metaData.axis },
+    base: { ...buildSwipeBase(metadata, r), axis: metadata.axis },
     data: data,
     capabilities: r.capabilities
   }
 }
-function buildSlider(metaData: DomMeta, r: Builder): SliderDesc | null {
-  if (!metaData.axis || metaData.axis === 'both') return null
-  const data = buildSliderData(metaData)
+function buildSlider(metadata: DomMeta, r: Builder): SliderDesc | null {
+  if (!metadata.axis || metadata.axis === 'both') return null
+  const data = buildSliderData(metadata)
   return {
     type: 'slider',
-    base: { ...buildSwipeBase(metaData, r), axis: metaData.axis },
+    base: { ...buildSwipeBase(metadata, r), axis: metadata.axis },
     data: data,
     capabilities: r.capabilities
   }
 }
-function buildDrag(metaData: DomMeta, r: Builder): DragDesc | null {
-  if (!metaData.axis || metaData.axis !== 'both') return null
-  const data = buildDragData(metaData)
+function buildDrag(metadata: DomMeta, r: Builder): DragDesc | null {
+  if (!metadata.axis || metadata.axis !== 'both') return null
+  const data = buildDragData(metadata)
   return {
     type: 'drag',
-    base: { ...buildSwipeBase(metaData, r), axis: metaData.axis },
+    base: { ...buildSwipeBase(metadata, r), axis: metadata.axis },
     data: data,
     capabilities: r.capabilities
   }
 }
-function buildScroll(metaData: DomMeta, r: Builder): ScrollDesc | null {
-  if (!metaData.axis || metaData.axis === 'both') return null
-  const data = buildScrollData(metaData)
+function buildScroll(metadata: DomMeta, r: Builder): ScrollDesc | null {
+  if (!metadata.axis || metadata.axis === 'both') return null
+  const data = buildScrollData(metadata)
   if (data) return {
     type: 'scroll',
-    base: { ...buildSwipeBase(metaData, r), axis: metaData.axis },
+    base: { ...buildSwipeBase(metadata, r), axis: metadata.axis },
     data: data,
     capabilities: r.capabilities
   }
   return null
 }
 
-function buildButton(metaData: DomMeta, r: Builder): ButtonDesc {
+function buildButton(metadata: DomMeta, r: Builder): ButtonDesc {
   return {
     type: 'button',
-    base: buildBase(metaData, r.pointerId),
+    base: buildBase(metadata, r.pointerId),
     capabilities: r.capabilities
   }
 }
@@ -103,48 +103,48 @@ function buildButton(metaData: DomMeta, r: Builder): ButtonDesc {
 /* =========================
     Build Base
   ========================= */
-function buildBase(metaData: DomMeta, pointerId: number): BaseInteraction {
+function buildBase(metadata: DomMeta, pointerId: number): BaseInteraction {
   return {
     pointerId: pointerId,
-    element: metaData.el,
-    id: metaData.id,
-    actionId: metaData.ds.action ?? undefined,
+    element: metadata.el,
+    id: metadata.id,
+    actionId: metadata.ds.action ?? undefined,
   }
 }
 
-function buildSwipeBase(metaData: DomMeta, r: Builder): BaseWithSwipe {
-  const base = buildBase(metaData, r.pointerId)
-  const layout = buildLayout(metaData, r)
+function buildSwipeBase(metadata: DomMeta, r: Builder): BaseWithSwipe {
+  const base = buildBase(metadata, r.pointerId)
+  const layout = buildLayout(metadata, r)
   return {
     ...base,
     layout: layout
   }
 }
 
-function buildLayout(metaData: DomMeta, r: Builder): LayoutData {
+function buildLayout(metadata: DomMeta, r: Builder): LayoutData {
   const d = sizeStore.getState().device
   const deviceSize = { width: d.width, height: d.height }
-  const { grabOffset, frame } = domQuery.getElSnapshot(r.x, r.y, metaData.el)
-  switch (metaData.type) {
+  const { grabOffset, frame } = domQuery.getElSnapshot(r.x, r.y, metadata.el)
+  switch (metadata.type) {
     case 'carousel': {
-      const s = carouselStore.getState().get(metaData.id)
+      const s = carouselStore.getState().get(metadata.id)
       return { ...s.layout, grabOffset, frameRect: frame, deviceSize }
     }
     case 'slider': {
-      const s = sliderStore.getState().get(metaData.id)
+      const s = sliderStore.getState().get(metadata.id)
       return { ...s.layout, grabOffset, frameRect: frame, deviceSize }
     }
 
     case 'drag': {
-      const s = dragStore.getState().get(metaData.id)
+      const s = dragStore.getState().get(metadata.id)
       return { ...s?.layout, grabOffset, frameRect: frame, deviceSize }
     }
 
     case 'scroll': {
-      const s = scrollStore.getState().get(metaData.id)
+      const s = scrollStore.getState().get(metadata.id)
       return { ...s.layout, grabOffset, frameRect: frame, deviceSize }
     }
-    default: throw new Error(`metaData.type error: ${metaData.type}`)
+    default: throw new Error(`metadata.type error: ${metadata.type}`)
   }
 }
 /* =========================
@@ -152,39 +152,39 @@ function buildLayout(metaData: DomMeta, r: Builder): LayoutData {
 ========================= */
 
 //TODO expose a store API that gives a specific selection of exposed getters. Not the whole Store..
-function buildCarouselData(metaData: DomMeta): (CarouselData) {
-  const currentScene = carouselStore.getState().getCurrentScene(metaData.id)
-  const lockSwipeAt = { prev: metaData.lockPrevAt, next: metaData.lockNextAt }
+function buildCarouselData(metadata: DomMeta): (CarouselData) {
+  const currentScene = carouselStore.getState().getCurrentScene(metadata.id)
+  const lockSwipeAt = { prev: metadata.lockPrevAt, next: metadata.lockNextAt }
   return { currentScene: currentScene ?? 0, lockSwipeAt }
 }
-function buildSliderData(metaData: DomMeta): SliderData {
-  const s = sliderStore.getState().get(metaData.id)
+function buildSliderData(metadata: DomMeta): SliderData {
+  const s = sliderStore.getState().get(metadata.id)
   return { constraints: s.constraints }
 }
-function buildDragData(metaData: DomMeta): DragData {
-  const s = dragStore.getState().get(metaData.id)
-  const snap = (metaData.snapX != null && metaData.snapY != null) ? { x: metaData.snapX, y: metaData.snapY } : undefined
+function buildDragData(metadata: DomMeta): DragData {
+  const s = dragStore.getState().get(metadata.id)
+  const snap = (metadata.snapX != null && metadata.snapY != null) ? { x: metadata.snapX, y: metadata.snapY } : undefined
   return { settledOffset: s.settledOffset, snap: snap, constraints: s.constraints }
 }
-function buildScrollData(metaData: DomMeta): ScrollData {
-  const s = scrollStore.getState().get(metaData.id)
-  const overflowSide = metaData.overflowSide != null ? metaData.overflowSide : undefined
+function buildScrollData(metadata: DomMeta): ScrollData {
+  const s = scrollStore.getState().get(metadata.id)
+  const overflowSide = metadata.overflowSide ?? undefined
   return { overflowSide, settledValue: s.settledValue, isVisible: s.isVisible }
 }
 /* =========================
     Build capabilities
   ========================= */
-function buildCapabilities(metaData: DomMeta): Capabilities {
-  const { ds, pressable, swipeable, instantSwipe } = metaData
+function buildCapabilities(metadata: DomMeta): Capabilities {
+  const { ds, isPressable, isSwipeable, isInstantSwipe } = metadata
 
   const pressConfirm =
-    pressable ||
+    isPressable ||
     ds.action !== undefined
 
   return {
-    pressable: pressConfirm,
-    swipeable,
-    instantSwipe
+    isPressable: pressConfirm,
+    isSwipeable,
+    isInstantSwipe
   }
 }
 

@@ -1,10 +1,10 @@
-import DragPrim from '@primitives/DragPrim/DragPrim'
-import { createId, generateId } from '@utils/idGenerator'
-import SliderPrim from '@primitives/SliderPrim/SliderPrim'
+import DragPrim from '@primitives/Drag/DragPrim'
+import { createId, generateId } from '@data/generators/idGenerator'
+import SliderPrim from '@primitives/Slider/SliderPrim'
 import Label, { type LabelSettings } from '../../blocks/Label/Label'
 import SvgIcon, { type IconSettings } from '../../blocks/SvgIcon/SvgIcon'
 import { useBehaviorState } from '@composites/hooks/useBehaviorState.hook'
-import type { Directive, DragSettings, SliderSettings } from '@composites/comp.types'
+import type { Directive, DragSettings, SliderSettings } from '@composites/types/comp.types'
 
 type SliderProps = {
   directive?: Directive

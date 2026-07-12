@@ -1,7 +1,7 @@
 import { Z } from '@config/zIndex.config';
 // import useRuntimeBindings from '../compositions/useRuntimeBindings.hook';
 import css from './Layers.module.css'
-import InputCarouselPrim from '@primitives/CarouselPrim/InputCarouselPrim';
+import InputCarouselPrim from '@primitives/Carousel/InputCarouselPrim';
 import clsx from 'clsx';
 import { layoutStore } from '@stores/layout.store';
 import React from 'react';
@@ -19,14 +19,14 @@ const LaneInputRenderer = React.memo(function LaneInputRenderer({
   const lockPrevAt = layoutStore(s => s[axis].lanes[laneId].lockPrevAt)
   const sceneCount = layoutStore(s => s[axis].lanes[laneId].sceneOrder.length)
 
-  const lock = sceneCount === 1
+  const isLocked = sceneCount === 1
 
   return (
     <InputCarouselPrim
       id={laneId}
       axis={axis}
-      lockNextAt={lock ? 0 : lockNextAt}
-      lockPrevAt={lock ? 0 : lockPrevAt}
+      lockNextAt={isLocked ? 0 : lockNextAt}
+      lockPrevAt={isLocked ? 0 : lockPrevAt}
     />
   )
 })

@@ -1,7 +1,7 @@
 import { APP_CONFIG } from '@config/app.config.ts'
 import { normalizeParameter, sizeStore } from '../../shared/state/stores/size.store.ts'
 import type { Descriptor, SwipeableDescriptor } from '../types/descriptor/descriptor.types.ts'
-import type { FrameSnapshot } from '../../interaction/types/descriptor/base.types.ts'
+import type { FrameSnapshot } from '../types/descriptor/base.types.ts'
 import type { Axis, Vec2 } from '@typing/core.types.ts'
 
 export const gestureUtils = {
@@ -24,8 +24,8 @@ export const gestureUtils = {
 		}
 	},
 	//FUTURE possible swipeThreshold dif for every type
-	swipeThresholdCalc(distance: number, instantSwipe: boolean): boolean {
-		if (instantSwipe) return true
+	swipeThresholdCalc(distance: number, isInstantSwipe: boolean): boolean {
+		if (isInstantSwipe) return true
 
 		const ratio = APP_CONFIG.swipeThresholdRatio ?? 0.05
 		const device = sizeStore.getState().device
@@ -43,9 +43,9 @@ export const gestureUtils = {
 
 	asSwipeableDescriptor(desc: Descriptor, intentAxis: Axis): SwipeableDescriptor | null {
 		if (desc.type == 'button') return null
-		const { swipeable, instantSwipe } = desc.capabilities
-		if (!swipeable) return null
-		if (instantSwipe) return desc
+		const { isSwipeable, isInstantSwipe } = desc.capabilities
+		if (!isSwipeable) return null
+		if (isInstantSwipe) return desc
 		if (!isAxisSupported(intentAxis, desc.base.axis)) return null
 		return desc
 	}

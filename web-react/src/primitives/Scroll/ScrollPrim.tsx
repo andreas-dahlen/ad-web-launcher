@@ -1,5 +1,5 @@
 import { useRef } from "react"
-import { usePointerBridge } from '@hooks/usePointerBridge.hook.ts'
+import { usePointerBridge } from '@interaction/adapter/usePointerBridge.hook.ts'
 import { useScrollSizing } from './hooks/useScrollSizing.hook.ts'
 import { useScrollMotion } from './hooks/useScrollMotion.hook.ts'
 import { useOverflowMotion } from './hooks/useOverflowMotion.hook.ts'
@@ -8,7 +8,7 @@ import css from './ScrollPrim.module.css'
 import clsx from 'clsx'
 import { dasx } from '@utils/dasx.ts'
 import { svsx } from '@utils/svsx.ts'
-import type { ScrollPrimProps } from '@primitives/prim.types.ts'
+import type { ScrollPrimProps } from '@primitives/types/prim.types.ts'
 import { scrollAlwaysAllowed, scrollPreset, scrollVars } from '@composites/styleVars/ScrollPrim.vars.ts'
 import { cpsx } from '@utils/cpsx.ts'
 

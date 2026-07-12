@@ -1,6 +1,6 @@
-import { createLane } from '@data/dataGenerator'
+import { createLane } from '@data/generators/dataGenerator'
 import type { Axis1D, PlusMinusOne } from '@typing/core.types'
-import { createId } from '@utils/idGenerator'
+import { createId } from '@data/generators/idGenerator'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 import { immer } from 'zustand/middleware/immer'

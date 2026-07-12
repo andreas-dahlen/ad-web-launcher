@@ -1,6 +1,6 @@
 import type { ButtonPreset, ButtonStyle } from '@composites/Button/ButtonPrim.vars'
 import type { SliderPreset, SliderStyle } from '@composites/Slider/SliderPrim.vars'
-import type { SnapConfig } from '@primitives/prim.types'
+import type { SnapConfig } from '@primitives/types/prim.types'
 import type { Axis1D, EventType } from '@typing/core.types'
 
 // `directive` contains high-level orchestration flags that determine

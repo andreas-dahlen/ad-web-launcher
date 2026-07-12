@@ -1,12 +1,12 @@
 import { interpreter } from '../input/interpreter.ts'
 import { domUpdater } from '../updater/domUpdater.ts'
-import { dragStore } from '@primitives/DragPrim/store/drag.store.ts'
-import { sliderStore } from '@primitives/SliderPrim/store/slider.store.ts'
-import { carouselStore } from '@primitives/CarouselPrim/store/carousel.store.ts'
+import { dragStore } from '@primitives/Drag/store/drag.store.ts'
+import { sliderStore } from '@primitives/Slider/store/slider.store.ts'
+import { carouselStore } from '@primitives/Carousel/store/carousel.store.ts'
 import type { EventBridgeType, EventType, InteractionType } from '../../shared/typing/core.types.ts'
-import type { PointerEventPackage } from '@hooks/usePointerBridge.hook.ts'
+import type { PointerEventPackage } from '@interaction/adapter/usePointerBridge.hook.ts'
 import { gestureStore } from '../../shared/state/stores/gesture.store.ts'
-import { scrollStore } from '@primitives/ScrollPrim/store/scroll.store.ts'
+import { scrollStore } from '@primitives/Scroll/store/scroll.store.ts'
 import { router } from '@interaction/runtime/solverRouter.ts'
 import type { InterpreterOutput } from '@interaction/types/runtime/interpreter.types.ts'
 
@@ -35,12 +35,11 @@ function abortGesture(pointerId: number) {
 }
 
 function notifyGestureStore(type: InteractionType, event: EventType, isLongPress: boolean, pointerId: number) {
-  if (event === 'swipeStart') gestureStore.getState().increment(type, pointerId)
-
-  if (event === 'swipeCommit' ||
-    event === 'swipeRevert' ||
-    event === 'pressRelease'
-  ) gestureStore.getState().decrement(pointerId)
+  if (event === 'swipeStart') {
+    gestureStore.getState().increment(type, pointerId)
+  } else if (['swipeCommit', 'swipeRevert', 'pressRelease'].includes(event)) {
+    gestureStore.getState().decrement(pointerId)
+  }
 
   if (isLongPress && event === 'press') { gestureStore.getState().setLongPress(pointerId) }
 }

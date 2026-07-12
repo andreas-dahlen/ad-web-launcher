@@ -1,11 +1,11 @@
 import clsx from 'clsx';
 import css from './Scenes.module.css'
-import ButtonPrim from '@primitives/ButtonPrim/ButtonPrim';
+import ButtonPrim from '@primitives/Button/ButtonPrim';
 import { layoutStore, type Scene } from '@stores/layout.store';
 import type { Axis1D } from '@typing/core.types';
-import { useSceneContext } from '@primitives/CarouselPrim/hooks/useSceneContext.hook';
+import { useSceneContext } from '@primitives/Carousel/hooks/useSceneContext.hook';
 import Button from '@composites/Button/Button';
-import { carouselStore } from '@primitives/CarouselPrim/store/carousel.store';
+import { carouselStore } from '@primitives/Carousel/store/carousel.store';
 import Frame from '@composites/Frame/Frame';
 import Label from '../../blocks/Label/Label';
 import * as Icons from '@data/icons'
@@ -73,7 +73,7 @@ export default function SceneLayoutPanel() {
           />
           <Button
             directive={{ mode: sceneCount === 1 ? "disabled" : "default" }}
-            button={{ onPressRelease: () => moveScene(axis, laneId, sceneId, +1) }}
+            button={{ onPressRelease: () => moveScene(axis, laneId, sceneId, 1) }}
             label={{ msg: "move right" }}
             icon={{ Svg: Icons.moveRight }}
           />
