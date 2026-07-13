@@ -2,13 +2,13 @@ import { useRef } from "react"
 import { usePointerBridge } from '@interaction/adapter/usePointerBridge.hook'
 import css from './ButtonPrim.module.css'
 import clsx from 'clsx'
-import { dasx } from '@utils/dasx'
+import { dasx } from '../../shared/sxCompiler/dasx'
 import type { ButtonPrimProps } from '@primitives/types/prim.types'
-import { svsx } from '@utils/svsx'
+import { svsx } from '../../shared/sxCompiler/svsx'
 import { buttonPreset } from '@composites/Button/ButtonPrim.vars'
-import { cpsx } from '@utils/cpsx'
-import { buttonStyle } from '@schema/components'
-import vars from '@styleSystem/tokens.module.css'
+import { cpsx } from '../../shared/sxCompiler/cpsx'
+import { buttonStyle } from '../../styleCompiler/schema/components'
+import vars from '@styleCompiler/tokens.module.css'
 
 export default function ButtonPrim({
   id,

@@ -1,4 +1,4 @@
-import type { ValidPrefix, VarDef } from '@utils/svsx.types'
+import type { ValidPrefix, VarDef } from '../../shared/sxCompiler/svsx.types'
 
 // Runtime guard: ensure prefix is valid
 function toValidPrefix(p: string): ValidPrefix {

@@ -54,7 +54,7 @@ export default function SettingsLayout() {
               alertStore.getState().show({
                 message: "Reset all layout settings?",
                 onConfirm: () => override(layout_DEFAULTS),
-                onCancel: () => console.log("Cancelled"),
+                onCancel: () => console.log("Canceled"),
               })
             }
           }}

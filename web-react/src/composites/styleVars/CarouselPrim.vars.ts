@@ -1,4 +1,4 @@
-import type { StyleFromVars, VarDef } from '@utils/svsx.types'
+import type { StyleFromVars, VarDef } from '../../shared/sxCompiler/svsx.types'
 import css from './carousel.module.css'
 export const carouselVars = {
   width: { name: "width", allowed: [] as const },

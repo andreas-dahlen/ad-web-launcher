@@ -50,7 +50,7 @@ const eventHandlers: Record<EventType, (el: HTMLElement) => void> = {
     setAttr(el, 'data-state', 'released')
   },
   pressCancel: (el) => {
-    setAttr(el, 'data-state', 'cancelled')
+    setAttr(el, 'data-state', 'canceled')
   },
   swipeStart: (el) => {
     setAttr(el, 'data-state', 'swiping')

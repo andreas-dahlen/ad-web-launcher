@@ -6,7 +6,7 @@ const buildCascade = require('./buildCascade.cjs');
 const log = require('./consoleLog.cjs')
 
 module.exports = (opts = {}) => {
-  const tokensDir = opts.tokensDir || "./src/styleSystem/tokens";
+  const tokensDir = opts.tokensDir || "./src/styleCompiler/tokens";
 
   return {
     postcssPlugin: "design-tokens-plugin",

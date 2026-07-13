@@ -21,8 +21,8 @@
 
     "state-pressed-scale": {"values": {"f": "scale(0.98)"}},
     "state-released-scale": {"values": {"f": "scale(1)"}},
-    "state-cancelled-scale": {"values": {"f": "scale(1)"}},
-    "state-cancelled-opacity": {"values": {"f": "0.5"}},
+    "state-canceled-scale": {"values": {"f": "scale(1)"}},
+    "state-canceled-opacity": {"values": {"f": "0.5"}},
     "state-pressed-filter": {"values": {"f": "brightness(0.95)"}}
   }
 }

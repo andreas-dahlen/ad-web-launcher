@@ -6,12 +6,13 @@ import { useSliderStore } from './store/useSliderStore.hook.ts'
 import { sliderStore } from './store/slider.store.ts'
 import css from './SliderPrim.module.css'
 import clsx from 'clsx'
-import { dasx } from '@utils/dasx.ts'
-import { svsx } from '@utils/svsx.ts'
+import { dasx } from '../../shared/sxCompiler/dasx.ts'
+import { svsx } from '../../shared/sxCompiler/svsx.ts'
 import type { SliderPrimProps } from '@primitives/types/prim.types.ts'
 import { sliderPreset } from '@composites/Slider/SliderPrim.vars.ts'
-import { cpsx } from '@utils/cpsx.ts'
-import { sliderStyle } from '@schema/components'
+import { cpsx } from '../../shared/sxCompiler/cpsx.ts'
+import { sliderStyle } from '../../styleCompiler/schema/components.ts'
+import vars from '@styleCompiler/tokens.module.css'
 
 export default function SliderPrim({
   id,
@@ -83,7 +84,7 @@ export default function SliderPrim({
 
   return (
     <div
-      className={clsx(css.slider, ...cpsx(presets, sliderPreset))}
+      className={clsx(vars.sliderCompiler, css.slider, ...cpsx(presets, sliderPreset))}
       style={{
         pointerEvents: interactive ? 'auto' : 'none',
         position: isInFlow ? "relative" : "absolute",
@@ -99,6 +100,8 @@ export default function SliderPrim({
         ...sliderDataAttrs
       })}
     >
+
+      <div className={css.track} />
 
       <div
         className={clsx(css.thumb)}

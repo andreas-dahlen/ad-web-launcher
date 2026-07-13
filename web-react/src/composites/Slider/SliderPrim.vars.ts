@@ -1,4 +1,4 @@
-import type { StyleFromVars, VarDef } from '@utils/svsx.types'
+import type { StyleFromVars, VarDef } from '../../shared/sxCompiler/svsx.types'
 import css from './Slider.module.css'
 export const sliderVars = {
   width: { name: "width", allowed: [] as const },

@@ -6,11 +6,11 @@ import { useOverflowMotion } from './hooks/useOverflowMotion.hook.ts'
 import { useScrollStore } from './store/useScrollStore.hook.ts'
 import css from './ScrollPrim.module.css'
 import clsx from 'clsx'
-import { dasx } from '@utils/dasx.ts'
-import { svsx } from '@utils/svsx.ts'
+import { dasx } from '../../shared/sxCompiler/dasx.ts'
+import { svsx } from '../../shared/sxCompiler/svsx.ts'
 import type { ScrollPrimProps } from '@primitives/types/prim.types.ts'
 import { scrollAlwaysAllowed, scrollPreset, scrollVars } from '@composites/styleVars/ScrollPrim.vars.ts'
-import { cpsx } from '@utils/cpsx.ts'
+import { cpsx } from '../../shared/sxCompiler/cpsx.ts'
 
 export default function ScrollPrim({
   id,

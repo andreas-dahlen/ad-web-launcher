@@ -1,0 +1,11 @@
+{
+  "component": "slider",
+  "inFix": "slider",
+
+  "alwaysAllowed": ["o", "p", "f"],
+  "vars": {
+    "bg": {"values": { "f": "hotPink;" }},
+    "radius": {"values": { "f": "var(--_border-radius-xs);"}},
+    "mainSize": {}
+  }
+}

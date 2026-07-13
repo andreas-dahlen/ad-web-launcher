@@ -5,7 +5,7 @@
 // const prefixPriority = ["o", "s", "m", "p", "t", "f"];
 
 // module.exports = (opts = {}) => {
-//   const tokensDir = opts.tokensDir || "./src/shared/styleSystem/tokens";
+//   const tokensDir = opts.tokensDir || "./src/shared/styleCompiler/tokens";
 
 //   return {
 //     postcssPlugin: "design-tokens-plugin",

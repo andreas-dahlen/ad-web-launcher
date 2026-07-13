@@ -64,7 +64,7 @@ export default defineConfig([
         { type: 'panels', pattern: 'src/panels/*/**', capture: ['mod'] },
         { type: 'primitives', pattern: 'src/primitives/*/**', capture: ['mod'] },
         { type: 'shared', pattern: 'src/shared/**/*' },
-        { type: 'styleSystem', pattern: 'src/styleSystem/*/**', capture: ['mod'] },
+        { type: 'styleCompiler', pattern: 'src/styleCompiler/*/**', capture: ['mod'] },
       ],
       'boundaries/files': [
 
@@ -174,7 +174,7 @@ export default defineConfig([
               allow: {
                 to: [
                   { element: { type: "composites", captured: { mod: "types" } } },
-                  { element: { type: "styleSystem", captured: { mod: "schema" } } }
+                  { element: { type: "styleCompiler", captured: { mod: "schema" } } }
                 ]
               }
             },
@@ -196,7 +196,7 @@ export default defineConfig([
                   { element: { type: "primitives", captured: { mod: "*" } } },
                   { element: { type: "blocks" } },
                   { element: { type: "data", captured: { mod: "generators" } } },
-                  { element: { type: "styleSystem", captured: { mod: "schema" } } }
+                  { element: { type: "styleCompiler", captured: { mod: "schema" } } }
                 ]
               }
             },
@@ -289,7 +289,7 @@ export default defineConfig([
                     file: { categories: "vars" }
                   },
                   { element: { type: "composites", captured: { mod: "styleVars" } } },
-                  { element: { type: "styleSystem", file: { categories: "globalModule" } } }
+                  { element: { type: "styleCompiler", file: { categories: "globalModule" } } }
                 ]
               }
             },
@@ -304,12 +304,12 @@ export default defineConfig([
               }
             },
             // ----------------------------------
-            // STYLESYSTEM
+            // STYLECOMPILER
             // ----------------------------------
             {
-              from: { element: { type: "styleSystem", captured: { mod: "schema" } } },
+              from: { element: { type: "styleCompiler", captured: { mod: "schema" } } },
               allow: {
-                to: { element: { type: "styleSystem", captured: { mod: "tokens" } } }
+                to: { element: { type: "styleCompiler", captured: { mod: "tokens" } } }
               }
             },
 

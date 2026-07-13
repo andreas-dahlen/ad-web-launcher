@@ -1,10 +1,10 @@
 import clsx from 'clsx'
 import css from './Surface.module.css'
-import { svsx } from '@utils/svsx'
+import { svsx } from '../../shared/sxCompiler/svsx'
 import { surfacePreset, type SurfacePreset } from './Surface.vars'
-import { cpsx } from '@utils/cpsx'
-import { surfaceStyle, type SurfaceStyle } from '../../styleSystem/schema/components'
-import vars from '@styleSystem/tokens.module.css'
+import { cpsx } from '../../shared/sxCompiler/cpsx'
+import { surfaceStyle, type SurfaceStyle } from '../../styleCompiler/schema/components'
+import vars from '@styleCompiler/tokens.module.css'
 type PanelBaseProps = {
   children: React.ReactNode
   styleVars?: SurfaceStyle

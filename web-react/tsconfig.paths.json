@@ -19,8 +19,8 @@
       "@styles/*": ["./src/shared/styles/*"],
       "@utils/*": ["./src/shared/utils/*"],
       
-      "@styleSystem/*": ["./src/styleSystem/*"],
-      "@schema/*": ["./src/styleSystem/schema/*"],
+      "@styleCompiler/*": ["./src/styleCompiler/*"],
+      "@schema/*": ["./src/styleCompiler/schema/*"],
 
       "@test/*": ["./src/test/*"]
     }

@@ -1,4 +1,4 @@
-import type { VarDef, ValidPrefix } from '@utils/svsx.types';
+import type { VarDef, ValidPrefix } from './svsx.types';
 type StyleString = `--${string}`
 
 function toKebab(str: string): string {

@@ -7,14 +7,14 @@ export default function tokenWatcher(): Plugin {
 
     configureServer(server) {
       // Watch all JSON token files
-      server.watcher.add("src/styleSystem/tokens/");
+      server.watcher.add("src/styleCompiler/tokens/");
 
       server.watcher.on("change", (file) => {
         if (file.endsWith(".json")) {
           console.log("🔄 JSON changed — rebuilding tokens...");
 
 
-          const cssFile = "src/styleSystem/tokens.module.css";
+          const cssFile = "src/styleCompiler/tokens.module.css";
 
           // Update timestamp → Vite thinks CSS changed
           if (fs.existsSync(cssFile)) {
