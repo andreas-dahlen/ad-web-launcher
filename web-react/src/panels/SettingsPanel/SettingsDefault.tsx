@@ -2,7 +2,7 @@ import Button from '@composites/Button/Button'
 import { settingsStore } from '@stores/settings.store'
 import { useState } from 'react'
 import SliderPrim from '@primitives/Slider/SliderPrim'
-import * as Icons from '@data/icons/index.barrel';
+import * as Icons from '@data/icons';
 import ButtonPair from '../../blocks/ButtonPair/ButtonPair'
 import { useSnapInput } from './hooks/useSnapInput'
 import Frame from '@composites/Frame/Frame'

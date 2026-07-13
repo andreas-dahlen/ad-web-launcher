@@ -1,4 +1,4 @@
-import type { IconName } from '@data/icons/index.barrel';
+import type { IconName } from '@data/icons';
 
 export interface AppRegistryItem {
   label: string;

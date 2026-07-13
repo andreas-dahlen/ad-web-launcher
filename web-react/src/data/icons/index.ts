@@ -6,4 +6,4 @@ export * from './external';
 export * from './system';
 
 // Automatically builds a union type: 'settings' | 'home' | 'bomb' etc.
-export type IconName = keyof typeof import('./index.barrel');
+export type IconName = keyof typeof import('.');

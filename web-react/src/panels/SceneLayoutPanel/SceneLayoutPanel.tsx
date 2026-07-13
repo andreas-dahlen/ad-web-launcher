@@ -8,7 +8,7 @@ import Button from '@composites/Button/Button';
 import { carouselStore } from '@primitives/Carousel/store/carousel.store';
 import Frame from '@composites/Frame/Frame';
 import Label from '../../blocks/Label/Label';
-import * as Icons from '@data/icons/index.barrel'
+import * as Icons from '@data/icons'
 
 type SceneLayoutPanel = {
   scene: Scene,
