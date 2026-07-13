@@ -11,6 +11,14 @@ module.exports = {
     console.log(`\n🎨 Processing component: ${name}`);
   },
 
+  buildingChains(infix) {
+    console.log(`\n🔧 chaining --final-${infix}-*`)
+  },
+
+  classMissing(selector) {
+    console.log(`\n❌ Created CSS class because couldn't find one named: ${selector}`)
+  },
+
   resultCascade(prefixPriority, component, variable) {
     const chain = prefixPriority
       .filter(p => component.alwaysAllowed.includes(p) || variable.allowed.includes(p))

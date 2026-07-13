@@ -9,8 +9,9 @@ import clsx from 'clsx'
 import { dasx } from '@utils/dasx.ts'
 import { svsx } from '@utils/svsx.ts'
 import type { SliderPrimProps } from '@primitives/types/prim.types.ts'
-import { sliderAlwaysAllowed, sliderPreset, sliderVars } from '@composites/Slider/SliderPrim.vars.ts'
+import { sliderPreset } from '@composites/Slider/SliderPrim.vars.ts'
 import { cpsx } from '@utils/cpsx.ts'
+import { sliderStyle } from '@schema/components'
 
 export default function SliderPrim({
   id,
@@ -86,7 +87,7 @@ export default function SliderPrim({
       style={{
         pointerEvents: interactive ? 'auto' : 'none',
         position: isInFlow ? "relative" : "absolute",
-        ...svsx(styleVars ?? {}, sliderVars, sliderAlwaysAllowed, "slider")
+        ...svsx(styleVars ?? {}, sliderStyle)
       }}
       ref={sliderRef}
       {...dasx({

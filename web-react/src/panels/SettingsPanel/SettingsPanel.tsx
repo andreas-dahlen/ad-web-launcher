@@ -4,7 +4,7 @@ import Frame from '@composites/Frame/Frame.tsx';
 import SettingsDefault from './SettingsDefault.tsx';
 import SettingsLayout from './SettingsLayout.tsx';
 import Button from '@composites/Button/Button.tsx';
-import * as Icons from '@data/icons/';
+import * as Icons from '@data/icons/index.barrel.ts';
 export default function SettingsPanel() {
 
   const update = settingsStore.getState().update

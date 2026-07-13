@@ -1,0 +1,13 @@
+{
+  "component": "carousel",
+    "inFix": "carousel",
+
+      "alwaysAllowed": ["o", "p", "f"],
+        "vars": {
+    "test": {
+      "allowed": ["t"],
+        "values": { "f": "hotPink;" },
+      "ignore": ["p"]
+    }
+  }
+}

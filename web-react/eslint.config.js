@@ -6,6 +6,7 @@ import tseslint from 'typescript-eslint'
 import boundaries from 'eslint-plugin-boundaries'
 import unicorn from 'eslint-plugin-unicorn'
 import { defineConfig, globalIgnores } from 'eslint/config'
+import noTestOnlyApi from './eslint/rules/no-test-only-api.js'
 
 export default defineConfig([
   globalIgnores(['dist', 'node_modules', '**/*.css', '**/*.svg']),
@@ -13,7 +14,12 @@ export default defineConfig([
   {
     plugins: {
       boundaries,
-      unicorn
+      unicorn,
+      local: {
+        rules: {
+          'no-test-only-api': noTestOnlyApi,
+        }
+      }
     }
   },
   // ----------------------------------
@@ -48,16 +54,17 @@ export default defineConfig([
 
       'boundaries/elements': [
         { type: 'api', pattern: 'src/api/**/*' },
-        { type: 'app', pattern: 'src/app/*/**', capture: ['folders'] },
+        { type: 'app', pattern: 'src/app/*/**', capture: ['mod'] },
         { type: 'blocks', pattern: 'src/blocks/**/*' },
+        { type: 'composites', pattern: 'src/composites/*/**', capture: ['mod'] },
         { type: 'config', pattern: 'src/config/**/*' },
-        { type: 'shared', pattern: 'src/shared/**/*' },
-        { type: 'composites', pattern: 'src/composites/*/**', capture: ['module'] },
-        { type: 'data', pattern: 'src/data/*/**', capture: ['module'] },
+        { type: 'data', pattern: 'src/data/*/**', capture: ['mod'] },
         { type: 'features', pattern: 'src/features/**/*' },
-        { type: 'panels', pattern: 'src/panels/*/**', capture: ['module'] },
-        { type: 'primitives', pattern: 'src/primitives/*/**', capture: ['module'] },
-        { type: 'interaction', pattern: 'src/interaction/*/**', capture: ['module'] },
+        { type: 'interaction', pattern: 'src/interaction/*/**', capture: ['mod'] },
+        { type: 'panels', pattern: 'src/panels/*/**', capture: ['mod'] },
+        { type: 'primitives', pattern: 'src/primitives/*/**', capture: ['mod'] },
+        { type: 'shared', pattern: 'src/shared/**/*' },
+        { type: 'styleSystem', pattern: 'src/styleSystem/*/**', capture: ['mod'] },
       ],
       'boundaries/files': [
 
@@ -71,6 +78,7 @@ export default defineConfig([
         { pattern: '**/buildDesc.ts', category: 'buildDesc' },
         { pattern: '**/pipeline.ts', category: 'pipeline' },
         { pattern: '**/solverRouter.ts', category: 'solverRouter' },
+        { pattern: '**/tokens.module.css', category: 'globalModule' }
       ],
       "boundaries/debug": {
         enabled: true,
@@ -103,6 +111,7 @@ export default defineConfig([
 
     rules: {
       // 'boundaries/no-unknown-dependencies': ['error'],
+      'local/no-test-only-api': 'error',
 
       'boundaries/dependencies': ['error',
         {
@@ -129,17 +138,17 @@ export default defineConfig([
             // ----------------------------------
 
             {
-              from: { element: { type: "app", captured: { folders: "*" } } },
+              from: { element: { type: "app", captured: { mod: "*" } } },
               allow: {
                 to: { element: { type: "panels" } }
               }
             },
             {
-              from: { element: { type: "app", captured: { folders: "layers" } } },
+              from: { element: { type: "app", captured: { mod: "layers" } } },
               allow: {
                 to: [
-                  { element: { type: "app", captured: { folders: "scenes" } } },
-                  { element: { type: "primitives", captured: { module: "Carousel" } } }
+                  { element: { type: "app", captured: { mod: "scenes" } } },
+                  { element: { type: "primitives", captured: { mod: "Carousel" } } }
                 ]
               }
             },
@@ -151,8 +160,8 @@ export default defineConfig([
                   { element: { type: "config" } },
                   { element: { type: "data" } },
                   { element: { type: "api" } },
-                  { element: { type: "app", captured: { folders: "layers" } } },
-                  { element: { type: "app", captured: { folders: "infrastructure" } } },
+                  { element: { type: "app", captured: { mod: "layers" } } },
+                  { element: { type: "app", captured: { mod: "infrastructure" } } },
                   { file: { categories: "app-entry" } }
                 ]
               }
@@ -163,7 +172,10 @@ export default defineConfig([
             {
               from: { element: { type: "blocks" } },
               allow: {
-                to: { element: { type: "composites", captured: { module: "types" } } }
+                to: [
+                  { element: { type: "composites", captured: { mod: "types" } } },
+                  { element: { type: "styleSystem", captured: { mod: "schema" } } }
+                ]
               }
             },
 
@@ -172,18 +184,19 @@ export default defineConfig([
             // COMPOSITES
             // ----------------------------------
             {
-              from: { element: { type: "composites", captured: { module: "*" } } },
+              from: { element: { type: "composites", captured: { mod: "*" } } },
               allow: {
                 to: [
                   {
-                    element: { type: "composites", captured: { module: "{{from.element.captured.module}}" } },
+                    element: { type: "composites", captured: { mod: "{{from.element.captured.mod}}" } },
                     file: { categories: "vars" }
                   },
-                  { element: { type: "composites", captured: { module: "types" } } },
-                  { element: { type: "composites", captured: { module: "hooks" } } },
-                  { element: { type: "primitives", captured: { module: "*" } } },
+                  { element: { type: "composites", captured: { mod: "types" } } },
+                  { element: { type: "composites", captured: { mod: "hooks" } } },
+                  { element: { type: "primitives", captured: { mod: "*" } } },
                   { element: { type: "blocks" } },
-                  { element: { type: "data", captured: { module: "generators" } } }
+                  { element: { type: "data", captured: { mod: "generators" } } },
+                  { element: { type: "styleSystem", captured: { mod: "schema" } } }
                 ]
               }
             },
@@ -192,9 +205,9 @@ export default defineConfig([
             // DATA
             // ----------------------------------
             {
-              from: { element: { type: "data", captured: { module: "external" } } },
+              from: { element: { type: "data", captured: { mod: "external" } } },
               allow: {
-                to: { element: { type: "data", captured: { module: "icons" } } }
+                to: { element: { type: "data", captured: { mod: "icons" } } }
               }
             },
 
@@ -202,21 +215,21 @@ export default defineConfig([
             // INTERACTION
             // ----------------------------------
             {
-              from: { element: { type: "interaction", captured: { module: "*" } } },
+              from: { element: { type: "interaction", captured: { mod: "*" } } },
               allow: {
-                to: [{ element: { type: "interaction", captured: { module: "types" } } }]
+                to: [{ element: { type: "interaction", captured: { mod: "types" } } }]
               }
             },
 
             {
-              from: { element: { type: "interaction", captured: { module: "solvers" } } },
+              from: { element: { type: "interaction", captured: { mod: "solvers" } } },
               allow: {
-                to: { element: { type: "interaction", captured: { module: "{{from.element.captured.module}}" } } }
+                to: { element: { type: "interaction", captured: { mod: "{{from.element.captured.mod}}" } } }
               }
             },
 
             {
-              from: { element: { type: "interaction", captured: { module: "adapter" } } },
+              from: { element: { type: "interaction", captured: { mod: "adapter" } } },
               allow: { to: { file: { categories: "pipeline" } } }
             },
 
@@ -226,18 +239,18 @@ export default defineConfig([
             },
             {
               from: { file: { categories: "solverRouter" } },
-              allow: { to: { element: { type: "interaction", captured: { module: "solvers" } } } }
+              allow: { to: { element: { type: "interaction", captured: { mod: "solvers" } } } }
             },
             {
               from: {
-                element: { type: "interaction", captured: { module: "runtime" } },
+                element: { type: "interaction", captured: { mod: "runtime" } },
                 file: { categories: "pipeline" }
               },
               allow: {
                 to: [
-                  { element: { type: "interaction", captured: { module: "input" } } },
-                  { element: { type: "interaction", captured: { module: "updater" } } },
-                  { element: { type: "interaction", captured: { module: "adapter" } } },
+                  { element: { type: "interaction", captured: { mod: "input" } } },
+                  { element: { type: "interaction", captured: { mod: "updater" } } },
+                  { element: { type: "interaction", captured: { mod: "adapter" } } },
                   { element: { type: "primitives" } }
                 ]
               }
@@ -246,14 +259,14 @@ export default defineConfig([
             // PANELS
             // ----------------------------------
             {
-              from: { element: { type: "panels", captured: { module: "*" } } },
+              from: { element: { type: "panels", captured: { mod: "*" } } },
               allow: {
                 to: [
-                  { element: { type: "panels", captured: { module: "{{from.element.captured.module}}" } } },
+                  { element: { type: "panels", captured: { mod: "{{from.element.captured.mod}}" } } },
                   { element: { type: "composites" } },
                   { element: { type: "blocks" } },
-                  { element: { type: "data", captured: { module: "icons" } } },
-                  { element: { type: "data", captured: { module: "generators" } } }
+                  { element: { type: "data", captured: { mod: "icons" } } },
+                  { element: { type: "data", captured: { mod: "generators" } } }
                 ]
               }
             },
@@ -261,32 +274,42 @@ export default defineConfig([
             // PRIMITIVES
             // ----------------------------------
             {
-              from: { element: { type: "primitives", captured: { module: "*" } } },
+              from: { element: { type: "primitives", captured: { mod: "*" } } },
               allow: {
                 to: [
-                  { element: { type: "primitives", captured: { module: "{{from.element.captured.module}}" } } },
-                  { element: { type: "primitives", captured: { module: "types" } } },
+                  { element: { type: "primitives", captured: { mod: "{{from.element.captured.mod}}" } } },
+                  { element: { type: "primitives", captured: { mod: "types" } } },
                   {
-                    element: { type: "interaction", captured: { module: "types" } },
+                    element: { type: "interaction", captured: { mod: "types" } },
                     file: { categories: "types" }
                   },
-                  { element: { type: "interaction", captured: { module: "adapter" } } },
+                  { element: { type: "interaction", captured: { mod: "adapter" } } },
                   {
-                    element: { type: "composites", captured: { module: "{{from.element.captured.module}}" } },
+                    element: { type: "composites", captured: { mod: "{{from.element.captured.mod}}" } },
                     file: { categories: "vars" }
                   },
-                  { element: { type: "composites", captured: { module: "styleVars" } } }
+                  { element: { type: "composites", captured: { mod: "styleVars" } } },
+                  { element: { type: "styleSystem", file: { categories: "globalModule" } } }
                 ]
               }
             },
 
             // ----------------------------------
-            // PRIMITIVES
+            // SHARED
             // ----------------------------------
             {
               from: { element: { type: "shared" } },
               allow: {
                 to: { file: { categories: "types" } }
+              }
+            },
+            // ----------------------------------
+            // STYLESYSTEM
+            // ----------------------------------
+            {
+              from: { element: { type: "styleSystem", captured: { mod: "schema" } } },
+              allow: {
+                to: { element: { type: "styleSystem", captured: { mod: "tokens" } } }
               }
             },
 
@@ -298,14 +321,14 @@ export default defineConfig([
             {
               from: { file: { categories: "stores" } },
               allow: {
-                to: { element: { type: "data", captured: { module: "generators" } } }
+                to: { element: { type: "data", captured: { mod: "generators" } } }
               }
             },
             {
               from: { file: { categories: "types" } },
               allow: {
                 to: [
-                  { element: { captured: { module: "{{from.element.captured.module}}" } } },
+                  { element: { captured: { mod: "{{from.element.captured.mod}}" } } },
                   { file: { categories: "types" } },
                   { file: { categories: "vars" } }
                 ]
@@ -413,45 +436,6 @@ export default defineConfig([
       'unicorn/filename-case': ['error', {
         case: 'camelCase',
       }]
-    }
-  },
-
-
-
-  // ─── Test-Only API & Cross-CSS Restrictions ──────────────────────
-
-  {
-    files: ['src/**/*.{ts,tsx}'],
-    rules: {
-      'no-restricted-imports': [
-        'error',
-        {
-          patterns: [
-            {
-              group: ['**/*.module.css'],
-              message: 'CSS Modules must be imported locally from their own folder. No cross-folder CSS imports allowed.',
-              allowImportNames: ['styleSystem']
-            }
-          ]
-        }
-      ]
-    }
-  },
-  {
-    files: ['src/**/*.{ts,tsx}'],
-    ignores: ['src/test/**/*'],
-    rules: {
-      'no-restricted-imports': [
-        'error',
-        {
-          paths: [
-            {
-              name: '__TEST_ONLY_API',
-              message: '__TEST_ONLY_API is for tests only'
-            }
-          ]
-        }
-      ]
     }
   }
 ])

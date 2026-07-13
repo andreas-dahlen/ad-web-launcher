@@ -1,0 +1,13 @@
+{
+  "component": "slider",
+    "inFix": "slider",
+
+      "alwaysAllowed": ["o", "p", "f"],
+        "vars": {
+    "test": {
+      "allowed": ["t"],
+        "values": { "f": "hotPink;" },
+      "ignore": ["p"]
+    }
+  }
+}

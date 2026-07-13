@@ -19,7 +19,7 @@
       "@styles/*": ["./src/shared/styles/*"],
       "@utils/*": ["./src/shared/utils/*"],
       
-      "@tokens/*": ["./src/styleSystem/tokens/*"],
+      "@styleSystem/*": ["./src/styleSystem/*"],
       "@schema/*": ["./src/styleSystem/schema/*"],
 
       "@test/*": ["./src/test/*"]

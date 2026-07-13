@@ -2,7 +2,7 @@ const validateDefinition = require("./validateDefinition.cjs");
 
 module.exports = function buildVarDefinitions(rule, component, variable, constants) {
   const { name, allowed, values, exclude } = variable;
-  const baseName = `${component.name}-${name}`;
+  const baseName = `${component.inFix}-${name}`;
 
   const effectiveAllowed = [
     ...allowed,

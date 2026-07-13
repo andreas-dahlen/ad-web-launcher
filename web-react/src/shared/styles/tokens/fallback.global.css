@@ -1,5 +1,5 @@
-  :root {
-    --f-border: 1px solid var(--_col-neutral-dark-1);
+  /* :root { */
+  /* --f-border: 1px solid var(--_col-neutral-dark-1);
     --f-box-shadow: 0px 0px 10px var(--_col-neutral-dark-1);
     --f-button-radius: var(--_border-radius-xs);
     --f-radius: var(--_border-radius-xl);
@@ -20,14 +20,14 @@
 
     --f-button-bg-on: var(--_col-neutral-light-1);
 
-    --f-button-size: var(--_button-size-l);
-    /* --f-button-size-m: var(--_button-size-xl); */
-    /* --f-button-size-l: var(--_button-size-l);
+    --f-button-size: var(--_button-size-l); */
+  /* --f-button-size-m: var(--_button-size-xl); */
+  /* --f-button-size-l: var(--_button-size-l);
     --f-button-size-m: var(--_button-size-m);
     --f-button-size-s: var(--_button-size-s);
     --f-button-size-xs: var(--_button-size-xs); */
 
-    --f-text-heading-col: var(--_text-col);
+  /* --f-text-heading-col: var(--_text-col);
     --f-text-body-col: var(--_text-col);
 
     --f-font-body: var(--_font-inter);
@@ -43,5 +43,5 @@
     --f-font-weight-l: var(--_font-weight-l);
     --f-font-weight-m: var(--_font-weight-m);
     --f-font-weight-s: var(--_font-weight-s);
-    --f-font-weight-xs: var(--_font-weight-xs);
-  }
+    --f-font-weight-xs: var(--_font-weight-xs); */
+  /* } */

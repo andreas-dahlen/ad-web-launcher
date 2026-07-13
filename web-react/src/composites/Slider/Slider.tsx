@@ -26,7 +26,7 @@ export default function Slider({
   const {
     mode,
     movable,
-    interactive,
+    isInteractive,
     isDragInteractive,
     isCompInteractive,
     isInFlow
@@ -48,7 +48,7 @@ export default function Slider({
         styleVars={styleVars}
         sliderDataAttrs={{
           "mode": mode,
-          "interactive": interactive,
+          "interactive": isInteractive,
           "state": "released"
         }}
       >

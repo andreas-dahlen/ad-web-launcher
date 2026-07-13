@@ -1,11 +1,13 @@
 import React from 'react'
 import { svsx } from '@utils/svsx'
-import { labelAlwaysAllowed, labelPreset, labelVars, type LabelPreset, type LabelStyle } from './Label.vars'
+import vars from '@styleSystem/tokens.module.css'
 import clsx from 'clsx'
 import css from './Label.module.css'
 import type { Mode } from '@composites/types/comp.types'
 import type { BoxSide } from '@typing/core.types'
 import { cpsx } from '@utils/cpsx'
+import { labelPreset, type LabelPreset } from '@blocks/Label/Label.vars'
+import { labelStyle, type LabelStyle } from '@schema/components'
 
 export type LabelSettings = {
   msg: string
@@ -34,10 +36,10 @@ export default function Label({
   const positionClass = positionMap[position ?? "bottom"]
 
   return (
-    <div className={clsx(css.labelwrapper,
+    <div className={clsx(vars.labelCompiler, css.labelwrapper,
       positionClass,
       ...cpsx(presets, labelPreset))}
-      style={svsx(styleVars ?? {}, labelVars, labelAlwaysAllowed, "label")}>
+      style={svsx(styleVars ?? {}, labelStyle)}>
 
       {React.createElement(
         el,

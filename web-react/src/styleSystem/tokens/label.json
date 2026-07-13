@@ -1,0 +1,14 @@
+{
+  "component": "label",
+    "inFix": "label",
+
+    "alwaysAllowed": ["o", "p", "f"],
+    "vars": {
+      "col": { "values": {"f": "var(--_col-warm-dark-1)"}},
+      "align": {"values": {"f": "center"}},
+      "position": {"values": {"f": "absolute"}},
+      "spacing": {},
+      "width": {},
+      "height": {}
+  }
+}

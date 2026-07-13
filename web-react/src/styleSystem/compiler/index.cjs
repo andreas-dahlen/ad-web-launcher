@@ -25,18 +25,31 @@ module.exports = (opts = {}) => {
 
       for (const component of components) {
         log.processing(component.name)
-        const compilerRule = postcss.rule({
-          selector: `.${component.name}Compiler`
-        });
+
+        const selector = `.${component.name}Compiler`;
+
+        let compilerRule
+
+        root.walkRules(rule => {
+          if (rule.selector === selector) {
+            compilerRule = rule
+          }
+        })
+
+        if (!compilerRule) {
+          log.classMissing(selector)
+          compilerRule = postcss.rule({ selector })
+          root.append(compilerRule)
+        }
+
+        log.buildingChains(component.inFix)
 
         for (const variable of component.vars) {
-          // console.log(`          🔧 building -> ${variable.key}`);
           buildVarDefinitions(compilerRule, component, variable, constants);
           buildCascade(compilerRule, component, variable, constants);
 
           log.resultCascade(constants.prefixPriority, component, variable)
         }
-        root.append(compilerRule);
         addedCompilers.push(`.${component.name}Compiler`);
         log.addedCompiler(component.name)
       }

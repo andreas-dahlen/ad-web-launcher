@@ -1,6 +1,6 @@
 module.exports = function buildCascade(rule, component, variable, constants) {
   const { name, allowed, exclude } = variable;
-  const baseName = `${component.name}-${name}`;
+  const baseName = `${component.inFix}-${name}`;
 
 
   const effectiveAllowed = [

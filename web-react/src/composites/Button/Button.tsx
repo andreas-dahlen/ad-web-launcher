@@ -25,7 +25,7 @@ export default function Button({
   const {
     mode,
     movable,
-    interactive,
+    isInteractive,
     isDragInteractive,
     isCompInteractive,
     isInFlow
@@ -47,7 +47,7 @@ export default function Button({
         styleVars={styleVars}
         buttonDataAttrs={{
           "mode": mode,
-          "interactive": interactive,
+          "interactive": isInteractive,
           "state": "released"
         }}
       >

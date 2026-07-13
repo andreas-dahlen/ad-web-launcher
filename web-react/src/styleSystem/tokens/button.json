@@ -1,0 +1,28 @@
+{
+  "component": "button",
+  "inFix": "button",
+
+  "alwaysAllowed": ["o", "p", "f"],
+  "vars": {
+    "bg": {"values": {"f": "hotPink"}},
+
+    "position": {"values": {"f": "relative"}},
+    "display": {"values": {"f": "flex"}},
+    "align": {"values": {"f": "center"}},
+    "justify": {"values": {"f": "center"}},
+
+    "width": {"values": {"f": "50px"}},
+    "height": {"values": {"f": "50px"}},
+
+    "radius": {"values": {"f": "var(--border-radius-xs)"}},
+    "border": {"values": {"f": "none"}},
+    "shadow": {"values": {"f": "0px 0px 10px var(--_col-neutral-dark-1)"}},
+    "opacity": {"values": {"f": "1"}},
+
+    "state-pressed-scale": {"values": {"f": "scale(0.98)"}},
+    "state-released-scale": {"values": {"f": "scale(1)"}},
+    "state-cancelled-scale": {"values": {"f": "scale(1)"}},
+    "state-cancelled-opacity": {"values": {"f": "0.5"}},
+    "state-pressed-filter": {"values": {"f": "brightness(0.95)"}}
+  }
+}

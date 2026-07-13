@@ -1,5 +1,3 @@
-
-
 module.exports = function validateDefinition(prefix, effectiveAllowed, value, prefixPriority) {
 
   // 1. Prefix must be allowed (after merging + excluding)

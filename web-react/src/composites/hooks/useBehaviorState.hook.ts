@@ -1,4 +1,4 @@
-import type { Directive } from '@composites/types/comp.types'
+import type { Directive, Mode } from '@composites/types/comp.types'
 import { settingsStore } from '@stores/settings.store'
 
 export function useBehaviorState({
@@ -15,7 +15,7 @@ export function useBehaviorState({
     default: "default"
   })[
     inputMode === undefined ? "default" : String(inputMode)
-  ]
+  ] as Mode
 
   const isInteractive = mode !== "disabled"
 

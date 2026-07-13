@@ -2,7 +2,7 @@ import Button from '@composites/Button/Button'
 import { settingsStore } from '@stores/settings.store'
 import { useState } from 'react'
 import SliderPrim from '@primitives/Slider/SliderPrim'
-import * as Icons from '@data/icons/';
+import * as Icons from '@data/icons/index.barrel';
 import ButtonPair from '../../blocks/ButtonPair/ButtonPair'
 import { useSnapInput } from './hooks/useSnapInput'
 import Frame from '@composites/Frame/Frame'
@@ -52,7 +52,7 @@ export default function SettingsDefault() {
             Svg: Icons.gridNine,
             variant: "fill",
             styleVars: {
-              svgRotate: "rotate(90deg)",
+              rotate: "rotate(90deg)",
             }
             // settings: {adjust: {rotate: 90 }, variant: "fill" }
           }}
@@ -88,7 +88,7 @@ export default function SettingsDefault() {
             variant: "light",
             phosphorSize: 40,
             styleVars: {
-              svgRotate: "rotate(90deg)",
+              rotate: "rotate(90deg)",
             }
           }}
         />
@@ -102,7 +102,7 @@ export default function SettingsDefault() {
             icon={{
               Svg: Icons.caretDown,
               phosphorSize: 30,
-              styleVars: { svgFlipY: "scaleY(-1)" }
+              styleVars: { flipY: "scaleY(-1)" }
             }}
           />
           <Button
@@ -128,7 +128,7 @@ export default function SettingsDefault() {
             icon={{
               Svg: Icons.caretDown,
               phosphorSize: 30,
-              styleVars: { svgFlipY: "ScaleY(-1)" }
+              styleVars: { flipY: "ScaleY(-1)" }
             }}
           />
           <Button

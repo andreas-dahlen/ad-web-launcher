@@ -35,7 +35,7 @@ export default defineConfig({
       '@styles': fromRoot('src/shared/styles'),
       '@utils': fromRoot('src/shared/utils'),
 
-      '@tokens': fromRoot('src/styleSystem/tokens'),
+      '@styleSystem': fromRoot('src/styleSystem'),
       '@schema': fromRoot('src/styleSystem/schema'),
 
       '@test': fromRoot('src/test')
