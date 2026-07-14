@@ -1,5 +1,21 @@
 export type ValidPrefix = "o" | "s" | "m" | "p" | "t" | "f";
 
+export type RawVarDef = {
+  name?: string;
+  allowed?: string[];
+  exclude?: string[];
+
+  // Compiler-only preset data. Ignored by TS model.
+  values?: Record<string, string>;
+};
+
+export type RawComponent = {
+  component: string;
+  infix?: string;
+  alwaysAllowed?: string[];
+  vars: Record<string, RawVarDef>;
+};
+
 export type VarDef<
   A extends readonly ValidPrefix[] = readonly ValidPrefix[],
   E extends readonly ValidPrefix[] = readonly ValidPrefix[]

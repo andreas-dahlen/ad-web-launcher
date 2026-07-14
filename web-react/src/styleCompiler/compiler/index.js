@@ -1,11 +1,10 @@
-const postcss = require("postcss");
-const loadTokens = require("./loadTokens.cjs");
-const buildVarDefinitions = require("./buildVarDefinitions.cjs");
-const constants = require("./constants.cjs");
-const buildCascade = require('./buildCascade.cjs');
-const log = require('./consoleLog.cjs')
+import postcss from 'postcss';
+import loadTokens from "./loadTokens.js"
+import buildVarDefinitions from './buildVarDefinitions.js';
+import buildCascade from './buildCascade.js';
+import log from './consoleLog.js'
 
-module.exports = (opts = {}) => {
+const plugin = (opts = {}) => {
   const tokensDir = opts.tokensDir || "./src/styleCompiler/tokens";
 
   return {
@@ -42,13 +41,13 @@ module.exports = (opts = {}) => {
           root.append(compilerRule)
         }
 
-        log.buildingChains(component.inFix)
+        log.buildingChains(component.infix)
 
         for (const variable of component.vars) {
-          buildVarDefinitions(compilerRule, component, variable, constants);
-          buildCascade(compilerRule, component, variable, constants);
+          buildVarDefinitions(compilerRule, component, variable);
+          buildCascade(compilerRule, component, variable);
 
-          log.resultCascade(constants.prefixPriority, component, variable)
+          log.resultCascade(component, variable)
         }
         addedCompilers.push(`.${component.name}Compiler`);
         log.addedCompiler(component.name)
@@ -58,4 +57,6 @@ module.exports = (opts = {}) => {
   };
 };
 
-module.exports.postcss = true;
+plugin.postcss = true;
+
+export default plugin

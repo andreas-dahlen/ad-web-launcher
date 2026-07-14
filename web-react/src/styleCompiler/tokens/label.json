@@ -1,6 +1,6 @@
 {
   "component": "label",
-    "inFix": "label",
+    "infix": "label",
 
     "alwaysAllowed": ["o", "p", "f"],
     "vars": {

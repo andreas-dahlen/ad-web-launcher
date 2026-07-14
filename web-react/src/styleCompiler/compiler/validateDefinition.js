@@ -1,4 +1,4 @@
-module.exports = function validateDefinition(prefix, effectiveAllowed, value, prefixPriority) {
+export function validateDefinition(prefix, effectiveAllowed, value, prefixPriority) {
 
   // 1. Prefix must be allowed (after merging + excluding)
   if (!effectiveAllowed.includes(prefix)) return false;
@@ -19,4 +19,4 @@ module.exports = function validateDefinition(prefix, effectiveAllowed, value, pr
 
   // 5. Anything else is invalid
   return false;
-};
+}

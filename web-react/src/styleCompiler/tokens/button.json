@@ -1,6 +1,6 @@
 {
   "component": "button",
-  "inFix": "button",
+  "infix": "button",
 
   "alwaysAllowed": ["o", "p", "f"],
   "vars": {

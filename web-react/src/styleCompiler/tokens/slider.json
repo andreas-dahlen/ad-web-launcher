@@ -1,6 +1,6 @@
 {
   "component": "slider",
-  "inFix": "slider",
+  "infix": "slider",
 
   "alwaysAllowed": ["o", "p", "f"],
   "vars": {

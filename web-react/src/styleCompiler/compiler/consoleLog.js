@@ -1,4 +1,5 @@
-module.exports = {
+import { constants } from '../../shared/compilerUtils/constants.ts';
+const log = {
   injecting(file) {
     console.log("⚙️ Injecting compiler classes into:", file);
   },
@@ -19,15 +20,15 @@ module.exports = {
     console.log(`\n❌ Created CSS class because couldn't find one named: ${selector}`)
   },
 
-  resultCascade(prefixPriority, component, variable) {
-    const chain = prefixPriority
+  resultCascade(component, variable) {
+    const chain = constants.prefixPriority
       .filter(p => component.alwaysAllowed.includes(p) || variable.allowed.includes(p))
       .map(prefix => {
         const val = variable.values[prefix];
 
         if (!val) return prefix;
 
-        if (!prefixPriority.includes(val)) {
+        if (!constants.prefixPriority.includes(val)) {
           return `${prefix}:${val}`; // literal
         }
 
@@ -50,3 +51,5 @@ module.exports = {
     console.log("")
   }
 };
+
+export default log;

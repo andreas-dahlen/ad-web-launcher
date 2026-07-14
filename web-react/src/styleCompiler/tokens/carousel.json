@@ -1,6 +1,6 @@
 {
   "component": "carousel",
-    "inFix": "carousel",
+    "infix": "carousel",
 
       "alwaysAllowed": ["o", "p", "f"],
         "vars": {

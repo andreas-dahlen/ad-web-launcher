@@ -1,5 +1,5 @@
+import type { StyleFromVars } from '../../shared/compilerUtils/compiler.types';
 import { convertJson } from './convert';
-import type { StyleFromVars } from '../../shared/sxCompiler/svsx.types';
 import surfaceJson from "../tokens/surface.json";
 import labelJson from "../tokens/label.json";
 import buttonJson from "../tokens/button.json";

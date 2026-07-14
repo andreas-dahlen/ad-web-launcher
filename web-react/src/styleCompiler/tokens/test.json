@@ -1,6 +1,6 @@
 {
   "component": "test",
-  "inFix": "test",
+  "infix": "test",
 
   "alwaysAllowed": ["o", "p", "f"],
   "vars": {

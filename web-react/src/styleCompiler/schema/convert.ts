@@ -1,4 +1,5 @@
-import type { ValidPrefix, VarDef } from '../../shared/sxCompiler/svsx.types'
+import type { RawComponent, RawVarDef, ValidPrefix, VarDef } from '../../shared/compilerUtils/compiler.types';
+
 
 // Runtime guard: ensure prefix is valid
 function toValidPrefix(p: string): ValidPrefix {
@@ -10,9 +11,8 @@ function toValidPrefix(p: string): ValidPrefix {
 }
 
 // Convert JSON vars → TS VarDef objects
-function convertVars(vars: Record<string, { name?: string; allowed?: string[]; exclude?: string[] }>):
+function convertVars(vars: Record<string, RawVarDef>):
   Record<string, VarDef> {
-
   const result: Record<string, VarDef> = {};
 
   for (const key in vars) {
@@ -33,7 +33,7 @@ function convertVars(vars: Record<string, { name?: string; allowed?: string[]; e
     result[key] = {
       name,
       allowed,
-      exclude
+      exclude,
     };
   }
 
@@ -41,15 +41,10 @@ function convertVars(vars: Record<string, { name?: string; allowed?: string[]; e
 }
 
 // Convert one component JSON file → TS structure
-export function convertJson(json: {
-  component: string;
-  inFix?: string;
-  alwaysAllowed?: string[];
-  vars: Record<string, { name?: string; allowed?: string[]; exclude?: string[] }>;
-}) {
+export function convertJson(json: RawComponent) {
   return {
     component: json.component,
-    inFix: json.inFix ?? json.component,
+    infix: json.infix ?? json.component,
     alwaysAllowed: Array.isArray(json.alwaysAllowed)
       ? json.alwaysAllowed.map(toValidPrefix)
       : [],

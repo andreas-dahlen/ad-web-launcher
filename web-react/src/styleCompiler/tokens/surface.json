@@ -1,6 +1,6 @@
 {
   "component": "surface",
-  "inFix": "surface",
+  "infix": "surface",
 
   "alwaysAllowed": ["o", "p", "f"],
   "vars": {

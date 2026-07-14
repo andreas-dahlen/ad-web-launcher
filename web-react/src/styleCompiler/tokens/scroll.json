@@ -1,6 +1,6 @@
 {
   "component": "scroll",
-    "inFix": "scroll",
+    "infix": "scroll",
 
       "alwaysAllowed": ["o", "p", "f"],
         "vars": {

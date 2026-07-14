@@ -1,5 +1,5 @@
-const fs = require("fs");
-const path = require("path");
+import fs from "fs";
+import path from "path";
 
 function findJsonFiles(dir) {
   return fs.readdirSync(dir, { withFileTypes: true })
@@ -18,7 +18,7 @@ function findJsonFiles(dir) {
     });
 }
 
-module.exports = function loadTokens(tokensDir) {
+export default function loadTokens(tokensDir) {
   // const files = fs.readdirSync(tokensDir).filter(f => f.endsWith(".json"));
   const files = findJsonFiles(tokensDir).sort();
   const seenComponents = new Set();
@@ -46,7 +46,7 @@ module.exports = function loadTokens(tokensDir) {
 
     return {
       name: json.component,
-      inFix: json.inFix ?? json.component,
+      infix: json.infix ?? json.component,
       alwaysAllowed: Array.isArray(json.alwaysAllowed)
         ? json.alwaysAllowed
         : [],

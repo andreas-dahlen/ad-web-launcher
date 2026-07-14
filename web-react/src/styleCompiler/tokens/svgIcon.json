@@ -1,6 +1,6 @@
 {
   "component": "svgIcon",
-  "inFix": "svg",
+  "infix": "svg",
 
   "alwaysAllowed": ["o", "p", "f"],
   "vars": {

@@ -1,15 +1,7 @@
-import type { VarDef, ValidPrefix } from './svsx.types';
-type StyleString = `--${string}`
-
-function toKebab(str: string): string {
-  return str
-    .replace(/([a-z0-9])([A-Z])/g, "$1-$2")
-    .toLowerCase()
-}
-
-function toStyleVar(first: string, second: string, third: string): StyleString {
-  return `--${toKebab(first)}-${toKebab(second)}-${toKebab(third)}`
-}
+import type { ValidPrefix, VarDef } from '../compilerUtils/compiler.types';
+import { getAllowedPrefixes } from '../compilerUtils/getAllowedPrefixes';
+import { toCssVar } from '../compilerUtils/toCssVar';
+import { isValidPrefix } from '../compilerUtils/isValidPrefix';
 
 /** Transforms an object into CSS style-variable entries */
 export function svsx(
@@ -17,11 +9,11 @@ export function svsx(
   component: {
     vars: Record<string, VarDef>;
     alwaysAllowed: readonly ValidPrefix[];
-    inFix: string;
+    infix: string;
   }
 ) {
   const output: Record<string, string> = {};
-  const { vars: definitions, alwaysAllowed, inFix } = component;
+  const { vars: definitions, alwaysAllowed, infix } = component;
 
   for (const [key, value] of Object.entries(input)) {
     if (value == null) continue
@@ -31,31 +23,28 @@ export function svsx(
     // -----------------------------------------------------
     const hasPrefix = key.includes(":")
     if (hasPrefix) {
-      const [prefixKeyRaw, varKey] = key.split(":")
+      const [prefixKey, varKey] = key.split(":")
 
-      if (!["o", "s", "m", "p", "t", "f"].includes(prefixKeyRaw)) {
-        console.warn(`[svsx] Invalid prefix "${prefixKeyRaw}".`);
+      if (!isValidPrefix(prefixKey)) {
+        console.warn(`[svsx] Invalid prefix "${prefixKey}".`);
         continue;
       }
-
-      const prefixKey = prefixKeyRaw as ValidPrefix;
 
       const def = definitions[varKey]
       if (!def) {
         console.warn(`[svsx] Unknown variable "${varKey}".`);
         continue
       }
-      const effectiveAllowed = [
-        ...def.allowed,
-        ...alwaysAllowed
-      ].filter(p => !def.exclude.includes(p));
+      const effectiveAllowed = getAllowedPrefixes(
+        def.allowed, alwaysAllowed, def.exclude
+      )
 
       if (!effectiveAllowed.includes(prefixKey)) {
         console.warn(`[svsx] Prefix "${prefixKey}" not allowed for "${varKey}".`);
         continue;
       }
 
-      const cssVar = toStyleVar(prefixKey, inFix, def.name);
+      const cssVar = toCssVar(prefixKey, infix, def.name);
 
       output[cssVar] = String(value)
       continue
@@ -66,7 +55,7 @@ export function svsx(
     // -----------------------------------------------------
     const def = definitions[key];
     if (def) {
-      const cssVar = toStyleVar("p", inFix, def.name)
+      const cssVar = toCssVar("p", infix, def.name)
       output[cssVar] = String(value);
       continue;
     }
@@ -100,10 +89,10 @@ export function mergeStyles<
       // PREFIXED KEYS: "t:bg", "o:padding", etc.
       // -----------------------------------------------------
       if (hasPrefix) {
-        const [prefixKeyRaw, varKey] = key.split(":");
+        const [prefixKey, varKey] = key.split(":");
 
-        if (!["o", "s", "m", "p", "t", "f"].includes(prefixKeyRaw)) {
-          console.warn(`[mergeStyles] Invalid prefix "${prefixKeyRaw}". Allowed prefixes: o, s, m, p, t, f`);
+        if (!isValidPrefix(prefixKey)) {
+          console.warn(`[mergeStyles] Invalid prefix "${prefixKey}". Allowed prefixes: o, s, m, p, t, f`);
           continue;
         }
 
