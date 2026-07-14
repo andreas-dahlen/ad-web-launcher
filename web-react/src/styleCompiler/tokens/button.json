@@ -14,7 +14,7 @@
     "width": {"values": {"f": "50px"}},
     "height": {"values": {"f": "50px"}},
 
-    "radius": {"values": {"f": "var(--border-radius-xs)"}},
+    "radius": {"values": {"f": "var(--_border-radius-xs)"}},
     "border": {"values": {"f": "none"}},
     "shadow": {"values": {"f": "0px 0px 10px var(--_col-neutral-dark-1)"}},
     "opacity": {"values": {"f": "1"}},

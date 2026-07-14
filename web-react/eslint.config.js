@@ -289,7 +289,8 @@ export default defineConfig([
                     file: { categories: "vars" }
                   },
                   { element: { type: "composites", captured: { mod: "styleVars" } } },
-                  { element: { type: "styleCompiler", file: { categories: "globalModule" } } }
+                  { element: { type: "styleCompiler", captured: { mod: "schema" } } },
+                  { file: { categories: "globalModule" } }
                 ]
               }
             },

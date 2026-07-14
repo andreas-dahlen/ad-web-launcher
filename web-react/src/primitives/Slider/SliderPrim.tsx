@@ -11,7 +11,7 @@ import { svsx } from '../../shared/sxCompiler/svsx.ts'
 import type { SliderPrimProps } from '@primitives/types/prim.types.ts'
 import { sliderPreset } from '@composites/Slider/SliderPrim.vars.ts'
 import { cpsx } from '../../shared/sxCompiler/cpsx.ts'
-import { sliderStyle } from '../../styleCompiler/schema/components.ts'
+import { sliderStyle } from '@schema/components.ts'
 import vars from '@styleCompiler/tokens.module.css'
 
 export default function SliderPrim({
