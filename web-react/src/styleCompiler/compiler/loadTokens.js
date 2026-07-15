@@ -1,5 +1,12 @@
 import fs from "fs";
 import path from "path";
+import { parse, printParseErrorCode } from 'jsonc-parser'
+import { toCssVar } from '../../shared/compilerUtils/toCssVar.ts';
+
+function formatLoggingPath(file) {
+  return path.relative(process.cwd(), file)
+    .replace(/^.*?tokens[\\/]/, "tokens/");
+}
 
 function findJsonFiles(dir) {
   return fs.readdirSync(dir, { withFileTypes: true })
@@ -10,7 +17,10 @@ function findJsonFiles(dir) {
         return findJsonFiles(fullPath);
       }
 
-      if (entry.isFile() && entry.name.endsWith(".json")) {
+      if (entry.isFile() &&
+        (entry.name.endsWith(".json") ||
+          entry.name.endsWith(".jsonc"))
+      ) {
         return [fullPath];
       }
 
@@ -21,11 +31,23 @@ function findJsonFiles(dir) {
 export default function loadTokens(tokensDir) {
   // const files = fs.readdirSync(tokensDir).filter(f => f.endsWith(".json"));
   const files = findJsonFiles(tokensDir).sort();
-  const seenComponents = new Set();
+  const seenVariables = new Map();
 
   return files.map(fullPath => {
-    // const fullPath = path.join(tokensDir, file);
-    const json = JSON.parse(fs.readFileSync(fullPath, "utf8"));
+
+    // const json = JSON.parse(fs.readFileSync(fullPath, "utf8"));
+    const text = fs.readFileSync(fullPath, "utf8");
+
+    const errors = []
+    const json = parse(text, errors)
+
+    if (errors.length) {
+      const details = errors
+        .map(error => printParseErrorCode(error.error))
+        .join(", ");
+
+      throw new Error(`Invalid JSON in ${fullPath}: ${details}`);
+    }
 
     if (!json.component) {
       throw new Error(`Missing "component" in ${fullPath}`);
@@ -35,29 +57,49 @@ export default function loadTokens(tokensDir) {
       throw new Error(`❌ "vars" must be an object in ${fullPath}`);
     }
 
-    if (seenComponents.has(json.component)) {
-      throw new Error(
-        `Duplicate token component "${json.component}" in ${fullPath}`
-      )
-    }
 
-    seenComponents.add(json.component);
-
+    const infix = json.infix ?? json.component;
 
     return {
       name: json.component,
-      infix: json.infix ?? json.component,
+      infix: infix,
       alwaysAllowed: Array.isArray(json.alwaysAllowed)
         ? json.alwaysAllowed
         : [],
       vars: Object.entries(json.vars || {}).map(([key, defRaw]) => {
+
         const def = defRaw || {};
+
+        const variableName = typeof def.name === "string" && def.name.trim()
+          ? def.name.trim()
+          : key
+
+        const identity = `${json.component}:${infix}:${variableName}`;
+
+        if (seenVariables.has(identity)) {
+          const previous = seenVariables.get(identity);
+
+          throw new Error(
+            [`
+              \nCSS variable collision!`,
+              `\nGenerated variable:`,
+              `   ${toCssVar("final", infix, variableName)}`,
+              `\nSources:`,
+              `     ${formatLoggingPath(fullPath)}`,
+              `     ${formatLoggingPath(previous)}\n`
+            ].join("\n")
+          );
+        }
+
+        if (def.values && typeof def.values !== "object") {
+          throw new Error(`"values" must be an object in ${fullPath}`)
+        }
+
+        seenVariables.set(identity, fullPath);
 
         return {
           key,
-          name: typeof def.name === "string" && def.name.trim()
-            ? def.name.trim()
-            : key,
+          name: variableName,
           allowed: Array.isArray(def.allowed) ? def.allowed : [],
           exclude: Array.isArray(def.exclude) ? def.exclude : [],
           values: def.values || {}

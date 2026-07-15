@@ -1,0 +1,14 @@
+{
+  "component": "slider",
+  "infix": "track",
+
+  "alwaysAllowed": ["o", "p", "f"],
+  "vars": {
+    "bg": {"values": {"f": ""}},
+    "opacity": {"values": {"f": ""}},
+
+    "radius": {"values": {"f": ""}},
+    "mainSize": {"values": {"f": ""}},
+    "crossSize": {"values": {"f": ""}}
+  }
+}

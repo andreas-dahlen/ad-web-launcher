@@ -43,7 +43,9 @@ export default function Label({
 
       {React.createElement(
         el,
-        { className: css.label },
+        {
+          // className: css.label 
+        },
         msg
       )}
     </div>

@@ -12,10 +12,12 @@ const plugin = (opts = {}) => {
 
     Once(root, { result }) {
       const file = result.opts.from;
-
+      // TODO: compiler classes currently host cascades.
+      // Future: inject cascades into consuming component classes.
       if (!file.endsWith("tokens.module.css")) return;
+      //remove
 
-      log.injecting(file)
+      log.injecting(file) //move
 
       const components = loadTokens(tokensDir);
       log.jsonsLoaded(components)
@@ -25,8 +27,10 @@ const plugin = (opts = {}) => {
       for (const component of components) {
         log.processing(component.name)
 
+        //needs to be derived from tokens where to inject.
         const selector = `.${component.name}Compiler`;
 
+        //needs to be a map?
         let compilerRule
 
         root.walkRules(rule => {
@@ -49,6 +53,8 @@ const plugin = (opts = {}) => {
 
           log.resultCascade(component, variable)
         }
+
+        //needs to be pushed correctly..
         addedCompilers.push(`.${component.name}Compiler`);
         log.addedCompiler(component.name)
       }

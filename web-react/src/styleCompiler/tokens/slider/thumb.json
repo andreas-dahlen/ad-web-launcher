@@ -1,0 +1,17 @@
+{
+  "component": "slider",
+  "infix": "thumb",
+
+  "alwaysAllowed": ["o", "p", "f"],
+  "vars": {
+    "bg": {"allowed": ["s"], "values": {"f": "gray"}},
+    "opacity": {"values": {"f": ""}},
+    
+    "mainSize": {"values": {"f": "30px"}},
+    "crossSize": {"values": {"f": "30px"}},
+
+    "stateSwipingBg": {"allowed": ["s"], "values": {"f": "green"}},
+    "statePressingBg": {"allowed": ["s"],"values": {"f": "black"}},
+    "stateCommittedBg": {"allowed": ["s"],"values": {"f": "blue"}}
+  }
+}

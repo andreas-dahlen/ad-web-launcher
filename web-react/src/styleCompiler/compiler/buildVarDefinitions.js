@@ -3,6 +3,7 @@ import { toCssVar } from '../../shared/compilerUtils/toCssVar.ts'
 import { getAllowedPrefixes } from '../../shared/compilerUtils/getAllowedPrefixes.ts';
 import { isValidPrefix } from '../../shared/compilerUtils/isValidPrefix.ts'
 import { constants } from '../../shared/compilerUtils/constants.ts';
+import { normalizeCssValue } from '../../shared/compilerUtils/normalizeCssValue.ts'
 export default function buildVarDefinitions(rule, component, variable) {
   const { name, allowed, values, exclude } = variable;
   // const baseName = `${component.infix}-${name}`;
@@ -23,7 +24,7 @@ export default function buildVarDefinitions(rule, component, variable) {
     if (isLiteral) {
       rule.append({
         prop: toCssVar(prefix, component.infix, name),
-        value: mappedValue
+        value: normalizeCssValue(mappedValue)
       });
       continue;
     }

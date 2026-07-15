@@ -1,0 +1,14 @@
+{
+  "component": "slider",
+  "infix": "slider",
+
+  "alwaysAllowed": ["o", "p", "f"],
+  "vars": {
+    "bg": {"values": { "f": "hotPink" }},
+    "opacity": {"values": {"f": ""}},
+
+    "radius": {"values": { "f": "var(--_border-radius-xs)"}},
+    "mainSize": {"values": {"f": "var(--thumb-cross-size)"}},
+    "crossSize": {"values": {"f": "var(--thumb-cross-size)"}}
+  }
+}

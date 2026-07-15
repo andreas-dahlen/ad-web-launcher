@@ -3,10 +3,10 @@ import { convertJson } from './convert';
 import surfaceJson from "../tokens/surface.json";
 import labelJson from "../tokens/label.json";
 import buttonJson from "../tokens/button.json";
-import carouselJson from "../tokens/carousel.json"
-import scrollJson from "../tokens/scroll.json"
-import sliderJson from "../tokens/slider.json"
-import svgIconJson from "../tokens/svgIcon.json"
+import carouselJson from "../tokens/carousel.json";
+import scrollJson from "../tokens/scroll.json";
+import sliderJson from "../tokens/slider";
+import svgIconJson from "../tokens/svgIcon.json";
 
 export const surfaceStyle = convertJson(surfaceJson)
 export type SurfaceStyle = StyleFromVars<typeof surfaceStyle.vars, typeof surfaceStyle.alwaysAllowed>

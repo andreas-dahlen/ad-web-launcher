@@ -174,7 +174,8 @@ export default defineConfig([
               allow: {
                 to: [
                   { element: { type: "composites", captured: { mod: "types" } } },
-                  { element: { type: "styleCompiler", captured: { mod: "schema" } } }
+                  { element: { type: "styleCompiler", captured: { mod: "schema" } } },
+                  { file: { categories: "globalModule" } }
                 ]
               }
             },

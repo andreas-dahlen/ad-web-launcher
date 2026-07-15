@@ -2,6 +2,7 @@ import type { ValidPrefix, VarDef } from '../compilerUtils/compiler.types';
 import { getAllowedPrefixes } from '../compilerUtils/getAllowedPrefixes';
 import { toCssVar } from '../compilerUtils/toCssVar';
 import { isValidPrefix } from '../compilerUtils/isValidPrefix';
+import { normalizeCssValue } from '../compilerUtils/normalizeCssValue';
 
 /** Transforms an object into CSS style-variable entries */
 export function svsx(
@@ -46,7 +47,7 @@ export function svsx(
 
       const cssVar = toCssVar(prefixKey, infix, def.name);
 
-      output[cssVar] = String(value)
+      output[cssVar] = normalizeCssValue(value)
       continue
     }
 
@@ -56,7 +57,7 @@ export function svsx(
     const def = definitions[key];
     if (def) {
       const cssVar = toCssVar("p", infix, def.name)
-      output[cssVar] = String(value);
+      output[cssVar] = normalizeCssValue(value);
       continue;
     }
     // -----------------------------------------------------
@@ -102,7 +103,7 @@ export function mergeStyles<
         }
 
         // Merge prefixed value directly
-        out[key] = value;
+        out[key] = normalizeCssValue(value);
         continue;
       }
 
@@ -110,7 +111,7 @@ export function mergeStyles<
       // UNPREFIXED KEYS → PRESET LAYER
       // -----------------------------------------------------
       if (key in map) {
-        out[key] = value;
+        out[key] = normalizeCssValue(value);
         continue;
       }
 

@@ -29,6 +29,7 @@
   },
   "include": [
     "vite.config.ts",
-    "vite.token-watcher.ts"
+    "vite.token-watcher.ts",
+    "vite.plugin-jsonc.ts"
   ]
 }

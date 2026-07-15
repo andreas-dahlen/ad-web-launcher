@@ -84,7 +84,7 @@ export default function SliderPrim({
 
   return (
     <div
-      className={clsx(vars.sliderCompiler, css.slider, ...cpsx(presets, sliderPreset))}
+      className={clsx(css.slider, vars.sliderCompiler, ...cpsx(presets, sliderPreset))}
       style={{
         pointerEvents: interactive ? 'auto' : 'none',
         position: isInFlow ? "relative" : "absolute",
