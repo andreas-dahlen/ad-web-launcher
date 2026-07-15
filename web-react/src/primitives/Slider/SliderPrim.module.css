@@ -53,6 +53,9 @@
   }
 }
 
+.thumb {
+  background: var(--o-thumb-bg);
+}
 
 
 .thumb {
