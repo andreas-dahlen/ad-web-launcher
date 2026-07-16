@@ -1,4 +1,4 @@
-import { constants } from '../../shared/compilerUtils/constants.ts';
+import { constants } from '../../shared/compilerUtils/constants.js';
 import path from "path";
 
 const log = {

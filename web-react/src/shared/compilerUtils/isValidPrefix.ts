@@ -1,5 +1,5 @@
 import type { ValidPrefix } from './compiler.types.ts';
-import { constants } from './constants.ts';
+import { constants } from './constants.js';
 export function isValidPrefix(
   value: unknown,
 ): value is ValidPrefix {
