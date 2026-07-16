@@ -37,8 +37,6 @@
     "src/**/*.ts",
     "src/**/*.tsx",
     "vite-env.d.ts", 
-    "vite.token-watcher.ts",
-    "vite.plugin-jsonc.ts"
       ],
   "exclude": [
     "node_modules",

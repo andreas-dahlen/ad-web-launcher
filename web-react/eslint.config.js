@@ -406,7 +406,8 @@ export default defineConfig([
       '**/dist/**/*',
       '**/node_modules/**/*',
       '**/.*',
-      '!src/**/*'
+      '!src/**/*',
+      '**/plugins/**/*'
     ],
     rules: {
       'unicorn/filename-case': ['error', {
@@ -432,7 +433,8 @@ export default defineConfig([
       '**/dist/**/*',
       '**/node_modules/**/*',
       '**/.*',
-      '!src/**/*'
+      '!src/**/*',
+      '**/plugins/**/*'
     ],
     rules: {
       'unicorn/filename-case': ['error', {

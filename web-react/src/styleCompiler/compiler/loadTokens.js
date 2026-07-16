@@ -2,11 +2,7 @@ import fs from "fs";
 import path from "path";
 import { parse, printParseErrorCode } from 'jsonc-parser'
 import { toCssVar } from '../../shared/compilerUtils/toCssVar.ts';
-
-function formatLoggingPath(file) {
-  return path.relative(process.cwd(), file)
-    .replace(/^.*?tokens[\\/]/, "tokens/");
-}
+import log from './consoleLog.js';
 
 function findJsonFiles(dir) {
   return fs.readdirSync(dir, { withFileTypes: true })
@@ -85,8 +81,8 @@ export default function loadTokens(tokensDir) {
               `\nGenerated variable:`,
               `   ${toCssVar("final", infix, variableName)}`,
               `\nSources:`,
-              `     ${formatLoggingPath(fullPath)}`,
-              `     ${formatLoggingPath(previous)}\n`
+              `     ${log.formatLoggingPath(fullPath)}`,
+              `     ${log.formatLoggingPath(previous)}\n`
             ].join("\n")
           );
         }

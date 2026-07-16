@@ -3,8 +3,8 @@ import react from '@vitejs/plugin-react-swc'
 import { viteSingleFile } from 'vite-plugin-singlefile'
 import path from 'path'
 import svgr from "vite-plugin-svgr";
-import tokenWatcher from './vite.token-watcher';
-import jsoncPlugin from './vite.plugin-jsonc';
+import tokenWatcher from './plugins/vite.token-watcher';
+import jsoncPlugin from './plugins/vite.plugin-jsonc';
 
 const fromRoot = (relativePath: string) => path.resolve(__dirname, relativePath)
 
