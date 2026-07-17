@@ -4,13 +4,15 @@ import { useScrollSizing } from './hooks/useScrollSizing.hook.ts'
 import { useScrollMotion } from './hooks/useScrollMotion.hook.ts'
 import { useOverflowMotion } from './hooks/useOverflowMotion.hook.ts'
 import { useScrollStore } from './store/useScrollStore.hook.ts'
-import css from './ScrollPrim.module.css'
+import css from './Scroll.module.css'
 import clsx from 'clsx'
 import { dasx } from '../../shared/sxCompiler/dasx.ts'
 import { svsx } from '../../shared/sxCompiler/svsx.ts'
 import type { ScrollPrimProps } from '@primitives/types/prim.types.ts'
-import { scrollAlwaysAllowed, scrollPreset, scrollVars } from '@composites/styleVars/ScrollPrim.vars.ts'
+
 import { cpsx } from '../../shared/sxCompiler/cpsx.ts'
+import { scrollStyle } from '@styleCompiler/schema/components.ts'
+import { scrollPreset } from '@shared/generated/scroll.preset.ts'
 
 export default function ScrollPrim({
   id,
@@ -76,7 +78,7 @@ export default function ScrollPrim({
         className={clsx(css.scroll, ...cpsx(presets, scrollPreset))}
         style={{
           ...contentStyle, pointerEvents: interactive ? 'auto' : 'none',
-          ...svsx(styleVars ?? {}, scrollVars, scrollAlwaysAllowed, "scroll")
+          ...svsx(styleVars ?? {}, scrollStyle)
         }}
         ref={contentRef}
         {...dasx({

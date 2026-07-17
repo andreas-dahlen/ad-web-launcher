@@ -63,7 +63,7 @@ export default defineConfig([
         { type: 'interaction', pattern: 'src/interaction/*/**', capture: ['mod'] },
         { type: 'panels', pattern: 'src/panels/*/**', capture: ['mod'] },
         { type: 'primitives', pattern: 'src/primitives/*/**', capture: ['mod'] },
-        { type: 'shared', pattern: 'src/shared/**/*' },
+        { type: 'shared', pattern: 'src/shared/*/**', capture: ['mod'] },
         { type: 'styleCompiler', pattern: 'src/styleCompiler/*/**', capture: ['mod'] },
       ],
       'boundaries/files': [
@@ -72,13 +72,14 @@ export default defineConfig([
 
         { pattern: 'src/app/*.{ts,tsx}', category: "app-entry" },
 
-        { pattern: '**/*.vars.ts', category: 'vars' },
         { pattern: '**/*.store.ts', category: 'stores' },
         { pattern: '**/*.types.ts', category: 'types' },
+        { pattern: '**/*.d.ts', category: 'types' },
+
         { pattern: '**/buildDesc.ts', category: 'buildDesc' },
         { pattern: '**/pipeline.ts', category: 'pipeline' },
         { pattern: '**/solverRouter.ts', category: 'solverRouter' },
-        { pattern: '**/tokens.module.css', category: 'globalModule' }
+        { pattern: '**/gesture.utils.ts', category: 'gestureUtils' }
       ],
       "boundaries/debug": {
         enabled: true,
@@ -125,8 +126,8 @@ export default defineConfig([
               from: { element: { type: "*" } },
               allow: {
                 to: [
-                  // { element: { type: '{{from.element.type}}' } },
-                  { element: { type: 'shared' } },
+                  { element: { type: 'shared', captured: { mod: "types" } }, file: { categories: "types" } },
+                  { element: { type: 'shared', captured: { mod: "assertions" } } },
                   { element: { type: 'config' } },
                   { element: { type: 'api' } },
                   { module: { origin: 'external' } }
@@ -148,9 +149,17 @@ export default defineConfig([
               allow: {
                 to: [
                   { element: { type: "app", captured: { mod: "scenes" } } },
-                  { element: { type: "primitives", captured: { mod: "Carousel" } } }
+                  { element: { type: "primitives", captured: { mod: "Carousel" } } },
                 ]
               }
+            },
+            {
+              from: [
+                { element: { type: "app", captured: { mod: "scenes" } } },
+                { element: { type: "app", captured: { mod: "layers" } } },
+                { element: { type: "app", captured: { mod: "infrastructure" } } },
+              ],
+              allow: { to: { element: { type: "shared", captured: { mod: "state" } } } }
             },
             {
               from: { file: { categories: "app-entry" } },
@@ -175,12 +184,12 @@ export default defineConfig([
                 to: [
                   { element: { type: "composites", captured: { mod: "types" } } },
                   { element: { type: "styleCompiler", captured: { mod: "schema" } } },
-                  { file: { categories: "globalModule" } }
+                  { element: { type: "shared", captured: { mod: "sxCompiler" } } },
+                  { element: { type: "shared", captured: { mod: "generated" } } }
+
                 ]
               }
             },
-
-
             // ----------------------------------
             // COMPOSITES
             // ----------------------------------
@@ -188,45 +197,55 @@ export default defineConfig([
               from: { element: { type: "composites", captured: { mod: "*" } } },
               allow: {
                 to: [
-                  {
-                    element: { type: "composites", captured: { mod: "{{from.element.captured.mod}}" } },
-                    file: { categories: "vars" }
-                  },
                   { element: { type: "composites", captured: { mod: "types" } } },
                   { element: { type: "composites", captured: { mod: "hooks" } } },
                   { element: { type: "primitives", captured: { mod: "*" } } },
                   { element: { type: "blocks" } },
                   { element: { type: "data", captured: { mod: "generators" } } },
-                  { element: { type: "styleCompiler", captured: { mod: "schema" } } }
+                  { element: { type: "styleCompiler", captured: { mod: "schema" } } },
+                  { element: { type: "shared", captured: { mod: "state" } }, file: { categories: "stores" } },
+                  { element: { type: "shared", captured: { mod: "generated" } } }
                 ]
               }
             },
-
             // ----------------------------------
             // DATA
             // ----------------------------------
             {
               from: { element: { type: "data", captured: { mod: "external" } } },
+              allow: { to: { element: { type: "data", captured: { mod: "icons" } } }, }
+            },
+            {
+              from: { element: { type: "data", captured: { mod: "generators" } } },
               allow: {
-                to: { element: { type: "data", captured: { mod: "icons" } } }
+                to: { element: { type: "shared", captured: { mod: "state" } }, file: { categories: "stores" } }
               }
             },
-
+            // ----------------------------------
+            // FEATURES
+            // ----------------------------------
+            {
+              from: { element: { type: "features" } },
+              allow: {
+                to: { element: { type: "shared", captured: { mod: "state" } }, file: { categories: "stores" } }
+              }
+            },
             // ----------------------------------
             // INTERACTION
             // ----------------------------------
             {
               from: { element: { type: "interaction", captured: { mod: "*" } } },
               allow: {
-                to: [{ element: { type: "interaction", captured: { mod: "types" } } }]
+                to: [
+                  { element: { type: "interaction", captured: { mod: "types" } } },
+                  { element: { type: "interaction", captured: { mod: "assertions" } } }
+                ]
               }
             },
 
             {
               from: { element: { type: "interaction", captured: { mod: "solvers" } } },
-              allow: {
-                to: { element: { type: "interaction", captured: { mod: "{{from.element.captured.mod}}" } } }
-              }
+              allow: { to: { element: { type: "interaction", captured: { mod: "{{from.element.captured.mod}}" } } } }
             },
 
             {
@@ -236,11 +255,23 @@ export default defineConfig([
 
             {
               from: { file: { categories: "buildDesc" } },
-              allow: { to: { element: { type: "primitives" } } }
+              allow: {
+                to: [
+                  { element: { type: "primitives" } },
+                  { element: { type: "shared", captured: { mod: "state" } }, file: { categories: "stores" } }
+                ]
+              }
             },
             {
-              from: { file: { categories: "solverRouter" } },
-              allow: { to: { element: { type: "interaction", captured: { mod: "solvers" } } } }
+              from: { file: { categories: "gestureUtils" } },
+              allow: { to: { element: { type: "shared", captured: { mod: "state" } }, file: { categories: "stores" } } }
+            },
+            {
+              from: {
+                element: { type: "interaction", captured: { mod: "runtime" } },
+                file: { categories: "solverRouter" }
+              },
+              allow: { to: { element: { type: "interaction", captured: { mod: "solvers" } } }, }
             },
             {
               from: {
@@ -252,7 +283,8 @@ export default defineConfig([
                   { element: { type: "interaction", captured: { mod: "input" } } },
                   { element: { type: "interaction", captured: { mod: "updater" } } },
                   { element: { type: "interaction", captured: { mod: "adapter" } } },
-                  { element: { type: "primitives" } }
+                  { element: { type: "primitives" } },
+                  { element: { type: "shared", captured: { mod: "state" } } }
                 ]
               }
             },
@@ -267,7 +299,8 @@ export default defineConfig([
                   { element: { type: "composites" } },
                   { element: { type: "blocks" } },
                   { element: { type: "data", captured: { mod: "icons" } } },
-                  { element: { type: "data", captured: { mod: "generators" } } }
+                  { element: { type: "data", captured: { mod: "generators" } } },
+                  { element: { type: "shared", captured: { mod: "state" } }, file: { categories: "stores" } }
                 ]
               }
             },
@@ -285,25 +318,39 @@ export default defineConfig([
                     file: { categories: "types" }
                   },
                   { element: { type: "interaction", captured: { mod: "adapter" } } },
-                  {
-                    element: { type: "composites", captured: { mod: "{{from.element.captured.mod}}" } },
-                    file: { categories: "vars" }
-                  },
+                  // { element: { type: "interaction", captured: { mod: "assertions" } } },
                   { element: { type: "composites", captured: { mod: "styleVars" } } },
                   { element: { type: "styleCompiler", captured: { mod: "schema" } } },
-                  { file: { categories: "globalModule" } }
+                  { element: { type: "shared", captured: { mod: "sxCompiler" } } },
+                  { element: { type: "shared", captured: { mod: "state" } }, file: { categories: "stores" } },
+                  { element: { type: "shared", captured: { mod: "generated" } } }
                 ]
               }
             },
-
             // ----------------------------------
             // SHARED
             // ----------------------------------
             {
-              from: { element: { type: "shared" } },
+              from: { element: { type: "shared", captured: { mod: "*" } } },
               allow: {
-                to: { file: { categories: "types" } }
+                to: [
+                  { file: { categories: "types" } },
+                  { element: { type: "shared", captured: { mod: "{{from.element.captured.mod}}" } } }
+                ]
               }
+            },
+            {
+              from: { element: { type: "shared", captured: { mod: "generated" } } },
+              allow: {
+                to: [
+                  { element: { type: "blocks" } },
+                  { element: { type: "composites" } }
+                ]
+              }
+            },
+            {
+              from: { element: { type: "shared", captured: { mod: "sxCompiler" } } },
+              allow: { to: { element: { type: "shared", captured: { mod: "compilerUtils" } } } }
             },
             // ----------------------------------
             // STYLECOMPILER
@@ -311,15 +358,23 @@ export default defineConfig([
             {
               from: { element: { type: "styleCompiler", captured: { mod: "schema" } } },
               allow: {
-                to: { element: { type: "styleCompiler", captured: { mod: "tokens" } } }
+                to: [
+                  { element: { type: "styleCompiler", captured: { mod: "tokens" } } },
+                  { element: { type: "shared", captured: { mod: "compilerUtils" } } }
+                ]
               }
             },
-
-
+            {
+              from: { element: { type: "styleCompiler", captured: { mod: "tokens" } } },
+              allow: {
+                to: [
+                  { element: { type: "shared", captured: { mod: "compilerUtils" } } }
+                ]
+              }
+            },
             // ----------------------------------
             // FILES
             // ----------------------------------
-
             {
               from: { file: { categories: "stores" } },
               allow: {
@@ -331,12 +386,10 @@ export default defineConfig([
               allow: {
                 to: [
                   { element: { captured: { mod: "{{from.element.captured.mod}}" } } },
-                  { file: { categories: "types" } },
-                  { file: { categories: "vars" } }
+                  { file: { categories: "types" } }
                 ]
               }
             }
-
           ]
         }
       ],

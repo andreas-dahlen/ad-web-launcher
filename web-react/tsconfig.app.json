@@ -36,7 +36,7 @@
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx",
-    "vite-env.d.ts", "src/shared/compilerUtils/constants.js", 
+    "vite-env.d.ts",
       ],
   "exclude": [
     "node_modules",

@@ -1,4 +1,4 @@
-import type { Constraints1D } from '@typing/core.types'
+import type { Constraints1D } from '../../../shared/types/core.types'
 import { useMemo } from "react"
 
 interface UseSliderMotionProps {

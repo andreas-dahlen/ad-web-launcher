@@ -1,5 +1,5 @@
 import type { Directive, DragSettings } from '@composites/types/comp.types'
-import type { SurfacePreset } from '../../blocks/Surface/Surface.vars'
+import type { SurfacePreset } from '@shared/generated/surface.preset'
 import type React from 'react'
 import { createId, generateId } from '@data/generators/idGenerator'
 import DragPrim from '@primitives/Drag/DragPrim'

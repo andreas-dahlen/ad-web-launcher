@@ -2,7 +2,7 @@ import SceneLayoutPanel from '../../panels/SceneLayoutPanel/SceneLayoutPanel'
 import { settingsStore } from '@stores/settings.store'
 
 import clsx from 'clsx'
-import type { Axis1D } from '@typing/core.types'
+import type { Axis1D } from '../../shared/types/core.types'
 export function Scenes({
   axis,
 }: { axis: Axis1D }) {

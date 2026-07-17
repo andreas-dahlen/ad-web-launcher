@@ -5,7 +5,7 @@ import { Scenes } from '@app/scenes/Scenes'
 import clsx from 'clsx'
 import React from 'react'
 import { layoutStore } from '@stores/layout.store'
-import type { Axis1D } from '@typing/core.types'
+import type { Axis1D } from '../../shared/types/core.types'
 import { SceneContext } from '@primitives/Carousel/hooks/useSceneContext.hook'
 /** LAYER 2/3! Interactive=false carousel. Contents are mounted inside!
  * The carousel swipes are handled by baseLayer. */

@@ -37,11 +37,12 @@ export default defineConfig({
       '@panels': fromRoot('src/panels'),
       '@primitives': fromRoot('src/primitives'),
 
+      '@shared': fromRoot('src/shared/'),
       '@stores': fromRoot('src/shared/state/stores'),
       '@hooks': fromRoot('src/shared/state/hooks'),
       '@typing': fromRoot('src/shared/typing'),
       '@styles': fromRoot('src/shared/styles'),
-      '@utils': fromRoot('src/shared/utils'),
+      '@generated': fromRoot('src/shared/generated'),
 
       '@styleCompiler': fromRoot('src/styleCompiler'),
       '@schema': fromRoot('src/styleCompiler/schema'),

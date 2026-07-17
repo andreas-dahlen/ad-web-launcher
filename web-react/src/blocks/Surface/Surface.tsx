@@ -1,7 +1,7 @@
 import clsx from 'clsx'
 import css from './Surface.module.css'
 import { svsx } from '../../shared/sxCompiler/svsx'
-import { surfacePreset, type SurfacePreset } from './Surface.vars'
+import { surfacePreset, type SurfacePreset } from '@shared/generated/surface.preset'
 import { cpsx } from '../../shared/sxCompiler/cpsx'
 import { surfaceStyle, type SurfaceStyle } from '../../styleCompiler/schema/components'
 import vars from '@styleCompiler/tokens.module.css'

@@ -1,7 +1,7 @@
 import type { ValidPrefix, VarDef } from '../compilerUtils/compiler.types';
 import { getAllowedPrefixes } from '../compilerUtils/getAllowedPrefixes';
-import { toCssVar } from '../compilerUtils/toCssVar';
-import { isValidPrefix } from '../compilerUtils/isValidPrefix';
+import { toCssVar } from '../compilerUtils/stringFormaters';
+import { isValidPrefix } from '../compilerUtils/prefixes';
 import { normalizeCssValue } from '../compilerUtils/normalizeCssValue';
 
 /** Transforms an object into CSS style-variable entries */

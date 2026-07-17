@@ -2,7 +2,7 @@
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 import { fetchWallpapers } from '@api/wallpaper';
-import type { SceneRole } from '@typing/core.types';
+import type { SceneRole } from '../../types/core.types';
 
 
 export type WallpaperStore = {

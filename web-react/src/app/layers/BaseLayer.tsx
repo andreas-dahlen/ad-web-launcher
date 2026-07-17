@@ -5,7 +5,7 @@ import InputCarouselPrim from '@primitives/Carousel/InputCarouselPrim';
 import clsx from 'clsx';
 import { layoutStore } from '@stores/layout.store';
 import React from 'react';
-import type { Axis1D } from '@typing/core.types';
+import type { Axis1D } from '../../shared/types/core.types';
 
 // Layer 1/3 scenes read inputs here!
 const LaneInputRenderer = React.memo(function LaneInputRenderer({

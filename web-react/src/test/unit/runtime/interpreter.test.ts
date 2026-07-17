@@ -7,7 +7,7 @@ import { createCarouselDesc, createDragDesc, createScrollDesc } from '@test/buil
 import { createInterpreterPress, createInterpreterSwipeStart, seedGesture } from '@test/builders/input.factory'
 import { createRuntimeswipeStart } from '@test/builders/runtime.factory'
 import { computed_DEFAULT } from '@test/fixtures/computed.fixture'
-import type { EventBridgeType } from '@typing/core.types'
+import type { EventBridgeType } from '../../../shared/types/core.types'
 import { testPipeline } from '@test/testAPI'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 

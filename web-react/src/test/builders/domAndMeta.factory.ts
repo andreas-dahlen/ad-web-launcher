@@ -1,6 +1,6 @@
 import { extractDomMeta } from '@interaction/input/domMeta'
 import { metaSeedByType } from '@test/fixtures/meta.fixture'
-import type { InteractionType } from '@typing/core.types'
+import type { InteractionType } from '../../shared/types/core.types'
 
 type MetaDataset = Record<string, string>
 export function createInteractionElement(type: InteractionType, overrides: MetaDataset = {}) {

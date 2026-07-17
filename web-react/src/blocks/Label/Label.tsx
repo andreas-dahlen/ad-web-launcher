@@ -4,9 +4,9 @@ import vars from '@styleCompiler/tokens.module.css'
 import clsx from 'clsx'
 import css from './Label.module.css'
 import type { Mode } from '@composites/types/comp.types'
-import type { BoxSide } from '@typing/core.types'
+import type { BoxSide } from '../../shared/types/core.types'
 import { cpsx } from '../../shared/sxCompiler/cpsx'
-import { labelPreset, type LabelPreset } from '@blocks/Label/Label.vars'
+import { labelPreset, type LabelPreset } from '@shared/generated/label.preset'
 import { labelStyle, type LabelStyle } from '../../styleCompiler/schema/components'
 
 export type LabelSettings = {

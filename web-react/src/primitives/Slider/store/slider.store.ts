@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
-import type { StoreLayout } from '@typing/store.types'
-import type { Constraints1D } from '@typing/core.types'
+import type { StoreLayout } from '../../../shared/types/store.types'
+import type { Constraints1D } from '../../../shared/types/core.types'
 import type { SliderAction } from '@interaction/types/runtime/action.types'
 export type SliderBinding = {
   //react motion

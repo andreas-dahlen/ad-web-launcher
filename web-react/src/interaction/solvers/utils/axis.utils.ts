@@ -1,7 +1,7 @@
 
 import { APP_CONFIG } from '@config/app.config.ts'
 import { vector } from "./vector.utils.ts"
-import type { Vec2, AxisDirection, Axis1D } from '../../../shared/typing/core.types.ts'
+import type { Vec2, AxisDirection, Axis1D } from '../../../shared/types/core.types.ts'
 import type { normalize1DBase, Normalized1D } from '@interaction/types/solver.types.ts'
 
 

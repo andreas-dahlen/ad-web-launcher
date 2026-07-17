@@ -1,7 +1,7 @@
 import { gestureUtils } from './gesture.utils.ts'
 import { compileDescriptor } from './buildDesc.ts'
 import { extractDomMeta } from './domMeta.ts'
-import type { Axis } from '@typing/core.types.ts'
+import type { Axis } from '../../shared/types/core.types.ts'
 import type { Descriptor, SwipeableDescriptor } from '../types/descriptor/descriptor.types.ts'
 import type { ElSnapshots } from '../types/descriptor/base.types.ts'
 

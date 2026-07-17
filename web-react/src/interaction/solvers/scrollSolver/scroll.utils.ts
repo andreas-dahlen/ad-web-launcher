@@ -1,6 +1,6 @@
 import { normalizeBase } from '../utils/axis.utils.ts'
 import { vector } from '../utils/vector.utils.ts'
-import type { Vec2 } from '@typing/core.types.ts'
+import type { Vec2 } from '../../../shared/types/core.types.ts'
 import type { ScrollDesc } from '../../types/descriptor/descriptor.types.ts'
 import type { ScrollData } from '../../types/descriptor/data.types.ts'
 import type { BaseWithAxis1D } from '../../types/descriptor/base.types.ts'

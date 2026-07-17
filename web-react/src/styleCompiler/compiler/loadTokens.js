@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { parse, printParseErrorCode } from 'jsonc-parser'
-import { toCssVar } from '../../shared/compilerUtils/toCssVar.ts';
+import { toCssVar } from '../../shared/compilerUtils/stringFormaters.ts';
 import log from './consoleLog.js';
 
 function findJsonFiles(dir) {

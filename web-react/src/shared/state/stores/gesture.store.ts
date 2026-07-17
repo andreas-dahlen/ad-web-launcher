@@ -1,4 +1,4 @@
-import type { InteractionType } from '../../typing/core.types';
+import type { InteractionType } from '../../types/core.types';
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 

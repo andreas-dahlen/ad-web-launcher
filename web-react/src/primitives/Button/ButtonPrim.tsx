@@ -1,14 +1,13 @@
 import { useRef } from "react"
 import { usePointerBridge } from '@interaction/adapter/usePointerBridge.hook'
-import css from './ButtonPrim.module.css'
+import css from './Button.module.css'
 import clsx from 'clsx'
 import { dasx } from '../../shared/sxCompiler/dasx'
 import type { ButtonPrimProps } from '@primitives/types/prim.types'
 import { svsx } from '../../shared/sxCompiler/svsx'
-import { buttonPreset } from '@composites/Button/ButtonPrim.vars'
 import { cpsx } from '../../shared/sxCompiler/cpsx'
 import { buttonStyle } from '../../styleCompiler/schema/components'
-import vars from '@styleCompiler/tokens.module.css'
+import { buttonPreset } from '@generated/button.preset'
 
 export default function ButtonPrim({
   id,
@@ -39,7 +38,9 @@ export default function ButtonPrim({
 
   return (
     <div
-      className={clsx(vars.buttonCompiler, css.button, ...cpsx(presets, buttonPreset))}
+      className={clsx(css.button,
+        ...cpsx(presets, buttonPreset)
+      )}
       style={{
         pointerEvents: interactive ? "auto" : "none",
         position: isInFlow ? "relative" : "absolute",

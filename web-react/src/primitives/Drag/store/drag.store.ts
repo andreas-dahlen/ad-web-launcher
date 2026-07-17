@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
-import type { Constraints2D, Vec2 } from '@typing/core.types'
-import type { StoreLayout } from '@typing/store.types'
+import type { Constraints2D, Vec2 } from '../../../shared/types/core.types'
+import type { StoreLayout } from '../../../shared/types/store.types'
 import type { FrameSnapshot } from '@interaction/types/descriptor/base.types'
 import type { DragAction } from '@interaction/types/runtime/action.types'
 

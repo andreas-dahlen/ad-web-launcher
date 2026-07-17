@@ -1,5 +1,5 @@
 import type { Runtime } from '@interaction/types/runtime/runtime.types.ts'
-import type { EventType } from '../../shared/typing/core.types.ts'
+import type { EventType } from '../../shared/types/core.types.ts'
 // domUpdater.ts
 /* -------------------------------------------------
    DOM helpers

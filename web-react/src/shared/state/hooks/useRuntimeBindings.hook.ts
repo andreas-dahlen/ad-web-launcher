@@ -1,5 +1,5 @@
 import { wallpaperStore } from '@stores/wallpaper.store'
-import type { EventType } from '@typing/core.types'
+import type { EventType } from '../../types/core.types'
 
 type RuntimeBindings = {
   onSwipeCommit?: (detail: EventType) => void

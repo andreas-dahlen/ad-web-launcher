@@ -1,8 +1,8 @@
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
-import type { StoreLayout } from '@typing/store.types'
+import type { StoreLayout } from '../../../shared/types/store.types'
 import type { ScrollAction } from '@interaction/types/runtime/action.types'
-import { assertNever } from '@utils/assertions'
+import { assertNever } from '@shared/assertions/assertions'
 
 export type ScrollBinding = {
   //react motion

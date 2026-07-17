@@ -1,4 +1,4 @@
-import { constants } from '../../shared/compilerUtils/constants.js';
+import { constants } from '../../shared/compilerUtils/prefixes.ts';
 import path from "path";
 
 const log = {
@@ -7,10 +7,6 @@ const log = {
   injecting(file) { console.log("\n⚙️ Injecting into:", this.formatLoggingPath(file)) },
   processing(name) { console.log(`🎨 Processing component: ${name}`) },
   buildingChains(infix) { console.log(`\n🔧 chaining --final-${infix}-*`) },
-
-  // targetMissing(selector) {
-  //   console.log(`\n❌ Created CSS class because couldn't find one named: ${selector}`)
-  // },
 
   resultCascade(component, variable) {
     const chain = constants.prefixPriority
@@ -26,54 +22,40 @@ const log = {
     console.log(`   🔮 ${variable.key}: ${chain.join(" → ")}`);
   },
 
-  // addedTarget(file, selector) {
-  //   console.log(`   ✅ Added: ${this.formatLoggingPath(file)}, ${selector}`);
-  // },
-
-  injectedTargets(target) {
+  injected(target) {
     console.log(`   ✅ ${this.formatLoggingPath(target.file)} → ${target.selector}`)
   },
-
-
-  missingFile(file) {
-    console.log(`   ❌ ${file}.module.css`)
+  presets(data) {
+    const { name, infix } = data
+    console.log(`   ✅ ${name} - ${infix} `)
   },
 
-  selectorWarning(selectorData) {
-    const { selector, availableSelectors, file } = selectorData
+  selectorWarning(warningData) {
+    const { invalidSelectors, file } = warningData
+    console.log(`     🚮 File: ${this.formatLoggingPath(file)}
+        Selectors: ${invalidSelectors.map(s => `${s}`).join(" , ")}\n`)
+  },
+
+  selectorError(selectorData) {
+    const { selector, validSelectors, file } = selectorData
 
     console.warn(
-      `   ❌ ${selector}
-          File: ${this.formatLoggingPath(file)}
-          Available:
-          ${availableSelectors.map(s => `${s}`).join(" | ")}
-─────────────────────────────────────────────────────`
+      `    ❌ Expected: ${selector}
+       File: ${this.formatLoggingPath(file)}
+       Found: ${validSelectors.map(s => `${s}`).join(" | ")}
+      ─────────────────────────────────────────────────────`
     );
   },
 
-  tokenReport() {
-
-
-
-
-
-  },
-
-
-
-
-
-
-
-
+  missingFile(file) { console.log(`    ❌ ${file}.module.css`) },
 
   formatLoggingPath(file) {
     return path.relative(process.cwd(), file)
       .split(path.sep)
       .slice(-2)
-      .join("/");
+      .join("/")
   }
-};
+}
 
-let timer;
-export default log;
+let timer
+export default log

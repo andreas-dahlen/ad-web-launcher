@@ -7,39 +7,58 @@ const missingClasses = new Set();
 const foundComponents = new Set()
 const expectedComponents = new Set()
 
+const presets = new Set()
+const brokenSelectors = new Set()
+
 function flush() {
-  console.log(`\n✨ [DesignTokens] Injection complete!`);
+  console.log(`\n ✨ [DesignTokens] Injection complete!`);
   console.log("────────────────────────────────────────")
 
+  if (injectedTargets.size) {
+    console.log(`\n 🎯 Injected Cascade (${injectedTargets.size})`);
+    for (const target of injectedTargets) {
+      log.injected(target)
+    }
+  }
 
-  if (missingClasses.size) {
-    console.log(`\n⚠ missing css classes (${missingClasses.size})`);
-    for (const selector of missingClasses) {
+  if (presets.size) {
+    console.log(`\n 📝 Presets generated (${presets.size})`)
+    for (const preset of presets) {
+      log.presets(preset)
+    }
+  }
+
+  if (brokenSelectors.size) {
+    console.log(`\n 🙊 Unusable preset selectors (${brokenSelectors.size})`)
+    for (const selector of brokenSelectors) {
       log.selectorWarning(selector)
     }
   }
 
 
+  if (missingClasses.size) {
+    console.log(`\n 🧩  Missing css classes for injection (${missingClasses.size})`);
+    for (const selector of missingClasses) {
+      log.selectorError(selector)
+    }
+  }
+
   const missing = [...expectedComponents]
     .filter(name => !foundComponents.has(name));
 
   if (missing.length) {
-    console.log(`\n⚠ Missing Files (${missing.length})`);
+    console.log(`\n 📁 Missing Files (${missing.length})`);
     for (const name of missing)
       log.missingFile(name)
   }
 
-  if (injectedTargets.size) {
-    console.log(`\n🎯 injected (${injectedTargets.size})`);
-    for (const target of injectedTargets) {
-      log.injectedTargets(target)
-    }
-  }
+
 
   injectedTargets.clear();
   missingClasses.clear();
   expectedComponents.clear();
   foundComponents.clear();
+  presets.clear();
 }
 
 function scheduleFlush() {
@@ -48,27 +67,31 @@ function scheduleFlush() {
 }
 
 export default {
-  foundFile(component) {
-    foundComponents.add(component);
-    scheduleFlush();
-  },
-
-  injected(target) {
-    injectedTargets.add(target);
-    scheduleFlush();
-  },
-
   expectComponents(components) {
     expectedComponents.clear();
 
     for (const component of components) {
       expectedComponents.add(component.name);
     }
-    // scheduleFlush();
   },
-
+  foundComponent(component) {
+    foundComponents.add(component);
+    scheduleFlush();
+  },
+  presets(presetData) {
+    presets.add(presetData);
+    scheduleFlush();
+  },
+  brokenSelectors(brokenData) {
+    brokenSelectors.add(brokenData)
+    scheduleFlush()
+  },
   missingClass(selectorData) {
     missingClasses.add(selectorData);
+    scheduleFlush();
+  },
+  injected(target) {
+    injectedTargets.add(target);
     scheduleFlush();
   }
 };

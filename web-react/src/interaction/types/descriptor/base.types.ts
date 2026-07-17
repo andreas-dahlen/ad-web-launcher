@@ -1,4 +1,4 @@
-import type { Axis, Axis1D, Axis2D, InteractionType, BoxSide, Size2D, Vec2 } from '@typing/core.types'
+import type { Axis, Axis1D, Axis2D, InteractionType, BoxSide, Size2D, Vec2 } from '../../../shared/types/core.types'
 
 
 export interface BaseInteraction {

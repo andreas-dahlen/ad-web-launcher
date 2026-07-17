@@ -1,5 +1,5 @@
 import type { Computed, ScrollComputed, SliderComputed } from '@interaction/types/runtime/computed.types'
-import type { Axis, InteractionType, BoxSide } from '@typing/core.types'
+import type { Axis, InteractionType, BoxSide } from '../../shared/types/core.types'
 
 export const VALID_DIRS = new Set<BoxSide>(['left', 'right', 'top', 'bottom'])
 
@@ -28,8 +28,4 @@ export function assertSliderComputed(computed: Computed): asserts computed is Sl
 }
 export function assertScrollComputed(computed: Computed): asserts computed is ScrollComputed {
   if (!computed) throw new Error("computed is required for scroll")
-}
-
-export function assertNever(x: never): never {
-  throw new Error(`Unhandled case: ${JSON.stringify(x)}`)
 }

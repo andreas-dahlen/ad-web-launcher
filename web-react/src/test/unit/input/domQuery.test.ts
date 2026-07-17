@@ -5,8 +5,8 @@ import { gestureUtils } from '@interaction/input/gesture.utils'
 import type { Descriptor } from '@interaction/types/descriptor/descriptor.types'
 import { createInteractionElement, createEl } from '@test/builders/domAndMeta.factory'
 import { createDesc } from '@test/builders/input.factory'
-import type { Axis, InteractionType } from '@typing/core.types'
-import { toType } from '@utils/assertions'
+import type { Axis, InteractionType } from '../../../shared/types/core.types'
+import { toType } from '../../../interaction/assertions/assertions'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
 function initDomTest(opts: { validAt: number; type?: string }) {

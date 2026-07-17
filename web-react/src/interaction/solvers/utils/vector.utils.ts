@@ -1,4 +1,4 @@
-import type { Axis, Axis1D, Constraints2D, AxisDirection, BoxSide, Vec2 } from '../../../shared/typing/core.types'
+import type { Axis, Axis1D, Constraints2D, AxisDirection, BoxSide, Vec2 } from '../../../shared/types/core.types'
 import { APP_CONFIG } from '@config/app.config'
 
 export const vector = {

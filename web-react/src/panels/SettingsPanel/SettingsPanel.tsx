@@ -19,7 +19,7 @@ export default function SettingsPanel() {
 
       <Button
         button={{
-          presets: ["close"],
+          // presets: ["close"],
           onPressRelease: () => update("panelOpen", false)
         }}
         icon={{ Svg: Icons.exit }}

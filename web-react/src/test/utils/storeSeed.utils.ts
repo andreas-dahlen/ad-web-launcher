@@ -7,7 +7,7 @@ import { scroll_DEFAULTS } from '@primitives/Scroll/store/useScrollStore.hook'
 import { sliderStore } from '@primitives/Slider/store/slider.store'
 import { slider_DEFAULTS } from '@primitives/Slider/store/useSliderStore.hook'
 import { merge } from '@test/utils/factory.utils'
-import type { InteractionType } from '@typing/core.types'
+import type { InteractionType } from '../../shared/types/core.types'
 
 export function seedStoreByType(type: Exclude<InteractionType, "button">, id: string = "test", overrides = {}) {
   switch (type) {

@@ -11,7 +11,7 @@ import { createCarouselData } from '@test/builders/data.factory'
 import { createInterpreterPress, createInterpreterPressRelease, createInterpreterSwipe, createInterpreterSwipeCommit, createInterpreterSwipeStart } from '@test/builders/input.factory'
 import { createRuntimeSwipe } from '@test/builders/runtime.factory'
 import { capabilities_DEFAULT } from '@test/fixtures/capabilities.fixture'
-import type { EventBridgeType } from '@typing/core.types'
+import type { EventBridgeType } from '../../../shared/types/core.types'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
 const pipeline_DEFAULT = {

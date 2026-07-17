@@ -1,4 +1,4 @@
-import type { Axis1D } from '@typing/core.types';
+import type { Axis1D } from '../../../shared/types/core.types';
 import { createContext, useContext } from 'react';
 
 export interface SceneContextValue {

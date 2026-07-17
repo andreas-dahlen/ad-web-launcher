@@ -44,7 +44,7 @@
 }
 
 
-.empty-row {
+.emptyRow {
   --p-surface-direction: row;
   --p-surface-bg: none;
   --p-surface-shadow: none;

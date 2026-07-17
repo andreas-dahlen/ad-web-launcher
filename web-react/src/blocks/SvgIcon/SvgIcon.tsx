@@ -2,10 +2,10 @@ import clsx from 'clsx';
 import { dasx } from '../../shared/sxCompiler/dasx';
 import css from './SvgIcon.module.css'
 import { svsx } from '../../shared/sxCompiler/svsx';
-import { svgIconPreset } from './SvgIcon.vars';
-import type { SvgIconPreset } from './SvgIcon.vars';
+
+import { svgIconPreset, type SvgIconPreset } from '@generated/svgIcon.preset';
 import { cpsx } from '../../shared/sxCompiler/cpsx';
-import type { DynamicIconComponent } from '@typing/svg';
+import type { DynamicIconComponent } from '@shared/types/svg'
 import type { Icon } from '@phosphor-icons/react';
 import type { Mode } from '@composites/types/comp.types';
 import { svgIconStyle, type SvgIconStyle } from '../../styleCompiler/schema/components';

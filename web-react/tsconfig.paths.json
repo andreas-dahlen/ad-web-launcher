@@ -13,11 +13,12 @@
       "@panels/*": ["./src/panels/*"],
       "@primitives/*": ["./src/primitives/*"],
 
+      "@shared/*": ["./src/shared/*"],
       "@stores/*": ["./src/shared/state/stores/*"],
       "@hooks/*": ["./src/shared/state/hooks/*"],
       "@typing/*": ["./src/shared/typing/*"],
       "@styles/*": ["./src/shared/styles/*"],
-      "@utils/*": ["./src/shared/utils/*"],
+      "@generated/*": ["./src/shared/generated/*"],
       
       "@styleCompiler/*": ["./src/styleCompiler/*"],
       "@schema/*": ["./src/styleCompiler/schema/*"],

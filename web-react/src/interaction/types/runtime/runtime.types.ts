@@ -1,4 +1,4 @@
-import type { Delta, Vec2 } from '../../../shared/typing/core.types.ts'
+import type { Delta, Vec2 } from '../../../shared/types/core.types.ts'
 
 export interface CancelData {
   readonly element: HTMLElement

@@ -1,5 +1,5 @@
 
-import { toAxis, toOverflowSide, toType } from '@utils/assertions.ts'
+import { toAxis, toOverflowSide, toType } from '../assertions/assertions.ts'
 import type { DomMeta } from '../types/descriptor/base.types.ts'
 
 /* =========================

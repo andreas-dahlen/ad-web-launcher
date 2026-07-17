@@ -3,7 +3,7 @@ import type { ScrollData } from '../../types/descriptor/data.types'
 import type { ScrollComputed } from '../../types/runtime/computed.types'
 import type { RuntimeStart } from '../../types/runtime/runtime.types'
 import type { BaseWithAxis1D, LayoutData } from '../../types/descriptor/base.types'
-import { type Axis1D } from '@typing/core.types'
+import { type Axis1D } from '../../../shared/types/core.types'
 
 export const overflowUtils = {
 

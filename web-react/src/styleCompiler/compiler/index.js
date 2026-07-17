@@ -6,6 +6,7 @@ import log from './consoleLog.js'
 import resolveSelector from './resolveSelector.js';
 import resolveFile from './resolveFile.js';
 import reporter from './tokenReport.js';
+import buildPresetFile from './buildPresetFile.js';
 
 const plugin = (opts = {}) => {
   const tokensDir = opts.tokensDir || "./src/styleCompiler/tokens";
@@ -26,17 +27,23 @@ const plugin = (opts = {}) => {
           continue
         }
 
-        reporter.foundFile(component.name)
+        reporter.foundComponent(component.name)
 
         const selectorResult = resolveSelector(root, component)
-        if (!selectorResult.rule) {
-          const { selector, availableSelectors } = selectorResult
-          reporter.missingClass({ selector, availableSelectors, file });
+        const { selector, validSelectors, invalidSelectors, rule } = selectorResult
+
+        buildPresetFile({ name: component.name, file: fileResult, selectors: validSelectors })
+        reporter.presets({ name: component.name, infix: component.infix })
+
+        if (invalidSelectors.length) {
+          reporter.brokenSelectors({ file: fileResult, invalidSelectors })
+        }
+
+        if (!rule) {
+          reporter.missingClass({ selector, file, validSelectors });
           continue
         }
-        reporter.injected({ file: fileResult, selector: selectorResult.selector });
-
-        const rule = selectorResult.rule;
+        reporter.injected({ file: fileResult, selector });
 
         log.injecting(file)
         log.processing(component.name)

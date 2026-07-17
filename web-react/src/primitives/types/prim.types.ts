@@ -1,11 +1,12 @@
-import type { ButtonPreset } from '@composites/Button/ButtonPrim.vars'
-import type { CarouselPreset } from '@composites/styleVars/CarouselPrim.vars'
-import type { ScrollPreset } from '@composites/styleVars/ScrollPrim.vars'
-import type { SliderPreset } from '@composites/Slider/SliderPrim.vars'
+
 import type { ButtonStyle, CarouselStyle, ScrollStyle, SliderStyle } from '../../styleCompiler/schema/components'
-import type { Axis1D, EventType, BoxSide } from '@typing/core.types'
-import type { DataAttributes } from '@typing/utils.types'
+import type { Axis1D, EventType, BoxSide } from '../../shared/types/core.types'
+import type { DataAttributes } from '../../shared/types/utils.types'
 import type React from 'react'
+import type { CarouselPreset } from '@shared/generated/carousel.preset'
+import type { SliderPreset } from '@shared/generated/slider.preset'
+import type { ScrollPreset } from '@shared/generated/scroll.preset'
+import type { ButtonPreset } from '@shared/generated/button.preset'
 
 //discriminating unions - capabilities
 export type SnapConfig = //default is false

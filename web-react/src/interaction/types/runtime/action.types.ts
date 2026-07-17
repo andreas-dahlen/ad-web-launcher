@@ -1,6 +1,6 @@
 import type { ComputedPackage } from '@interaction/types/runtime/computed.types';
 import type { CarouselCommit, CarouselSwipe, SliderPress, SliderSwipe, SliderCommit, SliderStart, DragStart, DragSwipe, DragCommit, ScrollStart, ScrollSwipe, ScrollCommit, ScrollOverflowStart, ScrollOverflowSwipe, ScrollOverflowCommit, ScrollOverflowRevert } from '@interaction/types/solver.types';
-import type { Press, Swipe, SwipeCommit, SwipeRevert, SwipeStart } from '@typing/core.types';
+import type { Press, Swipe, SwipeCommit, SwipeRevert, SwipeStart } from '../../../shared/types/core.types';
 
 // type WithComputed<T> = T & {
 //   computedUpdate: ComputedPackage
