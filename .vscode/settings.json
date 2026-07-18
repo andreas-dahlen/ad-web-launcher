@@ -1,0 +1,10 @@
+{
+  "json.schemas": [
+    {
+      "fileMatch": [
+        "web-react/src/styleCompiler/tokens/**/*.{json,jsonc}"
+      ],
+      "url": "./web-react/src/styleCompiler/schema/token.schema.json"
+    }
+  ]
+}

@@ -1,9 +1,9 @@
 import clsx from 'clsx'
 import css from './Surface.module.css'
 import { svsx } from '../../shared/sxCompiler/svsx'
-import { surfacePreset, type SurfacePreset } from '@shared/generated/surface.preset'
+import { surfacePreset, type SurfacePreset } from '@generated/presets/surface.preset'
 import { cpsx } from '../../shared/sxCompiler/cpsx'
-import { surfaceStyle, type SurfaceStyle } from '../../styleCompiler/schema/components'
+import { surfaceStyle, type SurfaceStyle } from '@generated/components/components'
 import vars from '@styleCompiler/tokens.module.css'
 type PanelBaseProps = {
   children: React.ReactNode

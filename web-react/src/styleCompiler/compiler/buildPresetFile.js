@@ -10,7 +10,7 @@ export default function buildPresetFile({ name, file, selectors }) {
   const component = `${camelName}Preset`;
   const typeName = `${pascalName}Preset`;
 
-  const generatedDir = path.resolve("./src/shared/generated");
+  const generatedDir = path.resolve("./src/shared/generated/presets");
   const presetFile = path.join(generatedDir, `${camelName}.preset.ts`);
 
   const sortedSelectors = [...selectors].sort();

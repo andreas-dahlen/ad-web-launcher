@@ -7,11 +7,13 @@ import resolveSelector from './resolveSelector.js';
 import resolveFile from './resolveFile.js';
 import reporter from './tokenReport.js';
 import buildPresetFile from './buildPresetFile.js';
+import buildComponentFile from './buildComponentFile.js';
 
 const plugin = (opts = {}) => {
   const tokensDir = opts.tokensDir || "./src/styleCompiler/tokens";
 
   const components = loadTokens(tokensDir);
+  buildComponentFile(components)
   log.jsonsLoaded(components)
   reporter.expectComponents(components)
   return {

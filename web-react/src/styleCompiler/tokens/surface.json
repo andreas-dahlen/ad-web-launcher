@@ -4,7 +4,7 @@
 
   "alwaysAllowed": ["o", "p", "f"],
   "vars": {
-    "bg": { "allowed": ["t"], "values": {"f": "hotPink;"}},
+    "bg": { "allowed": ["t"], "values": {"f": "black"}},
 
     "position": { "values": {"p": "f", "f": "relative"}},
     "display": { "values": {"p": "f", "f": "block"}},

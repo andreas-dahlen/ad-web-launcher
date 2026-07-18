@@ -11,8 +11,8 @@ import { svsx } from '../../shared/sxCompiler/svsx.ts'
 import type { ScrollPrimProps } from '@primitives/types/prim.types.ts'
 
 import { cpsx } from '../../shared/sxCompiler/cpsx.ts'
-import { scrollStyle } from '@styleCompiler/schema/components.ts'
-import { scrollPreset } from '@shared/generated/scroll.preset.ts'
+import { scrollStyle } from '@generated/components/components.ts'
+import { scrollPreset } from '@generated/presets/scroll.preset.ts'
 
 export default function ScrollPrim({
   id,

@@ -6,8 +6,8 @@ import css from './Label.module.css'
 import type { Mode } from '@composites/types/comp.types'
 import type { BoxSide } from '../../shared/types/core.types'
 import { cpsx } from '../../shared/sxCompiler/cpsx'
-import { labelPreset, type LabelPreset } from '@shared/generated/label.preset'
-import { labelStyle, type LabelStyle } from '../../styleCompiler/schema/components'
+import { labelPreset, type LabelPreset } from '@generated/presets/label.preset'
+import { labelStyle, type LabelStyle } from '@generated/components/components'
 
 export type LabelSettings = {
   msg: string

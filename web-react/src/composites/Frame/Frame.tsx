@@ -1,12 +1,12 @@
 import type { Directive, DragSettings } from '@composites/types/comp.types'
-import type { SurfacePreset } from '@shared/generated/surface.preset'
+import type { SurfacePreset } from '@generated/presets/surface.preset'
 import type React from 'react'
 import { createId, generateId } from '@data/generators/idGenerator'
 import DragPrim from '@primitives/Drag/DragPrim'
 import { useBehaviorState } from '@composites/hooks/useBehaviorState.hook'
 import { Surface } from '../../blocks/Surface/Surface'
 import Label, { type LabelSettings } from '../../blocks/Label/Label'
-import type { SurfaceStyle } from '../../styleCompiler/schema/components'
+import type { SurfaceStyle } from '@generated/components/components'
 
 type FrameProps = {
   directive?: Directive

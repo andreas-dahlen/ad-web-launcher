@@ -5,16 +5,21 @@ import reactRefresh from 'eslint-plugin-react-refresh'
 import tseslint from 'typescript-eslint'
 import boundaries from 'eslint-plugin-boundaries'
 import unicorn from 'eslint-plugin-unicorn'
-import { defineConfig, globalIgnores } from 'eslint/config'
 import noTestOnlyApi from './eslint/rules/no-test-only-api.js'
+import jsonSchemaValidator from 'eslint-plugin-json-schema-validator'
+import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
+
+  ...jsonSchemaValidator.configs.base,
+
   globalIgnores(['dist', 'node_modules', '**/*.css', '**/*.svg']),
 
   {
     plugins: {
       boundaries,
       unicorn,
+      jsonSchemaValidator,
       local: {
         rules: {
           'no-test-only-api': noTestOnlyApi,
@@ -22,6 +27,7 @@ export default defineConfig([
       }
     }
   },
+
   // ----------------------------------
   // Base TS / React config
   // ----------------------------------
@@ -64,6 +70,7 @@ export default defineConfig([
         { type: 'panels', pattern: 'src/panels/*/**', capture: ['mod'] },
         { type: 'primitives', pattern: 'src/primitives/*/**', capture: ['mod'] },
         { type: 'shared', pattern: 'src/shared/*/**', capture: ['mod'] },
+        { type: 'generated', pattern: 'src/shared/generated/*/**', capture: ['mod'] },
         { type: 'styleCompiler', pattern: 'src/styleCompiler/*/**', capture: ['mod'] },
       ],
       'boundaries/files': [
@@ -183,7 +190,7 @@ export default defineConfig([
               allow: {
                 to: [
                   { element: { type: "composites", captured: { mod: "types" } } },
-                  { element: { type: "styleCompiler", captured: { mod: "schema" } } },
+                  // { element: { type: "styleCompiler", captured: { mod: "schema" } } },
                   { element: { type: "shared", captured: { mod: "sxCompiler" } } },
                   { element: { type: "shared", captured: { mod: "generated" } } }
 
@@ -202,7 +209,7 @@ export default defineConfig([
                   { element: { type: "primitives", captured: { mod: "*" } } },
                   { element: { type: "blocks" } },
                   { element: { type: "data", captured: { mod: "generators" } } },
-                  { element: { type: "styleCompiler", captured: { mod: "schema" } } },
+                  // { element: { type: "styleCompiler", captured: { mod: "schema" } } },
                   { element: { type: "shared", captured: { mod: "state" } }, file: { categories: "stores" } },
                   { element: { type: "shared", captured: { mod: "generated" } } }
                 ]
@@ -320,7 +327,7 @@ export default defineConfig([
                   { element: { type: "interaction", captured: { mod: "adapter" } } },
                   // { element: { type: "interaction", captured: { mod: "assertions" } } },
                   { element: { type: "composites", captured: { mod: "styleVars" } } },
-                  { element: { type: "styleCompiler", captured: { mod: "schema" } } },
+                  // { element: { type: "styleCompiler", captured: { mod: "schema" } } },
                   { element: { type: "shared", captured: { mod: "sxCompiler" } } },
                   { element: { type: "shared", captured: { mod: "state" } }, file: { categories: "stores" } },
                   { element: { type: "shared", captured: { mod: "generated" } } }
@@ -340,17 +347,29 @@ export default defineConfig([
               }
             },
             {
-              from: { element: { type: "shared", captured: { mod: "generated" } } },
+              from: { element: { type: "shared", captured: { mod: "sxCompiler" } } },
+              allow: { to: { element: { type: "shared", captured: { mod: "compilerUtils" } } } }
+            },
+            // ----------------------------------
+            // shared/generated
+            // ----------------------------------
+            {
+              from: { element: { type: "shared", element: { type: "generated", captured: { mod: "presets" } } } },
               allow: {
                 to: [
                   { element: { type: "blocks" } },
-                  { element: { type: "composites" } }
+                  { element: { type: "primitives" } },
                 ]
               }
             },
             {
-              from: { element: { type: "shared", captured: { mod: "sxCompiler" } } },
-              allow: { to: { element: { type: "shared", captured: { mod: "compilerUtils" } } } }
+              from: { element: { type: "shared", element: { type: "generated", captured: { mod: "components" } } } },
+              allow: {
+                to: [
+                  { element: { type: "styleCompiler", captured: { mod: "tokens" } } },
+                  { element: { type: "styleCompiler", captured: { mod: "schema" } } }
+                ]
+              }
             },
             // ----------------------------------
             // STYLECOMPILER
@@ -436,6 +455,8 @@ export default defineConfig([
     }
   },
 
+
+
   // MIGRATED: "rules" → "policies
   // ─── Unicorn folder naming rules ──────────────────────
 
@@ -493,6 +514,26 @@ export default defineConfig([
       'unicorn/filename-case': ['error', {
         case: 'camelCase',
       }]
+    }
+  },
+  // ──────────── Json linting ──────────────────────
+  {
+    files: ['src/styleCompiler/tokens/**/*.{json,jsonc}'],
+    plugins: {
+      'json-schema-validator': jsonSchemaValidator,
+    },
+    rules: {
+      'json-schema-validator/no-invalid': [
+        'error',
+        {
+          schemas: [
+            {
+              fileMatch: ['src/styleCompiler/tokens/**/*.{json,jsonc}'],
+              schema: './src/styleCompiler/schema/token.schema.json'
+            }
+          ]
+        }
+      ]
     }
   }
 ])

@@ -1,12 +1,12 @@
 
-import type { ButtonStyle, CarouselStyle, ScrollStyle, SliderStyle } from '../../styleCompiler/schema/components'
+import type { ButtonStyle, CarouselStyle, ScrollStyle, SliderStyle } from '@generated/components/components'
 import type { Axis1D, EventType, BoxSide } from '../../shared/types/core.types'
 import type { DataAttributes } from '../../shared/types/utils.types'
 import type React from 'react'
-import type { CarouselPreset } from '@shared/generated/carousel.preset'
-import type { SliderPreset } from '@shared/generated/slider.preset'
-import type { ScrollPreset } from '@shared/generated/scroll.preset'
-import type { ButtonPreset } from '@shared/generated/button.preset'
+import type { CarouselPreset } from '@generated/presets/carousel.preset'
+import type { SliderPreset } from '@generated/presets/slider.preset'
+import type { ScrollPreset } from '@generated/presets/scroll.preset'
+import type { ButtonPreset } from '@generated/presets/button.preset'
 
 //discriminating unions - capabilities
 export type SnapConfig = //default is false

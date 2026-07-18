@@ -9,9 +9,9 @@ import clsx from 'clsx'
 import { dasx } from '../../shared/sxCompiler/dasx.ts'
 import { svsx } from '../../shared/sxCompiler/svsx.ts'
 import type { SliderPrimProps } from '@primitives/types/prim.types.ts'
-import { sliderPreset } from '@shared/generated/slider.preset.ts'
+import { sliderPreset } from '@generated/presets/slider.preset.ts'
 import { cpsx } from '../../shared/sxCompiler/cpsx.ts'
-import { sliderStyle } from '@schema/components.ts'
+import { sliderStyle } from '@generated/components/components.ts'
 import vars from '@styleCompiler/tokens.module.css'
 
 export default function SliderPrim({

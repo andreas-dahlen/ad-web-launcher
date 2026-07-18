@@ -1,8 +1,9 @@
 import fs from "fs";
 import path from "path";
-import { parse, printParseErrorCode } from 'jsonc-parser'
-import { toCssVar } from '../../shared/compilerUtils/stringFormaters.ts';
-import log from './consoleLog.js';
+import { parse } from 'jsonc-parser'
+// import { toCssVar } from '../../shared/compilerUtils/stringFormaters.ts';
+// import log from './consoleLog.js';
+import validate from './validateJson.js';
 
 function findJsonFiles(dir) {
   return fs.readdirSync(dir, { withFileTypes: true })
@@ -37,27 +38,13 @@ export default function loadTokens(tokensDir) {
     const errors = []
     const json = parse(text, errors)
 
-    if (errors.length) {
-      const details = errors
-        .map(error => printParseErrorCode(error.error))
-        .join(", ");
-
-      throw new Error(`Invalid JSON in ${fullPath}: ${details}`);
-    }
-
-    if (!json.component) {
-      throw new Error(`Missing "component" in ${fullPath}`);
-    }
-
-    if (json.vars && typeof json.vars !== "object") {
-      throw new Error(`❌ "vars" must be an object in ${fullPath}`);
-    }
-
+    validate.parse(errors, json, fullPath)
 
     const infix = json.infix ?? json.component;
 
     return {
       name: json.component,
+      file: fullPath,
       infix: infix,
       alwaysAllowed: Array.isArray(json.alwaysAllowed)
         ? json.alwaysAllowed
@@ -65,6 +52,8 @@ export default function loadTokens(tokensDir) {
       vars: Object.entries(json.vars || {}).map(([key, defRaw]) => {
 
         const def = defRaw || {};
+
+        validate.variable(key, def, fullPath)
 
         const variableName = typeof def.name === "string" && def.name.trim()
           ? def.name.trim()
@@ -74,24 +63,12 @@ export default function loadTokens(tokensDir) {
 
         if (seenVariables.has(identity)) {
           const previous = seenVariables.get(identity);
-
-          throw new Error(
-            [`
-              \nCSS variable collision!`,
-              `\nGenerated variable:`,
-              `   ${toCssVar("final", infix, variableName)}`,
-              `\nSources:`,
-              `     ${log.formatLoggingPath(fullPath)}`,
-              `     ${log.formatLoggingPath(previous)}\n`
-            ].join("\n")
-          );
+          validate.duplicates(previous, identity, fullPath)
         }
 
-        if (def.values && typeof def.values !== "object") {
-          throw new Error(`"values" must be an object in ${fullPath}`)
-        }
-
-        seenVariables.set(identity, fullPath);
+        seenVariables.set(identity, {
+          fullPath
+        })
 
         return {
           key,
