@@ -1,8 +1,8 @@
-import { validateDefinition } from './validateDefinition.js'
-import { toCssVar } from '../../shared/compilerUtils/stringFormaters.ts'
-import { getAllowedPrefixes } from '../../shared/compilerUtils/getAllowedPrefixes.ts';
-import { constants, isValidPrefix } from '../../shared/compilerUtils/prefixes.ts';
-import { normalizeCssValue } from '../../shared/compilerUtils/normalizeCssValue.ts'
+import { validateDefinition } from '../validation/validateVarDefinition.js'
+import { toCssVar } from '../../../shared/compilerUtils/stringFormaters.ts'
+import { getAllowedPrefixes } from '../../../shared/compilerUtils/getAllowedPrefixes.ts';
+import { constants, isValidPrefix } from '../../../shared/compilerUtils/prefixes.ts';
+import { normalizeCssValue } from '../../../shared/compilerUtils/normalizeCssValue.ts'
 export default function buildVarDefinitions(rule, component, variable) {
   const { name, allowed, values, exclude } = variable;
   // const baseName = `${component.infix}-${name}`;

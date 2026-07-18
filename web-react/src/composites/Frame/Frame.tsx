@@ -6,7 +6,7 @@ import DragPrim from '@primitives/Drag/DragPrim'
 import { useBehaviorState } from '@composites/hooks/useBehaviorState.hook'
 import { Surface } from '../../blocks/Surface/Surface'
 import Label, { type LabelSettings } from '../../blocks/Label/Label'
-import type { SurfaceStyle } from '@generated/components/components'
+import type { SurfaceStyle } from '@shared/generated/tokenStyles/tokenStyles'
 
 type FrameProps = {
   directive?: Directive

@@ -1,16 +1,16 @@
-import { constants } from '../../shared/compilerUtils/prefixes.ts';
+import { constants } from '../../../shared/compilerUtils/prefixes.ts';
 import path from "path";
 
 const log = {
-  jsonsLoaded(components) { console.log("📦 Loaded json files:", components.map(c => c.name)) },
+  jsonsLoaded(tokens) { console.log("📦 Loaded json files:", tokens.map(c => c.name)) },
 
   injecting(file) { console.log("\n⚙️ Injecting into:", this.formatLoggingPath(file)) },
   processing(name) { console.log(`🎨 Processing component: ${name}`) },
   buildingChains(infix) { console.log(`\n🔧 chaining --final-${infix}-*`) },
 
-  resultCascade(component, variable) {
+  resultCascade(token, variable) {
     const chain = constants.prefixPriority
-      .filter(p => component.alwaysAllowed.includes(p) || variable.allowed.includes(p))
+      .filter(p => token.alwaysAllowed.includes(p) || variable.allowed.includes(p))
       .map(prefix => {
         const val = variable.values[prefix];
         if (!val) return prefix;

@@ -1,6 +1,6 @@
-import { toCssVar } from '../../shared/compilerUtils/stringFormaters.ts'
-import { getAllowedPrefixes } from '../../shared/compilerUtils/getAllowedPrefixes.ts'
-import { constants } from '../../shared/compilerUtils/prefixes.ts';
+import { toCssVar } from '../../../shared/compilerUtils/stringFormaters.ts'
+import { getAllowedPrefixes } from '../../../shared/compilerUtils/getAllowedPrefixes.ts'
+import { constants } from '../../../shared/compilerUtils/prefixes.ts';
 export default function buildCascade(rule, component, variable) {
   const { name, allowed, exclude } = variable;
 

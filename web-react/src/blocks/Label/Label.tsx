@@ -7,7 +7,7 @@ import type { Mode } from '@composites/types/comp.types'
 import type { BoxSide } from '../../shared/types/core.types'
 import { cpsx } from '../../shared/sxCompiler/cpsx'
 import { labelPreset, type LabelPreset } from '@generated/presets/label.preset'
-import { labelStyle, type LabelStyle } from '@generated/components/components'
+import { labelStyle, type LabelStyle } from '@shared/generated/tokenStyles/tokenStyles'
 
 export type LabelSettings = {
   msg: string

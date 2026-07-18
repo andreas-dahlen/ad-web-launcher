@@ -1,6 +1,6 @@
 import type { SnapConfig } from '@primitives/types/prim.types'
 import type { Axis1D, EventType } from '../../shared/types/core.types'
-import type { ButtonStyle, SliderStyle } from '@generated/components/components'
+import type { ButtonStyle, SliderStyle } from '@shared/generated/tokenStyles/tokenStyles'
 import type { ButtonPreset } from '@generated/presets/button.preset'
 import type { SliderPreset } from '@generated/presets/slider.preset'
 

@@ -1,5 +1,5 @@
 import selectorParser from "postcss-selector-parser";
-import findInvalidSelectors from './findInvalidSelectors.js';
+import findInvalidSelectors from '../findInvalidSelectors.js';
 
 export default function resolveSelector(root, component) {
   const selector = `.${component.infix}`;

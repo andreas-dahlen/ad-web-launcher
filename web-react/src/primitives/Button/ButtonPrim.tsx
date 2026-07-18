@@ -6,7 +6,7 @@ import { dasx } from '../../shared/sxCompiler/dasx'
 import type { ButtonPrimProps } from '@primitives/types/prim.types'
 import { svsx } from '../../shared/sxCompiler/svsx'
 import { cpsx } from '../../shared/sxCompiler/cpsx'
-import { buttonStyle } from '@generated/components/components'
+import { buttonStyle } from '@shared/generated/tokenStyles/tokenStyles'
 import { buttonPreset } from '@generated/presets/button.preset'
 
 export default function ButtonPrim({

@@ -4,8 +4,8 @@ let timer
 const injectedTargets = new Set();
 const missingClasses = new Set();
 
-const foundComponents = new Set()
-const expectedComponents = new Set()
+const foundTokens = new Set()
+const expectedTokens = new Set()
 
 const presets = new Set()
 const brokenSelectors = new Set()
@@ -43,8 +43,8 @@ function flush() {
     }
   }
 
-  const missing = [...expectedComponents]
-    .filter(name => !foundComponents.has(name));
+  const missing = [...expectedTokens]
+    .filter(name => !foundTokens.has(name));
 
   if (missing.length) {
     console.log(`\n 📁 Missing Files (${missing.length})`);
@@ -56,8 +56,8 @@ function flush() {
 
   injectedTargets.clear();
   missingClasses.clear();
-  expectedComponents.clear();
-  foundComponents.clear();
+  expectedTokens.clear();
+  foundTokens.clear();
   presets.clear();
 }
 
@@ -67,15 +67,15 @@ function scheduleFlush() {
 }
 
 export default {
-  expectComponents(components) {
-    expectedComponents.clear();
+  expectTokens(tokens) {
+    expectedTokens.clear();
 
-    for (const component of components) {
-      expectedComponents.add(component.name);
+    for (const token of tokens) {
+      expectedTokens.add(token.name);
     }
   },
-  foundComponent(component) {
-    foundComponents.add(component);
+  foundToken(token) {
+    foundTokens.add(token);
     scheduleFlush();
   },
   presets(presetData) {

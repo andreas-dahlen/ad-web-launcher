@@ -1,61 +1,61 @@
 import postcss from 'postcss';
 import loadTokens from "./loadTokens.js"
-import buildVarDefinitions from './buildVarDefinitions.js';
-import buildCascade from './buildCascade.js';
-import log from './consoleLog.js'
-import resolveSelector from './resolveSelector.js';
-import resolveFile from './resolveFile.js';
-import reporter from './tokenReport.js';
-import buildPresetFile from './buildPresetFile.js';
-import buildComponentFile from './buildComponentFile.js';
+import buildVarDefinitions from './builders//buildVarDefinitions.js';
+import buildCascade from './builders/buildCascade.js';
+import log from './logging/consoleLog.js'
+import resolveSelector from './resolvers/resolveSelector.js';
+import resolveCssModule from './resolvers/resolveCssModule.js';
+import reporter from './logging/tokenReport.js';
+import buildPresetFile from './generators/generatePreset.js';
+import generateTokenStyles from './generators/generateTokenStyles.js';
 
 const plugin = (opts = {}) => {
   const tokensDir = opts.tokensDir || "./src/styleCompiler/tokens";
 
-  const components = loadTokens(tokensDir);
-  buildComponentFile(components)
-  log.jsonsLoaded(components)
-  reporter.expectComponents(components)
+  const tokens = loadTokens(tokensDir);
+  generateTokenStyles(tokens)
+  log.jsonsLoaded(tokens)
+  reporter.expectTokens(tokens)
   return {
     postcssPlugin: "design-tokens-plugin",
 
     Once(root, { result }) {
       const file = result.opts.from;
 
-      for (const component of components) {
+      for (const token of tokens) {
 
-        const fileResult = resolveFile(file, component)
-        if (!fileResult) {
+        const cssModule = resolveCssModule(file, token)
+        if (!cssModule) {
           continue
         }
 
-        reporter.foundComponent(component.name)
+        reporter.foundToken(token.name)
 
-        const selectorResult = resolveSelector(root, component)
+        const selectorResult = resolveSelector(root, token)
         const { selector, validSelectors, invalidSelectors, rule } = selectorResult
 
-        buildPresetFile({ name: component.name, file: fileResult, selectors: validSelectors })
-        reporter.presets({ name: component.name, infix: component.infix })
+        buildPresetFile({ name: token.name, file: cssModule, selectors: validSelectors })
+        reporter.presets({ name: token.name, infix: token.infix })
 
         if (invalidSelectors.length) {
-          reporter.brokenSelectors({ file: fileResult, invalidSelectors })
+          reporter.brokenSelectors({ file: cssModule, invalidSelectors })
         }
 
         if (!rule) {
           reporter.missingClass({ selector, file, validSelectors });
           continue
         }
-        reporter.injected({ file: fileResult, selector });
+        reporter.injected({ file: cssModule, selector });
 
         log.injecting(file)
-        log.processing(component.name)
-        log.buildingChains(component.infix)
+        log.processing(token.name)
+        log.buildingChains(token.infix)
 
-        for (const variable of component.vars) {
-          buildVarDefinitions(rule, component, variable);
-          buildCascade(rule, component, variable);
+        for (const variable of token.vars) {
+          buildVarDefinitions(rule, token, variable);
+          buildCascade(rule, token, variable);
 
-          log.resultCascade(component, variable)
+          log.resultCascade(token, variable)
         }
       }
     }

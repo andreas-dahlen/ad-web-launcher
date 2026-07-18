@@ -1,5 +1,5 @@
 
-import type { ButtonStyle, CarouselStyle, ScrollStyle, SliderStyle } from '@generated/components/components'
+import type { ButtonStyle, CarouselStyle, ScrollStyle, SliderStyle } from '@shared/generated/tokenStyles/tokenStyles'
 import type { Axis1D, EventType, BoxSide } from '../../shared/types/core.types'
 import type { DataAttributes } from '../../shared/types/utils.types'
 import type React from 'react'

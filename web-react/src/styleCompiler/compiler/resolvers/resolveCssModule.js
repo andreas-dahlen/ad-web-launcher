@@ -1,6 +1,6 @@
 import path from "path";
 
-export default function resolveFile(file, component) {
+export default function resolveCssModule(file, component) {
   const moduleName = path.basename(file);
   const expected = `${component.name}.module.css`;
 

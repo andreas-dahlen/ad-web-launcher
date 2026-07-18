@@ -3,7 +3,7 @@ import path from "path";
 import {
   toCamelCase,
   toPascalCase
-} from "../../shared/compilerUtils/stringFormaters.ts";
+} from "../../../shared/compilerUtils/stringFormaters.ts";
 
 
 function getImportPath(file, outputDir) {
@@ -65,19 +65,19 @@ function dedupeEntries(entries, outputDir) {
 }
 
 
-export default function buildComponentFile(components) {
+export default function generateTokenStyles(tokens) {
 
   const outputDir = path.resolve(
-    "./src/shared/generated/components"
+    "./src/shared/generated/tokenStyles"
   );
 
   const outputFile = path.join(
     outputDir,
-    "components.ts"
+    "tokenStyles.ts"
   );
 
 
-  const entries = [...components]
+  const entries = [...tokens]
     .sort((a, b) =>
       a.name.localeCompare(b.name)
     )
@@ -95,13 +95,13 @@ export default function buildComponentFile(components) {
 
 
   // One entry per component
-  const componentEntries = dedupeEntries(
+  const tokenEntries = dedupeEntries(
     entries,
     outputDir
   );
 
 
-  const imports = componentEntries
+  const imports = tokenEntries
     .map(({ file, importName }) => {
       const importPath = getImportPath(
         file,
@@ -113,7 +113,7 @@ export default function buildComponentFile(components) {
     .join("\n");
 
 
-  const exports = componentEntries
+  const exports = tokenEntries
     .map(({ camelName, pascalName, importName }) =>
       `
 export const ${camelName}Style = convertJson(${importName});

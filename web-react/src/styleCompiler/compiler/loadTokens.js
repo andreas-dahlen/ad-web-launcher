@@ -3,7 +3,7 @@ import path from "path";
 import { parse } from 'jsonc-parser'
 // import { toCssVar } from '../../shared/compilerUtils/stringFormaters.ts';
 // import log from './consoleLog.js';
-import validate from './validateJson.js';
+import validate from './validation/validateJson.js';
 
 function findJsonFiles(dir) {
   return fs.readdirSync(dir, { withFileTypes: true })
