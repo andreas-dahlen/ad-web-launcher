@@ -4,7 +4,7 @@
 
   "alwaysAllowed": ["o", "p", "f"],
   "vars": {
-    "bg": { "allowed": ["t"] },
+    "bg": { "allowed": ["t", "p"], "exclude": ["t", "p"]},
 
     "position": { "name": "position" },
     "display": { "name": "display"},

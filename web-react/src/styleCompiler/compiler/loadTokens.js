@@ -1,30 +1,8 @@
 import fs from "fs";
-// import path from "path";
 import { parse } from 'jsonc-parser'
-// import { toCssVar } from '../../shared/compilerUtils/stringFormaters.ts';
-// import log from './consoleLog.js';
 import validate from './validation/validateJson.js';
-import { findTokenFiles } from '../loaders/loadTokenFile.js';
-
-// function findJsonFiles(dir) {
-//   return fs.readdirSync(dir, { withFileTypes: true })
-//     .flatMap(entry => {
-//       const fullPath = path.join(dir, entry.name);
-
-//       if (entry.isDirectory()) {
-//         return findJsonFiles(fullPath);
-//       }
-
-//       if (entry.isFile() &&
-//         (entry.name.endsWith(".json") ||
-//           entry.name.endsWith(".jsonc"))
-//       ) {
-//         return [fullPath];
-//       }
-
-//       return [];
-//     });
-// }
+import { findTokenFiles } from '../loaders/findTokenFiles.js';
+import loadTokenFile from '../loaders/loadTokenFile.js';
 
 export default function loadTokens(tokensDir) {
   // const files = fs.readdirSync(tokensDir).filter(f => f.endsWith(".json"));
@@ -33,11 +11,7 @@ export default function loadTokens(tokensDir) {
 
   return files.map(fullPath => {
 
-    // const json = JSON.parse(fs.readFileSync(fullPath, "utf8"));
-    const text = fs.readFileSync(fullPath, "utf8");
-
-    const errors = []
-    const json = parse(text, errors)
+    const { json, errors } = loadTokenFile(fullPath)
 
     validate.parse(errors, json, fullPath)
 

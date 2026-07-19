@@ -5,12 +5,12 @@ import reactRefresh from 'eslint-plugin-react-refresh'
 import tseslint from 'typescript-eslint'
 import boundaries from 'eslint-plugin-boundaries'
 import unicorn from 'eslint-plugin-unicorn'
-import noTestOnlyApi from './eslint/rules/no-test-only-api.js'
+import localRules from './eslint/index.js'
 import jsonSchemaValidator from 'eslint-plugin-json-schema-validator'
+import * as jsoncParser from 'jsonc-eslint-parser'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
-
   ...jsonSchemaValidator.configs.base,
 
   globalIgnores(['dist', 'node_modules', '**/*.css', '**/*.svg']),
@@ -20,11 +20,7 @@ export default defineConfig([
       boundaries,
       unicorn,
       jsonSchemaValidator,
-      local: {
-        rules: {
-          'no-test-only-api': noTestOnlyApi,
-        }
-      }
+      local: localRules
     }
   },
 
@@ -534,6 +530,21 @@ export default defineConfig([
           ]
         }
       ]
+    }
+  },
+  {
+    files: [
+      "**/styleCompiler/tokens/**/*.json",
+      "**/styleCompiler/tokens/**/*.jsonc"
+    ],
+    languageOptions: {
+      parser: jsoncParser
+    },
+    plugins: {
+      tokens: localRules
+    },
+    rules: {
+      "tokens/no-invalid-prefix-relations": "error"
     }
   }
 ])

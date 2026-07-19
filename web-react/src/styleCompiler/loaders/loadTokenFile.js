@@ -1,23 +1,15 @@
-import fs from "fs";
-import path from "path";
+import fs from 'fs';
+import { parse } from 'jsonc-parser';
 
-export function findTokenFiles(dir) {
-  return fs.readdirSync(dir, { withFileTypes: true })
-    .flatMap(entry => {
-      const fullPath = path.join(dir, entry.name);
+export default function loadTokenFile(fullPath) {
+  const text = fs.readFileSync(fullPath, 'utf8');
 
-      if (entry.isDirectory()) {
-        return findTokenFiles(fullPath);
-      }
+  const errors = [];
+  const json = parse(text, errors);
 
-      if (entry.isFile() &&
-        (entry.name.endsWith(".json") ||
-          entry.name.endsWith(".jsonc"))
-      ) {
-        return [fullPath];
-      }
-
-      return [];
-    })
-    .sort();
+  return {
+    fullPath,
+    json,
+    errors,
+  };
 }
