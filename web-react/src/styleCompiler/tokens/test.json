@@ -6,23 +6,23 @@
   "vars": {
     "bg": { "allowed": ["t"] },
 
-    "position": { "name": "position", "allowed": [] },
-    "display": { "name": "display", "allowed": [] },
-    "justify": { "name": "justify", "allowed": [] },
-    "align": { "name": "align", "allowed": [] },
+    "position": { "name": "position" },
+    "display": { "name": "display"},
+    "justify": { "name": "justify"},
+    "align": { "name": "align"},
 
-    "overflow": { "name": "overflow", "allowed": [] },
+    "overflow": { "name": "overflow" },
 
-    "width": { "name": "width", "allowed": [] },
-    "height": { "name": "height", "allowed": [] },
+    "width": { "name": "width"},
+    "height": { "name": "height"},
 
-    "gap": { "name": "gap", "allowed": [] },
-    "margin": { "name": "margin", "allowed": [] },
-    "padding": { "name": "padding", "allowed": [] },
+    "gap": { "name": "gap" },
+    "margin": { "name": "margin"},
+    "padding": { "name": "padding"},
 
-    "border": { "name": "border", "allowed": [] },
-    "radius": { "name": "radius", "allowed": [] },
-    "shadow": { "name": "shadow", "allowed": [] },
+    "border": { "name": "border" },
+    "radius": { "name": "radius" },
+    "shadow": {},
 
     "blur": { "name": "blur", "values": {
       "f": "blur(20px)",

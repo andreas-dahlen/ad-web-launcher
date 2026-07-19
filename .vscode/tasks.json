@@ -1,0 +1,21 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Lint workspace",
+      "type": "shell",
+      "command": "npm run lint",
+      "options": {
+        "cwd": "${workspaceFolder}/web-react"
+      },
+      "problemMatcher": {
+        "base": "$eslint-stylish",
+        "applyTo": "allDocuments",
+        "owner": "eslint-workspace"
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      }
+    }
+  ]
+}

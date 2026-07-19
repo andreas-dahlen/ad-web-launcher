@@ -94,7 +94,7 @@ export default function generateTokenStyles(tokens) {
     });
 
 
-  // One entry per component
+  // One entry per token
   const tokenEntries = dedupeEntries(
     entries,
     outputDir

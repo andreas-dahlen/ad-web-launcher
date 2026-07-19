@@ -1,8 +1,27 @@
 import selectorParser from "postcss-selector-parser";
-import findInvalidSelectors from '../findInvalidSelectors.js';
 
-export default function resolveSelector(root, component) {
-  const selector = `.${component.infix}`;
+const VALID_IDENTIFIER = /^[A-Za-z_$][A-Za-z0-9_$]*$/;
+function findInvalidSelectors(selectors) {
+
+
+  const validSelectors = [];
+  const invalidSelectors = [];
+
+  for (const selector of selectors) {
+    if (VALID_IDENTIFIER.test(selector)) {
+      validSelectors.push(selector);
+    } else {
+      invalidSelectors.push(selector);
+    }
+  }
+
+  return {
+    validSelectors,
+    invalidSelectors
+  };
+}
+export default function resolveSelector(root, token) {
+  const selector = `.${token.infix}`;
 
   let targetRule;
   const availableSelectorsMap = new Set();

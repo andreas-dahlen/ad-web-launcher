@@ -7,7 +7,7 @@
     "test": {
       "allowed": ["t"],
         "values": { "f": "hotPink;" },
-      "ignore": ["f"]
+      "exclude": ["f"]
     }
   }
 }

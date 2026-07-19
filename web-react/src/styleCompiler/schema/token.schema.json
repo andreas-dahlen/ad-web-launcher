@@ -24,7 +24,6 @@
     },
     "vars": {
       "type": "object",
-      "minProperties": 1,
       "additionalProperties": {
         "$ref": "#/$defs/variable"
       }
@@ -35,6 +34,10 @@
       "type": "object",
       "properties": {
 
+        "name": {
+          "type": "string"
+        },
+
         "allowed": {
           "type": "array",
           "minItems": 1,
@@ -43,7 +46,7 @@
           }
         },
 
-        "ignore": {
+        "exclude": {
           "type": "array",
           "minItems": 1,
           "items": {

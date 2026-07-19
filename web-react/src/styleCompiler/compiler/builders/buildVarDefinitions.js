@@ -3,11 +3,11 @@ import { toCssVar } from '../../../shared/compilerUtils/stringFormaters.ts'
 import { getAllowedPrefixes } from '../../../shared/compilerUtils/getAllowedPrefixes.ts';
 import { constants, isValidPrefix } from '../../../shared/compilerUtils/prefixes.ts';
 import { normalizeCssValue } from '../../../shared/compilerUtils/normalizeCssValue.ts'
-export default function buildVarDefinitions(rule, component, variable) {
+export default function buildVarDefinitions(rule, token, variable) {
   const { name, allowed, values, exclude } = variable;
-  // const baseName = `${component.infix}-${name}`;
+  // const baseName = `${token.infix}-${name}`;
 
-  const effectiveAllowed = getAllowedPrefixes(allowed, component.alwaysAllowed, exclude)
+  const effectiveAllowed = getAllowedPrefixes(allowed, token.alwaysAllowed, exclude)
 
   for (const prefix of constants.prefixPriority) {
     const mappedValue = values[prefix];
@@ -22,7 +22,7 @@ export default function buildVarDefinitions(rule, component, variable) {
 
     if (isLiteral) {
       rule.append({
-        prop: toCssVar(prefix, component.infix, name),
+        prop: toCssVar(prefix, token.infix, name),
         value: normalizeCssValue(mappedValue)
       });
       continue;
@@ -33,8 +33,8 @@ export default function buildVarDefinitions(rule, component, variable) {
 
     if (isPrefixMapping) {
       rule.append({
-        prop: toCssVar(prefix, component.infix, name),
-        value: `var(${toCssVar(mappedValue, component.infix, name)})`
+        prop: toCssVar(prefix, token.infix, name),
+        value: `var(${toCssVar(mappedValue, token.infix, name)})`
       });
       continue;
     }

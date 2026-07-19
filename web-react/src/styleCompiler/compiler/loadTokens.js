@@ -1,33 +1,34 @@
 import fs from "fs";
-import path from "path";
+// import path from "path";
 import { parse } from 'jsonc-parser'
 // import { toCssVar } from '../../shared/compilerUtils/stringFormaters.ts';
 // import log from './consoleLog.js';
 import validate from './validation/validateJson.js';
+import { findTokenFiles } from '../loaders/loadTokenFile.js';
 
-function findJsonFiles(dir) {
-  return fs.readdirSync(dir, { withFileTypes: true })
-    .flatMap(entry => {
-      const fullPath = path.join(dir, entry.name);
+// function findJsonFiles(dir) {
+//   return fs.readdirSync(dir, { withFileTypes: true })
+//     .flatMap(entry => {
+//       const fullPath = path.join(dir, entry.name);
 
-      if (entry.isDirectory()) {
-        return findJsonFiles(fullPath);
-      }
+//       if (entry.isDirectory()) {
+//         return findJsonFiles(fullPath);
+//       }
 
-      if (entry.isFile() &&
-        (entry.name.endsWith(".json") ||
-          entry.name.endsWith(".jsonc"))
-      ) {
-        return [fullPath];
-      }
+//       if (entry.isFile() &&
+//         (entry.name.endsWith(".json") ||
+//           entry.name.endsWith(".jsonc"))
+//       ) {
+//         return [fullPath];
+//       }
 
-      return [];
-    });
-}
+//       return [];
+//     });
+// }
 
 export default function loadTokens(tokensDir) {
   // const files = fs.readdirSync(tokensDir).filter(f => f.endsWith(".json"));
-  const files = findJsonFiles(tokensDir).sort();
+  const files = findTokenFiles(tokensDir)
   const seenVariables = new Map();
 
   return files.map(fullPath => {

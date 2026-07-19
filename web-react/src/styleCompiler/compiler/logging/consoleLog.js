@@ -5,7 +5,7 @@ const log = {
   jsonsLoaded(tokens) { console.log("📦 Loaded json files:", tokens.map(c => c.name)) },
 
   injecting(file) { console.log("\n⚙️ Injecting into:", this.formatLoggingPath(file)) },
-  processing(name) { console.log(`🎨 Processing component: ${name}`) },
+  processing(name) { console.log(`🎨 Processing token: ${name}`) },
   buildingChains(infix) { console.log(`\n🔧 chaining --final-${infix}-*`) },
 
   resultCascade(token, variable) {

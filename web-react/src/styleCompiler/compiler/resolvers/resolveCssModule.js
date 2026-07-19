@@ -1,8 +1,8 @@
 import path from "path";
 
-export default function resolveCssModule(file, component) {
+export default function resolveCssModule(file, token) {
   const moduleName = path.basename(file);
-  const expected = `${component.name}.module.css`;
+  const expected = `${token.name}.module.css`;
 
   if (
     moduleName.toLowerCase() !== expected.toLowerCase()
