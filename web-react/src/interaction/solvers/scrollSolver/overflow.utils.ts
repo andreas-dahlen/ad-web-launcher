@@ -43,7 +43,7 @@ export const overflowUtils = {
     const containerSize = layout.containerSize.height
     const isTowardsVisibleDir = mainDelta < 0
 
-    if (!data.isVisible && isTowardsVisibleDir) return {
+    if (isTowardsVisibleDir && !data.isVisible) return {
       overflowValue: 0, isVisible: true
     }
 

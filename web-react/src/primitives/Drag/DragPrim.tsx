@@ -40,7 +40,7 @@ export default function DragPrim({
     elRef: dragItemRef,
     disabled: !interactive,
     onReaction: (reaction) => {
-      if (reaction.detail === 'swipeCommit' && onSwipeCommit) {
+      if (onSwipeCommit && reaction.detail === 'swipeCommit') {
         onSwipeCommit(reaction.detail)
       }
     }

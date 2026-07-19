@@ -24,7 +24,7 @@ export function svsx(
     // -----------------------------------------------------
     const hasPrefix = key.includes(":")
     if (hasPrefix) {
-      const [prefixKey, varKey] = key.split(":")
+      const [prefixKey, varKey] = key.split(":", 2)
 
       if (!isValidPrefix(prefixKey)) {
         console.warn(`[svsx] Invalid prefix "${prefixKey}".`);
@@ -90,7 +90,7 @@ export function mergeStyles<
       // PREFIXED KEYS: "t:bg", "o:padding", etc.
       // -----------------------------------------------------
       if (hasPrefix) {
-        const [prefixKey, varKey] = key.split(":");
+        const [prefixKey, varKey] = key.split(":", 2);
 
         if (!isValidPrefix(prefixKey)) {
           console.warn(`[mergeStyles] Invalid prefix "${prefixKey}". Allowed prefixes: o, s, m, p, t, f`);

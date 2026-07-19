@@ -22,8 +22,8 @@ export const carouselUtils = {
   isLocked(delta: number, index: number, lock: { prev: number | null, next: number | null }) {
     const { prev, next } = lock || {}
     if (prev == null && next == null) return false
-    if (prev != null && prev === index && delta > 0) return true
-    if (next != null && next === index && delta < 0) return true
+    if (prev === index && prev != null && delta > 0) return true
+    if (next === index && next != null && delta < 0) return true
     return false
   },
 

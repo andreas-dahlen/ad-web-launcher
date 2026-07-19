@@ -1,5 +1,5 @@
-import noTestOnlyApi from './rules/no-test-only-api.js';
-import noInvalidPrefixes from './rules/tokens/no-invalid-prefixes.js';
+import noTestOnlyApi from './testApi/no-test-only-api.js';
+import noInvalidPrefixes from './tokens/no-invalid-prefixes-relations.js';
 
 export default {
   rules: {

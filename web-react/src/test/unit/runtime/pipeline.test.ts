@@ -230,7 +230,7 @@ describe("[PIPELINE]", () => {
           pointerId: 1
         } as PointerEventPackage)
 
-        if (mock.desc.type === "carousel" && eventType === 'move') {
+        if (eventType === 'move' && mock.desc.type === "carousel") {
           const [[runtimeArg]] = domSpy.mock.calls
           expect(runtimeArg).toMatchObject({
             event: "swipeRevert"

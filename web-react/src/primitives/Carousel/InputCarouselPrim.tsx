@@ -24,7 +24,7 @@ export default function InputCarouselPrim({
     elRef: containerRef,
     disabled: false,
     onReaction: (reaction) => {
-      if (reaction.detail === 'swipeCommit' && onSwipeCommit) {
+      if (onSwipeCommit && reaction.detail === 'swipeCommit') {
         onSwipeCommit(reaction.detail)
       }
     }
