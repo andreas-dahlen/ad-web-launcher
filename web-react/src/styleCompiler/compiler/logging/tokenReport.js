@@ -10,6 +10,8 @@ const expectedTokens = new Set()
 const presets = new Set()
 const brokenSelectors = new Set()
 
+const mismatchedVariables = new Set()
+
 function flush() {
   console.log(`\n ✨ [DesignTokens] Injection complete!`);
   console.log("────────────────────────────────────────")
@@ -28,13 +30,20 @@ function flush() {
     }
   }
 
+  if (mismatchedVariables.size) {
+    console.log(`\n 🧐 Mismatched CSS variables (${mismatchedVariables.size})`)
+    for (const variableData of mismatchedVariables) {
+      log.variableWarning(variableData)
+    }
+  }
+
+
   if (brokenSelectors.size) {
     console.log(`\n 🙊 Unusable preset selectors (${brokenSelectors.size})`)
     for (const selector of brokenSelectors) {
       log.selectorWarning(selector)
     }
   }
-
 
   if (missingClasses.size) {
     console.log(`\n 🧩  Missing css classes for injection (${missingClasses.size})`);
@@ -54,11 +63,14 @@ function flush() {
 
 
 
+
   injectedTargets.clear();
   missingClasses.clear();
   expectedTokens.clear();
   foundTokens.clear();
   presets.clear();
+  brokenSelectors.clear();
+  mismatchedVariables.clear();
 }
 
 function scheduleFlush() {
@@ -92,6 +104,10 @@ export default {
   },
   injected(target) {
     injectedTargets.add(target);
+    scheduleFlush();
+  },
+  mismatchedVariables(variableData) {
+    mismatchedVariables.add(variableData)
     scheduleFlush();
   }
 };

@@ -4,7 +4,7 @@
 
   "alwaysAllowed": ["o", "p", "f"],
   "vars": {
-    "bg": {"values": {"f": "gray"}},
+    "bg": {"allowed": ["t"],"values": {"f": "black"}},
 
     "position": {"values": {"f": "relative"}},
     "display": {"values": {"f": "flex"}},
@@ -19,10 +19,10 @@
     "shadow": {"values": {"f": "0px 0px 10px var(--_col-neutral-dark-1)"}},
     "opacity": {"values": {"f": "1"}},
 
-    "state-pressed-scale": {"values": {"f": "scale(0.98)"}},
-    "state-released-scale": {"values": {"f": "scale(1)"}},
-    "state-canceled-scale": {"values": {"f": "scale(1)"}},
-    "state-canceled-opacity": {"values": {"f": "0.5"}},
-    "state-pressed-filter": {"values": {"f": "brightness(0.95)"}}
+    "statePressedScale": {"allowed": ["s"], "exclude":["p"], "values": {"f": "scale(0.98)"}},
+    "stateReleasedScale": {"allowed": ["s"],"exclude":["p"],"values": {"f": "scale(1)"}},
+    "stateCanceledScale": {"allowed": ["s"],"exclude":["p"],"values": {"f": "scale(1)"}},
+    "stateCanceledOpacity": {"allowed": ["s"],"exclude":["p"], "values": {"f": "0.5"}},
+    "statePressedFilter": {"allowed": ["s"],"exclude":["p"], "values": {"f": "brightness(0.95)"}}
   }
 }

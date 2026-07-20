@@ -1,5 +1,3 @@
-import fs from "fs";
-import { parse } from 'jsonc-parser'
 import validate from './validation/validateJson.js';
 import { findTokenFiles } from '../loaders/findTokenFiles.js';
 import loadTokenFile from '../loaders/loadTokenFile.js';

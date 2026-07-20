@@ -61,5 +61,5 @@
 }
 
 .button[data-state='canceled'] {
-  --s-button-opacity: var(--f-button-state-canceled-opacity);
+  --s-button-opacity: var(--final-button-state-canceled-opacity);
 }

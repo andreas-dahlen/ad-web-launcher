@@ -30,6 +30,18 @@ const log = {
     console.log(`   ✅ ${name} - ${infix} `)
   },
 
+  variableWarning(variableData) {
+    const { name, unused, missing, infix } = variableData
+    console.log(`     🚮 Component: ${name}-${infix}`)
+    if (unused.length) {
+      console.log(`🎨 Unused in CSS (${unused.length}) ${unused.map(s => `${s}`).join(" , ")}`)
+    }
+    if (missing.length) {
+      console.log(`📦 Missing in JSON (${missing.length}) ${missing.map(s => `${s}`).join(" , ")}`)
+    }
+    console.log()
+  },
+
   selectorWarning(warningData) {
     const { invalidSelectors, file } = warningData
     console.log(`     🚮 File: ${this.formatLoggingPath(file)}

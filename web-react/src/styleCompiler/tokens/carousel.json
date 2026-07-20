@@ -6,8 +6,7 @@
         "vars": {
     "test": {
       "allowed": ["t"],
-        "values": { "f": "hotPink;" },
-      "exclude": ["f"]
+        "values": { "f": "hotPink;" }
     }
   }
 }

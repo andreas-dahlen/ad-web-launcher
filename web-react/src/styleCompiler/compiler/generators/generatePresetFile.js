@@ -3,7 +3,7 @@ import path from "path";
 import { toCamelCase } from '../../../shared/compilerUtils/stringFormaters.ts';
 import { toPascalCase } from '../../../shared/compilerUtils/stringFormaters.ts';
 
-export default function buildPresetFile({ name, file, selectors }) {
+export default function generatePresetFile({ name, file, selectors }) {
   const pascalName = toPascalCase(name)
   const camelName = toCamelCase(name)
 
