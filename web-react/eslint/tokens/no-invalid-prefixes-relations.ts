@@ -6,7 +6,7 @@ import {
   getArrayProperty,
   getObjectProperty,
   getValueLoc
-} from "./helpers/tokenAst.js";
+} from "./helpers/tokenAst.ts";
 
 const rule: ESLintUtils.RuleModule<
   "invalidAllowed" |

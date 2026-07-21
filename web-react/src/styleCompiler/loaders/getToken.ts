@@ -1,7 +1,7 @@
 import loadTokenFile from './loadTokenFile.ts';
 import validate from '../compiler/validation/validateJson.ts';
-import type { RawVarDef, ValidPrefix } from '@shared/compilerUtils/compiler.types.ts';
-import { toValidPrefixes } from '@shared/compilerUtils/prefixes.ts';
+import type { RawVarDef, ValidPrefix } from '../../shared/compilerUtils/compiler.types.ts'
+import { toValidPrefixes } from '../../shared/compilerUtils/prefixes.ts';
 
 export type LoadedVariable = {
   key: string;

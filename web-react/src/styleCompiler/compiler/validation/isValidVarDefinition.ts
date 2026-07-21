@@ -1,5 +1,5 @@
-import type { ValidPrefix } from '@shared/compilerUtils/compiler.types';
-import { isValidPrefix } from '@shared/compilerUtils/prefixes';
+import type { ValidPrefix } from '../../../shared/compilerUtils/compiler.types.ts';
+import { isValidPrefix } from '../../../shared/compilerUtils/prefixes.ts';
 
 export function isValidVarDefinition(
   prefix: ValidPrefix,

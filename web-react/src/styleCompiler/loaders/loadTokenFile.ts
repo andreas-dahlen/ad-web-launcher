@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import { parse, type ParseError } from 'jsonc-parser';
-import type { RawComponent } from '@shared/compilerUtils/compiler.types';
+import type { RawComponent } from '../../shared/compilerUtils/compiler.types';
 
 export interface LoadedTokenFile {
   fullPath: string;

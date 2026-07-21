@@ -1,4 +1,4 @@
-import compiler from './src/styleCompiler/compiler/index.js'
+import compiler from './src/styleCompiler/compiler/index.ts'
 // import postcssImport from 'postcss-import';
 // import postcssNested from 'postcss-nested';
 export default {

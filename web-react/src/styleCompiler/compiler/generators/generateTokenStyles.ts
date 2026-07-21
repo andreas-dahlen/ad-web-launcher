@@ -4,7 +4,7 @@ import {
   toCamelCase,
   toPascalCase
 } from "../../../shared/compilerUtils/stringFormaters.ts";
-import resolveTokenImportPath from '../resolvers/resolveTokenImportPath.js';
+import resolveTokenImportPath from '../resolvers/resolveTokenImportPath.ts';
 
 type Token = {
   name: string;

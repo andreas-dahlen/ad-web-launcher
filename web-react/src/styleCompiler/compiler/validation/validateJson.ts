@@ -1,4 +1,4 @@
-import type { RawComponent, RawVarDef } from '@shared/compilerUtils/compiler.types';
+import type { RawComponent, RawVarDef } from '../../../shared/compilerUtils/compiler.types.ts';
 import { printParseErrorCode, type ParseError } from "jsonc-parser";
 import log from "../logging/consoleLog.ts";
 type TokenValidation = {
