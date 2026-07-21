@@ -1,12 +1,27 @@
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
 import {
   toCamelCase,
   toPascalCase
 } from "../../../shared/compilerUtils/stringFormaters.ts";
 import resolveTokenImportPath from '../resolvers/resolveTokenImportPath.js';
 
-function dedupeEntries(entries, outputDir) {
+type Token = {
+  name: string;
+  file: string;
+};
+
+type TokenEntry = {
+  name: string;
+  file: string;
+  camelName: string;
+  pascalName: string;
+  importName: string;
+};
+
+function dedupeEntries(
+  entries: TokenEntry[],
+  outputDir: string): TokenEntry[] {
   const seen = new Set();
 
   return entries.filter(({ file }) => {
@@ -27,17 +42,15 @@ function dedupeEntries(entries, outputDir) {
 }
 
 
-export default function generateTokenStyles(tokens) {
+export default function generateTokenStyles(tokens: Token[]): void {
 
   const outputDir = path.resolve("./src/shared/generated/tokenStyles");
 
   const outputFile = path.join(outputDir, "tokenStyles.ts");
 
 
-  const entries = [...tokens]
-    .sort((a, b) =>
-      a.name.localeCompare(b.name)
-    )
+  const entries = tokens
+    .toSorted((a, b) => a.name.localeCompare(b.name))
     .map(({ name, file }) => {
       const camelName = toCamelCase(name);
 

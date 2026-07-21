@@ -10,14 +10,14 @@ import {
   convertJson
 } from "@schema/convert";
 
-import buttonJson from "../../../styleCompiler/tokens/button.json";
-import carouselJson from "../../../styleCompiler/tokens/carousel.json";
-import labelJson from "../../../styleCompiler/tokens/label.json";
-import scrollJson from "../../../styleCompiler/tokens/scroll.json";
+import buttonJson from "../../../styleCompiler/tokens/button";
+import carouselJson from "../../../styleCompiler/tokens/carousel";
+import labelJson from "../../../styleCompiler/tokens/label";
+import scrollJson from "../../../styleCompiler/tokens/scroll";
 import sliderJson from "../../../styleCompiler/tokens/slider";
-import surfaceJson from "../../../styleCompiler/tokens/surface.json";
-import svgIconJson from "../../../styleCompiler/tokens/svgIcon.json";
-import testJson from "../../../styleCompiler/tokens/test.json";
+import surfaceJson from "../../../styleCompiler/tokens/surface";
+import svgIconJson from "../../../styleCompiler/tokens/svgIcon";
+import testJson from "../../../styleCompiler/tokens/test";
 
 
 export const buttonStyle = convertJson(buttonJson);

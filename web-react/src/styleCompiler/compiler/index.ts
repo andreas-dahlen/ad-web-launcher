@@ -1,17 +1,22 @@
 
 import getTokens from "../loaders/getTokens.ts"
 import getToken from '../loaders/getToken.ts';
-import buildVarDefinitions from './builders//buildVarDefinitions.js';
-import buildCascade from './builders/buildCascade.js';
-import log from './logging/consoleLog.js'
-import resolveSelector from './resolvers/resolveSelector.js';
-import reporter from './logging/tokenReport.js';
-import generatePresetFile from './generators/generatePresetFile.js';
-import generateTokenStyles from './generators/generateTokenStyles.js';
-import resolveVariableUsage from './resolvers/resolveVariableUsage.js';
-import resolveCssTokenFile from './resolvers/resolveCssTokenFile.js';
+import buildVarDefinitions from './builders/buildVarDefinitions.ts';
+import buildCascade from './builders/buildCascade.ts';
+import log from './logging/consoleLog.ts'
+import resolveSelector from './resolvers/resolveSelector.ts';
+import reporter from './logging/tokenReport.ts';
+import generatePresetFile from './generators/generatePresetFile.ts';
+import generateTokenStyles from './generators/generateTokenStyles.ts';
+import resolveVariableUsage from './resolvers/resolveVariableUsage.ts';
+import resolveCssTokenFile from './resolvers/resolveCssTokenFile.ts';
+import type { Root, PluginCreator } from 'postcss';
 
-const plugin = (opts = {}) => {
+type PluginOptions = {
+  tokensDir?: string;
+};
+
+const plugin: PluginCreator<PluginOptions> = (opts: PluginOptions = {}) => {
   const tokensDir = opts.tokensDir || "./src/styleCompiler/tokens";
   const tokens = getTokens(tokensDir);
   generateTokenStyles(tokens)
@@ -21,8 +26,9 @@ const plugin = (opts = {}) => {
   return {
     postcssPlugin: "design-tokens-plugin",
 
-    Once(root, { result }) {
+    Once(root: Root, { result }) {
       const file = result.opts.from;
+      if (!file) return;
       const freshTokens = tokens
         .map(token => {
           const cssModule = resolveCssTokenFile(file, token.name);
@@ -36,7 +42,14 @@ const plugin = (opts = {}) => {
             cssModule
           };
         })
-        .filter(Boolean);
+        .filter(
+          (
+            token,
+          ): token is {
+            token: ReturnType<typeof getToken>;
+            cssModule: string;
+          } => token !== null,
+        );
 
       for (const { token, cssModule } of freshTokens) {
         reporter.foundToken(token.name)
@@ -47,7 +60,7 @@ const plugin = (opts = {}) => {
         generatePresetFile({ name: token.name, file: cssModule, selectors: validSelectors })
         reporter.presets({ name: token.name, infix: token.infix })
 
-        if (invalidSelectors.length) {
+        if (invalidSelectors.length > 0) {
           reporter.brokenSelectors({ file: cssModule, invalidSelectors })
         }
 
@@ -59,7 +72,7 @@ const plugin = (opts = {}) => {
 
         const usage = resolveVariableUsage(root, token);
 
-        if (usage.missing.length || usage.unused.length) {
+        if (usage.missing.length > 0 || usage.unused.length > 0) {
           reporter.mismatchedVariables({
             name: token.name,
             infix: token.infix,

@@ -29,6 +29,8 @@
   },
   "include": [
     "vite.config.ts",
-    "plugins/**/*.ts"
-  ]
+    "plugins/**/*.ts",
+    "src/shared/compilerUtils/**/*.ts",
+    "src/styleCompiler",
+    "src/styleCompiler/**/*.ts"  ]
 }

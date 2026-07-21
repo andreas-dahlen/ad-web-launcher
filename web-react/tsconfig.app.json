@@ -36,11 +36,12 @@
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx",
-    "vite-env.d.ts",
-      ],
+    "vite-env.d.ts"],
   "exclude": [
     "node_modules",
     "dist",
-    "build"
+    "build",
+    "src/styleCompiler",
+    "plugins",
   ]
 }

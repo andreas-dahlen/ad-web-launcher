@@ -1,6 +1,7 @@
 import type { Plugin } from "vite";
 import fs from "node:fs";
 import path from "node:path";
+import resolveTokenOwnerName from "../src/shared/compilerUtils/resolveTokenOwnerName";
 
 function findCssModules(dir: string): string[] {
   const files = fs.readdirSync(dir, { withFileTypes: true });
@@ -12,6 +13,7 @@ function findCssModules(dir: string): string[] {
 
     if (file.isDirectory()) {
       result.push(...findCssModules(fullPath));
+      continue;
     }
 
     if (
@@ -25,27 +27,66 @@ function findCssModules(dir: string): string[] {
   return result;
 }
 
+function buildCssModuleMap(cssFiles: string[]) {
+  const map = new Map<string, string>();
+
+  for (const file of cssFiles) {
+    const name = path
+      .basename(file, ".module.css")
+      .toLowerCase();
+
+    map.set(name, file);
+  }
+
+  return map;
+}
+
 export default function tokenWatcher(): Plugin {
+  const cssCache = new Map<string, string>();
+
   return {
     name: "token-watcher",
 
     configureServer(server) {
-      const tokenDeps = findCssModules("./src");
+      const cssFiles = findCssModules("./src");
+      const cssMap = buildCssModuleMap(cssFiles);
 
       server.watcher.add("src/styleCompiler/tokens/");
 
       server.watcher.on("change", file => {
-        if (!file.endsWith(".json") && !file.endsWith(".jsonc")) {
+        if (
+          !file.endsWith(".json") &&
+          !file.endsWith(".jsonc")
+        ) {
           return;
         }
 
-        console.log("🔄 Token changed: rebuilding tokens...");
+        const cacheKey = path.normalize(file);
 
+        console.log("🔄 Token changed:", file);
 
-        for (const cssFile of tokenDeps) {
-          if (fs.existsSync(cssFile)) {
-            fs.utimesSync(cssFile, Date.now(), Date.now());
+        let cssFile = cssCache.get(cacheKey);
+
+        if (!cssFile) {
+          const owner = resolveTokenOwnerName(file);
+
+          cssFile = cssMap.get(owner.toLowerCase());
+
+          if (cssFile) {
+            cssCache.set(cacheKey, cssFile);
           }
+        }
+
+        if (!cssFile) {
+          console.warn("⚠️ No CSS module found for token:", file);
+          return;
+        }
+
+        if (fs.existsSync(cssFile)) {
+          fs.utimesSync(
+            cssFile, new Date(), new Date());
+
+          console.log("🔥 Reloading:", cssFile);
         }
       });
     }

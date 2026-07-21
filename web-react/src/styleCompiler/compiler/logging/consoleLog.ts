@@ -1,7 +1,33 @@
-import { constants } from '../../../shared/compilerUtils/prefixes.ts';
-import path from "path";
+import { constants } from "../../../shared/compilerUtils/prefixes.ts";
+import path from "node:path";
 
-const log = {
+type Token = {
+  name: string;
+  alwaysAllowed: string[];
+};
+
+type Variable = {
+  key: string;
+  allowed: string[];
+  values: Record<string, string>;
+};
+
+type Log = {
+  jsonsLoaded(tokens: Token[]): void;
+  injecting(file: string): void;
+  processing(name: string): void;
+  buildingChains(infix: string): void;
+  resultCascade(token: Token, variable: Variable): void;
+  injected(target: { file: string; selector: string }): void;
+  presets(data: { name: string; infix: string }): void;
+  variableWarning(data: { name: string; unused: string[]; missing: string[]; infix: string; }): void;
+  selectorWarning(data: { invalidSelectors: string[]; file: string; }): void;
+  selectorError(data: { selector: string; validSelectors: string[]; file: string; }): void;
+  missingFile(file: string): void;
+  formatLoggingPath(file: string): string;
+};
+
+const log: Log = {
   jsonsLoaded(tokens) { console.log("📦 Loaded json files:", tokens.map(c => c.name)) },
 
   injecting(file) { console.log("\n⚙️ Injecting into:", this.formatLoggingPath(file)) },
@@ -33,10 +59,10 @@ const log = {
   variableWarning(variableData) {
     const { name, unused, missing, infix } = variableData
     console.log(`     🚮 Component: ${name}-${infix}`)
-    if (unused.length) {
+    if (unused.length > 0) {
       console.log(`🎨 Unused in CSS (${unused.length}) ${unused.map(s => `${s}`).join(" , ")}`)
     }
-    if (missing.length) {
+    if (missing.length > 0) {
       console.log(`📦 Missing in JSON (${missing.length}) ${missing.map(s => `${s}`).join(" , ")}`)
     }
     console.log()

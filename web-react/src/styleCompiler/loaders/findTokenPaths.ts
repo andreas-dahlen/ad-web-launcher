@@ -1,13 +1,13 @@
 import fs from "node:fs";
 import path from "node:path";
 
-export function findTokenFiles(dir: string): string[] {
+export function findTokenPaths(dir: string): string[] {
   return fs.readdirSync(dir, { withFileTypes: true })
     .flatMap(entry => {
       const fullPath = path.join(dir, entry.name);
 
       if (entry.isDirectory()) {
-        return findTokenFiles(fullPath);
+        return findTokenPaths(fullPath);
       }
 
       if (entry.isFile() &&

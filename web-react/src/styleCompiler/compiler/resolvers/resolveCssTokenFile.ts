@@ -1,6 +1,6 @@
-import path from "path";
+import path from "node:path";
 
-export default function resolveCssTokenFile(file, tokenName) {
+export default function resolveCssTokenFile(file: string, tokenName: string): string | null {
   const moduleName = path.basename(file);
   const expected = `${tokenName}.module.css`;
 
