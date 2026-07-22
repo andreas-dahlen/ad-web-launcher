@@ -40,12 +40,11 @@ export default defineConfig({
       '@shared': fromRoot('src/shared/'),
       '@stores': fromRoot('src/shared/state/stores'),
       '@hooks': fromRoot('src/shared/state/hooks'),
-      '@typing': fromRoot('src/shared/typing'),
+      '@types': fromRoot('src/shared/types'),
       '@styles': fromRoot('src/shared/styles'),
       '@generated': fromRoot('src/shared/generated'),
 
-      '@styleCompiler': fromRoot('src/styleCompiler'),
-      '@schema': fromRoot('src/styleCompiler/schema'),
+      '@styleTokens': fromRoot('src/styleTokens'),
 
       '@test': fromRoot('src/test')
     }

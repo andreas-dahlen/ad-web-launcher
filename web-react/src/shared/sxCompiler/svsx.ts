@@ -1,8 +1,8 @@
-import type { ValidPrefix, VarDef } from '../compilerUtils/compiler.types';
-import { getAllowedPrefixes } from '../compilerUtils/getAllowedPrefixes';
-import { toCssVar } from '../compilerUtils/stringFormaters';
-import { isValidPrefix } from '../compilerUtils/prefixes';
-import { normalizeCssValue } from '../compilerUtils/normalizeCssValue';
+import type { ValidPrefix, VarDef } from '../tokenUtils/compiler.types';
+import { getAllowedPrefixes } from '../tokenUtils/getAllowedPrefixes';
+import { toCssVar } from '../tokenUtils/stringFormaters';
+import { isValidPrefix } from '../tokenUtils/prefixes';
+import { normalizeCssValue } from '../tokenUtils/normalizeCssValue';
 
 /** Transforms an object into CSS style-variable entries */
 export function svsx(

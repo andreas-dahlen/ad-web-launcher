@@ -9,7 +9,6 @@ import type { DynamicIconComponent } from '@shared/types/svg'
 import type { Icon } from '@phosphor-icons/react';
 import type { Mode } from '@composites/types/comp.types';
 import { svgIconStyle, type SvgIconStyle } from '@shared/generated/tokenStyles/tokenStyles'
-import vars from '@styleCompiler/tokens.module.css'
 
 export type IconSettings = {
   Svg: Icon | DynamicIconComponent
@@ -54,7 +53,7 @@ export default function SvgIcon({
       mirrored={isPhosphorIcon && svgFlipX ? true : undefined}
       {...dasx({ mode: mode })}
       style={{ ...svsx(styleVars ?? {}, svgIconStyle) }}
-      className={clsx(vars.svgIconCompiler, css.svg, ...cpsx(presets, svgIconPreset))}
+      className={clsx(css.svg, ...cpsx(presets, svgIconPreset))}
     />
   )
 }

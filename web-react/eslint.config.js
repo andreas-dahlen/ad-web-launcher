@@ -54,6 +54,11 @@ export default defineConfig([
         },
       },
 
+      //       Captured module	folder/*/**, capture...
+      //        Flat ownership folder	folder/**
+      //        Recursive folder tree without capture	folder/**/*
+      //         Child namespace ownership	folder/*/**
+
       'boundaries/elements': [
         { type: 'api', pattern: 'src/api/**/*' },
         { type: 'app', pattern: 'src/app/*/**', capture: ['mod'] },
@@ -67,7 +72,9 @@ export default defineConfig([
         { type: 'primitives', pattern: 'src/primitives/*/**', capture: ['mod'] },
         { type: 'shared', pattern: 'src/shared/*/**', capture: ['mod'] },
         { type: 'generated', pattern: 'src/shared/generated/*/**', capture: ['mod'] },
-        { type: 'styleCompiler', pattern: 'src/styleCompiler/*/**', capture: ['mod'] },
+        { type: 'tokenCompiler', pattern: 'src/styleTokens/compiler/*/**', capture: ['mod'] },
+        { type: 'tokens', pattern: 'src/styleTokens/tokens/*/**', capture: ['mod'] },
+        { type: 'tokenHelpers', pattern: 'src/styleTokens/tokenHelpers/**' }
       ],
       'boundaries/files': [
 
@@ -82,7 +89,9 @@ export default defineConfig([
         { pattern: '**/buildDesc.ts', category: 'buildDesc' },
         { pattern: '**/pipeline.ts', category: 'pipeline' },
         { pattern: '**/solverRouter.ts', category: 'solverRouter' },
-        { pattern: '**/gesture.utils.ts', category: 'gestureUtils' }
+        { pattern: '**/gesture.utils.ts', category: 'gestureUtils' },
+
+        { pattern: "src/styleTokens/tokens/**/*.{json,jsonc}", category: "tokenData" }
       ],
       "boundaries/debug": {
         enabled: true,
@@ -186,7 +195,6 @@ export default defineConfig([
               allow: {
                 to: [
                   { element: { type: "composites", captured: { mod: "types" } } },
-                  // { element: { type: "styleCompiler", captured: { mod: "schema" } } },
                   { element: { type: "shared", captured: { mod: "sxCompiler" } } },
                   { element: { type: "shared", captured: { mod: "generated" } } }
 
@@ -205,7 +213,6 @@ export default defineConfig([
                   { element: { type: "primitives", captured: { mod: "*" } } },
                   { element: { type: "blocks" } },
                   { element: { type: "data", captured: { mod: "generators" } } },
-                  // { element: { type: "styleCompiler", captured: { mod: "schema" } } },
                   { element: { type: "shared", captured: { mod: "state" } }, file: { categories: "stores" } },
                   { element: { type: "shared", captured: { mod: "generated" } } }
                 ]
@@ -321,9 +328,7 @@ export default defineConfig([
                     file: { categories: "types" }
                   },
                   { element: { type: "interaction", captured: { mod: "adapter" } } },
-                  // { element: { type: "interaction", captured: { mod: "assertions" } } },
                   { element: { type: "composites", captured: { mod: "styleVars" } } },
-                  // { element: { type: "styleCompiler", captured: { mod: "schema" } } },
                   { element: { type: "shared", captured: { mod: "sxCompiler" } } },
                   { element: { type: "shared", captured: { mod: "state" } }, file: { categories: "stores" } },
                   { element: { type: "shared", captured: { mod: "generated" } } }
@@ -344,11 +349,21 @@ export default defineConfig([
             },
             {
               from: { element: { type: "shared", captured: { mod: "sxCompiler" } } },
-              allow: { to: { element: { type: "shared", captured: { mod: "compilerUtils" } } } }
+              allow: { to: { element: { type: "shared", captured: { mod: "tokenUtils" } } } }
             },
             // ----------------------------------
             // shared/generated
             // ----------------------------------
+            {
+              from: { element: { type: "shared", captured: { mod: "generated" } } },
+              allow: {
+                to: [
+                  { element: { type: "shared", captured: { mod: "tokenUtils" } } },
+                  { element: { type: "tokens" } },
+                  { file: { categories: "tokenData" } }
+                ]
+              }
+            },
             {
               from: { element: { type: "shared", element: { type: "generated", captured: { mod: "presets" } } } },
               allow: {
@@ -358,34 +373,49 @@ export default defineConfig([
                 ]
               }
             },
+            // ----------------------------------
+            // tokenCompiler
+            // ----------------------------------
             {
-              from: { element: { type: "shared", element: { type: "generated", captured: { mod: "components" } } } },
+              from: { element: { type: "tokenCompiler", captured: { mod: "*" } } },
+              allow: { to: { element: { type: "shared", captured: { mod: "tokenUtils" } } } }
+            },
+            {
+              from: { element: { type: "tokenCompiler", captured: { mod: "validation" } } },
+              allow: { to: { element: { type: "tokenCompiler", captured: { mod: "logging" } } } }
+            },
+            {
+              from: { element: { type: "tokenCompiler", captured: { mod: "loaders" } } },
+              allow: { to: { element: { type: "tokenCompiler", captured: { mod: "validation" } } } }
+            },
+            {
+              from: { element: { type: "tokenCompiler", captured: { mod: "generators" } } },
+              allow: { to: { element: { type: "tokenCompiler", captured: { mod: "resolvers" } } } }
+            },
+            {
+              from: { element: { type: "tokenCompiler", captured: { mod: "builders" } } },
+              allow: { to: { element: { type: "tokenCompiler", captured: { mod: "validation" } } } }
+            },
+            // ----------------------------------
+            // TOKENS
+            // ----------------------------------
+            {
+              from: { element: { type: "tokens", captured: { mod: "*" } } },
               allow: {
                 to: [
-                  { element: { type: "styleCompiler", captured: { mod: "tokens" } } },
-                  { element: { type: "styleCompiler", captured: { mod: "schema" } } }
+                  {
+                    element: { type: "tokens", captured: { mod: "{{from.element.captured.mod}}" } },
+                    file: { categories: "tokenData" }
+                  },
+                  { element: { type: "tokenHelpers" } }
                 ]
               }
             },
-            // ----------------------------------
-            // STYLECOMPILER
-            // ----------------------------------
+
+
             {
-              from: { element: { type: "styleCompiler", captured: { mod: "schema" } } },
-              allow: {
-                to: [
-                  { element: { type: "styleCompiler", captured: { mod: "tokens" } } },
-                  { element: { type: "shared", captured: { mod: "compilerUtils" } } }
-                ]
-              }
-            },
-            {
-              from: { element: { type: "styleCompiler", captured: { mod: "tokens" } } },
-              allow: {
-                to: [
-                  { element: { type: "shared", captured: { mod: "compilerUtils" } } }
-                ]
-              }
+              from: { element: { type: "tokenHelpers" } },
+              allow: { to: { element: { type: "shared", captured: { mod: "tokenUtils" } } } }
             },
             // ----------------------------------
             // FILES
@@ -514,7 +544,7 @@ export default defineConfig([
   },
   // ──────────── Json linting ──────────────────────
   {
-    files: ['src/styleCompiler/tokens/**/*.{json,jsonc}'],
+    files: ['src/styleTokens/tokens/**/*.{json,jsonc}'],
     plugins: {
       'json-schema-validator': jsonSchemaValidator,
     },
@@ -524,8 +554,8 @@ export default defineConfig([
         {
           schemas: [
             {
-              fileMatch: ['src/styleCompiler/tokens/**/*.{json,jsonc}'],
-              schema: './src/styleCompiler/schema/token.schema.json'
+              fileMatch: ['src/styleTokens/tokens/**/*.{json,jsonc}'],
+              schema: './src/styleTokens/schema/token.schema.json'
             }
           ]
         }
@@ -534,8 +564,8 @@ export default defineConfig([
   },
   {
     files: [
-      "**/styleCompiler/tokens/**/*.json",
-      "**/styleCompiler/tokens/**/*.jsonc"
+      "**/styleTokens/tokens/**/*.json",
+      "**/styleTokens/tokens/**/*.jsonc"
     ],
     languageOptions: {
       parser: jsoncParser

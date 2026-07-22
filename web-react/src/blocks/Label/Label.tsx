@@ -1,6 +1,5 @@
 import React from 'react'
 import { svsx } from '../../shared/sxCompiler/svsx'
-import vars from '@styleCompiler/tokens.module.css'
 import clsx from 'clsx'
 import css from './Label.module.css'
 import type { Mode } from '@composites/types/comp.types'
@@ -36,7 +35,7 @@ export default function Label({
   const positionClass = positionMap[position ?? "bottom"]
 
   return (
-    <div className={clsx(vars.labelCompiler, css.labelwrapper,
+    <div className={clsx(css.labelwrapper,
       positionClass,
       ...cpsx(presets, labelPreset))}
       style={svsx(styleVars ?? {}, labelStyle)}>

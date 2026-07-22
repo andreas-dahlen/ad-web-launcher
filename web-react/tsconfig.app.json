@@ -41,7 +41,7 @@
     "node_modules",
     "dist",
     "build",
-    "src/styleCompiler",
+    "src/styleTokens/compiler",
     "plugins",
     "eslint"
   ]

@@ -4,7 +4,6 @@ import { svsx } from '../../shared/sxCompiler/svsx'
 import { surfacePreset, type SurfacePreset } from '@generated/presets/surface.preset'
 import { cpsx } from '../../shared/sxCompiler/cpsx'
 import { surfaceStyle, type SurfaceStyle } from '@shared/generated/tokenStyles/tokenStyles'
-import vars from '@styleCompiler/tokens.module.css'
 type PanelBaseProps = {
   children: React.ReactNode
   styleVars?: SurfaceStyle
@@ -16,7 +15,7 @@ type PanelBaseProps = {
 export function Surface({ children, styleVars, presets, isInFlow = true }: PanelBaseProps) {
   return (
     <div
-      className={clsx(vars.surfaceCompiler, css.surface,
+      className={clsx(css.surface,
         ...cpsx(presets, surfacePreset))}
       style={{ position: isInFlow ? "relative" : "absolute", ...svsx(styleVars ?? {}, surfaceStyle) }}
     >

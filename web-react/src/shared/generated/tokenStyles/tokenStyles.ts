@@ -4,20 +4,20 @@
 
 import type {
   StyleFromVars
-} from "@shared/compilerUtils/compiler.types";
+} from "@shared/tokenUtils/compiler.types";
 
 import {
   convertJson
-} from "@schema/convert";
+} from "@shared/tokenUtils/toRuntimeToken.ts";
 
-import buttonJson from "../../../styleCompiler/tokens/button";
-import carouselJson from "../../../styleCompiler/tokens/carousel";
-import labelJson from "../../../styleCompiler/tokens/label";
-import scrollJson from "../../../styleCompiler/tokens/scroll";
-import sliderJson from "../../../styleCompiler/tokens/slider";
-import surfaceJson from "../../../styleCompiler/tokens/surface";
-import svgIconJson from "../../../styleCompiler/tokens/svgIcon";
-import testJson from "../../../styleCompiler/tokens/test";
+import buttonJson from "../../../styleTokens/tokens/button.json";
+import carouselJson from "../../../styleTokens/tokens/carousel.json";
+import labelJson from "../../../styleTokens/tokens/label.json";
+import scrollJson from "../../../styleTokens/tokens/scroll.json";
+import sliderJson from "../../../styleTokens/tokens/slider";
+import surfaceJson from "../../../styleTokens/tokens/surface.json";
+import svgIconJson from "../../../styleTokens/tokens/svgIcon.json";
+import testJson from "../../../styleTokens/tokens/test.json";
 
 
 export const buttonStyle = convertJson(buttonJson);

@@ -16,12 +16,11 @@
       "@shared/*": ["./src/shared/*"],
       "@stores/*": ["./src/shared/state/stores/*"],
       "@hooks/*": ["./src/shared/state/hooks/*"],
-      "@typing/*": ["./src/shared/typing/*"],
+      "@types/*": ["./src/shared/types/*"],
       "@styles/*": ["./src/shared/styles/*"],
       "@generated/*": ["./src/shared/generated/*"],
       
-      "@styleCompiler/*": ["./src/styleCompiler/*"],
-      "@schema/*": ["./src/styleCompiler/schema/*"],
+      "@styleTokens/*": ["./src/styleTokens/*"],
 
       "@test/*": ["./src/test/*"]
     }

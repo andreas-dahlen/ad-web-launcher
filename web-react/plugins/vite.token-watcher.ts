@@ -1,7 +1,7 @@
 import type { Plugin } from "vite";
 import fs from "node:fs";
 import path from "node:path";
-import resolveTokenOwnerName from "../src/shared/compilerUtils/resolveTokenOwnerName";
+import getTokenOwner from "../src/shared/tokenUtils/getTokenOwner.ts";
 
 function findCssModules(dir: string): string[] {
   const files = fs.readdirSync(dir, { withFileTypes: true });
@@ -51,7 +51,7 @@ export default function tokenWatcher(): Plugin {
       const cssFiles = findCssModules("./src");
       const cssMap = buildCssModuleMap(cssFiles);
 
-      server.watcher.add("src/styleCompiler/tokens/");
+      server.watcher.add("src/tokenCompiler/tokens/");
 
       server.watcher.on("change", file => {
         if (
@@ -68,7 +68,7 @@ export default function tokenWatcher(): Plugin {
         let cssFile = cssCache.get(cacheKey);
 
         if (!cssFile) {
-          const owner = resolveTokenOwnerName(file);
+          const owner = getTokenOwner(file);
 
           cssFile = cssMap.get(owner.toLowerCase());
 

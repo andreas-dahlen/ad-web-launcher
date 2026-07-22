@@ -12,7 +12,6 @@ import type { SliderPrimProps } from '@primitives/types/prim.types.ts'
 import { sliderPreset } from '@generated/presets/slider.preset.ts'
 import { cpsx } from '../../shared/sxCompiler/cpsx.ts'
 import { sliderStyle } from '@shared/generated/tokenStyles/tokenStyles.ts'
-import vars from '@styleCompiler/tokens.module.css'
 
 export default function SliderPrim({
   id,
@@ -84,7 +83,7 @@ export default function SliderPrim({
 
   return (
     <div
-      className={clsx(css.slider, vars.sliderCompiler, ...cpsx(presets, sliderPreset))}
+      className={clsx(css.slider, ...cpsx(presets, sliderPreset))}
       style={{
         pointerEvents: interactive ? 'auto' : 'none',
         position: isInFlow ? "relative" : "absolute",
