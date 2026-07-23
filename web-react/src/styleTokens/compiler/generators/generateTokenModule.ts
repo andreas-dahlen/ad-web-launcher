@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { toCamelCase } from '../../../shared/tokenUtils/stringFormaters.ts';
 import { toPascalCase } from '../../../shared/tokenUtils/stringFormaters.ts';
-import type { LoadedToken } from '@styleTokens/compiler/loaders/getToken.ts';
+import type { LoadedToken } from '@styleTokens/compiler/loaders/loadToken.ts';
 
 export default function generateTokenModule(token: LoadedToken): void {
   const pascalName = toPascalCase(token.name)

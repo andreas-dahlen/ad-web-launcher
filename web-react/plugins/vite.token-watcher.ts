@@ -1,7 +1,7 @@
 import type { Plugin } from "vite";
 import fs from "node:fs";
 import path from "node:path";
-import getTokenOwner from "../src/shared/tokenUtils/getTokenOwner.ts";
+import resolveTokenGroup from "../src/shared/tokenUtils/resolveTokenGroup.ts";
 
 function findCssModules(dir: string): string[] {
   const files = fs.readdirSync(dir, { withFileTypes: true });
@@ -68,7 +68,7 @@ export default function tokenWatcher(): Plugin {
         let cssFile = cssCache.get(cacheKey);
 
         if (!cssFile) {
-          const owner = getTokenOwner(file);
+          const owner = resolveTokenGroup(file);
 
           cssFile = cssMap.get(owner.toLowerCase());
 

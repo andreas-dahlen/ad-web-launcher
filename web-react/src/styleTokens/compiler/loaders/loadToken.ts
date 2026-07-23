@@ -2,6 +2,7 @@ import loadTokenFile from './loadTokenFile.ts';
 import validate from '../validation/validateJson.ts';
 import type { RawVarDef, ValidPrefix } from '../../../shared/tokenUtils/compiler.types.ts'
 import { filterValidPrefixes } from '../../../shared/tokenUtils/prefixes.ts';
+import { getAllowedPrefixes } from '../../../shared/tokenUtils/getAllowedPrefixes.ts';
 
 export type LoadedVariable = {
   key: string;
@@ -9,11 +10,12 @@ export type LoadedVariable = {
   allowed: ValidPrefix[];
   exclude: ValidPrefix[];
   values: Partial<Record<ValidPrefix, string>>;
+  effectiveAllowed: ValidPrefix[]
 };
 
 export type LoadedToken = {
   name: string;
-  file: string;
+  tokenPath: string;
   infix: string;
   alwaysAllowed: ValidPrefix[];
   vars: LoadedVariable[];
@@ -23,14 +25,15 @@ export default function loadToken(fullPath: string): LoadedToken {
   const { json, errors } = loadTokenFile(fullPath)
 
   validate.parse(errors, json, fullPath)
-
   const infix = json.infix ?? json.component;
+
+  const alwaysAllowed = filterValidPrefixes(json.alwaysAllowed)
 
   return {
     name: json.component,
-    file: fullPath,
+    tokenPath: fullPath,
     infix,
-    alwaysAllowed: filterValidPrefixes(json.alwaysAllowed),
+    alwaysAllowed: alwaysAllowed,
     vars: Object.entries(json.vars ?? {}).map(([key, defRaw]) => {
       const def: RawVarDef = defRaw ?? {};
 
@@ -41,12 +44,15 @@ export default function loadToken(fullPath: string): LoadedToken {
           ? def.name.trim()
           : key;
 
+      const allowed = filterValidPrefixes(def.allowed)
+      const exclude = filterValidPrefixes(def.exclude)
       return {
         key,
         name: variableName,
-        allowed: filterValidPrefixes(def.allowed),
-        exclude: filterValidPrefixes(def.exclude),
-        values: def.values || {}
+        allowed: allowed,
+        exclude: exclude,
+        values: def.values || {},
+        effectiveAllowed: getAllowedPrefixes(allowed, alwaysAllowed, exclude)
       };
     })
   }
