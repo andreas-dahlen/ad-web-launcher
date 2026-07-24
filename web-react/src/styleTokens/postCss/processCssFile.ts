@@ -14,7 +14,10 @@ export default function processCssFile({
   root: Root;
   group: TokenGroup
 }) {
+  log.injecting(group.groupPath)
+
   for (const token of group.tokens) {
+    log.processing(token.name)
 
     reporter.foundToken(token.name)
 
@@ -45,8 +48,6 @@ export default function processCssFile({
       });
     }
 
-    log.injecting(group.groupPath)
-    log.processing(token.name)
     log.buildingChains(token.infix)
 
     for (const variable of token.vars) {

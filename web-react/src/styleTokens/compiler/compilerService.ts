@@ -14,6 +14,7 @@ export function initializeCompiler(tokensDir: string) {
   const groups = buildTokenGroups(tokenPaths, cssGroupMap);
   const cache = createTokenCache(groups);
   //validation?
+  const report = createReportMemory()
   syncCompiler();
 
   return {
@@ -35,6 +36,7 @@ export function initializeCompiler(tokensDir: string) {
   }
 
   function syncCompiler() {
+    report.reset(cache)
     //validation?
     // report.expectTokens(tokens)
     // log.jsonsLoaded(tokens)
@@ -43,6 +45,6 @@ export function initializeCompiler(tokensDir: string) {
   function processCss(root: Root, cssPath: string): void {
     const group = cache.getGroupByCssPath(cssPath)
     if (!group) return
-    processCssFile({ root, group })
+    processCssFile({ root, group, report })
   }
 }

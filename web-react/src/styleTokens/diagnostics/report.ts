@@ -119,5 +119,14 @@ export default {
   mismatchedVariables(variableData: VariableData) {
     mismatchedVariables.add(variableData)
     scheduleFlush();
+  },
+  clear() {
+    injectedTargets.clear();
+    missingClasses.clear();
+    expectedTokens.clear();
+    foundTokens.clear();
+    presets.clear();
+    brokenSelectors.clear();
+    mismatchedVariables.clear();
   }
 };

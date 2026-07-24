@@ -13,7 +13,7 @@ export default function applyTokenChange({
   cache: TokenCache;
 }) {
   const staleGroup = cache.getGroupByTokenPath(tokenPath);
-  //rename to staleGroup?
+
   const groupPath =
     staleGroup?.groupPath ?? resolveTokenGroup(tokenPath);
 
