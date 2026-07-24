@@ -1,9 +1,9 @@
-import log from './log.ts'
-type InjectedTarget = Parameters<typeof log.injected>[0];
-type PresetData = Parameters<typeof log.presets>[0];
-type VariableData = Parameters<typeof log.variableWarning>[0];
-type SelectorWarningData = Parameters<typeof log.selectorWarning>[0];
-type SelectorErrorData = Parameters<typeof log.selectorError>[0];
+import print from './print.ts'
+type InjectedTarget = Parameters<typeof print.injected>[0];
+type PresetData = Parameters<typeof print.presets>[0];
+type VariableData = Parameters<typeof print.variableWarning>[0];
+type SelectorWarningData = Parameters<typeof print.selectorWarning>[0];
+type SelectorErrorData = Parameters<typeof print.selectorError>[0];
 
 const state = {
   timer: undefined as ReturnType<typeof setTimeout> | undefined,
@@ -28,21 +28,21 @@ function flush() {
   if (injectedTargets.size > 0) {
     console.log(`\n 🎯 Injected Cascade (${injectedTargets.size})`);
     for (const target of injectedTargets) {
-      log.injected(target)
+      print.injected(target)
     }
   }
 
   if (presets.size > 0) {
     console.log(`\n 📝 Presets generated (${presets.size})`)
     for (const preset of presets) {
-      log.presets(preset)
+      print.presets(preset)
     }
   }
 
   if (mismatchedVariables.size > 0) {
     console.log(`\n 🧐 Mismatched CSS variables (${mismatchedVariables.size})`)
     for (const variableData of mismatchedVariables) {
-      log.variableWarning(variableData)
+      print.variableWarning(variableData)
     }
   }
 
@@ -50,14 +50,14 @@ function flush() {
   if (brokenSelectors.size > 0) {
     console.log(`\n 🙊 Unusable preset selectors (${brokenSelectors.size})`)
     for (const selector of brokenSelectors) {
-      log.selectorWarning(selector)
+      print.selectorWarning(selector)
     }
   }
 
   if (missingClasses.size > 0) {
     console.log(`\n 🧩  Missing css classes for injection (${missingClasses.size})`);
     for (const selector of missingClasses) {
-      log.selectorError(selector)
+      print.selectorError(selector)
     }
   }
 
@@ -68,7 +68,7 @@ function flush() {
   if (missing.length > 0) {
     console.log(`\n 📁 Missing Files (${missing.length})`);
     for (const name of missing)
-      log.missingFile(name)
+      print.missingFile(name)
   }
 
 

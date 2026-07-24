@@ -6,6 +6,7 @@ import { createTokenCache } from './state/tokenCache.ts';
 // import validate from './validation/validateJson';
 import applyTokenChange from './processors/applyTokenChange.ts';
 import processCssFile from '../postCss/processCssFile.ts'
+import createDiagnosticLog from '../diagnostics/createDiagnostics.ts';
 export type TokenCompiler = ReturnType<typeof initializeCompiler>;
 
 export function initializeCompiler(tokensDir: string) {
@@ -14,7 +15,7 @@ export function initializeCompiler(tokensDir: string) {
   const groups = buildTokenGroups(tokenPaths, cssGroupMap);
   const cache = createTokenCache(groups);
   //validation?
-  const report = createReportMemory()
+  const log = createDiagnosticLog()
   syncCompiler();
 
   return {
@@ -36,7 +37,7 @@ export function initializeCompiler(tokensDir: string) {
   }
 
   function syncCompiler() {
-    report.reset(cache)
+    log.resync(cache)
     //validation?
     // report.expectTokens(tokens)
     // log.jsonsLoaded(tokens)
@@ -45,6 +46,6 @@ export function initializeCompiler(tokensDir: string) {
   function processCss(root: Root, cssPath: string): void {
     const group = cache.getGroupByCssPath(cssPath)
     if (!group) return
-    processCssFile({ root, group, report })
+    processCssFile({ root, group, log })
   }
 }

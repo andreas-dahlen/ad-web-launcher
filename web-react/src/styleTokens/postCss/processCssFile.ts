@@ -1,61 +1,69 @@
 import type { Root } from "postcss";
-import reporter from '../diagnostics/report.ts'
-import log from '../diagnostics/log.ts';
+import reporter from '../diagnostics/report.ts';
+import print from '../diagnostics/print.ts';
 import resolveSelector from './resolvers/resolveSelector.ts';
 import resolveVariableUsage from './resolvers/resolveVariableUsage.ts';
 import buildVarDefinitions from './builders/buildVarDefinitions.ts';
 import buildCascade from './builders/buildCascade.ts';
 import type { TokenGroup } from '../types/compiler.types.ts';
+import type { Diagnostics } from '../diagnostics/createDiagnostics.ts';
 
 export default function processCssFile({
   root,
-  group
+  group,
+  log
 }: {
   root: Root;
-  group: TokenGroup
+  group: TokenGroup;
+  log: Diagnostics
 }) {
-  log.injecting(group.groupPath)
+  print.injecting(group.groupPath)
 
   for (const token of group.tokens) {
-    log.processing(token.name)
-
-    reporter.foundToken(token.name)
+    print.processing(token.name)
 
     const selectorResult = resolveSelector(root, token)
-    const { selector, validSelectors, invalidSelectors, rule } = selectorResult
+    // const { selector, validSelectors, invalidSelectors, rule } = selectorResult
+    const { rule } = selectorResult
+
+    log.selectors({ group, token, selectorResult })
 
     // generatePresetFile({ name: token.name, file: group.cssPath, selectors: validSelectors })
-    reporter.presets({ name: token.name, infix: token.infix })
+    // log.preset({ name: token.name, infix: token.infix })
 
-    if (invalidSelectors.length > 0) {
-      reporter.brokenSelectors({ file: group.cssPath, invalidSelectors })
-    }
+    // if (invalidSelectors.length > 0) {
+    //   log.brokenSelectors({ file: group.cssPath, invalidSelectors })
+    // }
 
     if (!rule) {
-      reporter.missingClass({ selector, file: group.groupPath, validSelectors });
+      // log.missingClass({ selector, file: group.groupPath, validSelectors });
       continue
     }
-    reporter.injected({ file: group.cssPath, selector });
 
-    const usage = resolveVariableUsage(root, token);
+    // const usage = resolveVariableUsage(root, token);
 
-    if (usage.missing.length > 0 || usage.unused.length > 0) {
-      reporter.mismatchedVariables({
-        name: token.name,
-        infix: token.infix,
-        missing: usage.missing,
-        unused: usage.unused
-      });
-    }
+    // log.mismatchedVariables(resolveVariableUsage(root, token))
 
-    log.buildingChains(token.infix)
+    log.variables({ root, token })
+
+    // if (usage.missing.length > 0 || usage.unused.length > 0) {
+    //   log.mismatchedVariables({
+    //     name: token.name,
+    //     infix: token.infix,
+    //     missing: usage.missing,
+    //     unused: usage.unused
+    //   });
+    // }
+
+    print.buildingChains(token.infix)
 
     for (const variable of token.vars) {
       buildVarDefinitions(rule, token, variable);
       buildCascade(rule, token, variable);
 
-      log.resultCascade(token, variable)
+      print.resultCascade(token, variable)
     }
-
+    log.processedToken(token.name)
   }
+  log.processedGroup(group.groupPath)
 }

@@ -12,7 +12,7 @@ type Variable = {
   values: Record<string, string>;
 };
 
-type Log = {
+type Print = {
   jsonsLoaded(tokens: Token[]): void;
   injecting(file: string): void;
   processing(name: string): void;
@@ -26,7 +26,7 @@ type Log = {
   missingFile(file: string): void;
 };
 
-const log: Log = {
+const print: Print = {
   jsonsLoaded(tokens) { console.log("📦 Loaded json files:", tokens.map(c => c.name)) },
 
   injecting(file) { console.log("\n⚙️ Injecting into:", formatLogPath(file)) },
@@ -71,8 +71,8 @@ const log: Log = {
   },
 
   selectorWarning(warningData) {
-    const { invalidSelectors, file } = warningData
-    console.log(`     🚮 File: ${formatLogPath(file)}
+    const { invalidSelectors, tokenPath } = warningData
+    console.log(`     🚮 File: ${formatLogPath(tokenPath)}
         Selectors: ${invalidSelectors.map(s => `${s}`).join(" , ")}\n`)
   },
 
@@ -92,4 +92,4 @@ const log: Log = {
   },
 }
 
-export default log
+export default print
