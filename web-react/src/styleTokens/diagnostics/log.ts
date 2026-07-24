@@ -1,5 +1,5 @@
-import { prefixPriority } from "../../../shared/tokenUtils/prefixes.ts";
-import path from "node:path";
+import { isValidPrefix, prefixPriority } from '../../shared/tokenUtils/prefixes.ts'
+import formatLogPath from './formatLogPath.ts';
 
 type Token = {
   name: string;
@@ -24,13 +24,12 @@ type Log = {
   selectorWarning(data: { invalidSelectors: string[]; file: string; }): void;
   selectorError(data: { selector: string; validSelectors: string[]; file: string; }): void;
   missingFile(file: string): void;
-  formatLoggingPath(file: string): string;
 };
 
 const log: Log = {
   jsonsLoaded(tokens) { console.log("📦 Loaded json files:", tokens.map(c => c.name)) },
 
-  injecting(file) { console.log("\n⚙️ Injecting into:", this.formatLoggingPath(file)) },
+  injecting(file) { console.log("\n⚙️ Injecting into:", formatLogPath(file)) },
   processing(name) { console.log(`🎨 Processing token: ${name}`) },
   buildingChains(infix) { console.log(`\n🔧 chaining --final-${infix}-*`) },
 
@@ -40,7 +39,7 @@ const log: Log = {
       .map(prefix => {
         const val = variable.values[prefix];
         if (!val) return prefix;
-        if (!prefixPriority.includes(val)) {
+        if (!isValidPrefix(val)) {
           return `${prefix}:${val}`; // literal
         }
         return `${prefix}:${val}`; // prefix mapping
@@ -49,7 +48,7 @@ const log: Log = {
   },
 
   injected(target) {
-    console.log(`   ✅ ${this.formatLoggingPath(target.file)} → ${target.selector}`)
+    console.log(`   ✅ ${formatLogPath(target.file)} → ${target.selector}`)
   },
   presets(data) {
     const { name, infix } = data
@@ -73,29 +72,24 @@ const log: Log = {
 
   selectorWarning(warningData) {
     const { invalidSelectors, file } = warningData
-    console.log(`     🚮 File: ${this.formatLoggingPath(file)}
+    console.log(`     🚮 File: ${formatLogPath(file)}
         Selectors: ${invalidSelectors.map(s => `${s}`).join(" , ")}\n`)
   },
 
   selectorError(selectorData) {
-    const { selector, validSelectors, file } = selectorData
+    const { selector, validSelectors, file } = selectorData;
 
     console.warn(
       `    ❌ Expected: ${selector}
-       File: ${this.formatLoggingPath(file)}
-       Found: ${validSelectors.map(s => `${s}`).join(" | ")}
+       File: ${formatLogPath(file)}
+       Found: ${validSelectors.join(" | ")}
       ─────────────────────────────────────────────────────`
     );
   },
 
-  missingFile(file) { console.log(`    ❌ ${file}.module.css`) },
-
-  formatLoggingPath(file) {
-    return path.relative(process.cwd(), file)
-      .split(path.sep)
-      .slice(-2)
-      .join("/")
-  }
+  missingFile(file) {
+    console.log(`    ❌ ${file}.module.css`);
+  },
 }
 
 export default log

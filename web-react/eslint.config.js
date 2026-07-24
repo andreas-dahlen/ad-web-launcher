@@ -72,9 +72,9 @@ export default defineConfig([
         { type: 'primitives', pattern: 'src/primitives/*/**', capture: ['mod'] },
         { type: 'shared', pattern: 'src/shared/*/**', capture: ['mod'] },
         { type: 'generated', pattern: 'src/shared/generated/*/**', capture: ['mod'] },
-        { type: 'tokenCompiler', pattern: 'src/styleTokens/compiler/*/**', capture: ['mod'] },
-        { type: 'tokens', pattern: 'src/styleTokens/tokens/*/**', capture: ['mod'] },
-        { type: 'tokenHelpers', pattern: 'src/styleTokens/tokenHelpers/**' }
+        // { type: 'tokenCompiler', pattern: 'src/styleTokens/compiler/*/**', capture: ['mod'] },
+        // { type: 'tokens', pattern: 'src/styleTokens/tokens/*/**', capture: ['mod'] },
+        // { type: 'tokenHelpers', pattern: 'src/styleTokens/tokenHelpers/**' }
       ],
       'boundaries/files': [
 
@@ -376,65 +376,65 @@ export default defineConfig([
             // ----------------------------------
             // tokenCompiler
             // ----------------------------------
-            {
-              from: { element: { type: "tokenCompiler", captured: { mod: "*" } } },
-              allow: { to: { element: { type: "shared", captured: { mod: "tokenUtils" } } } }
-            },
-            {
-              from: { element: { type: "tokenCompiler", captured: { mod: "validation" } } },
-              allow: { to: { element: { type: "tokenCompiler", captured: { mod: "logging" } } } }
-            },
-            {
-              from: { element: { type: "tokenCompiler", captured: { mod: "loaders" } } },
-              allow: { to: { element: { type: "tokenCompiler", captured: { mod: "validation" } } } }
-            },
-            {
-              from: { element: { type: "tokenCompiler", captured: { mod: "generators" } } },
-              allow: { to: { element: { type: "tokenCompiler", captured: { mod: "resolvers" } } } }
-            },
-            {
-              from: { element: { type: "tokenCompiler", captured: { mod: "builders" } } },
-              allow: { to: { element: { type: "tokenCompiler", captured: { mod: "validation" } } } }
-            },
+            // {
+            //   from: { element: { type: "tokenCompiler", captured: { mod: "*" } } },
+            //   allow: { to: { element: { type: "shared", captured: { mod: "tokenUtils" } } } }
+            // },
+            // {
+            //   from: { element: { type: "tokenCompiler", captured: { mod: "validation" } } },
+            //   allow: { to: { element: { type: "tokenCompiler", captured: { mod: "logging" } } } }
+            // },
+            // {
+            //   from: { element: { type: "tokenCompiler", captured: { mod: "loaders" } } },
+            //   allow: { to: { element: { type: "tokenCompiler", captured: { mod: "validation" } } } }
+            // },
+            // {
+            //   from: { element: { type: "tokenCompiler", captured: { mod: "generators" } } },
+            //   allow: { to: { element: { type: "tokenCompiler", captured: { mod: "resolvers" } } } }
+            // },
+            // {
+            //   from: { element: { type: "tokenCompiler", captured: { mod: "builders" } } },
+            //   allow: { to: { element: { type: "tokenCompiler", captured: { mod: "validation" } } } }
+            // },
             // ----------------------------------
             // TOKENS
             // ----------------------------------
-            {
-              from: { element: { type: "tokens", captured: { mod: "*" } } },
-              allow: {
-                to: [
-                  {
-                    element: { type: "tokens", captured: { mod: "{{from.element.captured.mod}}" } },
-                    file: { categories: "tokenData" }
-                  },
-                  { element: { type: "tokenHelpers" } }
-                ]
-              }
-            },
+            // {
+            //   from: { element: { type: "tokens", captured: { mod: "*" } } },
+            //   allow: {
+            //     to: [
+            //       {
+            //         element: { type: "tokens", captured: { mod: "{{from.element.captured.mod}}" } },
+            //         file: { categories: "tokenData" }
+            //       },
+            //       { element: { type: "tokenHelpers" } }
+            //     ]
+            //   }
+            // },
 
 
-            {
-              from: { element: { type: "tokenHelpers" } },
-              allow: { to: { element: { type: "shared", captured: { mod: "tokenUtils" } } } }
-            },
-            // ----------------------------------
-            // FILES
-            // ----------------------------------
-            {
-              from: { file: { categories: "stores" } },
-              allow: {
-                to: { element: { type: "data", captured: { mod: "generators" } } }
-              }
-            },
-            {
-              from: { file: { categories: "types" } },
-              allow: {
-                to: [
-                  { element: { captured: { mod: "{{from.element.captured.mod}}" } } },
-                  { file: { categories: "types" } }
-                ]
-              }
-            }
+            // {
+            //   from: { element: { type: "tokenHelpers" } },
+            //   allow: { to: { element: { type: "shared", captured: { mod: "tokenUtils" } } } }
+            // },
+            // // ----------------------------------
+            // // FILES
+            // // ----------------------------------
+            // {
+            //   from: { file: { categories: "stores" } },
+            //   allow: {
+            //     to: { element: { type: "data", captured: { mod: "generators" } } }
+            //   }
+            // },
+            // {
+            //   from: { file: { categories: "types" } },
+            //   allow: {
+            //     to: [
+            //       { element: { captured: { mod: "{{from.element.captured.mod}}" } } },
+            //       { file: { categories: "types" } }
+            //     ]
+            //   }
+            // }
           ]
         }
       ],

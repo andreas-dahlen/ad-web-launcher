@@ -1,4 +1,4 @@
-import log from './consoleLog.ts'
+import log from './log.ts'
 type InjectedTarget = Parameters<typeof log.injected>[0];
 type PresetData = Parameters<typeof log.presets>[0];
 type VariableData = Parameters<typeof log.variableWarning>[0];

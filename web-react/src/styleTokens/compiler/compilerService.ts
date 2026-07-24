@@ -1,41 +1,48 @@
-import createTokenGroups from './resolvers/createTokenGroups.ts';
+import type { Root } from 'postcss';
+import findTokenPaths from './discovery/findTokenPaths.ts';
+import findModulePaths from './discovery/findModulePaths.ts';
+import buildTokenGroups from './builders/buildTokenGroups.ts';
 import { createTokenCache } from './state/tokenCache.ts';
 // import validate from './validation/validateJson';
-import reporter from "./logging/tokenReport.ts"
-import log from './logging/consoleLog.ts';
-import findTokenPaths from './loaders/findTokenPaths.ts';
-import findModulePaths from './resolvers/findModulePaths.ts';
-import createTokenGroup from './resolvers/createTokenGroup.ts';
-
-
+import applyTokenChange from './processors/applyTokenChange.ts';
+import processCssFile from '../postCss/processCssFile.ts'
+export type TokenCompiler = ReturnType<typeof initializeCompiler>;
 
 export function initializeCompiler(tokensDir: string) {
   const tokenPaths = findTokenPaths(tokensDir);
   const cssGroupMap = findModulePaths(tokenPaths);
-  const groups = createTokenGroups(tokenPaths, cssGroupMap);
+  const groups = buildTokenGroups(tokenPaths, cssGroupMap);
   const cache = createTokenCache(groups);
-
+  //validation?
   syncCompiler();
 
   return {
-    cache,
-    refreshCompiler,
-    syncCompiler,
+    processCss,
+    handleTokenChange
   };
 
+  function handleTokenChange(tokenPath: string) {
+    const cssPath = applyTokenChange({
+      tokenPath,
+      cache,
+    })
 
-  function refreshCompiler(groupPath: string, cssPath: string) {
-    const group = createTokenGroup(groupPath, cssPath);
+    if (!cssPath) return;
 
-    cache.replaceGroup(group);
+    syncCompiler()
 
-    syncCompiler();
+    return cssPath
   }
 
   function syncCompiler() {
-    const tokens = cache.tokens();
+    //validation?
+    // report.expectTokens(tokens)
+    // log.jsonsLoaded(tokens)
+  }
 
-    reporter.expectTokens(tokens);
-    log.jsonsLoaded(tokens);
+  function processCss(root: Root, cssPath: string): void {
+    const group = cache.getGroupByCssPath(cssPath)
+    if (!group) return
+    processCssFile({ root, group })
   }
 }

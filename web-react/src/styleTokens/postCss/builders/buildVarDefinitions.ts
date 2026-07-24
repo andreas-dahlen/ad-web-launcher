@@ -1,8 +1,8 @@
 import type { Rule } from "postcss";
-import { isValidVarDefinition } from "../validation/isValidVarDefinition.ts";
+import { isValidVarDefinition } from "../../validation/isValidVarDefinition.ts";
 import { toCssVar } from "../../../shared/tokenUtils/stringFormaters.ts";
 import { getAllowedPrefixes } from "../../../shared/tokenUtils/getAllowedPrefixes.ts";
-import { prefixPriority, isValidPrefix } from "../../../shared/tokenUtils/prefixes.ts";
+import { prefixPriority, isValidPrefix } from "../../../shared/tokenUtils/prefixes.ts"
 import { normalizeCssValue } from "../../../shared/tokenUtils/normalizeCssValue.ts";
 import type { ValidPrefix } from "../../../shared/tokenUtils/compiler.types.ts";
 

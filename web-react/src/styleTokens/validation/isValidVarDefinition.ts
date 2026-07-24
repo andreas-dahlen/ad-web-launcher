@@ -1,5 +1,5 @@
-import type { ValidPrefix } from '../../../shared/tokenUtils/compiler.types.ts';
-import { isValidPrefix } from '../../../shared/tokenUtils/prefixes.ts';
+import type { ValidPrefix } from '../../shared/tokenUtils/compiler.types.ts';
+import { isValidPrefix } from '../../shared/tokenUtils/prefixes.ts';
 
 export function isValidVarDefinition(
   prefix: ValidPrefix,

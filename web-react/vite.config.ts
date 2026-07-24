@@ -3,20 +3,26 @@ import react from '@vitejs/plugin-react-swc'
 import { viteSingleFile } from 'vite-plugin-singlefile'
 import path from 'path'
 import svgr from "vite-plugin-svgr";
-import tokenWatcher from './plugins/vite.token-watcher';
-import jsoncPlugin from './plugins/vite.plugin-jsonc';
+import createTokenIntegration from './plugins/vite.token-integration';
 
 const fromRoot = (relativePath: string) => path.resolve(__dirname, relativePath)
+const TOKEN_DIR = fromRoot("src/styleTokens/tokens");
 
+const tokenIntegration = createTokenIntegration(TOKEN_DIR);
 // https://vite.dev/config/
 export default defineConfig({
+  css: {
+    postcss: {
+      plugins: [
+        tokenIntegration.postcss
+      ],
+    },
+  },
   plugins: [
     react(),
     viteSingleFile(),
     svgr(),
-    tokenWatcher(),
-    jsoncPlugin()
-
+    tokenIntegration.viteWatcher
   ],
   base: './',
   build: {

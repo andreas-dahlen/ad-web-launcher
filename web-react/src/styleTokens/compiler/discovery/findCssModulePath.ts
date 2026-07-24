@@ -1,36 +1,22 @@
 import fs from "node:fs";
 import path from "node:path";
-import resolveTokenGroup from "../../../shared/tokenUtils/resolveTokenGroup.ts";
 
-export default function findModulePaths(
-  tokenPaths: string[],
-): Map<string, string> {
-
-  const cssModules = findCssModules(path.resolve("./src"));
-
-  const cssMap = new Map<string, string>();
-
-  const groups = new Set(
-    tokenPaths.map(resolveTokenGroup)
+export default function findCssModulePath(
+  groupPath: string,
+): string | undefined {
+  const cssModules = findCssModules(
+    path.resolve("./src"),
   );
 
-  for (const groupPath of groups) {
-    const groupName = extractName(groupPath);
+  const groupName = extractName(groupPath);
 
-    const cssPath = cssModules.find(file => {
-      const name = path
-        .basename(file, ".module.css")
-        .toLowerCase();
+  return cssModules.find(file => {
+    const name = path
+      .basename(file, ".module.css")
+      .toLowerCase();
 
-      return name === groupName;
-    });
-
-    if (cssPath) {
-      cssMap.set(groupPath, cssPath);
-    }
-  }
-
-  return cssMap;
+    return name === groupName;
+  });
 }
 
 

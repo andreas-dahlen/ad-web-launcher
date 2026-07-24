@@ -30,9 +30,9 @@
   "include": [
     "vite.config.ts",
     "plugins/**/*.ts",
+    "src/styleTokens",
+    "src/styleTokens/**/*.ts",
     "src/shared/tokenUtils/**/*.ts",
-    "src/styleTokens/compiler",
-    "src/styleTokens/compiler/**/*.ts",
     "eslint/**/*.ts",
     "eslint",
     "eslint/**.ts"

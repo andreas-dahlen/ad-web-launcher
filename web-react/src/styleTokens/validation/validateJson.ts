@@ -1,10 +1,10 @@
-import type { RawComponent, RawVarDef } from '../../../shared/tokenUtils/compiler.types.ts';
+import formatLogPath from '../diagnostics/formatLogPath.ts';
+import type { RawComponent, RawVarDef } from '../../shared/tokenUtils/compiler.types.ts';
 import { printParseErrorCode, type ParseError } from "jsonc-parser";
-import log from "../logging/consoleLog.ts";
 type TokenValidation = {
   parse(errors: ParseError[], json: RawComponent, fullPath: string): void;
   variable(key: string, def: RawVarDef, fullPath: string): void;
-  duplicates(previous: { fullPath: string } | undefined, cssVariable: string, fullPath: string): never;
+  duplicates(previous: { tokenPath: string } | undefined, cssVariable: string, fullPath: string): never;
 };
 const validate: TokenValidation = {
 
@@ -79,8 +79,8 @@ const validate: TokenValidation = {
         `\nGenerated variable:`,
         `   ${cssVariable}`,
         `\nSources:`,
-        `     ${log.formatLoggingPath(fullPath)}`,
-        `     ${previous && log.formatLoggingPath(previous.fullPath)}\n`
+        `     ${formatLogPath(fullPath)}`,
+        `     ${previous && formatLogPath(previous.tokenPath)}\n`
       ].join("\n")
     );
   }

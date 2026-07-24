@@ -1,25 +1,9 @@
 import loadTokenFile from './loadTokenFile.ts';
-import validate from '../validation/validateJson.ts';
-import type { RawVarDef, ValidPrefix } from '../../../shared/tokenUtils/compiler.types.ts'
+import validate from '../../validation/validateJson.ts';
+import type { RawVarDef } from '../../../shared/tokenUtils/compiler.types.ts'
 import { filterValidPrefixes } from '../../../shared/tokenUtils/prefixes.ts';
 import { getAllowedPrefixes } from '../../../shared/tokenUtils/getAllowedPrefixes.ts';
-
-export type LoadedVariable = {
-  key: string;
-  name: string;
-  allowed: ValidPrefix[];
-  exclude: ValidPrefix[];
-  values: Partial<Record<ValidPrefix, string>>;
-  effectiveAllowed: ValidPrefix[]
-};
-
-export type LoadedToken = {
-  name: string;
-  tokenPath: string;
-  infix: string;
-  alwaysAllowed: ValidPrefix[];
-  vars: LoadedVariable[];
-};
+import type { LoadedToken } from '../../types/compiler.types.ts'
 
 export default function loadToken(fullPath: string): LoadedToken {
   const { json, errors } = loadTokenFile(fullPath)

@@ -1,68 +1,57 @@
-import type { TokenGroup } from '../resolvers/createTokenGroups.ts';
-import type { LoadedToken } from '../loaders/loadToken.ts';
+import type { TokenGroup } from '../../types/compiler.types.ts';
 
-export function createTokenCache(groups: TokenGroup[]) {
+export type TokenCache = ReturnType<typeof createTokenCache>;
 
-  const byGroupPath = new Map<string, TokenGroup>();
-  const byTokenPath = new Map<string, LoadedToken>();
-  const byCssPath = new Map<string, TokenGroup>();
+// In-memory compiler snapshot.
+// Built from token sources at startup and updated when token files change.
+export function createTokenCache(initialGroups: TokenGroup[]) {
+  const groups = new Set<TokenGroup>();
+
+  const groupByTokenPath = new Map<string, TokenGroup>();
+  const groupByCssPath = new Map<string, TokenGroup>();
 
   function addGroup(group: TokenGroup) {
-    byGroupPath.set(group.groupPath, group);
-    byCssPath.set(group.cssPath, group);
+    groups.add(group);
+
+    if (group.cssPath) {
+      groupByCssPath.set(group.cssPath, group);
+    }
 
     for (const token of group.tokens) {
-      byTokenPath.set(token.tokenPath, token);
+      groupByTokenPath.set(token.tokenPath, group);
     }
   }
 
-  function removeGroup(groupPath: string) {
-    const group = byGroupPath.get(groupPath);
+  function removeGroup(group: TokenGroup) {
+    groups.delete(group);
 
-    if (!group) return;
-
-    byGroupPath.delete(groupPath);
-    byCssPath.delete(group.cssPath);
+    if (group.cssPath) {
+      groupByCssPath.delete(group.cssPath);
+    }
 
     for (const token of group.tokens) {
-      byTokenPath.delete(token.tokenPath);
+      groupByTokenPath.delete(token.tokenPath);
     }
   }
 
-  for (const group of groups) {
-    addGroup(group);
-  }
-
-  function replaceGroup(group: TokenGroup) {
-    removeGroup(group.groupPath);
+  for (const group of initialGroups) {
     addGroup(group);
   }
 
   return {
-    replaceGroup,
     addGroup,
     removeGroup,
 
-    getGroup(path: string) {
-      return byGroupPath.get(path);
-    },
-
-    getToken(path: string) {
-      return byTokenPath.get(path);
+    getGroupByTokenPath(tokenPath: string) {
+      return groupByTokenPath.get(tokenPath);
     },
 
     getGroupByCssPath(cssPath: string) {
-      return byCssPath.get(cssPath);
+      return groupByCssPath.get(cssPath);
     },
 
     groups() {
-      // eslint-disable-next-line unicorn/prefer-iterator-to-array
-      return [...byGroupPath.values()];
-    },
-
-    tokens() {
-      // eslint-disable-next-line unicorn/prefer-iterator-to-array
-      return [...byTokenPath.values()];
+      return [...groups];
     },
   };
 }
