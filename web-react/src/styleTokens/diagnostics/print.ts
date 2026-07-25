@@ -12,7 +12,7 @@ type Variable = {
   values: Record<string, string>;
 };
 
-type Print = {
+export type Print = {
   jsonsLoaded(tokens: Token[]): void;
   injecting(file: string): void;
   processing(name: string): void;
