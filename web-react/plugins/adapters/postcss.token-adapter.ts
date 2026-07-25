@@ -10,10 +10,9 @@ export default function createTokenPostCssAdapter(
 
     Once(root: Root, { result }) {
       const cssPath = result.opts.from;
-
       if (!cssPath) return;
 
-      tokenCompiler.processCss(root, cssPath);
+      tokenCompiler.runCssModule(root, cssPath);
     },
   };
 }

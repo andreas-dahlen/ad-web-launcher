@@ -1,8 +1,8 @@
 
 import type { TokenCache } from "../compiler/state/tokenCache.ts";
-import resolveVariableUsage from '../postCss/resolvers/resolveVariableUsage.ts';
+import analyzeVariableUsage from './analyzers/analyzeVariableUsage.ts';
 import type { Root, Rule } from 'postcss';
-import type { LoadedToken } from '../types/compiler.types.ts';
+import type { CssData, LoadedToken } from '../types/compiler.types.ts';
 import analyzeSelectors from './analyzers/analyzeSelectors.ts';
 
 type SelectorCheckData = {
@@ -39,7 +39,7 @@ export type DiagnosticSnapshot = ReturnType<Diagnostics["snapshot"]>;
 
 export type Diagnostics = ReturnType<typeof createDiagnosticService>;
 
-export default function createDiagnosticService(cache: TokenCache) {
+export default function createDiagnosticService() {
 
   const state = {
     expectedGroups: new Set<string>(),
@@ -56,10 +56,8 @@ export default function createDiagnosticService(cache: TokenCache) {
     missingClasses: new Set<MissingClass>(),
     mismatchedVariables: new Set<VariableMismatch>(),
   };
-
-  resync(cache)
   return {
-    resync,
+    reset,
 
     recordSelectors,
 
@@ -72,27 +70,23 @@ export default function createDiagnosticService(cache: TokenCache) {
     snapshot,
   };
 
-  function resync(cache: TokenCache) {
+  function reset() {
     clear();
+  }
 
-    for (const group of cache.groups()) {
-      state.expectedGroups.add(group.groupPath);
-
-      for (const token of group.tokens) {
-        state.expectedTokens.add(token.name);
-      }
-    }
+  function recordCssData(cssData: CssData) {
+    const { usableSelectors, unusableSelectors } = analyzeSelectors(cssData.foundSelectors)
   }
 
   function recordSelectors(data: SelectorCheckData) {
     const { usableSelectors, unusableSelectors } = analyzeSelectors(data.foundSelectors)
-    if (unusableSelectors.length > 0) { //check missing classes aswell... no need to save invalidSelectors if CSS class doesn't exist...
+    if (unusableSelectors.length > 0) {
       state.unusableSelectors.add({
         cssPath: data.cssPath,
         unusableSelectors
       });
     }
-    if (!data.rule) { //&& if no cssPath because if no CSS path we have a bigger issue that should be handled elsewhere...?
+    if (!data.rule) {
       state.missingClasses.add({
         infix: data.token.infix,
         tokenPath: data.token.tokenPath,
@@ -103,7 +97,7 @@ export default function createDiagnosticService(cache: TokenCache) {
 
   function recordVariables(data: VariableCheckData) {
     const { root, token } = data
-    const usage = resolveVariableUsage(root, token)
+    const usage = analyzeVariableUsage(root, token)
     if (usage.missing.length > 0 || usage.unused.length > 0) {
       state.mismatchedVariables.add({
         name: token.name,

@@ -1,4 +1,4 @@
-import type { TokenGroup } from '../../types/compiler.types.ts';
+import type { CssData, TokenGroup } from '../../types/compiler.types.ts';
 
 export type TokenCache = ReturnType<typeof createTokenCache>;
 
@@ -9,9 +9,11 @@ export function createTokenCache(initialGroups: TokenGroup[]) {
 
   const groupByTokenPath = new Map<string, TokenGroup>();
   const groupByCssPath = new Map<string, TokenGroup>();
+  const groupByGroupPath = new Map<string, TokenGroup>();
 
   function addGroup(group: TokenGroup) {
     groups.add(group);
+    groupByGroupPath.set(group.groupPath, group)
 
     if (group.cssPath) {
       groupByCssPath.set(group.cssPath, group);
@@ -24,6 +26,7 @@ export function createTokenCache(initialGroups: TokenGroup[]) {
 
   function removeGroup(group: TokenGroup) {
     groups.delete(group);
+    groupByGroupPath.delete(group.groupPath)
 
     if (group.cssPath) {
       groupByCssPath.delete(group.cssPath);
@@ -32,6 +35,7 @@ export function createTokenCache(initialGroups: TokenGroup[]) {
     for (const token of group.tokens) {
       groupByTokenPath.delete(token.tokenPath);
     }
+
   }
 
   for (const group of initialGroups) {
@@ -44,18 +48,23 @@ export function createTokenCache(initialGroups: TokenGroup[]) {
       .filter((path): path is string => path !== undefined);
   }
 
-  function updateGroup(
-    group: TokenGroup,
-    data: Partial<TokenGroup>,
+  function updateCssData(
+    cssData: CssData,
   ) {
-    Object.assign(group, data);
+    const group = groupByGroupPath.get(cssData.groupPath);
+
+    if (!group) {
+      throw new Error(`Missing group: ${cssData.groupPath}`);
+    }
+
+    group.cssData = cssData;
   }
 
   return {
     addGroup,
     removeGroup,
     cssPaths,
-    updateGroup,
+    updateCssData,
 
     getGroupByTokenPath(tokenPath: string) {
       return groupByTokenPath.get(tokenPath);
@@ -63,6 +72,10 @@ export function createTokenCache(initialGroups: TokenGroup[]) {
 
     getGroupByCssPath(cssPath: string) {
       return groupByCssPath.get(cssPath);
+    },
+
+    getGroupByGroupPath(groupPath: string) {
+      return groupByGroupPath.get(groupPath)
     },
 
     groups() {

@@ -1,32 +1,44 @@
 import type { Root } from "postcss";
 import print from '../diagnostics/report/print.ts';
-import resolveSelector from './resolvers/resolveSelector.ts';
+import resolveSelectors from './resolvers/resolveSelectors.ts';
 import buildVarDefinitions from './builders/buildVarDefinitions.ts';
 import buildCascade from './builders/buildCascade.ts';
-import type { TokenGroup } from '../types/compiler.types.ts';
-import type { Diagnostics } from '../diagnostics/diagnosticService.ts';
+import type { CssData, TokenGroup, TokenResult } from '../types/compiler.types.ts';
 
-export default function processCssFile({
+export default function processModule({
   root,
   group,
 }: {
   root: Root;
   group: TokenGroup;
-}) {
+}): CssData {
+
   print.injecting(group.groupPath)
 
+  const { rules, foundSelectors } = resolveSelectors(
+    root,
+    group.tokens.map(token => token.infix)
+  );
+
+
+  const tokenResults: TokenResult[] = [];
   for (const token of group.tokens) {
     print.processing(token.name)
 
-    const { rule, foundSelectors } = resolveSelector(root, token.infix)
+    const rule = rules.get(`.${token.infix}`);
 
     // diagnostics.recordSelectors({ cssPath: group.cssPath, token, foundSelectors, rule })
 
-    if (!rule) {
-      continue
-    }
+    tokenResults.push({
+      name: token.name,
+      infix: token.infix,
+      processed: Boolean(rule),
+    });
 
     // diagnostics.recordVariables({ root, token })
+    if (!rule) {
+      continue;
+    }
 
     print.buildingChains(token.infix)
 
@@ -38,5 +50,10 @@ export default function processCssFile({
     }
     // diagnostics.recordTokenProcessed(token.name, token.infix)
   }
-  // diagnostics.recordGroupProcessed(group.groupPath)
+  return {
+    groupPath: group.groupPath,
+    cssPath: group.cssPath,
+    foundSelectors,
+    tokens: tokenResults
+  }
 }

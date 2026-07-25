@@ -4,7 +4,23 @@ export interface TokenGroup {
   groupPath: string;
   cssPath?: string;
   tokens: LoadedToken[];
+
+  cssData?: CssData
 }
+
+export type CssData = {
+  groupPath: string
+  cssPath?: string
+  foundSelectors: string[]
+  tokens: TokenResult[]
+}
+
+export type TokenResult = {
+  name: string
+  infix: string
+  processed: boolean
+}
+
 
 export type LoadedVariable = {
   key: string;

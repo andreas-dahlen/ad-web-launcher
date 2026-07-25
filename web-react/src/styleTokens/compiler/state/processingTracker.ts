@@ -5,7 +5,7 @@ export function createProcessingTracker(expectedPaths: string[]) {
   return {
     markProcessed,
     isComplete,
-    resync,
+    invalidate,
     snapshot
   };
 
@@ -23,14 +23,12 @@ export function createProcessingTracker(expectedPaths: string[]) {
     return true;
   }
 
-  function resync(paths: string[]) {
-    expected.clear();
-
-    for (const path of paths) {
-      expected.add(path);
+  function invalidate(path: string) {
+    if (!expected.has(path)) {
+      expected.add(path)
     }
 
-    processed.clear();
+    expected.delete(path);
   }
 
   function snapshot() {

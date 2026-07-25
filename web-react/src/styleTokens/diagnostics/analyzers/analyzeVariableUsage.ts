@@ -13,7 +13,7 @@ type VariableUsage = {
   unused: string[];
 };
 
-export default function resolveVariableUsage(root: Root, token: Token): VariableUsage {
+export default function analyzeVariableUsage(root: Root, token: Token): VariableUsage {
   const declared = new Map<string, string>(
     token.vars.map(variable => {
       const cssVar = toCssVar(

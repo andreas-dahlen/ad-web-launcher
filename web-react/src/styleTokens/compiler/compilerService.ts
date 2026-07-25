@@ -4,7 +4,7 @@ import buildTokenGroups from './builders/buildTokenGroups.ts';
 import { createTokenCache } from './state/tokenCache.ts';
 // import validate from './validation/validateJson';
 import applyTokenChange from './processors/applyTokenChange.ts';
-import processCssFile from '../postCss/processCssFile.ts'
+import processModule from '../postCss/processModule.ts'
 import createDiagnosticService from '../diagnostics/diagnosticService.ts';
 import { createProcessingTracker } from './state/processingTracker.ts';
 // import createReporter from '../diagnostics//report/reporter.ts';
@@ -15,15 +15,16 @@ export function initializeCompiler(tokensDir: string) {
   const groups = buildTokenGroups(tokenPaths);
   const cache = createTokenCache(groups);
   //validation?
-  const diagnostics = createDiagnosticService(cache)
+  const diagnostics = createDiagnosticService()
   const tracker = createProcessingTracker(cache.cssPaths())
 
   return {
-    processCss,
+    runCssModule,
     handleTokenChange
   };
 
   function handleTokenChange(tokenPath: string) {
+    diagnostics.reset();
     const cssPath = applyTokenChange({
       tokenPath,
       cache,
@@ -31,31 +32,34 @@ export function initializeCompiler(tokensDir: string) {
 
     if (!cssPath) return;
 
-    diagnostics.resync(cache);
-    tracker.resync(cache.cssPaths());
+    tracker.invalidate(cssPath); //HELLO YOUNG PADOWAN... need to update tracker to also contain potential new files if they're created (sync)
 
     return cssPath //triggers processCss
   }
 
   //TODO deserves a rename..
-  function processCss(root: Root, cssPath: string): void {
+  function runCssModule(root: Root, cssPath: string): void {
     const group = cache.getGroupByCssPath(cssPath)
 
-    //group is possibly undefined...
+    //diagnostics.recordAllCssModulesFound
     if (!group) {
       // diagnostics.recordUnknownCss(cssPath);
       return
     }
 
-    processCssFile({ root, group })
+    const cssData = processModule({ root, group })
 
-    // cache.updateGroup(cssData, group.groupPath)
+    cache.updateCssData(cssData)
     tracker.markProcessed(cssPath)
-    console.log("snapshot:", tracker.snapshot())
+    // diagnostics.recordCssData(cssData)
 
     if (tracker.isComplete()) {
       console.log("GOAL!")
+      // const groups = cache.groups()
+      //build stuff with the groups...
 
+
+      //report...
     }
   }
 }
