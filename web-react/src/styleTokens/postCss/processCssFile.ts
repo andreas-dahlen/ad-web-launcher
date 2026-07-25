@@ -1,5 +1,5 @@
 import type { Root } from "postcss";
-import print from '../diagnostics/print.ts';
+import print from '../diagnostics/report/print.ts';
 import resolveSelector from './resolvers/resolveSelector.ts';
 import buildVarDefinitions from './builders/buildVarDefinitions.ts';
 import buildCascade from './builders/buildCascade.ts';
@@ -9,11 +9,9 @@ import type { Diagnostics } from '../diagnostics/diagnosticService.ts';
 export default function processCssFile({
   root,
   group,
-  diagnostics
 }: {
   root: Root;
   group: TokenGroup;
-  diagnostics: Diagnostics
 }) {
   print.injecting(group.groupPath)
 
@@ -22,13 +20,13 @@ export default function processCssFile({
 
     const { rule, foundSelectors } = resolveSelector(root, token.infix)
 
-    diagnostics.recordSelectors({ cssPath: group.cssPath, token, foundSelectors, rule })
+    // diagnostics.recordSelectors({ cssPath: group.cssPath, token, foundSelectors, rule })
 
     if (!rule) {
       continue
     }
 
-    diagnostics.recordVariables({ root, token })
+    // diagnostics.recordVariables({ root, token })
 
     print.buildingChains(token.infix)
 
@@ -38,7 +36,7 @@ export default function processCssFile({
 
       print.resultCascade(token, variable)
     }
-    diagnostics.recordTokenProcessed(token.name, token.infix)
+    // diagnostics.recordTokenProcessed(token.name, token.infix)
   }
-  diagnostics.recordGroupProcessed(group.groupPath)
+  // diagnostics.recordGroupProcessed(group.groupPath)
 }

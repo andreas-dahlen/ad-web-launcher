@@ -1,28 +1,21 @@
-import fs from "node:fs";
-import path from "node:path";
-
+import extractGroupName from '../../../shared/tokenUtils/extractGroupName.ts';
+import path from "node:path"
+import fs from "node:fs"
 export default function findCssModulePath(
   groupPath: string,
 ): string | undefined {
-  const cssModules = findCssModules(
+  const groupName = extractGroupName(groupPath);
+
+  return searchDirectory(
     path.resolve("./src"),
+    groupName,
   );
-
-  const groupName = extractName(groupPath);
-
-  return cssModules.find(file => {
-    const name = path
-      .basename(file, ".module.css")
-      .toLowerCase();
-
-    return name === groupName;
-  });
 }
 
-
-function findCssModules(dir: string): string[] {
-  const result: string[] = [];
-
+function searchDirectory(
+  dir: string,
+  groupName: string,
+): string | undefined {
   const entries = fs.readdirSync(dir, {
     withFileTypes: true,
   });
@@ -31,27 +24,26 @@ function findCssModules(dir: string): string[] {
     const fullPath = path.join(dir, entry.name);
 
     if (entry.isDirectory()) {
-      result.push(...findCssModules(fullPath));
+      const match = searchDirectory(
+        fullPath,
+        groupName,
+      );
+
+      if (match) {
+        return match;
+      }
+
       continue;
     }
 
     if (
       entry.isFile() &&
-      entry.name.endsWith(".module.css")
+      entry.name.endsWith(".module.css") &&
+      path.basename(entry.name, ".module.css").toLowerCase() === groupName
     ) {
-      result.push(fullPath);
+      return fullPath;
     }
   }
 
-  return result;
-}
-
-
-function extractName(groupPath: string): string {
-  const normalized = groupPath.replaceAll("\\", "/");
-
-  return normalized
-    .slice(normalized.lastIndexOf("/") + 1)
-    .replace(/\.(json|jsonc)$/i, "")
-    .toLowerCase();
+  return undefined;
 }

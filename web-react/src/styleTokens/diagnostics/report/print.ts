@@ -1,5 +1,6 @@
-import { isValidPrefix, prefixPriority } from '../../shared/tokenUtils/prefixes.ts'
-import formatLogPath from './formatLogPath.ts';
+import type { ReportSection } from './buildReport.ts';
+import { isValidPrefix, prefixPriority } from '../../../shared/tokenUtils/prefixes.ts'
+import formatLogPath from '../formatLogPath.ts';
 
 type Token = {
   name: string;
@@ -24,6 +25,7 @@ export type Print = {
   selectorWarning(data: { invalidSelectors: string[]; file: string; }): void;
   selectorError(data: { selector: string; validSelectors: string[]; file: string; }): void;
   missingFile(file: string): void;
+  section(section: ReportSection): void;
 };
 
 const print: Print = {
@@ -90,6 +92,21 @@ const print: Print = {
   missingFile(file) {
     console.log(`    ❌ ${file}.module.css`);
   },
+
+
+  section(section: ReportSection) {
+    console.log(`\n ${section.title}`);
+
+    for (const entry of section.entries) {
+      console.log(`  ${entry.title}`);
+
+      for (const line of entry.lines) {
+        console.log(`     ${line}`);
+      }
+
+      console.log();
+    }
+  }
 }
 
 export default print

@@ -1,36 +1,46 @@
 import resolveTokenGroup from '../resolvers/resolveTokenGroup.ts';
 import loadToken from '../loaders/loadToken.ts';
 import buildTokenGroup from '../builders/buildTokenGroup.ts';
-import type { LoadedToken, TokenGroup } from '../../types/compiler.types.ts';
+import type { TokenGroup } from '../../types/compiler.types.ts';
+import createModuleMap from '../discovery/createModuleMap.ts'
 
-export default function buildTokenGroups(
+export default function createTokenGroups(
   tokenPaths: string[],
-  cssMap: Map<string, string>
 ): TokenGroup[] {
 
-  const groups = new Map<string, LoadedToken[]>();
+  const groupPaths = [
+    ...new Set(tokenPaths.map(resolveTokenGroup))
+  ];
 
-  for (const tokenPath of tokenPaths) {
-    const groupPath = resolveTokenGroup(tokenPath);
+  const cssMap = createModuleMap(groupPaths);
 
-    const tokens = groups.get(groupPath) ?? [];
+  const groups = new Map<string, TokenGroup>();
 
-    tokens.push(loadToken(tokenPath));
-
-    groups.set(groupPath, tokens);
-  }
-
-  const result: TokenGroup[] = [];
-
-  for (const [groupPath, tokens] of groups) {
-    result.push(
+  // create group shells
+  for (const groupPath of groupPaths) {
+    groups.set(
+      groupPath,
       buildTokenGroup(
         groupPath,
-        tokens,
+        [],
         cssMap.get(groupPath),
       )
     );
   }
 
-  return result;
+  // attach tokens
+  for (const tokenPath of tokenPaths) {
+    const groupPath = resolveTokenGroup(tokenPath);
+
+    const group = groups.get(groupPath);
+
+    if (!group) {
+      throw new Error(`Missing token group: ${groupPath}`);
+    }
+
+    group.tokens.push(loadToken(tokenPath));
+  }
+
+  // eslint-disable-next-line unicorn/prefer-iterator-to-array
+  return [...groups.values()];
 }

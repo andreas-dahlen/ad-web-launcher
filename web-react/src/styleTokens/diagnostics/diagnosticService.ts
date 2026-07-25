@@ -19,7 +19,7 @@ type VariableCheckData = {
 
 type UnusableSelectors = {
   cssPath: string | undefined;
-  usableSelectors: string[];
+  unusableSelectors: string[];
 };
 
 type VariableMismatch = {
@@ -32,14 +32,15 @@ type VariableMismatch = {
 type MissingClass = {
   infix: string;
   tokenPath: string;
-  unusableSelectors: string[];
+  usableSelectors: string[];
 };
 
 export type DiagnosticSnapshot = ReturnType<Diagnostics["snapshot"]>;
 
 export type Diagnostics = ReturnType<typeof createDiagnosticService>;
 
-export default function createDiagnosticService() {
+export default function createDiagnosticService(cache: TokenCache) {
+
   const state = {
     expectedGroups: new Set<string>(),
     expectedTokens: new Set<string>(),
@@ -56,6 +57,7 @@ export default function createDiagnosticService() {
     mismatchedVariables: new Set<VariableMismatch>(),
   };
 
+  resync(cache)
   return {
     resync,
 
@@ -87,14 +89,14 @@ export default function createDiagnosticService() {
     if (unusableSelectors.length > 0) { //check missing classes aswell... no need to save invalidSelectors if CSS class doesn't exist...
       state.unusableSelectors.add({
         cssPath: data.cssPath,
-        usableSelectors
+        unusableSelectors
       });
     }
     if (!data.rule) { //&& if no cssPath because if no CSS path we have a bigger issue that should be handled elsewhere...?
       state.missingClasses.add({
         infix: data.token.infix,
         tokenPath: data.token.tokenPath,
-        unusableSelectors
+        usableSelectors
       })
     }
   }

@@ -1,5 +1,6 @@
 
-import type { Diagnostics } from './diagnosticService.ts';
+import buildReport from './buildReport.ts';
+import type { Diagnostics } from '../diagnosticService.ts';
 import print from './print.ts'
 
 export default function createReporter(
@@ -15,8 +16,13 @@ export default function createReporter(
   function flush() {
 
     const snapshot = diagnostics.snapshot()
+    const report = buildReport(snapshot)
     console.log(`\n ✨ [DesignTokens] Injection complete!`);
     console.log("────────────────────────────────────────")
+
+    for (const section of report.sections) {
+      print.section(section)
+    }
 
     // if (injectedTargets.size > 0) {
     //   console.log(`\n 🎯 Injected Cascade (${injectedTargets.size})`);
@@ -32,9 +38,9 @@ export default function createReporter(
     //   }
     // }
 
-    // if (mismatchedVariables.size > 0) {
-    //   console.log(`\n 🧐 Mismatched CSS variables (${mismatchedVariables.size})`)
-    //   for (const variableData of mismatchedVariables) {
+    // if (snapshot.mismatchedVariables.size > 0) {
+    //   console.log(`\n 🧐 Mismatched CSS variables (${snapshot.mismatchedVariables.size})`)
+    //   for (const variableData of snapshot.mismatchedVariables) {
     //     print.variableWarning(variableData)
     //   }
     // }

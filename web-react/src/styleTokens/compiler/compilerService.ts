@@ -1,24 +1,22 @@
 import type { Root } from 'postcss';
 import findTokenPaths from './discovery/findTokenPaths.ts';
-import findModulePaths from './discovery/findModulePaths.ts';
 import buildTokenGroups from './builders/buildTokenGroups.ts';
 import { createTokenCache } from './state/tokenCache.ts';
 // import validate from './validation/validateJson';
 import applyTokenChange from './processors/applyTokenChange.ts';
 import processCssFile from '../postCss/processCssFile.ts'
 import createDiagnosticService from '../diagnostics/diagnosticService.ts';
-import createReporter from '../diagnostics/report.ts';
+import { createProcessingTracker } from './state/processingTracker.ts';
+// import createReporter from '../diagnostics//report/reporter.ts';
 export type TokenCompiler = ReturnType<typeof initializeCompiler>;
 
 export function initializeCompiler(tokensDir: string) {
   const tokenPaths = findTokenPaths(tokensDir);
-  const cssGroupMap = findModulePaths(tokenPaths);
-  const groups = buildTokenGroups(tokenPaths, cssGroupMap);
+  const groups = buildTokenGroups(tokenPaths);
   const cache = createTokenCache(groups);
   //validation?
-  const diagnostics = createDiagnosticService()
-  const reporter = createReporter(diagnostics)
-  syncCompiler();
+  const diagnostics = createDiagnosticService(cache)
+  const tracker = createProcessingTracker(cache.cssPaths())
 
   return {
     processCss,
@@ -33,20 +31,31 @@ export function initializeCompiler(tokensDir: string) {
 
     if (!cssPath) return;
 
-    syncCompiler()
+    diagnostics.resync(cache);
+    tracker.resync(cache.cssPaths());
 
-    return cssPath
+    return cssPath //triggers processCss
   }
 
-  function syncCompiler() {
-    diagnostics.resync(cache)
-    //create Files... add diagnostic information...
-  }
-
+  //TODO deserves a rename..
   function processCss(root: Root, cssPath: string): void {
     const group = cache.getGroupByCssPath(cssPath)
-    if (!group) return
-    processCssFile({ root, group, diagnostics })
-    reporter.scheduleFlush()
+
+    //group is possibly undefined...
+    if (!group) {
+      // diagnostics.recordUnknownCss(cssPath);
+      return
+    }
+
+    processCssFile({ root, group })
+
+    // cache.updateGroup(cssData, group.groupPath)
+    tracker.markProcessed(cssPath)
+    console.log("snapshot:", tracker.snapshot())
+
+    if (tracker.isComplete()) {
+      console.log("GOAL!")
+
+    }
   }
 }

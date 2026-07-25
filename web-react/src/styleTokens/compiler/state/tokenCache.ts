@@ -38,9 +38,24 @@ export function createTokenCache(initialGroups: TokenGroup[]) {
     addGroup(group);
   }
 
+  function cssPaths(): string[] {
+    return [...groups]
+      .map(group => group.cssPath)
+      .filter((path): path is string => path !== undefined);
+  }
+
+  function updateGroup(
+    group: TokenGroup,
+    data: Partial<TokenGroup>,
+  ) {
+    Object.assign(group, data);
+  }
+
   return {
     addGroup,
     removeGroup,
+    cssPaths,
+    updateGroup,
 
     getGroupByTokenPath(tokenPath: string) {
       return groupByTokenPath.get(tokenPath);
