@@ -1,23 +1,23 @@
 import type { Root } from "postcss";
-import print from '../diagnostics/report/print.ts';
-import resolveSelectors from './resolvers/resolveSelectors.ts';
+import print from '../diagnostics/print/print.ts';
+import walkModule from './resolvers/walkModule.ts';
 import buildVarDefinitions from './builders/buildVarDefinitions.ts';
 import buildCascade from './builders/buildCascade.ts';
-import type { CssData, TokenGroup, TokenResult } from '../types/compiler.types.ts';
+import type { CssData, CssTokenGroup, TokenResult } from '../types/compiler.types.ts';
 
 export default function processModule({
   root,
   group,
 }: {
   root: Root;
-  group: TokenGroup;
+  group: CssTokenGroup;
 }): CssData {
 
   print.injecting(group.groupPath)
 
-  const { rules, foundSelectors } = resolveSelectors(
-    root,
-    group.tokens.map(token => token.infix)
+
+  const { rules, foundSelectors, usableSelectors, foundVariables } = walkModule(
+    root, group.tokens.map(token => token.infix)
   );
 
 
@@ -32,6 +32,7 @@ export default function processModule({
     tokenResults.push({
       name: token.name,
       infix: token.infix,
+      tokenPath: token.tokenPath,
       processed: Boolean(rule),
     });
 
@@ -54,6 +55,8 @@ export default function processModule({
     groupPath: group.groupPath,
     cssPath: group.cssPath,
     foundSelectors,
-    tokens: tokenResults
+    usableSelectors,
+    tokens: tokenResults,
+    foundVariables: foundVariables
   }
 }

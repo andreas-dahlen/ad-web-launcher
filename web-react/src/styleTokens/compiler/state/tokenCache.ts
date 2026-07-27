@@ -1,4 +1,4 @@
-import type { CssData, TokenGroup } from '../../types/compiler.types.ts';
+import type { TokenGroup } from '../../types/compiler.types.ts';
 
 export type TokenCache = ReturnType<typeof createTokenCache>;
 
@@ -38,33 +38,26 @@ export function createTokenCache(initialGroups: TokenGroup[]) {
 
   }
 
+  function getCssPaths(): string[] {
+    // eslint-disable-next-line unicorn/prefer-iterator-to-array
+    return [...groupByCssPath.keys()]
+  }
+
+  function getMissingCssGroupPaths(): string[] {
+    return [...groups]
+      .filter(group => !group.cssPath)
+      .map(group => group.groupPath);
+  }
+
   for (const group of initialGroups) {
     addGroup(group);
-  }
-
-  function cssPaths(): string[] {
-    return [...groups]
-      .map(group => group.cssPath)
-      .filter((path): path is string => path !== undefined);
-  }
-
-  function updateCssData(
-    cssData: CssData,
-  ) {
-    const group = groupByGroupPath.get(cssData.groupPath);
-
-    if (!group) {
-      throw new Error(`Missing group: ${cssData.groupPath}`);
-    }
-
-    group.cssData = cssData;
   }
 
   return {
     addGroup,
     removeGroup,
-    cssPaths,
-    updateCssData,
+    getCssPaths,
+    getMissingCssGroupPaths,
 
     getGroupByTokenPath(tokenPath: string) {
       return groupByTokenPath.get(tokenPath);
@@ -78,7 +71,7 @@ export function createTokenCache(initialGroups: TokenGroup[]) {
       return groupByGroupPath.get(groupPath)
     },
 
-    groups() {
+    getGroups() {
       return [...groups];
     },
   };

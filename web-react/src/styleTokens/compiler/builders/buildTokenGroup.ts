@@ -7,11 +7,6 @@ export default function buildTokenGroup(
 ): TokenGroup {
 
   validateDuplicateVars(tokens)
-
-  if (!cssPath) {
-    //TODO report missing css path!!
-  }
-
   return {
     groupPath,
     cssPath,

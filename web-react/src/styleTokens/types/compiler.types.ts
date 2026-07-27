@@ -1,28 +1,33 @@
-import type { ValidPrefix } from '../../shared/tokenUtils/compiler.types';
+import type { CssVarString, ValidPrefix } from '../../shared/tokenUtils/compiler.types';
 
 export interface TokenGroup {
   groupPath: string;
   cssPath?: string;
   tokens: LoadedToken[];
-
-  cssData?: CssData
 }
 
-export type CssData = {
+export type CssTokenGroup = TokenGroup & {
+  cssPath: string
+}
+
+export type CssData = { // CssModuleResult
   groupPath: string
-  cssPath?: string
+  cssPath: string
   foundSelectors: string[]
+  usableSelectors: string[]
   tokens: TokenResult[]
+  foundVariables: CssVarString[]
 }
 
-export type TokenResult = {
+export type TokenResult = { //TODO rename to ProcessedToken actually KEEP TOKENRESULT!!
   name: string
   infix: string
+  tokenPath: string
   processed: boolean
 }
 
 
-export type LoadedVariable = {
+export type LoadedVariable = { //rename to variable? or TokenVariable.
   key: string;
   name: string;
   allowed: ValidPrefix[];
@@ -31,7 +36,7 @@ export type LoadedVariable = {
   effectiveAllowed: ValidPrefix[]
 };
 
-export type LoadedToken = {
+export type LoadedToken = { //rename to token
   name: string;
   tokenPath: string;
   infix: string;

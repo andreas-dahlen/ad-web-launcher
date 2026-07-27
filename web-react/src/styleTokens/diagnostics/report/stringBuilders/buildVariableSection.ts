@@ -1,10 +1,11 @@
-import type { DiagnosticSnapshot } from '../../diagnosticService.ts';
+
+import type { VariableMismatch } from '../../data/analyzers/analyzeVariableUsage.ts';
 import type { ReportEntry, ReportSection } from '../buildReport.ts';
 
-export default function buildVariableSection(snapshot: DiagnosticSnapshot): ReportSection | undefined {
+export default function buildVariableSection(data: VariableMismatch[]): ReportSection | undefined {
   const entries: ReportEntry[] = [];
 
-  for (const variable of snapshot.mismatchedVariables) {
+  for (const variable of data) {
     const lines: string[] = [];
 
     if (variable.unused.length > 0) {

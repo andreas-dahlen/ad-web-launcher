@@ -1,4 +1,4 @@
-import resolveTokenGroup from '../resolvers/resolveTokenGroup.ts';
+import resolveTokenGroupPath from '../resolvers/resolveTokenGroupPath.ts'
 import loadToken from '../loaders/loadToken.ts';
 import buildTokenGroup from '../builders/buildTokenGroup.ts';
 import type { TokenGroup } from '../../types/compiler.types.ts';
@@ -9,7 +9,7 @@ export default function createTokenGroups(
 ): TokenGroup[] {
 
   const groupPaths = [
-    ...new Set(tokenPaths.map(resolveTokenGroup))
+    ...new Set(tokenPaths.map(resolveTokenGroupPath))
   ];
 
   const cssMap = createModuleMap(groupPaths);
@@ -30,7 +30,7 @@ export default function createTokenGroups(
 
   // attach tokens
   for (const tokenPath of tokenPaths) {
-    const groupPath = resolveTokenGroup(tokenPath);
+    const groupPath = resolveTokenGroupPath(tokenPath);
 
     const group = groups.get(groupPath);
 

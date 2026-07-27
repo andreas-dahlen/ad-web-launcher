@@ -1,36 +1,36 @@
-import formatLogPath from '../../formatLogPath.ts';
-import type { DiagnosticSnapshot } from '../../diagnosticService.ts';
-import type { ReportEntry, ReportSection } from '../buildReport.ts';
+import formatLogPath from '../../print/formatLogPath.ts';
 
-export default function buildClassSection(snapshot: DiagnosticSnapshot): ReportSection | undefined {
+import type { ReportEntry, ReportSection } from '../buildReport.ts';
+import type { MissingClass } from '../../data/analyzers/analyzeTokens.ts';
+
+export default function buildClassSection(data: MissingClass[]): ReportSection | undefined {
   const entries: ReportEntry[] = [];
 
-  for (const className of snapshot.missingClasses) {
+  for (const missingClass of data) {
     const lines: string[] = [];
 
-    if (className.tokenPath.length > 0) {
+    if (missingClass.tokenPath.length > 0) {
       lines.push(
-        `File: ${formatLogPath(className.tokenPath)}`);
+        `File: ${formatLogPath(missingClass.tokenPath)}`);
     }
 
-    if (className.usableSelectors) {
+    if (missingClass.usableSelectors.length > 0) {
       lines.push(
-        `Available selectors (${className.usableSelectors.length})
-     ${className.usableSelectors.join(", ")}`
+        `Available selectors (${missingClass.usableSelectors.length})
+     ${missingClass.usableSelectors.join(", ")}`
       );
+
+      entries.push({
+        title: `❌ Expected: .${missingClass.infix}`,
+        lines
+      });
     }
-
-
-    entries.push({
-      title: `❌ Expected: .${className.infix}`,
-      lines
-    });
   }
 
   if (entries.length === 0) return;
 
   return {
-    title: `🧩  Missing css classes for injection (${snapshot.missingClasses.size})`,
+    title: `🧩  Missing css classes for injection (${entries.length})`,
     entries
   };
 }

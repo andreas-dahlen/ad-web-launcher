@@ -1,4 +1,4 @@
-import formatLogPath from '../diagnostics/formatLogPath.ts';
+import formatLogPath from '../diagnostics/print/formatLogPath.ts';
 import type { RawComponent, RawVarDef } from '../../shared/tokenUtils/compiler.types.ts';
 import { printParseErrorCode, type ParseError } from "jsonc-parser";
 type TokenValidation = {

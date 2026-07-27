@@ -1,21 +1,53 @@
-export function createProcessingTracker(expectedPaths: string[]) {
-  const expected = new Set(expectedPaths);
+export function createProcessingTracker(expectedCssPaths: string[]) {
+  const expected = new Set(expectedCssPaths);
   const processed = new Set<string>();
+  const failures = new Set<string>();
 
   return {
+    snapshot,
     markProcessed,
-    isComplete,
+    markMissing,
     invalidate,
-    snapshot
+    // hasFailed,
+    hasSucceeded,
+    hasFinished
   };
-
-  function markProcessed(path: string) {
-    processed.add(path);
+  function snapshot() {
+    return {
+      expected: new Set(expected),
+      processed: new Set(processed),
+      failures: new Set(failures)
+    }
   }
 
-  function isComplete() {
-    for (const path of expected) {
-      if (!processed.has(path)) {
+  function markProcessed(cssPath: string) {
+    processed.add(cssPath)
+    failures.delete(cssPath)
+  }
+
+  function markMissing(cssPath: string) {
+    if (!expected.has(cssPath)) {
+      return;
+    }
+    failures.add(cssPath)
+    processed.delete(cssPath)
+  }
+
+
+  function invalidate(cssPath: string) {
+    expected.add(cssPath)
+    processed.delete(cssPath)
+    failures.delete(cssPath)
+  }
+
+
+  // function hasFailed() {
+  //   return hasFinished() && !hasSucceeded()
+  // }
+
+  function hasFinished() {
+    for (const cssPath of expected) {
+      if (!processed.has(cssPath) && !failures.has(cssPath)) {
         return false;
       }
     }
@@ -23,18 +55,7 @@ export function createProcessingTracker(expectedPaths: string[]) {
     return true;
   }
 
-  function invalidate(path: string) {
-    if (!expected.has(path)) {
-      expected.add(path)
-    }
-
-    expected.delete(path);
-  }
-
-  function snapshot() {
-    return {
-      expected: new Set(expected),
-      processed: new Set(processed),
-    };
+  function hasSucceeded() {
+    return hasFinished() && failures.size === 0;
   }
 }

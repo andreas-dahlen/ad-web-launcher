@@ -1,5 +1,7 @@
 export type ValidPrefix = "o" | "s" | "m" | "p" | "t" | "f";
 
+export type CssVarString = `--${string}`
+
 export type RawVarDef = {
   name?: string;
   allowed?: string[];

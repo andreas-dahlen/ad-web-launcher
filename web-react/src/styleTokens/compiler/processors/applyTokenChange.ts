@@ -1,6 +1,6 @@
 import buildTokenGroup from '../builders/buildTokenGroup.ts';
 import type { TokenCache } from '../state/tokenCache.ts';
-import resolveTokenGroup from '../resolvers/resolveTokenGroup.ts';
+import resolveTokenGroupPath from '../resolvers/resolveTokenGroupPath.ts'
 import findCssModulePath from '../discovery/findCssModulePath.ts';
 import loadToken from '../loaders/loadToken.ts';
 import findTokenPaths from '../discovery/findTokenPaths.ts';
@@ -15,7 +15,7 @@ export default function applyTokenChange({
   const staleGroup = cache.getGroupByTokenPath(tokenPath);
 
   const groupPath =
-    staleGroup?.groupPath ?? resolveTokenGroup(tokenPath);
+    staleGroup?.groupPath ?? resolveTokenGroupPath(tokenPath);
 
   const cssPath = findCssModulePath(groupPath);
 
@@ -34,5 +34,5 @@ export default function applyTokenChange({
 
   cache.addGroup(group);
 
-  return cssPath;
+  return group;
 }
