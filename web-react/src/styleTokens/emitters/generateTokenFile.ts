@@ -1,8 +1,8 @@
 import fs from "node:fs";
 import path from "node:path";
-import { toCamelCase } from '../../../shared/tokenUtils/stringFormaters.ts';
-import { toPascalCase } from '../../../shared/tokenUtils/stringFormaters.ts';
-import type { LoadedToken } from '../../types/compiler.types.ts';
+import { toCamelCase } from '../../shared/tokenUtils/stringFormaters.ts';
+import { toPascalCase } from '../../shared/tokenUtils/stringFormaters.ts';
+import type { LoadedToken } from '../types/compiler.types.ts';
 
 export default function generateTokenFile(token: LoadedToken): void {
   const pascalName = toPascalCase(token.name)
@@ -18,9 +18,7 @@ export default function generateTokenFile(token: LoadedToken): void {
 
   const vars = token.vars
     .map((v) => {
-      const name = v.name
-        ? `name: "${v.name}",`
-        : "";
+      const name = `name: "${v.name ?? v.key}",`
       return `
     ${v.key}: {
       ${name}

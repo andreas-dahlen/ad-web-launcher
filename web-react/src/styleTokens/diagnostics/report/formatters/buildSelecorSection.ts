@@ -12,14 +12,14 @@ export default function buildSelectorSection(data: UnusableSelector[]): ReportSe
 
     if (unusables.unusableSelectors.length > 0) {
       lines.push(
-        `Selectors (${unusables.unusableSelectors.length})
-     ${unusables.unusableSelectors.join(", ")}`
+        `  Selectors (${unusables.unusableSelectors.length})
+       ${unusables.unusableSelectors.join(", ")}`
       );
 
 
 
       entries.push({
-        title: `🚮 File: ${formatLogPath(unusables.cssPath)}`,
+        title: ` 📄 File: ${formatLogPath(unusables.cssPath)}`,
         lines
       });
     }
@@ -27,7 +27,7 @@ export default function buildSelectorSection(data: UnusableSelector[]): ReportSe
   if (entries.length === 0) return;
 
   return {
-    title: `🙊 Unusable preset selectors (${entries.length})`,
+    title: `🙊 [Unusable Preset Selectors] (${entries.length}) \n`,
     entries
   };
 }

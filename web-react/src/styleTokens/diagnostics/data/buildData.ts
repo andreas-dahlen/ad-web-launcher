@@ -5,12 +5,15 @@ import type { TokenCache } from "../../compiler/state/tokenCache.ts";
 import analyzeSelectors, { type UnusableSelector } from "./analyzers/analyzeSelectors.ts";
 import analyzeTokens, { type MissingClass } from './analyzers/analyzeTokens.ts';
 import analyzeVariableUsage, { type VariableMismatch } from './analyzers/analyzeVariableUsage.ts';
+import analyzeWriteResult, { type GeneratedFiles } from './analyzers/analyzeWriteResult.ts'
 
 export type DiagnosticData = {
   missingClasses: MissingClass[];
   unusableSelectors: UnusableSelector[]
   mismatchedVariables: VariableMismatch[]
   missingCssModules: string[]
+  processedGroupCount: number
+  generatedFiles: GeneratedFiles
 }
 
 export default function buildData(
@@ -30,8 +33,15 @@ export default function buildData(
   const missingCssModules = run.getMissingModules()
     .map(groupPath => extractGroupName(groupPath))
 
+  const emitResult = run.getEmitResult()
+
+  const generatedFiles = analyzeWriteResult(emitResult?.writeResult)
+
 
   const groups = resolveProcessedGroups(cache, run)
+
+  const processedGroupCount = groups.length
+
   for (const group of groups) {
     /*---------------------------------------
           NON-Css Data
@@ -60,6 +70,8 @@ export default function buildData(
     missingClasses,
     unusableSelectors,
     mismatchedVariables,
-    missingCssModules
+    missingCssModules,
+    processedGroupCount,
+    generatedFiles
   }
 }

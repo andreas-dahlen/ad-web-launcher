@@ -1,0 +1,47 @@
+import path from "node:path"
+import extractGroupName from '../../../../shared/tokenUtils/extractGroupName.ts';
+import { toCamelCase, toPascalCase } from '../../../../shared/tokenUtils/stringFormaters.ts';
+import type { CssData } from '../../../types/compiler.types';
+
+export type PresetFileData = {
+  presetName: string
+  typeName: string
+  cssImport: string
+  presetFile: string
+  selectors: string[];
+};
+
+export default function extractPresetData(
+  cssData: CssData,
+): PresetFileData | null {
+
+  const name = extractGroupName(cssData.groupPath)
+
+  const camelName = toCamelCase(name)
+
+  const presetName = `${camelName}Preset`
+  const typeName = `${toPascalCase(name)}Preset`
+
+  const generatedDir = path.resolve("./src/shared/generated/presets");
+  const presetFile = path.join(generatedDir, `${camelName}.preset.ts`);
+
+  let cssImport = path.relative(
+    generatedDir,
+    cssData.cssPath
+  );
+
+  // make it valid for imports
+  cssImport = cssImport.replaceAll("\\", "/");
+
+  // if (!cssImport.startsWith(".")) {
+  //   cssImport = `${cssImport}`;
+  // }
+
+  return {
+    presetName,
+    typeName,
+    selectors: cssData.usableSelectors,
+    cssImport,
+    presetFile
+  }
+}

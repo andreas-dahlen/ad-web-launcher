@@ -4,7 +4,7 @@
 
   "alwaysAllowed": ["o", "p", "f"],
   "vars": {
-    "bg": {"allowed": ["t"],"values": {"f": "hotPink"}},
+    "bg": {"allowed": ["t"],"values": {"f": "blue"}},
 
     "position": {"values": {"f": "relative"}},
     "display": {"values": {"f": "flex"}},

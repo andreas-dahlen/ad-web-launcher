@@ -10,15 +10,15 @@ export default function buildVariableSection(data: VariableMismatch[]): ReportSe
 
     if (variable.unused.length > 0) {
       lines.push(
-        `🎨 Unused in CSS (${variable.unused.length})`,
-        ...variable.unused.map(variable => `   ${variable}`)
+        ` 🎨 Unused in CSS (${variable.unused.length})`,
+        ...variable.unused.map(variable => `    ${variable}`)
       );
     }
 
     if (variable.missing.length > 0) {
       lines.push(
-        `📦 Missing in JSON (${variable.missing.length})`,
-        ...variable.missing.map(variable => `   ${variable}`)
+        ` 📦 Missing in JSON (${variable.missing.length})`,
+        ...variable.missing.map(variable => `    ${variable}`)
       );
     }
 
@@ -28,7 +28,7 @@ export default function buildVariableSection(data: VariableMismatch[]): ReportSe
         : `${variable.name}-${variable.infix}`
 
     entries.push({
-      title: `🚮 Component: ${component}`,
+      title: ` 🧩 Component: ${component}`,
       lines
     });
   }
@@ -36,7 +36,7 @@ export default function buildVariableSection(data: VariableMismatch[]): ReportSe
   if (entries.length === 0) return;
 
   return {
-    title: "🧐 Variable mismatches:",
+    title: `🧐 [Variable Mismatches] (${data.length}) \n`,
     entries
   };
 }

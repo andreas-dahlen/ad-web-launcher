@@ -11,7 +11,7 @@ export default function buildFileSection(data: string[]): ReportSection | undefi
 
 
       entries.push({
-        title: `❌ ${missingFile}.module.css`,
+        title: ` ❌ ${missingFile}.module.css`,
         lines
       });
     }
@@ -19,7 +19,7 @@ export default function buildFileSection(data: string[]): ReportSection | undefi
   if (entries.length === 0) return;
 
   return {
-    title: `📁 Missing Files (${entries.length})`,
+    title: `📁 [Missing Files] (${entries.length}) \n`,
     entries
   };
 }

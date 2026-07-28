@@ -53,7 +53,7 @@ function resolveCssFromGroup(
   groupPath: string,
   cssPaths: string[],
 ): string | undefined {
-  const groupName = extractGroupName(groupPath);
+  const groupName = extractGroupName(groupPath).toLowerCase();
 
   return cssPaths.find(cssPath =>
     path.basename(cssPath, ".module.css").toLowerCase() === groupName

@@ -1,24 +1,27 @@
 import type { Root } from 'postcss';
 import findTokenPaths from './discovery/findTokenPaths.ts';
-import buildTokenGroups from './builders/buildTokenGroups.ts';
+import createTokenGroups from './actions/createTokenGroups.ts';
+import applyTokenChange from './actions/applyTokenChange.ts';
 import { createTokenCache } from './state/tokenCache.ts';
-// import validate from './validation/validateJson';
-import applyTokenChange from './processors/applyTokenChange.ts';
-import processModule from '../postCss/processModule.ts'
 import { createProcessingTracker } from './state/processingTracker.ts';
 import createCompilerRun from './state/compilerRun.ts';
+import { createCompletionGuard } from './state/completionGuard.ts';
+import processModule from '../postCss/processModule.ts'
 import { assertHasCssPath } from '../validation/assersions.ts';
+// import validate from './validation/validateJson';
+import emitFiles from '../emitters/emitFiles.ts';
 import runDiagnostics from '../diagnostics/runDiagnostics.ts';
-import resolveProcessedGroups from './resolvers/resolveProcessedGroups.ts';
 export type TokenCompiler = ReturnType<typeof initializeCompiler>;
 
 export function initializeCompiler(tokensDir: string) {
   const tokenPaths = findTokenPaths(tokensDir)
-  const groups = buildTokenGroups(tokenPaths)
+  const groups = createTokenGroups(tokenPaths)
   const cache = createTokenCache(groups)
   //validation?
   const tracker = createProcessingTracker(cache.getCssPaths())
   const run = createCompilerRun(cache.getMissingCssGroupPaths())
+
+  const guard = createCompletionGuard()
 
   return {
     runCssModule,
@@ -27,6 +30,7 @@ export function initializeCompiler(tokensDir: string) {
 
   function handleTokenChange(tokenPath: string) {
     run.reset()
+    guard.reset()
 
     const group = applyTokenChange({
       tokenPath,
@@ -63,21 +67,15 @@ export function initializeCompiler(tokensDir: string) {
 
   function handleCompletion() {
     if (!tracker.hasFinished()) return
+    if (!guard.canComplete()) return
     // run.recordTrackerResult(tracker.getTrackerState or getTrackerResult())
 
     if (tracker.hasSucceeded()) {
-      runBuild()
+      const emitResult = emitFiles(cache, run)
+      run.recordEmitResult(emitResult)
+
     }
 
     runDiagnostics(cache, run)
   }
-
-  function runBuild() {
-    const group = resolveProcessedGroups(cache, run)
-    console.log("building", group.map(g => g.groupPath))
-  }
-
-  // function runDiagnostics() {
-  //   runDiagnostics(cache, run)
-  // }
 }

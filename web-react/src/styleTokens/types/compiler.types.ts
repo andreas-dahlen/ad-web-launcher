@@ -1,3 +1,4 @@
+import type { WriteResult } from '../emitters/write/writeFiles.ts';
 import type { CssVarString, ValidPrefix } from '../../shared/tokenUtils/compiler.types';
 
 export interface TokenGroup {
@@ -43,3 +44,7 @@ export type LoadedToken = { //rename to token
   alwaysAllowed: ValidPrefix[];
   vars: LoadedVariable[];
 };
+
+export type EmitResult = {
+  writeResult: WriteResult
+}

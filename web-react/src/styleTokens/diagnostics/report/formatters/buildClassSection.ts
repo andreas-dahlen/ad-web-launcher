@@ -21,7 +21,7 @@ export default function buildClassSection(data: MissingClass[]): ReportSection |
       );
 
       entries.push({
-        title: `❌ Expected: .${missingClass.infix}`,
+        title: ` ❌ Expected: .${missingClass.infix}`,
         lines
       });
     }
@@ -30,7 +30,7 @@ export default function buildClassSection(data: MissingClass[]): ReportSection |
   if (entries.length === 0) return;
 
   return {
-    title: `🧩  Missing css classes for injection (${entries.length})`,
+    title: `🎯 [Missing Css Classes] (${entries.length}) \n`,
     entries
   };
 }

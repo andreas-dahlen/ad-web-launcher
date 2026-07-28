@@ -4,7 +4,7 @@ import fs from "node:fs"
 export default function findCssModulePath(
   groupPath: string,
 ): string | undefined {
-  const groupName = extractGroupName(groupPath);
+  const groupName = extractGroupName(groupPath).toLowerCase();
 
   return searchDirectory(
     path.resolve("./src"),

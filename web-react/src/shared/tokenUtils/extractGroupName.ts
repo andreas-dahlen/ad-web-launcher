@@ -9,5 +9,4 @@ export default function extractGroupName(
 
   return file
     .replace(/\.(json|jsonc)$/i, "")
-    .toLowerCase();
 }
