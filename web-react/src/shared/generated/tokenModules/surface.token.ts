@@ -28,7 +28,7 @@ export const surfaceStyle = {
          radius: { name: "radius", allowed: ["o","p","f"]},
          shadow: { name: "shadow", allowed: ["o","p","f"]},
          blur: { name: "blur", allowed: ["o","p","f"]},
-         before-content: { name: "before-content", allowed: ["o","p","f"]},
+         beforeContent: { name: "beforeContent", allowed: ["o","p","f"]},
          opacity: { name: "opacity", allowed: ["o","p","f"]} 
 }
   }

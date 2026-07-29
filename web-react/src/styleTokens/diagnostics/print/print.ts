@@ -1,23 +1,13 @@
-import { isValidPrefix, prefixPriority } from '../../../shared/tokenUtils/prefixes.ts'
+import type { LoadedToken, LoadedVariable } from '../../types/compiler.types.ts';
+import { isValidPrefix } from '../../../shared/tokenUtils/prefixes.ts'
 import formatLogPath from './formatLogPath.ts';
 
-type Token = {
-  name: string;
-  alwaysAllowed: string[];
-};
-
-type Variable = {
-  key: string;
-  allowed: string[];
-  values: Record<string, string>;
-};
-
 export type Print = {
-  jsonsLoaded(tokens: Token[]): void;
+  jsonsLoaded(tokens: LoadedToken[]): void;
   injecting(file: string): void;
   processing(name: string): void;
   buildingChains(infix: string): void;
-  resultCascade(token: Token, variable: Variable): void;
+  resultCascade(variable: LoadedVariable): void;
   injected(target: { file: string; selector: string }): void;
   presets(data: { name: string; infix: string }): void;
   // variableWarning(data: { name: string; unused: string[]; missing: string[]; infix: string; }): void;
@@ -34,17 +24,21 @@ const print: Print = {
   processing(name) { console.log(`🎨 Processing token: ${name}`) },
   buildingChains(infix) { console.log(`\n🔧 chaining --final-${infix}-*`) },
 
-  resultCascade(token, variable) {
-    const chain = prefixPriority
-      .filter(p => token.alwaysAllowed.includes(p) || variable.allowed.includes(p))
-      .map(prefix => {
-        const val = variable.values[prefix];
-        if (!val) return prefix;
-        if (!isValidPrefix(val)) {
-          return `${prefix}:${val}`; // literal
-        }
-        return `${prefix}:${val}`; // prefix mapping
-      });
+  resultCascade(variable) {
+    const chain = variable.effectiveAllowed.map(prefix => {
+      const value = variable.values[prefix];
+
+      if (!value) {
+        return prefix;
+      }
+
+      if (isValidPrefix(value)) {
+        return `${prefix}:→${value}`;
+      }
+
+      return `${prefix}:${value}`;
+    });
+
     console.log(`   🔮 ${variable.key}: ${chain.join(" → ")}`);
   },
 

@@ -1,5 +1,6 @@
 import type { WriteResult } from '../emitters/write/writeFiles.ts';
 import type { CssVarString, ValidPrefix } from '../../shared/tokenUtils/compiler.types';
+import type { Issue } from '../../shared/tokenUtils/prefixes.ts';
 
 export interface TokenGroup {
   groupPath: string;
@@ -31,8 +32,8 @@ export type TokenResult = { //TODO rename to ProcessedToken actually KEEP TOKENR
 export type LoadedVariable = { //rename to variable? or TokenVariable.
   key: string;
   name: string;
-  allowed: ValidPrefix[];
-  exclude: ValidPrefix[];
+  // allowed: ValidPrefix[];
+  // exclude: ValidPrefix[];
   values: Partial<Record<ValidPrefix, string>>;
   effectiveAllowed: ValidPrefix[]
 };
@@ -47,4 +48,18 @@ export type LoadedToken = { //rename to token
 
 export type EmitResult = {
   writeResult: WriteResult
+}
+
+export type LoadedTokenResult = {
+  token: LoadedToken;
+  issues: Issue[];
+}
+
+export type LoadedGroupResult = {
+  group: TokenGroup;
+  issues: Issue[];
+}
+export type LoadedGroupsResult = {
+  groups: TokenGroup[];
+  issues: Issue[];
 }

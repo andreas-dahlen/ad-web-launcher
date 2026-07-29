@@ -47,7 +47,7 @@ export default function processModule({
       buildVarDefinitions(rule, token, variable);
       buildCascade(rule, token, variable);
 
-      print.resultCascade(token, variable)
+      print.resultCascade(variable)
     }
     // diagnostics.recordTokenProcessed(token.name, token.infix)
   }

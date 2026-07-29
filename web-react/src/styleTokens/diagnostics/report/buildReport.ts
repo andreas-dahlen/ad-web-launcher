@@ -6,6 +6,7 @@ import buildClassSection from './formatters/buildClassSection.ts';
 import buildSelectorSection from './formatters/buildSelecorSection.ts';
 import buildFileSection from './formatters/buildFileSection.ts';
 import headerSection from './formatters/headerSection.ts';
+import buildIssuesSection from './formatters/buildIssuesSection.ts';
 
 export type ReportSection = {
   title: string;
@@ -36,6 +37,8 @@ export default function buildReport(data: DiagnosticData): ReportSection[] {
   if (classSection) sections.push(classSection)
   const fileSection = buildFileSection(data.missingCssModules)
   if (fileSection) sections.push(fileSection)
+  const issuesSection = buildIssuesSection(data.issues)
+  if (issuesSection) sections.push(issuesSection)
 
   return sections;
 }

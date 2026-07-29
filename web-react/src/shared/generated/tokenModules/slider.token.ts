@@ -25,7 +25,11 @@ export const sliderStyle = {
          crossSize: { name: "crossSize", allowed: ["o","p","f"]},
          stateSwipingBg: { name: "stateSwipingBg", allowed: ["o","s","p","f"]},
          statePressingBg: { name: "statePressingBg", allowed: ["o","s","p","f"]},
-         stateCommittedBg: { name: "stateCommittedBg", allowed: ["o","s","p","f"]} 
+         stateCommittedBg: { name: "stateCommittedBg", allowed: ["o","s","p","f"]},
+         test: { name: "test", allowed: ["o","p","f"]},
+         test3: { name: "test3", allowed: ["o","p","f"]},
+         test7: { name: "test7", allowed: ["o","p","f"]},
+         test2: { name: "test2", allowed: ["o","p","f"]} 
 },
    track: {
           bg: { name: "bg", allowed: ["o","p","f"]},

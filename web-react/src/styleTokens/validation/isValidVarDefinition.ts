@@ -10,9 +10,8 @@ export function isValidVarDefinition(
 
   if (value === prefix) return false;
 
-  if (typeof value === "string" && !isValidPrefix(value)) {
-    return true;
-  }
+  if (typeof value === "string" && !isValidPrefix(value)) return true;
+
 
   if (isValidPrefix(value)) {
     return effectiveAllowed.includes(value);

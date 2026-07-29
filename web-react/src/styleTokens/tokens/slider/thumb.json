@@ -12,6 +12,10 @@
 
     "stateSwipingBg": {"allowed": ["s"], "values": {"f": "green"}},
     "statePressingBg": {"allowed": ["s"],"values": {"f": "black"}},
-    "stateCommittedBg": {"allowed": ["s"],"values": {"f": "blue"}}
+    "stateCommittedBg": {"allowed": ["s"],"values": {"f": "blue"}},
+    "test": {"values": {"banana": 5}},
+    "test3": {"values": {"allowed": "p", "apple": true, "banana": 2354235, "f": 123}},
+    "test7": {"foo": {"exclude": "e", "apple": true, "banana": 2354235, "f": 123}},
+    "test2": {"values": {}}
   }
 }

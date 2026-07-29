@@ -1,3 +1,5 @@
+import { toKebab } from '@shared/tokenUtils/stringFormaters'
+
 type DataValue =
   | string
   | number
@@ -11,11 +13,6 @@ type DataString = `data-${string}`
 
 type DataAttrsResult = Record<DataString, string>
 
-function toKebab(str: string): string {
-  return str
-    .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
-    .toLowerCase();
-}
 
 function toDataAttr(key: string): DataString {
   const kebab = toKebab(key)

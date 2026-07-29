@@ -1,5 +1,5 @@
 import type { ValidPrefix, VarDef } from '../tokenUtils/compiler.types';
-import { getAllowedPrefixes } from '../tokenUtils/getAllowedPrefixes';
+import { resolveAllowedPrefixes } from '../tokenUtils/resolveAllowedPrefixes';
 import { toCssVar } from '../tokenUtils/stringFormaters';
 import { isValidPrefix } from '../tokenUtils/prefixes';
 import { normalizeCssValue } from '../tokenUtils/normalizeCssValue';
@@ -36,7 +36,8 @@ export function svsx(
         console.warn(`[svsx] Unknown variable "${varKey}".`);
         continue
       }
-      const effectiveAllowed = getAllowedPrefixes(
+      //TODO delete dependency
+      const { effectiveAllowed } = resolveAllowedPrefixes(
         def.allowed, alwaysAllowed, def.exclude
       )
 

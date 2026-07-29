@@ -1,12 +1,13 @@
 import resolveTokenGroupPath from '../resolvers/resolveTokenGroupPath.ts'
 import loadToken from '../loaders/loadToken.ts';
 import buildTokenGroup from '../builders/buildTokenGroup.ts';
-import type { TokenGroup } from '../../types/compiler.types.ts';
+import type { LoadedGroupsResult, TokenGroup } from '../../types/compiler.types.ts';
 import createModuleMap from '../discovery/createModuleMap.ts'
+import type { Issue } from '../../../shared/tokenUtils/prefixes.ts';
 
 export default function createTokenGroups(
   tokenPaths: string[],
-): TokenGroup[] {
+): LoadedGroupsResult {
 
   const groupPaths = [
     ...new Set(tokenPaths.map(resolveTokenGroupPath))
@@ -15,7 +16,7 @@ export default function createTokenGroups(
   const cssMap = createModuleMap(groupPaths);
 
   const groups = new Map<string, TokenGroup>();
-
+  const issues: Issue[] = []
   // create group shells
   for (const groupPath of groupPaths) {
     groups.set(
@@ -37,10 +38,12 @@ export default function createTokenGroups(
     if (!group) {
       throw new Error(`Missing token group: ${groupPath}`);
     }
+    const result = loadToken(tokenPath);
 
-    group.tokens.push(loadToken(tokenPath));
+    issues.push(...result.issues);
+    group.tokens.push(result.token);
   }
 
   // eslint-disable-next-line unicorn/prefer-iterator-to-array
-  return [...groups.values()];
+  return { groups: [...groups.values()], issues };
 }

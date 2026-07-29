@@ -8,7 +8,7 @@ export type RawVarDef = {
   exclude?: string[];
 
   // Compiler-only preset data. Ignored by TS model.
-  values?: Record<string, string>;
+  values?: Record<ValidPrefix, string>;
 };
 
 export type RawComponent = {

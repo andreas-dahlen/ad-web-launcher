@@ -4,6 +4,8 @@ import resolveTokenGroupPath from '../resolvers/resolveTokenGroupPath.ts'
 import findCssModulePath from '../discovery/findCssModulePath.ts';
 import loadToken from '../loaders/loadToken.ts';
 import findTokenPaths from '../discovery/findTokenPaths.ts';
+import type { LoadedGroupResult } from '@styleTokens/types/compiler.types.ts';
+// import type { TokenGroup } from '@styleTokens/types/compiler.types.ts';
 
 export default function applyTokenChange({
   tokenPath,
@@ -11,7 +13,7 @@ export default function applyTokenChange({
 }: {
   tokenPath: string;
   cache: TokenCache;
-}) {
+}): LoadedGroupResult {
   const staleGroup = cache.getGroupByTokenPath(tokenPath);
 
   const groupPath =
@@ -20,11 +22,10 @@ export default function applyTokenChange({
   const cssPath = findCssModulePath(groupPath);
 
   const tokenPaths = findTokenPaths(groupPath);
-  const tokens = tokenPaths.map(loadToken)
+  const results = tokenPaths.map(loadToken);
 
-  if (!cssPath) {
-    //TODO VAlidate? i mean throw log... return error msg is probably the implementation i am thinking...
-  }
+  const tokens = results.map(result => result.token);
+  const issues = results.flatMap(result => result.issues);
 
   const group = buildTokenGroup(groupPath, tokens, cssPath);
 
@@ -34,5 +35,5 @@ export default function applyTokenChange({
 
   cache.addGroup(group);
 
-  return group;
+  return { group, issues };
 }

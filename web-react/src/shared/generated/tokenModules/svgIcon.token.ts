@@ -12,10 +12,10 @@ export const svgIconStyle = {
 
   vars: {   
    svg: {
-          mode-off-col: { name: "mode-off-col", allowed: ["o","m","p","f"]},
-         mode-on-col: { name: "mode-on-col", allowed: ["o","m","p","f"]},
-         mode-default-col: { name: "mode-default-col", allowed: ["o","m","p","f"]},
-         mode-disabled-col: { name: "mode-disabled-col", allowed: ["o","m","p","f"]},
+          modeOffCol: { name: "modeOffCol", allowed: ["o","m","p","f"]},
+         modeOnCol: { name: "modeOnCol", allowed: ["o","m","p","f"]},
+         modeDefaultCol: { name: "modeDefaultCol", allowed: ["o","m","p","f"]},
+         modeDisabledCol: { name: "modeDisabledCol", allowed: ["o","m","p","f"]},
          width: { name: "width", allowed: ["o","p","f"]},
          height: { name: "height", allowed: ["o","p","f"]},
          flipX: { name: "flip-x", allowed: ["o","p","f"]},

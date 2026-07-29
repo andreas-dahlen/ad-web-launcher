@@ -6,6 +6,7 @@ import analyzeSelectors, { type UnusableSelector } from "./analyzers/analyzeSele
 import analyzeTokens, { type MissingClass } from './analyzers/analyzeTokens.ts';
 import analyzeVariableUsage, { type VariableMismatch } from './analyzers/analyzeVariableUsage.ts';
 import analyzeWriteResult, { type GeneratedFiles } from './analyzers/analyzeWriteResult.ts'
+import analyzeIssues, { type SortedIssues } from './analyzers/analyzeIssues.ts';
 
 export type DiagnosticData = {
   missingClasses: MissingClass[];
@@ -14,6 +15,7 @@ export type DiagnosticData = {
   missingCssModules: string[]
   processedGroupCount: number
   generatedFiles: GeneratedFiles
+  issues: SortedIssues[]
 }
 
 export default function buildData(
@@ -34,6 +36,7 @@ export default function buildData(
     .map(groupPath => extractGroupName(groupPath))
 
   const emitResult = run.getEmitResult()
+  const issues = analyzeIssues(run.getIssues())
 
   const generatedFiles = analyzeWriteResult(emitResult?.writeResult)
 
@@ -72,6 +75,7 @@ export default function buildData(
     mismatchedVariables,
     missingCssModules,
     processedGroupCount,
-    generatedFiles
+    generatedFiles,
+    issues
   }
 }

@@ -7,40 +7,40 @@ import { createProcessingTracker } from './state/processingTracker.ts';
 import createCompilerRun from './state/compilerRun.ts';
 import { createCompletionGuard } from './state/completionGuard.ts';
 import processModule from '../postCss/processModule.ts'
-import { assertHasCssPath } from '../validation/assersions.ts';
-// import validate from './validation/validateJson';
+import assert from './assertions/assertions.ts'
 import emitFiles from '../emitters/emitFiles.ts';
 import runDiagnostics from '../diagnostics/runDiagnostics.ts';
 export type TokenCompiler = ReturnType<typeof initializeCompiler>;
 
 export function initializeCompiler(tokensDir: string) {
   const tokenPaths = findTokenPaths(tokensDir)
-  const groups = createTokenGroups(tokenPaths)
-  const cache = createTokenCache(groups)
-  //validation?
+  const loaded = createTokenGroups(tokenPaths)
+  const cache = createTokenCache(loaded.groups)
   const tracker = createProcessingTracker(cache.getCssPaths())
   const run = createCompilerRun(cache.getMissingCssGroupPaths())
-
   const guard = createCompletionGuard()
 
+  run.recordIssues(loaded.issues)
   return {
     runCssModule,
     handleTokenChange
   }
 
-  function handleTokenChange(tokenPath: string) {
+  function handleTokenChange(tokenPath: string): string | null {
     run.reset()
     guard.reset()
 
-    const group = applyTokenChange({
+    const { group, issues } = applyTokenChange({
       tokenPath,
       cache,
     })
 
+    run.recordIssues(issues)
+
     if (!group.cssPath) {
       run.recordMissingModule(group.groupPath)
       runDiagnostics(cache, run)
-      return
+      return null
     }
     tracker.invalidate(group.cssPath)
     return group.cssPath //triggers runCssModule
@@ -56,7 +56,7 @@ export function initializeCompiler(tokensDir: string) {
       handleCompletion()
       return
     }
-    assertHasCssPath(group)
+    assert.hasCssPath(group)
     const cssData = processModule({ root, group })
 
     run.recordCssData(group.groupPath, cssData)
@@ -65,7 +65,7 @@ export function initializeCompiler(tokensDir: string) {
     handleCompletion()
   }
 
-  function handleCompletion() {
+  function handleCompletion(): void {
     if (!tracker.hasFinished()) return
     if (!guard.canComplete()) return
     // run.recordTrackerResult(tracker.getTrackerState or getTrackerResult())

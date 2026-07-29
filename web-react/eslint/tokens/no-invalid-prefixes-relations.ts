@@ -1,11 +1,13 @@
 import path from "node:path";
-import type { TSESTree, ESLintUtils } from "@typescript-eslint/utils";
+import type { ESLintUtils } from "@typescript-eslint/utils";
+import type { AST } from 'jsonc-eslint-parser';
 import {
   getAlwaysAllowed,
   getVars,
   getArrayProperty,
   getObjectProperty,
-  getValueLoc
+  getValueLoc,
+  getKeyLoc
 } from "./helpers/tokenAst.ts";
 
 const rule: ESLintUtils.RuleModule<
@@ -13,7 +15,8 @@ const rule: ESLintUtils.RuleModule<
   "invalidExclude" |
   "conflict" |
   "invalidValuePrefix" |
-  "excludedValuePrefix",
+  "excludedValuePrefix" |
+  "invalidVariable",
   []
 > = {
   meta: {
@@ -36,7 +39,10 @@ const rule: ESLintUtils.RuleModule<
         '"{{prefix}}" is not declared as allowed or alwaysAllowed',
 
       excludedValuePrefix:
-        '"{{prefix}}" cannot be used because it is excluded'
+        '"{{prefix}}" cannot be used because it is excluded',
+
+      invalidVariable:
+        '"{{key}}" must be camelCase'
     }
   },
 
@@ -48,21 +54,22 @@ const rule: ESLintUtils.RuleModule<
     }
 
     return {
-      Program(node: TSESTree.Program) {
-
-        const statement = node.body[0];
+      Program(node) {
+        const jsonNode = node as unknown as AST.JSONProgram;
+        const statement = jsonNode.body[0];
 
         if (
           !statement ||
-          statement.type !== "ExpressionStatement"
+          statement.type !== "JSONExpressionStatement"
         ) {
           return;
         }
 
         const root = statement.expression;
 
-        if (!root || root.type !== "ObjectExpression") return;
-
+        if (!root || root.type !== "JSONObjectExpression") {
+          return;
+        }
 
         const alwaysAllowed = getAlwaysAllowed(root);
         const vars = getVars(root);
@@ -72,6 +79,15 @@ const rule: ESLintUtils.RuleModule<
           const exclude = getArrayProperty(variable.value, "exclude");
           const values = getObjectProperty(variable.value, "values");
           const totalAllowed = [...alwaysAllowed.values, ...allowed.values];
+          // const variableName = variable.key
+
+          if (!/^[a-z][a-zA-Z0-9]*$/.test(variable.name)) {
+            context.report({
+              loc: getKeyLoc(variable.key),
+              messageId: "invalidVariable",
+              data: { key: variable.name }
+            });
+          }
 
           for (const entry of allowed.entries) {
             const prefix = entry.value;

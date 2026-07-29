@@ -1,3 +1,4 @@
+import type { Issue } from '@shared/tokenUtils/prefixes';
 import type { CssData, EmitResult } from '../../types/compiler.types';
 
 export type CompilerRun = ReturnType<typeof createCompilerRun>;
@@ -7,6 +8,7 @@ export default function createCompilerRun(groupPaths: string[]) {
   const unusedCssModules = new Set<string>()
   const processedCssData = new Map<string, CssData>()
   let emitResult: EmitResult | undefined
+  const processedIssues: Issue[] = []
 
   for (const groupPath of groupPaths) {
     recordMissingModule(groupPath)
@@ -16,6 +18,7 @@ export default function createCompilerRun(groupPaths: string[]) {
     unusedCssModules.clear()
     processedCssData.clear()
     emitResult = undefined
+    processedIssues.length = 0
   }
   function recordMissingModule(groupPath: string) {
     missingCssModules.add(groupPath)
@@ -29,6 +32,9 @@ export default function createCompilerRun(groupPaths: string[]) {
   function recordEmitResult(result: EmitResult) {
     emitResult = result
   }
+  function recordIssues(issues: Issue[]) {
+    processedIssues.push(...issues)
+  }
 
   return {
     reset,
@@ -36,6 +42,7 @@ export default function createCompilerRun(groupPaths: string[]) {
     recordCssData,
     recordUnusedModule,
     recordEmitResult,
+    recordIssues,
 
     getMissingModules() { return [...missingCssModules] },
     getUnusedModules() { return [...unusedCssModules] },
@@ -46,6 +53,7 @@ export default function createCompilerRun(groupPaths: string[]) {
     },
     getCssData(groupPath: string) {
       return processedCssData.get(groupPath)
-    }
+    },
+    getIssues() { return [...processedIssues] }
   } as const
 }
