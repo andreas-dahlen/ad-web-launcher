@@ -1,14 +1,14 @@
 import fs from "node:fs";
 import { parse, type ParseError } from 'jsonc-parser';
-import type { RawComponent } from '../../../shared/tokenUtils/compiler.types';
+import type { RawToken } from '@styleTokens/types/compiler.types';
 
-export interface LoadedTokenFile {
+type TokenFile = {
   fullPath: string;
-  json: RawComponent;
+  json: RawToken;
   errors: ParseError[];
 }
 
-export default function loadTokenFile(fullPath: string): LoadedTokenFile {
+export default function loadTokenFile(fullPath: string): TokenFile {
   const text = fs.readFileSync(fullPath, 'utf8');
 
   const errors: ParseError[] = [];

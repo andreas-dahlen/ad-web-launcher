@@ -1,38 +1,29 @@
 import type { Rule } from "postcss";
-import { isValidVarDefinition } from "../../validation/isValidVarDefinition.ts";
-import { toCssVar } from "../../../shared/tokenUtils/stringFormaters.ts";
-import { prefixPriority, isValidPrefix } from "../../../shared/tokenUtils/prefixes.ts"
-import { normalizeCssValue } from "../../../shared/tokenUtils/normalizeCssValue.ts";
-import type { LoadedToken, LoadedVariable } from '../../types/compiler.types.ts';
+import { normalizeCssValue, toCssVar } from "../../../shared/tokenUtils/stringFormaters.ts";
+import { prefixPriority, isValidPrefix } from "../../../shared/tokenUtils/prefixes.ts";
+import type { CompilerToken, CompilerVariable } from "../../types/compiler.types.ts";
 
 export default function buildVarDefinitions(
   rule: Rule,
-  token: LoadedToken,
-  variable: LoadedVariable,
+  token: CompilerToken,
+  variable: CompilerVariable,
 ): void {
-  const { name, effectiveAllowed, values, } = variable;
-
+  const { name, effectiveAllowed, values } = variable;
 
   for (const prefix of prefixPriority) {
-    const mappedValue = values[prefix];
+    if (!effectiveAllowed.includes(prefix)) continue;
 
-    if (!isValidVarDefinition(prefix, effectiveAllowed, mappedValue)) {
-      continue;
-    }
+    const value = values[prefix];
 
-    const isLiteral = !isValidPrefix(mappedValue);
+    if (!value) continue;
 
-    if (isLiteral) {
-      rule.append({
-        prop: toCssVar(prefix, token.infix, name),
-        value: normalizeCssValue(mappedValue),
-      });
+    const cssVar = toCssVar(prefix, token.infix, name);
 
-      continue;
-    }
     rule.append({
-      prop: toCssVar(prefix, token.infix, name),
-      value: `var(${toCssVar(mappedValue, token.infix, name)})`,
+      prop: cssVar,
+      value: isValidPrefix(value)
+        ? `var(${toCssVar(value, token.infix, name)})`
+        : normalizeCssValue(value),
     });
   }
 }

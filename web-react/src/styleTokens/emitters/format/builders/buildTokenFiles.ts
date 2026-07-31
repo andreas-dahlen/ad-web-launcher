@@ -28,7 +28,7 @@ export default function buildTokenFiles(tokenGroupData: TokenGroupFileData[]): F
 
 
     const importStatement = `import type {
-  StyleFromVars,
+  StyleFromComponent,
   TokenComponent
 } from "@shared/tokenUtils/compiler.types"`
 
@@ -45,7 +45,7 @@ export const ${entry.styleName} = {
   }
 } as const satisfies TokenComponent;
 
-export type ${entry.typeName} = StyleFromVars<typeof ${entry.styleName}.vars>;
+export type ${entry.typeName} = StyleFromComponent<typeof ${entry.styleName}>;
 `;
 
     files.push({ filePath: entry.tokenFile, content })

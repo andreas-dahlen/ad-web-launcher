@@ -1,10 +1,10 @@
 import { printParseErrorCode, type ParseError } from 'jsonc-parser';
 import type { TokenGroup } from "../../types/compiler.types";
-import type { RawComponent, RawVarDef } from '../../../shared/tokenUtils/compiler.types';
+import type { RawToken, RawVariable } from "../../types/compiler.types"
 
 type Assertions = {
-  token(errors: ParseError[], json: RawComponent, fullPath: string): void;
-  variable(key: string, def: unknown, fullPath: string): asserts def is RawVarDef;
+  token(errors: ParseError[], json: RawToken, fullPath: string): void;
+  variable(key: string, def: unknown, fullPath: string): asserts def is RawVariable;
   hasCssPath(group: TokenGroup): asserts group is TokenGroup & { cssPath: string }
 };
 
@@ -52,7 +52,7 @@ const assert: Assertions = {
       throw new Error(`❌ Variable "${key}" must be an object in ${fullPath}`);
     }
 
-    const variable = def as RawVarDef;
+    const variable = def as RawVariable;
 
     if (variable.name !== undefined &&
       (typeof variable.name !== "string" || !variable.name.trim())) {

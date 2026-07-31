@@ -1,5 +1,5 @@
 import path from "node:path"
-import extractGroupName from '../../../../shared/tokenUtils/extractGroupName.ts';
+import extractGroupName from '../../../compiler/resolvers/extractGroupName.ts';
 import { toCamelCase, toPascalCase } from '../../../../shared/tokenUtils/stringFormaters.ts';
 import type { CssData } from '../../../types/compiler.types';
 
@@ -32,10 +32,6 @@ export default function extractPresetData(
 
   // make it valid for imports
   cssImport = cssImport.replaceAll("\\", "/");
-
-  // if (!cssImport.startsWith(".")) {
-  //   cssImport = `${cssImport}`;
-  // }
 
   return {
     presetName,

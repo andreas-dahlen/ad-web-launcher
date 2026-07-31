@@ -1,51 +1,51 @@
-export type ValidPrefix = "o" | "s" | "m" | "p" | "t" | "f";
+export type ValidPrefix =
+  | "o"
+  | "s"
+  | "m"
+  | "p"
+  | "t"
+  | "f";
 
-export type CssVarString = `--${string}`
-
-export type RawVarDef = {
-  name?: string;
-  allowed?: string[];
-  exclude?: string[];
-
-  // Compiler-only preset data. Ignored by TS model.
-  values?: Record<ValidPrefix, string>;
-};
-
-export type RawComponent = {
-  component: string;
-  infix?: string;
-  alwaysAllowed?: string[];
-  vars: Record<string, RawVarDef>;
-};
+export type CssVarString = `--${string}`;
 
 export type VarDef<
-  A extends readonly ValidPrefix[] = readonly ValidPrefix[],
-  E extends readonly ValidPrefix[] = readonly ValidPrefix[]
+  A extends readonly ValidPrefix[] = readonly ValidPrefix[]
 > = {
   name: string;
   allowed: A;
-  exclude: E;
 };
 
-type AllPrefixesFor<
-  V extends Record<string, VarDef>,
-  Always extends readonly ValidPrefix[],
-  K extends Extract<keyof V, string>
-> =
-  Exclude<
-    V[K]["allowed"][number] | Always[number],
-    V[K]["exclude"][number]
-  >;
+export type TokenGroup = Record<string, VarDef>;
 
-type PrefixedKeys<
-  V extends Record<string, VarDef>,
-  Always extends readonly ValidPrefix[],
-  K extends Extract<keyof V, string>
-> = `${AllPrefixesFor<V, Always, K>}:${K}`;
+export type TokenComponent = {
+  component: string;
+  vars: Record<string, TokenGroup>;
+};
 
-export type StyleFromVars<
-  V extends Record<string, VarDef>,
-  Always extends readonly ValidPrefix[] = []
+type StyleValue = string | number;
+
+type PrefixedKey<
+  K extends string,
+  A extends readonly ValidPrefix[]
+> = `${A[number]}:${K}`;
+
+type StyleFromGroup<
+  G extends TokenGroup
 > =
-  Partial<{ [K in keyof V]: string | number }> &
-  Partial<{ [K in Extract<keyof V, string> as PrefixedKeys<V, Always, K>]: string | number }>;
+  Partial<Record<keyof G, StyleValue>> &
+  Partial<{
+    [K in Extract<keyof G, string> as PrefixedKey<K, G[K]["allowed"]>]:
+    StyleValue;
+  }>;
+
+type NamedGroups<
+  V extends Record<string, TokenGroup>
+> = Partial<{
+  [K in keyof V]: StyleFromGroup<V[K]>;
+}>;
+
+export type StyleFromComponent<
+  C extends TokenComponent
+> =
+  StyleFromGroup<C["vars"][C["component"]]> &
+  NamedGroups<C["vars"]>;

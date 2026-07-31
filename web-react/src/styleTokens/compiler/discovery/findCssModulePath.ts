@@ -1,4 +1,4 @@
-import extractGroupName from '../../../shared/tokenUtils/extractGroupName.ts';
+import extractGroupName from '../resolvers/extractGroupName.ts';
 import path from "node:path"
 import fs from "node:fs"
 export default function findCssModulePath(

@@ -3,12 +3,12 @@ import { dasx } from '../../shared/sxCompiler/dasx';
 import css from './SvgIcon.module.css'
 import { svsx } from '../../shared/sxCompiler/svsx';
 
-import { svgIconPreset, type SvgIconPreset } from '@generated/presets/svgIcon.preset';
+import { svgIconPreset, type SvgIconPreset } from '@generated/presets/svgIcon.preset'
 import { cpsx } from '../../shared/sxCompiler/cpsx';
 import type { DynamicIconComponent } from '@shared/types/svg'
 import type { Icon } from '@phosphor-icons/react';
 import type { Mode } from '@composites/types/comp.types';
-import { svgIconStyle, type SvgIconStyle } from '@shared/generated/tokenStyles/tokenStyles'
+import { svgIconStyle, type SvgIconStyle } from '@shared/generated/tokenModules/svgIcon.token'
 
 export type IconSettings = {
   Svg: Icon | DynamicIconComponent
@@ -28,18 +28,18 @@ export default function SvgIcon({
 }: IconSettings) {
 
   const {
-    svgFlipX,
-    svgDefaultCol,
-    svgOnCol,
-    svgOffCol,
-    svgDisabledCol
-  } = styleVars ?? {}
+    flipX,
+    modeDefaultCol,
+    modeOnCol,
+    modeOffCol,
+    modeDisabledCol
+  } = styleVars?.svg ?? {}
 
   const computedColor = ({
-    disabled: svgDisabledCol,
-    on: svgOnCol,
-    off: svgOffCol,
-    default: svgDefaultCol
+    disabled: modeDisabledCol,
+    on: modeOnCol,
+    off: modeOffCol,
+    default: modeDefaultCol
   })[mode ?? "default"]
 
 
@@ -50,7 +50,7 @@ export default function SvgIcon({
       size={phosphorSize ?? 40}
       color={computedColor || "currentColor"}
       weight={variant}
-      mirrored={isPhosphorIcon && svgFlipX ? true : undefined}
+      mirrored={isPhosphorIcon && flipX ? true : undefined}
       {...dasx({ mode: mode })}
       style={{ ...svsx(styleVars ?? {}, svgIconStyle) }}
       className={clsx(css.svg, ...cpsx(presets, svgIconPreset))}

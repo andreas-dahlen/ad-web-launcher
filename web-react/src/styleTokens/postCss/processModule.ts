@@ -3,7 +3,7 @@ import print from '../diagnostics/print/print.ts';
 import walkModule from './resolvers/walkModule.ts';
 import buildVarDefinitions from './builders/buildVarDefinitions.ts';
 import buildCascade from './builders/buildCascade.ts';
-import type { CssData, CssTokenGroup, TokenResult } from '../types/compiler.types.ts';
+import type { CssData, CssTokenGroup, ProcessedToken } from '../types/compiler.types.ts';
 
 export default function processModule({
   root,
@@ -21,7 +21,7 @@ export default function processModule({
   );
 
 
-  const tokenResults: TokenResult[] = [];
+  const tokenResults: ProcessedToken[] = [];
   for (const token of group.tokens) {
     print.processing(token.name)
 

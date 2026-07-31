@@ -1,127 +1,192 @@
-import type { ValidPrefix, VarDef } from '../tokenUtils/compiler.types';
-import { resolveAllowedPrefixes } from '../tokenUtils/resolveAllowedPrefixes';
-import { toCssVar } from '../tokenUtils/stringFormaters';
-import { isValidPrefix } from '../tokenUtils/prefixes';
-import { normalizeCssValue } from '../tokenUtils/normalizeCssValue';
+import type {
+  TokenComponent,
+  TokenGroup,
+  ValidPrefix
+} from "../tokenUtils/compiler.types";
 
-/** Transforms an object into CSS style-variable entries */
+import {
+  normalizeCssValue,
+  toCssVar
+} from "../tokenUtils/stringFormaters";
+
+import {
+  isValidPrefix
+} from "../tokenUtils/prefixes";
+
+type StyleInput = Record<string, unknown>;
+
+/**
+ * Resolves style variables against a generated TokenComponent.
+ * Primary component vars can be passed directly:
+ * { bg: "red" }
+ *
+ * Named groups can be targeted explicitly:
+ * { thumb: {
+ *      bg: "blue"
+ *          }
+ * }
+ */
 export function svsx(
-  input: Record<string, unknown>,
-  component: {
-    vars: Record<string, VarDef>;
-    alwaysAllowed: readonly ValidPrefix[];
-    infix: string;
-  }
+  input: StyleInput,
+  component: TokenComponent
 ) {
   const output: Record<string, string> = {};
-  const { vars: definitions, alwaysAllowed, infix } = component;
 
-  for (const [key, value] of Object.entries(input)) {
-    if (value == null) continue
+  const primaryGroup =
+    component.vars[component.component];
 
-    // -----------------------------------------------------
-    // PREFIXED KEYS: "t:bg", "o:padding", etc.
-    // -----------------------------------------------------
-    const hasPrefix = key.includes(":")
-    if (hasPrefix) {
-      const [prefixKey, varKey] = key.split(":", 2)
-
-      if (!isValidPrefix(prefixKey)) {
-        console.warn(`[svsx] Invalid prefix "${prefixKey}".`);
-        continue;
-      }
-
-      const def = definitions[varKey]
-      if (!def) {
-        console.warn(`[svsx] Unknown variable "${varKey}".`);
-        continue
-      }
-      //TODO delete dependency
-      const { effectiveAllowed } = resolveAllowedPrefixes(
-        def.allowed, alwaysAllowed, def.exclude
-      )
-
-      if (!effectiveAllowed.includes(prefixKey)) {
-        console.warn(`[svsx] Prefix "${prefixKey}" not allowed for "${varKey}".`);
-        continue;
-      }
-
-      const cssVar = toCssVar(prefixKey, infix, def.name);
-
-      output[cssVar] = normalizeCssValue(value)
-      continue
-    }
-
-    // -----------------------------------------------------
-    // UNPREFIXED KEYS → PRESET LAYER
-    // -----------------------------------------------------
-    const def = definitions[key];
-    if (def) {
-      const cssVar = toCssVar("p", infix, def.name)
-      output[cssVar] = normalizeCssValue(value);
+  if (!primaryGroup) {
+    console.warn(
+      `[svsx] Missing primary group "${component.component}".`
+    );
+    return output;
+  }
+  // -----------------------------------------------------
+  // PRIMARY GROUP FALLBACK
+  // -----------------------------------------------------
+  processGroup(
+    input,
+    primaryGroup,
+    component.component,
+    output
+  );
+  // -----------------------------------------------------
+  // NAMED GROUPS
+  // -----------------------------------------------------
+  for (const [groupName, value] of Object.entries(input)) {
+    if (typeof value !== "object" || value == null) {
       continue;
     }
-    // -----------------------------------------------------
-    // Unknown key (neither prefixed nor defined)
-    // -----------------------------------------------------
-    console.warn(`[svsx] Unknown style key "${key}".`);
+
+    const group =
+      component.vars[groupName];
+
+    if (!group) {
+      console.warn(`[svsx] Unknown group "${groupName}".`);
+      continue;
+    }
+    processGroup(
+      value as StyleInput,
+      group,
+      groupName,
+      output
+    );
   }
   return output;
 }
 
-/** [USAGE]: const mergedStyles = mergeStyles( buttonVars, styleVars, { preset: { width: "100px" } } ) */
-export function mergeStyles<
-  VarsMap extends Record<string, VarDef>
->(
-  map: VarsMap,
-  base: Record<string, unknown> | undefined,
-  ...additions: (Record<string, unknown> | false | null | undefined)[]
+function processGroup(
+  input: StyleInput,
+  definitions: TokenGroup,
+  infix: string,
+  output: Record<string, string>
 ) {
-  const out: Record<string, unknown> = { ...(base) };
+  for (const [key, value] of Object.entries(input)) {
+    if (value == null) continue;
 
-  for (const add of additions) {
-    if (!add) continue;
+    const hasPrefix = key.includes(":");
+    // -----------------------------------------------------
+    // PREFIXED KEYS
+    // -----------------------------------------------------
+    if (hasPrefix) {
+      const [prefix, varKey] =
+        key.split(":", 2);
 
-    for (const [key, value] of Object.entries(add)) {
-      if (value == null) continue;
+      if (!isValidPrefix(prefix)) {
+        console.warn(`[svsx] Invalid prefix "${prefix}".`);
+        continue;
+      }
+      const def =
+        definitions[varKey];
 
-      const hasPrefix = key.includes(":");
-
-      // -----------------------------------------------------
-      // PREFIXED KEYS: "t:bg", "o:padding", etc.
-      // -----------------------------------------------------
-      if (hasPrefix) {
-        const [prefixKey, varKey] = key.split(":", 2);
-
-        if (!isValidPrefix(prefixKey)) {
-          console.warn(`[mergeStyles] Invalid prefix "${prefixKey}". Allowed prefixes: o, s, m, p, t, f`);
-          continue;
-        }
-
-        if (!(varKey in map)) {
-          console.warn(`[mergeStyles] Unknown variable "${varKey}".`);
-          continue;
-        }
-
-        // Merge prefixed value directly
-        out[key] = normalizeCssValue(value);
+      if (!def) {
+        console.warn(`[svsx] Unknown variable "${varKey}" in "${infix}".`);
         continue;
       }
 
-      // -----------------------------------------------------
-      // UNPREFIXED KEYS → PRESET LAYER
-      // -----------------------------------------------------
-      if (key in map) {
-        out[key] = normalizeCssValue(value);
+      if (!def.allowed.includes(prefix as ValidPrefix)) {
+        console.warn(`[svsx] Prefix "${prefix}" not allowed for "${varKey}".`);
         continue;
       }
+      output[
+        toCssVar(prefix, infix, def.name)
+      ] =
+        normalizeCssValue(value);
 
-      // -----------------------------------------------------
-      // Unknown key
-      // -----------------------------------------------------
-      console.warn(`[mergeStyles] Unknown style key "${key}".`);
+      continue;
     }
-  }
+    // -----------------------------------------------------
+    // UNPREFIXED → PRESET
+    // -----------------------------------------------------
+    const def =
+      definitions[key];
 
-  return out;
+    if (!def) {
+      console.warn(
+        `[svsx] Unknown style key "${key}" in "${infix}".`
+      );
+      continue;
+    }
+    output[
+      toCssVar("p", infix, def.name)
+    ] =
+      normalizeCssValue(value);
+  }
 }
+
+/** [USAGE]: const mergedStyles = mergeStyles( buttonVars, styleVars, { preset: { width: "100px" } } ) */
+// export function mergeStyles<
+//   VarsMap extends Record<string, VarDef>
+// >(
+//   map: VarsMap,
+//   base: Record<string, unknown> | undefined,
+//   ...additions: (Record<string, unknown> | false | null | undefined)[]
+// ) {
+//   const out: Record<string, unknown> = { ...(base) };
+
+//   for (const add of additions) {
+//     if (!add) continue;
+
+//     for (const [key, value] of Object.entries(add)) {
+//       if (value == null) continue;
+
+//       const hasPrefix = key.includes(":");
+
+//       // -----------------------------------------------------
+//       // PREFIXED KEYS: "t:bg", "o:padding", etc.
+//       // -----------------------------------------------------
+//       if (hasPrefix) {
+//         const [prefixKey, varKey] = key.split(":", 2);
+
+//         if (!isValidPrefix(prefixKey)) {
+//           console.warn(`[mergeStyles] Invalid prefix "${prefixKey}". Allowed prefixes: o, s, m, p, t, f`);
+//           continue;
+//         }
+
+//         if (!(varKey in map)) {
+//           console.warn(`[mergeStyles] Unknown variable "${varKey}".`);
+//           continue;
+//         }
+
+//         // Merge prefixed value directly
+//         out[key] = normalizeCssValue(value);
+//         continue;
+//       }
+
+//       // -----------------------------------------------------
+//       // UNPREFIXED KEYS → PRESET LAYER
+//       // -----------------------------------------------------
+//       if (key in map) {
+//         out[key] = normalizeCssValue(value);
+//         continue;
+//       }
+
+//       // -----------------------------------------------------
+//       // Unknown key
+//       // -----------------------------------------------------
+//       console.warn(`[mergeStyles] Unknown style key "${key}".`);
+//     }
+//   }
+
+//   return out;
+// }

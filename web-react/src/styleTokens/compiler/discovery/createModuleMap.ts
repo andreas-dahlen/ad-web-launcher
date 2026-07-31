@@ -1,4 +1,4 @@
-import extractGroupName from '../../../shared/tokenUtils/extractGroupName.ts';
+import extractGroupName from '../resolvers/extractGroupName.ts';
 import fs from "node:fs";
 import path from "node:path";
 

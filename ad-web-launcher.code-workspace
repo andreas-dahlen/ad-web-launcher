@@ -16,12 +16,11 @@
 		"terminal.integrated.cwd": "${workspaceFolder}/web-react",
 		"scopesManager.localScopes": [
 			{
-				"id": "ms3ya3pbsl6u9",
-				"name": "compiler",
+				"id": "ms8w1ocq1l9ot",
+				"name": "workplace",
 				"patterns": [
-					"ad-web-launcher/web-react/src/styleTokens/**",
-					"ad-web-launcher/web-react/src/shared/generated/presets/label.preset.ts",
-					"ad-web-launcher/web-react/src/shared/tokenUtils/**"
+					"ad-web-launcher/web-react/src/shared/**",
+					"ad-web-launcher/web-react/src/styleTokens/**"
 				]
 			}
 		]

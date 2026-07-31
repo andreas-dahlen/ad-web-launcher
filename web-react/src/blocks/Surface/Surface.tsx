@@ -3,7 +3,7 @@ import css from './Surface.module.css'
 import { svsx } from '../../shared/sxCompiler/svsx'
 import { surfacePreset, type SurfacePreset } from '@generated/presets/surface.preset'
 import { cpsx } from '../../shared/sxCompiler/cpsx'
-import { surfaceStyle, type SurfaceStyle } from '@shared/generated/tokenStyles/tokenStyles'
+import { surfaceStyle, type SurfaceStyle } from '@shared/generated/tokenModules/surface.token'
 type PanelBaseProps = {
   children: React.ReactNode
   styleVars?: SurfaceStyle

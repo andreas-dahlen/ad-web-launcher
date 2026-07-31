@@ -1,8 +1,9 @@
 import type { SnapConfig } from '@primitives/types/prim.types'
 import type { Axis1D, EventType } from '../../shared/types/core.types'
-import type { ButtonStyle, SliderStyle } from '@shared/generated/tokenStyles/tokenStyles'
 import type { ButtonPreset } from '@generated/presets/button.preset'
 import type { SliderPreset } from '@generated/presets/slider.preset'
+import type { ButtonStyle } from '@shared/generated/tokenModules/button.token'
+import type { SliderStyle } from '@shared/generated/tokenModules/slider.token'
 
 // `directive` contains high-level orchestration flags that determine
 // how the composite exists in the UI. These are not drag or button

@@ -1,7 +1,7 @@
-import type { LoadedToken } from '@styleTokens/types/compiler.types';
+import type { CompilerToken } from '@styleTokens/types/compiler.types';
 import validate from './validateJson.ts';
 
-export default function validateDuplicateVars(tokens: LoadedToken[]) {
+export default function validateDuplicateVars(tokens: CompilerToken[]) {
   const seenVariables = new Map<string, { tokenPath: string }>();
 
   for (const token of tokens) {

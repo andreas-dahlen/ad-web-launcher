@@ -11,7 +11,7 @@ import type { ContentCarouselPrimProps } from '@primitives/types/prim.types.ts'
 import type { SceneRole } from '../../shared/types/core.types.ts'
 
 import { cpsx } from '../../shared/sxCompiler/cpsx.ts'
-import { carouselStyle } from '@shared/generated/tokenStyles/tokenStyles.ts'
+import { carouselStyle } from '@shared/generated/tokenModules/carousel.token.ts'
 import { carouselPreset } from '@generated/presets/carousel.preset.ts'
 
 

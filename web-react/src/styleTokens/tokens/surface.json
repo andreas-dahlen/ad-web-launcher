@@ -27,7 +27,7 @@
     "shadow": { "values": {"p": "f", "f": "none"}},
     "blur": { "values": {"p": "f", "f": "none"}},
 
-    "before-content": {"values": {"p": "f", "f": "none"}},
+    "beforeContent": {"values": {"p": "f", "f": "none"}},
     "opacity": {"values": {"p": "f", "f": "1"}}
   }
 }

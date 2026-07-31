@@ -11,8 +11,6 @@ export default function runDiagnostics(
 
   const data = buildData(cache, run)
 
-  // console.log(JSON.stringify(data, null, 2))
-
   const report = buildReport(data)
 
   printReport(report)

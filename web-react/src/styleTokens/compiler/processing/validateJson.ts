@@ -1,7 +1,7 @@
-import formatLogPath from '../diagnostics/print/formatLogPath.ts';
-import type { RawComponent, RawVarDef } from '../../shared/tokenUtils/compiler.types.ts';
+import formatLogPath from '../../diagnostics/print/formatLogPath.ts';
+import type { RawToken, RawVariable } from '../../types/compiler.types.ts'
 import { printParseErrorCode, type ParseError } from "jsonc-parser";
-import type { Issue } from '../../shared/tokenUtils/prefixes.ts';
+import type { Issue } from '../../types/issueCollector.types.ts';
 
 export type ValidationResult =
   | {
@@ -14,8 +14,8 @@ export type ValidationResult =
 
 
 type TokenValidation = {
-  parse(errors: ParseError[], json: RawComponent, fullPath: string): void;
-  variable(key: string, def: RawVarDef, fullPath: string): void;
+  parse(errors: ParseError[], json: RawToken, fullPath: string): void;
+  variable(key: string, def: RawVariable, fullPath: string): void;
   duplicates(previous: { tokenPath: string } | undefined, cssVariable: string, fullPath: string): never;
 };
 const validate: TokenValidation = {
@@ -84,64 +84,12 @@ const validate: TokenValidation = {
       throw new Error(`❌ Variable "${key}" values must be an object in ${fullPath}`);
     }
   },
-  // variable(key, def, fullPath) {
 
-  //   if (typeof def !== "object" || def === null || Array.isArray(def)) {
-  //     console.log("FAILED 1")
-  //     return {
-  //       valid: false,
-  //       issue: { subject: "variable", name: key, property: "definition", reason: "expected-object", path: fullPath }
-  //     };
-  //   }
-
-  //   if (
-  //     def.name !== undefined &&
-  //     (typeof def.name !== "string" || !def.name.trim())) {
-  //     console.log("FAILED 2")
-  //     return {
-  //       valid: false,
-  //       issue: { subject: "variable", name: key, property: "name", reason: "expected-string", path: fullPath }
-  //     };
-  //   }
-
-  //   if (def.allowed !== undefined && !Array.isArray(def.allowed)) {
-  //     console.log("FAILED 3")
-  //     return {
-  //       valid: false,
-  //       issue: { subject: "variable", name: key, property: "allowed", reason: "expected-array", path: fullPath }
-  //     };
-  //   }
-
-  //   if (def.exclude !== undefined && !Array.isArray(def.exclude)) {
-  //     console.log("FAILED 4")
-  //     return {
-  //       valid: false,
-  //       issue: { subject: "variable", name: key, property: "exclude", reason: "expected-array", path: fullPath }
-  //     };
-  //   }
-
-  //   if (
-  //     def.values !== undefined &&
-  //     (typeof def.values !== "object" ||
-  //       def.values === null ||
-  //       Array.isArray(def.values))) {
-  //     console.log("FAILED 5")
-  //     return {
-  //       valid: false,
-  //       issue: { subject: "variable", name: key, property: "values", reason: "expected-object", path: fullPath }
-  //     };
-  //   }
-
-  //   return {
-  //     valid: true
-  //   };
-  // },
-
-  duplicates(previous, cssVariable, fullPath) {
+  duplicates(previous, identity, fullPath) {
     throw new Error(
-      [`❌ CSS variable collision!`,
-        `\nGenerated variable:`,
-        `   ${cssVariable}`,
+      [`❌ CSS variable identity collision!`,
+        `\nGenerated identity:`,
+        `   ${identity}`,
         `\nSources:`,
         `     ${formatLogPath(fullPath)}`,
         `     ${previous && formatLogPath(previous.tokenPath)}\n`

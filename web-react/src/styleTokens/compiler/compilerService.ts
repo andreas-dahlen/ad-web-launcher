@@ -1,13 +1,13 @@
 import type { Root } from 'postcss';
 import findTokenPaths from './discovery/findTokenPaths.ts';
-import createTokenGroups from './actions/createTokenGroups.ts';
-import applyTokenChange from './actions/applyTokenChange.ts';
+import createTokenGroups from './pipeline/createTokenGroups.ts';
+import applyTokenChange from './pipeline/applyTokenChange.ts';
 import { createTokenCache } from './state/tokenCache.ts';
 import { createProcessingTracker } from './state/processingTracker.ts';
 import createCompilerRun from './state/compilerRun.ts';
 import { createCompletionGuard } from './state/completionGuard.ts';
 import processModule from '../postCss/processModule.ts'
-import assert from './assertions/assertions.ts'
+import assert from './processing/assertions.ts'
 import emitFiles from '../emitters/emitFiles.ts';
 import runDiagnostics from '../diagnostics/runDiagnostics.ts';
 export type TokenCompiler = ReturnType<typeof initializeCompiler>;
@@ -25,7 +25,6 @@ export function initializeCompiler(tokensDir: string) {
     runCssModule,
     handleTokenChange
   }
-
   function handleTokenChange(tokenPath: string): string | null {
     run.reset()
     guard.reset()
@@ -39,7 +38,7 @@ export function initializeCompiler(tokensDir: string) {
 
     if (!group.cssPath) {
       run.recordMissingModule(group.groupPath)
-      runDiagnostics(cache, run)
+      // runDiagnostics(cache, run)
       return null
     }
     tracker.invalidate(group.cssPath)

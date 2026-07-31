@@ -1,4 +1,4 @@
-import type { Issue } from '@shared/tokenUtils/prefixes';
+import type { IssueGroup } from '@styleTokens/types/issueCollector.types';
 import type { CssData, EmitResult } from '../../types/compiler.types';
 
 export type CompilerRun = ReturnType<typeof createCompilerRun>;
@@ -8,7 +8,7 @@ export default function createCompilerRun(groupPaths: string[]) {
   const unusedCssModules = new Set<string>()
   const processedCssData = new Map<string, CssData>()
   let emitResult: EmitResult | undefined
-  const processedIssues: Issue[] = []
+  const processedIssues: IssueGroup[] = []
 
   for (const groupPath of groupPaths) {
     recordMissingModule(groupPath)
@@ -32,7 +32,7 @@ export default function createCompilerRun(groupPaths: string[]) {
   function recordEmitResult(result: EmitResult) {
     emitResult = result
   }
-  function recordIssues(issues: Issue[]) {
+  function recordIssues(issues: IssueGroup[]) {
     processedIssues.push(...issues)
   }
 

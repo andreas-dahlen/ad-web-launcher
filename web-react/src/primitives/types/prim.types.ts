@@ -1,5 +1,3 @@
-
-import type { ButtonStyle, CarouselStyle, ScrollStyle, SliderStyle } from '@shared/generated/tokenStyles/tokenStyles'
 import type { Axis1D, EventType, BoxSide } from '../../shared/types/core.types'
 import type { DataAttributes } from '../../shared/types/utils.types'
 import type React from 'react'
@@ -7,6 +5,10 @@ import type { CarouselPreset } from '@generated/presets/carousel.preset'
 import type { SliderPreset } from '@generated/presets/slider.preset'
 import type { ScrollPreset } from '@generated/presets/scroll.preset'
 import type { ButtonPreset } from '@generated/presets/button.preset'
+import type { CarouselStyle } from '@shared/generated/tokenModules/carousel.token'
+import type { SliderStyle } from '@shared/generated/tokenModules/slider.token'
+import type { ScrollStyle } from '@shared/generated/tokenModules/scroll.token'
+import type { ButtonStyle } from '@shared/generated/tokenModules/button.token'
 
 //discriminating unions - capabilities
 export type SnapConfig = //default is false

@@ -1,8 +1,8 @@
-import type { LoadedToken, TokenGroup } from "../../types/compiler.types.ts"
-import validateDuplicateVars from '../../validation/validateDuplicateVars.ts';
+import type { CompilerToken, TokenGroup } from "../../types/compiler.types.ts"
+import validateDuplicateVars from '../processing/validateDuplicateVars.ts';
 export default function buildTokenGroup(
   groupPath: string,
-  tokens: LoadedToken[],
+  tokens: CompilerToken[],
   cssPath?: string,
 ): TokenGroup {
 

@@ -16,7 +16,8 @@ const rule: ESLintUtils.RuleModule<
   "conflict" |
   "invalidValuePrefix" |
   "excludedValuePrefix" |
-  "invalidVariable",
+  "invalidVariable" |
+  "invalidValueSelfReference",
   []
 > = {
   meta: {
@@ -42,7 +43,10 @@ const rule: ESLintUtils.RuleModule<
         '"{{prefix}}" cannot be used because it is excluded',
 
       invalidVariable:
-        '"{{key}}" must be camelCase'
+        '"{{key}}" must be camelCase',
+
+      invalidValueSelfReference:
+        `"{{prefix}}" cannot reference itself`
     }
   },
 
@@ -135,6 +139,13 @@ const rule: ESLintUtils.RuleModule<
               context.report({
                 loc: getValueLoc(entry.node),
                 messageId: "excludedValuePrefix",
+                data: { prefix }
+              });
+            }
+            if (entry.value === prefix) {
+              context.report({
+                loc: getValueLoc(entry.node),
+                messageId: "invalidValueSelfReference",
                 data: { prefix }
               });
             }

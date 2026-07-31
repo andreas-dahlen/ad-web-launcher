@@ -1,4 +1,4 @@
-import extractGroupName from '../../../shared/tokenUtils/extractGroupName.ts';
+import extractGroupName from '../../compiler/resolvers/extractGroupName.ts';
 import resolveProcessedGroups from '../../compiler/resolvers/resolveProcessedGroups.ts';
 import type { CompilerRun } from '../../compiler/state/compilerRun.ts';
 import type { TokenCache } from "../../compiler/state/tokenCache.ts";
@@ -6,7 +6,7 @@ import analyzeSelectors, { type UnusableSelector } from "./analyzers/analyzeSele
 import analyzeTokens, { type MissingClass } from './analyzers/analyzeTokens.ts';
 import analyzeVariableUsage, { type VariableMismatch } from './analyzers/analyzeVariableUsage.ts';
 import analyzeWriteResult, { type GeneratedFiles } from './analyzers/analyzeWriteResult.ts'
-import analyzeIssues, { type SortedIssues } from './analyzers/analyzeIssues.ts';
+import analyzeIssues, { type AnalyzedIssueGroup } from './analyzers/analyzeIssues.ts';
 
 export type DiagnosticData = {
   missingClasses: MissingClass[];
@@ -15,7 +15,7 @@ export type DiagnosticData = {
   missingCssModules: string[]
   processedGroupCount: number
   generatedFiles: GeneratedFiles
-  issues: SortedIssues[]
+  issues: AnalyzedIssueGroup[]
 }
 
 export default function buildData(

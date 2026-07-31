@@ -1,8 +1,8 @@
 import path from 'node:path'
 import type { CssTokenGroup } from '../../../types/compiler.types'
 import type { ValidPrefix } from '../../../../shared/tokenUtils/compiler.types'
-import { toCamelCase, toPascalCase } from '../../../../shared/tokenUtils/stringFormaters'
-import extractGroupName from '../../../../shared/tokenUtils/extractGroupName'
+import { toCamelCase, toPascalCase } from '../../../../shared/tokenUtils/stringFormaters.ts'
+import extractGroupName from '../../../compiler/resolvers/extractGroupName.ts'
 
 export type TokenGroupFileData = {
   name: string

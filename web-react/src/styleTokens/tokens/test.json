@@ -4,7 +4,7 @@
 
   "alwaysAllowed": ["o", "p", "f"],
   "vars": {
-    "bg": { "allowed": ["t", "p"], "exclude": ["t", "p"]},
+    "bg": { "allowed": ["t"]},
 
     "position": { "name": "position" },
     "display": { "name": "display"},
@@ -29,7 +29,7 @@
       "p": "f"
     } },
 
-    "before-content": {},
+    "beforeContent": {},
     "opacity": {}
   }
 }

@@ -1,6 +1,6 @@
-import type { ValidPrefix } from './compiler.types';
-import { prefixPriority } from './prefixes.ts';
-import createIssueCollector from './issueCollector.ts';
+import type { ValidPrefix } from '../../../shared/tokenUtils/compiler.types.ts';
+import { prefixPriority } from '../../../shared/tokenUtils/prefixes';
+import { createNullIssueCollector, type IssueCollector } from '../state/issueCollector.ts';
 
 const priority = new Map(
   prefixPriority.map((prefix, index) => [prefix, index]),
@@ -10,33 +10,26 @@ function getPriority(prefix: ValidPrefix): number {
   return priority.get(prefix)!;
 }
 
-type IssueContext = {
-  name: string
-  path: string
-}
-
 export function resolveAllowedPrefixes(
   allowed: readonly ValidPrefix[],
   alwaysAllowed: readonly ValidPrefix[],
   exclude: readonly ValidPrefix[],
-  context?: IssueContext
+  collector?: IssueCollector
 ) {
 
-  const collector = createIssueCollector("prefix",
-    context?.name ?? "unknown",
-    context?.path ?? "unknown")
-
+  const collect = collector ?? createNullIssueCollector()
+  collect.setSubject("Prefix Parsing")
   for (const prefix of allowed) {
     if (alwaysAllowed.includes(prefix)) {
-      collector.setIssue("already in alwaysAllowed", prefix)
+      collect.set({ reason: "already in alwaysAllowed", value: prefix })
     }
   }
   for (const prefix of exclude) {
     if (!alwaysAllowed.includes(prefix)) {
-      collector.setIssue("cannot exclude non-alwaysAllowed prefix", prefix)
+      collect.set({ reason: "cannot exclude non-alwaysAllowed prefix", value: prefix })
     }
     if (allowed.includes(prefix)) {
-      collector.setIssue("exists in both allowed and exclude", prefix)
+      collect.set({ reason: "exists in both allowed and exclude", value: prefix })
     }
   }
 
@@ -49,7 +42,6 @@ export function resolveAllowedPrefixes(
   ].sort((a, b) => getPriority(a) - getPriority(b));
 
   return {
-    effectiveAllowed,
-    issues: collector.flushIssues(),
+    effectiveAllowed
   }
 }

@@ -1,13 +1,13 @@
-import type { LoadedToken, LoadedVariable } from '../../types/compiler.types.ts';
+import type { CompilerToken, CompilerVariable } from '../../types/compiler.types.ts';
 import { isValidPrefix } from '../../../shared/tokenUtils/prefixes.ts'
 import formatLogPath from './formatLogPath.ts';
 
 export type Print = {
-  jsonsLoaded(tokens: LoadedToken[]): void;
+  jsonsLoaded(tokens: CompilerToken[]): void;
   injecting(file: string): void;
   processing(name: string): void;
   buildingChains(infix: string): void;
-  resultCascade(variable: LoadedVariable): void;
+  resultCascade(variable: CompilerVariable): void;
   injected(target: { file: string; selector: string }): void;
   presets(data: { name: string; infix: string }): void;
   // variableWarning(data: { name: string; unused: string[]; missing: string[]; infix: string; }): void;
