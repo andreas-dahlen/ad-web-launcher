@@ -1,5 +1,5 @@
-import type { CompilerToken } from '@styleTokens/types/compiler.types';
-import validate from './validateJson.ts';
+import formatLogPath from '../../diagnostics/print/formatLogPath.ts';
+import type { CompilerToken } from '../../types/compiler.types.ts';
 
 export default function validateDuplicateVars(tokens: CompilerToken[]) {
   const seenVariables = new Map<string, { tokenPath: string }>();
@@ -11,7 +11,16 @@ export default function validateDuplicateVars(tokens: CompilerToken[]) {
 
         const previous = seenVariables.get(identity);
 
-        validate.duplicates(previous, identity, token.tokenPath)
+
+        throw new Error(
+          [`❌ CSS variable identity collision!`,
+            `\nGenerated identity:`,
+            `   ${identity}`,
+            `\nSources:`,
+            `     ${formatLogPath(token.tokenPath)}`,
+            `     ${previous && formatLogPath(previous.tokenPath)}\n`
+          ].join("\n")
+        );
 
       }
 

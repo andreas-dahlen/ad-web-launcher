@@ -2,7 +2,7 @@ import loadTokenFile from '../loaders/loadTokenFile.ts';
 import type { TokenResult } from '../../types/compiler.types.ts'
 import assert from '../processing/assertions.ts';
 import parseToken from './parseToken.ts';
-import createIssueCollector from '../state/issueCollector.ts';
+import createIssueCollector from '../tracking/issueCollector.ts';
 
 export default function loadToken(fullPath: string): TokenResult {
   const { json, errors } = loadTokenFile(fullPath)

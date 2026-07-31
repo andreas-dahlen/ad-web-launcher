@@ -1,6 +1,6 @@
 import type { ValidPrefix } from '../../../shared/tokenUtils/compiler.types.ts';
-import { prefixPriority } from '../../../shared/tokenUtils/prefixes';
-import { createNullIssueCollector, type IssueCollector } from '../state/issueCollector.ts';
+import { prefixPriority } from '../../../shared/tokenUtils/prefixes.ts';
+import { createNullIssueCollector, type IssueCollector } from '../tracking/issueCollector.ts';
 
 const priority = new Map(
   prefixPriority.map((prefix, index) => [prefix, index]),

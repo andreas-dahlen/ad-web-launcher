@@ -3,9 +3,9 @@ import react from '@vitejs/plugin-react-swc'
 import { viteSingleFile } from 'vite-plugin-singlefile'
 import path from 'path'
 import svgr from "vite-plugin-svgr";
-import createTokenIntegration from './plugins/vite.token-integration';
+import createTokenIntegration from './plugins/vite.token-integration.ts';
 
-const fromRoot = (relativePath: string) => path.resolve(__dirname, relativePath)
+const fromRoot = (relativePath: string) => path.resolve(import.meta.dirname, relativePath)
 const TOKEN_DIR = fromRoot("src/styleTokens/tokens");
 
 const tokenIntegration = createTokenIntegration(TOKEN_DIR);

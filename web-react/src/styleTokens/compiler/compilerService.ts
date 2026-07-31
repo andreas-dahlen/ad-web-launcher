@@ -2,10 +2,10 @@ import type { Root } from 'postcss';
 import findTokenPaths from './discovery/findTokenPaths.ts';
 import createTokenGroups from './pipeline/createTokenGroups.ts';
 import applyTokenChange from './pipeline/applyTokenChange.ts';
-import { createTokenCache } from './state/tokenCache.ts';
-import { createProcessingTracker } from './state/processingTracker.ts';
-import createCompilerRun from './state/compilerRun.ts';
-import { createCompletionGuard } from './state/completionGuard.ts';
+import { createTokenCache } from './tracking/tokenCache.ts';
+import { createProcessingTracker } from './tracking/processingTracker.ts';
+import createCompilerRun from './tracking/compilerRun.ts';
+import { createCompletionGuard } from './tracking/completionGuard.ts';
 import processModule from '../postCss/processModule.ts'
 import assert from './processing/assertions.ts'
 import emitFiles from '../emitters/emitFiles.ts';

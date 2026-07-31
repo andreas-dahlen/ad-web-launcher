@@ -1,5 +1,4 @@
-import { mergeIssueGroups } from '../../../compiler/state/issueCollector.ts'
-import type { Issue, IssueGroup } from '../../../types/issueCollector.types'
+import type { Issue, IssueGroup } from '../../../types/issueCollector.types.ts'
 
 export type IssueContextGroup = {
   context?: string
@@ -12,9 +11,7 @@ export type AnalyzedIssueGroup = {
 }
 
 export default function analyzeIssues(groups: IssueGroup[]): AnalyzedIssueGroup[] {
-  const merged = mergeIssueGroups(groups)
-
-  return merged
+  return groups
     .filter(group => group.issues.length > 0)
     .map(group => {
       const contexts = new Map<string | undefined, Issue[]>()

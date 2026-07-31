@@ -1,6 +1,6 @@
 import { printParseErrorCode, type ParseError } from 'jsonc-parser';
-import type { TokenGroup } from "../../types/compiler.types";
-import type { RawToken, RawVariable } from "../../types/compiler.types"
+import type { TokenGroup } from "../../types/compiler.types.ts";
+import type { RawToken, RawVariable } from "../../types/compiler.types.ts"
 
 type Assertions = {
   token(errors: ParseError[], json: RawToken, fullPath: string): void;

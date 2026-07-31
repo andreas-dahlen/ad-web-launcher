@@ -1,7 +1,8 @@
 import extractGroupName from '../../compiler/resolvers/extractGroupName.ts';
 import resolveProcessedGroups from '../../compiler/resolvers/resolveProcessedGroups.ts';
-import type { CompilerRun } from '../../compiler/state/compilerRun.ts';
-import type { TokenCache } from "../../compiler/state/tokenCache.ts";
+import type { CompilerRun } from '../../compiler/tracking/compilerRun.ts';
+import type { TokenCache } from "../../compiler/tracking/tokenCache.ts";
+import { mergeIssueGroups } from '../../compiler/tracking/issueCollector.ts';
 import analyzeSelectors, { type UnusableSelector } from "./analyzers/analyzeSelectors.ts";
 import analyzeTokens, { type MissingClass } from './analyzers/analyzeTokens.ts';
 import analyzeVariableUsage, { type VariableMismatch } from './analyzers/analyzeVariableUsage.ts';
@@ -36,7 +37,7 @@ export default function buildData(
     .map(groupPath => extractGroupName(groupPath))
 
   const emitResult = run.getEmitResult()
-  const issues = analyzeIssues(run.getIssues())
+  const issues = analyzeIssues(mergeIssueGroups(run.getIssues()))
 
   const generatedFiles = analyzeWriteResult(emitResult?.writeResult)
 

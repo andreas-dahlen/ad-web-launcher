@@ -1,4 +1,3 @@
-import formatLogPath from '../../diagnostics/print/formatLogPath.ts';
 import type { RawToken, RawVariable } from '../../types/compiler.types.ts'
 import { printParseErrorCode, type ParseError } from "jsonc-parser";
 import type { Issue } from '../../types/issueCollector.types.ts';
@@ -16,7 +15,6 @@ export type ValidationResult =
 type TokenValidation = {
   parse(errors: ParseError[], json: RawToken, fullPath: string): void;
   variable(key: string, def: RawVariable, fullPath: string): void;
-  duplicates(previous: { tokenPath: string } | undefined, cssVariable: string, fullPath: string): never;
 };
 const validate: TokenValidation = {
 
@@ -83,18 +81,6 @@ const validate: TokenValidation = {
         Array.isArray(def.values))) {
       throw new Error(`❌ Variable "${key}" values must be an object in ${fullPath}`);
     }
-  },
-
-  duplicates(previous, identity, fullPath) {
-    throw new Error(
-      [`❌ CSS variable identity collision!`,
-        `\nGenerated identity:`,
-        `   ${identity}`,
-        `\nSources:`,
-        `     ${formatLogPath(fullPath)}`,
-        `     ${previous && formatLogPath(previous.tokenPath)}\n`
-      ].join("\n")
-    );
   }
 }
 

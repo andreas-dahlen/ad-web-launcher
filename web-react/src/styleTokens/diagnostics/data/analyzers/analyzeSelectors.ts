@@ -1,4 +1,4 @@
-import type { CssData } from '../../../types/compiler.types';
+import type { CssData } from '../../../types/compiler.types.ts';
 
 export type UnusableSelector = {
   cssPath: string;

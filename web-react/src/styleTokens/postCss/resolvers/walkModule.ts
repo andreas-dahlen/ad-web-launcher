@@ -1,5 +1,5 @@
 import { toCssVarPrefix } from '../../../shared/tokenUtils/stringFormaters.ts';
-import type { CssVarString } from '../../../shared/tokenUtils/compiler.types';
+import type { CssVarString } from '../../../shared/tokenUtils/compiler.types.ts';
 import type { Root, Rule } from "postcss";
 import selectorParser from "postcss-selector-parser";
 

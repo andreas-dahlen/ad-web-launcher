@@ -1,7 +1,7 @@
-import type { ValidPrefix } from '../../../shared/tokenUtils/compiler.types'
-import type { CompilerVariable, RawVariable } from '../../types/compiler.types'
+import type { ValidPrefix } from '../../../shared/tokenUtils/compiler.types.ts'
+import type { CompilerVariable, RawVariable } from '../../types/compiler.types.ts'
 import { prefixLeadingNumber, removeInvalidCharacters, toCamelCase, escapeReservedWord, removeWhitespace } from '../../../shared/tokenUtils/stringFormaters.ts'
-import { createNullIssueCollector, type IssueCollector } from '../state/issueCollector.ts'
+import { createNullIssueCollector, type IssueCollector } from '../tracking/issueCollector.ts'
 import { resolveAllowedPrefixes } from '../resolvers/resolveAllowedPrefixes.ts'
 
 type ParseToken = {

@@ -1,7 +1,7 @@
 import path from "node:path"
 import extractGroupName from '../../../compiler/resolvers/extractGroupName.ts';
 import { toCamelCase, toPascalCase } from '../../../../shared/tokenUtils/stringFormaters.ts';
-import type { CssData } from '../../../types/compiler.types';
+import type { CssData } from '../../../types/compiler.types.ts';
 
 export type PresetFileData = {
   presetName: string

@@ -72,9 +72,11 @@ export default defineConfig([
         { type: 'primitives', pattern: 'src/primitives/*/**', capture: ['mod'] },
         { type: 'shared', pattern: 'src/shared/*/**', capture: ['mod'] },
         { type: 'generated', pattern: 'src/shared/generated/*/**', capture: ['mod'] },
-        // { type: 'tokenCompiler', pattern: 'src/styleTokens/compiler/*/**', capture: ['mod'] },
-        // { type: 'tokens', pattern: 'src/styleTokens/tokens/*/**', capture: ['mod'] },
-        // { type: 'tokenHelpers', pattern: 'src/styleTokens/tokenHelpers/**' }
+        // { type: 'styleTokens', pattern: 'src/styleTokens/*/**', capture: ['mod'] },
+        { type: 'compiler', pattern: 'src/styleTokens/compiler/*/**', capture: ['mod'] },
+        // { type: 'diagnostics', pattern: 'src/styleTokens/diagnostics/*/**', capture: ['mod'] },
+        // { type: 'emitters', pattern: 'src/styleTokens/emitters/*/**', capture: ['mod'] },
+        // { type: 'postCss', pattern: 'src/styleTokens/postCss/*/**', capture: ['mod'] },
       ],
       'boundaries/files': [
 
@@ -343,6 +345,7 @@ export default defineConfig([
               allow: {
                 to: [
                   { file: { categories: "types" } },
+                  { element: { type: "shared", captured: { mod: "enums" } } },
                   { element: { type: "shared", captured: { mod: "{{from.element.captured.mod}}" } } }
                 ]
               }
@@ -355,16 +358,6 @@ export default defineConfig([
             // shared/generated
             // ----------------------------------
             {
-              from: { element: { type: "shared", captured: { mod: "generated" } } },
-              allow: {
-                to: [
-                  { element: { type: "shared", captured: { mod: "tokenUtils" } } },
-                  { element: { type: "tokens" } },
-                  { file: { categories: "tokenData" } }
-                ]
-              }
-            },
-            {
               from: { element: { type: "shared", element: { type: "generated", captured: { mod: "presets" } } } },
               allow: {
                 to: [
@@ -376,10 +369,55 @@ export default defineConfig([
             // ----------------------------------
             // tokenCompiler
             // ----------------------------------
+            {
+              from: { element: { type: "compiler", captured: { mod: "*" } } },
+              allow: { to: { file: { categories: "types" } } }
+            },
+            {
+              from: { element: { type: "compiler", captured: { mod: "discovery" } } },
+              allow: { to: { element: { type: "compiler", captured: { mod: "resolvers" } } } }
+            },
+            {
+              from: { element: { type: "compiler", captured: { mod: "pipeline" } } },
+              allow: {
+                to: [
+                  { element: { type: "compiler", captured: { mod: "builders" } } },
+                  { element: { type: "compiler", captured: { mod: "resolvers" } } },
+                  { element: { type: "compiler", captured: { mod: "discovery" } } },
+                  { element: { type: "compiler", captured: { mod: "processing" } } },
+                  { element: { type: "compiler", captured: { mod: "tracking" } } }
+                ]
+              }
+            },
+            {
+              from: { element: { type: "compiler", captured: { mod: "processing" } } },
+              allow: {
+                to: [
+                  { element: { type: "compiler", captured: { mod: "tracking" } } },
+                  { element: { type: "compiler", captured: { mod: "loaders" } } },
+                  { element: { type: "compiler", captured: { mod: "resolvers" } } },
+                  { element: { type: "shared", captured: { mod: "tokenUtils" } } }
+                ]
+              }
+            },
+            {
+              from: { element: { type: "compiler", captured: { mod: "resolvers" } } },
+              allow: {
+                to: [
+                  { element: { type: "compiler", captured: { mod: "tracking" } } },
+                  { element: { type: "shared", captured: { mod: "tokenUtils" } } }
+                ]
+              }
+            },
+
+
+
+
             // {
             //   from: { element: { type: "tokenCompiler", captured: { mod: "*" } } },
-            //   allow: { to: { element: { type: "shared", captured: { mod: "tokenUtils" } } } }
+            //   allow: { to: { file: { categories: "types" } } }
             // },
+            // allow: { to: { element: { type: "shared", captured: { mod: "tokenUtils" } } } }
             // {
             //   from: { element: { type: "tokenCompiler", captured: { mod: "validation" } } },
             //   allow: { to: { element: { type: "tokenCompiler", captured: { mod: "logging" } } } }
@@ -420,12 +458,12 @@ export default defineConfig([
             // // ----------------------------------
             // // FILES
             // // ----------------------------------
-            // {
-            //   from: { file: { categories: "stores" } },
-            //   allow: {
-            //     to: { element: { type: "data", captured: { mod: "generators" } } }
-            //   }
-            // },
+            {
+              from: { file: { categories: "stores" } },
+              allow: {
+                to: { element: { type: "data", captured: { mod: "generators" } } }
+              }
+            },
             // {
             //   from: { file: { categories: "types" } },
             //   allow: {

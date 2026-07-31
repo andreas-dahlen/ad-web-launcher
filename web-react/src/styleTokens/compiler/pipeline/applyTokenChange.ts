@@ -1,5 +1,5 @@
 import buildTokenGroup from '../builders/buildTokenGroup.ts';
-import type { TokenCache } from '../state/tokenCache.ts';
+import type { TokenCache } from '../tracking/tokenCache.ts';
 import resolveTokenGroupPath from '../resolvers/resolveTokenGroupPath.ts'
 import findCssModulePath from '../discovery/findCssModulePath.ts';
 import processToken from '../processing/processToken.ts';

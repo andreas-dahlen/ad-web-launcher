@@ -1,6 +1,6 @@
-import type { CssTokenGroup } from '../../types/compiler.types';
-import type { CompilerRun } from '../state/compilerRun.ts';
-import type { TokenCache } from '../state/tokenCache.ts';
+import type { CssTokenGroup } from '../../types/compiler.types.ts';
+import type { CompilerRun } from '../tracking/compilerRun.ts';
+import type { TokenCache } from '../tracking/tokenCache.ts';
 
 export default function resolveProcessedGroups(
   cache: TokenCache,
