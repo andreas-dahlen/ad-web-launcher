@@ -1,7 +1,7 @@
-import formatLogPath from '../../diagnostics/print/formatLogPath.ts';
+import { formatLogPath } from '../../consoleUtils/utils.ts';
 import type { CompilerToken } from '../../types/compiler.types.ts';
 
-export default function validateDuplicateVars(tokens: CompilerToken[]) {
+export function validateDuplicateVars(tokens: CompilerToken[]) {
   const seenVariables = new Map<string, { tokenPath: string }>();
 
   for (const token of tokens) {

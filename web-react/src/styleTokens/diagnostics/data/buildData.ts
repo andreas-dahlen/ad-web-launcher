@@ -1,25 +1,17 @@
-import extractGroupName from '../../compiler/resolvers/extractGroupName.ts';
-import resolveProcessedGroups from '../../compiler/resolvers/resolveProcessedGroups.ts';
+import type { DiagnosticData, InvalidVarDeclaration, MissingClass, UnusableSelector, VariableMismatch } from '../../types/diagnostics.types.ts';
 import type { CompilerRun } from '../../compiler/tracking/compilerRun.ts';
 import type { TokenCache } from "../../compiler/tracking/tokenCache.ts";
 import { mergeIssueGroups } from '../../compiler/tracking/issueCollector.ts';
-import analyzeSelectors, { type UnusableSelector } from "./analyzers/analyzeSelectors.ts";
-import analyzeTokens, { type MissingClass } from './analyzers/analyzeTokens.ts';
-import analyzeVariableUsage, { type VariableMismatch } from './analyzers/analyzeVariableUsage.ts';
-import analyzeWriteResult, { type GeneratedFiles } from './analyzers/analyzeWriteResult.ts'
-import analyzeIssues, { type AnalyzedIssueGroup } from './analyzers/analyzeIssues.ts';
+import { extractGroupName } from '../../compiler/resolvers/extractGroupName.ts';
+import { resolveProcessedGroups } from '../../compiler/resolvers/resolveProcessedGroups.ts';
+import { analyzeSelectors } from "./analyzers/analyzeSelectors.ts";
+import { analyzeTokens } from './analyzers/analyzeTokens.ts';
+import { analyzeVariableUsage } from './analyzers/analyzeVariableUsage.ts';
+import { analyzeWriteResult } from './analyzers/analyzeWriteResult.ts'
+import { analyzeIssues } from './analyzers/analyzeIssues.ts';
+import { analyzeVariableDeclarations } from './analyzers/analyzeVariableDeclarations.ts';
 
-export type DiagnosticData = {
-  missingClasses: MissingClass[];
-  unusableSelectors: UnusableSelector[]
-  mismatchedVariables: VariableMismatch[]
-  missingCssModules: string[]
-  processedGroupCount: number
-  generatedFiles: GeneratedFiles
-  issues: AnalyzedIssueGroup[]
-}
-
-export default function buildData(
+export function buildData(
   cache: TokenCache,
   run: CompilerRun,
   //tracker!?
@@ -28,7 +20,7 @@ export default function buildData(
   const missingClasses: MissingClass[] = []
   const unusableSelectors: UnusableSelector[] = []
   const mismatchedVariables: VariableMismatch[] = []
-
+  const invalidVarDeclarations: InvalidVarDeclaration[] = []
   /*---------------------------------------
           NON-Group specific
   -------------------------------------*/
@@ -68,12 +60,14 @@ export default function buildData(
 
     missingClasses.push(...analyzeTokens(cssData))
     mismatchedVariables.push(...analyzeVariableUsage(cssData, group))
+    invalidVarDeclarations.push(...analyzeVariableDeclarations(cssData, group))
   }
 
   return {
     missingClasses,
     unusableSelectors,
     mismatchedVariables,
+    invalidVarDeclarations,
     missingCssModules,
     processedGroupCount,
     generatedFiles,

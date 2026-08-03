@@ -8,7 +8,7 @@ export type IssueCollector = {
   flush(): IssueGroup[]
 }
 
-export default function createIssueCollector(): IssueCollector {
+export function createIssueCollector(): IssueCollector {
 
   const groups = new Map<string, IssueGroup>()
 

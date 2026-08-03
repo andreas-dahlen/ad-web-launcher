@@ -8,7 +8,7 @@ type Assertions = {
   hasCssPath(group: TokenGroup): asserts group is TokenGroup & { cssPath: string }
 };
 
-const assert: Assertions = {
+export const assert: Assertions = {
 
 
   token(errors, json, fullPath) {
@@ -88,4 +88,3 @@ const assert: Assertions = {
     }
   }
 }
-export default assert

@@ -16,7 +16,7 @@ type TokenValidation = {
   parse(errors: ParseError[], json: RawToken, fullPath: string): void;
   variable(key: string, def: RawVariable, fullPath: string): void;
 };
-const validate: TokenValidation = {
+export const validate: TokenValidation = {
 
   parse(errors, json, fullPath) {
     if (errors.length > 0) {
@@ -83,5 +83,3 @@ const validate: TokenValidation = {
     }
   }
 }
-
-export default validate;

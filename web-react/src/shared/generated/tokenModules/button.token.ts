@@ -21,13 +21,15 @@ export const buttonStyle = {
          height: { name: "height", allowed: ["o","p","f"]},
          radius: { name: "radius", allowed: ["o","p","f"]},
          border: { name: "border", allowed: ["o","p","f"]},
-         shadow: { name: "shadow", allowed: ["o","p","f"]},
-         opacity: { name: "opacity", allowed: ["o","p","f"]},
+         shadow: { name: "shadow", allowed: ["o","s","p","f"]},
+         opacity: { name: "opacity", allowed: ["o","s","p","f"]},
+         filter: { name: "filter", allowed: ["o","s","p","f"]},
          statePressedScale: { name: "statePressedScale", allowed: ["o","s","f"]},
          stateReleasedScale: { name: "stateReleasedScale", allowed: ["o","s","f"]},
          stateCanceledScale: { name: "stateCanceledScale", allowed: ["o","s","f"]},
          stateCanceledOpacity: { name: "stateCanceledOpacity", allowed: ["o","s","f"]},
-         statePressedFilter: { name: "statePressedFilter", allowed: ["o","s","f"]} 
+         statePressedFilter: { name: "statePressedFilter", allowed: ["o","s","f"]},
+         statePressedShadow: { name: "statePressedShadow", allowed: ["o","s","f"]} 
 }
   }
 } as const satisfies TokenComponent;

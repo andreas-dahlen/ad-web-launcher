@@ -1,7 +1,6 @@
-import type { WriteResult } from '../emitters/write/writeFiles.ts';
-import type { CssVarString, ValidPrefix } from '../../shared/tokenUtils/compiler.types';
+import type { CssVarString, ValidPrefix } from '../../shared/tokenUtils/compiler.types.ts';
 
-import type { IssueGroup } from '../../shared/tokenUtils/issueCollector.ts';
+import type { IssueGroup } from './issueCollector.types.ts';
 
 
 
@@ -64,6 +63,7 @@ export type CssData = { // CssModuleResult
   usableSelectors: string[]
   tokens: ProcessedToken[]
   foundVariables: CssVarString[]
+  declaredVariables: CssVarString[]
 }
 export type ProcessedToken = {
   name: string
@@ -73,7 +73,19 @@ export type ProcessedToken = {
 }
 
 export type EmitResult = {
-  writeResult: WriteResult
+  writeResult: FileResult
+  patchResult: FileResult
+}
+export type FileResult = {
+  updated: string[]
+  skipped: string[]
 }
 
-
+// export type WriteResult = {
+//   written: string[]
+//   skipped: string[]
+// }
+// export type PatchResult = {
+//   written: string[]
+//   skipped: string[]
+// }

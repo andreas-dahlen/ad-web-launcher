@@ -1,16 +1,7 @@
+import type { AnalyzedIssueGroup } from '../../../types/diagnostics.types.ts'
 import type { Issue, IssueGroup } from '../../../types/issueCollector.types.ts'
 
-export type IssueContextGroup = {
-  context?: string
-  issues: Issue[]
-}
-
-export type AnalyzedIssueGroup = {
-  subject: string
-  contexts: IssueContextGroup[]
-}
-
-export default function analyzeIssues(groups: IssueGroup[]): AnalyzedIssueGroup[] {
+export function analyzeIssues(groups: IssueGroup[]): AnalyzedIssueGroup[] {
   return groups
     .filter(group => group.issues.length > 0)
     .map(group => {

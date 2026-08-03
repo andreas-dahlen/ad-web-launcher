@@ -1,4 +1,4 @@
-export default function extractGroupName(
+export function extractGroupName(
   groupPath: string
 ): string {
   const normalized = groupPath.replaceAll("\\", "/");

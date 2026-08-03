@@ -1,9 +1,24 @@
 {
+  "eslint.workingDirectories": [
+    {
+      "directory": "./web-react",
+      "changeProcessCWD": true
+    }
+  ],
+    "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact",
+    "json",
+    "jsonc"
+  ],
   "json.schemas": [
     {
       "fileMatch": [
-        "web-react/src/styleTokens/tokens/**/*.{json,jsonc}"
-      ],
+  "web-react/src/styleTokens/tokens/**/*.json",
+  "web-react/src/styleTokens/tokens/**/*.jsonc"
+],
       "url": "./web-react/src/styleTokens/schema/token.schema.json"
     }
   ],

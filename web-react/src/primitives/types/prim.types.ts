@@ -1,14 +1,14 @@
-import type { Axis1D, EventType, BoxSide } from '../../shared/types/core.types'
-import type { DataAttributes } from '../../shared/types/utils.types'
+import type { Axis1D, EventType, BoxSide } from '../../shared/types/core.types.ts'
+import type { DataAttributes } from '../../shared/types/utils.types.ts'
 import type React from 'react'
-import type { CarouselPreset } from '@generated/presets/carousel.preset'
-import type { SliderPreset } from '@generated/presets/slider.preset'
-import type { ScrollPreset } from '@generated/presets/scroll.preset'
-import type { ButtonPreset } from '@generated/presets/button.preset'
-import type { CarouselStyle } from '@shared/generated/tokenModules/carousel.token'
-import type { SliderStyle } from '@shared/generated/tokenModules/slider.token'
-import type { ScrollStyle } from '@shared/generated/tokenModules/scroll.token'
-import type { ButtonStyle } from '@shared/generated/tokenModules/button.token'
+import type { CarouselPreset } from '@generated/presets/carousel.preset.ts'
+import type { SliderPreset } from '@generated/presets/slider.preset.ts'
+import type { ScrollPreset } from '@generated/presets/scroll.preset.ts'
+import type { ButtonPreset } from '@generated/presets/button.preset.ts'
+import type { CarouselStyle } from '@shared/generated/tokenModules/carousel.token.ts'
+import type { SliderStyle } from '@shared/generated/tokenModules/slider.token.ts'
+import type { ScrollStyle } from '@shared/generated/tokenModules/scroll.token.ts'
+import type { ButtonStyle } from '@shared/generated/tokenModules/button.token.ts'
 
 //discriminating unions - capabilities
 export type SnapConfig = //default is false
@@ -22,8 +22,13 @@ export type SnapConfig = //default is false
     snapX?: number
     snapY?: number
   }
+type BasePrimProps = {
+  id: string
+  interactive?: boolean
+  isInFlow?: boolean
+}
 
-export type OverflowProps =
+type OverflowProps =
   | { overflowSide: BoxSide; isInitialVisible: boolean }
   | { overflowSide: never; isInitialVisible: never }
 
@@ -76,9 +81,3 @@ export type ButtonPrimProps = BasePrimProps & {
   onPressRelease?: (detail: EventType) => void
 }
 
-
-export type BasePrimProps = {
-  id: string
-  interactive?: boolean
-  isInFlow?: boolean
-}

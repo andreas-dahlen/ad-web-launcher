@@ -11,8 +11,15 @@ export const scrollStyle = {
   component: "scroll",
 
   vars: {   
+   knob: {
+          bg: { name: "bg", allowed: ["o","p","f"]},
+         width: { name: "width", allowed: ["o","p","f"]},
+         height: { name: "height", allowed: ["o","p","f"]} 
+},
    scroll: {
-          test: { name: "test", allowed: ["o","t","f"]} 
+          height: { name: "height", allowed: ["o","p","f"]},
+         width: { name: "width", allowed: ["o","p","f"]},
+         opacity: { name: "opacity", allowed: ["o","p","f"]} 
 }
   }
 } as const satisfies TokenComponent;

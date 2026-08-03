@@ -1,5 +1,7 @@
+/* 
+file://wsl.localhost/Ubuntu//home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/surface.jsonc
+*/
 .surface {
-
   gap: var(--final-surface-gap);
   margin: var(--final-surface-margin);
   padding: var(--final-surface-padding);
@@ -11,16 +13,16 @@
 
 .bg {
   --p-surface-overflow: hidden;
-  --p-surface-border-radius: 10px;
+  --p-surface-radius: 10px;
   --p-surface-opacity: 50%;
   --p-surface-blur: blur(15px);
   --p-surface-before-content: "";
 
-  &::before {
-    /* content: var(--final-surface-before-content, ""); */
-    content: "";
+  &::after {
+    content: var(--final-surface-before-content);
+    /* content: ""; */
     inset: 0;
-    position: absolute;
+    position: var(--final-surface-position);
     opacity: var(--final-surface-opacity, 50%);
     background: var(--final-surface-bg);
     z-index: -1;

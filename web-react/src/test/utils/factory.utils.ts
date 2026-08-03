@@ -5,4 +5,4 @@ export function merge<T>(base: T, overrides?: Partial<T>): T {
   }
 }
 
-export const ANY = <T>(v: T): unknown => v
+// export const ANY = <T>(v: T): unknown => v

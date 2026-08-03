@@ -145,9 +145,9 @@ describe('[GESTUREUTILS]', () => {
       const desc = createCarouselDesc({
         base: undefined,
         capabilities: {
-          pressable: true,
-          swipeable: true,
-          instantSwipe: true
+          isPressable: true,
+          isSwipeable: true,
+          isInstantSwipe: true
         }
       })
 

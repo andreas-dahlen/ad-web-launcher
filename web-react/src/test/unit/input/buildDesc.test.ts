@@ -197,21 +197,21 @@ describe("[BUILD DESC]", () => {
       [false, "someAction", false, false, true],
     ])(
       "pressable=%s action=%s => %s",
-      (pressable, action, swipeable, instantSwipe, expected) => {
+      (isPressable, action, isSwipeable, isInstantSwipe, expected) => {
 
         const meta = {
-          pressable,
-          swipeable,
-          instantSwipe,
+          isPressable,
+          isSwipeable,
+          isInstantSwipe,
           ds: { action }
         } as unknown as DomMeta
 
         const result = testBuildDesc.buildCapabilities(meta)
 
         expect(result).toEqual({
-          pressable: expected,
-          swipeable,
-          instantSwipe,
+          isPressable: expected,
+          isSwipeable,
+          isInstantSwipe,
         })
       }
     )

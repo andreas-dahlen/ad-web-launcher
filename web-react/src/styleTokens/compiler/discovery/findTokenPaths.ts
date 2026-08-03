@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 
-export default function findTokenPaths(target: string): string[] {
+export function findTokenPaths(target: string): string[] {
   const absoluteTarget = path.resolve(target);
 
   const stat = fs.statSync(absoluteTarget);

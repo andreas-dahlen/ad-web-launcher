@@ -2,7 +2,7 @@ import type { CssTokenGroup } from '../../types/compiler.types.ts';
 import type { CompilerRun } from '../tracking/compilerRun.ts';
 import type { TokenCache } from '../tracking/tokenCache.ts';
 
-export default function resolveProcessedGroups(
+export function resolveProcessedGroups(
   cache: TokenCache,
   run: CompilerRun
 ): CssTokenGroup[] {

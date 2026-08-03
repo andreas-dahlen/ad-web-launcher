@@ -6,7 +6,7 @@ interface CarouselDatabase {
   readonly currentScene: number
 }
 
-export interface CarouselModifiers {
+interface CarouselModifiers {
   readonly lockSwipeAt?: {
     readonly prev: number | null
     readonly next: number | null
@@ -22,7 +22,7 @@ interface DragDatabase {
 }
 
 
-export interface DragModifiers {
+interface DragModifiers {
   readonly snap?: Vec2;
 }
 

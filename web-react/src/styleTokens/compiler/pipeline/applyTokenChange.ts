@@ -1,13 +1,13 @@
-import buildTokenGroup from '../builders/buildTokenGroup.ts';
-import type { TokenCache } from '../tracking/tokenCache.ts';
-import resolveTokenGroupPath from '../resolvers/resolveTokenGroupPath.ts'
-import findCssModulePath from '../discovery/findCssModulePath.ts';
-import processToken from '../processing/processToken.ts';
-import findTokenPaths from '../discovery/findTokenPaths.ts';
 import type { TokenGroupResult } from '@styleTokens/types/compiler.types.ts';
+import type { TokenCache } from '../tracking/tokenCache.ts';
+import { buildTokenGroup } from '../builders/buildTokenGroup.ts';
+import { resolveTokenGroupPath } from '../resolvers/resolveTokenGroupPath.ts'
+import { processToken } from '../processing/processToken.ts';
+import { findCssModulePath } from '../discovery/findCssModulePath.ts';
+import { findTokenPaths } from '../discovery/findTokenPaths.ts';
 // import type { TokenGroup } from '@styleTokens/types/compiler.types.ts';
 
-export default function applyTokenChange({
+export function applyTokenChange({
   tokenPath,
   cache,
 }: {

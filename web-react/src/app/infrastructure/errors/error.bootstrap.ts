@@ -8,7 +8,7 @@ type NormalizedError = {
   type: string;
 };
 
-export function registerErrorHooks() {
+function registerErrorHooks() {
   window.removeEventListener("error", handleError);
   window.removeEventListener("unhandledrejection", handleError);
 
@@ -59,8 +59,8 @@ function createErrorSystem() {
 
 const errorSystem = createErrorSystem();
 
-export const setErrorHandler = errorSystem.set;
-export const dispatchError = errorSystem.dispatch
+// export const setErrorHandler = errorSystem.set;
+const dispatchError = errorSystem.dispatch
 
 export function bootstrapApp(debugMode: AppConfig["debugMode"]) {
   if (debugMode) {

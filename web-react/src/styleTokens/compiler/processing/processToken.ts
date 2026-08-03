@@ -1,10 +1,10 @@
-import loadTokenFile from '../loaders/loadTokenFile.ts';
+import { loadTokenFile } from '../loaders/loadTokenFile.ts';
 import type { TokenResult } from '../../types/compiler.types.ts'
-import assert from '../processing/assertions.ts';
-import parseToken from './parseToken.ts';
-import createIssueCollector from '../tracking/issueCollector.ts';
+import { assert } from '../processing/assertions.ts';
+import { parseToken } from './parseToken.ts';
+import { createIssueCollector } from '../tracking/issueCollector.ts';
 
-export default function loadToken(fullPath: string): TokenResult {
+export function processToken(fullPath: string): TokenResult {
   const { json, errors } = loadTokenFile(fullPath)
   const collector = createIssueCollector()
 

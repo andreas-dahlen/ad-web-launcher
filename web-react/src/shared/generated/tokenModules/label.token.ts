@@ -15,7 +15,6 @@ export const labelStyle = {
           col: { name: "col", allowed: ["o","p","f"]},
          align: { name: "align", allowed: ["o","p","f"]},
          position: { name: "position", allowed: ["o","p","f"]},
-         spacing: { name: "spacing", allowed: ["o","p","f"]},
          width: { name: "width", allowed: ["o","p","f"]},
          height: { name: "height", allowed: ["o","p","f"]} 
 }

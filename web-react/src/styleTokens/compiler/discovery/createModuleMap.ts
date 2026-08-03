@@ -1,8 +1,8 @@
-import extractGroupName from '../resolvers/extractGroupName.ts';
+import { extractGroupName } from '../resolvers/extractGroupName.ts';
 import fs from "node:fs";
 import path from "node:path";
 
-export default function createModuleMap(
+export function createModuleMap(
   groupPaths: string[],
 ): Map<string, string> {
   const cssPaths = findCssModules(path.resolve("./src"));

@@ -1,0 +1,15 @@
+// file://wsl.localhost/Ubuntu//home/david/repos/ad-web-launcher/web-react/src/primitives/Slider/Slider.module.css
+{
+  "component": "slider",
+  "infix": "slider",
+
+  "alwaysAllowed": ["o", "p", "f"],
+  "vars": {
+    "bg": {"values": { "f": "gray" }},
+    "opacity": {"values": {"f": "1"}},
+
+    "radius": {"values": { "f": "var(--_border-radius-xs)"}},
+    "mainSize": {"values": {"f": "100px"}},
+    "crossSize": {"values": {"f": "30px"}}
+  }
+}

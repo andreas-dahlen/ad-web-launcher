@@ -16,11 +16,32 @@
 		"terminal.integrated.cwd": "${workspaceFolder}/web-react",
 		"scopesManager.localScopes": [
 			{
-				"id": "ms8w1ocq1l9ot",
-				"name": "workplace",
+				"id": "msarlp1lgzu1f",
+				"name": "src",
 				"patterns": [
-					"ad-web-launcher/web-react/src/shared/**",
-					"ad-web-launcher/web-react/src/styleTokens/**"
+					"ad-web-launcher/web-react/src/**"
+				]
+			},
+			{
+				"id": "msaro3tcz6j9n",
+				"name": "visuals",
+				"patterns": [
+					"ad-web-launcher/web-react/src/styleTokens/tokens/**",
+					"ad-web-launcher/web-react/src/panels/**",
+					"ad-web-launcher/web-react/src/features/**",
+					"ad-web-launcher/web-react/src/composites/**",
+					"ad-web-launcher/web-react/src/blocks/**"
+				]
+			},
+			{
+				"id": "msc05evzzsobo",
+				"name": "compiler",
+				"patterns": [
+					"ad-web-launcher/web-react/src/styleTokens/**",
+					"ad-web-launcher/web-react/src/shared/tokenUtils/**",
+					"ad-web-launcher/web-react/src/shared/sxCompiler/**",
+					"ad-web-launcher/web-react/eslint/**",
+					"ad-web-launcher/web-react/src/test/**"
 				]
 			}
 		]

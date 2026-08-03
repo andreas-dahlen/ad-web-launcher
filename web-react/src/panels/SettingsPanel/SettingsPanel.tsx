@@ -14,7 +14,6 @@ export default function SettingsPanel() {
   return (
     <Frame
       presets={["bg", "frame"]}
-      styleVars={{ bg: "block", "t:bg": "var(--f-surface-bg)" }}
     >
 
       <Button

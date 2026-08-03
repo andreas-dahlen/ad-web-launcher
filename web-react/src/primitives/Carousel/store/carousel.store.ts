@@ -6,7 +6,7 @@ import type { CarouselAction } from '@interaction/types/runtime/action.types'
 import { assertNever } from '@shared/assertions/assertions'
 export type NodeId = 0 | 1 | 2
 
-export type Node = {
+type Node = {
   nodeId: NodeId
   sceneIdx: number
 }

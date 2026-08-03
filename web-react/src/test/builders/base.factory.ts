@@ -1,4 +1,4 @@
-import type { BaseInteraction, BaseWithAxis1D, BaseWithAxis2D, BaseWithSwipe, LayoutData } from '@interaction/types/descriptor/base.types';
+import type { BaseInteraction, BaseWithAxis1D, BaseWithAxis2D } from '@interaction/types/descriptor/base.types';
 import { merge } from '@test/utils/factory.utils';
 import { base_DEFAULT, baseSwipe_DEFAULT } from '@test/fixtures/base.fixture';
 
@@ -6,15 +6,15 @@ export function createBaseInteraction(overrides: Partial<BaseInteraction> = {}):
   return merge(base_DEFAULT.base, overrides)
 }
 
-export function createLayout(overrides: Partial<LayoutData> = {}): LayoutData {
-  return merge(base_DEFAULT.layout, overrides)
-}
+// export function createLayout(overrides: Partial<LayoutData> = {}): LayoutData {
+//   return merge(base_DEFAULT.layout, overrides)
+// }
 
 
-export function createBaseSwipe(
-  overrides: Partial<BaseWithSwipe> = {}): BaseWithSwipe {
-  return merge(baseSwipe_DEFAULT, overrides)
-}
+// export function createBaseSwipe(
+//   overrides: Partial<BaseWithSwipe> = {}): BaseWithSwipe {
+//   return merge(baseSwipe_DEFAULT, overrides)
+// }
 
 export function createBaseWithAxis1D(
   overrides: Partial<BaseWithAxis1D> = {}

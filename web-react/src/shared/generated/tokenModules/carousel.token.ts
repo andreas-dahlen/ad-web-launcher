@@ -12,7 +12,8 @@ export const carouselStyle = {
 
   vars: {   
    carousel: {
-          test: { name: "test", allowed: ["o","p","t","f"]} 
+          width: { name: "width", allowed: ["o","p","f"]},
+         height: { name: "height", allowed: ["o","p","f"]} 
 }
   }
 } as const satisfies TokenComponent;

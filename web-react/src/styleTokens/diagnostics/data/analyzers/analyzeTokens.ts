@@ -1,11 +1,7 @@
+import type { MissingClass } from '../../../types/diagnostics.types.ts';
 import type { CssData } from '../../../types/compiler.types.ts';
 
-export type MissingClass = {
-  infix: string;
-  tokenPath: string;
-  usableSelectors: string[];
-};
-export default function analyzeTokens(cssData: CssData): MissingClass[] {
+export function analyzeTokens(cssData: CssData): MissingClass[] {
 
   const missingClasses: MissingClass[] = [];
 

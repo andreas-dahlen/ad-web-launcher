@@ -195,7 +195,7 @@ describe("[INTERPRETER]", () => {
       expect(runtime.cancel).toBeDefined()
     })
     it('returns expected package for swipeStart with NEW descriptor (NO PRESS CANCEL)', () => {
-      const oldDesc = createScrollDesc({ capabilities: { pressable: false, swipeable: false, instantSwipe: false } })
+      const oldDesc = createScrollDesc({ capabilities: { isPressable: false, isSwipeable: false, isInstantSwipe: false } })
       const expected = {
         desc: createScrollDesc(),
         runtime: createRuntimeswipeStart({ delta: { x: x, y: y }, cancel: undefined })

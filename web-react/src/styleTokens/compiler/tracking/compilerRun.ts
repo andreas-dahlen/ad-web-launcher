@@ -2,7 +2,7 @@ import type { IssueGroup } from '@styleTokens/types/issueCollector.types.ts';
 import type { CssData, EmitResult } from '../../types/compiler.types.ts';
 
 export type CompilerRun = ReturnType<typeof createCompilerRun>;
-export default function createCompilerRun(groupPaths: string[]) {
+export function createCompilerRun(groupPaths: string[]) {
 
   const missingCssModules = new Set<string>()
   const unusedCssModules = new Set<string>()

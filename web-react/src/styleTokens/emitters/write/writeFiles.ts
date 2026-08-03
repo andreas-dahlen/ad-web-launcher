@@ -1,34 +1,30 @@
-import type { FileOutput } from '../format/buildOutput.ts';
+import type { FileResult } from '../../types/compiler.types.ts';
+import type { FormatResult } from '../generate/generateOutput.ts';
 import fs from "node:fs";
 import path from "node:path";
 
-export type WriteResult = {
-  written: string[]
-  skipped: string[]
-}
-
-export default function writeFiles(files: FileOutput[]): WriteResult {
+export function writeFiles(files: FormatResult[]): FileResult {
   const written: string[] = []
   const skipped: string[] = []
 
   for (const file of files) {
-    fs.mkdirSync(path.dirname(file.filePath), { recursive: true });
+    fs.mkdirSync(path.dirname(file.filePath), { recursive: true })
 
     if (fs.existsSync(file.filePath)) {
-      const current = fs.readFileSync(file.filePath, "utf8");
+      const current = fs.readFileSync(file.filePath, "utf8")
 
       if (current === file.content) {
-        skipped.push(file.filePath);
-        continue;
+        skipped.push(file.filePath)
+        continue
       }
     }
 
-    fs.writeFileSync(file.filePath, file.content);
-    written.push(file.filePath);
+    fs.writeFileSync(file.filePath, file.content)
+    written.push(file.filePath)
   }
 
   return {
-    written,
-    skipped,
-  };
+    updated: written,
+    skipped
+  }
 }

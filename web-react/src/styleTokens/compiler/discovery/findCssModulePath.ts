@@ -1,7 +1,7 @@
-import extractGroupName from '../resolvers/extractGroupName.ts';
+import { extractGroupName } from '../resolvers/extractGroupName.ts';
 import path from "node:path"
 import fs from "node:fs"
-export default function findCssModulePath(
+export function findCssModulePath(
   groupPath: string,
 ): string | undefined {
   const groupName = extractGroupName(groupPath).toLowerCase();

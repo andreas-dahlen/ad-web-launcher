@@ -1,17 +1,17 @@
 export const capabilities_DEFAULT = {
   press: {
-    pressable: true,
-    swipeable: false,
-    instantSwipe: false
+    isPressable: true,
+    isSwipeable: false,
+    isInstantSwipe: false
   },
   swipe: {
-    pressable: true,
-    swipeable: true,
-    instantSwipe: false
+    isPressable: true,
+    isSwipeable: true,
+    isInstantSwipe: false
   },
   instant: {
-    pressable: false,
-    swipeable: true,
-    instantSwipe: true
+    isPressable: false,
+    isSwipeable: true,
+    isInstantSwipe: true
   }
 } as const

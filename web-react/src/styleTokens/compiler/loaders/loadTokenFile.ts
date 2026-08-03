@@ -8,7 +8,7 @@ type TokenFile = {
   errors: ParseError[];
 }
 
-export default function loadTokenFile(fullPath: string): TokenFile {
+export function loadTokenFile(fullPath: string): TokenFile {
   const text = fs.readFileSync(fullPath, 'utf8');
 
   const errors: ParseError[] = [];

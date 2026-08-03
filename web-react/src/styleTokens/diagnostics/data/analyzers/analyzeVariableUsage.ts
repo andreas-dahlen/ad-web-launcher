@@ -1,13 +1,9 @@
+import type { VariableMismatch } from '../../../types/diagnostics.types.ts';
 import type { CssVarString } from '../../../../shared/tokenUtils/compiler.types.ts';
 import { toCssVar, toCssVarPrefix } from '../../../../shared/tokenUtils/stringFormaters.ts';
-import type { CssData, CssTokenGroup } from '@styleTokens/types/compiler.types.ts';
-export type VariableMismatch = {
-  name: string;
-  infix: string;
-  missing: CssVarString[];
-  unused: CssVarString[];
-};
-export default function analyzeVariableUsage(cssData: CssData, group: CssTokenGroup): VariableMismatch[] {
+import type { CssData, CssTokenGroup } from '../../../types/compiler.types.ts';
+
+export function analyzeVariableUsage(cssData: CssData, group: CssTokenGroup): VariableMismatch[] {
   const result: VariableMismatch[] = []
 
   const found = new Set(cssData.foundVariables);

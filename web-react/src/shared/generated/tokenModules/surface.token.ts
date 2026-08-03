@@ -14,13 +14,6 @@ export const surfaceStyle = {
    surface: {
           bg: { name: "bg", allowed: ["o","p","t","f"]},
          position: { name: "position", allowed: ["o","p","f"]},
-         display: { name: "display", allowed: ["o","p","f"]},
-         direction: { name: "direction", allowed: ["o","p","f"]},
-         justify: { name: "justify", allowed: ["o","p","f"]},
-         align: { name: "align", allowed: ["o","p","f"]},
-         overflow: { name: "overflow", allowed: ["o","p","f"]},
-         width: { name: "width", allowed: ["o","p","f"]},
-         height: { name: "height", allowed: ["o","p","f"]},
          gap: { name: "gap", allowed: ["o","p","f"]},
          margin: { name: "margin", allowed: ["o","p","f"]},
          padding: { name: "padding", allowed: ["o","p","f"]},

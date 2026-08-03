@@ -22,7 +22,7 @@ export function createLane(axis: Axis1D) {
   } satisfies Lane
 }
 
-export function createLaneSystem(axis: Axis1D) {
+function createLaneSystem(axis: Axis1D) {
   const lane = createLane(axis)
 
   return {

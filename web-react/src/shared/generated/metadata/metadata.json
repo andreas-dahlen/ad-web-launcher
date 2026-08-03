@@ -1,0 +1,18 @@
+{
+  "groups": {
+    "slider": {
+      "cssPath": "/home/david/repos/ad-web-launcher/web-react/src/primitives/Slider/Slider.module.css",
+      "tokenPaths": [
+        "/home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/slider/slider.jsonc",
+        "/home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/slider/thumb.jsonc",
+        "/home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/slider/track.jsonc"
+      ]
+    }
+  },
+  "files": {
+    "/home/david/repos/ad-web-launcher/web-react/src/primitives/Slider/Slider.module.css": "slider",
+    "/home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/slider/slider.jsonc": "slider",
+    "/home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/slider/thumb.jsonc": "slider",
+    "/home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/slider/track.jsonc": "slider"
+  }
+}

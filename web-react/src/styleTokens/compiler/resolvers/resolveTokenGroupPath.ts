@@ -1,6 +1,6 @@
 
 
-export default function resolveTokenGroupPath(
+export function resolveTokenGroupPath(
   tokenPath: string
 ): string {
   const normalized = tokenPath.replaceAll("\\", "/");

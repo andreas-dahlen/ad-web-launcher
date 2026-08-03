@@ -27,6 +27,9 @@ eslint: lint
 knip:
     npx knip --no-exit-code
 
+tokens *args:
+    if [ -z "{{args}}" ]; then npx tsx src/styleTokens/compiler/dryLogCompiler.ts; else npx tsx src/styleTokens/compiler/dryLogCompiler.ts {{args}}; fi
+
 build:
     npm run build
 

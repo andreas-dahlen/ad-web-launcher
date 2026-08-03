@@ -1,9 +1,9 @@
-import type { SnapConfig } from '@primitives/types/prim.types'
-import type { Axis1D, EventType } from '../../shared/types/core.types'
-import type { ButtonPreset } from '@generated/presets/button.preset'
-import type { SliderPreset } from '@generated/presets/slider.preset'
-import type { ButtonStyle } from '@shared/generated/tokenModules/button.token'
-import type { SliderStyle } from '@shared/generated/tokenModules/slider.token'
+import type { SnapConfig } from '@primitives/types/prim.types.ts'
+import type { Axis1D, EventType } from '../../shared/types/core.types.ts'
+import type { ButtonPreset } from '@generated/presets/button.preset.ts'
+import type { SliderPreset } from '@generated/presets/slider.preset.ts'
+import type { ButtonStyle } from '@shared/generated/tokenModules/button.token.ts'
+import type { SliderStyle } from '@shared/generated/tokenModules/slider.token.ts'
 
 // `directive` contains high-level orchestration flags that determine
 // how the composite exists in the UI. These are not drag or button
@@ -15,7 +15,7 @@ export type Directive = {
   isInFlow?: boolean
 }
 
-export type ModeInput = Mode | boolean
+type ModeInput = Mode | boolean
 export type Mode = "default" | "on" | "off" | "disabled"
 
 export type DragSettings = SnapConfig & {

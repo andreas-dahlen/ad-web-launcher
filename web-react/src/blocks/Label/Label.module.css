@@ -1,3 +1,6 @@
+/* 
+file://wsl.localhost/Ubuntu//home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/label.jsonc
+*/
 .sexy {
   --p-label-col: var(--_col-warm-dark-1);
 }
@@ -35,6 +38,10 @@
 .base {
   --f-label-align: center;
   text-align: var(--final-label-align);
+}
+
+.label {
+  background: var(--final-label-col);
 }
 
 /* --o-: var(--s-, var(--m-, var(--p-, var(--t-, var(--f-))))); */

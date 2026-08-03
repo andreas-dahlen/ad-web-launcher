@@ -21,6 +21,8 @@ export const sliderStyle = {
    thumb: {
           bg: { name: "bg", allowed: ["o","s","p","f"]},
          opacity: { name: "opacity", allowed: ["o","p","f"]},
+         radius: { name: "radius", allowed: ["o","p","f"]},
+         border: { name: "border", allowed: ["o","p","f"]},
          mainSize: { name: "mainSize", allowed: ["o","p","f"]},
          crossSize: { name: "crossSize", allowed: ["o","p","f"]},
          stateSwipingBg: { name: "stateSwipingBg", allowed: ["o","s","p","f"]},

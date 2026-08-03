@@ -1,20 +1,20 @@
 import type { Root } from 'postcss';
-import findTokenPaths from './discovery/findTokenPaths.ts';
-import createTokenGroups from './pipeline/createTokenGroups.ts';
-import applyTokenChange from './pipeline/applyTokenChange.ts';
+import { findTokenPaths } from './discovery/findTokenPaths.ts';
+import { compileTokenGroups } from './pipeline/compileTokenGroups.ts';
+import { applyTokenChange } from './pipeline/applyTokenChange.ts';
 import { createTokenCache } from './tracking/tokenCache.ts';
 import { createProcessingTracker } from './tracking/processingTracker.ts';
-import createCompilerRun from './tracking/compilerRun.ts';
+import { createCompilerRun } from './tracking/compilerRun.ts';
 import { createCompletionGuard } from './tracking/completionGuard.ts';
-import processModule from '../postCss/processModule.ts'
-import assert from './processing/assertions.ts'
-import emitFiles from '../emitters/emitFiles.ts';
-import runDiagnostics from '../diagnostics/runDiagnostics.ts';
+import { processModule } from '../postCss/processModule.ts'
+import { assert } from './processing/assertions.ts'
+import { emitFiles } from '../emitters/emitFiles.ts';
+import { runDiagnostics } from '../diagnostics/runDiagnostics.ts';
 export type TokenCompiler = ReturnType<typeof initializeCompiler>;
 
 export function initializeCompiler(tokensDir: string) {
   const tokenPaths = findTokenPaths(tokensDir)
-  const loaded = createTokenGroups(tokenPaths)
+  const loaded = compileTokenGroups(tokenPaths)
   const cache = createTokenCache(loaded.groups)
   const tracker = createProcessingTracker(cache.getCssPaths())
   const run = createCompilerRun(cache.getMissingCssGroupPaths())

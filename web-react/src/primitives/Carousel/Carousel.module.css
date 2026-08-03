@@ -1,8 +1,9 @@
+/* 
+file://wsl.localhost/Ubuntu//home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/carousel.jsonc
+*/
 .carousel {
-  --scene-width: 100%;
-  --scene-height: 100%;
-  width: var(--scene-width);
-  height: var(--scene-height);
+  width: var(--final-carousel-width);
+  height: var(--final-carousel-height);
   position: relative;
   overflow: hidden;
   /* transform: translateZ(0); */
@@ -10,8 +11,8 @@
 
 .scene {
   position: absolute;
-  width: var(--scene-width);
-  height: var(--scene-height);
+  width: var(--final-carousel-width);
+  height: var(--final-carousel-height);
   will-change: transform;
   /* Prevent layout thrashing */
   contain: paint;
@@ -20,8 +21,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: var(--scene-width);
-    height: var(--scene-height);
+    width: var(--final-carousel-width);
+    height: var(--final-carousel-height);
   }
 }
 

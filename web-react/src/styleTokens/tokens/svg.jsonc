@@ -1,0 +1,19 @@
+// file://wsl.localhost/Ubuntu//home/david/repos/ad-web-launcher/web-react/src/blocks/Svg/Svg.module.css
+{
+  "component": "svg",
+  "infix": "svg",
+
+  "alwaysAllowed": ["o", "p", "f"],
+  "vars": {
+    "modeOffCol": {"allowed": ["m"],"values": {"f": "var(--_col-neutral-light-1)" }},
+    "modeOnCol": {"allowed": ["m"],"values": {"f": "var(--_col-neutral-dark-1)" }},
+    "modeDefaultCol": {"allowed": ["m"],"values": {"f": "var(--_col-neutral-mid-1)" }},
+    "modeDisabledCol": {"allowed": ["m"],"values": {"f": "var(--_col-neutral-mid-1)" }},
+
+    "width": {"values": {"p": "f", "f": "40px"}},
+    "height": {"values": {"p": "f", "f": "40px"}},
+    "flipX": {"name": "flip-x", "values": {"f": "scaleX(1)"}},
+    "flipY": {"name": "flip-y", "values": {"f": "scaleY(1)"}},
+    "rotate": {"values": {"f": "rotate(0deg)"}}
+  }
+}

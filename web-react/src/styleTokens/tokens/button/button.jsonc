@@ -1,0 +1,31 @@
+// file://wsl.localhost/Ubuntu//home/david/repos/ad-web-launcher/web-react/src/primitives/Button/Button.module.css
+{
+  "component": "button",
+  "infix": "button",
+
+  "alwaysAllowed": ["o", "p", "f"],
+  "vars": {
+    "bg": {"allowed": ["t"],"values": {"f": "gray"}},
+
+    "position": {"values": {"f": "relative"}},
+    "display": {"values": {"f": "flex"}},
+    "align": {"values": {"f": "center"}},
+    "justify": {"values": {"f": "center"}},
+
+    "width": {"values": {"f": "50px"}},
+    "height": {"values": {"f": "50px"}},
+
+    "radius": {"values": {"f": "var(--_border-radius-xs)"}},
+    "border": {"values": {"f": "none"}},
+    "shadow": {"allowed": ["s"], "values": {"f": "0px 0px 10px var(--_col-neutral-dark-1)"}},
+    "opacity": {"allowed": ["s"], "values": {"f": "1"}},
+    "filter": {"allowed": ["s"],"values":{ "f": "none"}},
+
+    "statePressedScale": {"allowed": ["s"], "exclude":["p"], "values": {"f": "scale(0.98)"}},
+    "stateReleasedScale": {"allowed": ["s"],"exclude":["p"],"values": {"f": "scale(1)"}},
+    "stateCanceledScale": {"allowed": ["s"],"exclude":["p"],"values": {"f": "scale(1)"}},
+    "stateCanceledOpacity": {"allowed": ["s"],"exclude":["p"], "values": {"f": "0.7"}},
+    "statePressedFilter": {"allowed": ["s"],"exclude":["p"], "values": {"f": "brightness(0.95)"}},
+    "statePressedShadow": {"allowed": ["s"],"exclude":["p"], "values": {"f": "0px 0px 20px hotPink"}}
+  }
+}

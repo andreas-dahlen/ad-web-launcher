@@ -1,6 +1,6 @@
 import type { ReportSection } from '@styleTokens/diagnostics/report/buildReport';
 
-export default function printReport(sections: ReportSection[]) {
+export function printReport(sections: ReportSection[]) {
   for (const section of sections) {
     console.log(`${section.title}`);
 

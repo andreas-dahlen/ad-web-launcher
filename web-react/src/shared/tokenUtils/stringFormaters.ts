@@ -1,5 +1,5 @@
 import type { CssVarString } from '@shared/tokenUtils/compiler.types';
-import { reserved } from '../enums/compiler.ts';
+import { reserved } from './reservedList.ts';
 
 export function toKebab(str: string): string {
   return str

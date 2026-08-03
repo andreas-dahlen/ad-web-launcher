@@ -1,18 +1,8 @@
-import formatLogPath from '../../print/formatLogPath.ts'
-import type { WriteResult } from '../../../emitters/write/writeFiles.ts'
+import { formatLogPath } from '../../../consoleUtils/utils.ts'
+import type { FileResult } from '../../../types/compiler.types.ts'
+import type { GeneratedFiles } from '../../../types/diagnostics.types.ts'
 
-
-export type GeneratedFiles = {
-  presets: FileStatus
-  tokens: FileStatus
-}
-
-export type FileStatus = {
-  written: string[]
-  skipped: string[]
-}
-
-export default function analyzeWriteResult(result: WriteResult | undefined): GeneratedFiles {
+export function analyzeWriteResult(result: FileResult | undefined): GeneratedFiles {
 
   const generatedFiles: GeneratedFiles = {
     presets: {
@@ -25,7 +15,7 @@ export default function analyzeWriteResult(result: WriteResult | undefined): Gen
     }
   }
 
-  const writtenPaths = result?.written ?? []
+  const writtenPaths = result?.updated ?? []
   const skippedPaths = result?.skipped ?? []
 
   const writtenFiles = writtenPaths.map(formatLogPath)

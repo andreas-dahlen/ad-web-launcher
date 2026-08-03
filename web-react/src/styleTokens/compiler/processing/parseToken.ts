@@ -10,7 +10,7 @@ type ParseToken = {
   values(values: Partial<Record<ValidPrefix, string>> | undefined, collector: IssueCollector): Partial<Record<ValidPrefix, string>>
 }
 
-const parse: ParseToken = {
+export const parseToken: ParseToken = {
   identifier(inputString, collector) {
 
     let name = inputString
@@ -56,7 +56,7 @@ const parse: ParseToken = {
     collector.setSubject("Variable Parsing")
     collector.editScope({ value: key, context: "variable key" })
 
-    const keyResult = parse.identifier(key, collector)
+    const keyResult = parseToken.identifier(key, collector)
 
     collector.editScope({ value: rawVar.name, context: "variable name" })
     let name = rawVar.name
@@ -77,7 +77,7 @@ const parse: ParseToken = {
         key: keyResult.name,
         name,
         effectiveAllowed: prefixes.effectiveAllowed,
-        values: parse.values(rawVar.values, collector)
+        values: parseToken.values(rawVar.values, collector)
       }
     }
   },
@@ -97,5 +97,3 @@ const parse: ParseToken = {
     )
   }
 }
-
-export default parse

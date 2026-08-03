@@ -15,6 +15,8 @@ export function resetInteractionStores() {
   wallpaperStore.setState({ wallpapers: [], pool: [] })
   settingsStore.setState({
     settings: {
+      settingsMode: "default",
+      layoutMode: "lanes",
       layoutManagerV: false,
       layoutManagerH: false,
       panelOpen: false,

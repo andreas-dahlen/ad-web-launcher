@@ -1,6 +1,3 @@
-import clsx from 'clsx';
-import css from './Scenes.module.css'
-import ButtonPrim from '@primitives/Button/ButtonPrim';
 import { layoutStore, type Scene } from '@stores/layout.store';
 import type { Axis1D } from '../../shared/types/core.types';
 import { useSceneContext } from '@primitives/Carousel/hooks/useSceneContext.hook';

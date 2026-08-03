@@ -1,11 +1,7 @@
+import type { UnusableSelector } from '../../../types/diagnostics.types.ts';
 import type { CssData } from '../../../types/compiler.types.ts';
 
-export type UnusableSelector = {
-  cssPath: string;
-  unusableSelectors: string[];
-};
-
-export default function analyzeSelectors(
+export function analyzeSelectors(
   cssData: CssData,
 ): UnusableSelector | undefined {
   const unusableSelectors = cssData.foundSelectors.filter(
@@ -21,21 +17,3 @@ export default function analyzeSelectors(
     unusableSelectors,
   };
 }
-
-
-
-// const VALID_IDENTIFIER = /^[A-Za-z_$][A-Za-z0-9_$]*$/;
-
-// const usableSelectors: string[] = [];
-// const unusableSelectors: string[] = [];
-
-
-
-
-// for (const selector of selectors) {
-//   if (VALID_IDENTIFIER.test(selector)) {
-//     usableSelectors.push(selector);
-//   } else {
-//     unusableSelectors.push(selector);
-//   }
-// }

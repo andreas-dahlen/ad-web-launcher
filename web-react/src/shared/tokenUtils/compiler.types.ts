@@ -8,7 +8,7 @@ export type ValidPrefix =
 
 export type CssVarString = `--${string}`;
 
-export type VarDef<
+type VarDef<
   A extends readonly ValidPrefix[] = readonly ValidPrefix[]
 > = {
   name: string;

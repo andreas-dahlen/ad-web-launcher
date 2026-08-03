@@ -1,12 +1,13 @@
-import type { DiagnosticData } from '../data/buildData.ts';
-import buildPresetSection from './formatters/buildPresetSection.ts';
-import buildTokenSection from './formatters/buildTokenSection.ts';
-import buildVariableSection from './formatters/buildVariableSection.ts';
-import buildClassSection from './formatters/buildClassSection.ts';
-import buildSelectorSection from './formatters/buildSelecorSection.ts';
-import buildFileSection from './formatters/buildFileSection.ts';
-import headerSection from './formatters/headerSection.ts';
-import buildIssuesSection from './formatters/buildIssuesSection.ts';
+import type { DiagnosticData } from '../../types/diagnostics.types.ts';
+import { presetSection } from './sections/presetSection.ts';
+import { tokenSection } from './sections/tokenSection.ts';
+import { variableSection } from './sections/variableSection.ts';
+import { classSection } from './sections/classSection.ts';
+import { selectorSection } from './sections/selectorSection.ts';
+import { fileSection } from './sections/fileSection.ts';
+import { headerSection } from './sections/headerSection.ts';
+import { issuesSection } from './sections/issuesSection.ts';
+import { invalidVarSection } from './sections/invalidVarSection.ts';
 
 export type ReportSection = {
   title: string;
@@ -18,27 +19,29 @@ export type ReportEntry = {
   lines?: string[];
 };
 
-export default function buildReport(data: DiagnosticData): ReportSection[] {
+export function buildReport(data: DiagnosticData): ReportSection[] {
   const sections: ReportSection[] = [];
 
   const header = headerSection(data.processedGroupCount)
   sections.push(header)
 
-  const presetSection = buildPresetSection(data.generatedFiles.presets)
-  if (presetSection) sections.push(presetSection)
-  const tokenSection = buildTokenSection(data.generatedFiles.tokens)
-  if (tokenSection) sections.push(tokenSection)
+  const preset = presetSection(data.generatedFiles.presets)
+  if (preset) sections.push(preset)
+  const token = tokenSection(data.generatedFiles.tokens)
+  if (token) sections.push(token)
 
-  const variableSection = buildVariableSection(data.mismatchedVariables)
-  if (variableSection) sections.push(variableSection)
-  const selectorSection = buildSelectorSection(data.unusableSelectors);
-  if (selectorSection) sections.push(selectorSection);
-  const classSection = buildClassSection(data.missingClasses)
-  if (classSection) sections.push(classSection)
-  const fileSection = buildFileSection(data.missingCssModules)
-  if (fileSection) sections.push(fileSection)
-  const issuesSection = buildIssuesSection(data.issues)
-  if (issuesSection) sections.push(issuesSection)
+  const variableReport = variableSection(data.mismatchedVariables)
+  if (variableReport) sections.push(variableReport)
+  const selectorReport = selectorSection(data.unusableSelectors);
+  if (selectorReport) sections.push(selectorReport);
+  const classReport = classSection(data.missingClasses)
+  if (classReport) sections.push(classReport)
+  const invalidVarReport = invalidVarSection(data.invalidVarDeclarations)
+  if (invalidVarReport) sections.push(invalidVarReport)
+  const fileReport = fileSection(data.missingCssModules)
+  if (fileReport) sections.push(fileReport)
+  const issuesReport = issuesSection(data.issues)
+  if (issuesReport) sections.push(issuesReport)
 
   return sections;
 }

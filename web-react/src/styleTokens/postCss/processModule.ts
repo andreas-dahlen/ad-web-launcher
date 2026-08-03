@@ -1,11 +1,11 @@
 import type { Root } from "postcss";
-import print from '../diagnostics/print/print.ts';
-import walkModule from './resolvers/walkModule.ts';
-import buildVarDefinitions from './builders/buildVarDefinitions.ts';
-import buildCascade from './builders/buildCascade.ts';
 import type { CssData, CssTokenGroup, ProcessedToken } from '../types/compiler.types.ts';
+import { print } from '../consoleUtils/print.ts';
+import { walkModule } from './resolvers/walkModule.ts';
+import { injectVarDefinitions } from './inject/injectVarDefinitions.ts';
+import { injectCascade } from './inject/injectCascade.ts';
 
-export default function processModule({
+export function processModule({
   root,
   group,
 }: {
@@ -16,7 +16,7 @@ export default function processModule({
   print.injecting(group.groupPath)
 
 
-  const { rules, foundSelectors, usableSelectors, foundVariables } = walkModule(
+  const { rules, foundSelectors, usableSelectors, foundVariables, declaredVariables } = walkModule(
     root, group.tokens.map(token => token.infix)
   );
 
@@ -44,8 +44,8 @@ export default function processModule({
     print.buildingChains(token.infix)
 
     for (const variable of token.vars) {
-      buildVarDefinitions(rule, token, variable);
-      buildCascade(rule, token, variable);
+      injectVarDefinitions(rule, token, variable);
+      injectCascade(rule, token, variable);
 
       print.resultCascade(variable)
     }
@@ -57,6 +57,7 @@ export default function processModule({
     foundSelectors,
     usableSelectors,
     tokens: tokenResults,
-    foundVariables: foundVariables
+    foundVariables: foundVariables,
+    declaredVariables: declaredVariables
   }
 }

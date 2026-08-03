@@ -8,10 +8,11 @@ type WalkModuleResult = {
   foundSelectors: string[]
   usableSelectors: string[]
   foundVariables: CssVarString[]
+  declaredVariables: CssVarString[]
 };
 const VALID_IDENTIFIER = /^[A-Za-z_$][A-Za-z0-9_$]*$/;
 
-export default function walkModule(
+export function walkModule(
   root: Root,
   infixes: string[]
 ): WalkModuleResult {
@@ -22,10 +23,16 @@ export default function walkModule(
     infix => toCssVarPrefix("final", infix)
   );
 
+  const declarationPrefixes = ["o", "s", "m", "p", "t", "f"]
+    .flatMap(prefix =>
+      infixes.map(infix => `--${prefix}-${infix}`)
+    );
+
   const rules = new Map<string, Rule>()
   const foundSelectors = new Set<string>()
   const usableSelectors = new Set<string>()
   const foundVariables = new Set<CssVarString>()
+  const declaredVariables = new Set<CssVarString>();
 
   root.walkRules(rule => {
     selectorParser(selectors => {
@@ -47,6 +54,16 @@ export default function walkModule(
 
 
   root.walkDecls(decl => {
+
+    if (
+      declarationPrefixes.some(prefix =>
+        decl.prop.startsWith(prefix)
+      )
+    ) {
+      declaredVariables.add(decl.prop as CssVarString);
+    }
+
+
     for (const match of decl.value.matchAll(
       /var\((--[\w-]+)\s*(?:,[^)]+)?\)/g
     )) {
@@ -66,6 +83,7 @@ export default function walkModule(
     rules,
     foundSelectors: [...foundSelectors],
     usableSelectors: [...usableSelectors],
-    foundVariables: [...foundVariables]
+    foundVariables: [...foundVariables],
+    declaredVariables: [...declaredVariables]
   }
 }

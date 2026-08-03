@@ -29,23 +29,23 @@ function format(key: DebugKey): string {
 }
 
 // Draw using raw screen pixels only.
-export function drawDots(x: number, y: number, color: string = 'red'): void {
-  if (DEBUG.enabled && DEBUG.channels.drawDots) {
-    const dot = document.createElement('div')
-    dot.style.position = 'fixed'
-    dot.style.left = `${x - 6}px`
-    dot.style.top = `${y - 6}px`
-    dot.style.width = '12px'
-    dot.style.height = '12px'
-    dot.style.borderRadius = '50%'
-    dot.style.background = color
-    dot.style.pointerEvents = 'none'
-    dot.style.zIndex = '99999'
+// export function drawDots(x: number, y: number, color: string = 'red'): void {
+//   if (DEBUG.enabled && DEBUG.channels.drawDots) {
+//     const dot = document.createElement('div')
+//     dot.style.position = 'fixed'
+//     dot.style.left = `${x - 6}px`
+//     dot.style.top = `${y - 6}px`
+//     dot.style.width = '12px'
+//     dot.style.height = '12px'
+//     dot.style.borderRadius = '50%'
+//     dot.style.background = color
+//     dot.style.pointerEvents = 'none'
+//     dot.style.zIndex = '99999'
 
-    document.body.appendChild(dot)
-    setTimeout(() => dot.remove(), 500)
-  }
-}
+//     document.body.appendChild(dot)
+//     setTimeout(() => dot.remove(), 500)
+//   }
+// }
 
 ////////////////////////
 //debug registration

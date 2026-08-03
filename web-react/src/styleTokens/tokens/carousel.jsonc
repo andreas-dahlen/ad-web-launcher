@@ -1,0 +1,11 @@
+// file://wsl.localhost/Ubuntu//home/david/repos/ad-web-launcher/web-react/src/primitives/Carousel/Carousel.module.css
+{
+  "component": "carousel",
+    "infix": "carousel",
+
+      "alwaysAllowed": ["o", "p", "f"],
+        "vars": {
+    "width":{"values": {"f": "100%"}},
+    "height":{"values": {"f": "100%"}}
+  }
+}
