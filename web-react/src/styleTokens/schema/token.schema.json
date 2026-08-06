@@ -19,7 +19,7 @@
       "type": "array",
       "minItems": 1,
       "items": {
-        "enum": ["o", "s", "m", "p", "t", "f"]
+        "enum": ["o", "i", "s", "m", "p", "t", "f"]
       }
     },
     "vars": {
@@ -43,7 +43,7 @@
           "type": "array",
           "minItems": 1,
           "items": {
-            "enum": ["o", "s", "m", "p", "t", "f"]
+            "enum": ["o", "i", "s", "m", "p", "t", "f"]
           }
         },
 
@@ -51,7 +51,7 @@
           "type": "array",
           "minItems": 1,
           "items": {
-            "enum": ["o", "s", "m", "p", "t", "f"]
+            "enum": ["o", "i", "s", "m", "p", "t", "f"]
           }
         },
 
@@ -64,7 +64,8 @@
             "m": { "type": "string" },
             "p": { "type": "string" },
             "t": { "type": "string" },
-            "f": { "type": "string" }
+            "f": { "type": "string" },
+            "i": { "type": "string" }
           },
           "additionalProperties": false
         }

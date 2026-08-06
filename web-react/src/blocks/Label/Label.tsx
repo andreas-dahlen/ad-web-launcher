@@ -1,4 +1,3 @@
-import React from 'react'
 import { svsx } from '../../shared/sxCompiler/svsx'
 import clsx from 'clsx'
 import css from './Label.module.css'
@@ -7,11 +6,12 @@ import type { BoxSide } from '../../shared/types/core.types'
 import { cpsx } from '../../shared/sxCompiler/cpsx'
 import { labelPreset, type LabelPreset } from '@generated/presets/label.preset'
 import { labelStyle, type LabelStyle } from '@shared/generated/tokenModules/label.token'
+import type { ElementType } from 'react'
 
 export type LabelSettings = {
   msg: string
   mode?: Mode
-  el?: string
+  el?: ElementType
   position?: BoxSide | "center"
   styleVars?: LabelStyle
   presets?: LabelPreset[]
@@ -31,22 +31,16 @@ export default function Label({
     center: css.center,
     bottom: css.bottom
   }
-
   const positionClass = positionMap[position ?? "bottom"]
 
+  const Element = el
   return (
-    <div className={clsx(css.labelwrapper,
+    <div className={clsx(css.label,
       positionClass,
       ...cpsx(presets, labelPreset))}
       style={svsx(styleVars ?? {}, labelStyle)}>
 
-      {React.createElement(
-        el,
-        {
-          // className: css.label 
-        },
-        msg
-      )}
+      <Element>{msg}</Element>
     </div>
   )
 }

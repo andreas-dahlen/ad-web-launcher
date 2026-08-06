@@ -56,7 +56,7 @@ function dryLogCompiler() {
 
     print.injecting(group.groupPath)
 
-    const { rules, foundSelectors, usableSelectors, foundVariables, declaredVariables } = walkModule(
+    const { rules, foundSelectors, usableSelectors, foundFinalVariables, declaredVariables } = walkModule(
       root, group.tokens.map(token => token.infix)
     );
 
@@ -89,7 +89,7 @@ function dryLogCompiler() {
       foundSelectors,
       usableSelectors,
       tokens: tokenResults,
-      foundVariables: foundVariables,
+      foundFinalVariables: foundFinalVariables,
       declaredVariables
     }
   }

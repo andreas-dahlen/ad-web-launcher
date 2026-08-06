@@ -7,7 +7,7 @@ import { layoutStore } from '@stores/layout.store';
 import React from 'react';
 import type { Axis1D } from '../../shared/types/core.types';
 
-// Layer 1/3 scenes read inputs here!
+// Layer 1/4 scenes read inputs here!
 const LaneInputRenderer = React.memo(function LaneInputRenderer({
   axis,
   laneId

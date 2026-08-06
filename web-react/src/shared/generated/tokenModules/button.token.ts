@@ -12,24 +12,30 @@ export const buttonStyle = {
 
   vars: {   
    button: {
-          bg: { name: "bg", allowed: ["o","p","t","f"]},
-         position: { name: "position", allowed: ["o","p","f"]},
+          position: { name: "position", allowed: ["o","p","f"]},
          display: { name: "display", allowed: ["o","p","f"]},
          align: { name: "align", allowed: ["o","p","f"]},
          justify: { name: "justify", allowed: ["o","p","f"]},
+         opacity: { name: "opacity", allowed: ["o","i","s","m","p","f"]},
+         modeDisabledOpacity: { name: "modeDisabledOpacity", allowed: ["o","m","p","f"]},
+         interactiveFalseOpacity: { name: "interactiveFalseOpacity", allowed: ["o","i","p","f"]},
          width: { name: "width", allowed: ["o","p","f"]},
-         height: { name: "height", allowed: ["o","p","f"]},
-         radius: { name: "radius", allowed: ["o","p","f"]},
-         border: { name: "border", allowed: ["o","p","f"]},
-         shadow: { name: "shadow", allowed: ["o","s","p","f"]},
-         opacity: { name: "opacity", allowed: ["o","s","p","f"]},
-         filter: { name: "filter", allowed: ["o","s","p","f"]},
+         height: { name: "height", allowed: ["o","p","f"]} 
+},
+   visual: {
+          bg: { name: "bg", allowed: ["o","m","t","f"]},
+         radius: { name: "radius", allowed: ["o","f"]},
+         border: { name: "border", allowed: ["o","s","p","f"]},
+         shadow: { name: "shadow", allowed: ["o","s","f"]},
+         filter: { name: "filter", allowed: ["o","s","f"]},
          statePressedScale: { name: "statePressedScale", allowed: ["o","s","f"]},
          stateReleasedScale: { name: "stateReleasedScale", allowed: ["o","s","f"]},
          stateCanceledScale: { name: "stateCanceledScale", allowed: ["o","s","f"]},
-         stateCanceledOpacity: { name: "stateCanceledOpacity", allowed: ["o","s","f"]},
          statePressedFilter: { name: "statePressedFilter", allowed: ["o","s","f"]},
-         statePressedShadow: { name: "statePressedShadow", allowed: ["o","s","f"]} 
+         statePressedShadow: { name: "statePressedShadow", allowed: ["o","s","f"]},
+         statePressedBorder: { name: "statePressedBorder", allowed: ["o","s","f"]},
+         modeOffBg: { name: "modeOffBg", allowed: ["o","s","f"]},
+         modeOnBg: { name: "modeOnBg", allowed: ["o","s","f"]} 
 }
   }
 } as const satisfies TokenComponent;

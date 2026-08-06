@@ -1,17 +1,34 @@
 /* 
-file://wsl.localhost/Ubuntu//home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/surface.jsonc
+file://wsl.localhost/Ubuntu//home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/visual.jsonc
 */
-.surface {
-  gap: var(--final-surface-gap);
-  margin: var(--final-surface-margin);
-  padding: var(--final-surface-padding);
-  border: var(--final-surface-border);
-  border-radius: var(--final-surface-radius);
-  box-shadow: var(--final-surface-shadow);
-  backdrop-filter: var(--final-surface-blur);
+.visual {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: var(--final-visual-overflow);
+  border: var(--final-visual-border);
+  border-radius: var(--final-visual-radius);
+  box-shadow: var(--final-visual-shadow);
+  backdrop-filter: var(--final-visual-blur);
+  z-index: -1;
+
+  &::after {
+    position: absolute;
+    inset: 0;
+    content: "";
+    z-index: -1;
+    pointer-events: none;
+    opacity: var(--final-visual-opacity);
+    background: var(--final-visual-bg);
+  }
 }
 
-.bg {
+.settingsPanel {
+  --p-visual-shadow: inset 0px 0px 13px black;
+}
+
+/* .bg {
   --p-surface-overflow: hidden;
   --p-surface-radius: 10px;
   --p-surface-opacity: 50%;
@@ -20,7 +37,6 @@ file://wsl.localhost/Ubuntu//home/david/repos/ad-web-launcher/web-react/src/styl
 
   &::after {
     content: var(--final-surface-before-content);
-    /* content: ""; */
     inset: 0;
     position: var(--final-surface-position);
     opacity: var(--final-surface-opacity, 50%);
@@ -28,9 +44,9 @@ file://wsl.localhost/Ubuntu//home/david/repos/ad-web-launcher/web-react/src/styl
     z-index: -1;
     pointer-events: none;
   }
-}
+} */
 
-.frame {
+/* .frame {
   --p-surface-display: flex;
   --p-surface-direction: column;
   --p-surface-position: absolute;
@@ -51,4 +67,4 @@ file://wsl.localhost/Ubuntu//home/david/repos/ad-web-launcher/web-react/src/styl
   --p-surface-bg: none;
   --p-surface-shadow: none;
   --p-surface-position: relative;
-}
+} */

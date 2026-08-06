@@ -13,12 +13,14 @@ export default function SettingsPanel() {
 
   return (
     <Frame
-      presets={["bg", "frame"]}
+      layout={{ presets: ["settingsPanel"] }}
+      visual={{ presets: ["settingsPanel"] }}
     >
 
       <Button
+        directive={{ isInFlow: false }}
         button={{
-          // presets: ["close"],
+          presets: ["close"],
           onPressRelease: () => update("panelOpen", false)
         }}
         icon={{ Svg: Icons.exit }}

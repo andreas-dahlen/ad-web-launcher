@@ -1,0 +1,37 @@
+// file://wsl.localhost/Ubuntu//home/david/repos/ad-web-launcher/web-react/src/blocks/Layout/Layout.module.css
+{
+  "component": "layout",
+  "infix": "layout",
+
+  "alwaysAllowed": ["o", "p", "f"],
+  "vars": {
+    "display": { "values": {"f": "block"}},
+
+    "flexDirection": { "values": { "f": "initial"}},
+    "justify": { "values": {"f": "initial"}},
+    "align": { "values": {"f": "initial"}},
+
+
+    "width": { "values": {"f": "auto"}},
+    "height": { "values": { "f": "auto"}},
+
+    "gap": { "values": {"f": "0"} },
+    "margin": { "values": {"f": "0px"}},
+    "padding": { "values": {"f": "0px"} },
+    "inset": {},
+    "minWidth": {},
+    "minHeight": {}
+
+
+    // "bg": {"allowed": ["t"], "values": {"f": "gray"}},
+    // "overflow": { "values": { "f": "visible"}},
+
+    // "border": { "allowed": ["t"], "values": {"f": "none"}},
+    // "radius":{"values": {"f": "0px"}},
+    // "shadow": { "values": { "f": "none"}},
+    // "blur": { "values": { "f": "none"}},
+
+    // "beforeContent": {"values": { "f": "none"}},
+    // "opacity": {"values": {"f": "1"}}
+  }
+}

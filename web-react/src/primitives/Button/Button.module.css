@@ -1,6 +1,8 @@
 /* 
 file://wsl.localhost/Ubuntu//home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/button/button.jsonc
+file://wsl.localhost/Ubuntu//home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/button/visual.jsonc
 */
+
 .button {
 
   user-select: none;
@@ -10,6 +12,7 @@ file://wsl.localhost/Ubuntu//home/david/repos/ad-web-launcher/web-react/src/styl
   display: var(--final-button-display);
   align-items: var(--final-button-align);
   justify-content: var(--final-button-justify);
+  pointer-events: none;
 
   opacity: var(--final-button-opacity);
 
@@ -19,16 +22,16 @@ file://wsl.localhost/Ubuntu//home/david/repos/ad-web-launcher/web-react/src/styl
   transition: opacity 140ms ease;
 }
 
-.transformWrapper {
-  width: var(--final-button-width);
-  height: var(--final-button-height);
+.visual {
+  width: 100%;
+  height: 100%;
 
-  background: var(--final-button-bg);
-  border-radius: var(--final-button-radius);
+  background: var(--final-visual-bg);
+  border-radius: var(--final-visual-radius);
 
-  border: var(--final-button-border);
-  filter: var(--final-button-filter);
-  box-shadow: var(--final-button-shadow);
+  border: var(--final-visual-border);
+  filter: var(--final-visual-filter);
+  box-shadow: var(--final-visual-shadow);
 
   transition:
     filter 100ms cubic-bezier(0.2, 0.8, 0.2, 1),
@@ -36,33 +39,82 @@ file://wsl.localhost/Ubuntu//home/david/repos/ad-web-launcher/web-react/src/styl
     box-shadow 140ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-.contentWrapper {
+.content {
   position: absolute;
   inset: 0;
-  width: var(--final-button-width);
-  height: var(--final-button-height);
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.button[data-state="pressed"] .transformWrapper {
-  transform: var(--final-button-state-pressed-scale);
+/* Presets */
+
+.close {
+  filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.614));
+  --p-button-position: absolute;
+  right: 15px;
+  top: 15px;
+
+  --t-visual-bg: none;
+  --f-visual-bg: none;
+
+  --p-button-width: 30px;
+  --p-button-height: 30px;
+  --p-visual-border: none;
+
+}
+
+.close[data-state='pressed'] {
+  box-shadow: none;
+}
+
+
+
+/* state */
+[data-state="pressed"] .visual {
+  transform: var(--final-visual-state-pressed-scale);
   /* box-shadow:
     0 2px 6px rgba(0, 0, 0, 0.25),
     inset 0 0 6px rgba(0, 0, 0, 0.25); */
-  --s-button-shadow: var(--final-button-state-pressed-shadow);
-  --s-button-filter: var(--final-button-state-pressed-filter);
+  --s-visual-shadow: var(--final-visual-state-pressed-shadow);
+  --s-visual-filter: var(--final-visual-state-pressed-filter);
+  --s-visual-border: var(--final-visual-state-pressed-border);
 }
 
-.button[data-state='released'] .transformWrapper {
-  transform: var(--final-button-state-released-scale);
+[data-state='released'] .visual {
+  transform: var(--final-visual-state-released-scale);
 }
 
-.button[data-state='canceled'] .transformWrapper {
-  transform: var(--final-button-state-canceled-scale);
+[data-state='canceled'] .visual {
+  transform: var(--final-visual-state-canceled-scale);
 }
 
-.button[data-state='canceled'] {
+/* .button[data-state='canceled'] {
   --s-button-opacity: var(--final-button-state-canceled-opacity);
+} */
+
+/* mode */
+
+[data-mode="on"] .visual {
+  --m-visual-bg: var(--final-visual-mode-on-bg);
+}
+
+[data-mode="off"] .visual {
+  --m-visual-bg: var(--final-visual-mode-off-bg);
+}
+
+.button[data-mode="disabled"] {
+  --m-button-opacity: var(--final-button-mode-disabled-opacity);
+}
+
+/* interactive */
+
+[data-interactive='true'] .visual {
+  --i-button-opacity: unset;
+}
+
+.button[data-interactive='false'] {
+  --i-button-opacity: var(--final-button-interactive-false-opacity);
 }

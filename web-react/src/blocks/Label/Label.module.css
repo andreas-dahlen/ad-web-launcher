@@ -1,47 +1,29 @@
 /* 
 file://wsl.localhost/Ubuntu//home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/label.jsonc
 */
-.sexy {
-  --p-label-col: var(--_col-warm-dark-1);
-}
 
 .bottom {
-  --f-label-height: var(--final-button-size);
-  top: var(--final-label-height);
+  top: var(--final-label-offset-y);
 }
 
 .top {
-  --f-label-height: var(--final-button-size);
-  bottom: var(--final-label-height);
+  bottom: var(--final-label-offset-y);
 }
 
 .left {
-  --f-label-width: var(--final-button-size);
-  right: var(--final-label-width);
+  right: var(--final-label-offset-x);
 }
 
 .right {
-  --f-label-width: var(--final-button-size);
-  left: var(--final-label-width);
+  left: var(--final-label-offset-x);
 }
 
 .center {
   --f-label-width: 0;
 }
 
-
-.labelwrapper {
-  --f-label-position: absolute;
-  position: var(--final-label-position);
-}
-
-.base {
-  --f-label-align: center;
-  text-align: var(--final-label-align);
-}
-
 .label {
-  background: var(--final-label-col);
+  position: var(--final-label-position);
+  text-align: var(--final-label-align);
+  color: var(--final-label-col);
 }
-
-/* --o-: var(--s-, var(--m-, var(--p-, var(--t-, var(--f-))))); */

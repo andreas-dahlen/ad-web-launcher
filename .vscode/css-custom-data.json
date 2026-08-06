@@ -1,0 +1,9 @@
+{
+  "properties": [
+    {
+      "name": "composes",
+      "description": "CSS Modules class composition",
+      "status": "standard"
+    }
+  ]
+}

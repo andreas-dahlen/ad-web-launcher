@@ -6,8 +6,9 @@
   
   export const buttonPreset = {
     button: css.button,
-  contentWrapper: css.contentWrapper,
-  transformWrapper: css.transformWrapper,
+  close: css.close,
+  content: css.content,
+  visual: css.visual,
   } as const;
   
   export type ButtonPreset = keyof typeof buttonPreset;

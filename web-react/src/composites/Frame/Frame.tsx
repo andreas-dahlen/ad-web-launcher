@@ -1,18 +1,17 @@
 import type { Directive, DragSettings } from '@composites/types/comp.types'
-import type { SurfacePreset } from '@generated/presets/surface.preset'
 import type React from 'react'
 import { createId, generateId } from '@data/generators/idGenerator'
 import DragPrim from '@primitives/Drag/DragPrim'
 import { useBehaviorState } from '@composites/hooks/useBehaviorState.hook'
-import { Surface } from '../../blocks/Surface/Surface'
+import { Layout, type LayoutSettings } from '@blocks/Layout/Layout'
 import Label, { type LabelSettings } from '../../blocks/Label/Label'
-import type { SurfaceStyle } from '@shared/generated/tokenModules/surface.token'
+import { Visual, type VisualSettings } from '@blocks/visual/Visual'
 
 type FrameProps = {
   directive?: Directive
   drag?: DragSettings
-  styleVars?: SurfaceStyle
-  presets?: SurfacePreset[]
+  visual?: VisualSettings
+  layout?: LayoutSettings
   label?: LabelSettings
   children: React.ReactNode
 }
@@ -20,8 +19,8 @@ type FrameProps = {
 export default function Frame({
   directive,
   drag,
-  styleVars,
-  presets,
+  visual,
+  layout,
   label,
   children
 }: FrameProps) {
@@ -38,21 +37,28 @@ export default function Frame({
 
 
   const Frame = (
-    <>
-      <Surface
-        isInFlow={isInFlow}
-        styleVars={styleVars}
-        presets={presets}
+    <div style={{ position: isInFlow ? "relative" : "absolute" }}>
+      <Layout
+        styleVars={layout?.styleVars}
+        presets={layout?.presets}
       >
+        <Visual
+          styleVars={visual?.styleVars}
+          presets={visual?.presets}
+        />
+        {children}
+
+
         {label && <Label
           msg={label.msg}
           mode={mode}
           position={label.position}
         />}
-        {children}
 
-      </Surface>
-    </>
+
+
+      </Layout>
+    </div>
   )
 
   if (movable) return (

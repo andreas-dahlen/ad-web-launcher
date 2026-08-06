@@ -6,7 +6,7 @@ import type { CssData, CssTokenGroup } from '../../../types/compiler.types.ts';
 export function analyzeVariableUsage(cssData: CssData, group: CssTokenGroup): VariableMismatch[] {
   const result: VariableMismatch[] = []
 
-  const found = new Set(cssData.foundVariables);
+  const found = new Set(cssData.foundFinalVariables);
 
   for (const token of group.tokens) {
     const declared = new Set(

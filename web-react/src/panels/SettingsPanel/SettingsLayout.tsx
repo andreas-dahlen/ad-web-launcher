@@ -23,7 +23,9 @@ export default function SettingsLayout() {
         el={"h1"}
         position={"center"}
         styleVars={{ position: "relative" }} />
-      <Frame presets={["row"]}>
+      <Frame
+      // presets={["row"]}
+      >
         <Button
           directive={{ mode: layoutManagerH }}
           button={{

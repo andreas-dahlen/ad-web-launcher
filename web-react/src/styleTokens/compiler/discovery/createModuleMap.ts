@@ -5,7 +5,7 @@ import path from "node:path";
 export function createModuleMap(
   groupPaths: string[],
 ): Map<string, string> {
-  const cssPaths = findCssModules(path.resolve("./src"));
+  const cssPaths = findCssModules(path.resolve("./src")); //TODO make it safer? might resolve incorrectly? needs robustness?
 
   const cssMap = new Map<string, string>();
 

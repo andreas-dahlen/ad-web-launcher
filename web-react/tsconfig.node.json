@@ -35,6 +35,7 @@
     "src/shared/tokenUtils/**/*.ts",
     "eslint/**/*.ts",
     "eslint",
-    "eslint/**.ts"
+    "eslint/**.ts",
+    "src/test/styleTokens"
     ]
 }

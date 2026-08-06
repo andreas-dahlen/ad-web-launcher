@@ -7,24 +7,20 @@ import type {
   TokenComponent
 } from "@shared/tokenUtils/compiler.types"
 
-export const surfaceStyle = {
-  component: "surface",
+export const visualStyle = {
+  component: "visual",
 
   vars: {   
-   surface: {
+   visual: {
           bg: { name: "bg", allowed: ["o","p","t","f"]},
-         position: { name: "position", allowed: ["o","p","f"]},
-         gap: { name: "gap", allowed: ["o","p","f"]},
-         margin: { name: "margin", allowed: ["o","p","f"]},
-         padding: { name: "padding", allowed: ["o","p","f"]},
+         overflow: { name: "overflow", allowed: ["o","p","f"]},
          border: { name: "border", allowed: ["o","p","t","f"]},
          radius: { name: "radius", allowed: ["o","p","f"]},
          shadow: { name: "shadow", allowed: ["o","p","f"]},
          blur: { name: "blur", allowed: ["o","p","f"]},
-         beforeContent: { name: "beforeContent", allowed: ["o","p","f"]},
          opacity: { name: "opacity", allowed: ["o","p","f"]} 
 }
   }
 } as const satisfies TokenComponent;
 
-export type SurfaceStyle = StyleFromComponent<typeof surfaceStyle>;
+export type VisualStyle = StyleFromComponent<typeof visualStyle>;

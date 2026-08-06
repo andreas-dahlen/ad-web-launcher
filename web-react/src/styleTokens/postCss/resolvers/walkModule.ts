@@ -1,15 +1,10 @@
 import { toCssVarPrefix } from '../../../shared/tokenUtils/stringFormaters.ts';
 import type { CssVarString } from '../../../shared/tokenUtils/compiler.types.ts';
-import type { Root, Rule } from "postcss";
+import type { Rule, Root } from "postcss";
 import selectorParser from "postcss-selector-parser";
+import { prefixPriority } from '../../../shared/tokenUtils/prefixes.ts';
+import type { WalkModuleResult } from '../../types/compiler.types.ts';
 
-type WalkModuleResult = {
-  rules: Map<string, Rule>
-  foundSelectors: string[]
-  usableSelectors: string[]
-  foundVariables: CssVarString[]
-  declaredVariables: CssVarString[]
-};
 const VALID_IDENTIFIER = /^[A-Za-z_$][A-Za-z0-9_$]*$/;
 
 export function walkModule(
@@ -23,7 +18,7 @@ export function walkModule(
     infix => toCssVarPrefix("final", infix)
   );
 
-  const declarationPrefixes = ["o", "s", "m", "p", "t", "f"]
+  const declarationPrefixes = prefixPriority
     .flatMap(prefix =>
       infixes.map(infix => `--${prefix}-${infix}`)
     );
@@ -31,8 +26,9 @@ export function walkModule(
   const rules = new Map<string, Rule>()
   const foundSelectors = new Set<string>()
   const usableSelectors = new Set<string>()
-  const foundVariables = new Set<CssVarString>()
+  const foundFinalVariables = new Set<CssVarString>()
   const declaredVariables = new Set<CssVarString>();
+  const presetResetData = new Map<Rule, Set<CssVarString>>()
 
   root.walkRules(rule => {
     selectorParser(selectors => {
@@ -63,6 +59,13 @@ export function walkModule(
       declaredVariables.add(decl.prop as CssVarString);
     }
 
+    const rule = decl.parent;
+
+    if (rule?.type !== "rule") {
+      return;
+    }
+
+    const isCustomProperty = decl.prop.startsWith("--");
 
     for (const match of decl.value.matchAll(
       /var\((--[\w-]+)\s*(?:,[^)]+)?\)/g
@@ -74,7 +77,16 @@ export function walkModule(
           cssVar.startsWith(prefix)
         )
       ) {
-        foundVariables.add(cssVar as CssVarString);
+        foundFinalVariables.add(cssVar as CssVarString);
+
+
+        if (isCustomProperty) return
+
+        const variables = presetResetData.get(rule) ?? new Set();
+
+        variables.add(cssVar as CssVarString);
+
+        presetResetData.set(rule, variables);
       }
     }
   });
@@ -83,7 +95,8 @@ export function walkModule(
     rules,
     foundSelectors: [...foundSelectors],
     usableSelectors: [...usableSelectors],
-    foundVariables: [...foundVariables],
-    declaredVariables: [...declaredVariables]
+    foundFinalVariables: [...foundFinalVariables],
+    declaredVariables: [...declaredVariables],
+    presetResetData
   }
 }

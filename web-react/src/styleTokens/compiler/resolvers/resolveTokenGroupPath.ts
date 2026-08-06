@@ -3,7 +3,7 @@
 export function resolveTokenGroupPath(
   tokenPath: string
 ): string {
-  const normalized = tokenPath.replaceAll("\\", "/");
+  const normalized = tokenPath.replaceAll("\\", "/").replaceAll(/\/+/g, "/");
 
   const tokensIndex = normalized.indexOf("tokens/");
 

@@ -43,6 +43,7 @@
     "build",
     "src/styleTokens/",
     "plugins",
-    "eslint"
+    "eslint",
+    "src/test/styleTokens"
   ]
 }

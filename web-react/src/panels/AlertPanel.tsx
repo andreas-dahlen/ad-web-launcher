@@ -8,10 +8,14 @@ export default function AlertPanel() {
   if (!open) return null
 
   return (
-    <Frame presets={["frame", "bg"]}>
+    <Frame
+    // presets={["frame", "bg"]}
+    >
       <p>{message}</p>
 
-      <Frame presets={["row"]}>
+      <Frame
+      // presets={["row"]}
+      >
 
 
         <ButtonPrim

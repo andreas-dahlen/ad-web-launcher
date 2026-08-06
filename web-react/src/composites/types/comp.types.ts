@@ -11,12 +11,13 @@ import type { SliderStyle } from '@shared/generated/tokenModules/slider.token.ts
 // interactivity, and behavioral capabilities.
 export type Directive = {
   mode?: ModeInput
+  interactive?: boolean
   movable?: boolean
   isInFlow?: boolean
 }
 
 type ModeInput = Mode | boolean
-export type Mode = "default" | "on" | "off" | "disabled"
+export type Mode = "default" | "disabled" | "on" | "off"
 
 export type DragSettings = SnapConfig & {
   onSwipeCommit?: (detail: EventType) => void

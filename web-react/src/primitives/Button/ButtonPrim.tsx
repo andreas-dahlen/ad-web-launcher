@@ -55,9 +55,9 @@ export default function ButtonPrim({
         ...buttonDataAttrs
       })}
     >
-      <div className={css.transformWrapper} />
+      <div className={css.visual} />
 
-      <div className={css.contentWrapper}>
+      <div className={css.content}>
         {children}
       </div>
 

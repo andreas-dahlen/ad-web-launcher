@@ -25,6 +25,7 @@ export function initializeCompiler(tokensDir: string) {
     runCssModule,
     handleTokenChange
   }
+
   function handleTokenChange(tokenPath: string): string | null {
     run.reset()
     guard.reset()
@@ -38,7 +39,6 @@ export function initializeCompiler(tokensDir: string) {
 
     if (!group.cssPath) {
       run.recordMissingModule(group.groupPath)
-      // runDiagnostics(cache, run)
       return null
     }
     tracker.invalidate(group.cssPath)
@@ -56,6 +56,7 @@ export function initializeCompiler(tokensDir: string) {
       return
     }
     assert.hasCssPath(group)
+
     const cssData = processModule({ root, group })
 
     run.recordCssData(group.groupPath, cssData)
@@ -65,9 +66,9 @@ export function initializeCompiler(tokensDir: string) {
   }
 
   function handleCompletion(): void {
+
     if (!tracker.hasFinished()) return
     if (!guard.canComplete()) return
-    // run.recordTrackerResult(tracker.getTrackerState or getTrackerResult())
 
     if (tracker.hasSucceeded()) {
       const emitResult = emitFiles(cache, run)

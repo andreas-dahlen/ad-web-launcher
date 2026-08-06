@@ -1,9 +1,20 @@
+import type { Rule } from 'postcss';
 import type { CssVarString, ValidPrefix } from '../../shared/tokenUtils/compiler.types.ts';
 
 import type { IssueGroup } from './issueCollector.types.ts';
 
+//postcss
+export type PresetResetData = Map<Rule, Set<CssVarString>>
+export type WalkModuleResult = {
+  rules: Map<string, Rule>
+  foundSelectors: string[]
+  usableSelectors: string[]
+  foundFinalVariables: CssVarString[]
+  declaredVariables: CssVarString[]
+  presetResetData: PresetResetData
+};
 
-
+//raw tokens
 export type RawToken = {
   component: string;
   infix?: string;
@@ -62,7 +73,7 @@ export type CssData = { // CssModuleResult
   foundSelectors: string[]
   usableSelectors: string[]
   tokens: ProcessedToken[]
-  foundVariables: CssVarString[]
+  foundFinalVariables: CssVarString[]
   declaredVariables: CssVarString[]
 }
 export type ProcessedToken = {

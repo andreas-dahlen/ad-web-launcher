@@ -15,8 +15,8 @@ export const labelStyle = {
           col: { name: "col", allowed: ["o","p","f"]},
          align: { name: "align", allowed: ["o","p","f"]},
          position: { name: "position", allowed: ["o","p","f"]},
-         width: { name: "width", allowed: ["o","p","f"]},
-         height: { name: "height", allowed: ["o","p","f"]} 
+         offsetX: { name: "offsetX", allowed: ["o","p","f"]},
+         offsetY: { name: "offsetY", allowed: ["o","p","f"]} 
 }
   }
 } as const satisfies TokenComponent;

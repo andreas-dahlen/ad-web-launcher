@@ -6,7 +6,17 @@ export function isValidPrefix(
   return typeof value === "string" &&
     (prefixPriority).includes(value as ValidPrefix);
 }
-
+/**
+ * Prefix semantics
+ *
+ * i = Interactive (runtime gesture values)
+ * o = Override (explicit consumer override)
+ * s = State (hover, pressed, disabled)
+ * m = Mode (primary, compact, danger)
+ * p = Preset (named visual style)
+ * t = Theme (application theme)
+ * f = Fallback (component defaults)
+ */
 export const prefixPriority = [
-  "o", "s", "m", "p", "t", "f"
+  "o", "i", "s", "m", "p", "t", "f"
 ] as const satisfies readonly ValidPrefix[]

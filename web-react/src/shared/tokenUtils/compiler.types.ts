@@ -1,10 +1,11 @@
 export type ValidPrefix =
-  | "o"
-  | "s"
-  | "m"
-  | "p"
-  | "t"
-  | "f";
+  | "i" // Interactive
+  | "o" // Override
+  | "s" // State
+  | "m" // Mode
+  | "p" // Preset
+  | "t" // Theme
+  | "f"; // Fallback
 
 export type CssVarString = `--${string}`;
 

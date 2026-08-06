@@ -7,7 +7,8 @@ import React from 'react'
 import { layoutStore } from '@stores/layout.store'
 import type { Axis1D } from '../../shared/types/core.types'
 import { SceneContext } from '@primitives/Carousel/hooks/useSceneContext.hook'
-/** LAYER 2/3! Interactive=false carousel. Contents are mounted inside!
+import DragGrid from '@features/DragGrid/DragGrid'
+/** LAYER 2/4! Interactive=false carousel. Contents are mounted inside!
  * The carousel swipes are handled by baseLayer. */
 
 // ---------------------------
@@ -100,6 +101,8 @@ export default function ContentLayer() {
           <LaneRenderer key={laneId} axis="vertical" laneId={laneId} />
         ))}
       </div>
+
+      <DragGrid></DragGrid>
     </>
   )
 }
