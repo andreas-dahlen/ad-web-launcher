@@ -3,7 +3,7 @@ import type { GroupMetadata } from '../../extract/assemblers/assembleMetadata.ts
 export function formatTokenPatch(metadata: GroupMetadata[]): FormatResult[] {
   const files: FormatResult[] = []
 
-  const basePath = "file://wsl.localhost/Ubuntu/"
+  const basePath = "file://wsl.localhost/Ubuntu"
 
   for (const data of metadata) {
 
