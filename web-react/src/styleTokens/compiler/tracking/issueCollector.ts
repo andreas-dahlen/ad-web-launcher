@@ -12,7 +12,7 @@ export function createIssueCollector(): IssueCollector {
 
   const groups = new Map<string, IssueGroup>()
 
-  let currentScope: Partial<IssueScope>
+  let currentScope: Partial<IssueScope> = {}
   let subject: string | undefined
 
   function setSubject(addedSubject: string) {
@@ -71,7 +71,7 @@ export function createIssueCollector(): IssueCollector {
 
     groups.clear()
 
-    currentScope = { path: "", value: "", context: "" }
+    currentScope = {}
     subject = undefined
 
     return result

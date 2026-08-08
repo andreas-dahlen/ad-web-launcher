@@ -30,6 +30,9 @@ export default mergeConfig(
             environment: 'node',
             include: [
               'src/test/styleTokens/**/*.test.ts'
+            ],
+            setupFiles: [
+              'src/test/styleTokens/setup.utils.ts',
             ]
           }
         }

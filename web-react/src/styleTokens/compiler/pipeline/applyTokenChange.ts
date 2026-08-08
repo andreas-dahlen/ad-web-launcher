@@ -22,7 +22,9 @@ export function applyTokenChange({
   const cssPath = findCssModulePath(groupPath);
 
   const tokenPaths = findTokenPaths(groupPath);
-  const results = tokenPaths.map(processToken);
+  const results = tokenPaths.map(tokenPath =>
+    processToken(tokenPath)
+  )
 
   const tokens = results.map(result => result.token);
   const issues = results.flatMap(result => result.issues);

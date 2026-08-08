@@ -16,97 +16,99 @@ function createFile(filePath: string) {
   fs.writeFileSync(filePath, "");
 }
 
-describe("createModuleMap", () => {
-  const originalCwd = process.cwd();
+describe('[COMPILER]', () => {
+  describe("createModuleMap", () => {
+    const originalCwd = process.cwd();
 
-  afterEach(() => {
-    process.chdir(originalCwd);
-  });
+    afterEach(() => {
+      process.chdir(originalCwd);
+    });
 
-  it("maps token groups to matching css modules", () => {
-    const root = createTempDir();
+    it("maps token groups to matching css modules", () => {
+      const root = createTempDir();
 
-    createFile(
-      path.join(root, "src", "components", "button", "Button.module.css")
-    );
+      createFile(
+        path.join(root, "src", "components", "button", "Button.module.css")
+      );
 
-    createFile(
-      path.join(root, "src", "components", "slider", "Slider.module.css")
-    );
+      createFile(
+        path.join(root, "src", "components", "slider", "Slider.module.css")
+      );
 
-    process.chdir(root);
+      process.chdir(root);
 
-    const result = createModuleMap([
-      path.join(root, "tokens", "button.json"),
-      path.join(root, "tokens", "slider"),
-    ]);
+      const result = createModuleMap([
+        path.join(root, "tokens", "button.json"),
+        path.join(root, "tokens", "slider"),
+      ]);
 
-    expect(result).toEqual(
-      new Map([
-        [
-          path.join(root, "tokens", "button.json"),
-          path.join(
-            root,
-            "src",
-            "components",
-            "button",
-            "Button.module.css"
-          ),
-        ],
-        [
-          path.join(root, "tokens", "slider"),
-          path.join(
-            root,
-            "src",
-            "components",
-            "slider",
-            "Slider.module.css"
-          ),
-        ],
-      ])
-    );
-  });
+      expect(result).toEqual(
+        new Map([
+          [
+            path.join(root, "tokens", "button.json"),
+            path.join(
+              root,
+              "src",
+              "components",
+              "button",
+              "Button.module.css"
+            ),
+          ],
+          [
+            path.join(root, "tokens", "slider"),
+            path.join(
+              root,
+              "src",
+              "components",
+              "slider",
+              "Slider.module.css"
+            ),
+          ],
+        ])
+      );
+    });
 
-  it("ignores css modules without matching token groups", () => {
-    const root = createTempDir();
+    it("ignores css modules without matching token groups", () => {
+      const root = createTempDir();
 
-    createFile(
-      path.join(root, "src", "components", "button", "Button.module.css")
-    );
+      createFile(
+        path.join(root, "src", "components", "button", "Button.module.css")
+      );
 
-    createFile(
-      path.join(root, "src", "components", "unused", "Unused.module.css")
-    );
+      createFile(
+        path.join(root, "src", "components", "unused", "Unused.module.css")
+      );
 
-    process.chdir(root);
+      process.chdir(root);
 
-    const result = createModuleMap([
-      path.join(root, "tokens", "button.json"),
-    ]);
+      const result = createModuleMap([
+        path.join(root, "tokens", "button.json"),
+      ]);
 
-    expect(result.size).toBe(1);
-    expect(result.has(
-      path.join(root, "tokens", "button.json")
-    )).toBe(true);
-  });
+      expect(result.size).toBe(1);
+      expect(result.has(
+        path.join(root, "tokens", "button.json")
+      )).toBe(true);
+    });
 
-  it("matches css module names case insensitively", () => {
-    const root = createTempDir();
+    it("matches css module names case insensitively", () => {
+      const root = createTempDir();
 
-    createFile(
-      path.join(root, "src", "Button", "BUTTON.module.css")
-    );
+      createFile(
+        path.join(root, "src", "Button", "BUTTON.module.css")
+      );
 
-    process.chdir(root);
+      process.chdir(root);
 
-    const result = createModuleMap([
-      path.join(root, "tokens", "button.json"),
-    ]);
+      const result = createModuleMap([
+        path.join(root, "tokens", "button.json"),
+      ]);
 
-    expect(result.get(
-      path.join(root, "tokens", "button.json")
-    )).toBe(
-      path.join(root, "src", "Button", "BUTTON.module.css")
-    );
-  });
-});
+      expect(result.get(
+        path.join(root, "tokens", "button.json")
+      )).toBe(
+        path.join(root, "src", "Button", "BUTTON.module.css")
+      );
+    });
+  })
+})

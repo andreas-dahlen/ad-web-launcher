@@ -3,13 +3,11 @@ import path from "node:path"
 import fs from "node:fs"
 export function findCssModulePath(
   groupPath: string,
+  root = path.resolve("./src"),
 ): string | undefined {
   const groupName = extractGroupName(groupPath).toLowerCase();
 
-  return searchDirectory(
-    path.resolve("./src"),
-    groupName,
-  );
+  return searchDirectory(root, groupName);
 }
 
 function searchDirectory(

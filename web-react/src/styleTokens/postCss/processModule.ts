@@ -9,27 +9,24 @@ import { injectPresetResets } from './inject/injectPresetResets.ts';
 export function processModule({
   root,
   group,
+  mutate = true
 }: {
   root: Root;
   group: CssTokenGroup;
+  mutate?: boolean
 }): CssData {
 
   print.injecting(group.groupPath)
 
-
   const { rules, foundSelectors, usableSelectors, foundFinalVariables, declaredVariables, presetResetData } = walkModule(
     root, group.tokens.map(token => token.infix)
   );
-
-  injectPresetResets(presetResetData)
 
   const tokenResults: ProcessedToken[] = [];
   for (const token of group.tokens) {
     print.processing(token.name)
 
     const rule = rules.get(`.${token.infix}`);
-
-    // diagnostics.recordSelectors({ cssPath: group.cssPath, token, foundSelectors, rule })
 
     tokenResults.push({
       name: token.name,
@@ -38,7 +35,6 @@ export function processModule({
       processed: Boolean(rule),
     });
 
-    // diagnostics.recordVariables({ root, token })
     if (!rule) {
       continue;
     }
@@ -46,13 +42,19 @@ export function processModule({
     print.buildingChains(token.infix)
 
     for (const variable of token.vars) {
-      injectVarDefinitions(rule, token, variable);
-      injectCascade(rule, token, variable);
-
       print.resultCascade(variable)
+
+      if (mutate) {
+        injectVarDefinitions(rule, token, variable);
+        injectCascade(rule, token, variable);
+      }
     }
-    // diagnostics.recordTokenProcessed(token.name, token.infix)
   }
+
+  if (mutate) {
+    injectPresetResets(presetResetData, group)
+  }
+
   return {
     groupPath: group.groupPath,
     cssPath: group.cssPath,
