@@ -2,11 +2,11 @@
 
 ## Input
 
-* [ ] `adapter/usePointerBridge.hook.ts`
+* [x] `adapter/usePointerBridge.hook.ts`
 
-  * [ ] pointer down / move / up forwarding
-  * [ ] coordinates / pointer ID forwarding
-  * [ ] cleanup
+  * [x] pointer down / move / up forwarding
+  * [x] coordinates / pointer ID forwarding
+  * [x] cleanup
 
 * [x] `input/buildDesc.ts`
 
@@ -20,30 +20,30 @@
 
 ## Assertions
 
-* [ ] `assertions/assertions.ts`
+* [x] `assertions/assertions.ts`
 
-  * [ ] valid inputs
-  * [ ] invalid inputs
-  * [ ] expected failures / error messages
+  * [x] valid inputs
+  * [x] invalid inputs
+  * [x] expected failures / error messages
 
 ## Runtime
 
 * [x] `runtime/pipeline.ts`
-* [ ] `runtime/solverRouter.ts`
+* [x] `runtime/solverRouter.ts`
 
-  * [ ] carousel
-  * [ ] slider
-  * [ ] drag
-  * [ ] scroll
-  * [ ] invalid / unknown type
-  * [ ] null solver result
+  * [x] carousel
+  * [x] slider
+  * [x] drag
+  * [x] scroll
+  * [x] invalid / unknown type
+  * [x] null solver result
 
 ## Solvers
 
 ### Carousel
 
 * [x] `carouselSolver/carousel.solver.ts`
-* [ ] `carouselSolver/carousel.utils.ts`
+* [x] `carouselSolver/carousel.utils.ts`
 
 Behavior:
 
@@ -55,20 +55,20 @@ Behavior:
 ### Drag
 
 * [x] `dragSolver/drag.solver.ts`
-* [ ] `dragSolver/drag.utils.ts`
+* [x] `dragSolver/drag.utils.ts`
 
 Behavior:
 
 * [x] swipeStart
 * [x] swipe
 * [x] commit
-* [ ] constraints / edge cases
+* [x] constraints / edge cases
 
 ### Scroll
 
 * [x] `scrollSolver/scroll.solver.ts`
-* [ ] `scrollSolver/scroll.utils.ts`
-* [ ] `scrollSolver/overflow.utils.ts`
+* [ ] `scrollSolver/scroll.utils.ts` needs to be finished before testing
+* [ ] `scrollSolver/overflow.utils.ts` needs to be finished before testing
 
 Behavior:
 
@@ -111,7 +111,7 @@ Behavior:
 
 ## Updater
 
-* [ ] `updater/domUpdater.ts`
+* [x] `updater/domUpdater.ts`
 
   * [ ] descriptor → DOM mutation
   * [ ] attributes

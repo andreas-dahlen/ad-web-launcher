@@ -11,7 +11,7 @@ vi.mock('@interaction/runtime/pipeline', () => ({
   }
 }))
 
-describe('usePointerBridge', () => {
+describe('[USE POINTER BRIDGE]', () => {
   let element: HTMLElement
   let elRef: { current: HTMLElement | null }
 

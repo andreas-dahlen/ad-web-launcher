@@ -2,13 +2,11 @@
 /** Transforms preset names into CSS module class names */
 export function cpsx<P extends string>(
   presets: P[] | undefined,
-  map: Record<P, string | Record<string, string>>
+  map: Record<P, string>
 ): string[] {
-  if (!presets) return [];
-  return presets.flatMap(p => {
-    const v = map[p];
-    return typeof v === "string" ? v : Object.values(v);
-  });
+  if (!presets) return []
+
+  return presets.map(p => map[p])
 }
 
 

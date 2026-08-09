@@ -6,7 +6,7 @@ import { APP_CONFIG } from '@config/app.config'
 /* -------------------------
 Device info (works for web and APK)
 -------------------------- */
-interface Device {
+export type Device = {
   width: number
   height: number
   density: number
@@ -112,4 +112,9 @@ function computeScale(dev: Device, vw: number, vh: number) {
  */
 export function normalizeParameter(parameter: number) {
   return sizeStore.getState().normalizeParameter(parameter)
+}
+
+export const __TEST_ONLY_API = {
+  sanitizeDevice,
+  computeScale
 }

@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
+import path from 'node:path'
 
 import { assemblePresetData } from '@styleTokens/emitters/extract/assemblers/assemblePresetData'
 import type { CssData } from '@styleTokens/types/compiler.types'
-import path from 'node:path'
 
 function createCssData(
   overrides: Partial<CssData> = {},
@@ -11,7 +11,7 @@ function createCssData(
     groupPath: '/tokens/button',
     cssPath: '/components/Button/Button.module.css',
     foundSelectors: [],
-    usableSelectors: [],
+    usableSelectors: ['primary'],
     foundFinalVariables: [],
     declaredVariables: [],
     tokens: [],
@@ -67,27 +67,45 @@ describe('[EMITTERS]', () => {
     it('normalizes Windows path separators in the CSS import', () => {
       const result = assemblePresetData(
         createCssData({
-          cssPath: String.raw`C:\\project\\src\\components\\Button\\Button.module.css`,
+          cssPath: String.raw`C:\project\src\components\Button\Button.module.css`,
         }),
       )
 
       expect(result?.cssImport).not.toContain('\\')
     })
 
-    it('passes usable selectors through unchanged', () => {
-      const selectors = [
-        'button',
-        'button_$state',
-        'active',
-      ]
-
+    it('filters non-preset selectors', () => {
       const result = assemblePresetData(
         createCssData({
-          usableSelectors: selectors,
+          groupPath: '/tokens/button',
+          usableSelectors: [
+            'button',
+            'button_$state',
+            'active',
+            'focusUtil',
+          ],
         }),
       )
 
-      expect(result?.selectors).toEqual(selectors)
+      expect(result?.selectors).toEqual([
+        'button_$state',
+        'active',
+      ])
+    })
+
+    it('returns null when no preset selectors remain', () => {
+      const result = assemblePresetData(
+        createCssData({
+          groupPath: '/tokens/svg',
+          usableSelectors: [
+            'svg',
+            'focusUtil',
+            'debugUtil',
+          ],
+        }),
+      )
+
+      expect(result).toBeNull()
     })
 
     it('preserves the CSS path in the generated import', () => {

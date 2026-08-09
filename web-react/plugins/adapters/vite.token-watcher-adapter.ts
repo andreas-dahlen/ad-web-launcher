@@ -38,3 +38,7 @@ export default function createTokenWatcherAdapter(
     },
   };
 }
+
+export const __TEST_ONLY_API = {
+  isTokenFile
+}

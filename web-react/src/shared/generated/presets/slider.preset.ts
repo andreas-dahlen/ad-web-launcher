@@ -5,8 +5,7 @@
   import css from "../../../primitives/Slider/Slider.module.css";
   
   export const sliderPreset = {
-    slider: css.slider,
-  thumb: css.thumb,
+    thumb: css.thumb,
   track: css.track,
   } as const;
   

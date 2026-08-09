@@ -6,3 +6,6 @@ export { __TEST_ONLY_API as testBuildDesc }
 
 export { __TEST_ONLY_API as testPipeline }
   from '@interaction/runtime/pipeline'
+
+export { __TEST_ONLY_API as testSize }
+  from '@shared/state/stores/size.store'

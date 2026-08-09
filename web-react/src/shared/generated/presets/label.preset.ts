@@ -7,7 +7,6 @@
   export const labelPreset = {
     bottom: css.bottom,
   center: css.center,
-  label: css.label,
   left: css.left,
   right: css.right,
   top: css.top,

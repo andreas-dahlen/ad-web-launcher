@@ -1,5 +1,5 @@
 import path from "node:path";
-import type { ESLintUtils } from "@typescript-eslint/utils";
+import type { Rule } from 'eslint';
 import type { AST } from 'jsonc-eslint-parser';
 import {
   getAlwaysAllowed,
@@ -10,16 +10,7 @@ import {
   getKeyLoc
 } from "./helpers/tokenAst.ts";
 
-const rule: ESLintUtils.RuleModule<
-  "invalidAllowed" |
-  "invalidExclude" |
-  "conflict" |
-  "invalidValuePrefix" |
-  "excludedValuePrefix" |
-  "invalidVariable" |
-  "invalidValueSelfReference",
-  []
-> = {
+const rule: Rule.RuleModule = {
   meta: {
     type: "problem",
     docs: {

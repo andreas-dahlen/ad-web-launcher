@@ -36,6 +36,7 @@
     "eslint/**/*.ts",
     "eslint",
     "eslint/**.ts",
-    "src/test/styleTokens"
+    "src/test/node",
+    "src/test/node/**/*.ts"
     ]
 }

@@ -5,8 +5,7 @@
   import css from "../../../primitives/Button/Button.module.css";
   
   export const buttonPreset = {
-    button: css.button,
-  close: css.close,
+    close: css.close,
   content: css.content,
   visual: css.visual,
   } as const;

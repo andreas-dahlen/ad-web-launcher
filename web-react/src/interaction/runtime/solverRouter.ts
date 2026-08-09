@@ -152,7 +152,7 @@ export const router = {
             effects: { eventOverride: "swipeRevert" }
           }
         }
-        throw new Error(`Unknown carousel solution from swipeCommit: ${solution}`)
+        throw new Error(`Unknown scroll solution from swipeCommit: ${solution}`)
       }
       default: throw new Error(`Unknown event for scroll solvers: ${event}`)
     }

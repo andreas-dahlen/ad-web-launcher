@@ -44,6 +44,6 @@
     "src/styleTokens/",
     "plugins",
     "eslint",
-    "src/test/styleTokens"
+    "src/test/node"
   ]
 }

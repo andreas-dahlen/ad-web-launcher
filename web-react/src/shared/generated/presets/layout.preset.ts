@@ -7,7 +7,6 @@
   export const layoutPreset = {
     center: css.center,
   column: css.column,
-  layout: css.layout,
   row: css.row,
   settingsPanel: css.settingsPanel,
   } as const;

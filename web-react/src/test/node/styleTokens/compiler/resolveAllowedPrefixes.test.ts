@@ -1,7 +1,7 @@
 import { resolveAllowedPrefixes } from '@styleTokens/compiler/resolvers/resolveAllowedPrefixes';
 import type { IssueCollector } from '@styleTokens/compiler/tracking/issueCollector';
 import { describe, expect, it } from 'vitest';
-import { createTestCollector } from '@test/styleTokens/compiler.factory';
+import { createTestCollector } from '@test/node/styleTokens/compiler.factory';
 import type { ValidPrefix } from '@shared/tokenUtils/compiler.types';
 
 

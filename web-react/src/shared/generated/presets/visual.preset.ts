@@ -6,7 +6,6 @@
   
   export const visualPreset = {
     settingsPanel: css.settingsPanel,
-  visual: css.visual,
   } as const;
   
   export type VisualPreset = keyof typeof visualPreset;

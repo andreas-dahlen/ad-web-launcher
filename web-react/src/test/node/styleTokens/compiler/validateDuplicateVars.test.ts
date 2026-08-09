@@ -1,5 +1,5 @@
 import { validateDuplicateVars } from '@styleTokens/compiler/builders/validateDuplicateVars';
-import { createCompilerToken, createCompilerVariable } from '@test/styleTokens/compiler.factory';
+import { createCompilerToken, createCompilerVariable } from '@test/node/styleTokens/compiler.factory';
 import { describe, expect, it } from 'vitest';
 describe('[COMPILER]', () => {
   describe('validateDuplicateVars', () => {

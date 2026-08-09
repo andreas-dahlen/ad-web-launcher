@@ -1,47 +1,44 @@
-import path from "node:path";
-import type { TSESTree, ESLintUtils } from "@typescript-eslint/utils";
+import path from 'node:path'
+import type { Rule } from 'eslint'
 
-const rule: ESLintUtils.RuleModule<
-  "forbidden",
-  []
-> = {
+const rule: Rule.RuleModule = {
   meta: {
-    type: "problem",
+    type: 'problem',
     docs: {
-      description: "Prevent importing __TEST_ONLY_API outside tests",
+      description: 'Prevent importing __TEST_ONLY_API outside tests'
     },
     schema: [],
     messages: {
-      forbidden: "__TEST_ONLY_API is only available in test files",
-    },
+      forbidden: '__TEST_ONLY_API is only available in test files'
+    }
   },
 
   create(context) {
-    const filename = context.filename.split(path.sep).join("/");
+    const filename = context.filename.split(path.sep).join('/')
 
-    const isTestFile = filename.includes("/src/test/");
+    const isTestFile = filename.includes('/src/test/')
 
     if (isTestFile) {
-      return {};
+      return {}
     }
 
     return {
-      ImportDeclaration(node: TSESTree.ImportDeclaration) {
+      ImportDeclaration(node) {
         for (const specifier of node.specifiers) {
           if (
-            specifier.type === "ImportSpecifier" &&
-            specifier.imported.type === "Identifier" &&
-            specifier.imported.name === "__TEST_ONLY_API"
+            specifier.type === 'ImportSpecifier' &&
+            specifier.imported.type === 'Identifier' &&
+            specifier.imported.name === '__TEST_ONLY_API'
           ) {
             context.report({
               node: specifier,
-              messageId: "forbidden",
-            });
+              messageId: 'forbidden'
+            })
           }
         }
-      },
-    };
-  },
-};
+      }
+    }
+  }
+}
 
-export default rule;
+export default rule

@@ -5,7 +5,7 @@
   import css from "../../../blocks/Svg/Svg.module.css";
   
   export const svgPreset = {
-    svg: css.svg,
+  
   } as const;
   
   export type SvgPreset = keyof typeof svgPreset;

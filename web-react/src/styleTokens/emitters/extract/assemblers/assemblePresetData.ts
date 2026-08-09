@@ -3,6 +3,7 @@ import { extractGroupName } from '../../../compiler/resolvers/extractGroupName.t
 import { toCamelCase, toPascalCase } from '../../../../shared/tokenUtils/stringFormaters.ts';
 import type { CssData } from '../../../types/compiler.types.ts';
 
+const NON_PRESET_SUFFIX = 'Util'
 export type PresetFileData = {
   presetName: string
   typeName: string
@@ -30,13 +31,21 @@ export function assemblePresetData(
     cssData.cssPath
   );
 
+  const selectors = cssData.usableSelectors.filter(
+    selector =>
+      selector !== camelName &&
+      !selector.endsWith(NON_PRESET_SUFFIX)
+  )
+
+  if (selectors.length === 0) return null
+
   // make it valid for imports
   cssImport = cssImport.replaceAll("\\", "/");
 
   return {
     presetName,
     typeName,
-    selectors: cssData.usableSelectors,
+    selectors,
     cssImport,
     presetFile
   }

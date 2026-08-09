@@ -7,7 +7,6 @@
   export const scrollPreset = {
     container: css.container,
   knob: css.knob,
-  scroll: css.scroll,
   } as const;
   
   export type ScrollPreset = keyof typeof scrollPreset;

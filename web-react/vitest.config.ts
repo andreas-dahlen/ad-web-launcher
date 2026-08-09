@@ -16,7 +16,7 @@ export default mergeConfig(
               'src/**/*.test.ts',
             ],
             exclude: [
-              'src/test/styleTokens/**',
+              'src/test/node/**',
             ],
             setupFiles: [
               'src/test/setup.utils.ts',
@@ -29,10 +29,10 @@ export default mergeConfig(
             name: 'styleTokens',
             environment: 'node',
             include: [
-              'src/test/styleTokens/**/*.test.ts'
+              'src/test/node/**/*.test.ts'
             ],
             setupFiles: [
-              'src/test/styleTokens/setup.utils.ts',
+              'src/test/node/styleTokens/setup.utils.ts',
             ]
           }
         }

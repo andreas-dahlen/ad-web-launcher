@@ -5,8 +5,7 @@
   import css from "../../../primitives/Carousel/Carousel.module.css";
   
   export const carouselPreset = {
-    carousel: css.carousel,
-  scene: css.scene,
+    scene: css.scene,
   wallpaper: css.wallpaper,
   } as const;
   
