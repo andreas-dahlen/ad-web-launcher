@@ -29,6 +29,8 @@
   },
   "include": [
     "vite.config.ts",
+    "vite.base.ts",
+    "vite.compiler.ts",
     "plugins/**/*.ts",
     "src/styleTokens",
     "src/styleTokens/**/*.ts",

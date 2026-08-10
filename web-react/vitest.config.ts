@@ -25,7 +25,7 @@ export default mergeConfig(
           },
         },
         {
-          extends: true,
+          extends: "./vite.base.ts",
 
           test: {
             name: 'react',

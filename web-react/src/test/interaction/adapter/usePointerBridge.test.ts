@@ -30,9 +30,9 @@ describe('[USE POINTER BRIDGE]', () => {
     }
 
     /*
-     * jsdom does not implement Pointer Capture APIs.
-     * Provide the minimal browser API required by the hook.
-     */
+    * jsdom does not implement Pointer Capture APIs.
+    * Provide the minimal browser API required by the hook.
+    */
     setPointerCapture = vi.fn()
     releasePointerCapture = vi.fn()
     hasPointerCapture = vi.fn(() => true)
@@ -452,8 +452,8 @@ describe('[USE POINTER BRIDGE]', () => {
       unmount()
 
       /*
-       * Re-mounting against the same element should start a fresh gesture.
-       */
+      * Re-mounting against the same element should start a fresh gesture.
+      */
       renderHook(() =>
         usePointerBridge({
           elRef

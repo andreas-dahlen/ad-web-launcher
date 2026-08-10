@@ -44,6 +44,9 @@
     "src/styleTokens/",
     "plugins",
     "eslint",
-    "src/test/node"
+    "src/test/node",
+    "vite.base.ts",
+    "vite.compiler.ts",
+    "vite.config.ts"
   ]
 }
