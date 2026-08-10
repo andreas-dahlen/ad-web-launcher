@@ -17,9 +17,26 @@ export default mergeConfig(
             ],
             exclude: [
               'src/test/node/**',
+              'src/test/react/**'
             ],
             setupFiles: [
               'src/test/setup.utils.ts',
+            ],
+          },
+        },
+        {
+          extends: true,
+
+          test: {
+            name: 'react',
+            environment: 'jsdom',
+
+            include: [
+              'src/test/react/**/*.test.{ts,tsx}',
+            ],
+
+            setupFiles: [
+              'src/test/react/setup.utils.ts',
             ],
           },
         },
@@ -32,7 +49,7 @@ export default mergeConfig(
               'src/test/node/**/*.test.ts'
             ],
             setupFiles: [
-              'src/test/node/styleTokens/setup.utils.ts',
+              'src/test/node/setup.utils.ts',
             ]
           }
         }
