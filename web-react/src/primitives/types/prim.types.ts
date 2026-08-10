@@ -12,13 +12,8 @@ import type { ButtonStyle } from '@shared/generated/tokenModules/button.token.ts
 
 //discriminating unions - capabilities
 export type SnapConfig = //default is false
-  | {
-    useSettingsSnap: true
-    snapX?: never
-    snapY?: never
-  }
-  | {
-    useSettingsSnap?: false
+  {
+    useSettingsSnap?: boolean
     snapX?: number
     snapY?: number
   }

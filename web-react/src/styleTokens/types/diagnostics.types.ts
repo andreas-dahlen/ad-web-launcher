@@ -10,6 +10,7 @@ export type DiagnosticData = {
   processedGroupCount: number
   generatedFiles: GeneratedFiles
   issues: AnalyzedIssueGroup[]
+  omittedPresetFiles: string[]
 }
 
 type IssueContextGroup = {

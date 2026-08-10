@@ -1,5 +1,5 @@
 import { useRef, useEffect } from "react"
-import { useMotion } from "./hooks/useMotion.hook.ts"
+import { useCarouselMotion } from "./hooks/useCarouselMotion.hook.ts"
 import { useItemSizing } from './hooks/useItemSizing.hook.ts'
 import { useCarouselStore } from './store/useCarouselStore.hook.ts'
 import { carouselStore, type NodeId } from './store/carousel.store.ts'
@@ -52,7 +52,7 @@ export default function ContentCarouselPrim({
   const {
     onTransitionEnd,
     styleForRole
-  } = useMotion({
+  } = useCarouselMotion({
     store: { liveOffset, dragging, settling },
     horizontal: axis === "horizontal",
     axisSize,

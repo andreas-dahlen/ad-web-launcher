@@ -102,6 +102,7 @@ describe('[DIAGNOSTICS]', () => {
         mismatchedVariables: [],
         invalidVarDeclarations: [],
         missingCssModules: [],
+        omittedPresetFiles: [],
         processedGroupCount: 0,
         generatedFiles: {
           presets: {
@@ -252,6 +253,9 @@ describe('[DIAGNOSTICS]', () => {
             updated: [],
             skipped: [],
           },
+          extractResult: {
+            omittedPresetFiles: []
+          }
         })),
       } as unknown as CompilerRun
 

@@ -37,9 +37,14 @@ describe('[EMITTERS]', () => {
       )
 
       expect(result).toEqual({
-        presetFiles: [],
-        tokenFiles: [],
-        metadata: [],
+        outputData: {
+          presetFiles: [],
+          tokenFiles: [],
+          metadata: [],
+        },
+        extractResult: {
+          omittedPresetFiles: [],
+        },
       })
     })
 
@@ -91,9 +96,14 @@ describe('[EMITTERS]', () => {
       )
 
       expect(result).toEqual({
-        metadata: [metadata],
-        tokenFiles: [tokenData],
-        presetFiles: [presetData],
+        outputData: {
+          metadata: [metadata],
+          tokenFiles: [tokenData],
+          presetFiles: [presetData],
+        },
+        extractResult: {
+          omittedPresetFiles: [],
+        },
       })
 
       expect(assembleMetadata)
@@ -101,6 +111,67 @@ describe('[EMITTERS]', () => {
 
       expect(assembleTokenData)
         .toHaveBeenCalledWith(group)
+
+      expect(assemblePresetData)
+        .toHaveBeenCalledWith(cssData)
+    })
+
+    it('records omitted preset files when preset data is not assembled', () => {
+      const group = {
+        groupPath: '/tokens/button',
+      }
+
+      const cssData = {
+        cssPath: '/styles/button.css',
+        groupPath: '/tokens/button',
+      }
+
+      const metadata = {
+        name: 'button',
+      }
+
+      const tokenData = {
+        name: 'button',
+      }
+
+      const cache = {
+        getGroupByGroupPath: vi.fn()
+          .mockReturnValue(group),
+      }
+
+      const run = {
+        getProcessedGroupPaths: vi.fn()
+          .mockReturnValue(['/tokens/button']),
+        getCssData: vi.fn()
+          .mockReturnValue(cssData),
+      }
+
+      vi.mocked(assembleMetadata)
+        .mockReturnValue(metadata as never)
+
+      vi.mocked(assembleTokenData)
+        .mockReturnValue(tokenData as never)
+
+      vi.mocked(assemblePresetData)
+        .mockReturnValue(null)
+
+      const result = extractData(
+        cache as never,
+        run as never,
+      )
+
+      expect(result).toEqual({
+        outputData: {
+          metadata: [metadata],
+          tokenFiles: [tokenData],
+          presetFiles: [],
+        },
+        extractResult: {
+          omittedPresetFiles: [
+            '/styles/button.css',
+          ],
+        },
+      })
 
       expect(assemblePresetData)
         .toHaveBeenCalledWith(cssData)
@@ -143,9 +214,14 @@ describe('[EMITTERS]', () => {
       )
 
       expect(result).toEqual({
-        metadata: [metadata],
-        tokenFiles: [tokenData],
-        presetFiles: [],
+        outputData: {
+          metadata: [metadata],
+          tokenFiles: [tokenData],
+          presetFiles: [],
+        },
+        extractResult: {
+          omittedPresetFiles: [],
+        },
       })
 
       expect(assemblePresetData)
@@ -181,9 +257,14 @@ describe('[EMITTERS]', () => {
       )
 
       expect(result).toEqual({
-        metadata: [],
-        tokenFiles: [],
-        presetFiles: [],
+        outputData: {
+          presetFiles: [],
+          tokenFiles: [],
+          metadata: [],
+        },
+        extractResult: {
+          omittedPresetFiles: [],
+        },
       })
     })
   })

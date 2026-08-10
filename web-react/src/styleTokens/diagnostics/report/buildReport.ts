@@ -8,6 +8,7 @@ import { fileSection } from './sections/fileSection.ts';
 import { headerSection } from './sections/headerSection.ts';
 import { issuesSection } from './sections/issuesSection.ts';
 import { invalidVarSection } from './sections/invalidVarSection.ts';
+import { omittedPresetSection } from './sections/omittedPresetSection.ts';
 
 export type ReportSection = {
   title: string;
@@ -27,6 +28,8 @@ export function buildReport(data: DiagnosticData): ReportSection[] {
 
   const preset = presetSection(data.generatedFiles.presets)
   if (preset) sections.push(preset)
+  const omittedPreset = omittedPresetSection(data.omittedPresetFiles)
+  if (omittedPreset) sections.push(omittedPreset)
   const token = tokenSection(data.generatedFiles.tokens)
   if (token) sections.push(token)
 

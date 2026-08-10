@@ -1,5 +1,5 @@
 import { testBuildDesc } from '../testAPI'
-import { createMetaByType } from '@test/builders/domAndMeta.factory'
+import { createMetaByType } from '@test/app/interaction/builders/domAndMeta.factory'
 import { resetInteractionStores } from '@test/utils/storeReset.utils'
 
 import { seedStoreByType } from '@test/utils/storeSeed.utils'

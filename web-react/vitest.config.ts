@@ -20,7 +20,7 @@ export default mergeConfig(
               'src/test/react/**'
             ],
             setupFiles: [
-              'src/test/setup.utils.ts',
+              'src/test/app/setup.utils.ts',
             ],
           },
         },

@@ -83,7 +83,12 @@ export type ProcessedToken = {
   processed: boolean
 }
 
+export type ExtractResult = {
+  omittedPresetFiles: string[]
+}
+
 export type EmitResult = {
+  extractResult: ExtractResult
   writeResult: FileResult
   patchResult: FileResult
 }
@@ -91,12 +96,3 @@ export type FileResult = {
   updated: string[]
   skipped: string[]
 }
-
-// export type WriteResult = {
-//   written: string[]
-//   skipped: string[]
-// }
-// export type PatchResult = {
-//   written: string[]
-//   skipped: string[]
-// }

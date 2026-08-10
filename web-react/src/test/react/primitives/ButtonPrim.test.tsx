@@ -4,6 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import ButtonPrim from '@primitives/Button/ButtonPrim'
 import { usePointerBridge } from '@interaction/adapter/usePointerBridge.hook'
+import type { EventType } from '@shared/types/core.types'
 
 vi.mock('@interaction/adapter/usePointerBridge.hook', () => ({
   usePointerBridge: vi.fn()
@@ -199,7 +200,7 @@ describe('[BUTTON PRIM]', () => {
       const { onReaction } = getBridgeOptions()
 
       const reaction = new CustomEvent('reaction', {
-        detail: 'pressRelease'
+        detail: 'pressRelease' as EventType
       })
 
       onReaction?.(reaction)
@@ -220,7 +221,7 @@ describe('[BUTTON PRIM]', () => {
       const { onReaction } = getBridgeOptions()
 
       const reaction = new CustomEvent('reaction', {
-        detail: 'press'
+        detail: 'press' as EventType
       })
 
       onReaction?.(reaction)
@@ -234,7 +235,7 @@ describe('[BUTTON PRIM]', () => {
       const { onReaction } = getBridgeOptions()
 
       const reaction = new CustomEvent('reaction', {
-        detail: 'pressRelease'
+        detail: 'pressRelease' as EventType
       })
 
       expect(() => {

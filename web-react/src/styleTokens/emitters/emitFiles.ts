@@ -9,16 +9,16 @@ import { patchFiles } from './write/patchFiles.ts';
 
 export function emitFiles(cache: TokenCache, run: CompilerRun): EmitResult {
 
+  const { extractResult, outputData } = extractData(cache, run)
 
-  const data = extractData(cache, run)
-
-  const { files, patches } = generateOutput(data)
+  const { files, patches } = generateOutput(outputData)
 
   const patchResult = patchFiles(patches)
 
   const writeResult = writeFiles(files)
 
   return {
+    extractResult,
     writeResult,
     patchResult
   }

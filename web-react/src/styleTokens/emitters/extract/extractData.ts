@@ -6,6 +6,7 @@ import type { TokenGroupFileData } from './assemblers/assembleTokenData.ts'
 import { assembleTokenData } from './assemblers/assembleTokenData.ts'
 import { assemblePresetData } from './assemblers/assemblePresetData.ts'
 import { assembleMetadata, type GroupMetadata } from './assemblers/assembleMetadata.ts'
+import type { ExtractResult } from '@styleTokens/types/compiler.types.ts'
 
 
 export type EmitData = {
@@ -13,15 +14,23 @@ export type EmitData = {
   tokenFiles: TokenGroupFileData[]
   metadata: GroupMetadata[]
 }
+
+export type ExtractData = {
+  outputData: EmitData
+  extractResult: ExtractResult
+}
+
 export function extractData(
   cache: TokenCache,
   run: CompilerRun,
   //tracker!?
-): EmitData {
+): ExtractData {
 
   const presetFiles: PresetFileData[] = []
   const tokenFiles: TokenGroupFileData[] = []
   const metadata: GroupMetadata[] = []
+
+  const omittedPresetFiles = new Set<string>()
 
   /*---------------------------------------
           NON-Group specific
@@ -52,14 +61,18 @@ export function extractData(
     -------------------------------------*/
 
     const presetResult = assemblePresetData(cssData)
-    if (presetResult) presetFiles.push(presetResult)
-
-
+    if (presetResult) { presetFiles.push(presetResult) }
+    else { omittedPresetFiles.add(cssData.cssPath) }
   }
 
   return {
-    presetFiles,
-    tokenFiles,
-    metadata
+    outputData: {
+      presetFiles,
+      tokenFiles,
+      metadata
+    },
+    extractResult: {
+      omittedPresetFiles: [...omittedPresetFiles]
+    }
   }
 }

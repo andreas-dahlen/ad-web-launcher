@@ -33,6 +33,10 @@ export function buildData(
 
   const generatedFiles = analyzeWriteResult(emitResult?.writeResult)
 
+  //patchResult currently unused...
+
+  const omittedPresetFiles =
+    emitResult?.extractResult.omittedPresetFiles ?? []
 
   const groups = resolveProcessedGroups(cache, run)
 
@@ -71,6 +75,7 @@ export function buildData(
     missingCssModules,
     processedGroupCount,
     generatedFiles,
-    issues
+    issues,
+    omittedPresetFiles
   }
 }
