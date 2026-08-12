@@ -4,7 +4,7 @@ import type { FormatResult } from '../generateOutput.ts';
 
 
 
-export function formatMetaFile(groups: GroupMetadata[]): FormatResult[] {
+export function formatMetaFile(groups: GroupMetadata[]): FormatResult {
   const metadataPath = path.resolve("./src/shared/generated/metadata/metadata.json")
 
   const content = JSON.stringify(
@@ -30,10 +30,8 @@ export function formatMetaFile(groups: GroupMetadata[]): FormatResult[] {
     2,
   )
 
-  return [
-    {
-      filePath: metadataPath,
-      content,
-    },
-  ]
+  return {
+    filePath: metadataPath,
+    content,
+  }
 }

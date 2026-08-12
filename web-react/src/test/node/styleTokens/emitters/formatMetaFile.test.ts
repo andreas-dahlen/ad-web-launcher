@@ -23,8 +23,8 @@ describe('[EMITTER]', () => {
     it('returns a metadata file', () => {
       const result = formatMetaFile([])
 
-      expect(result).toHaveLength(1)
-      expect(result[0]).toMatchObject({
+      expect(result).toBeDefined()
+      expect(result).toMatchObject({
         filePath: expect.stringContaining(
           'src/shared/generated/metadata/metadata.json',
         ),
@@ -36,7 +36,7 @@ describe('[EMITTER]', () => {
         createGroup(),
       ])
 
-      const content = JSON.parse(result[0].content)
+      const content = JSON.parse(result.content)
 
       expect(content.groups).toEqual({
         button: {
@@ -54,7 +54,7 @@ describe('[EMITTER]', () => {
         createGroup(),
       ])
 
-      const content = JSON.parse(result[0].content)
+      const content = JSON.parse(result.content)
 
       expect(content.files).toEqual({
         '/components/Button/Button.module.css': 'button',
@@ -76,7 +76,7 @@ describe('[EMITTER]', () => {
         }),
       ])
 
-      const content = JSON.parse(result[0].content)
+      const content = JSON.parse(result.content)
 
       expect(content.groups).toEqual({
         button: {
@@ -108,14 +108,14 @@ describe('[EMITTER]', () => {
         createGroup(),
       ])
 
-      expect(result[0].content).toContain('\n  "groups":')
-      expect(result[0].content).toContain('\n  "files":')
+      expect(result.content).toContain('\n  "groups":')
+      expect(result.content).toContain('\n  "files":')
     })
 
     it('returns valid JSON for no groups', () => {
       const result = formatMetaFile([])
 
-      expect(JSON.parse(result[0].content)).toEqual({
+      expect(JSON.parse(result.content)).toEqual({
         groups: {},
         files: {},
       })

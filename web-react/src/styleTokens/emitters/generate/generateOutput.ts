@@ -3,6 +3,7 @@ import { formatTokenFiles } from './format/formatTokenFiles.ts';
 import { formatPresetFiles } from './format/formatPresetFiles.ts';
 import { formatMetaFile } from './format/formatMetaFile.ts';
 import { formatTokenPatch } from './format/formatTokenPatch.ts';
+import { formatLspFile } from './format/formatLspFile.ts';
 
 export type FormatResult = {
   filePath: string;
@@ -21,7 +22,8 @@ export function generateOutput(data: EmitData): GeneratedOutput {
     files: [
       ...formatPresetFiles(data.presetFiles),
       ...formatTokenFiles(data.tokenFiles),
-      ...formatMetaFile(data.metadata)
+      formatMetaFile(data.metadata),
+      formatLspFile(data.tokenFiles)
     ],
     patches: [
       ...formatTokenPatch(data.metadata)

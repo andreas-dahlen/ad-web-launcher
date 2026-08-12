@@ -11,7 +11,8 @@ export function createRawVariable(
 }
 export const compilerVariable_DEFAULT = {
   key: "bg",
-  name: "background",
+  name: "backGround",
+  cssName: "back-ground",
   values: { f: "black" },
   effectiveAllowed: ["o", "p", "f"]
 } satisfies CompilerVariable

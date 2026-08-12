@@ -19,12 +19,12 @@ function createTokenGroup(
         variables: [
           {
             key: 'bg',
-            name: 'background',
-            allowed: ['f'],
+            cssName: 'back-ground',
+            allowed: ['f']
           },
           {
             key: 'color',
-            name: 'color',
+            cssName: 'color',
             allowed: ['p', 'f'],
           },
         ],
@@ -98,7 +98,7 @@ describe('[EMITTER]', () => {
       ])
 
       expect(result.content).toContain(
-        'bg: { name: "background", allowed: ["f"]}',
+        'bg: { name: "back-ground", allowed: ["f"]}',
       )
 
       expect(result.content).toContain(
@@ -125,7 +125,7 @@ describe('[EMITTER]', () => {
               variables: [
                 {
                   key: 'bg',
-                  name: 'background',
+                  cssName: 'back-ground',
                   allowed: ['f'],
                 },
               ],
@@ -135,7 +135,7 @@ describe('[EMITTER]', () => {
               variables: [
                 {
                   key: 'bg',
-                  name: 'background',
+                  cssName: 'back-ground',
                   allowed: ['s', 'f'],
                 },
               ],
@@ -153,7 +153,7 @@ describe('[EMITTER]', () => {
       )
 
       expect(result.content).toContain(
-        'bg: { name: "background", allowed: ["s","f"]}',
+        'bg: { name: "back-ground", allowed: ["s","f"]}',
       )
     })
 

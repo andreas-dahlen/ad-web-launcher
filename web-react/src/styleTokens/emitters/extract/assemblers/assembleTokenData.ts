@@ -16,9 +16,10 @@ type TokenData = {
   variables: VarData[];
 }
 type VarData = {
-  name: string
+  cssName: string
   key: string
   allowed: ValidPrefix[]
+  values: Partial<Record<ValidPrefix, string>>
 }
 
 export function assembleTokenData(group: CssTokenGroup): TokenGroupFileData {
@@ -38,9 +39,10 @@ export function assembleTokenData(group: CssTokenGroup): TokenGroupFileData {
   for (const token of group.tokens) {
     const variables = token.vars.map((v) => {
       return {
-        name: v.name ?? v.key,
+        cssName: v.cssName,
         key: v.key,
-        allowed: v.effectiveAllowed
+        allowed: v.effectiveAllowed,
+        values: v.values
       }
     })
     tokens.push({ variables, infix: token.infix })

@@ -16,49 +16,50 @@ export type WalkModuleResult = {
 
 //raw tokens
 export type RawToken = {
-  component: string;
-  infix?: string;
-  alwaysAllowed?: ValidPrefix[];
-  vars: Record<string, RawVariable>;
-};
+  component: string
+  infix?: string
+  alwaysAllowed?: ValidPrefix[]
+  vars: Record<string, RawVariable>
+}
 
 export type RawVariable = {
-  name?: string;
-  allowed?: ValidPrefix[];
-  exclude?: ValidPrefix[];
-  values?: Partial<Record<ValidPrefix, string>>;
+  name?: string
+  allowed?: ValidPrefix[]
+  exclude?: ValidPrefix[]
+  values?: Partial<Record<ValidPrefix, string>>
 }
 
 
 //resolved Token
 export type CompilerToken = {
-  name: string;
-  tokenPath: string;
-  infix: string;
-  vars: CompilerVariable[];
+  name: string
+  tokenPath: string
+  infix: string
+  vars: CompilerVariable[]
 };
 export type CompilerVariable = {
-  key: string;
-  name: string;
-  values: Partial<Record<ValidPrefix, string>>;
+  key: string
+  name: string
+  cssName: string
+  values: Partial<Record<ValidPrefix, string>>
   effectiveAllowed: ValidPrefix[]
 };
 export type TokenResult = {
-  token: CompilerToken;
+  token: CompilerToken
   issues: IssueGroup[]
 }
 export interface TokenGroup {
-  groupPath: string;
-  cssPath?: string;
-  tokens: CompilerToken[];
+  groupPath: string
+  cssPath?: string
+  tokens: CompilerToken[]
 }
 export type TokenGroupResult = {
-  group: TokenGroup;
-  issues: IssueGroup[];
+  group: TokenGroup
+  issues: IssueGroup[]
 }
 export type TokenGroupsResult = {
-  groups: TokenGroup[];
-  issues: IssueGroup[];
+  groups: TokenGroup[]
+  issues: IssueGroup[]
 }
 
 //CSS path is garanteed.

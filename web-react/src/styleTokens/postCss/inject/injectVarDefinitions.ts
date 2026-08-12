@@ -8,7 +8,7 @@ export function injectVarDefinitions(
   token: CompilerToken,
   variable: CompilerVariable,
 ): void {
-  const { name, effectiveAllowed, values } = variable;
+  const { cssName, effectiveAllowed, values } = variable;
 
   for (const prefix of prefixPriority) {
     if (!effectiveAllowed.includes(prefix)) continue;
@@ -17,12 +17,12 @@ export function injectVarDefinitions(
 
     if (!value) continue;
 
-    const cssVar = toCssVar(prefix, token.infix, name);
+    const cssVar = toCssVar(prefix, token.infix, cssName);
 
     rule.append({
       prop: cssVar,
       value: isValidPrefix(value)
-        ? `var(${toCssVar(value, token.infix, name)})`
+        ? `var(${toCssVar(value, token.infix, cssName)})`
         : normalizeCssValue(value),
     });
   }

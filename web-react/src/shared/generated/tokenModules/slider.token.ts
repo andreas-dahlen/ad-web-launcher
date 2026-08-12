@@ -15,26 +15,26 @@ export const sliderStyle = {
           bg: { name: "bg", allowed: ["o","p","f"]},
          opacity: { name: "opacity", allowed: ["o","p","f"]},
          radius: { name: "radius", allowed: ["o","p","f"]},
-         mainSize: { name: "mainSize", allowed: ["o","p","f"]},
-         crossSize: { name: "crossSize", allowed: ["o","p","f"]} 
+         mainSize: { name: "main-size", allowed: ["o","p","f"]},
+         crossSize: { name: "cross-size", allowed: ["o","p","f"]} 
 },
    thumb: {
           bg: { name: "bg", allowed: ["o","s","p","f"]},
          opacity: { name: "opacity", allowed: ["o","p","f"]},
          radius: { name: "radius", allowed: ["o","p","f"]},
          border: { name: "border", allowed: ["o","p","f"]},
-         mainSize: { name: "mainSize", allowed: ["o","p","f"]},
-         crossSize: { name: "crossSize", allowed: ["o","p","f"]},
-         stateSwipingBg: { name: "stateSwipingBg", allowed: ["o","s","p","f"]},
-         statePressingBg: { name: "statePressingBg", allowed: ["o","s","p","f"]},
-         stateCommittedBg: { name: "stateCommittedBg", allowed: ["o","s","p","f"]} 
+         mainSize: { name: "main-size", allowed: ["o","p","f"]},
+         crossSize: { name: "cross-size", allowed: ["o","p","f"]},
+         stateSwipingBg: { name: "state-swiping-bg", allowed: ["o","s","p","f"]},
+         statePressingBg: { name: "state-pressing-bg", allowed: ["o","s","p","f"]},
+         stateCommittedBg: { name: "state-committed-bg", allowed: ["o","s","p","f"]} 
 },
    track: {
           bg: { name: "bg", allowed: ["o","p","f"]},
          opacity: { name: "opacity", allowed: ["o","p","f"]},
          radius: { name: "radius", allowed: ["o","p","f"]},
-         mainSize: { name: "mainSize", allowed: ["o","p","f"]},
-         crossSize: { name: "crossSize", allowed: ["o","p","f"]} 
+         mainSize: { name: "main-size", allowed: ["o","p","f"]},
+         crossSize: { name: "cross-size", allowed: ["o","p","f"]} 
 }
   }
 } as const satisfies TokenComponent;

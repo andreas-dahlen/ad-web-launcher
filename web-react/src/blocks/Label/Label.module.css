@@ -1,6 +1,9 @@
 /* 
 file://wsl.localhost/Ubuntu/home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/label.jsonc
 */
+:root {
+  --f-bg-test: blue;
+}
 
 .bottom {
   top: var(--final-label-offset-y);
@@ -12,6 +15,7 @@ file://wsl.localhost/Ubuntu/home/david/repos/ad-web-launcher/web-react/src/style
 
 .left {
   right: var(--final-label-offset-x);
+
 }
 
 .right {
@@ -26,4 +30,8 @@ file://wsl.localhost/Ubuntu/home/david/repos/ad-web-launcher/web-react/src/style
   position: var(--final-label-position);
   text-align: var(--final-label-align);
   color: var(--final-label-col);
+}
+
+.test_Util {
+  --x-test: initial;
 }

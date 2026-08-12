@@ -1,6 +1,6 @@
 import type { ValidPrefix } from '../../../shared/tokenUtils/compiler.types.ts'
 import type { CompilerVariable, RawVariable } from '../../types/compiler.types.ts'
-import { prefixLeadingNumber, removeInvalidCharacters, toCamelCase, escapeReservedWord, removeWhitespace } from '../../../shared/tokenUtils/stringFormaters.ts'
+import { prefixLeadingNumber, removeInvalidCharacters, toCamelCase, escapeReservedWord, removeWhitespace, toKebab } from '../../../shared/tokenUtils/stringFormaters.ts'
 import { createNullIssueCollector, type IssueCollector } from '../tracking/issueCollector.ts'
 import { resolveAllowedPrefixes } from '../resolvers/resolveAllowedPrefixes.ts'
 
@@ -59,15 +59,13 @@ export const parseToken: ParseToken = {
     const keyResult = parseToken.identifier(key, collector)
 
     collector.editScope({ value: rawVar.name, context: "variable name" })
-    let name = rawVar.name
-    if (rawVar.name) {
-      const slugName = removeWhitespace(rawVar.name)
-      if (slugName !== rawVar.name) {
-        collector.set({ reason: "removed whitespace", after: slugName })
-        name = slugName
-      }
-    }
-    name ||= keyResult.name
+
+    const nameResult = rawVar.name
+      ? parseToken.identifier(rawVar.name, collector)
+      : keyResult
+
+    const cssName = toKebab(nameResult.name)
+
     const allowed = rawVar.allowed ?? []
     const exclude = rawVar.exclude ?? []
     const prefixes = resolveAllowedPrefixes(allowed, alwaysAllowed, exclude, collector)
@@ -75,10 +73,11 @@ export const parseToken: ParseToken = {
     return {
       variable: {
         key: keyResult.name,
-        name,
+        name: nameResult.name,
+        cssName,
         effectiveAllowed: prefixes.effectiveAllowed,
         values: parseToken.values(rawVar.values, collector)
-      }
+      } satisfies CompilerVariable
     }
   },
 

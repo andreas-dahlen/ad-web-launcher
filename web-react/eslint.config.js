@@ -13,7 +13,7 @@ import { defineConfig, globalIgnores } from 'eslint/config'
 export default defineConfig([
   ...jsonSchemaValidator.configs.base,
 
-  globalIgnores(['dist', 'node_modules', '**/*.css', '**/*.svg']),
+  globalIgnores(['dist', 'node_modules', '**/*.css', '**/*.svg', '**/*.generated.ts']),
 
   {
     plugins: {

@@ -11,7 +11,7 @@ export function analyzeVariableUsage(cssData: CssData, group: CssTokenGroup): Va
   for (const token of group.tokens) {
     const declared = new Set(
       token.vars.map(variable =>
-        toCssVar("final", token.infix, variable.name)
+        toCssVar("final", token.infix, variable.cssName)
       )
     );
 

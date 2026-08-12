@@ -15,7 +15,7 @@ export function formatTokenFiles(tokenGroupData: TokenGroupFileData[]): FormatRe
     for (const token of entry.tokens) {
 
       const varsRaw = token.variables.map((v) => {
-        return `         ${v.key}: { name: "${v.name}", allowed: [${v.allowed.map((a) => `"${a}"`).join(",")}]}`
+        return `         ${v.key}: { name: "${v.cssName}", allowed: [${v.allowed.map((a) => `"${a}"`).join(",")}]}`
       }).join(",\n")
 
 

@@ -6,16 +6,16 @@ export function injectCascade(
   rule: Rule,
   token: CompilerToken,
   variable: CompilerVariable) {
-  const { name, effectiveAllowed } = variable;
+  const { cssName, effectiveAllowed } = variable;
 
   const chain = effectiveAllowed.reduceRight(
     (acc, prefix) =>
-      `var(${toCssVar(prefix, token.infix, name)}${acc ? `, ${acc}` : ""})`,
+      `var(${toCssVar(prefix, token.infix, cssName)}${acc ? `, ${acc}` : ""})`,
     ""
   );
 
   rule.append({
-    prop: toCssVar("final", token.infix, name),
+    prop: toCssVar("final", token.infix, cssName),
     value: chain
   })
 }

@@ -22,7 +22,8 @@ function createGroup(
         vars: [
           {
             key: 'bg',
-            name: 'background',
+            name: 'backGround',
+            cssName: 'back-ground',
             values: {},
             effectiveAllowed: ['f'],
           },
@@ -173,7 +174,7 @@ describe('[DIAGNOSTICS]', () => {
           '--final-button-unknown',
         ],
         declaredVariables: [
-          '--x-button-background',
+          '--x-button-back-ground',
         ],
       })
 
@@ -205,7 +206,7 @@ describe('[DIAGNOSTICS]', () => {
           name: 'button',
           infix: 'button',
           missing: ['--final-button-unknown'],
-          unused: ['--final-button-background'],
+          unused: ['--final-button-back-ground'],
         },
       ])
 
@@ -213,7 +214,7 @@ describe('[DIAGNOSTICS]', () => {
         {
           name: 'button',
           infix: 'button',
-          invalid: ['--x-button-background'],
+          invalid: ['--x-button-back-ground'],
         },
       ])
     })

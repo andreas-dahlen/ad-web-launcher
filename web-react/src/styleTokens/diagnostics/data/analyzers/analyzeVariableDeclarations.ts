@@ -16,13 +16,13 @@ export function analyzeVariableDeclarations(cssData: CssData, group: CssTokenGro
 
       const allowed = new Set(
         variable.effectiveAllowed.map(prefix =>
-          toCssVar(prefix, token.infix, variable.name)
+          toCssVar(prefix, token.infix, variable.cssName)
         )
       )
 
       for (const cssVar of found) {
         if (
-          cssVar.includes(`-${token.infix}-${variable.name}`) &&
+          cssVar.includes(`-${token.infix}-${variable.cssName}`) &&
           !allowed.has(cssVar)
         ) {
           invalid.push(cssVar);

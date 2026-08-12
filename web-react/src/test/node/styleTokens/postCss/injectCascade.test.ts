@@ -38,6 +38,7 @@ function createVariable(
   return {
     key: 'bg',
     name: 'background',
+    cssName: 'back-ground',
     values: {},
     effectiveAllowed: ['f'],
     ...overrides,
@@ -68,11 +69,11 @@ describe('[POSTCSS]', () => {
       const declaration = getLastDeclaration(rule)
 
       expect(declaration.prop).toBe(
-        '--final-button-background',
+        '--final-button-back-ground',
       )
 
       expect(declaration.value).toBe(
-        'var(--f-button-background)',
+        'var(--f-button-back-ground)',
       )
     })
 
@@ -88,11 +89,11 @@ describe('[POSTCSS]', () => {
       const declaration = getLastDeclaration(rule)
 
       expect(declaration.prop).toBe(
-        '--final-button-background',
+        '--final-button-back-ground',
       )
 
       expect(declaration.value).toBe(
-        'var(--p-button-background, var(--f-button-background))',
+        'var(--p-button-back-ground, var(--f-button-back-ground))',
       )
     })
 
@@ -101,7 +102,8 @@ describe('[POSTCSS]', () => {
       const token = createToken()
       const variable = createVariable({
         key: 'bg',
-        name: 'background',
+        name: 'backGround',
+        cssName: 'back-ground',
         effectiveAllowed: ['f'],
       })
 
@@ -110,11 +112,11 @@ describe('[POSTCSS]', () => {
       const declaration = getLastDeclaration(rule)
 
       expect(declaration.prop).toBe(
-        '--final-button-background',
+        '--final-button-back-ground',
       )
 
       expect(declaration.value).toBe(
-        'var(--f-button-background)',
+        'var(--f-button-back-ground)',
       )
     })
 
@@ -124,7 +126,8 @@ describe('[POSTCSS]', () => {
       token.infix = 'surface'
 
       const variable = createVariable({
-        name: 'border-radius',
+        name: 'borderRadius',
+        cssName: 'border-radius',
         effectiveAllowed: ['f'],
       })
 

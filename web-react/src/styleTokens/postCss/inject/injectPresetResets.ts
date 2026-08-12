@@ -37,10 +37,10 @@ function findVariable(
       continue
     }
 
-    const name = cssVar.slice(`--final-${prefix}`.length)
+    const cssName = cssVar.slice(`--final-${prefix}`.length)
 
     return token.vars.find(
-      variable => variable.name === name,
+      variable => variable.cssName === cssName,
     )
   }
 

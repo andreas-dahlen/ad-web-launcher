@@ -102,20 +102,20 @@ describe('[COMPILER]', () => {
         createTestCollector()
       )
 
-      expect(result.variable.name).toBe('Background');
+      expect(result.variable.name).toBe('background');
       expect(result.variable.key).toBe('bg');
     });
 
     it('removes whitespace from the explicit variable name', () => {
       const result = parseToken.variable(
-        createRawVariable({ name: 'Background Color' }),
+        createRawVariable({ name: 'background Color' }),
         'bg',
         [],
         createTestCollector()
       )
 
       expect(result.variable.name)
-        .toBe('BackgroundColor');
+        .toBe('backgroundColor');
     })
 
     it('resolves effective allowed prefixes', () => {

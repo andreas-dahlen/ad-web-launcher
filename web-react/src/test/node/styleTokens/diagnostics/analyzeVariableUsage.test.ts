@@ -14,6 +14,7 @@ function createVariable(
   return {
     key: 'bg',
     name: 'background',
+    cssName: 'back-ground',
     values: {},
     effectiveAllowed: ['f'],
     ...overrides,
@@ -67,7 +68,7 @@ describe('[DIAGNOSTICS]', () => {
     it('returns no mismatch when usage matches declarations', () => {
       const cssData = createCssData({
         foundFinalVariables: [
-          '--final-button-background',
+          '--final-button-back-ground',
         ],
       })
 
@@ -81,7 +82,7 @@ describe('[DIAGNOSTICS]', () => {
     it('reports a final variable used by CSS but missing from the token', () => {
       const cssData = createCssData({
         foundFinalVariables: [
-          '--final-button-background',
+          '--final-button-back-ground',
           '--final-button-color',
         ],
       })
@@ -117,7 +118,7 @@ describe('[DIAGNOSTICS]', () => {
           infix: 'button',
           missing: [],
           unused: [
-            '--final-button-background',
+            '--final-button-back-ground',
           ],
         },
       ])
@@ -135,11 +136,12 @@ describe('[DIAGNOSTICS]', () => {
           createToken({
             vars: [
               createVariable({
-                name: 'background',
+                name: 'back-ground',
               }),
               createVariable({
                 key: 'border',
                 name: 'border',
+                cssName: 'border'
               }),
             ],
           }),
@@ -156,7 +158,7 @@ describe('[DIAGNOSTICS]', () => {
             '--final-button-color',
           ],
           unused: [
-            '--final-button-background',
+            '--final-button-back-ground',
             '--final-button-border',
           ],
         },
@@ -166,7 +168,7 @@ describe('[DIAGNOSTICS]', () => {
     it('ignores final variables belonging to another token', () => {
       const cssData = createCssData({
         foundFinalVariables: [
-          '--final-surface-background',
+          '--final-surface-back-ground',
         ],
       })
 
@@ -180,7 +182,7 @@ describe('[DIAGNOSTICS]', () => {
           infix: 'button',
           missing: [],
           unused: [
-            '--final-button-background',
+            '--final-button-back-ground',
           ],
         },
       ])
@@ -189,7 +191,7 @@ describe('[DIAGNOSTICS]', () => {
     it('analyzes tokens independently', () => {
       const cssData = createCssData({
         foundFinalVariables: [
-          '--final-button-background',
+          '--final-button-back-ground',
           '--final-surface-color',
         ],
       })
@@ -201,7 +203,8 @@ describe('[DIAGNOSTICS]', () => {
             infix: 'button',
             vars: [
               createVariable({
-                name: 'background',
+                name: 'backGround',
+                cssName: 'back-ground',
               }),
             ],
           }),
@@ -212,6 +215,7 @@ describe('[DIAGNOSTICS]', () => {
               createVariable({
                 key: 'color',
                 name: 'color',
+                cssName: 'color'
               }),
             ],
           }),

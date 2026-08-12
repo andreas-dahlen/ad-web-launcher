@@ -13,7 +13,7 @@ import type { CssVarString } from '@shared/tokenUtils/compiler.types'
 function createRule() {
   const root = postcss.parse(`
     .button {
-      color: var(--final-button-background);
+      color: var(--final-button-back-ground);
     }
   `)
 
@@ -41,6 +41,7 @@ function createVariable(
   return {
     key: 'bg',
     name: 'background',
+    cssName: 'back-ground',
     values: {},
     effectiveAllowed: ['p'],
     ...overrides,
@@ -91,7 +92,7 @@ describe('[POSTCSS]', () => {
 
       const data = createResetData(
         rule,
-        '--final-button-background',
+        '--final-button-back-ground',
       )
 
       injectPresetResets(data, group)
@@ -100,7 +101,7 @@ describe('[POSTCSS]', () => {
       const reset = declarations.at(-1)
 
       expect(reset).toMatchObject({
-        prop: '--p-button-background',
+        prop: '--p-button-back-ground',
         value: 'initial',
       })
     })
@@ -123,7 +124,7 @@ describe('[POSTCSS]', () => {
 
       const data = createResetData(
         rule,
-        '--final-button-background',
+        '--final-button-back-ground',
       )
 
       injectPresetResets(data, group)
@@ -132,7 +133,7 @@ describe('[POSTCSS]', () => {
         getDeclarations(rule).some(
           declaration =>
             declaration.type === 'decl' &&
-            declaration.prop === '--p-button-background',
+            declaration.prop === '--p-button-back-ground',
         ),
       ).toBe(false)
     })
@@ -147,11 +148,13 @@ describe('[POSTCSS]', () => {
             ...token,
             vars: [
               createVariable({
-                name: 'background',
+                name: 'backGround',
+                cssName: 'back-ground'
               }),
               createVariable({
                 key: 'color',
                 name: 'color',
+                cssName: 'color'
               }),
             ],
           },
@@ -160,7 +163,7 @@ describe('[POSTCSS]', () => {
 
       const data = createResetData(
         rule,
-        '--final-button-background',
+        '--final-button-back-ground',
         '--final-button-color',
       )
 
@@ -169,7 +172,7 @@ describe('[POSTCSS]', () => {
       const declarations = getDeclarations(rule)
 
       expect(declarations.at(-2)).toMatchObject({
-        prop: '--p-button-background',
+        prop: '--p-button-back-ground',
         value: 'initial',
       })
 
@@ -185,7 +188,7 @@ describe('[POSTCSS]', () => {
 
       const data = createResetData(
         rule,
-        '--final-button-background',
+        '--final-button-back-ground',
       )
 
       injectPresetResets(data, group)
@@ -200,7 +203,8 @@ describe('[POSTCSS]', () => {
       token.infix = 'surface'
 
       const variable = createVariable({
-        name: 'border-radius',
+        name: 'borderRadius',
+        cssName: 'border-radius'
       })
 
       const group = createGroup({
@@ -233,7 +237,8 @@ describe('[POSTCSS]', () => {
       const token = createToken()
       const variable = createVariable({
         key: 'bg',
-        name: 'background',
+        name: 'backGround',
+        cssName: 'back-ground'
       })
 
       const group = createGroup({
@@ -247,7 +252,7 @@ describe('[POSTCSS]', () => {
 
       const data = createResetData(
         rule,
-        '--final-button-background',
+        '--final-button-back-ground',
       )
 
       injectPresetResets(data, group)
@@ -255,7 +260,7 @@ describe('[POSTCSS]', () => {
       const declarations = getDeclarations(rule)
 
       expect(declarations.at(-1)).toMatchObject({
-        prop: '--p-button-background',
+        prop: '--p-button-back-ground',
       })
     })
   })

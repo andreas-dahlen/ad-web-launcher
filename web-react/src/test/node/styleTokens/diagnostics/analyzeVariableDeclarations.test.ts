@@ -13,7 +13,8 @@ function createVariable(
 ): CompilerVariable {
   return {
     key: 'bg',
-    name: 'background',
+    name: 'backGround',
+    cssName: 'back-ground',
     values: {},
     effectiveAllowed: ['f'],
     ...overrides,
@@ -67,7 +68,7 @@ describe('[DIAGNOSTICS]', () => {
     it('ignores declarations with an allowed prefix', () => {
       const cssData = createCssData({
         declaredVariables: [
-          '--f-button-background',
+          '--f-button-back-ground',
         ],
       })
 
@@ -81,7 +82,7 @@ describe('[DIAGNOSTICS]', () => {
     it('reports declarations with a disallowed prefix', () => {
       const cssData = createCssData({
         declaredVariables: [
-          '--p-button-background',
+          '--p-button-back-ground',
         ],
       })
 
@@ -94,7 +95,7 @@ describe('[DIAGNOSTICS]', () => {
           name: 'Button',
           infix: 'button',
           invalid: [
-            '--p-button-background',
+            '--p-button-back-ground',
           ],
         },
       ])
@@ -103,7 +104,7 @@ describe('[DIAGNOSTICS]', () => {
     it('ignores unrelated declarations', () => {
       const cssData = createCssData({
         declaredVariables: [
-          '--f-other-background',
+          '--f-other-back-ground',
           '--p-surface-color',
           '--random-value',
         ],
@@ -119,9 +120,9 @@ describe('[DIAGNOSTICS]', () => {
     it('reports multiple invalid declarations for one token', () => {
       const cssData = createCssData({
         declaredVariables: [
-          '--p-button-background',
-          '--m-button-background',
-          '--s-button-background',
+          '--p-button-back-ground',
+          '--m-button-back-ground',
+          '--s-button-back-ground',
         ],
       })
 
@@ -134,9 +135,9 @@ describe('[DIAGNOSTICS]', () => {
           name: 'Button',
           infix: 'button',
           invalid: [
-            '--p-button-background',
-            '--m-button-background',
-            '--s-button-background',
+            '--p-button-back-ground',
+            '--m-button-back-ground',
+            '--s-button-back-ground',
           ],
         },
       ])
@@ -145,9 +146,9 @@ describe('[DIAGNOSTICS]', () => {
     it('allows multiple configured prefixes', () => {
       const cssData = createCssData({
         declaredVariables: [
-          '--f-button-background',
-          '--p-button-background',
-          '--m-button-background',
+          '--f-button-back-ground',
+          '--p-button-back-ground',
+          '--m-button-back-ground',
         ],
       })
 
@@ -170,7 +171,7 @@ describe('[DIAGNOSTICS]', () => {
           name: 'Button',
           infix: 'button',
           invalid: [
-            '--m-button-background',
+            '--m-button-back-ground',
           ],
         },
       ])
@@ -179,7 +180,7 @@ describe('[DIAGNOSTICS]', () => {
     it('analyzes variables independently', () => {
       const cssData = createCssData({
         declaredVariables: [
-          '--p-button-background',
+          '--p-button-back-ground',
           '--p-button-color',
         ],
       })
@@ -189,12 +190,14 @@ describe('[DIAGNOSTICS]', () => {
           createToken({
             vars: [
               createVariable({
-                name: 'background',
+                name: 'backGround',
+                cssName: 'back-ground',
                 effectiveAllowed: ['p'],
               }),
               createVariable({
                 key: 'color',
                 name: 'color',
+                cssName: 'color',
                 effectiveAllowed: ['f'],
               }),
             ],

@@ -38,7 +38,8 @@ function createVariable(
 ): CompilerVariable {
   return {
     key: 'bg',
-    name: 'background',
+    name: 'backGround',
+    cssName: 'back-ground',
     values: {},
     effectiveAllowed: ['f'],
     ...overrides,
@@ -69,7 +70,7 @@ describe('[POSTCSS]', () => {
 
       expect(declarations).toHaveLength(2)
       expect(declarations[1]).toMatchObject({
-        prop: '--f-button-background',
+        prop: '--f-button-back-ground',
         value: 'red',
       })
     })
@@ -92,12 +93,12 @@ describe('[POSTCSS]', () => {
       expect(declarations).toHaveLength(3)
 
       expect(declarations[1]).toMatchObject({
-        prop: '--p-button-background',
+        prop: '--p-button-back-ground',
         value: 'blue',
       })
 
       expect(declarations[2]).toMatchObject({
-        prop: '--f-button-background',
+        prop: '--f-button-back-ground',
         value: 'red',
       })
     })
@@ -120,7 +121,7 @@ describe('[POSTCSS]', () => {
       expect(declarations).toHaveLength(2)
 
       expect(declarations[1]).toMatchObject({
-        prop: '--f-button-background',
+        prop: '--f-button-back-ground',
         value: 'red',
       })
     })
@@ -142,7 +143,7 @@ describe('[POSTCSS]', () => {
       expect(declarations).toHaveLength(2)
 
       expect(declarations[1]).toMatchObject({
-        prop: '--f-button-background',
+        prop: '--f-button-back-ground',
         value: 'red',
       })
     })
@@ -162,8 +163,8 @@ describe('[POSTCSS]', () => {
       const declarations = getDeclarations(rule)
 
       expect(declarations[1]).toMatchObject({
-        prop: '--f-button-background',
-        value: 'var(--p-button-background)',
+        prop: '--f-button-back-ground',
+        value: 'var(--p-button-back-ground)',
       })
     })
 
@@ -182,7 +183,7 @@ describe('[POSTCSS]', () => {
       const declarations = getDeclarations(rule)
 
       expect(declarations[1]).toMatchObject({
-        prop: '--f-button-background',
+        prop: '--f-button-back-ground',
         value: normalizeCssValue('  red  '),
       })
     })
@@ -204,7 +205,7 @@ describe('[POSTCSS]', () => {
       const declarations = getDeclarations(rule)
 
       expect(declarations[1]).toMatchObject({
-        prop: '--f-button-background',
+        prop: '--f-button-back-ground',
       })
     })
 
@@ -214,7 +215,8 @@ describe('[POSTCSS]', () => {
       token.infix = 'surface'
 
       const variable = createVariable({
-        name: 'border-radius',
+        name: 'borderRadius',
+        cssName: 'border-radius',
         effectiveAllowed: ['f'],
         values: {
           f: '4px',

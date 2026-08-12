@@ -4,28 +4,34 @@ import { describe, expect, it } from 'vitest';
 describe('[COMPILER]', () => {
   describe('validateDuplicateVars', () => {
     it('does not throw when all variable identities are unique', () => {
-      expect(() =>
-        validateDuplicateVars([
-          createCompilerToken({
-            tokenPath: '/first.jsonc',
-            vars: [
-              createCompilerVariable({
-                name: 'color'
-              })
-            ]
+      const first = createCompilerToken({
+        tokenPath: '/first.jsonc',
+        infix: 'og',
+        vars: [
+          createCompilerVariable({
+            key: 'color',
+            name: 'color',
+            cssName: 'color',
           }),
-          createCompilerToken({
-            tokenPath: '/second.jsonc',
-            infix: "different",
-            vars: [
-              createCompilerVariable({
-                name: 'color'
-              })
-            ]
-          })
-        ])
-      ).not.toThrow();
-    });
+        ],
+      })
+
+      const second = createCompilerToken({
+        tokenPath: '/second.jsonc',
+        infix: 'different',
+        vars: [
+          createCompilerVariable({
+            key: 'color',
+            name: 'color',
+            cssName: 'color',
+          }),
+        ],
+      })
+
+      expect(() =>
+        validateDuplicateVars([first, second])
+      ).not.toThrow()
+    })
 
     it('throws when two variables generate the same identity', () => {
       expect(() =>
@@ -81,10 +87,10 @@ describe('[COMPILER]', () => {
           createCompilerToken({
             vars: [
               createCompilerVariable({
-                name: 'color'
+                cssName: 'color'
               }),
               createCompilerVariable({
-                name: 'another'
+                cssName: 'another'
               })
             ]
           })

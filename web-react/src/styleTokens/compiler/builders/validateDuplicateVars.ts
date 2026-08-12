@@ -5,8 +5,11 @@ export function validateDuplicateVars(tokens: CompilerToken[]) {
   const seenVariables = new Map<string, { tokenPath: string }>();
 
   for (const token of tokens) {
+
     for (const variable of token.vars) {
-      const identity = `${token.name}:${token.infix}:${variable.name}`;
+
+      const identity = `${token.name}:${token.infix}:${variable.cssName}`
+
       if (seenVariables.has(identity)) {
 
         const previous = seenVariables.get(identity);

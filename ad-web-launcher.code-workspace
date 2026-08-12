@@ -10,7 +10,6 @@
 			"**/archive": true,
 			"**/ADWebWallpaper": true,
 			"**/md": true,
-			"**/dist": true,
 			"**/node_modules": true,
 		},
 		"terminal.integrated.cwd": "${workspaceFolder}/web-react",
@@ -42,7 +41,8 @@
 					"ad-web-launcher/web-react/src/shared/tokenUtils/**",
 					"ad-web-launcher/web-react/src/shared/sxCompiler/**",
 					"ad-web-launcher/web-react/eslint/**",
-					"ad-web-launcher/web-react/src/test/**"
+					"ad-web-launcher/web-react/src/test/**",
+					"ad-web-launcher/web-react/src/shared/generated/**"
 				]
 			},
 			{

@@ -52,6 +52,10 @@ file://wsl.localhost/Ubuntu//home/david/repos/ad-web-launcher/web-react/src/styl
   --p-layout-gap: 20px;
 }
 
+.unsued {
+  background: black;
+}
+
 /* .bg { */
 /* --p-layout-display: flex;
   --p-layout-flex-direction: column;

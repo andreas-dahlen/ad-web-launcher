@@ -1,38 +1,20 @@
-# ==================== SETTINGS & VARIABLES ====================
-# Force bash to execute the commands cleanly inside WSL
+# ==================== SETTINGS ====================
+
 set shell := ["bash", "-c"]
 
-# Path to the workspace file relative to this web-react folder
 workspace := "../ad-web-launcher.code-workspace"
 
+# ================== DEFAULT ====================
 
-# ==================== RECIPES ====================
-# Runs help on just
 default: help
+
+# ================== DEVELOPMENT ====================
 
 install:
     npm install
 
 dev:
     npm run dev
-
-test *args:
-    if [ -z "{{args}}" ]; then \
-        npm run test; \
-    else \
-        npm run test -- {{args}}; \
-    fi
-
-lint *args:
-    if [ -z "{{args}}" ]; then npm run lint; else npx eslint {{args}}; fi
-
-eslint: lint
-
-knip:
-    npx knip --no-exit-code
-
-tokens *args:
-    if [ -z "{{args}}" ]; then npx tsx src/styleTokens/compiler/dryLogCompiler.ts; else npx tsx src/styleTokens/compiler/dryLogCompiler.ts {{args}}; fi
 
 build:
     npm run build
@@ -44,15 +26,53 @@ build-prod:
 preview:
     npm run preview
 
-# Open the parent folder's VS Code workspace file from WSL
+# ==================== QUALITY ====================
+
+test *args:
+    if [ -z "{{ args }}" ]; then \
+        npm run test; \
+    else \
+        npm run test -- {{ args }}; \
+    fi
+
+coverage *args:
+    if [ -z "{{ args }}" ]; then \
+        npm run test:coverage; \
+    else \
+        npm run test:coverage -- {{ args }}; \
+    fi
+
+lint *args:
+    if [ -z "{{ args }}" ]; then npm run lint; else npx eslint {{ args }}; fi
+
+eslint: lint
+
+knip:
+    npx knip --no-exit-code
+
+# ============== STYLE TOKENS LOG ==================
+
+tokens *args:
+    if [ -z "{{ args }}" ]; then npx tsx src/styleTokens/compiler/dryLogCompiler.ts; else npx tsx src/styleTokens/compiler/dryLogCompiler.ts {{ args }}; fi
+
+# ==================== EXTENSIONS ====================
+
+deploy-cvc:
+    cd extensions/css-variable-completion && npm run deploy
+    code --install-extension extensions/css-variable-completion/css-variable-completion-0.0.1.vsix
+
+# ==================== WORKSPACE ====================
+
 open:
     @echo "🤖 Opening workspace from WSL..."
-    code {{workspace}}
+    code {{ workspace }}
 
-# Optional: Open the workspace in a totally new VS Code window
 open-new:
     @echo "🤖 Opening workspace in a new window..."
-    code -n {{workspace}}
+    code -n {{ workspace }}
+
+
+# ==================== HELP ====================
 
 help:
     @echo ""
@@ -62,6 +82,6 @@ help:
     @echo "→ just"
     @just --list
     @echo ""
-    @echo "[NPM] legacy script layer"
+    @echo "[NPM] package scripts"
     @echo "→ npm run"
     @npm pkg get scripts

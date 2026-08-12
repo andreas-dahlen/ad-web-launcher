@@ -13,7 +13,7 @@ export const layoutStyle = {
   vars: {   
    layout: {
           display: { name: "display", allowed: ["o","p","f"]},
-         flexDirection: { name: "flexDirection", allowed: ["o","p","f"]},
+         flexDirection: { name: "flex-direction", allowed: ["o","p","f"]},
          justify: { name: "justify", allowed: ["o","p","f"]},
          align: { name: "align", allowed: ["o","p","f"]},
          width: { name: "width", allowed: ["o","p","f"]},
@@ -22,8 +22,8 @@ export const layoutStyle = {
          margin: { name: "margin", allowed: ["o","p","f"]},
          padding: { name: "padding", allowed: ["o","p","f"]},
          inset: { name: "inset", allowed: ["o","p","f"]},
-         minWidth: { name: "minWidth", allowed: ["o","p","f"]},
-         minHeight: { name: "minHeight", allowed: ["o","p","f"]} 
+         minWidth: { name: "min-width", allowed: ["o","p","f"]},
+         minHeight: { name: "min-height", allowed: ["o","p","f"]} 
 }
   }
 } as const satisfies TokenComponent;

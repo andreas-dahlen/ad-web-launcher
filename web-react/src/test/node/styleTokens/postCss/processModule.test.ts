@@ -18,7 +18,8 @@ function createVariable(
 ): CompilerVariable {
   return {
     key: 'bg',
-    name: 'background',
+    name: 'backGround',
+    cssName: 'back-ground',
     values: {
       f: 'red',
     },
@@ -90,7 +91,8 @@ describe('[POSTCSS]', () => {
             tokenPath: '/tokens/surface/default.jsonc',
             vars: [
               createVariable({
-                name: 'border-radius',
+                name: 'borderRadius',
+                cssName: 'border-radius'
               }),
             ],
           }),
@@ -170,15 +172,15 @@ describe('[POSTCSS]', () => {
 
       expect(declarations).toContainEqual(
         expect.objectContaining({
-          prop: '--f-button-background',
+          prop: '--f-button-back-ground',
           value: 'red',
         }),
       )
 
       expect(declarations).toContainEqual(
         expect.objectContaining({
-          prop: '--final-button-background',
-          value: 'var(--f-button-background)',
+          prop: '--final-button-back-ground',
+          value: 'var(--f-button-back-ground)',
         }),
       )
     })
@@ -186,7 +188,7 @@ describe('[POSTCSS]', () => {
     it('injects preset resets when the preset prefix is allowed', () => {
       const root = parseCss(`
         .button {
-          color: var(--final-button-background);
+          color: var(--final-button-back-ground);
         }
       `)
 
@@ -210,7 +212,7 @@ describe('[POSTCSS]', () => {
 
       expect(declarations).toContainEqual(
         expect.objectContaining({
-          prop: '--p-button-background',
+          prop: '--p-button-back-ground',
           value: 'initial',
         }),
       )
@@ -219,7 +221,7 @@ describe('[POSTCSS]', () => {
     it('does not mutate the CSS when mutate is false', () => {
       const root = parseCss(`
         .button {
-          color: var(--final-button-background);
+          color: var(--final-button-back-ground);
         }
       `)
 
@@ -243,15 +245,15 @@ describe('[POSTCSS]', () => {
       ])
 
       expect(result.foundFinalVariables).toEqual([
-        '--final-button-background',
+        '--final-button-back-ground',
       ])
     })
 
     it('returns the analysis collected while processing', () => {
       const root = parseCss(`
         .button {
-          --s-button-background: red;
-          color: var(--final-button-background);
+          --s-button-back-ground: red;
+          color: var(--final-button-back-ground);
         }
 
         .other {
@@ -281,11 +283,11 @@ describe('[POSTCSS]', () => {
       ])
 
       expect(result.declaredVariables).toEqual([
-        '--s-button-background',
+        '--s-button-back-ground',
       ])
 
       expect(result.foundFinalVariables).toEqual([
-        '--final-button-background',
+        '--final-button-back-ground',
       ])
     })
   })

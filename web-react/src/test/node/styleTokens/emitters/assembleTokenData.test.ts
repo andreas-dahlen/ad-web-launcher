@@ -12,7 +12,8 @@ function createVariable(
 ): CompilerVariable {
   return {
     key: 'bg',
-    name: 'background',
+    name: 'backGround',
+    cssName: 'back-ground',
     values: {},
     effectiveAllowed: ['f'],
     ...overrides,
@@ -105,7 +106,8 @@ describe('[EMITTERS]', () => {
                 // eslint-disable-next-line unicorn/max-nested-calls
                 createVariable({
                   key: 'bg',
-                  name: 'background',
+                  name: 'backGround',
+                  cssName: 'back-ground',
                   effectiveAllowed: ['f', 'p'],
                 }),
               ],
@@ -116,9 +118,10 @@ describe('[EMITTERS]', () => {
 
       expect(result.tokens[0]?.variables).toEqual([
         {
-          name: 'background',
+          cssName: 'back-ground',
           key: 'bg',
           allowed: ['f', 'p'],
+          values: {}
         },
       ])
     })
@@ -133,6 +136,7 @@ describe('[EMITTERS]', () => {
                 createVariable({
                   key: 'bg',
                   name: undefined,
+                  cssName: undefined,
                 }),
               ],
             }),
@@ -142,9 +146,10 @@ describe('[EMITTERS]', () => {
 
       expect(result.tokens[0]?.variables).toEqual([
         {
-          name: 'bg',
           key: 'bg',
+          cssName: undefined,
           allowed: ['f'],
+          values: {}
         },
       ])
     })
@@ -158,13 +163,15 @@ describe('[EMITTERS]', () => {
                 // eslint-disable-next-line unicorn/max-nested-calls
                 createVariable({
                   key: 'bg',
-                  name: 'background',
+                  name: 'backGround',
+                  cssName: 'back-ground',
                   effectiveAllowed: ['f'],
                 }),
                 // eslint-disable-next-line unicorn/max-nested-calls
                 createVariable({
                   key: 'radius',
-                  name: 'border-radius',
+                  name: 'borderRadius',
+                  cssName: 'border-radius',
                   effectiveAllowed: ['p', 'f'],
                 }),
               ],
@@ -175,14 +182,16 @@ describe('[EMITTERS]', () => {
 
       expect(result.tokens[0]?.variables).toEqual([
         {
-          name: 'background',
+          cssName: 'back-ground',
           key: 'bg',
           allowed: ['f'],
+          values: {}
         },
         {
-          name: 'border-radius',
+          cssName: 'border-radius',
           key: 'radius',
           allowed: ['p', 'f'],
+          values: {}
         },
       ])
     })
