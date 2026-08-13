@@ -47,7 +47,7 @@ export function initializeCompiler(tokensDir: string) {
 
   function runCssModule(root: Root, cssPath: string): void {
     const group = cache.getGroupByCssPath(cssPath)
-
+    //here need to save variable meta data and do a set probably of css variables... should run once per css file at startup...
     if (!group) {
       tracker.markMissing(cssPath)
       run.recordUnusedModule(cssPath);

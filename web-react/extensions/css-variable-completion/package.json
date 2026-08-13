@@ -30,5 +30,16 @@
     "@vscode/vsce": "^3.9.2",
     "esbuild": "^0.28.2",
     "typescript": "^6.0.3"
+  },
+   "contributes": {
+    "configuration": {
+      "properties": {
+        "cssVariableCompletion.variablesFile": {
+          "type": "string",
+            "default": "web-react/src/shared/generated/metadata/cssVariables.generated.jsonc",
+              "description": "Path to the CSS variable metadata file, relative to the workspace."
+        }
+      }
+    }
   }
 }

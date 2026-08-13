@@ -897,16 +897,18 @@ var ParseErrorCode;
 
 // src/extension.ts
 var import_node_fs = require("node:fs");
-var import_node_path = require("node:path");
-function loadVariables(extensionUri) {
-  const filePath = (0, import_node_path.join)(extensionUri.fsPath, "variables.jsonc");
-  const contents = (0, import_node_fs.readFileSync)(filePath, "utf8");
+function loadVariables(fileUri) {
+  const contents = (0, import_node_fs.readFileSync)(fileUri.fsPath, "utf8");
   const parsed = parse2(contents);
   if (!Array.isArray(parsed)) {
-    throw new Error("variables.jsonc must contain an array");
+    throw new Error(
+      "cssVariables.generated.jsonc must contain an array"
+    );
   }
   if (!parsed.every((value) => typeof value === "string")) {
-    throw new Error("variables.jsonc must contain only strings");
+    throw new Error(
+      "cssVariables.generated.jsonc must contain only strings"
+    );
   }
   return parsed;
 }
@@ -915,9 +917,15 @@ var CssVariableCompletionProvider = class {
     this.variables = variables;
   }
   variables;
+  updateVariables(variables) {
+    this.variables = variables;
+  }
   provideCompletionItems(document, position) {
     const line = document.lineAt(position.line).text;
     const beforeCursor = line.slice(0, position.character);
+    vscode.window.showInformationMessage(
+      `completion: "${beforeCursor}"`
+    );
     if (/\bvar\([^)]*$/.test(beforeCursor)) {
       return new vscode.CompletionList([], false);
     }
@@ -936,11 +944,73 @@ var CssVariableCompletionProvider = class {
   }
 };
 function activate(context) {
-  const variables = loadVariables(context.extensionUri);
   vscode.window.showInformationMessage(
-    `CSS completion loaded ${variables.length} variables`
+    "[css variable completion loaded]"
+  );
+  const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
+  if (!workspaceFolder) {
+    vscode.window.showErrorMessage(
+      "[css variable completion] no workspace folder"
+    );
+    return;
+  }
+  const config = vscode.workspace.getConfiguration(
+    "cssVariableCompletion"
+  );
+  const variablesFile = config.get("variablesFile");
+  if (!variablesFile) {
+    vscode.window.showErrorMessage(
+      "[css variable completion] variablesFile setting is missing"
+    );
+    return;
+  }
+  const variablesUri = vscode.Uri.joinPath(
+    workspaceFolder.uri,
+    ...variablesFile.split("/")
+  );
+  vscode.window.showInformationMessage(
+    `[css variable completion] loading ${variablesUri.fsPath}`
+  );
+  let variables;
+  try {
+    variables = loadVariables(variablesUri);
+  } catch (error) {
+    vscode.window.showErrorMessage(
+      `[css variable completion] failed to load variables: ${String(error)}`
+    );
+    return;
+  }
+  vscode.window.showInformationMessage(
+    `[css variable completion] loaded ${variables.length} variables`
   );
   const provider = new CssVariableCompletionProvider(variables);
+  const watcher = vscode.workspace.createFileSystemWatcher(
+    new vscode.RelativePattern(
+      workspaceFolder,
+      variablesFile
+    )
+  );
+  context.subscriptions.push(
+    watcher,
+    watcher.onDidChange(() => {
+      try {
+        provider.updateVariables(loadVariables(variablesUri));
+      } catch (error) {
+        vscode.window.showErrorMessage(
+          `[css variable completion] failed to reload variables: ${String(error)}`
+        );
+      }
+    }),
+    watcher.onDidCreate(() => {
+      try {
+        provider.updateVariables(loadVariables(variablesUri));
+      } catch (error) {
+        vscode.window.showErrorMessage(
+          `[css variable completion] failed to load variables: ${String(error)}`
+        );
+      }
+    })
+  );
   const selector = [
     { language: "css" },
     { language: "scss" },
@@ -952,6 +1022,9 @@ function activate(context) {
       provider,
       "-"
     )
+  );
+  vscode.window.showInformationMessage(
+    "[css variable completion] provider registered"
   );
 }
 function deactivate() {
