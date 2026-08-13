@@ -6,6 +6,7 @@ import { createTokenCache } from './tracking/tokenCache.ts';
 import { createProcessingTracker } from './tracking/processingTracker.ts';
 import { createCompilerRun } from './tracking/compilerRun.ts';
 import { createCompletionGuard } from './tracking/completionGuard.ts';
+import { processPost } from '../postCss/processPost.ts';
 import { processModule } from '../postCss/processModule.ts'
 import { assert } from './processing/assertions.ts'
 import { emitFiles } from '../emitters/emitFiles.ts';
@@ -46,15 +47,20 @@ export function initializeCompiler(tokensDir: string) {
   }
 
   function runCssModule(root: Root, cssPath: string): void {
+    tracker.notifyActivity()
+
+    const postData = processPost(root, cssPath)
+    run.recordPostData(postData)
+
     const group = cache.getGroupByCssPath(cssPath)
-    //here need to save variable meta data and do a set probably of css variables... should run once per css file at startup...
     if (!group) {
       tracker.markMissing(cssPath)
       run.recordUnusedModule(cssPath);
 
-      handleCompletion()
+      void handleCompletion()
       return
     }
+    tracker.notifyActivity()
     assert.hasCssPath(group)
 
     const cssData = processModule({ root, group })
@@ -62,12 +68,12 @@ export function initializeCompiler(tokensDir: string) {
     run.recordCssData(group.groupPath, cssData)
     tracker.markProcessed(cssPath)
 
-    handleCompletion()
+    void handleCompletion()
   }
 
-  function handleCompletion(): void {
+  async function handleCompletion(): Promise<void> {
+    await tracker.awaitCompletion();
 
-    if (!tracker.hasFinished()) return
     if (!guard.canComplete()) return
 
     if (tracker.hasSucceeded()) {

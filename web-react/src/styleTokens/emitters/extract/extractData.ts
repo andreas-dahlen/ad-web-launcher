@@ -5,14 +5,17 @@ import type { PresetFileData } from './assemblers/assemblePresetData.ts'
 import type { TokenGroupFileData } from './assemblers/assembleTokenData.ts'
 import { assembleTokenData } from './assemblers/assembleTokenData.ts'
 import { assemblePresetData } from './assemblers/assemblePresetData.ts'
+import { assembleVariableData } from './assemblers/assembleVariableData.ts'
 import { assembleMetadata, type GroupMetadata } from './assemblers/assembleMetadata.ts'
-import type { ExtractResult } from '@styleTokens/types/compiler.types.ts'
+import type { ExtractResult } from '../../types/compiler.types.ts'
+import type { CssVarString } from '../../../shared/tokenUtils/compiler.types.ts'
 
 
 export type EmitData = {
   presetFiles: PresetFileData[]
   tokenFiles: TokenGroupFileData[]
   metadata: GroupMetadata[]
+  allVariables: CssVarString[]
 }
 
 export type ExtractData = {
@@ -23,7 +26,6 @@ export type ExtractData = {
 export function extractData(
   cache: TokenCache,
   run: CompilerRun,
-  //tracker!?
 ): ExtractData {
 
   const presetFiles: PresetFileData[] = []
@@ -35,8 +37,8 @@ export function extractData(
   /*---------------------------------------
           NON-Group specific
   -------------------------------------*/
-
   const groups = resolveProcessedGroups(cache, run)
+
 
   for (const group of groups) {
     /*---------------------------------------
@@ -52,7 +54,7 @@ export function extractData(
 
     const cssData = run.getCssData(group.groupPath)
     if (!cssData) {
-      //this should NOT throw... //TODO register event for diagnostics!?
+      //this should NOT throw...
       continue;
     }
 
@@ -64,12 +66,19 @@ export function extractData(
     if (presetResult) { presetFiles.push(presetResult) }
     else { omittedPresetFiles.add(cssData.cssPath) }
   }
+  /*---------------------------------------
+    FInal processing
+  -------------------------------------*/
+
+  const postData = run.getAllPostData()
+  const allVariables = assembleVariableData(postData, tokenFiles.flatMap(t => t.tokens))
 
   return {
     outputData: {
       presetFiles,
       tokenFiles,
-      metadata
+      metadata,
+      allVariables
     },
     extractResult: {
       omittedPresetFiles: [...omittedPresetFiles]

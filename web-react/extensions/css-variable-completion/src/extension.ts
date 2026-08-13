@@ -39,9 +39,9 @@ class CssVariableCompletionProvider
     const line = document.lineAt(position.line).text
     const beforeCursor = line.slice(0, position.character)
 
-    vscode.window.showInformationMessage(
-      `completion: "${beforeCursor}"`,
-    )
+    // vscode.window.showInformationMessage(
+    //   `completion: "${beforeCursor}"`,
+    // )
 
     if (/\bvar\([^)]*$/.test(beforeCursor)) {
       return new vscode.CompletionList([], false)
@@ -64,12 +64,22 @@ class CssVariableCompletionProvider
   }
 }
 
+async function openLspDocument(lspPath: vscode.Uri): Promise<void> {
+  try {
+    await vscode.workspace.openTextDocument(lspPath);
+  } catch (error) {
+    console.error(
+      `[css variable completion] failed to open LSP document: ${String(error)}`,
+    );
+  }
+}
 export function activate(context: vscode.ExtensionContext): void {
-  vscode.window.showInformationMessage(
-    '[css variable completion loaded]',
-  )
+  // vscode.window.showInformationMessage(
+  //   '[css variable completion loaded]',
+  // )
 
   const workspaceFolder = vscode.workspace.workspaceFolders?.[0]
+
 
   if (!workspaceFolder) {
     vscode.window.showErrorMessage(
@@ -77,6 +87,12 @@ export function activate(context: vscode.ExtensionContext): void {
     )
     return
   }
+  const lspPath = vscode.Uri.joinPath(
+    workspaceFolder?.uri,
+    "web-react/src/shared/generated/metadata/cssVariables.generated.ts",
+  )
+
+  void openLspDocument(lspPath)
 
   const config = vscode.workspace.getConfiguration(
     'cssVariableCompletion',
@@ -96,9 +112,9 @@ export function activate(context: vscode.ExtensionContext): void {
     ...variablesFile.split('/'),
   )
 
-  vscode.window.showInformationMessage(
-    `[css variable completion] loading ${variablesUri.fsPath}`,
-  )
+  // vscode.window.showInformationMessage(
+  //   `[css variable completion] loading ${variablesUri.fsPath}`,
+  // )
 
   let variables: string[]
 
@@ -162,9 +178,9 @@ export function activate(context: vscode.ExtensionContext): void {
     ),
   )
 
-  vscode.window.showInformationMessage(
-    '[css variable completion] provider registered',
-  )
+  // vscode.window.showInformationMessage(
+  //   '[css variable completion] provider registered',
+  // )
 }
 
 export function deactivate(): void { }

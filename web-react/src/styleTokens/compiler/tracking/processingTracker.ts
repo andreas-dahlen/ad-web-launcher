@@ -5,56 +5,91 @@ export function createProcessingTracker(expectedCssPaths: string[]) {
 
   let flushTimer: ReturnType<typeof setTimeout> | undefined;
 
+  let completion:
+    | {
+      resolve: () => void;
+      reject: (error: unknown) => void;
+    }
+    | undefined;
+
   return {
     snapshot,
     markProcessed,
     markMissing,
     invalidate,
+    notifyActivity,
+    awaitCompletion,
     hasSucceeded,
-    hasFinished
+    hasFinished,
   };
 
   function invalidate(cssPath: string) {
-    expected.add(cssPath)
-    processed.delete(cssPath)
-    failures.delete(cssPath)
-    scheduleFlush()
+    expected.add(cssPath);
+    processed.delete(cssPath);
+    failures.delete(cssPath);
+
+    scheduleFlush();
   }
 
   function markProcessed(cssPath: string) {
-    processed.add(cssPath)
-    failures.delete(cssPath)
-    scheduleFlush()
+    processed.add(cssPath);
+    failures.delete(cssPath);
+
+    scheduleFlush();
   }
 
   function markMissing(cssPath: string) {
     if (!expected.has(cssPath)) {
       return;
     }
-    failures.add(cssPath)
-    processed.delete(cssPath)
-    scheduleFlush()
+
+    failures.add(cssPath);
+    processed.delete(cssPath);
+
+    scheduleFlush();
+  }
+
+  function notifyActivity() {
+    scheduleFlush();
+  }
+
+  function awaitCompletion(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      completion = { resolve, reject };
+      scheduleFlush();
+    });
   }
 
   function scheduleFlush() {
     if (flushTimer) {
       clearTimeout(flushTimer);
     }
-    flushTimer = setTimeout(checkStall, 1000);
+
+    flushTimer = setTimeout(checkCompletion, 1000);
   }
 
-  function checkStall() {
+  function checkCompletion() {
     flushTimer = undefined;
 
-    if (hasFinished()) return;
+    if (!completion) {
+      return;
+    }
+
+    if (hasFinished()) {
+      const currentCompletion = completion;
+      completion = undefined;
+
+      currentCompletion.resolve();
+      return;
+    }
 
     const missing = [...expected].filter(
       cssPath =>
         !processed.has(cssPath) &&
-        !failures.has(cssPath)
+        !failures.has(cssPath),
     );
 
-    throw new Error(
+    const error = new Error(
       [
         "❌ Style token compilation stalled",
         "",
@@ -64,9 +99,15 @@ export function createProcessingTracker(expectedCssPaths: string[]) {
         "Possible causes:",
         "  • CSS module is not imported",
         "  • PostCSS did not process the module",
-        "  • processing exited early \n \n"
-      ].join("\n")
+        "  • processing exited early",
+        "",
+      ].join("\n"),
     );
+
+    const currentCompletion = completion;
+    completion = undefined;
+
+    currentCompletion.reject(error);
   }
 
   function snapshot() {
@@ -74,15 +115,19 @@ export function createProcessingTracker(expectedCssPaths: string[]) {
       expected: new Set(expected),
       processed: new Set(processed),
       failures: new Set(failures),
-    }
+    };
   }
 
   function hasFinished() {
     for (const cssPath of expected) {
-      if (!processed.has(cssPath) && !failures.has(cssPath)) {
+      if (
+        !processed.has(cssPath) &&
+        !failures.has(cssPath)
+      ) {
         return false;
       }
     }
+
     return true;
   }
 

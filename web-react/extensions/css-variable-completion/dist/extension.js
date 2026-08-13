@@ -923,9 +923,6 @@ var CssVariableCompletionProvider = class {
   provideCompletionItems(document, position) {
     const line = document.lineAt(position.line).text;
     const beforeCursor = line.slice(0, position.character);
-    vscode.window.showInformationMessage(
-      `completion: "${beforeCursor}"`
-    );
     if (/\bvar\([^)]*$/.test(beforeCursor)) {
       return new vscode.CompletionList([], false);
     }
@@ -943,10 +940,16 @@ var CssVariableCompletionProvider = class {
     );
   }
 };
+async function openLspDocument(lspPath) {
+  try {
+    await vscode.workspace.openTextDocument(lspPath);
+  } catch (error) {
+    console.error(
+      `[css variable completion] failed to open LSP document: ${String(error)}`
+    );
+  }
+}
 function activate(context) {
-  vscode.window.showInformationMessage(
-    "[css variable completion loaded]"
-  );
   const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
   if (!workspaceFolder) {
     vscode.window.showErrorMessage(
@@ -954,6 +957,11 @@ function activate(context) {
     );
     return;
   }
+  const lspPath = vscode.Uri.joinPath(
+    workspaceFolder?.uri,
+    "web-react/src/shared/generated/metadata/cssVariables.generated.ts"
+  );
+  void openLspDocument(lspPath);
   const config = vscode.workspace.getConfiguration(
     "cssVariableCompletion"
   );
@@ -967,9 +975,6 @@ function activate(context) {
   const variablesUri = vscode.Uri.joinPath(
     workspaceFolder.uri,
     ...variablesFile.split("/")
-  );
-  vscode.window.showInformationMessage(
-    `[css variable completion] loading ${variablesUri.fsPath}`
   );
   let variables;
   try {
@@ -1022,9 +1027,6 @@ function activate(context) {
       provider,
       "-"
     )
-  );
-  vscode.window.showInformationMessage(
-    "[css variable completion] provider registered"
   );
 }
 function deactivate() {

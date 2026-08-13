@@ -11,7 +11,7 @@ export type TokenGroupFileData = {
   tokenFile: string
   tokens: TokenData[]
 }
-type TokenData = {
+export type TokenData = {
   infix: string
   variables: VarData[];
 }

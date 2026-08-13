@@ -1,5 +1,6 @@
 import type { IssueGroup } from '@styleTokens/types/issueCollector.types.ts';
 import type { CssData, EmitResult } from '../../types/compiler.types.ts';
+import type { PostData } from '@styleTokens/postCss/processPost.ts';
 
 export type CompilerRun = ReturnType<typeof createCompilerRun>;
 export function createCompilerRun(groupPaths: string[]) {
@@ -7,6 +8,7 @@ export function createCompilerRun(groupPaths: string[]) {
   const missingCssModules = new Set<string>()
   const unusedCssModules = new Set<string>()
   const processedCssData = new Map<string, CssData>()
+  const processedPostData = new Map<string, PostData>()
   let emitResult: EmitResult | undefined
   const processedIssues: IssueGroup[] = []
 
@@ -17,6 +19,7 @@ export function createCompilerRun(groupPaths: string[]) {
     missingCssModules.clear()
     unusedCssModules.clear()
     processedCssData.clear()
+    processedPostData.clear()
     emitResult = undefined
     processedIssues.length = 0
   }
@@ -29,6 +32,9 @@ export function createCompilerRun(groupPaths: string[]) {
   function recordCssData(groupPath: string, cssData: CssData) {
     processedCssData.set(groupPath, cssData)
   }
+  function recordPostData(postData: PostData) {
+    processedPostData.set(postData.cssPath, postData)
+  }
   function recordEmitResult(result: EmitResult) {
     emitResult = result
   }
@@ -40,6 +46,7 @@ export function createCompilerRun(groupPaths: string[]) {
     reset,
     recordMissingModule,
     recordCssData,
+    recordPostData,
     recordUnusedModule,
     recordEmitResult,
     recordIssues,
@@ -53,6 +60,10 @@ export function createCompilerRun(groupPaths: string[]) {
     },
     getCssData(groupPath: string) {
       return processedCssData.get(groupPath)
+    },
+    getAllPostData() {
+      // eslint-disable-next-line unicorn/prefer-iterator-to-array
+      return [...processedPostData.values()];
     },
     getIssues() { return [...processedIssues] }
   } as const

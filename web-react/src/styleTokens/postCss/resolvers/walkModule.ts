@@ -4,6 +4,7 @@ import type { Rule, Root } from "postcss";
 import selectorParser from "postcss-selector-parser";
 import { prefixPriority } from '../../../shared/tokenUtils/prefixes.ts';
 import type { WalkModuleResult } from '../../types/compiler.types.ts';
+import { assert } from '../../compiler/processing/assertions.ts'
 
 const VALID_IDENTIFIER = /^[A-Za-z_$][A-Za-z0-9_$]*$/;
 
@@ -56,7 +57,8 @@ export function walkModule(
         decl.prop.startsWith(prefix)
       )
     ) {
-      declaredVariables.add(decl.prop as CssVarString);
+      assert.cssVariable(decl.prop)
+      declaredVariables.add(decl.prop);
     }
 
     const rule = decl.parent;
@@ -77,14 +79,15 @@ export function walkModule(
           cssVar.startsWith(prefix)
         )
       ) {
-        foundFinalVariables.add(cssVar as CssVarString);
+        assert.cssVariable(cssVar)
+        foundFinalVariables.add(cssVar);
 
 
         if (isCustomProperty) return
 
         const variables = presetResetData.get(rule) ?? new Set();
 
-        variables.add(cssVar as CssVarString);
+        variables.add(cssVar);
 
         presetResetData.set(rule, variables);
       }

@@ -1,13 +1,16 @@
 import { printParseErrorCode, type ParseError } from 'jsonc-parser';
 import type { TokenGroup } from "../../types/compiler.types.ts";
 import type { RawToken, RawVariable } from "../../types/compiler.types.ts"
+import type { CssVarString } from '../../../shared/tokenUtils/compiler.types.ts';
 
 type Assertions = {
   token(errors: ParseError[], json: RawToken, fullPath: string): void;
   variable(key: string, def: unknown, fullPath: string): asserts def is RawVariable;
+  cssVariable(value: string): asserts value is CssVarString;
   hasCssPath(group: TokenGroup): asserts group is TokenGroup & { cssPath: string }
 };
 
+const CSS_VARIABLE = /^--[A-Za-z_][A-Za-z0-9_-]*$/;
 export const assert: Assertions = {
 
 
@@ -75,6 +78,14 @@ export const assert: Assertions = {
         variable.values === null ||
         Array.isArray(variable.values))) {
       throw new Error(`❌ Variable "${key}" values must be an object in ${fullPath}`);
+    }
+  },
+
+  cssVariable(value): asserts value is CssVarString {
+    if (!CSS_VARIABLE.test(value)) {
+      throw new Error(
+        `Invariant violated: "${value}" is not a CSS custom property.`,
+      );
     }
   },
 

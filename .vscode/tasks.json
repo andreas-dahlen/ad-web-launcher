@@ -13,6 +13,10 @@
         "applyTo": "allDocuments",
         "owner": "eslint-workspace"
       },
+      "presentation": {
+        "reveal": "never",
+        "panel": "shared"
+      },
       "runOptions": {
         "runOn": "folderOpen"
       }
