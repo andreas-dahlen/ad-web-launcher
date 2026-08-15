@@ -9,3 +9,6 @@ export { __TEST_ONLY_API as testPipeline }
 
 export { __TEST_ONLY_API as testSize }
   from '@shared/state/stores/size.store'
+
+export { __TEST_ONLY_API as applyCommit }
+  from '@primitives/Carousel/store/carousel.store'

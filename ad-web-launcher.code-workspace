@@ -11,6 +11,7 @@
 			"**/ADWebWallpaper": true,
 			"**/md": true,
 			"**/node_modules": true,
+			// "*/coverage": true
 		},
 		"terminal.integrated.cwd": "${workspaceFolder}/web-react",
 		"scopesManager.localScopes": [

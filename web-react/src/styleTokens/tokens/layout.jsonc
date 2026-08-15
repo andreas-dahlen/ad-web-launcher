@@ -4,24 +4,24 @@
   "component": "layout",
   "infix": "layout",
 
-  "alwaysAllowed": ["o", "p", "f"],
+  "alwaysAllowed": [ "o", "p", "f" ],
   "vars": {
-    "display": { "values": {"f": "block"}},
+    "display": { "values": { "f": "block" } },
 
-    "flexDirection": { "values": { "f": "initial"}},
-    "justify": { "values": {"f": "initial"}},
-    "align": { "values": {"f": "initial"}},
+    "flexDirection": { "values": { "f": "initial" } },
+    "justify": { "values": { "f": "initial" } },
+    "align": { "values": { "f": "initial" } },
 
 
-    "width": { "values": {"f": "auto"}},
-    "height": { "values": { "f": "auto"}},
+    "width": { "values": { "f": "auto" } },
+    "height": { "values": { "f": "auto" } },
 
-    "gap": { "values": {"f": "0"} },
-    "margin": { "values": {"f": "0px"}},
-    "padding": { "values": {"f": "0px"} },
-    "inset": {},
-    "minWidth": {},
-    "minHeight": {}
+    "gap": { "values": { "f": "0" } },
+    "margin": { "values": { "f": "0px" } },
+    "padding": { "values": { "f": "0px" } },
+    "inset": { },
+    "minWidth": { },
+    "minHeight": { }
 
 
     // "bg": {"allowed": ["t"], "values": {"f": "gray"}},

@@ -6,6 +6,13 @@ export default mergeConfig(
 
     test: {
       reporters: ['verbose'],
+      coverage: {
+        provider: 'v8',
+        exclude: [
+          'src/test/**',
+          '**/*.css'
+        ]
+      },
       projects: [
         {
           extends: true,

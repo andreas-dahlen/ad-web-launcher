@@ -4,19 +4,19 @@
   "component": "slider",
   "infix": "thumb",
 
-  "alwaysAllowed": ["o", "p", "f"],
+  "alwaysAllowed": [ "o", "p", "f" ],
   "vars": {
-    "bg": {"allowed": ["s"], "values": {"f": "hotPink"}},
-    "opacity": {"values": {"f": "1"}},
+    "bg": { "allowed": [ "s" ], "values": { "f": "hotPink" } },
+    "opacity": { "values": { "f": "1" } },
 
-    "radius":{"values": {"f": "5px"}},
-    "border":{},
-    
-    "mainSize": {"values": {"f": "30px"}},
-    "crossSize": {"values": {"f": "30px"}},
+    "radius": { "values": { "f": "5px" } },
+    "border": { },
 
-    "stateSwipingBg": {"allowed": ["s"], "values": {"f": "green"}},
-    "statePressingBg": {"allowed": ["s"],"values": {"f": "black"}},
-    "stateCommittedBg": {"allowed": ["s"],"values": {"f": "blue"}}
+    "mainSize": { "values": { "f": "30px" } },
+    "crossSize": { "values": { "f": "30px" } },
+
+    "stateSwipingBg": { "allowed": [ "s" ], "values": { "f": "green" } },
+    "statePressingBg": { "allowed": [ "s" ], "values": { "f": "black" } },
+    "stateCommittedBg": { "allowed": [ "s" ], "values": { "f": "blue" } }
   }
 }

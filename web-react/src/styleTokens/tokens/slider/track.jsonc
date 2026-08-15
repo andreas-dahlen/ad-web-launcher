@@ -4,13 +4,13 @@
   "component": "slider",
   "infix": "track",
 
-  "alwaysAllowed": ["o", "p", "f"],
+  "alwaysAllowed": [ "o", "p", "f" ],
   "vars": {
-    "bg": {"values": {"f": "hotPink"}},
-    "opacity": {"values": {"f": "0.5"}},
+    "bg": { "values": { "f": "hotPink" } },
+    "opacity": { "values": { "f": "0.5" } },
 
-    "radius": {"values": {"f": "50px"}},
-    "mainSize": {"values": {"f": "100%"}},
-    "crossSize": {"values": {"f": "4px"}}
+    "radius": { "values": { "f": "50px" } },
+    "mainSize": { "values": { "f": "100%" } },
+    "crossSize": { "values": { "f": "4px" } }
   }
 }

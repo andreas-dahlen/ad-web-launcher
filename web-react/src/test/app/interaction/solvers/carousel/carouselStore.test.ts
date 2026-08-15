@@ -1,13 +1,26 @@
 import { describe, it, expect, vi, afterEach } from 'vitest'
-import { carouselStore, type CarouselBinding } from '@primitives/Carousel/store/carousel.store'
+
+import {
+  carouselStore,
+  type CarouselBinding
+} from '@primitives/Carousel/store/carousel.store'
+
+import { applyCommit } from '@test/testAPI'
+
 import { carousel_DEFAULTS } from '@primitives/Carousel/store/useCarouselStore.hook'
 
-import { getStoreByType, seedStoreByType } from '@test/utils/storeSeed.utils'
+import {
+  getStoreByType,
+  seedStoreByType
+} from '@test/utils/storeSeed.utils'
+
 import { resetInteractionStores } from '@test/utils/storeReset.utils'
+
 
 function initTest(data: CarouselBinding = carousel_DEFAULTS) {
   seedStoreByType("carousel", "test", data)
 }
+
 
 function getTest() {
   return getStoreByType("carousel") as CarouselBinding
@@ -15,57 +28,154 @@ function getTest() {
 
 
 describe("[CAROUSELSTORE]", () => {
-  afterEach(() => { resetInteractionStores() })
+  afterEach(() => {
+    resetInteractionStores()
+  })
+
 
   describe('[Base Functionality]', () => {
     it('adds carousel node', () => {
       initTest()
+
       expect(getTest()).toEqual({
         ...carousel_DEFAULTS
       })
     })
+
+
     it('makes sure no duplicate node', () => {
       initTest()
       initTest()
+
       const state = carouselStore.getState()
+
       expect(Object.keys(state.bindings)).toHaveLength(1)
     })
+
+
     it('get returns same with as fetching straight up', () => {
       initTest()
-      expect(getTest()).toEqual(carouselStore.getState().get("test"))
+
+      expect(getTest()).toEqual(
+        carouselStore.getState().get("test")
+      )
     })
+
+
     it("makes sure that delete deletes", () => {
       initTest()
+
       carouselStore.getState().init("test2", carousel_DEFAULTS)
       carouselStore.getState().delete("test")
+
       const state = carouselStore.getState()
+
       expect(Object.keys(state.bindings)).toHaveLength(1)
+
       expect(getTest()).toBe(undefined)
+
       expect(state.bindings["test2"]).toEqual({
         ...carousel_DEFAULTS
       })
     })
   })
 
+
   describe("[Domain Specific]", () => {
-    it("makes sure that count setter function sets count", () => {
+    it("sets count", () => {
       initTest()
+
       carouselStore.getState().setCount("test", 5)
-      expect(getTest().count).toEqual(5)
+
+      expect(getTest().count).toBe(5)
     })
-    it("makes sure that setLayout setter function sets layout", () => {
+
+
+    it("clamps count to zero", () => {
       initTest()
 
-      const packet = {
-        containerSize: { width: 50, height: 100 },
-        itemSize: { width: 100, height: 50 }
-      }
-      carouselStore.getState().setLayout("test", packet)
-      expect(getTest().layout).toEqual(packet)
+      carouselStore.getState().setCount("test", -5)
+
+      expect(getTest().count).toBe(0)
     })
 
-    it('set Settling resets liveOffset and clears settling on next frame', () => {
-      const test: CarouselBinding = { ...carousel_DEFAULTS, settling: true, pendingDir: { dir: "left", axis: "horizontal" }, liveOffset: 100 }
+
+    it("sets container size", () => {
+      initTest()
+
+      const size = {
+        width: 50,
+        height: 100
+      }
+
+      carouselStore.getState().setContainerSize("test", size)
+
+      expect(getTest().layout.containerSize).toEqual(size)
+    })
+
+
+    it("sets item size", () => {
+      initTest()
+
+      const size = {
+        width: 100,
+        height: 50
+      }
+
+      carouselStore.getState().setItemSize("test", size)
+
+      expect(getTest().layout.itemSize).toEqual(size)
+    })
+
+
+    it("gets the current scene", () => {
+      const test: CarouselBinding = {
+        ...carousel_DEFAULTS,
+        nodeBindings: {
+          ...carousel_DEFAULTS.nodeBindings,
+          currentNode: 1,
+          nodes: [
+            {
+              nodeId: 0,
+              sceneIdx: 4
+            },
+            {
+              nodeId: 1,
+              sceneIdx: 7
+            },
+            {
+              nodeId: 2,
+              sceneIdx: 9
+            }
+          ]
+        }
+      }
+
+      initTest(test)
+
+      expect(
+        carouselStore.getState().getCurrentScene("test")
+      ).toBe(7)
+    })
+
+
+    it('returns undefined for an unknown carousel', () => {
+      expect(
+        carouselStore.getState().getCurrentScene("missing")
+      ).toBeUndefined()
+    })
+
+
+    it('setSettling commits pending direction and clears settling on next frame', () => {
+      const test: CarouselBinding = {
+        ...carousel_DEFAULTS,
+        settling: true,
+        pendingDir: {
+          dir: "left",
+          axis: "horizontal"
+        },
+        liveOffset: 100
+      }
 
       vi.useFakeTimers()
 
@@ -75,60 +185,167 @@ describe("[CAROUSELSTORE]", () => {
         carouselStore.getState().setSettling('test')
 
         expect(getTest().liveOffset).toBe(0)
+        expect(getTest().pendingDir).toBeNull()
+        expect(getTest().settling).toBe(true)
 
-        vi.advanceTimersByTime(20)
-        const state2 = carouselStore.getState()
-        expect(state2.bindings["test"].settling).toBe(false)
+        vi.runAllTimers()
+
+        expect(getTest().settling).toBe(false)
       } finally {
         vi.useRealTimers()
       }
     })
-  })
 
-  describe("[APPLY]", () => {
 
-    it('correctly modifies store at swipeStart', () => {
-      const action = { event: "swipeStart" } as const
-      const test = { ...carousel_DEFAULTS, settling: true, pendingDir: { dir: "left", axis: "horizontal" }, liveOffset: 100, count: 3 } as const
-      const result = { ...carousel_DEFAULTS, settling: false, pendingDir: null, liveOffset: 0, count: 3, dragging: true }
+    it('setSettling does nothing without a pending direction', () => {
+      const test: CarouselBinding = {
+        ...carousel_DEFAULTS,
+        settling: false,
+        pendingDir: null,
+        liveOffset: 100
+      }
 
       initTest(test)
+
+      carouselStore.getState().setSettling('test')
+
+      expect(getTest()).toEqual(test)
+    })
+  })
+
+
+  describe("[APPLY]", () => {
+    it('correctly modifies store at swipeStart', () => {
+      const action = {
+        event: "swipeStart"
+      } as const
+
+      const test = {
+        ...carousel_DEFAULTS,
+        settling: true,
+        pendingDir: {
+          dir: "left",
+          axis: "horizontal"
+        },
+        liveOffset: 100,
+        count: 3
+      } as const
+
+      const result = {
+        ...carousel_DEFAULTS,
+        settling: false,
+        pendingDir: null,
+        liveOffset: 0,
+        count: 3,
+        dragging: true
+      }
+
+      initTest(test)
+
       carouselStore.getState().apply("test", action)
+
       expect(getTest()).toEqual(result)
     })
 
-    it("correctly modifies store at swipe", () => {
 
+    it("correctly modifies store at swipe", () => {
       initTest()
+
       carouselStore.getState().apply("test", {
         event: "swipe",
-        payload: { delta1D: 20 }
+        payload: {
+          delta1D: 20
+        }
       })
+
       expect(getTest().liveOffset).toBe(20)
     })
+
 
     it("correctly modifies store at swipeCommit", () => {
       const actionAndResult = {
         event: "swipeCommit",
         payload: {
           delta1D: 20,
-          direction: { dir: "up", axis: "vertical" }
+          direction: {
+            dir: "up",
+            axis: "vertical"
+          }
         }
       } as const
-      const test = { ...carousel_DEFAULTS, settling: false, pendingDir: { dir: "left", axis: "horizontal" }, liveOffset: 100, dragging: true } as const
+
+      const test = {
+        ...carousel_DEFAULTS,
+        settling: false,
+        pendingDir: {
+          dir: "left",
+          axis: "horizontal"
+        },
+        liveOffset: 100,
+        dragging: true
+      } as const
 
       initTest(test)
+
       carouselStore.getState().apply("test", actionAndResult)
 
-      expect(getTest().pendingDir).toEqual(actionAndResult.payload.direction)
-      expect(getTest().liveOffset).toEqual(actionAndResult.payload.delta1D)
+      expect(getTest().pendingDir).toEqual(
+        actionAndResult.payload.direction
+      )
+
+      expect(getTest().liveOffset).toEqual(
+        actionAndResult.payload.delta1D
+      )
+
       expect(getTest().dragging).toBe(false)
     })
-    it("correctly modifies store at swipeRevert", () => {
-      const action = { event: "swipeRevert" } as const
-      const test = { ...carousel_DEFAULTS, pendingDir: { dir: "left", axis: "horizontal" }, liveOffset: 100, dragging: true } as const
+
+
+    it("ignores swipeCommit while settling", () => {
+      const action = {
+        event: "swipeCommit",
+        payload: {
+          delta1D: 20,
+          direction: {
+            dir: "left",
+            axis: "horizontal"
+          }
+        }
+      } as const
+
+      const test = {
+        ...carousel_DEFAULTS,
+        settling: true,
+        pendingDir: null,
+        liveOffset: 100,
+        dragging: true
+      } as const
 
       initTest(test)
+
+      carouselStore.getState().apply("test", action)
+
+      expect(getTest()).toEqual(test)
+    })
+
+
+    it("correctly modifies store at swipeRevert", () => {
+      const action = {
+        event: "swipeRevert"
+      } as const
+
+      const test = {
+        ...carousel_DEFAULTS,
+        pendingDir: {
+          dir: "left",
+          axis: "horizontal"
+        },
+        liveOffset: 100,
+        dragging: true
+      } as const
+
+      initTest(test)
+
       carouselStore.getState().apply("test", action)
 
       expect(getTest().liveOffset).toEqual(0)
@@ -138,5 +355,78 @@ describe("[CAROUSELSTORE]", () => {
   })
 
 
-  //TODO write test(s) for getNextIndex
+  describe("[applyCommit]", () => {
+    it("commits to the next node", () => {
+      const binding: CarouselBinding = {
+        ...carousel_DEFAULTS,
+        count: 5,
+        pendingDir: {
+          dir: "left",
+          axis: "horizontal"
+        },
+        nodeBindings: {
+          currentNode: 1,
+          nodes: [
+            { nodeId: 0, sceneIdx: 0 },
+            { nodeId: 1, sceneIdx: 1 },
+            { nodeId: 2, sceneIdx: 2 }
+          ]
+        }
+      }
+
+      applyCommit(binding)
+
+      expect(binding.nodeBindings.currentNode).toBe(2)
+
+      expect(binding.nodeBindings.nodes).toEqual([
+        { nodeId: 0, sceneIdx: 3 },
+        { nodeId: 1, sceneIdx: 1 },
+        { nodeId: 2, sceneIdx: 2 }
+      ])
+    })
+
+
+    it("commits to the previous node", () => {
+      const binding: CarouselBinding = {
+        ...carousel_DEFAULTS,
+        count: 5,
+        pendingDir: {
+          dir: "right",
+          axis: "horizontal"
+        },
+        nodeBindings: {
+          currentNode: 1,
+          nodes: [
+            { nodeId: 0, sceneIdx: 0 },
+            { nodeId: 1, sceneIdx: 1 },
+            { nodeId: 2, sceneIdx: 2 }
+          ]
+        }
+      }
+
+      applyCommit(binding)
+
+      expect(binding.nodeBindings.currentNode).toBe(0)
+
+      expect(binding.nodeBindings.nodes).toEqual([
+        { nodeId: 0, sceneIdx: 0 },
+        { nodeId: 1, sceneIdx: 1 },
+        { nodeId: 2, sceneIdx: 4 }
+      ])
+    })
+
+
+    it("does nothing without a pending direction", () => {
+      const binding: CarouselBinding = {
+        ...carousel_DEFAULTS,
+        pendingDir: null
+      }
+
+      const before = structuredClone(binding)
+
+      applyCommit(binding)
+
+      expect(binding).toEqual(before)
+    })
+  })
 })

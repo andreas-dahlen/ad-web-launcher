@@ -1,93 +1,100 @@
-export function createProcessingTracker(expectedCssPaths: string[]) {
-  const expected = new Set(expectedCssPaths);
-  const processed = new Set<string>();
-  const failures = new Set<string>();
+const POST_CSS_FLUSH_DELAY_MS = 1000
 
-  let flushTimer: ReturnType<typeof setTimeout> | undefined;
+export function createProcessingTracker(expectedCssPaths: string[]) {
+  const expectedPaths = new Set(expectedCssPaths)
+  const processedPaths = new Set<string>()
+  const failedPaths = new Set<string>()
+
+  let postCssTimer: ReturnType<typeof setTimeout> | undefined
 
   let completion:
     | {
-      resolve: () => void;
-      reject: (error: unknown) => void;
+      resolve: () => void
+      reject: (error: unknown) => void
     }
-    | undefined;
+    | undefined
+
+  const __TEST_ONLY_API = () => ({
+    expectedPaths: new Set(expectedPaths),
+    processedPaths: new Set(processedPaths),
+    failedPaths: new Set(failedPaths),
+  })
 
   return {
-    snapshot,
+    __TEST_ONLY_API,
     markProcessed,
     markMissing,
     invalidate,
-    notifyActivity,
-    awaitCompletion,
-    hasSucceeded,
-    hasFinished,
-  };
+    notifyPostCssActivity,
+    awaitPostCssCompletion,
+    tokensSucceeded,
+  }
 
   function invalidate(cssPath: string) {
-    expected.add(cssPath);
-    processed.delete(cssPath);
-    failures.delete(cssPath);
+    expectedPaths.add(cssPath)
+    processedPaths.delete(cssPath)
+    failedPaths.delete(cssPath)
 
-    scheduleFlush();
+    schedulePostCssFlush()
   }
 
   function markProcessed(cssPath: string) {
-    processed.add(cssPath);
-    failures.delete(cssPath);
+    processedPaths.add(cssPath)
+    failedPaths.delete(cssPath)
 
-    scheduleFlush();
+    schedulePostCssFlush()
   }
 
   function markMissing(cssPath: string) {
-    if (!expected.has(cssPath)) {
-      return;
+    if (!expectedPaths.has(cssPath)) {
+      return
     }
 
-    failures.add(cssPath);
-    processed.delete(cssPath);
+    failedPaths.add(cssPath)
+    processedPaths.delete(cssPath)
 
-    scheduleFlush();
+    schedulePostCssFlush()
   }
 
-  function notifyActivity() {
-    scheduleFlush();
+  function notifyPostCssActivity() {
+    schedulePostCssFlush()
   }
 
-  function awaitCompletion(): Promise<void> {
+  function awaitPostCssCompletion(): Promise<void> {
     return new Promise((resolve, reject) => {
-      completion = { resolve, reject };
-      scheduleFlush();
-    });
+      completion = { resolve, reject }
+      schedulePostCssFlush()
+    })
   }
 
-  function scheduleFlush() {
-    if (flushTimer) {
-      clearTimeout(flushTimer);
+  function schedulePostCssFlush() {
+    if (postCssTimer) {
+      clearTimeout(postCssTimer)
     }
 
-    flushTimer = setTimeout(checkCompletion, 1000);
+    postCssTimer = setTimeout(flushPostCss, POST_CSS_FLUSH_DELAY_MS)
   }
 
-  function checkCompletion() {
-    flushTimer = undefined;
+  function flushPostCss() {
+    postCssTimer = undefined
 
     if (!completion) {
-      return;
+      return
     }
 
-    if (hasFinished()) {
-      const currentCompletion = completion;
-      completion = undefined;
+    if (allPathsResolved()) {
+      const currentCompletion = completion
+      completion = undefined
 
-      currentCompletion.resolve();
-      return;
+      currentCompletion.resolve()
+      return
     }
 
-    const missing = [...expected].filter(
+    const missing = [...expectedPaths].filter(
       cssPath =>
-        !processed.has(cssPath) &&
-        !failures.has(cssPath),
-    );
+        !processedPaths.has(cssPath) &&
+        !failedPaths.has(cssPath),
+    )
 
     const error = new Error(
       [
@@ -102,36 +109,28 @@ export function createProcessingTracker(expectedCssPaths: string[]) {
         "  • processing exited early",
         "",
       ].join("\n"),
-    );
+    )
 
-    const currentCompletion = completion;
-    completion = undefined;
+    const currentCompletion = completion
+    completion = undefined
 
-    currentCompletion.reject(error);
+    currentCompletion.reject(error)
   }
 
-  function snapshot() {
-    return {
-      expected: new Set(expected),
-      processed: new Set(processed),
-      failures: new Set(failures),
-    };
-  }
 
-  function hasFinished() {
-    for (const cssPath of expected) {
+  function allPathsResolved() {
+    for (const cssPath of expectedPaths) {
       if (
-        !processed.has(cssPath) &&
-        !failures.has(cssPath)
+        !processedPaths.has(cssPath) &&
+        !failedPaths.has(cssPath)
       ) {
-        return false;
+        return false
       }
     }
-
-    return true;
+    return true
   }
 
-  function hasSucceeded() {
-    return hasFinished() && failures.size === 0;
+  function tokensSucceeded() {
+    return allPathsResolved() && failedPaths.size === 0
   }
 }

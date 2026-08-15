@@ -6,13 +6,15 @@
   "scripts": {
     "test": "vitest",
     "test:coverage": "vitest run --coverage",
+    "test:coverage:open": "xdg-open coverage/index.html",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "build:prod": "tsc -b && vite build --mode production && node scripts/deploy.js",
     "lint": "eslint .",
     "preview": "vite preview",
     "knip": "knip",
-    "tokens": "tsx src/styleTokens/compiler/dryLogCompiler.ts"
+    "tokens": "tsx src/styleTokens/compiler/dryLogCompiler.ts",
+    "typecheck": "tsc -b --noEmit"
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.10",

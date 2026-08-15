@@ -13,27 +13,24 @@ describe('[COMPILER]', () => {
         'surface.module.css',
       ])
 
-      const snapshot = tracker.snapshot()
+      const state = tracker.__TEST_ONLY_API()
 
-      expect(snapshot.expected).toEqual(
+      expect(state.expectedPaths).toEqual(
         new Set([
           'button.module.css',
           'surface.module.css',
         ])
       )
 
-      expect(snapshot.processed).toEqual(new Set())
-      expect(snapshot.failures).toEqual(new Set())
-
-      expect(tracker.hasFinished()).toBe(false)
-      expect(tracker.hasSucceeded()).toBe(false)
+      expect(state.processedPaths).toEqual(new Set())
+      expect(state.failedPaths).toEqual(new Set())
+      expect(tracker.tokensSucceeded()).toBe(false)
     })
 
-    it('is finished when there are no expected paths', () => {
+    it('succeeds when there are no expected paths', () => {
       const tracker = createProcessingTracker([])
 
-      expect(tracker.hasFinished()).toBe(true)
-      expect(tracker.hasSucceeded()).toBe(true)
+      expect(tracker.tokensSucceeded()).toBe(true)
     })
 
     it('marks an expected path as processed', () => {
@@ -43,18 +40,17 @@ describe('[COMPILER]', () => {
 
       tracker.markProcessed('button.module.css')
 
-      const snapshot = tracker.snapshot()
+      const state = tracker.__TEST_ONLY_API()
 
-      expect(snapshot.processed).toEqual(
+      expect(state.processedPaths).toEqual(
         new Set(['button.module.css'])
       )
 
-      expect(snapshot.failures).toEqual(new Set())
-      expect(tracker.hasFinished()).toBe(true)
-      expect(tracker.hasSucceeded()).toBe(true)
+      expect(state.failedPaths).toEqual(new Set())
+      expect(tracker.tokensSucceeded()).toBe(true)
     })
 
-    it('does not finish until every expected path is resolved', () => {
+    it('does not succeed until every expected path is resolved', () => {
       const tracker = createProcessingTracker([
         'button.module.css',
         'surface.module.css',
@@ -62,13 +58,11 @@ describe('[COMPILER]', () => {
 
       tracker.markProcessed('button.module.css')
 
-      expect(tracker.hasFinished()).toBe(false)
-      expect(tracker.hasSucceeded()).toBe(false)
+      expect(tracker.tokensSucceeded()).toBe(false)
 
       tracker.markProcessed('surface.module.css')
 
-      expect(tracker.hasFinished()).toBe(true)
-      expect(tracker.hasSucceeded()).toBe(true)
+      expect(tracker.tokensSucceeded()).toBe(true)
     })
 
     it('marks an expected path as a failure', () => {
@@ -78,16 +72,14 @@ describe('[COMPILER]', () => {
 
       tracker.markMissing('button.module.css')
 
-      const snapshot = tracker.snapshot()
+      const state = tracker.__TEST_ONLY_API()
 
-      expect(snapshot.failures).toEqual(
+      expect(state.failedPaths).toEqual(
         new Set(['button.module.css'])
       )
 
-      expect(snapshot.processed).toEqual(new Set())
-
-      expect(tracker.hasFinished()).toBe(true)
-      expect(tracker.hasSucceeded()).toBe(false)
+      expect(state.processedPaths).toEqual(new Set())
+      expect(tracker.tokensSucceeded()).toBe(false)
     })
 
     it('does not mark an unexpected path as a failure', () => {
@@ -97,13 +89,11 @@ describe('[COMPILER]', () => {
 
       tracker.markMissing('surface.module.css')
 
-      const snapshot = tracker.snapshot()
+      const state = tracker.__TEST_ONLY_API()
 
-      expect(snapshot.failures).toEqual(new Set())
-      expect(snapshot.processed).toEqual(new Set())
-
-      expect(tracker.hasFinished()).toBe(false)
-      expect(tracker.hasSucceeded()).toBe(false)
+      expect(state.failedPaths).toEqual(new Set())
+      expect(state.processedPaths).toEqual(new Set())
+      expect(tracker.tokensSucceeded()).toBe(false)
     })
 
     it('replaces a failure when the path is processed successfully', () => {
@@ -114,14 +104,14 @@ describe('[COMPILER]', () => {
       tracker.markMissing('button.module.css')
       tracker.markProcessed('button.module.css')
 
-      const snapshot = tracker.snapshot()
+      const state = tracker.__TEST_ONLY_API()
 
-      expect(snapshot.processed).toEqual(
+      expect(state.processedPaths).toEqual(
         new Set(['button.module.css'])
       )
 
-      expect(snapshot.failures).toEqual(new Set())
-      expect(tracker.hasSucceeded()).toBe(true)
+      expect(state.failedPaths).toEqual(new Set())
+      expect(tracker.tokensSucceeded()).toBe(true)
     })
 
     it('invalidates a processed path', () => {
@@ -131,21 +121,19 @@ describe('[COMPILER]', () => {
 
       tracker.markProcessed('button.module.css')
 
-      expect(tracker.hasSucceeded()).toBe(true)
+      expect(tracker.tokensSucceeded()).toBe(true)
 
       tracker.invalidate('button.module.css')
 
-      const snapshot = tracker.snapshot()
+      const state = tracker.__TEST_ONLY_API()
 
-      expect(snapshot.expected).toEqual(
+      expect(state.expectedPaths).toEqual(
         new Set(['button.module.css'])
       )
 
-      expect(snapshot.processed).toEqual(new Set())
-      expect(snapshot.failures).toEqual(new Set())
-
-      expect(tracker.hasFinished()).toBe(false)
-      expect(tracker.hasSucceeded()).toBe(false)
+      expect(state.processedPaths).toEqual(new Set())
+      expect(state.failedPaths).toEqual(new Set())
+      expect(tracker.tokensSucceeded()).toBe(false)
     })
 
     it('invalidates a failed path', () => {
@@ -155,18 +143,15 @@ describe('[COMPILER]', () => {
 
       tracker.markMissing('button.module.css')
 
-      expect(tracker.hasFinished()).toBe(true)
-      expect(tracker.hasSucceeded()).toBe(false)
+      expect(tracker.tokensSucceeded()).toBe(false)
 
       tracker.invalidate('button.module.css')
 
-      const snapshot = tracker.snapshot()
+      const state = tracker.__TEST_ONLY_API()
 
-      expect(snapshot.processed).toEqual(new Set())
-      expect(snapshot.failures).toEqual(new Set())
-
-      expect(tracker.hasFinished()).toBe(false)
-      expect(tracker.hasSucceeded()).toBe(false)
+      expect(state.processedPaths).toEqual(new Set())
+      expect(state.failedPaths).toEqual(new Set())
+      expect(tracker.tokensSucceeded()).toBe(false)
     })
 
     it('adds a new path when invalidating an unknown path', () => {
@@ -174,43 +159,42 @@ describe('[COMPILER]', () => {
 
       tracker.invalidate('button.module.css')
 
-      const snapshot = tracker.snapshot()
+      const state = tracker.__TEST_ONLY_API()
 
-      expect(snapshot.expected).toEqual(
+      expect(state.expectedPaths).toEqual(
         new Set(['button.module.css'])
       )
 
-      expect(tracker.hasFinished()).toBe(false)
-      expect(tracker.hasSucceeded()).toBe(false)
+      expect(tracker.tokensSucceeded()).toBe(false)
     })
 
-    it('does not mutate the sets returned by snapshot', () => {
+    it('does not expose mutable internal sets', () => {
       const tracker = createProcessingTracker([
         'button.module.css',
       ])
 
       tracker.markProcessed('button.module.css')
 
-      const snapshot = tracker.snapshot()
+      const state = tracker.__TEST_ONLY_API()
 
-      snapshot.expected.clear()
-      snapshot.processed.clear()
-      snapshot.failures.add('fake.module.css')
+      state.expectedPaths.clear()
+      state.processedPaths.clear()
+      state.failedPaths.add('fake.module.css')
 
-      const nextSnapshot = tracker.snapshot()
+      const nextState = tracker.__TEST_ONLY_API()
 
-      expect(nextSnapshot.expected).toEqual(
+      expect(nextState.expectedPaths).toEqual(
         new Set(['button.module.css'])
       )
 
-      expect(nextSnapshot.processed).toEqual(
+      expect(nextState.processedPaths).toEqual(
         new Set(['button.module.css'])
       )
 
-      expect(nextSnapshot.failures).toEqual(new Set())
+      expect(nextState.failedPaths).toEqual(new Set())
     })
 
-    it('requires all expected paths to be resolved for success', () => {
+    it('does not succeed when any expected path has failed', () => {
       const tracker = createProcessingTracker([
         'button.module.css',
         'surface.module.css',
@@ -220,13 +204,11 @@ describe('[COMPILER]', () => {
       tracker.markProcessed('button.module.css')
       tracker.markMissing('surface.module.css')
 
-      expect(tracker.hasFinished()).toBe(false)
-      expect(tracker.hasSucceeded()).toBe(false)
+      expect(tracker.tokensSucceeded()).toBe(false)
 
       tracker.markProcessed('layout.module.css')
 
-      expect(tracker.hasFinished()).toBe(true)
-      expect(tracker.hasSucceeded()).toBe(false)
+      expect(tracker.tokensSucceeded()).toBe(false)
     })
 
     it('succeeds when all expected paths are processed', () => {
@@ -238,38 +220,36 @@ describe('[COMPILER]', () => {
       tracker.markProcessed('button.module.css')
       tracker.markProcessed('surface.module.css')
 
-      expect(tracker.hasFinished()).toBe(true)
-      expect(tracker.hasSucceeded()).toBe(true)
+      expect(tracker.tokensSucceeded()).toBe(true)
     })
 
-    it('does not count unrelated failures toward completion', () => {
+    it('does not count unrelated failures', () => {
       const tracker = createProcessingTracker([
         'button.module.css',
       ])
 
       tracker.markMissing('unrelated.module.css')
 
-      expect(tracker.hasFinished()).toBe(false)
-      expect(tracker.hasSucceeded()).toBe(false)
+      const state = tracker.__TEST_ONLY_API()
+
+      expect(state.failedPaths).toEqual(new Set())
+      expect(tracker.tokensSucceeded()).toBe(false)
     })
 
-    describe('stall detection', () => {
-
-      it('does not throw when all paths are resolved before the timer fires', () => {
-        vi.useFakeTimers()
-
+    describe('PostCSS completion', () => {
+      it('resolves when all expected paths are already resolved', async () => {
         const tracker = createProcessingTracker([
           'button.module.css',
         ])
 
         tracker.markProcessed('button.module.css')
 
-        expect(() => {
-          vi.advanceTimersByTime(1000)
-        }).not.toThrow()
+        await expect(
+          tracker.awaitPostCssCompletion()
+        ).resolves.toBeUndefined()
       })
 
-      it('resets the stall timer whenever progress is made', () => {
+      it('resolves when all expected paths are processed', async () => {
         vi.useFakeTimers()
 
         const tracker = createProcessingTracker([
@@ -277,22 +257,106 @@ describe('[COMPILER]', () => {
           'surface.module.css',
         ])
 
+        const completion = tracker.awaitPostCssCompletion()
+
+        tracker.markProcessed('button.module.css')
+        tracker.markProcessed('surface.module.css')
+
+        vi.advanceTimersByTime(1000)
+
+        await expect(completion).resolves.toBeUndefined()
+      })
+
+      it('resolves when all expected paths finish with failures', async () => {
+        vi.useFakeTimers()
+
+        const tracker = createProcessingTracker([
+          'button.module.css',
+          'surface.module.css',
+        ])
+
+        const completion = tracker.awaitPostCssCompletion()
+
+        tracker.markMissing('button.module.css')
+        tracker.markMissing('surface.module.css')
+
+        vi.advanceTimersByTime(1000)
+
+        await expect(completion).resolves.toBeUndefined()
+      })
+
+      it('rejects when expected paths remain unresolved', async () => {
+        vi.useFakeTimers()
+
+        const tracker = createProcessingTracker([
+          'button.module.css',
+          'surface.module.css',
+        ])
+
+        const completion = tracker.awaitPostCssCompletion()
+
+        vi.advanceTimersByTime(1000)
+
+        await expect(completion).rejects.toThrow(
+          'Style token compilation stalled'
+        )
+      })
+
+      it('reports all unresolved CSS modules when PostCSS stalls', async () => {
+        vi.useFakeTimers()
+
+        const tracker = createProcessingTracker([
+          'button.module.css',
+          'surface.module.css',
+          'layout.module.css',
+        ])
+
+        const completion = tracker.awaitPostCssCompletion()
+
+        vi.advanceTimersByTime(1000)
+
+        await expect(completion).rejects.toThrow(
+          [
+            '❌ Style token compilation stalled',
+            '',
+            'Unresolved CSS modules:',
+            '  • button.module.css',
+            '  • surface.module.css',
+            '  • layout.module.css',
+          ].join('\n')
+        )
+      })
+
+      it('resets the PostCSS flush timer when processing makes progress', async () => {
+        vi.useFakeTimers()
+
+        const tracker = createProcessingTracker([
+          'button.module.css',
+          'surface.module.css',
+        ])
+
+        const completion = tracker.awaitPostCssCompletion()
+
         vi.advanceTimersByTime(900)
 
         tracker.markProcessed('button.module.css')
 
-        expect(() => {
-          vi.advanceTimersByTime(900)
-        }).not.toThrow()
+        vi.advanceTimersByTime(999)
 
-        expect(tracker.hasFinished()).toBe(false)
+        expect(
+          tracker.__TEST_ONLY_API().processedPaths
+        ).toEqual(
+          new Set(['button.module.css'])
+        )
 
-        expect(() => {
-          vi.advanceTimersByTime(100)
-        }).toThrow()
+        tracker.markProcessed('surface.module.css')
+
+        vi.advanceTimersByTime(1000)
+
+        await expect(completion).resolves.toBeUndefined()
       })
 
-      it('resets the stall timer when a path is invalidated', () => {
+      it('resets the PostCSS flush timer when a path is invalidated', async () => {
         vi.useFakeTimers()
 
         const tracker = createProcessingTracker([
@@ -301,19 +365,66 @@ describe('[COMPILER]', () => {
 
         tracker.markProcessed('button.module.css')
 
+        const completion = tracker.awaitPostCssCompletion()
+
         vi.advanceTimersByTime(900)
 
         tracker.invalidate('button.module.css')
 
-        expect(() => {
-          vi.advanceTimersByTime(900)
-        }).not.toThrow()
+        vi.advanceTimersByTime(999)
 
-        expect(tracker.hasFinished()).toBe(false)
+        expect(
+          tracker.__TEST_ONLY_API().processedPaths
+        ).toEqual(new Set())
 
-        expect(() => {
-          vi.advanceTimersByTime(100)
-        }).toThrow()
+        const rejection = expect(completion).rejects.toThrow(
+          'Style token compilation stalled'
+        )
+
+        vi.advanceTimersByTime(1)
+
+        await rejection
+      })
+
+      it('resets the PostCSS flush timer when PostCSS activity occurs', async () => {
+        vi.useFakeTimers()
+
+        const tracker = createProcessingTracker([
+          'button.module.css',
+        ])
+
+        const completion = tracker.awaitPostCssCompletion()
+
+        vi.advanceTimersByTime(900)
+
+        tracker.notifyPostCssActivity()
+
+        vi.advanceTimersByTime(999)
+
+        const rejection = expect(completion).rejects.toThrow(
+          'Style token compilation stalled'
+        )
+
+        vi.advanceTimersByTime(1)
+
+        await rejection
+      })
+
+      it('resolves after a failure followed by successful processing', async () => {
+        vi.useFakeTimers()
+
+        const tracker = createProcessingTracker([
+          'button.module.css',
+        ])
+
+        const completion = tracker.awaitPostCssCompletion()
+
+        tracker.markMissing('button.module.css')
+        tracker.markProcessed('button.module.css')
+
+        vi.advanceTimersByTime(1000)
+
+        await expect(completion).resolves.toBeUndefined()
       })
     })
   })

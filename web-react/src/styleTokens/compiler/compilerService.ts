@@ -47,7 +47,7 @@ export function initializeCompiler(tokensDir: string) {
   }
 
   function runCssModule(root: Root, cssPath: string): void {
-    tracker.notifyActivity()
+    tracker.notifyPostCssActivity()
 
     const postData = processPost(root, cssPath)
     run.recordPostData(postData)
@@ -60,7 +60,7 @@ export function initializeCompiler(tokensDir: string) {
       void handleCompletion()
       return
     }
-    tracker.notifyActivity()
+    tracker.notifyPostCssActivity()
     assert.hasCssPath(group)
 
     const cssData = processModule({ root, group })
@@ -72,11 +72,11 @@ export function initializeCompiler(tokensDir: string) {
   }
 
   async function handleCompletion(): Promise<void> {
-    await tracker.awaitCompletion();
+    await tracker.awaitPostCssCompletion();
 
     if (!guard.canComplete()) return
 
-    if (tracker.hasSucceeded()) {
+    if (tracker.tokensSucceeded()) {
       const emitResult = emitFiles(cache, run)
       run.recordEmitResult(emitResult)
 

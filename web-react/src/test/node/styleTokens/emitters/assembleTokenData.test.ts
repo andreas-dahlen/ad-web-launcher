@@ -1,209 +1,484 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 
-import { assembleTokenData } from '@styleTokens/emitters/extract/assemblers/assembleTokenData'
-import type {
-  CompilerToken,
-  CompilerVariable,
-  CssTokenGroup,
-} from '@styleTokens/types/compiler.types'
+import { extractData } from '@styleTokens/emitters/extract/extractData'
+import { assembleMetadata, type GroupMetadata } from '@styleTokens/emitters/extract/assemblers/assembleMetadata'
+import { assembleTokenData, type TokenGroupFileData } from '@styleTokens/emitters/extract/assemblers/assembleTokenData'
+import { assemblePresetData } from '@styleTokens/emitters/extract/assemblers/assemblePresetData'
+import { assembleVariableData } from '@styleTokens/emitters/extract/assemblers/assembleVariableData'
+import type { CssVarString } from '@shared/tokenUtils/compiler.types'
 
-function createVariable(
-  overrides: Partial<CompilerVariable> = {},
-): CompilerVariable {
-  return {
-    key: 'bg',
-    name: 'backGround',
-    cssName: 'back-ground',
-    values: {},
-    effectiveAllowed: ['f'],
-    ...overrides,
-  }
-}
+vi.mock(
+  '@styleTokens/emitters/extract/assemblers/assembleMetadata',
+)
 
-function createToken(
-  overrides: Partial<CompilerToken> = {},
-): CompilerToken {
-  return {
-    name: 'button',
-    infix: 'button',
-    tokenPath: '/tokens/button/default.jsonc',
-    vars: [
-      createVariable(),
-    ],
-    ...overrides,
-  }
-}
+vi.mock(
+  '@styleTokens/emitters/extract/assemblers/assembleTokenData',
+)
 
-function createGroup(
-  overrides: Partial<CssTokenGroup> = {},
-): CssTokenGroup {
-  return {
-    groupPath: '/tokens/button',
-    cssPath: '/components/Button/Button.module.css',
-    tokens: [
-      createToken(),
-    ],
-    ...overrides,
-  }
-}
+vi.mock(
+  '@styleTokens/emitters/extract/assemblers/assemblePresetData',
+)
+
+vi.mock(
+  '@styleTokens/emitters/extract/assemblers/assembleVariableData',
+)
 
 describe('[EMITTERS]', () => {
-  describe('assembleTokenData', () => {
-    it('builds names from the group name', () => {
-      const result = assembleTokenData(
-        createGroup({
+  describe('extractData', () => {
+
+    it('returns empty collections when there are no processed groups', () => {
+      const cache = {
+        getGroupByGroupPath: vi.fn(),
+      }
+
+      const run = {
+        getProcessedGroupPaths: vi.fn()
+          .mockReturnValue([]),
+        getCssData: vi.fn(),
+        getAllPostData: vi.fn()
+          .mockReturnValue([]),
+      }
+
+      const variables = [] as CssVarString[]
+
+      vi.mocked(assembleVariableData)
+        .mockReturnValue(variables)
+
+      const result = extractData(
+        cache as never,
+        run as never,
+      )
+
+      expect(result).toEqual({
+        outputData: {
+          presetFiles: [],
+          tokenFiles: [],
+          metadata: [],
+          allVariables: variables,
+        },
+        extractResult: {
+          omittedPresetFiles: [],
+        },
+      })
+
+      expect(run.getAllPostData)
+        .toHaveBeenCalled()
+
+      expect(assembleVariableData)
+        .toHaveBeenCalledWith([], [])
+    })
+
+    it('collects assembled metadata, token data, and preset data', () => {
+      const group = {
+        groupPath: '/tokens/button',
+      }
+
+      const cssData = {
+        groupPath: '/tokens/button',
+      }
+
+      const metadata = {
+        name: 'button',
+      }
+
+      const tokenData = {
+        name: 'button',
+        tokens: [],
+      }
+
+      const presetData = {
+        presetName: 'buttonPreset',
+      }
+
+      const cache = {
+        getGroupByGroupPath: vi.fn()
+          .mockReturnValue(group),
+      }
+
+      const run = {
+        getProcessedGroupPaths: vi.fn()
+          .mockReturnValue(['/tokens/button']),
+        getCssData: vi.fn()
+          .mockReturnValue(cssData),
+        getAllPostData: vi.fn()
+          .mockReturnValue([]),
+      }
+
+      const variables = [] as CssVarString[]
+
+      vi.mocked(assembleMetadata)
+        .mockReturnValue(metadata as never)
+
+      vi.mocked(assembleTokenData)
+        .mockReturnValue(tokenData as never)
+
+      vi.mocked(assemblePresetData)
+        .mockReturnValue(presetData as never)
+
+      vi.mocked(assembleVariableData)
+        .mockReturnValue(variables)
+
+      const result = extractData(
+        cache as never,
+        run as never,
+      )
+
+      expect(result).toEqual({
+        outputData: {
+          metadata: [metadata],
+          tokenFiles: [tokenData],
+          presetFiles: [presetData],
+          allVariables: variables,
+        },
+        extractResult: {
+          omittedPresetFiles: [],
+        },
+      })
+
+      expect(assembleMetadata)
+        .toHaveBeenCalledWith(group)
+
+      expect(assembleTokenData)
+        .toHaveBeenCalledWith(group)
+
+      expect(assemblePresetData)
+        .toHaveBeenCalledWith(cssData)
+    })
+
+    it('records omitted preset files when preset data is not assembled', () => {
+      const group = {
+        groupPath: '/tokens/button',
+      }
+
+      const cssData = {
+        cssPath: '/styles/button.css',
+        groupPath: '/tokens/button',
+      }
+
+      const metadata = {
+        name: 'button',
+      }
+
+      const tokenData = {
+        name: 'button',
+        tokens: [],
+      }
+
+      const cache = {
+        getGroupByGroupPath: vi.fn()
+          .mockReturnValue(group),
+      }
+
+      const run = {
+        getProcessedGroupPaths: vi.fn()
+          .mockReturnValue(['/tokens/button']),
+        getCssData: vi.fn()
+          .mockReturnValue(cssData),
+        getAllPostData: vi.fn()
+          .mockReturnValue([]),
+      }
+
+      const variables = [] as CssVarString[]
+
+      vi.mocked(assembleMetadata)
+        .mockReturnValue(metadata as never)
+
+      vi.mocked(assembleTokenData)
+        .mockReturnValue(tokenData as never)
+
+      vi.mocked(assemblePresetData)
+        .mockReturnValue(null)
+
+      vi.mocked(assembleVariableData)
+        .mockReturnValue(variables)
+
+      const result = extractData(
+        cache as never,
+        run as never,
+      )
+
+      expect(result).toEqual({
+        outputData: {
+          metadata: [metadata],
+          tokenFiles: [tokenData],
+          presetFiles: [],
+          allVariables: variables,
+        },
+        extractResult: {
+          omittedPresetFiles: [
+            '/styles/button.css',
+          ],
+        },
+      })
+
+      expect(assemblePresetData)
+        .toHaveBeenCalledWith(cssData)
+    })
+
+    it('skips preset data when CSS data is missing', () => {
+      const group = {
+        groupPath: '/tokens/button',
+      }
+
+      const metadata = {
+        name: 'button',
+      }
+
+      const tokenData = {
+        name: 'button',
+        tokens: [],
+      }
+
+      const cache = {
+        getGroupByGroupPath: vi.fn()
+          .mockReturnValue(group),
+      }
+
+      const run = {
+        getProcessedGroupPaths: vi.fn()
+          .mockReturnValue(['/tokens/button']),
+        getCssData: vi.fn()
+          .mockReturnValue(undefined),
+        getAllPostData: vi.fn()
+          .mockReturnValue([]),
+      }
+
+      const variables = [] as CssVarString[]
+
+      vi.mocked(assembleMetadata)
+        .mockReturnValue(metadata as never)
+
+      vi.mocked(assembleTokenData)
+        .mockReturnValue(tokenData as never)
+
+      vi.mocked(assembleVariableData)
+        .mockReturnValue(variables)
+
+      const result = extractData(
+        cache as never,
+        run as never,
+      )
+
+      expect(result).toEqual({
+        outputData: {
+          metadata: [metadata],
+          tokenFiles: [tokenData],
+          presetFiles: [],
+          allVariables: variables,
+        },
+        extractResult: {
+          omittedPresetFiles: [],
+        },
+      })
+
+      expect(assemblePresetData)
+        .not.toHaveBeenCalled()
+    })
+
+    it('collects assembled variable data from all token files', () => {
+      const groups = [
+        {
           groupPath: '/tokens/button',
-        }),
-      )
+        },
+        {
+          groupPath: '/tokens/input',
+        },
+      ]
 
-      expect(result.name).toBe('button')
-      expect(result.styleName).toBe('buttonStyle')
-      expect(result.typeName).toBe('ButtonStyle')
-    })
-
-    it('builds the generated token file path', () => {
-      const result = assembleTokenData(
-        createGroup({
+      const postData = [
+        {
           groupPath: '/tokens/button',
-        }),
-      )
-
-      expect(result.tokenFile).toContain(
-        '/src/shared/generated/tokenModules/button.token.ts',
-      )
-    })
-
-    it('preserves token infixes', () => {
-      const result = assembleTokenData(
-        createGroup({
-          tokens: [
-            createToken({
-              infix: 'button',
-            }),
-            createToken({
-              infix: 'surface',
-            }),
-          ],
-        }),
-      )
-
-      expect(result.tokens).toEqual([
-        expect.objectContaining({
-          infix: 'button',
-        }),
-        expect.objectContaining({
-          infix: 'surface',
-        }),
-      ])
-    })
-
-    it('maps variable names, keys, and allowed prefixes', () => {
-      const result = assembleTokenData(
-        createGroup({
-          tokens: [
-            createToken({
-              vars: [
-                // eslint-disable-next-line unicorn/max-nested-calls
-                createVariable({
-                  key: 'bg',
-                  name: 'backGround',
-                  cssName: 'back-ground',
-                  effectiveAllowed: ['f', 'p'],
-                }),
-              ],
-            }),
-          ],
-        }),
-      )
-
-      expect(result.tokens[0]?.variables).toEqual([
-        {
-          cssName: 'back-ground',
-          key: 'bg',
-          allowed: ['f', 'p'],
-          values: {}
-        },
-      ])
-    })
-
-    it('falls back to the variable key when the name is missing', () => {
-      const result = assembleTokenData(
-        createGroup({
-          tokens: [
-            createToken({
-              vars: [
-                // eslint-disable-next-line unicorn/max-nested-calls
-                createVariable({
-                  key: 'bg',
-                  name: undefined,
-                  cssName: undefined,
-                }),
-              ],
-            }),
-          ],
-        }),
-      )
-
-      expect(result.tokens[0]?.variables).toEqual([
-        {
-          key: 'bg',
-          cssName: undefined,
-          allowed: ['f'],
-          values: {}
-        },
-      ])
-    })
-
-    it('preserves multiple variables within a token', () => {
-      const result = assembleTokenData(
-        createGroup({
-          tokens: [
-            createToken({
-              vars: [
-                // eslint-disable-next-line unicorn/max-nested-calls
-                createVariable({
-                  key: 'bg',
-                  name: 'backGround',
-                  cssName: 'back-ground',
-                  effectiveAllowed: ['f'],
-                }),
-                // eslint-disable-next-line unicorn/max-nested-calls
-                createVariable({
-                  key: 'radius',
-                  name: 'borderRadius',
-                  cssName: 'border-radius',
-                  effectiveAllowed: ['p', 'f'],
-                }),
-              ],
-            }),
-          ],
-        }),
-      )
-
-      expect(result.tokens[0]?.variables).toEqual([
-        {
-          cssName: 'back-ground',
-          key: 'bg',
-          allowed: ['f'],
-          values: {}
         },
         {
-          cssName: 'border-radius',
-          key: 'radius',
-          allowed: ['p', 'f'],
-          values: {}
+          groupPath: '/tokens/input',
         },
-      ])
-    })
+      ]
 
-    it('returns an empty token list when the group has no tokens', () => {
-      const result = assembleTokenData(
-        createGroup({
-          tokens: [],
-        }),
+      const buttonTokenData = {
+        name: 'button',
+        tokens: [
+          {
+            infix: 'button',
+            variables: [],
+          },
+        ],
+      }
+
+      const inputTokenData = {
+        name: 'input',
+        tokens: [
+          {
+            infix: 'input',
+            variables: [],
+          },
+        ],
+      }
+
+      const variables = [
+        '--button-color',
+        '--button-radius',
+        '--input-color',
+      ] as CssVarString[]
+
+      const cache = {
+        getGroupByGroupPath: vi.fn()
+          .mockImplementation(groupPath => {
+            return groups.find(group => group.groupPath === groupPath)
+          }),
+      }
+
+      const run = {
+        getProcessedGroupPaths: vi.fn()
+          .mockReturnValue([
+            '/tokens/button',
+            '/tokens/input',
+          ]),
+        getCssData: vi.fn()
+          .mockReturnValue(undefined),
+        getAllPostData: vi.fn()
+          .mockReturnValue(postData),
+      }
+
+      vi.mocked(assembleTokenData)
+        .mockReturnValueOnce(buttonTokenData as never)
+        .mockReturnValueOnce(inputTokenData as never)
+
+      vi.mocked(assembleVariableData)
+        .mockReturnValue(variables)
+
+      const result = extractData(
+        cache as never,
+        run as never,
       )
 
-      expect(result.tokens).toEqual([])
+      expect(result.outputData.allVariables)
+        .toEqual(variables)
+
+      expect(assembleVariableData)
+        .toHaveBeenCalledWith(
+          postData,
+          [
+            ...buttonTokenData.tokens,
+            ...inputTokenData.tokens,
+          ],
+        )
+    })
+
+    it('only passes successfully assembled token data to variable assembly', () => {
+      const groups = [
+        {
+          groupPath: '/tokens/button',
+        },
+        {
+          groupPath: '/tokens/input',
+        },
+      ]
+
+      const postData = [
+        {
+          groupPath: '/tokens/button',
+        },
+        {
+          groupPath: '/tokens/input',
+        },
+      ]
+
+      const tokenData = {
+        name: 'button',
+        tokens: [
+          {
+            infix: 'button',
+            variables: [],
+          },
+        ],
+      }
+
+      const cache = {
+        getGroupByGroupPath: vi.fn()
+          .mockImplementation(groupPath => {
+            return groups.find(group => group.groupPath === groupPath)
+          }),
+      }
+
+      const run = {
+        getProcessedGroupPaths: vi.fn()
+          .mockReturnValue([
+            '/tokens/button',
+            '/tokens/input',
+          ]),
+        getCssData: vi.fn()
+          .mockReturnValue(undefined),
+        getAllPostData: vi.fn()
+          .mockReturnValue(postData),
+      }
+
+      const variables = [] as CssVarString[]
+
+      vi.mocked(assembleTokenData)
+        .mockReturnValueOnce(tokenData as never)
+        .mockReturnValueOnce(undefined as unknown as TokenGroupFileData)
+
+      vi.mocked(assembleVariableData)
+        .mockReturnValue(variables)
+
+      extractData(
+        cache as never,
+        run as never,
+      )
+
+      expect(assembleVariableData)
+        .toHaveBeenCalledWith(
+          postData,
+          tokenData.tokens,
+        )
+    })
+
+    it('only collects assembler results that exist', () => {
+      const group = {
+        groupPath: '/tokens/button',
+      }
+
+      const cache = {
+        getGroupByGroupPath: vi.fn()
+          .mockReturnValue(group),
+      }
+
+      const run = {
+        getProcessedGroupPaths: vi.fn()
+          .mockReturnValue(['/tokens/button']),
+        getCssData: vi.fn()
+          .mockReturnValue(undefined),
+        getAllPostData: vi.fn()
+          .mockReturnValue([]),
+      }
+
+      const variables = [] as CssVarString[]
+
+      vi.mocked(assembleMetadata)
+        .mockReturnValue(undefined as unknown as GroupMetadata)
+
+      vi.mocked(assembleTokenData)
+        .mockReturnValue(undefined as unknown as TokenGroupFileData)
+
+      vi.mocked(assembleVariableData)
+        .mockReturnValue(variables)
+
+      const result = extractData(
+        cache as never,
+        run as never,
+      )
+
+      expect(result).toEqual({
+        outputData: {
+          presetFiles: [],
+          tokenFiles: [],
+          metadata: [],
+          allVariables: variables,
+        },
+        extractResult: {
+          omittedPresetFiles: [],
+        },
+      })
     })
   })
 })

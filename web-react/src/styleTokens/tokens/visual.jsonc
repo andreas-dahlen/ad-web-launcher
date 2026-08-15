@@ -1,20 +1,19 @@
 // file://wsl.localhost/Ubuntu/home/david/repos/ad-web-launcher/web-react/src/blocks/visual/Visual.module.css
-// file://wsl.localhost/Ubuntu//home/david/repos/ad-web-launcher/web-react/src/blocks/visual/Visual.module.css
 {
   "component": "visual",
   "infix": "visual",
 
-  "alwaysAllowed": ["o", "p", "f"],
+  "alwaysAllowed": [ "o", "p", "f" ],
   "vars": {
-    "bg": {"allowed": ["t"], "values": {"f": "none"}},
+    "bg": { "allowed": [ "t" ], "values": { "f": "none" } },
 
-    "overflow": { "values": { "f": "hidden"}},
+    "overflow": { "values": { "f": "hidden" } },
 
-    "border": { "allowed": ["t"], "values": {"f": "none"}},
-    "radius":{"values": {"f": "20px"}},
-    "shadow": { "values": { "f": "none"}},
-    "blur": { "values": { "f": "blur(20px)"}},
+    "border": { "allowed": [ "t" ], "values": { "f": "none" } },
+    "radius": { "values": { "f": "20px" } },
+    "shadow": { "values": { "f": "none" } },
+    "blur": { "values": { "f": "blur(20px)" } },
 
-    "opacity": {"values": {"f": "0.5"}}
+    "opacity": { "values": { "f": "0.5" } }
   }
 }

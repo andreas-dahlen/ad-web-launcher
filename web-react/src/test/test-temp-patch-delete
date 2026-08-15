@@ -1,0 +1,28 @@
+🔴 Tier 1 — investigate first
+slider.solver.ts — 47%
+SliderPrim.tsx — 46%
+carousel.store.ts — 55%
+wallpaper.store.ts — 11%
+settings.store.ts — 50%
+assembleTokenData.ts — 0%
+assembleVariableData.ts — 0%
+src/shared/assertions/assertions.ts — 0%
+
+🟡 Tier 2 — inspect after
+interpreter.ts — 82%
+buildDesc.ts — 90%
+domQuery.ts — 94%
+pipeline.ts — 92%
+scroll.store.ts — 83%
+drag.store.ts — 89%
+slider.store.ts — 91%
+
+🟢 Tier 3 — probably don't care
+
+Basically all the:
+
+95–100%
+
+files.
+
+Especially the 100% utility/compiler files. Don't manufacture tests just to turn 100 into 100. 😆

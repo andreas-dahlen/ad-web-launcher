@@ -10,6 +10,15 @@ default: help
 
 # ================== DEVELOPMENT ====================
 
+audit:
+    npm audit
+
+outdated:
+    npm outdated
+
+doctor:
+    npm doctor
+
 install:
     npm install
 
@@ -28,32 +37,53 @@ preview:
 
 # ==================== QUALITY ====================
 
+type:
+    npm run typecheck
+
 test *args:
     if [ -z "{{ args }}" ]; then \
         npm run test; \
     else \
-        npm run test -- {{ args }}; \
+        npm run test -- "src/test/{{ args }}"; \
     fi
 
 coverage *args:
     if [ -z "{{ args }}" ]; then \
         npm run test:coverage; \
     else \
-        npm run test:coverage -- {{ args }}; \
+        npm run test:coverage -- "src/test/{{ args }}"; \
     fi
 
+coverage-open:
+    npm run test:coverage:open
+
 lint *args:
-    if [ -z "{{ args }}" ]; then npm run lint; else npx eslint {{ args }}; fi
+    if [ -z "{{ args }}" ]; then \
+        npm run lint; \
+    else \
+        npx eslint {{ args }}; \
+    fi
 
 eslint: lint
 
-knip:
-    npx knip --no-exit-code
+knip *args:
+    npx knip --no-exit-code {{ args }}
+
+# Run the full project audit without stopping on individual failures.
+check:
+    npm run typecheck || true; \
+    npm run test -- --run || true; \
+    npx knip --no-exit-code; \
+    npm run lint || true
 
 # ============== STYLE TOKENS LOG ==================
 
 tokens *args:
-    if [ -z "{{ args }}" ]; then npx tsx src/styleTokens/compiler/dryLogCompiler.ts; else npx tsx src/styleTokens/compiler/dryLogCompiler.ts {{ args }}; fi
+    if [ -z "{{ args }}" ]; then \
+        npx tsx src/styleTokens/compiler/dryLogCompiler.ts; \
+    else \
+        npx tsx src/styleTokens/compiler/dryLogCompiler.ts {{ args }}; \
+    fi
 
 # ==================== EXTENSIONS ====================
 
