@@ -1,4 +1,6 @@
 {
+  "publisher": "ad-web-launcher",
+
   "name": "css-variable-completion",
   "displayName": "CSS Variable Completion",
   "description": "Provides completion for CSS custom-property declarations.",
@@ -31,13 +33,13 @@
     "esbuild": "^0.28.2",
     "typescript": "^6.0.3"
   },
-   "contributes": {
+  "contributes": {
     "configuration": {
       "properties": {
         "cssVariableCompletion.variablesFile": {
           "type": "string",
-            "default": "web-react/src/shared/generated/metadata/cssVariables.generated.jsonc",
-              "description": "Path to the CSS variable metadata file, relative to the workspace."
+          "default": "web-react/src/shared/generated/metadata/cssVariables.generated.jsonc",
+          "description": "Path to the CSS variable metadata file, relative to the workspace."
         }
       }
     }
