@@ -21,7 +21,7 @@
   "scripts": {
     "build": "tsc && esbuild src/extension.ts --bundle --platform=node --external:vscode --main-fields=module,main --outfile=dist/extension.js",
     "watch": "tsc --watch",
-    "deploy": "npm run build && npx @vscode/vsce package --allow-missing-repository"
+    "package": "npm run build && vsce package --allow-missing-repository"
   },
   "dependencies": {
     "jsonc-parser": "^3.3.1"

@@ -27,6 +27,11 @@
 //--f-carousel-width: 100%;
 //--f-carousel-height: 100%;
 
+//:root {
+
+// --_col-cool-light-1: rgb(173, 224, 224);
+// }
+
 //},
 //button {
 //--final-button-position: 🔮 position: o → p → f:relative;
