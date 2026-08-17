@@ -25,6 +25,8 @@ function dryLogCompiler() {
     const root = parseCss(cssPath)
     const group = cache.getGroupByCssPath(cssPath)
 
+    //TODO NEEDS POST PARSING
+
     if (!group) {
       run.recordUnusedModule(cssPath);
       continue
@@ -32,7 +34,7 @@ function dryLogCompiler() {
     assert.hasCssPath(group)
     const cssData = processModule({ root, group, mutate: false })
 
-    run.recordCssData(group.groupPath, cssData)
+    cache.addCssData(cssData)
   }
   runDiagnostics(cache, run)
 

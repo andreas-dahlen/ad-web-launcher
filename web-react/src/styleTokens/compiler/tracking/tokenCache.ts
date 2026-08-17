@@ -1,4 +1,5 @@
-import type { TokenGroup } from '../../types/compiler.types.ts';
+import type { PostData } from '@styleTokens/postCss/processPost.ts';
+import type { CssData, TokenGroup } from '../../types/compiler.types.ts';
 
 export type TokenCache = ReturnType<typeof createTokenCache>;
 
@@ -7,9 +8,10 @@ export type TokenCache = ReturnType<typeof createTokenCache>;
 export function createTokenCache(initialGroups: TokenGroup[]) {
   const groups = new Set<TokenGroup>();
 
-  const groupByTokenPath = new Map<string, TokenGroup>();
-  const groupByCssPath = new Map<string, TokenGroup>();
-  const groupByGroupPath = new Map<string, TokenGroup>();
+  const groupByTokenPath = new Map<string, TokenGroup>()
+  const groupByCssPath = new Map<string, TokenGroup>()
+  const groupByGroupPath = new Map<string, TokenGroup>()
+  const postData = new Map<string, PostData>()
 
   function addGroup(group: TokenGroup) {
     groups.add(group);
@@ -35,18 +37,10 @@ export function createTokenCache(initialGroups: TokenGroup[]) {
     for (const token of group.tokens) {
       groupByTokenPath.delete(token.tokenPath);
     }
-
   }
 
-  function getCssPaths(): string[] {
-    // eslint-disable-next-line unicorn/prefer-iterator-to-array
-    return [...groupByCssPath.keys()]
-  }
-
-  function getMissingCssGroupPaths(): string[] {
-    return [...groups]
-      .filter(group => !group.cssPath)
-      .map(group => group.groupPath);
+  function getGroupByGroupPath(groupPath: string) {
+    return groupByGroupPath.get(groupPath)
   }
 
   for (const group of initialGroups) {
@@ -56,9 +50,33 @@ export function createTokenCache(initialGroups: TokenGroup[]) {
   return {
     addGroup,
     removeGroup,
-    getCssPaths,
-    getMissingCssGroupPaths,
+    getGroupByGroupPath,
 
+    getMissingCssGroupPaths(): string[] {
+      return [...groups]
+        .filter(group => !group.cssPath)
+        .map(group => group.groupPath);
+    },
+
+    addCssData(cssData: CssData) {
+      const group = getGroupByGroupPath(cssData.groupPath)
+      if (!group) return
+
+      group.cssData = cssData
+    },
+    addPostData(data: PostData) {
+      postData.set(data.cssPath, data)
+    },
+
+    getAllPostData() {
+      // eslint-disable-next-line unicorn/prefer-iterator-to-array
+      return [...postData.values()]
+    },
+
+    getCssPaths(): string[] {
+      // eslint-disable-next-line unicorn/prefer-iterator-to-array
+      return [...groupByCssPath.keys()]
+    },
     getGroupByTokenPath(tokenPath: string) {
       return groupByTokenPath.get(tokenPath);
     },
@@ -67,9 +85,6 @@ export function createTokenCache(initialGroups: TokenGroup[]) {
       return groupByCssPath.get(cssPath);
     },
 
-    getGroupByGroupPath(groupPath: string) {
-      return groupByGroupPath.get(groupPath)
-    },
 
     getGroups() {
       return [...groups];

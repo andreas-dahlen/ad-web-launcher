@@ -1,25 +1,19 @@
 import type { TokenData } from './assembleTokenData.ts';
-import type { PostData } from '../../../postCss/processPost.ts';
 import type { CssVarString } from '../../../../shared/tokenUtils/compiler.types.ts';
 import { toCssVar } from '../../../../shared/tokenUtils/stringFormaters.ts';
 
+export type ExtensionData = {
+  variables: CssVarString[]
+}
 
-export function assembleVariableData(postData: PostData[], tokenData: TokenData[]): CssVarString[] {
-
-  const variables = new Set<CssVarString>
-
-  for (const post of postData) {
-    for (const variable of post.variables) {
-      variables.add(variable)
-    }
-  }
+export function assembleExtensionData(allVariables: CssVarString[], tokenData: TokenData[]): ExtensionData {
+  const variables = new Set<CssVarString>(allVariables)
 
   for (const token of tokenData) {
     for (const variable of token.variables) {
       variables.add(
         toCssVar("final", token.infix, variable.cssName),
       )
-
       for (const allowed of variable.allowed) {
         variables.add(
           toCssVar(allowed, token.infix, variable.cssName),
@@ -27,5 +21,5 @@ export function assembleVariableData(postData: PostData[], tokenData: TokenData[
       }
     }
   }
-  return [...variables]
+  return { variables: [...variables] }
 }

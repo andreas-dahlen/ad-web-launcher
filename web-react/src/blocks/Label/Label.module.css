@@ -31,31 +31,3 @@ file://wsl.localhost/Ubuntu/home/david/repos/ad-web-launcher/web-react/src/style
   text-align: var(--final-label-align);
   color: var(--final-label-col);
 }
-
-.test_Util {
-  --x-test: initial;
-  --test-2: var(--_border-radius-m);
-  --test-3: var(--_col-cool-light-1);
-  --test-4: var(--_color-on);
-  --test-5: #fff00f;
-  --test-6: var(--test-5);
-  color: var(--test-5);
-  background: var(--test-5);
-  --test-7: var(--test-6);
-}
-
-.test_Util {
-  --x-test: var(--test-5);
-  background: var(--_col-cool-light-1)
-}
-
-/* rgb, #, hsl, hwb works ... not lab, lch, oklab, oklch*/
-
-/* same .module.css */
-:root {
-  --test-color: oklch(46.97% 0.1402 24.271);
-}
-
-.foo {
-  color: var(--test-color);
-}

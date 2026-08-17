@@ -4,7 +4,7 @@ import type { ValidPrefix } from '../../../../shared/tokenUtils/compiler.types.t
 import { toCamelCase, toPascalCase } from '../../../../shared/tokenUtils/stringFormaters.ts'
 import { extractGroupName } from '../../../compiler/resolvers/extractGroupName.ts'
 
-export type TokenGroupFileData = {
+export type TokenGroupData = {
   name: string
   styleName: string
   typeName: string
@@ -22,7 +22,7 @@ type VarData = {
   values: Partial<Record<ValidPrefix, string>>
 }
 
-export function assembleTokenData(group: CssTokenGroup): TokenGroupFileData {
+export function assembleTokenData(group: CssTokenGroup): TokenGroupData {
 
   const rawName = extractGroupName(group.groupPath)
 

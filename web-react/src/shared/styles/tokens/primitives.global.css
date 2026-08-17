@@ -28,8 +28,6 @@ neutral = greys / blacks / whites  */
 
   --_text-col: oklch(0% 0 0);
 
-  --_TEST: var(--_text-col);
-
   --_deg: 15deg;
 
   /* global defaults */

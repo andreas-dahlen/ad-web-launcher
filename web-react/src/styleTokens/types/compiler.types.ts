@@ -51,8 +51,19 @@ export type TokenResult = {
 export interface TokenGroup {
   groupPath: string
   cssPath?: string
+  cssData?: CssData
   tokens: CompilerToken[]
 }
+//CSS path is garanteed.
+export type CssTokenGroup = TokenGroup & {
+  cssPath: string
+}
+
+//cssData is garanteed.
+export type CssDataTokenGroup = CssTokenGroup & {
+  cssData: CssData
+}
+
 export type TokenGroupResult = {
   group: TokenGroup
   issues: IssueGroup[]
@@ -62,10 +73,6 @@ export type TokenGroupsResult = {
   issues: IssueGroup[]
 }
 
-//CSS path is garanteed.
-export type CssTokenGroup = TokenGroup & {
-  cssPath: string
-}
 
 // after CSS processing
 export type CssData = { // CssModuleResult

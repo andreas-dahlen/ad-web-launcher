@@ -949,6 +949,46 @@ async function openLspDocument(lspPath) {
     );
   }
 }
+var pendingCssDocument;
+function watchCssSave(context, lspPath) {
+  context.subscriptions.push(
+    vscode.workspace.onDidSaveTextDocument((document) => {
+      if (document.languageId !== "css" && document.languageId !== "scss" && document.languageId !== "less") {
+        return;
+      }
+      pendingCssDocument = document;
+    }),
+    vscode.workspace.createFileSystemWatcher(lspPath.fsPath).onDidChange(
+      async () => {
+        const document = pendingCssDocument;
+        pendingCssDocument = void 0;
+        if (!document) return;
+        await nudgeCssModule(document);
+      }
+    )
+  );
+}
+async function nudgeCssModule(document) {
+  const editor = vscode.window.visibleTextEditors.find(
+    (editor2) => editor2.document === document
+  );
+  if (!editor) return;
+  const position = new vscode.Position(0, 0);
+  const inserted = await editor.edit((editBuilder) => {
+    editBuilder.insert(position, " ");
+  });
+  if (!inserted) return;
+  const removed = await editor.edit((editBuilder) => {
+    editBuilder.delete(
+      new vscode.Range(
+        position,
+        position.translate(0, 1)
+      )
+    );
+  });
+  if (!removed) return;
+  await document.save();
+}
 function activate(context) {
   const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
   if (!workspaceFolder) {
@@ -962,6 +1002,7 @@ function activate(context) {
     "web-react/src/shared/generated/metadata/cssVariables.generated.ts"
   );
   void openLspDocument(lspPath);
+  watchCssSave(context, lspPath);
   const config = vscode.workspace.getConfiguration(
     "cssVariableCompletion"
   );

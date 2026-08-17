@@ -5,6 +5,8 @@ export default function createTokenPostCssAdapter(
   tokenCompiler: TokenCompiler,
 ): AcceptedPlugin {
 
+  console.log("POSTCSS ENTRY")
+
   return {
     postcssPlugin: "style-token-compiler",
 

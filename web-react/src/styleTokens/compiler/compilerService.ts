@@ -5,7 +5,7 @@ import { applyTokenChange } from './pipeline/applyTokenChange.ts';
 import { createTokenCache } from './tracking/tokenCache.ts';
 import { createProcessingTracker } from './tracking/processingTracker.ts';
 import { createCompilerRun } from './tracking/compilerRun.ts';
-import { createCompletionGuard } from './tracking/completionGuard.ts';
+// import { createCompletionGuard } from './tracking/completionGuard.ts';
 import { processPost } from '../postCss/processPost.ts';
 import { processModule } from '../postCss/processModule.ts'
 import { assert } from './processing/assertions.ts'
@@ -19,7 +19,7 @@ export function initializeCompiler(tokensDir: string) {
   const cache = createTokenCache(loaded.groups)
   const tracker = createProcessingTracker(cache.getCssPaths())
   const run = createCompilerRun(cache.getMissingCssGroupPaths())
-  const guard = createCompletionGuard()
+  // const guard = createCompletionGuard()
 
   run.recordIssues(loaded.issues)
   return {
@@ -29,7 +29,7 @@ export function initializeCompiler(tokensDir: string) {
 
   function handleTokenChange(tokenPath: string): string | null {
     run.reset()
-    guard.reset()
+    // guard.reset()
 
     const { group, issues } = applyTokenChange({
       tokenPath,
@@ -47,10 +47,11 @@ export function initializeCompiler(tokensDir: string) {
   }
 
   function runCssModule(root: Root, cssPath: string): void {
+    console.log("postCss ran:", cssPath)
     tracker.notifyPostCssActivity()
 
     const postData = processPost(root, cssPath)
-    run.recordPostData(postData)
+    cache.addPostData(postData)
 
     const group = cache.getGroupByCssPath(cssPath)
     if (!group) {
@@ -65,7 +66,7 @@ export function initializeCompiler(tokensDir: string) {
 
     const cssData = processModule({ root, group })
 
-    run.recordCssData(group.groupPath, cssData)
+    cache.addCssData(cssData)
     tracker.markProcessed(cssPath)
 
     void handleCompletion()
@@ -74,10 +75,12 @@ export function initializeCompiler(tokensDir: string) {
   async function handleCompletion(): Promise<void> {
     await tracker.awaitPostCssCompletion();
 
-    if (!guard.canComplete()) return
+    console.log("before guard")
 
+    // console.log("can complete:", guard.canComplete())
+    // if (!guard.canComplete()) return
     if (tracker.tokensSucceeded()) {
-      const emitResult = emitFiles(cache, run)
+      const emitResult = emitFiles(cache)
       run.recordEmitResult(emitResult)
 
     }

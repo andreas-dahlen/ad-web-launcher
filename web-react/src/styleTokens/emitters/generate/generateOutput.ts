@@ -20,10 +20,10 @@ export function generateOutput(data: EmitData): GeneratedOutput {
   return {
     files: [
       ...formatPresetFiles(data.presetFiles),
-      ...formatTokenFiles(data.tokenFiles),
+      ...formatTokenFiles(data.tokenData),
       formatMetaFile(data.metadata),
-      formatLspFile(data.tokenFiles),
-      formatExtensionFile(data.allVariables)
+      formatLspFile(data.tokenData, data.lspData),
+      formatExtensionFile(data.extensionData)
     ],
     patches: [
       ...formatTokenPatch(data.metadata)

@@ -5,7 +5,7 @@
       "changeProcessCWD": true
     }
   ],
-    "eslint.validate": [
+  "eslint.validate": [
     "javascript",
     "javascriptreact",
     "typescript",
@@ -16,9 +16,9 @@
   "json.schemas": [
     {
       "fileMatch": [
-  "web-react/src/styleTokens/tokens/**/*.json",
-  "web-react/src/styleTokens/tokens/**/*.jsonc"
-],
+        "web-react/src/styleTokens/tokens/**/*.json",
+        "web-react/src/styleTokens/tokens/**/*.jsonc"
+      ],
       "url": "./web-react/src/styleTokens/schema/token.schema.json"
     }
   ],
@@ -33,6 +33,7 @@
     "**/ADWebWallpaper": true,
     "**/md": true,
     "**/node_modules": true,
+    "*/coverage": true
   },
   "search.exclude": {
     "**/node_modules": true,

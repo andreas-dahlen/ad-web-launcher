@@ -1,6 +1,5 @@
 {
   "publisher": "ad-web-launcher",
-
   "name": "css-variable-completion",
   "displayName": "CSS Variable Completion",
   "description": "Provides completion for CSS custom-property declarations.",

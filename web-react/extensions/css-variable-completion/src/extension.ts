@@ -72,6 +72,88 @@ async function openLspDocument(lspPath: vscode.Uri): Promise<void> {
     );
   }
 }
+
+// function reloadCssModule(context: vscode.ExtensionContext): void {
+//   context.subscriptions.push(
+//     vscode.workspace.onDidSaveTextDocument(document => {
+//       if (
+//         document.languageId !== 'css' &&
+//         document.languageId !== 'scss' &&
+//         document.languageId !== 'less'
+//       ) {
+//         return
+//       }
+//       vscode.window.showInformationMessage(
+//         `[css file saved] reloading ${document.uri}`,
+//       )
+//       void nudgeCssModule(document)
+//     }),
+//   )
+// }
+
+let pendingCssDocument: vscode.TextDocument | undefined
+
+function watchCssSave(
+  context: vscode.ExtensionContext,
+  lspPath: vscode.Uri,
+): void {
+  context.subscriptions.push(
+    vscode.workspace.onDidSaveTextDocument(document => {
+      if (
+        document.languageId !== 'css' &&
+        document.languageId !== 'scss' &&
+        document.languageId !== 'less'
+      ) {
+        return
+      }
+
+      pendingCssDocument = document
+    }),
+
+    vscode.workspace.createFileSystemWatcher(lspPath.fsPath).onDidChange(
+      async () => {
+        const document = pendingCssDocument
+        pendingCssDocument = undefined
+
+        if (!document) return
+
+        await nudgeCssModule(document)
+      },
+    ),
+  )
+}
+
+async function nudgeCssModule(
+  document: vscode.TextDocument,
+): Promise<void> {
+  const editor = vscode.window.visibleTextEditors.find(
+    editor => editor.document === document,
+  )
+
+  if (!editor) return
+
+  const position = new vscode.Position(0, 0)
+
+  const inserted = await editor.edit(editBuilder => {
+    editBuilder.insert(position, ' ')
+  })
+
+  if (!inserted) return
+
+  const removed = await editor.edit(editBuilder => {
+    editBuilder.delete(
+      new vscode.Range(
+        position,
+        position.translate(0, 1),
+      ),
+    )
+  })
+
+  if (!removed) return
+
+  await document.save()
+}
+
 export function activate(context: vscode.ExtensionContext): void {
   // vscode.window.showInformationMessage(
   //   '[css variable completion loaded]',
@@ -92,6 +174,7 @@ export function activate(context: vscode.ExtensionContext): void {
   )
 
   void openLspDocument(lspPath)
+  watchCssSave(context, lspPath)
 
   const config = vscode.workspace.getConfiguration(
     'cssVariableCompletion',

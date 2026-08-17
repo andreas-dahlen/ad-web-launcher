@@ -1,5 +1,5 @@
 import { printParseErrorCode, type ParseError } from 'jsonc-parser';
-import type { TokenGroup } from "../../types/compiler.types.ts";
+import type { CssDataTokenGroup, CssTokenGroup, TokenGroup } from "../../types/compiler.types.ts";
 import type { RawToken, RawVariable } from "../../types/compiler.types.ts"
 import type { CssVarString } from '../../../shared/tokenUtils/compiler.types.ts';
 
@@ -8,6 +8,7 @@ type Assertions = {
   variable(key: string, def: unknown, fullPath: string): asserts def is RawVariable;
   cssVariable(value: string): asserts value is CssVarString;
   hasCssPath(group: TokenGroup): asserts group is TokenGroup & { cssPath: string }
+  hasCssData(group: CssTokenGroup): asserts group is CssDataTokenGroup
 };
 
 const CSS_VARIABLE = /^--[A-Za-z_][A-Za-z0-9_-]*$/;
@@ -95,6 +96,16 @@ export const assert: Assertions = {
     if (!group.cssPath) {
       throw new Error(
         `Invariant violated: Token group "${group.groupPath}" has no cssPath.`,
+      );
+    }
+  },
+
+  hasCssData(
+    group: TokenGroup,
+  ): asserts group is TokenGroup {
+    if (!group.cssData) {
+      throw new Error(
+        `Invariant violated: Token group "${group.cssData}" has no cssData.`,
       );
     }
   }

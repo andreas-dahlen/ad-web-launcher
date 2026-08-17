@@ -1,8 +1,8 @@
-import type { TokenGroupFileData } from '../../extract/assemblers/assembleTokenData.ts';
+import type { TokenGroupData } from '../../extract/assemblers/assembleTokenData.ts';
 import type { FormatResult } from '../generateOutput.ts';
 
 
-export function formatTokenFiles(tokenGroupData: TokenGroupFileData[]): FormatResult[] {
+export function formatTokenFiles(tokenGroupData: TokenGroupData[]): FormatResult[] {
   const files: FormatResult[] = []
 
   for (const entry of tokenGroupData) {
