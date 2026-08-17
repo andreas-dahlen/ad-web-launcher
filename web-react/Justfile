@@ -104,7 +104,13 @@ open-new:
     @echo "🤖 Opening workspace in a new window..."
     code -n {{ workspace }}
 
+# ==================== DELETABLES ====================
 
+# Check whether the current TypeScript version is supported by typescript-eslint
+check-ts-v:
+    npm view typescript-eslint@latest peerDependencies
+    npm view @typescript-eslint/parser@latest peerDependencies
+    
 # ==================== HELP ====================
 
 help:

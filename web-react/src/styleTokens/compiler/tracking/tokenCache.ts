@@ -19,11 +19,9 @@ export function createTokenCache(initialGroups: TokenGroup[]) {
     for (const token of group.tokens) {
       groupByTokenPath.set(token.tokenPath, group)
     }
-
     if (!group.cssPath) return
     assert.hasCssPath(group)
     groupByCssPath.set(group.cssPath, group)
-
   }
 
   function removeGroup(group: TokenGroup) {
