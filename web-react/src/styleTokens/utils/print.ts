@@ -1,6 +1,6 @@
 import type { CompilerVariable } from '../types/compiler.types.ts';
 import { isValidPrefix } from '../../shared/tokenUtils/prefixes.ts'
-import { colors, formatLogPath, paint } from './utils.ts';
+import { colors, formatLogPath, paint } from './string.ts';
 
 type Print = {
   injecting(file: string): void;
@@ -13,8 +13,8 @@ export const print: Print = {
   // jsonsLoaded(tokens) { console.log("📦 Loaded json files:", tokens.map(c => c.name)) },
 
   injecting(file) { console.log(`\n⚙️ ${paint(`Injecting into:`, colors.subHeading)} ${paint(formatLogPath(file), colors.file)}`) },
-  processing(name) { console.log(`🎨 ${paint(`Processing token:`, colors.subHeading)} ${paint(name, colors.heading)}`) },
-  buildingChains(infix) { console.log(`\n🔧 ${paint(`chaining`, colors.muted)} ${paint(`--final-${infix}-*`, colors.variable)}`) },
+  processing(name) { console.log(`\n🎨 ${paint(`Processing token:`, colors.subHeading)} ${paint(name, colors.heading)}`) },
+  buildingChains(infix) { console.log(`🔧 ${paint(`chaining`, colors.muted)} ${paint(`--final-${infix}-*`, colors.variable)}`) },
 
   resultCascade(variable) {
     const chain = variable.effectiveAllowed.map(prefix => {

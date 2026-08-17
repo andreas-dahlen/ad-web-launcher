@@ -78,7 +78,7 @@ export default defineConfig([
         { type: 'emitters', pattern: 'src/styleTokens/emitters/*/**', capture: ['mod'] },
         { type: 'postCss', pattern: 'src/styleTokens/postCss/*/**', capture: ['mod'] },
         { type: 'tokenTypes', pattern: 'src/styleTokens/types/**' },
-        { type: 'consoleUtils', pattern: 'src/styleTokens/consoleUtils/**' }
+        { type: 'utils', pattern: 'src/styleTokens/utils/**' }
       ],
       'boundaries/files': [
 
@@ -383,7 +383,7 @@ export default defineConfig([
                 { element: { type: "emitters", captured: { mod: "*" } } },
                 { element: { type: "postCss", captured: { mod: "*" } } },
                 { element: { type: "tokenTypes" } },
-                { element: { type: "consoleUtils" } },
+                { element: { type: "utils" } },
                 { file: { categories: "emitFiles" } },
                 { file: { categories: "processModule" } }
               ],
@@ -391,7 +391,7 @@ export default defineConfig([
                 to: [
                   { element: { type: "tokenTypes" } },
                   { element: { type: "shared", captured: { mod: "tokenUtils" } } },
-                  { element: { type: "consoleUtils" } }
+                  { element: { type: "utils" } }
                 ]
               }
             },

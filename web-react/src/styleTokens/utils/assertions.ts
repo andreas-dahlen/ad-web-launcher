@@ -1,14 +1,15 @@
 import { printParseErrorCode, type ParseError } from 'jsonc-parser';
-import type { CssDataTokenGroup, CssTokenGroup, TokenGroup } from "../../types/compiler.types.ts";
-import type { RawToken, RawVariable } from "../../types/compiler.types.ts"
-import type { CssVarString } from '../../../shared/tokenUtils/compiler.types.ts';
+import type { CssDataTokenGroup, CssTokenGroup, TokenGroup } from "../types/compiler.types.ts";
+import type { RawToken, RawVariable } from "../types/compiler.types.ts"
+import type { CssVarString } from '../../shared/tokenUtils/compiler.types.ts';
 
 type Assertions = {
   token(errors: ParseError[], json: RawToken, fullPath: string): void;
   variable(key: string, def: unknown, fullPath: string): asserts def is RawVariable;
   cssVariable(value: string): asserts value is CssVarString;
-  hasCssPath(group: TokenGroup): asserts group is TokenGroup & { cssPath: string }
-  hasCssData(group: CssTokenGroup): asserts group is CssDataTokenGroup
+  hasCssPath(group: TokenGroup | undefined): asserts group is CssTokenGroup
+  groupsHaveCssPath(groups: TokenGroup[]): asserts groups is CssTokenGroup[]
+  groupsHaveCssData(groups: TokenGroup[]): asserts groups is CssDataTokenGroup[]
 };
 
 const CSS_VARIABLE = /^--[A-Za-z_][A-Za-z0-9_-]*$/;
@@ -90,23 +91,31 @@ export const assert: Assertions = {
     }
   },
 
-  hasCssPath(
-    group: TokenGroup,
-  ): asserts group is TokenGroup & { cssPath: string } {
-    if (!group.cssPath) {
+  hasCssPath(group) {
+    if (!group?.cssPath) {
       throw new Error(
-        `Invariant violated: Token group "${group.groupPath}" has no cssPath.`,
+        `Invariant violated: Token group "${group?.groupPath}" has no cssPath.`,
       );
     }
   },
 
-  hasCssData(
-    group: TokenGroup,
-  ): asserts group is TokenGroup {
-    if (!group.cssData) {
-      throw new Error(
-        `Invariant violated: Token group "${group.cssData}" has no cssData.`,
-      );
+  groupsHaveCssPath(groups) {
+    for (const group of groups) {
+      if (!group.cssPath) {
+        throw new Error(
+          `Invariant violated: Token group "${group.groupPath}" has no cssPath.`,
+        )
+      }
+    }
+  },
+
+  groupsHaveCssData(groups) {
+    for (const group of groups) {
+      if (!group?.cssData) {
+        throw new Error(
+          `Invariant violated: A token in tokenGroups "${group.groupPath}" has no cssData.`,
+        );
+      }
     }
   }
 }

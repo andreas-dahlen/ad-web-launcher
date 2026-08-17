@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { tokenSection } from '@styleTokens/diagnostics/report/sections/tokenSection'
 import type { FileStatus } from '@styleTokens/types/diagnostics.types'
 
-vi.mock('@styleTokens/consoleUtils/utils', () => ({
+vi.mock('@styleTokens/utils/string', () => ({
   colors: {
     muted: 'muted',
     file: 'file',

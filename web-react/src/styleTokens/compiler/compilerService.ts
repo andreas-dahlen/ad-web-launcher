@@ -5,10 +5,8 @@ import { applyTokenChange } from './pipeline/applyTokenChange.ts';
 import { createTokenCache } from './tracking/tokenCache.ts';
 import { createProcessingTracker } from './tracking/processingTracker.ts';
 import { createCompilerRun } from './tracking/compilerRun.ts';
-// import { createCompletionGuard } from './tracking/completionGuard.ts';
 import { processPost } from '../postCss/processPost.ts';
 import { processModule } from '../postCss/processModule.ts'
-import { assert } from './processing/assertions.ts'
 import { emitFiles } from '../emitters/emitFiles.ts';
 import { runDiagnostics } from '../diagnostics/runDiagnostics.ts';
 export type TokenCompiler = ReturnType<typeof initializeCompiler>;
@@ -18,73 +16,61 @@ export function initializeCompiler(tokensDir: string) {
   const loaded = compileTokenGroups(tokenPaths)
   const cache = createTokenCache(loaded.groups)
   const tracker = createProcessingTracker(cache.getCssPaths())
-  const run = createCompilerRun(cache.getMissingCssGroupPaths())
-  // const guard = createCompletionGuard()
+  const run = createCompilerRun()
 
   run.recordIssues(loaded.issues)
+
   return {
-    runCssModule,
+    handleCssModule,
     handleTokenChange
   }
 
   function handleTokenChange(tokenPath: string): string | null {
-    run.reset()
-    // guard.reset()
 
     const { group, issues } = applyTokenChange({
       tokenPath,
       cache,
     })
 
+    if (!group.cssPath) return null
     run.recordIssues(issues)
-
-    if (!group.cssPath) {
-      run.recordMissingModule(group.groupPath)
-      return null
-    }
-    tracker.invalidate(group.cssPath)
-    return group.cssPath //triggers runCssModule
+    return group.cssPath //triggers handleCssModule
   }
 
-  function runCssModule(root: Root, cssPath: string): void {
-    console.log("postCss ran:", cssPath)
+  function handleCssModule(root: Root, cssPath: string): void {
     tracker.notifyPostCssActivity()
-
-    const postData = processPost(root, cssPath)
+    const postData = processPost({ root, cssPath })
     cache.addPostData(postData)
 
     const group = cache.getGroupByCssPath(cssPath)
     if (!group) {
-      tracker.markMissing(cssPath)
-      run.recordUnusedModule(cssPath);
 
       void handleCompletion()
       return
     }
-    tracker.notifyPostCssActivity()
-    assert.hasCssPath(group)
+
+    tracker.invalidate(cssPath)
 
     const cssData = processModule({ root, group })
-
     cache.addCssData(cssData)
-    tracker.markProcessed(cssPath)
+
+    tracker.markResolved(cssPath)
+    run.recordProcessed(cssPath)
 
     void handleCompletion()
   }
 
   async function handleCompletion(): Promise<void> {
     await tracker.awaitPostCssCompletion();
+    applyCompletion()
+  }
 
-    console.log("before guard")
-
-    // console.log("can complete:", guard.canComplete())
-    // if (!guard.canComplete()) return
-    if (tracker.tokensSucceeded()) {
-      const emitResult = emitFiles(cache)
-      run.recordEmitResult(emitResult)
-
-    }
-
+  function applyCompletion(): void {
+    const emitResult = emitFiles(cache, run)
+    run.recordEmitResult(emitResult)
     runDiagnostics(cache, run)
+    run.reset()
   }
 }
+
+

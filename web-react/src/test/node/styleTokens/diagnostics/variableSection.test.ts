@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { variableSection } from '@styleTokens/diagnostics/report/sections/variableSection'
 import type { VariableMismatch } from '@styleTokens/types/diagnostics.types'
 
-vi.mock('@styleTokens/consoleUtils/utils', () => ({
+vi.mock('@styleTokens/utils/string', () => ({
   colors: {
     error: 'error',
     file: 'file',

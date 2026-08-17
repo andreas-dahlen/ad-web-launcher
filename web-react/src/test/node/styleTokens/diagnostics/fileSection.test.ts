@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest'
 
 import { fileSection } from '@styleTokens/diagnostics/report/sections/fileSection'
 
-vi.mock('@styleTokens/consoleUtils/utils', () => ({
+vi.mock('@styleTokens/utils/string', () => ({
   colors: {
     muted: 'muted',
     file: 'file',

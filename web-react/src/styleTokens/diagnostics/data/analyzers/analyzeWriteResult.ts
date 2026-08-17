@@ -1,4 +1,3 @@
-import { formatLogPath } from '../../../consoleUtils/utils.ts'
 import type { FileResult } from '../../../types/compiler.types.ts'
 import type { GeneratedFiles } from '../../../types/diagnostics.types.ts'
 
@@ -18,10 +17,10 @@ export function analyzeWriteResult(result: FileResult | undefined): GeneratedFil
   const writtenPaths = result?.updated ?? []
   const skippedPaths = result?.skipped ?? []
 
-  const writtenFiles = writtenPaths.map(formatLogPath)
-  const skippedFiles = skippedPaths.map(formatLogPath)
+  // const writtenFiles = writtenPaths.map(formatLogPath)
+  // const skippedFiles = skippedPaths.map(formatLogPath)
 
-  for (const file of writtenFiles) {
+  for (const file of writtenPaths) {
     if (file.endsWith(".preset.ts")) {
       generatedFiles.presets.written.push(file)
     }
@@ -30,7 +29,7 @@ export function analyzeWriteResult(result: FileResult | undefined): GeneratedFil
     }
   }
 
-  for (const file of skippedFiles) {
+  for (const file of skippedPaths) {
     if (file.endsWith(".preset.ts")) {
       generatedFiles.presets.skipped.push(file)
     }

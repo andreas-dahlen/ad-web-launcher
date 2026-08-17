@@ -28,7 +28,7 @@ describe('[COMPILER]', () => {
     it('starts with no processed CSS data', () => {
       const run = createCompilerRun(['button'])
 
-      expect(run.getProcessedGroupPaths()).toEqual([])
+      expect(run.getGroups()).toEqual([])
     })
 
     it('starts with no emit result', () => {

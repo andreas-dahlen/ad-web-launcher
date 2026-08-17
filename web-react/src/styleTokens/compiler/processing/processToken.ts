@@ -1,6 +1,6 @@
 import { loadTokenFile } from '../loaders/loadTokenFile.ts';
 import type { TokenResult } from '../../types/compiler.types.ts'
-import { assert } from '../processing/assertions.ts';
+import { assert } from '../../utils/assertions.ts';
 import { parseToken } from './parseToken.ts';
 import { createIssueCollector } from '../tracking/issueCollector.ts';
 

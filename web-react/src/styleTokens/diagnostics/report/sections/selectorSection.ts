@@ -2,7 +2,7 @@
 
 import type { UnusableSelector } from '../../../types/diagnostics.types.ts';
 import type { ReportEntry, ReportSection } from '../buildReport.ts';
-import { colors, formatLogPath, paint } from '../../../consoleUtils/utils.ts';
+import { colors, formatLogPath, paint } from '../../../utils/string.ts';
 
 export function selectorSection(data: UnusableSelector[]): ReportSection | undefined {
   const entries: ReportEntry[] = [];

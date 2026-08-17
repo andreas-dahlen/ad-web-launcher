@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { issuesSection } from '@styleTokens/diagnostics/report/sections/issuesSection'
 import type { AnalyzedIssueGroup } from '@styleTokens/types/diagnostics.types'
 
-vi.mock('@styleTokens/consoleUtils/utils', () => ({
+vi.mock('@styleTokens/utils/string', () => ({
   colors: {
     subHeading: 'subHeading',
     value: 'value',

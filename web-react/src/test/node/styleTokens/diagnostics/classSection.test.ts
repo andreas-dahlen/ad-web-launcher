@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { classSection } from '@styleTokens/diagnostics/report/sections/classSection'
 import type { MissingClass } from '@styleTokens/types/diagnostics.types'
 
-vi.mock('@styleTokens/consoleUtils/utils', () => ({
+vi.mock('@styleTokens/utils/string', () => ({
   colors: {
     muted: 'muted',
     file: 'file',

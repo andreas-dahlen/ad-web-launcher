@@ -40,16 +40,16 @@
         "/home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/slider/track.jsonc"
       ]
     },
-    "svg": {
-      "cssPath": "/home/david/repos/ad-web-launcher/web-react/src/blocks/Svg/Svg.module.css",
-      "tokenPaths": [
-        "/home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/svg.jsonc"
-      ]
-    },
     "visual": {
       "cssPath": "/home/david/repos/ad-web-launcher/web-react/src/blocks/visual/Visual.module.css",
       "tokenPaths": [
         "/home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/visual.jsonc"
+      ]
+    },
+    "svg": {
+      "cssPath": "/home/david/repos/ad-web-launcher/web-react/src/blocks/Svg/Svg.module.css",
+      "tokenPaths": [
+        "/home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/svg.jsonc"
       ]
     }
   },
@@ -70,9 +70,9 @@
     "/home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/slider/slider.jsonc": "slider",
     "/home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/slider/thumb.jsonc": "slider",
     "/home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/slider/track.jsonc": "slider",
-    "/home/david/repos/ad-web-launcher/web-react/src/blocks/Svg/Svg.module.css": "svg",
-    "/home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/svg.jsonc": "svg",
     "/home/david/repos/ad-web-launcher/web-react/src/blocks/visual/Visual.module.css": "visual",
-    "/home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/visual.jsonc": "visual"
+    "/home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/visual.jsonc": "visual",
+    "/home/david/repos/ad-web-launcher/web-react/src/blocks/Svg/Svg.module.css": "svg",
+    "/home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/svg.jsonc": "svg"
   }
 }

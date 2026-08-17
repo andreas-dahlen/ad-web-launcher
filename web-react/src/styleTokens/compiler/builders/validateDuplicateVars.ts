@@ -1,4 +1,4 @@
-import { formatLogPath } from '../../consoleUtils/utils.ts';
+import { formatLogPath } from '../../utils/string.ts';
 import type { CompilerToken } from '../../types/compiler.types.ts';
 
 export function validateDuplicateVars(tokens: CompilerToken[]) {

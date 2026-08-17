@@ -1,4 +1,4 @@
-import { colors, paint } from '../../../consoleUtils/utils.ts';
+import { colors, paint, formatLogPath } from '../../../utils/string.ts';
 import type { FileStatus } from '../../../types/diagnostics.types.ts';
 import type { ReportEntry, ReportSection } from '../buildReport.ts';
 
@@ -10,7 +10,7 @@ export function tokenSection(data: FileStatus): ReportSection | undefined {
     for (const skipped of data.skipped) {
 
       skippedLines.push(
-        `${paint('File', colors.muted)}: ${paint(skipped, colors.file)}`);
+        `${paint('File', colors.muted)}: ${paint(formatLogPath(skipped), colors.file)}`);
     }
     entries.push({
       title: ` 😴 ${paint(`skipped:`, colors.subHeading)}`,
@@ -22,7 +22,7 @@ export function tokenSection(data: FileStatus): ReportSection | undefined {
     for (const written of data.written) {
 
       writtenLines.push(
-        `${paint('File', colors.muted)}: ${paint(written, colors.file)}`);
+        `${paint('File', colors.muted)}: ${paint(formatLogPath(written), colors.file)}`);
     }
 
 

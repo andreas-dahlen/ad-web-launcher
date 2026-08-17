@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { invalidVarSection } from '@styleTokens/diagnostics/report/sections/invalidVarSection'
 import type { InvalidVarDeclaration } from '@styleTokens/types/diagnostics.types'
 
-vi.mock('@styleTokens/consoleUtils/utils', () => ({
+vi.mock('@styleTokens/utils/string', () => ({
   colors: {
     error: 'error',
     value: 'value',

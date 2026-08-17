@@ -1,6 +1,5 @@
 import type { DiagnosticData, InvalidVarDeclaration, MissingClass, UnusableSelector, VariableMismatch } from '../../types/diagnostics.types.ts';
 import type { CompilerRun } from '../../compiler/tracking/compilerRun.ts';
-import type { TokenCache } from "../../compiler/tracking/tokenCache.ts";
 import { mergeIssueGroups } from '../../compiler/tracking/issueCollector.ts';
 import { extractGroupName } from '../../compiler/resolvers/extractGroupName.ts';
 import { analyzeSelectors } from "./analyzers/analyzeSelectors.ts";
@@ -9,13 +8,15 @@ import { analyzeVariableUsage } from './analyzers/analyzeVariableUsage.ts';
 import { analyzeWriteResult } from './analyzers/analyzeWriteResult.ts'
 import { analyzeIssues } from './analyzers/analyzeIssues.ts';
 import { analyzeVariableDeclarations } from './analyzers/analyzeVariableDeclarations.ts';
-import { assert } from '../../compiler/processing/assertions.ts';
+import type { TokenCache } from '@styleTokens/compiler/tracking/tokenCache.ts';
 
-export function buildData(
+export function buildData({
+  cache,
+  run
+}: {
   cache: TokenCache,
-  run: CompilerRun,
-  //tracker!?
-): DiagnosticData {
+  run: CompilerRun
+}): DiagnosticData {
 
   const missingClasses: MissingClass[] = []
   const unusableSelectors: UnusableSelector[] = []
@@ -25,35 +26,33 @@ export function buildData(
           NON-Group specific
   -------------------------------------*/
 
-  const missingCssModules = run.getMissingModules()
+  const emitResult = run.getEmitResult()
+  const runGroups = cache.getCssDataGroupsByPaths(
+    run.getProcessedPaths()
+  )
+
+  const missingCssModules = cache.getMissingCssGroupPaths()
     .map(groupPath => extractGroupName(groupPath))
 
-  const emitResult = run.getEmitResult()
   const issues = analyzeIssues(mergeIssueGroups(run.getIssues()))
 
   const generatedFiles = analyzeWriteResult(emitResult?.writeResult)
 
-  //patchResult currently unused...
+  //patchResult currently unused... needs to use all emitResults...
 
   const omittedPresetFiles =
     emitResult?.extractResult.omittedPresetFiles ?? []
 
-  const groups = cache.getGroups()
+  const processedGroupCount = runGroups.length
 
-  const processedGroupCount = groups.length
-
-  for (const group of groups) {
+  for (const group of runGroups) {
     /*---------------------------------------
           NON-Css Data
     -------------------------------------*/
 
-    //nothing yet xD
-
     /*---------------------------------------
       Css Data dependencies
     -------------------------------------*/
-    assert.hasCssPath(group)
-    assert.hasCssData(group)
 
     const selectorResult = analyzeSelectors(group.cssData);
     if (selectorResult) unusableSelectors.push(selectorResult)

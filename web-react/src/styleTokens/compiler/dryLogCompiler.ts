@@ -6,9 +6,9 @@ import { findTokenPaths } from './discovery/findTokenPaths.ts';
 import { compileTokenGroups } from './pipeline/compileTokenGroups.ts';
 import { createTokenCache } from './tracking/tokenCache.ts';
 import { createCompilerRun } from './tracking/compilerRun.ts';
-import { assert } from './processing/assertions.ts'
 import { runDiagnostics } from '../diagnostics/runDiagnostics.ts';
 import { processModule } from '../postCss/processModule.ts';
+import { processPost } from '../postCss/processPost.ts';
 
 function dryLogCompiler() {
   const projectRoot = process.cwd();
@@ -17,26 +17,27 @@ function dryLogCompiler() {
 
   const tokenPaths = findTokenPaths(tokensDir)
   const loaded = compileTokenGroups(tokenPaths)
-  const cache = createTokenCache(loaded.groups)
-  const run = createCompilerRun(cache.getMissingCssGroupPaths())
+  const dryCache = createTokenCache(loaded.groups)
+  const run = createCompilerRun()
   run.recordIssues(loaded.issues)
 
-  for (const cssPath of cache.getCssPaths()) {
+  for (const cssPath of dryCache.getCssPaths()) {
     const root = parseCss(cssPath)
-    const group = cache.getGroupByCssPath(cssPath)
+    const group = dryCache.getGroupByCssPath(cssPath)
 
-    //TODO NEEDS POST PARSING
+    const postData = processPost({ root, cssPath, mutate: false })
+    dryCache.addPostData(postData)
 
-    if (!group) {
-      run.recordUnusedModule(cssPath);
-      continue
-    }
-    assert.hasCssPath(group)
+    if (!group) continue
+
     const cssData = processModule({ root, group, mutate: false })
+    dryCache.addCssData(cssData)
 
-    cache.addCssData(cssData)
+    run.recordProcessed(cssPath)
   }
-  runDiagnostics(cache, run)
+  runDiagnostics(dryCache, run)
+
+  run.reset()
 
   function parseCss(cssPath: string): Root {
     const source = fs.readFileSync(cssPath, "utf8");

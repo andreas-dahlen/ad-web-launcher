@@ -2,27 +2,21 @@ import type { IssueGroup } from '@styleTokens/types/issueCollector.types.ts';
 import type { EmitResult } from '../../types/compiler.types.ts';
 
 export type CompilerRun = ReturnType<typeof createCompilerRun>;
-export function createCompilerRun(groupPaths: string[]) {
+export function createCompilerRun() {
 
-  const missingCssModules = new Set<string>()
-  const unusedCssModules = new Set<string>()
+  const processedPaths = new Set<string>()
+
   let emitResult: EmitResult | undefined
   const processedIssues: IssueGroup[] = []
 
-  for (const groupPath of groupPaths) {
-    recordMissingModule(groupPath)
-  }
   function reset() {
-    missingCssModules.clear()
-    unusedCssModules.clear()
+    processedPaths.clear()
+
     emitResult = undefined
     processedIssues.length = 0
   }
-  function recordMissingModule(groupPath: string) {
-    missingCssModules.add(groupPath)
-  }
-  function recordUnusedModule(cssPath: string) {
-    unusedCssModules.add(cssPath)
+  function recordProcessed(cssPath: string) {
+    processedPaths.add(cssPath)
   }
 
   function recordEmitResult(result: EmitResult) {
@@ -34,13 +28,13 @@ export function createCompilerRun(groupPaths: string[]) {
 
   return {
     reset,
-    recordMissingModule,
-    recordUnusedModule,
+
+    recordProcessed,
+
     recordEmitResult,
     recordIssues,
 
-    getMissingModules() { return [...missingCssModules] },
-    getUnusedModules() { return [...unusedCssModules] },
+    getProcessedPaths() { return [...processedPaths] },
     getEmitResult() { return emitResult },
     getIssues() { return [...processedIssues] }
   } as const

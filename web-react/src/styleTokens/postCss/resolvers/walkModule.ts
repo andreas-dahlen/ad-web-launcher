@@ -4,7 +4,7 @@ import type { Rule, Root } from "postcss";
 import selectorParser from "postcss-selector-parser";
 import { prefixPriority } from '../../../shared/tokenUtils/prefixes.ts';
 import type { WalkModuleResult } from '../../types/compiler.types.ts';
-import { assert } from '../../compiler/processing/assertions.ts'
+import { assert } from '../../utils/assertions.ts'
 
 const VALID_IDENTIFIER = /^[A-Za-z_$][A-Za-z0-9_$]*$/;
 
@@ -100,6 +100,6 @@ export function walkModule(
     usableSelectors: [...usableSelectors],
     foundFinalVariables: [...foundFinalVariables],
     declaredVariables: [...declaredVariables],
-    presetResetData
+    presetResetData: [...presetResetData]
   }
 }

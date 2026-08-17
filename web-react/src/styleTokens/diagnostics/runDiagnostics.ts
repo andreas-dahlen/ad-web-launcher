@@ -9,7 +9,7 @@ export function runDiagnostics(
   run: CompilerRun,
 ) {
 
-  const data = buildData(cache, run)
+  const data = buildData({ cache, run })
 
   const report = buildReport(data)
 

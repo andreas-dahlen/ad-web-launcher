@@ -16,7 +16,6 @@
     ],
     "skipLibCheck": true,
     /* Bundler mode */
-    /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
@@ -34,19 +33,11 @@
     "resolveJsonModule": true
   },
   "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    "vite-env.d.ts"],
+    "src",
+    "vite-env.d.ts"
+  ],
   "exclude": [
-    "node_modules",
-    "dist",
-    "build",
-    "src/styleTokens/",
-    "plugins",
-    "eslint",
+    "src/styleTokens",
     "src/test/node",
-    "vite.base.ts",
-    "vite.compiler.ts",
-    "vite.config.ts"
   ]
 }

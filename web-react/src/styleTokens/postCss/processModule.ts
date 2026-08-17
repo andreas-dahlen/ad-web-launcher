@@ -1,6 +1,6 @@
 import type { Root } from "postcss";
 import type { CssData, CssTokenGroup, ProcessedToken } from '../types/compiler.types.ts';
-import { print } from '../consoleUtils/print.ts';
+import { print } from '../utils/print.ts';
 import { walkModule } from './resolvers/walkModule.ts';
 import { injectVarDefinitions } from './inject/injectVarDefinitions.ts';
 import { injectCascade } from './inject/injectCascade.ts';
@@ -16,7 +16,7 @@ export function processModule({
   mutate?: boolean
 }): CssData {
 
-  print.injecting(group.groupPath)
+  print.injecting(group.cssPath)
 
   const { rules, foundSelectors, usableSelectors, foundFinalVariables, declaredVariables, presetResetData } = walkModule(
     root, group.tokens.map(token => token.infix)
@@ -24,7 +24,7 @@ export function processModule({
 
   const tokenResults: ProcessedToken[] = [];
   for (const token of group.tokens) {
-    print.processing(token.name)
+    print.processing(token.infix)
 
     const rule = rules.get(`.${token.infix}`);
 

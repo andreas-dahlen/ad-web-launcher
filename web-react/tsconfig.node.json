@@ -31,14 +31,10 @@
     "vite.config.ts",
     "vite.base.ts",
     "vite.compiler.ts",
-    "plugins/**/*.ts",
+    "plugins",
     "src/styleTokens",
-    "src/styleTokens/**/*.ts",
-    "src/shared/tokenUtils/**/*.ts",
-    "eslint/**/*.ts",
+    "src/shared/tokenUtils",
     "eslint",
-    "eslint/**.ts",
-    "src/test/node",
-    "src/test/node/**/*.ts"
-    ]
+    "src/test/node"
+  ]
 }

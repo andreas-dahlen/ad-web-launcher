@@ -4,7 +4,7 @@ import type { CssVarString, ValidPrefix } from '../../shared/tokenUtils/compiler
 import type { IssueGroup } from './issueCollector.types.ts';
 
 //postcss
-export type PresetResetData = Map<Rule, Set<CssVarString>>
+export type PresetResetData = Array<[Rule, Set<CssVarString>]>
 export type WalkModuleResult = {
   rules: Map<string, Rule>
   foundSelectors: string[]
@@ -48,7 +48,7 @@ export type TokenResult = {
   token: CompilerToken
   issues: IssueGroup[]
 }
-export interface TokenGroup {
+export type TokenGroup = {
   groupPath: string
   cssPath?: string
   cssData?: CssData
@@ -58,7 +58,6 @@ export interface TokenGroup {
 export type CssTokenGroup = TokenGroup & {
   cssPath: string
 }
-
 //cssData is garanteed.
 export type CssDataTokenGroup = CssTokenGroup & {
   cssData: CssData
@@ -72,7 +71,13 @@ export type TokenGroupsResult = {
   groups: TokenGroup[]
   issues: IssueGroup[]
 }
+// glbal processing
 
+export type PostData = {
+  cssPath: string;
+  variables: CssVarString[];
+  oklchVariables: Array<[CssVarString, string]>;
+};
 
 // after CSS processing
 export type CssData = { // CssModuleResult

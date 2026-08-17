@@ -1,8 +1,8 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import { print } from '@styleTokens/consoleUtils/print'
+import { print } from '@styleTokens/utils/print'
 
-vi.mock('@styleTokens/consoleUtils/utils', () => ({
+vi.mock('@styleTokens/utils/string', () => ({
   colors: {
     subHeading: 'subHeading',
     file: 'file',

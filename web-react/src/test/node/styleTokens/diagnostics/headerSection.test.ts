@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest'
 
 import { headerSection } from '@styleTokens/diagnostics/report/sections/headerSection'
 
-vi.mock('@styleTokens/consoleUtils/utils', () => ({
+vi.mock('@styleTokens/utils/string', () => ({
   colors: {
     heading: 'heading',
     value: 'value',
