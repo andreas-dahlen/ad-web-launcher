@@ -1,8 +1,8 @@
 import { describe, it, expect, afterEach } from 'vitest'
 import { dragStore, type DragBinding } from '@primitives/Drag/store/drag.store'
 import { drag_DEFAULTS } from '@primitives/Drag/store/useDragStore.hook'
-import { getStoreByType, seedStoreByType } from '@test/utils/storeSeed.utils'
-import { resetInteractionStores } from '@test/utils/storeReset.utils'
+import { getStoreByType, seedStoreByType } from '@test/testUtils/storeSeed.utils'
+import { resetInteractionStores } from '@test/testUtils/storeReset.utils'
 
 function initTest(data: DragBinding = drag_DEFAULTS) {
   seedStoreByType("drag", "test", data)

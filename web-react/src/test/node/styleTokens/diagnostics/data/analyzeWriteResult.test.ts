@@ -16,13 +16,13 @@ describe('[DIAGNOSTICS]', () => {
       expect(result).toEqual({
         presets: {
           written: [
-            'presets/button.preset.ts',
+            '/src/shared/generated/presets/button.preset.ts',
           ],
           skipped: [],
         },
         tokens: {
           written: [
-            'tokenModules/button.token.ts',
+            '/src/shared/generated/tokenModules/button.token.ts',
           ],
           skipped: [],
         },
@@ -42,13 +42,13 @@ describe('[DIAGNOSTICS]', () => {
         presets: {
           written: [],
           skipped: [
-            'presets/button.preset.ts',
+            '/src/shared/generated/presets/button.preset.ts',
           ],
         },
         tokens: {
           written: [],
           skipped: [
-            'tokenModules/button.token.ts',
+            '/src/shared/generated/tokenModules/button.token.ts',
           ],
         },
       })
@@ -90,7 +90,7 @@ describe('[DIAGNOSTICS]', () => {
       })
     })
 
-    it('sorts files within each category', () => {
+    it('preserves file order', () => {
       const result = analyzeWriteResult({
         updated: [
           '/src/shared/generated/presets/zebra.preset.ts',
@@ -102,13 +102,13 @@ describe('[DIAGNOSTICS]', () => {
       })
 
       expect(result.presets.written).toEqual([
-        'presets/alpha.preset.ts',
-        'presets/zebra.preset.ts',
+        '/src/shared/generated/presets/alpha.preset.ts',
+        '/src/shared/generated/presets/zebra.preset.ts',
       ])
 
       expect(result.tokens.written).toEqual([
-        'tokenModules/alpha.token.ts',
-        'tokenModules/zebra.token.ts',
+        '/src/shared/generated/tokenModules/alpha.token.ts',
+        '/src/shared/generated/tokenModules/zebra.token.ts',
       ])
     })
   })

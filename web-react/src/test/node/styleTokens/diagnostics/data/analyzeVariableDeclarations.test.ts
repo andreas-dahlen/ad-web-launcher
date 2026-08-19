@@ -5,7 +5,7 @@ import type {
   CompilerToken,
   CompilerVariable,
   CssData,
-  CssTokenGroup,
+  CssDataTokenGroup,
 } from '@styleTokens/types/compiler.types'
 
 function createVariable(
@@ -51,14 +51,15 @@ function createCssData(
 }
 
 function createGroup(
-  overrides: Partial<CssTokenGroup> = {},
-): CssTokenGroup {
+  overrides: Partial<CssDataTokenGroup> = {},
+): CssDataTokenGroup {
   return {
     groupPath: '/tokens/button',
     cssPath: '/components/Button/Button.module.css',
     tokens: [
       createToken(),
     ],
+    cssData: createCssData(),
     ...overrides,
   }
 }
@@ -66,30 +67,30 @@ function createGroup(
 describe('[DIAGNOSTICS]', () => {
   describe('analyzeVariableDeclarations', () => {
     it('ignores declarations with an allowed prefix', () => {
-      const cssData = createCssData({
-        declaredVariables: [
-          '--f-button-back-ground',
-        ],
+      const group = createGroup({
+        cssData: createCssData({
+          declaredVariables: [
+            '--f-button-back-ground',
+          ],
+        }),
       })
 
-      const group = createGroup()
-
       expect(
-        analyzeVariableDeclarations(cssData, group),
+        analyzeVariableDeclarations(group),
       ).toEqual([])
     })
 
     it('reports declarations with a disallowed prefix', () => {
-      const cssData = createCssData({
-        declaredVariables: [
-          '--p-button-back-ground',
-        ],
+      const group = createGroup({
+        cssData: createCssData({
+          declaredVariables: [
+            '--p-button-back-ground',
+          ],
+        }),
       })
 
-      const group = createGroup()
-
       expect(
-        analyzeVariableDeclarations(cssData, group),
+        analyzeVariableDeclarations(group),
       ).toEqual([
         {
           name: 'Button',
@@ -102,34 +103,34 @@ describe('[DIAGNOSTICS]', () => {
     })
 
     it('ignores unrelated declarations', () => {
-      const cssData = createCssData({
-        declaredVariables: [
-          '--f-other-back-ground',
-          '--p-surface-color',
-          '--random-value',
-        ],
+      const group = createGroup({
+        cssData: createCssData({
+          declaredVariables: [
+            '--f-other-back-ground',
+            '--p-surface-color',
+            '--random-value',
+          ],
+        }),
       })
 
-      const group = createGroup()
-
       expect(
-        analyzeVariableDeclarations(cssData, group),
+        analyzeVariableDeclarations(group),
       ).toEqual([])
     })
 
     it('reports multiple invalid declarations for one token', () => {
-      const cssData = createCssData({
-        declaredVariables: [
-          '--p-button-back-ground',
-          '--m-button-back-ground',
-          '--s-button-back-ground',
-        ],
+      const group = createGroup({
+        cssData: createCssData({
+          declaredVariables: [
+            '--p-button-back-ground',
+            '--m-button-back-ground',
+            '--s-button-back-ground',
+          ],
+        }),
       })
 
-      const group = createGroup()
-
       expect(
-        analyzeVariableDeclarations(cssData, group),
+        analyzeVariableDeclarations(group),
       ).toEqual([
         {
           name: 'Button',
@@ -144,15 +145,14 @@ describe('[DIAGNOSTICS]', () => {
     })
 
     it('allows multiple configured prefixes', () => {
-      const cssData = createCssData({
-        declaredVariables: [
-          '--f-button-back-ground',
-          '--p-button-back-ground',
-          '--m-button-back-ground',
-        ],
-      })
-
       const group = createGroup({
+        cssData: createCssData({
+          declaredVariables: [
+            '--f-button-back-ground',
+            '--p-button-back-ground',
+            '--m-button-back-ground',
+          ],
+        }),
         tokens: [
           createToken({
             vars: [
@@ -165,7 +165,7 @@ describe('[DIAGNOSTICS]', () => {
       })
 
       expect(
-        analyzeVariableDeclarations(cssData, group),
+        analyzeVariableDeclarations(group),
       ).toEqual([
         {
           name: 'Button',
@@ -178,14 +178,13 @@ describe('[DIAGNOSTICS]', () => {
     })
 
     it('analyzes variables independently', () => {
-      const cssData = createCssData({
-        declaredVariables: [
-          '--p-button-back-ground',
-          '--p-button-color',
-        ],
-      })
-
       const group = createGroup({
+        cssData: createCssData({
+          declaredVariables: [
+            '--p-button-back-ground',
+            '--p-button-color',
+          ],
+        }),
         tokens: [
           createToken({
             vars: [
@@ -206,7 +205,7 @@ describe('[DIAGNOSTICS]', () => {
       })
 
       expect(
-        analyzeVariableDeclarations(cssData, group),
+        analyzeVariableDeclarations(group),
       ).toEqual([
         {
           name: 'Button',
@@ -219,11 +218,10 @@ describe('[DIAGNOSTICS]', () => {
     })
 
     it('returns an empty array when there are no declarations', () => {
-      const cssData = createCssData()
       const group = createGroup()
 
       expect(
-        analyzeVariableDeclarations(cssData, group),
+        analyzeVariableDeclarations(group),
       ).toEqual([])
     })
   })

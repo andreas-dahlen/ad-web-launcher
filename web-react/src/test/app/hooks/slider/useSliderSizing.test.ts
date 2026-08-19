@@ -4,7 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { useSliderSizing } from '@primitives/Slider/hooks/useSliderSizing.hook'
 import { sliderStore } from '@primitives/Slider/store/slider.store'
 
-import { createResizeObserverMock } from '@test/utils/resizeObserver.utils'
+import { createResizeObserverMock } from '@test/testUtils/resizeObserver.utils'
 
 vi.mock('@primitives/Slider/store/slider.store', () => ({
   sliderStore: {

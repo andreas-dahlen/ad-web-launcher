@@ -1,13 +1,11 @@
 import { describe, expect, it } from 'vitest'
 
 import { formatTokenFiles } from '@styleTokens/emitters/generate/format/formatTokenFiles'
-import type {
-  TokenGroupFileData,
-} from '@styleTokens/emitters/extract/assemblers/assembleTokenData'
+import type { TokenGroupData } from '@styleTokens/emitters/extract/assemblers/assembleTokenData'
 
 function createTokenGroup(
-  overrides: Partial<TokenGroupFileData> = {},
-): TokenGroupFileData {
+  overrides: Partial<TokenGroupData> = {},
+): TokenGroupData {
   return {
     name: 'button',
     styleName: 'buttonStyle',
@@ -20,12 +18,14 @@ function createTokenGroup(
           {
             key: 'bg',
             cssName: 'back-ground',
-            allowed: ['f']
+            allowed: ['f'],
+            values: {}
           },
           {
             key: 'color',
             cssName: 'color',
             allowed: ['p', 'f'],
+            values: {}
           },
         ],
       },
@@ -127,6 +127,7 @@ describe('[EMITTER]', () => {
                   key: 'bg',
                   cssName: 'back-ground',
                   allowed: ['f'],
+                  values: {}
                 },
               ],
             },
@@ -137,6 +138,7 @@ describe('[EMITTER]', () => {
                   key: 'bg',
                   cssName: 'back-ground',
                   allowed: ['s', 'f'],
+                  values: {}
                 },
               ],
             },

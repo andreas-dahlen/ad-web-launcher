@@ -5,16 +5,16 @@ import {
   type CarouselBinding
 } from '@primitives/Carousel/store/carousel.store'
 
-import { applyCommit } from '@test/testAPI'
+import { applyCommit } from '@test/testApi'
 
 import { carousel_DEFAULTS } from '@primitives/Carousel/store/useCarouselStore.hook'
 
 import {
   getStoreByType,
   seedStoreByType
-} from '@test/utils/storeSeed.utils'
+} from '@test/testUtils/storeSeed.utils'
 
-import { resetInteractionStores } from '@test/utils/storeReset.utils'
+import { resetInteractionStores } from '@test/testUtils/storeReset.utils'
 
 
 function initTest(data: CarouselBinding = carousel_DEFAULTS) {

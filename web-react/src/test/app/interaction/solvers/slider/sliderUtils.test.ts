@@ -3,7 +3,7 @@ import { createBaseWithAxis1D } from '@test/app/interaction/builders/base.factor
 import { sliderUtils } from '@interaction/solvers/sliderSolver/slider.utils';
 import { createComputedSlider } from '@test/app/interaction/builders/computed.factory';
 import type { Normalized1D } from '@interaction/types/solver.types';
-import { merge } from '@test/utils/factory.utils';
+import { merge } from '@test/testUtils/factory.utils';
 import { data_DEFAULT } from '@test/app/interaction/fixtures/data.fixture';
 import { base_DEFAULT } from '@test/app/interaction/fixtures/base.fixture';
 

@@ -1,12 +1,12 @@
 import type { VariableMismatch } from '../../../types/diagnostics.types.ts';
 import type { CssVarString } from '../../../../shared/tokenUtils/compiler.types.ts';
 import { toCssVar, toCssVarPrefix } from '../../../../shared/tokenUtils/stringFormaters.ts';
-import type { CssData, CssTokenGroup } from '../../../types/compiler.types.ts';
+import type { CssDataTokenGroup } from '../../../types/compiler.types.ts';
 
-export function analyzeVariableUsage(cssData: CssData, group: CssTokenGroup): VariableMismatch[] {
+export function analyzeVariableUsage(group: CssDataTokenGroup): VariableMismatch[] {
   const result: VariableMismatch[] = []
 
-  const found = new Set(cssData.foundFinalVariables);
+  const found = new Set(group.cssData.foundFinalVariables);
 
   for (const token of group.tokens) {
     const declared = new Set(

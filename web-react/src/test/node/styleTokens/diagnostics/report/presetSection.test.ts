@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
 
-import { tokenSection } from '@styleTokens/diagnostics/report/sections/tokenSection'
+import { presetSection } from '@styleTokens/diagnostics/report/sections/presetSection'
 import type { FileStatus } from '@styleTokens/types/diagnostics.types'
 
 vi.mock('@styleTokens/utils/string', () => ({
@@ -12,8 +12,15 @@ vi.mock('@styleTokens/utils/string', () => ({
     heading: 'heading',
     value: 'value',
   },
-
   paint: String,
+  formatLogPath: (path: string) => {
+    const marker = '/generated/'
+    const index = path.indexOf(marker)
+
+    return index === -1
+      ? path
+      : path.slice(index + marker.length)
+  },
 }))
 
 function createFileStatus(
@@ -27,39 +34,43 @@ function createFileStatus(
 }
 
 describe('[DIAGNOSTICS]', () => {
-  describe('tokenSection', () => {
+  describe('presetSection', () => {
     it('creates a section when files were written', () => {
-      const result = tokenSection(
+      const result = presetSection(
         createFileStatus({
-          written: ['tokens/button.token.ts'],
+          written: [
+            '/src/shared/generated/presets/button.preset.ts',
+          ],
         }),
       )
 
       expect(result).toBeDefined()
-      expect(result?.title).toContain('Tokens')
+      expect(result?.title).toContain('Preset files')
       expect(result?.title).toContain('(1)')
       expect(result?.entries).toHaveLength(1)
     })
 
     it('creates a section when files were skipped', () => {
-      const result = tokenSection(
+      const result = presetSection(
         createFileStatus({
-          skipped: ['tokens/button.token.ts'],
+          skipped: [
+            '/src/shared/generated/presets/button.preset.ts',
+          ],
         }),
       )
 
       expect(result).toBeDefined()
-      expect(result?.title).toContain('Tokens')
+      expect(result?.title).toContain('Preset files')
       expect(result?.title).toContain('(1)')
       expect(result?.entries).toHaveLength(1)
     })
 
-    it('reports written files in a written entry', () => {
-      const result = tokenSection(
+    it('reports formatted written file paths', () => {
+      const result = presetSection(
         createFileStatus({
           written: [
-            'tokens/button.token.ts',
-            'tokens/card.token.ts',
+            '/src/shared/generated/presets/button.preset.ts',
+            '/src/shared/generated/presets/card.preset.ts',
           ],
         }),
       )
@@ -72,20 +83,20 @@ describe('[DIAGNOSTICS]', () => {
       expect(entry?.lines).toHaveLength(2)
 
       expect(entry?.lines?.some(line =>
-        line.includes('tokens/button.token.ts'),
+        line.includes('presets/button.preset.ts'),
       )).toBe(true)
 
       expect(entry?.lines?.some(line =>
-        line.includes('tokens/card.token.ts'),
+        line.includes('presets/card.preset.ts'),
       )).toBe(true)
     })
 
-    it('reports skipped files in a skipped entry', () => {
-      const result = tokenSection(
+    it('reports formatted skipped file paths', () => {
+      const result = presetSection(
         createFileStatus({
           skipped: [
-            'tokens/button.token.ts',
-            'tokens/card.token.ts',
+            '/src/shared/generated/presets/button.preset.ts',
+            '/src/shared/generated/presets/card.preset.ts',
           ],
         }),
       )
@@ -98,19 +109,23 @@ describe('[DIAGNOSTICS]', () => {
       expect(entry?.lines).toHaveLength(2)
 
       expect(entry?.lines?.some(line =>
-        line.includes('tokens/button.token.ts'),
+        line.includes('presets/button.preset.ts'),
       )).toBe(true)
 
       expect(entry?.lines?.some(line =>
-        line.includes('tokens/card.token.ts'),
+        line.includes('presets/card.preset.ts'),
       )).toBe(true)
     })
 
     it('creates separate entries for written and skipped files', () => {
-      const result = tokenSection(
+      const result = presetSection(
         createFileStatus({
-          written: ['tokens/button.token.ts'],
-          skipped: ['tokens/card.token.ts'],
+          written: [
+            '/src/shared/generated/presets/button.preset.ts',
+          ],
+          skipped: [
+            '/src/shared/generated/presets/card.preset.ts',
+          ],
         }),
       )
 
@@ -130,14 +145,14 @@ describe('[DIAGNOSTICS]', () => {
     })
 
     it('reports the total number of files in the section title', () => {
-      const result = tokenSection(
+      const result = presetSection(
         createFileStatus({
           written: [
-            'tokens/button.token.ts',
-            'tokens/card.token.ts',
+            '/src/shared/generated/presets/button.preset.ts',
+            '/src/shared/generated/presets/card.preset.ts',
           ],
           skipped: [
-            'tokens/surface.token.ts',
+            '/src/shared/generated/presets/surface.preset.ts',
           ],
         }),
       )
@@ -146,9 +161,11 @@ describe('[DIAGNOSTICS]', () => {
     })
 
     it('does not create a written entry when no files were written', () => {
-      const result = tokenSection(
+      const result = presetSection(
         createFileStatus({
-          skipped: ['tokens/button.token.ts'],
+          skipped: [
+            '/src/shared/generated/presets/button.preset.ts',
+          ],
         }),
       )
 
@@ -160,9 +177,11 @@ describe('[DIAGNOSTICS]', () => {
     })
 
     it('does not create a skipped entry when no files were skipped', () => {
-      const result = tokenSection(
+      const result = presetSection(
         createFileStatus({
-          written: ['tokens/button.token.ts'],
+          written: [
+            '/src/shared/generated/presets/button.preset.ts',
+          ],
         }),
       )
 
@@ -175,7 +194,7 @@ describe('[DIAGNOSTICS]', () => {
 
     it('returns undefined when there are no files', () => {
       expect(
-        tokenSection(createFileStatus()),
+        presetSection(createFileStatus()),
       ).toBeUndefined()
     })
   })

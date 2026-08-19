@@ -13,7 +13,7 @@ import { defineConfig, globalIgnores } from 'eslint/config'
 export default defineConfig([
   ...jsonSchemaValidator.configs.base,
 
-  globalIgnores(['dist', 'node_modules', '**/*.css', '**/*.svg', '**/*.generated.ts']),
+  globalIgnores(['dist', 'node_modules', '**/*.css', '**/*.svg', '**/*.generated.ts', 'coverage']),
 
   {
     plugins: {
@@ -141,7 +141,6 @@ export default defineConfig([
           // ----------------------------------
           // BASE
           // ----------------------------------
-
           policies: [
             {
               from: { element: { type: "*" } },
@@ -574,8 +573,7 @@ export default defineConfig([
       'unicorn/prefer-minimal-ternary': 'off',
       'unicorn/empty-brace-spaces': 'off',
       'unicorn/no-this-outside-of-class': 'off',
-      'unicorn/filename-case': 'off',
-
+      'unicorn/single-line-block-comment-style': 'off',
 
       'unicorn/prefer-module': 'off',
       'unicorn/no-null': 'off',
@@ -590,10 +588,8 @@ export default defineConfig([
     }
   },
 
-
-
-  // MIGRATED: "rules" → "policies
-  // ─── Unicorn folder naming rules ──────────────────────
+  // // MIGRATED: "rules" → "policies
+  // // ─── Unicorn folder naming rules ──────────────────────
 
   {
     files: ['src/test/**/*.{ts,tsx}'],
@@ -605,49 +601,31 @@ export default defineConfig([
   },
 
 
-  // 2. STRICT RULE: React Components, SVGs, and CSS Modules MUST be PascalCase
+  // // 1. STRICT RULE: React Components, SVGs, and CSS Modules MUST be PascalCase
   {
-    files: ['**/*.tsx', '**/*.jsx', '**/*.module.css', '**/*.svg'],
+    files: ['src/**/*.{tsx,jsx,module.css,svg}'],
     ignores: [
-      '**/vite.config.*',
-      '**/vite.*.ts',
-      '**/scripts/**/*',
-      '**/dist/**/*',
-      '**/node_modules/**/*',
-      '**/.*',
-      '!src/**/*',
-      '**/plugins/**/*'
+      "**/*.test.tsx",
+      "**/main.tsx"
     ],
     rules: {
       'unicorn/filename-case': ['error', {
         case: 'pascalCase',
-        ignore: [
-          '^src$',
-          '^node_modules$'
-        ]
+        checkDirectories: false
       }]
     }
   },
 
-  // 3. STRICT RULE: Standard TypeScript/JavaScript logic files MUST be camelCase
+  // // 2. STRICT RULE: Standard TypeScript/JavaScript logic files MUST be camelCase
   {
-    files: ['*/**.ts', '*/**.js'],
-    // Exclude component test files or files that intentionally use PascalCase if necessary
+    files: ['src/**/*.{ts,js}'],
     ignores: [
-      '**/*.tsx',
-      '**/test/**/*',
-      '**/vite.config.*',
-      '**/vite.*.ts',
-      '**/scripts/**/*',
-      '**/dist/**/*',
-      '**/node_modules/**/*',
-      '**/.*',
-      '!src/**/*',
-      '**/plugins/**/*'
+      "**/test/**/*.ts",
     ],
     rules: {
       'unicorn/filename-case': ['error', {
         case: 'camelCase',
+        checkDirectories: false
       }]
     }
   },

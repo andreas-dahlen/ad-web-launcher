@@ -4,7 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { useDragSizing } from '@primitives/Drag/hooks/useDragSizing.hook'
 import { dragStore } from '@primitives/Drag/store/drag.store'
 
-import { createResizeObserverMock } from '@test/utils/resizeObserver.utils'
+import { createResizeObserverMock } from '@test/testUtils/resizeObserver.utils'
 
 vi.mock('@primitives/Drag/store/drag.store', () => ({
   dragStore: {

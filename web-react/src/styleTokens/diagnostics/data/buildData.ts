@@ -43,8 +43,6 @@ export function buildData({
   const omittedPresetFiles =
     emitResult?.extractResult.omittedPresetFiles ?? []
 
-  const processedGroupCount = runGroups.length
-
   for (const group of runGroups) {
     /*---------------------------------------
           NON-Css Data
@@ -58,8 +56,8 @@ export function buildData({
     if (selectorResult) unusableSelectors.push(selectorResult)
 
     missingClasses.push(...analyzeTokens(group.cssData))
-    mismatchedVariables.push(...analyzeVariableUsage(group.cssData, group))
-    invalidVarDeclarations.push(...analyzeVariableDeclarations(group.cssData, group))
+    mismatchedVariables.push(...analyzeVariableUsage(group))
+    invalidVarDeclarations.push(...analyzeVariableDeclarations(group))
   }
 
   return {
@@ -68,7 +66,7 @@ export function buildData({
     mismatchedVariables,
     invalidVarDeclarations,
     missingCssModules,
-    processedGroupCount,
+    processedGroupCount: runGroups.length,
     generatedFiles,
     issues,
     omittedPresetFiles

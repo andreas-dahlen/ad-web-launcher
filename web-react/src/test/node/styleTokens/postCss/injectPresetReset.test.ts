@@ -63,9 +63,9 @@ function createResetData(
   rule: ReturnType<typeof createRule>,
   ...variables: CssVarString[]
 ): PresetResetData {
-  return new Map([
+  return [
     [rule, new Set(variables)],
-  ])
+  ]
 }
 
 function getDeclarations(rule: ReturnType<typeof createRule>) {

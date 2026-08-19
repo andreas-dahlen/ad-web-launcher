@@ -121,11 +121,12 @@ describe('[COMPILER]', () => {
         .toBe('/css/OldButton.module.css')
     })
 
-    it('removes the stale group when replacing an existing token group', () => {
+    it('removes the stale group from the cache', () => {
       const tokenPath = '/tokens/button/default.jsonc'
 
       const staleGroup = createCssTokenGroup({
         groupPath: '/tokens/button',
+        cssPath: '/css/Button.module.css',
         tokens: [
           createCompilerToken({ tokenPath }),
         ],
@@ -154,12 +155,11 @@ describe('[COMPILER]', () => {
         cache,
       })
 
-      expect(cache.getGroups())
-        .toEqual([result.group])
+      expect(cache.getGroupByTokenPath(tokenPath))
+        .toBe(result.group)
 
-      expect(
-        cache.getGroupByGroupPath(staleGroup.groupPath)
-      ).toBe(result.group)
+      expect(cache.getGroupByCssPath(staleGroup.cssPath!))
+        .toBe(result.group)
     })
 
     it('processes every token in the group', () => {
@@ -187,7 +187,7 @@ describe('[COMPILER]', () => {
 
       const processToken = vi.spyOn(
         processTokenModule,
-        'processToken'
+        'processToken',
       )
 
       processToken
@@ -357,9 +357,8 @@ describe('[COMPILER]', () => {
         cache,
       })
 
-      expect(cache.getGroups()).toEqual([
-        result.group,
-      ])
+      expect(cache.getGroupByTokenPath(tokenPath))
+        .toBe(result.group)
     })
   })
 })

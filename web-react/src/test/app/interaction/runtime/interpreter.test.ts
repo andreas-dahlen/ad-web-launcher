@@ -8,7 +8,7 @@ import { createInterpreterPress, createInterpreterSwipeStart, seedGesture } from
 import { createRuntimeswipeStart } from '@test/app/interaction/builders/runtime.factory'
 import { computed_DEFAULT } from '@test/app/interaction/fixtures/computed.fixture'
 import type { EventBridgeType } from '@shared/types/core.types'
-import { testPipeline } from '@test/testAPI'
+import { testPipeline } from '@test/testApi'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
 const x = 0

@@ -4,7 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { useItemSizing } from '@primitives/Carousel/hooks/useItemSizing.hook'
 import { carouselStore } from '@primitives/Carousel/store/carousel.store'
 
-import { createResizeObserverMock } from '@test/utils/resizeObserver.utils'
+import { createResizeObserverMock } from '@test/testUtils/resizeObserver.utils'
 
 vi.mock('@primitives/Carousel/store/carousel.store', () => ({
   carouselStore: {

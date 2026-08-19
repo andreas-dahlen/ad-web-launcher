@@ -53,6 +53,7 @@ export default function SettingsDefault() {
             variant: "fill",
             styleVars: {
               rotate: "rotate(90deg)",
+              modeOnCol: "m:modeDisabledCol"
             }
             // settings: { adjust: { rotate: 90 }, variant: "fill" }
           }}

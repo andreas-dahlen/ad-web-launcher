@@ -10,19 +10,19 @@ export function cpsx<P extends string>(
 }
 
 
-/** [USAGE]: mergePresets( buttonPresetMap, presets, !conditional && "presetClassName") */
-// export function mergePresets<
-//   PresetMap extends Record<string, unknown>
-// >(
-//   map: PresetMap,
-//   base: (keyof PresetMap)[] | undefined,
-//   ...additions: (keyof PresetMap | false | null | undefined)[]
-// ) {
-//   return [
-//     ...(base ?? []),
-//     ...additions
-//   ].filter((x): x is keyof PresetMap => {
-//     if (!x) return false;
-//     return x in map;
-//   });
-// }
+/* [USAGE]: mergePresets( buttonPresetMap, presets, !conditional && "presetClassName")
+export function mergePresets<
+  PresetMap extends Record<string, unknown>
+>(
+  map: PresetMap,
+  base: (keyof PresetMap)[] | undefined,
+  ...additions: (keyof PresetMap | false | null | undefined)[]
+) {
+  return [
+    ...(base ?? []),
+    ...additions
+  ].filter((x): x is keyof PresetMap => {
+    if (!x) return false;
+    return x in map;
+  });
+} */

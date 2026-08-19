@@ -1,17 +1,20 @@
-import { assert } from '@styleTokens/compiler/processing/assertions';
-import type { RawToken, TokenGroup } from '@styleTokens/types/compiler.types';
-import { describe, expect, it } from 'vitest';
+import { assert } from '@styleTokens/utils/assertions'
+import type {
+  CssDataTokenGroup,
+  RawToken,
+  TokenGroup,
+} from '@styleTokens/types/compiler.types'
+import { describe, expect, it } from 'vitest'
+import type { ParseError } from 'jsonc-parser'
 
-const path = '/tokens/button.jsonc';
+const path = '/tokens/button.jsonc'
 
 describe('[COMPILER]', () => {
   describe('assert.token', () => {
     it.each([
       {
         description: 'rejects empty component',
-        json: {
-          component: '',
-        },
+        json: { component: '' },
         error: '"component" must be a non empty string',
       },
       {
@@ -45,10 +48,13 @@ describe('[COMPILER]', () => {
       },
     ])('$description', ({ json, error }) => {
       expect(() =>
-        assert.token([], json as unknown as RawToken, path)
-      ).toThrow(error);
-    });
-
+        assert.token(
+          [],
+          json as unknown as RawToken,
+          path,
+        ),
+      ).toThrow(error)
+    })
 
     it('accepts valid token data', () => {
       expect(() =>
@@ -61,22 +67,24 @@ describe('[COMPILER]', () => {
             alwaysAllowed: ['f'],
           },
           path,
-        )
-      ).not.toThrow();
-    });
-
+        ),
+      ).not.toThrow()
+    })
 
     it('rejects JSON parse errors', () => {
+      const errors = [
+        { error: 1 },
+      ] as unknown as ParseError[]
+
       expect(() =>
         assert.token(
-          [{ error: 1 } as never],
+          errors,
           { component: 'button', vars: {} },
           path,
-        )
-      ).toThrow('Invalid JSON');
-    });
-  });
-
+        ),
+      ).toThrow('Invalid JSON')
+    })
+  })
 
   describe('assert.variable', () => {
     it.each([
@@ -92,30 +100,22 @@ describe('[COMPILER]', () => {
       },
       {
         description: 'rejects empty name',
-        value: {
-          name: '',
-        },
+        value: { name: '' },
         error: 'name must be a non empty string',
       },
       {
         description: 'rejects allowed as non array',
-        value: {
-          allowed: 'f',
-        },
+        value: { allowed: 'f' },
         error: 'allowed must be an array',
       },
       {
         description: 'rejects exclude as non array',
-        value: {
-          exclude: 'f',
-        },
+        value: { exclude: 'f' },
         error: 'exclude must be an array',
       },
       {
         description: 'rejects values as array',
-        value: {
-          values: [],
-        },
+        value: { values: [] },
         error: 'values must be an object',
       },
     ])('$description', ({ value, error }) => {
@@ -124,10 +124,9 @@ describe('[COMPILER]', () => {
           'background',
           value,
           path,
-        )
-      ).toThrow(error);
-    });
-
+        ),
+      ).toThrow(error)
+    })
 
     it('accepts valid variables', () => {
       expect(() =>
@@ -142,11 +141,36 @@ describe('[COMPILER]', () => {
             },
           },
           path,
-        )
-      ).not.toThrow();
-    });
-  });
+        ),
+      ).not.toThrow()
+    })
+  })
 
+  describe('assert.cssVariable', () => {
+    it.each([
+      '--button-background',
+      '--foo',
+      '--_private',
+      '--foo_123-bar',
+    ])('accepts valid CSS variable %s', value => {
+      expect(() =>
+        assert.cssVariable(value),
+      ).not.toThrow()
+    })
+
+    it.each([
+      'button-background',
+      '-button-background',
+      '--',
+      '--1button',
+      '--foo!',
+      '--foo bar',
+    ])('rejects invalid CSS variable %s', value => {
+      expect(() =>
+        assert.cssVariable(value),
+      ).toThrow('is not a CSS custom property')
+    })
+  })
 
   describe('assert.hasCssPath', () => {
     it('accepts groups with cssPath', () => {
@@ -154,23 +178,124 @@ describe('[COMPILER]', () => {
         groupPath: '/tokens/button',
         cssPath: '/css/Button.module.css',
         tokens: [],
-      };
+      }
 
       expect(() =>
-        assert.hasCssPath(group)
-      ).not.toThrow();
-    });
+        assert.hasCssPath(group),
+      ).not.toThrow()
+    })
 
+    it('rejects undefined groups', () => {
+      expect(() =>
+        assert.hasCssPath(undefined),
+      ).toThrow('has no cssPath')
+    })
 
     it('rejects groups without cssPath', () => {
       const group = {
         groupPath: '/tokens/button',
         tokens: [],
-      } as TokenGroup;
+      } as TokenGroup
 
       expect(() =>
-        assert.hasCssPath(group)
-      ).toThrow('has no cssPath');
-    });
-  });
-});
+        assert.hasCssPath(group),
+      ).toThrow('has no cssPath')
+    })
+  })
+
+  describe('assert.groupsHaveCssPath', () => {
+    it('accepts groups with cssPath', () => {
+      const groups = [
+        {
+          groupPath: '/tokens/button',
+          cssPath: '/css/Button.module.css',
+          tokens: [],
+        },
+        {
+          groupPath: '/tokens/input',
+          cssPath: '/css/Input.module.css',
+          tokens: [],
+        },
+      ] as TokenGroup[]
+
+      expect(() =>
+        assert.groupsHaveCssPath(groups),
+      ).not.toThrow()
+    })
+
+    it('rejects a group without cssPath', () => {
+      const groups = [
+        {
+          groupPath: '/tokens/button',
+          cssPath: '/css/Button.module.css',
+          tokens: [],
+        },
+        {
+          groupPath: '/tokens/input',
+          tokens: [],
+        },
+      ] as TokenGroup[]
+
+      expect(() =>
+        assert.groupsHaveCssPath(groups),
+      ).toThrow('Token group "/tokens/input" has no cssPath')
+    })
+
+    it('returns without error for an empty group list', () => {
+      expect(() =>
+        assert.groupsHaveCssPath([]),
+      ).not.toThrow()
+    })
+  })
+
+  describe('assert.groupsHaveCssData', () => {
+    it('accepts groups with cssData', () => {
+      const groups = [
+        {
+          groupPath: '/tokens/button',
+          cssPath: '/css/Button.module.css',
+          tokens: [],
+          cssData: {},
+        },
+        {
+          groupPath: '/tokens/input',
+          cssPath: '/css/Input.module.css',
+          tokens: [],
+          cssData: {},
+        },
+      ] as unknown as CssDataTokenGroup[]
+
+      expect(() =>
+        assert.groupsHaveCssData(groups),
+      ).not.toThrow()
+    })
+
+    it('rejects a group without cssData', () => {
+      const groups = [
+        {
+          groupPath: '/tokens/button',
+          cssPath: '/css/Button.module.css',
+          tokens: [],
+          cssData: {},
+        },
+        {
+          groupPath: '/tokens/input',
+          cssPath: '/css/Input.module.css',
+          tokens: [],
+        },
+      ] as unknown as CssDataTokenGroup[]
+
+      expect(() =>
+        assert.groupsHaveCssData(groups),
+      ).toThrow(
+        'A token in tokenGroups "/tokens/input" has no cssData',
+      )
+    })
+
+    it('returns without error for an empty group list', () => {
+      expect(() =>
+        assert.groupsHaveCssData([]),
+      ).not.toThrow()
+    })
+  })
+})

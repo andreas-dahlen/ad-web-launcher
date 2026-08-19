@@ -11,8 +11,8 @@ export function applyTokenChange({
   tokenPath,
   cache,
 }: {
-  tokenPath: string;
-  cache: TokenCache;
+  tokenPath: string
+  cache: TokenCache
 }): TokenGroupResult {
   const staleGroup = cache.getGroupByTokenPath(tokenPath);
 

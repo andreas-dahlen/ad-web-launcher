@@ -67,7 +67,7 @@ export function extractData({
   -------------------------------------*/
 
   const allTokenData = groups
-    .map(assembleTokenData)
+    .map(group => assembleTokenData(group))
     .filter((data): data is TokenGroupData => data !== undefined)
 
   const extensionData = assembleExtensionData(

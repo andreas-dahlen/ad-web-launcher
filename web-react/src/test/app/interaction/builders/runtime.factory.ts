@@ -1,5 +1,5 @@
 import type { RuntimePress, RuntimePressRelease, RuntimeSwipe, RuntimeCommit, RuntimeStart } from '@interaction/types/runtime/runtime.types';
-import { merge } from '@test/utils/factory.utils';
+import { merge } from '@test/testUtils/factory.utils';
 import { event_DEFAULT } from '@test/app/interaction/fixtures/runtimeEvents.fixture';
 
 export function createRuntimePress(

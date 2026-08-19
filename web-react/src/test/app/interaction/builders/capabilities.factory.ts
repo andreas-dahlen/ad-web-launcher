@@ -1,5 +1,5 @@
 import type { Capabilities } from '@interaction/types/descriptor/base.types';
-import { merge } from '@test/utils/factory.utils';
+import { merge } from '@test/testUtils/factory.utils';
 import { capabilities_DEFAULT } from '@test/app/interaction/fixtures/capabilities.fixture';
 
 export function createPressCapabilities(

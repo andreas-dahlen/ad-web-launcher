@@ -7,9 +7,6 @@ export function formatTokenFiles(tokenGroupData: TokenGroupData[]): FormatResult
 
   for (const entry of tokenGroupData) {
 
-    // const variables = entry.tokens.variables
-    //   .toSorted((a, b) => a.name.localeCompare(b.name));
-
     const vars: string[] = [];
 
     for (const token of entry.tokens) {
@@ -18,14 +15,10 @@ export function formatTokenFiles(tokenGroupData: TokenGroupData[]): FormatResult
         return `         ${v.key}: { name: "${v.cssName}", allowed: [${v.allowed.map((a) => `"${a}"`).join(",")}]}`
       }).join(",\n")
 
-
-
       const baseVar = `\n   ${token.infix}: {\n ${varsRaw} \n}`
 
       vars.push(baseVar)
-
     }
-
 
     const importStatement = `import type {
   StyleFromComponent,

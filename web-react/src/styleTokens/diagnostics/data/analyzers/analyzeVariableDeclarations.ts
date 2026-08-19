@@ -1,12 +1,12 @@
 import type { CssVarString } from '../../../../shared/tokenUtils/compiler.types.ts';
 import { toCssVar } from '../../../../shared/tokenUtils/stringFormaters.ts';
-import type { CssData, CssTokenGroup } from '../../../types/compiler.types.ts';
+import type { CssDataTokenGroup } from '../../../types/compiler.types.ts';
 import type { InvalidVarDeclaration } from '../../../types/diagnostics.types.ts';
-export function analyzeVariableDeclarations(cssData: CssData, group: CssTokenGroup): InvalidVarDeclaration[] {
+export function analyzeVariableDeclarations(group: CssDataTokenGroup): InvalidVarDeclaration[] {
 
   const result: InvalidVarDeclaration[] = []
 
-  const found = new Set(cssData.declaredVariables);
+  const found = new Set(group.cssData.declaredVariables);
 
   for (const token of group.tokens) {
 

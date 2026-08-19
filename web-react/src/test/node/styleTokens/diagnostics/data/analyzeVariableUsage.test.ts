@@ -5,7 +5,7 @@ import type {
   CompilerToken,
   CompilerVariable,
   CssData,
-  CssTokenGroup,
+  CssDataTokenGroup,
 } from '@styleTokens/types/compiler.types'
 
 function createVariable(
@@ -51,14 +51,15 @@ function createCssData(
 }
 
 function createGroup(
-  overrides: Partial<CssTokenGroup> = {},
-): CssTokenGroup {
+  overrides: Partial<CssDataTokenGroup> = {},
+): CssDataTokenGroup {
   return {
     groupPath: '/tokens/button',
     cssPath: '/components/Button/Button.module.css',
     tokens: [
       createToken(),
     ],
+    cssData: createCssData(),
     ...overrides,
   }
 }
@@ -66,32 +67,28 @@ function createGroup(
 describe('[DIAGNOSTICS]', () => {
   describe('analyzeVariableUsage', () => {
     it('returns no mismatch when usage matches declarations', () => {
-      const cssData = createCssData({
-        foundFinalVariables: [
-          '--final-button-back-ground',
-        ],
+      const group = createGroup({
+        cssData: createCssData({
+          foundFinalVariables: [
+            '--final-button-back-ground',
+          ],
+        }),
       })
 
-      const group = createGroup()
-
-      expect(
-        analyzeVariableUsage(cssData, group),
-      ).toEqual([])
+      expect(analyzeVariableUsage(group)).toEqual([])
     })
 
     it('reports a final variable used by CSS but missing from the token', () => {
-      const cssData = createCssData({
-        foundFinalVariables: [
-          '--final-button-back-ground',
-          '--final-button-color',
-        ],
+      const group = createGroup({
+        cssData: createCssData({
+          foundFinalVariables: [
+            '--final-button-back-ground',
+            '--final-button-color',
+          ],
+        }),
       })
 
-      const group = createGroup()
-
-      expect(
-        analyzeVariableUsage(cssData, group),
-      ).toEqual([
+      expect(analyzeVariableUsage(group)).toEqual([
         {
           name: 'Button',
           infix: 'button',
@@ -104,15 +101,9 @@ describe('[DIAGNOSTICS]', () => {
     })
 
     it('reports a declared variable that is not used by CSS', () => {
-      const cssData = createCssData({
-        foundFinalVariables: [],
-      })
-
       const group = createGroup()
 
-      expect(
-        analyzeVariableUsage(cssData, group),
-      ).toEqual([
+      expect(analyzeVariableUsage(group)).toEqual([
         {
           name: 'Button',
           infix: 'button',
@@ -125,13 +116,12 @@ describe('[DIAGNOSTICS]', () => {
     })
 
     it('reports both missing and unused variables', () => {
-      const cssData = createCssData({
-        foundFinalVariables: [
-          '--final-button-color',
-        ],
-      })
-
       const group = createGroup({
+        cssData: createCssData({
+          foundFinalVariables: [
+            '--final-button-color',
+          ],
+        }),
         tokens: [
           createToken({
             vars: [
@@ -141,16 +131,14 @@ describe('[DIAGNOSTICS]', () => {
               createVariable({
                 key: 'border',
                 name: 'border',
-                cssName: 'border'
+                cssName: 'border',
               }),
             ],
           }),
         ],
       })
 
-      expect(
-        analyzeVariableUsage(cssData, group),
-      ).toEqual([
+      expect(analyzeVariableUsage(group)).toEqual([
         {
           name: 'Button',
           infix: 'button',
@@ -166,17 +154,15 @@ describe('[DIAGNOSTICS]', () => {
     })
 
     it('ignores final variables belonging to another token', () => {
-      const cssData = createCssData({
-        foundFinalVariables: [
-          '--final-surface-back-ground',
-        ],
+      const group = createGroup({
+        cssData: createCssData({
+          foundFinalVariables: [
+            '--final-surface-back-ground',
+          ],
+        }),
       })
 
-      const group = createGroup()
-
-      expect(
-        analyzeVariableUsage(cssData, group),
-      ).toEqual([
+      expect(analyzeVariableUsage(group)).toEqual([
         {
           name: 'Button',
           infix: 'button',
@@ -189,14 +175,13 @@ describe('[DIAGNOSTICS]', () => {
     })
 
     it('analyzes tokens independently', () => {
-      const cssData = createCssData({
-        foundFinalVariables: [
-          '--final-button-back-ground',
-          '--final-surface-color',
-        ],
-      })
-
       const group = createGroup({
+        cssData: createCssData({
+          foundFinalVariables: [
+            '--final-button-back-ground',
+            '--final-surface-color',
+          ],
+        }),
         tokens: [
           createToken({
             name: 'Button',
@@ -215,20 +200,17 @@ describe('[DIAGNOSTICS]', () => {
               createVariable({
                 key: 'color',
                 name: 'color',
-                cssName: 'color'
+                cssName: 'color',
               }),
             ],
           }),
         ],
       })
 
-      expect(
-        analyzeVariableUsage(cssData, group),
-      ).toEqual([])
+      expect(analyzeVariableUsage(group)).toEqual([])
     })
 
     it('returns an empty array when there are no declarations or usage', () => {
-      const cssData = createCssData()
       const group = createGroup({
         tokens: [
           createToken({
@@ -237,9 +219,7 @@ describe('[DIAGNOSTICS]', () => {
         ],
       })
 
-      expect(
-        analyzeVariableUsage(cssData, group),
-      ).toEqual([])
+      expect(analyzeVariableUsage(group)).toEqual([])
     })
   })
 })

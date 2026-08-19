@@ -1,5 +1,5 @@
 import { normalizeParameter, sizeStore, type Device } from '@shared/state/stores/size.store'
-import { testSize } from '@test/testAPI'
+import { testSize } from '@test/testApi'
 import { beforeEach, describe, expect, it } from 'vitest'
 
 const { sanitizeDevice, computeScale } = testSize
