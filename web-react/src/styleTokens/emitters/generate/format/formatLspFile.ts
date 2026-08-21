@@ -1,48 +1,46 @@
 import path from 'node:path';
-import type { TokenGroupData } from '../../extract/assemblers/assembleTokenData.ts';
 import type { FormatResult } from '../generateOutput.ts';
 import { toCssVar } from '../../../../shared/tokenUtils/stringFormaters.ts';
-import type { LspData } from '@styleTokens/emitters/extract/assemblers/assembleLspData.ts';
+import type { LspData } from '../../extract/assemblers/assembleLspData.ts';
 
 
-export function formatLspFile(tokenGroupData: TokenGroupData[], lspData: LspData): FormatResult {
+export function formatLspFile(lspData: LspData): FormatResult {
   const output: string[] = []
 
   const filePath = path.resolve("./src/shared/generated/metadata/cssVariables.generated.ts")
 
-  for (const group of tokenGroupData) {
-    for (const token of group.tokens) {
+  for (const token of lspData.tokens) {
 
-      const finalVars: string[] = []
-      const definedVars: string[] = []
+    const finalVars: string[] = []
+    const definedVars: string[] = []
 
-      for (const variable of token.variables) {
-        const finalVarName = toCssVar("final", token.infix, variable.cssName)
+    for (const variable of token.variables) {
+      const finalVarName = toCssVar("final", token.infix, variable.cssName)
 
-        const chain = variable.allowed.map(prefix => {
-          const value = variable.values[prefix];
+      const chain = variable.allowed.map(prefix => {
+        const value = variable.values[prefix];
 
-          if (!value) {
-            return `${prefix}`;
-          }
+        if (!value) {
+          return `${prefix}`;
+        }
 
-          definedVars.push(`//${toCssVar(prefix, token.infix, variable.cssName)}: ${value};\n`)
+        definedVars.push(`//${toCssVar(prefix, token.infix, variable.cssName)}: ${value};\n`)
 
-          return `${prefix}:${value}`;
-        })
+        return `${prefix}:${value}`;
+      })
 
-        finalVars.push(`//${finalVarName}: 🔮 ${variable.key}: ${chain.join(" → ")};\n`)
-      }
-
-      const name =
-        group.name == token.infix
-          ? group.name
-          : `${group.name}-${token.infix}`
-
-      const tokenVars = `\n//${name} {\n${finalVars.join("")}${definedVars.join("")}\n//}`
-
-      output.push(tokenVars)
+      finalVars.push(`//${finalVarName}: 🔮 ${variable.key}: ${chain.join(" → ")};\n`)
     }
+
+    const name = token.infix
+    // const name =
+    //   group.name == token.infix
+    //     ? group.name
+    //     : `${group.name}-${token.infix}`
+
+    const tokenVars = `\n//${name} {\n${finalVars.join("")}${definedVars.join("")}\n//}`
+
+    output.push(tokenVars)
   }
 
   output.push(`\n//:root {\n${lspData.rgbVariables.map(variable => `//${variable};`).join("\n")}\n//}`)

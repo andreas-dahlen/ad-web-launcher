@@ -9,7 +9,6 @@ export function isValidPrefix(
 /**
  * Prefix semantics
  *
- * i = Interactive (runtime gesture values)
  * o = Override (explicit consumer override)
  * s = State (hover, pressed, disabled)
  * m = Mode (primary, compact, danger)
@@ -18,5 +17,5 @@ export function isValidPrefix(
  * f = Fallback (component defaults)
  */
 export const prefixPriority = [
-  "o", "i", "s", "m", "p", "t", "f"
+  "o", "s", "m", "p", "t", "f"
 ] as const satisfies readonly ValidPrefix[]

@@ -5,13 +5,14 @@ import { assemblePresetData } from './assemblers/assemblePresetData.ts'
 import { assembleLspData, type LspData } from './assemblers/assembleLspData.ts'
 import { assembleMetadata, type GroupMetadata } from './assemblers/assembleMetadata.ts'
 import { assembleExtensionData, type ExtensionData } from './assemblers/assembleExtensionData.ts'
-import type { CssDataTokenGroup, ExtractResult } from '../../types/compiler.types.ts'
-import type { PostData } from '@styleTokens/postCss/processPost.ts'
+import type { ExtractResult } from '../../types/compiler.types.ts'
+import type { TokenCache } from '../../compiler/tracking/tokenCache.ts'
+import type { CompilerRun } from '../../compiler/tracking/compilerRun.ts'
 
 
 export type EmitData = {
   presetFiles: PresetFileData[]
-  tokenData: TokenGroupData[]
+  tokenFiles: TokenGroupData[]
   metadata: GroupMetadata[]
   extensionData: ExtensionData
   lspData: LspData
@@ -22,65 +23,68 @@ export type ExtractData = {
   extractResult: ExtractResult
 }
 
-export function extractData({
-  groups,
-  postData,
-  runGroups
-}: {
-  groups: CssDataTokenGroup[],
-  postData: PostData[],
-  runGroups: CssDataTokenGroup[]
-}): ExtractData {
+export function extractData(cache: TokenCache,
+  run: CompilerRun): ExtractData {
 
   const presetFiles: PresetFileData[] = []
+  const tokenFiles: TokenGroupData[] = []
   const tokenData: TokenGroupData[] = []
   const metadata: GroupMetadata[] = []
 
   const omittedPresetFiles = new Set<string>()
 
-  /*---------------------------------------
-          Multiple files run results
-  -------------------------------------*/
-
-  for (const runGroup of runGroups) {
-    const tokenResult = assembleTokenData(runGroup)
-    if (tokenResult) tokenData.push(tokenResult)
-
-    const presetResult = assemblePresetData(runGroup.cssData)
-    if (presetResult) { presetFiles.push(presetResult) }
-    else { omittedPresetFiles.add(runGroup.cssPath) }
-
-  }
-
+  const groups = cache.getCssDataGroups()
+  const runGroups = cache.getCssDataGroupsByPaths(run.getProcessedPaths())
+  const postData = cache.getAllPostData()
 
   /*---------------------------------------
-        Single file output
+        all groups
   -------------------------------------*/
   for (const group of groups) {
+
+    const tokenResult = assembleTokenData(group)
+    if (tokenResult) tokenData.push(tokenResult)
 
     const metaResult = assembleMetadata(group)
     if (metaResult) metadata.push(metaResult)
 
   }
+
+  /*---------------------------------------
+          current run
+  -------------------------------------*/
+  for (const runGroup of runGroups) {
+    const tokenFile = tokenData.find(
+      data => data.groupPath === runGroup.groupPath,
+    )
+    if (tokenFile) {
+      tokenFiles.push(tokenFile)
+    }
+
+    const presetResult = assemblePresetData(runGroup.cssData)
+    if (presetResult) { presetFiles.push(presetResult) }
+    else { omittedPresetFiles.add(runGroup.cssPath) }
+  }
+
+
   /*---------------------------------------
     Final processing
   -------------------------------------*/
 
-  const allTokenData = groups
-    .map(group => assembleTokenData(group))
-    .filter((data): data is TokenGroupData => data !== undefined)
-
   const extensionData = assembleExtensionData(
     postData.flatMap(t => t.variables),
-    allTokenData.flatMap(t => t.tokens)
+    tokenData.flatMap(t => t.tokens)
   )
 
-  const lspData = assembleLspData(postData.flatMap(t => t.oklchVariables))
+  const lspData = assembleLspData(
+    postData.flatMap(t => t.oklchVariables),
+    tokenData.flatMap(t => t.tokens)
+  )
 
   return {
     outputData: {
       presetFiles,
-      tokenData,
+      tokenFiles,
       metadata,
       extensionData,
       lspData

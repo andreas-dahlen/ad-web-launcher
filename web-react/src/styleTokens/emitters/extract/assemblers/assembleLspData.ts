@@ -1,10 +1,16 @@
+import type { CssVarString } from '../../../../shared/tokenUtils/compiler.types.ts';
+import type { TokenData } from './assembleTokenData.ts';
 import Color from 'colorjs.io';
 
 export type LspData = {
   rgbVariables: string[]
+  tokens: TokenData[]
 }
 
-export function assembleLspData(oklchVariables: Array<[`--${string}`, string]>): LspData {
+export function assembleLspData(
+  oklchVariables: Array<[CssVarString, string]>,
+  tokens: TokenData[]
+): LspData {
 
   const rgbVariables = new Set<string>()
 
@@ -17,7 +23,8 @@ export function assembleLspData(oklchVariables: Array<[`--${string}`, string]>):
   }
 
   return {
-    rgbVariables: [...rgbVariables]
+    rgbVariables: [...rgbVariables],
+    tokens
   }
 }
 

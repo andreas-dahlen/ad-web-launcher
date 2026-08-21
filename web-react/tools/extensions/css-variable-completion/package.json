@@ -1,0 +1,50 @@
+{
+  "publisher": "ad-web-launcher",
+  "name": "css-variable-completion",
+  "type": "module",
+  "displayName": "CSS Variable Completion",
+  "description": "Provides completion for CSS custom-property declarations.",
+  "version": "0.0.1",
+  "private": true,
+  "engines": {
+    "vscode": "^1.125.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "onLanguage:css",
+    "onLanguage:scss",
+    "onLanguage:less"
+  ],
+  "scripts": {
+    "build": "tsc && esbuild src/extension.ts --bundle --platform=node --external:vscode --main-fields=module,main --outfile=dist/extension.js",
+    "watch": "tsc --watch",
+    "package": "npm run build && vsce package --allow-missing-repository"
+  },
+  "dependencies": {
+    "jsonc-parser": "^3.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.2",
+    "@types/vscode": "^1.125.0",
+    "@vscode/vsce": "^3.9.2",
+    "esbuild": "^0.28.2",
+    "typescript": "^6.0.3"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true
+  },
+  "contributes": {
+    "configuration": {
+      "properties": {
+        "cssVariableCompletion.variablesFile": {
+          "type": "string",
+          "default": "web-react/src/shared/generated/metadata/cssVariables.generated.jsonc",
+          "description": "Path to the CSS variable metadata file, relative to the workspace."
+        }
+      }
+    }
+  }
+}

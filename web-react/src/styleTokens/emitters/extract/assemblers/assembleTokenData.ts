@@ -5,6 +5,7 @@ import { toCamelCase, toPascalCase } from '../../../../shared/tokenUtils/stringF
 import { extractGroupName } from '../../../compiler/resolvers/extractGroupName.ts'
 
 export type TokenGroupData = {
+  groupPath: string
   name: string
   styleName: string
   typeName: string
@@ -49,6 +50,7 @@ export function assembleTokenData(group: CssTokenGroup): TokenGroupData {
   }
 
   return {
+    groupPath: group.groupPath,
     name,
     styleName,
     typeName,

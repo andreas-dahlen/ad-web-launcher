@@ -2,7 +2,7 @@ import type { EmitData } from '../extract/extractData.ts';
 import { formatTokenFiles } from './format/formatTokenFiles.ts';
 import { formatPresetFiles } from './format/formatPresetFiles.ts';
 import { formatMetaFile } from './format/formatMetaFile.ts';
-import { formatTokenPatch } from './format/formatTokenPatch.ts';
+import { formatPathPatches } from './format/formatPathPatches.ts';
 import { formatLspFile } from './format/formatLspFile.ts';
 import { formatExtensionFile } from './format/formatExtensionFile.ts';
 
@@ -20,13 +20,13 @@ export function generateOutput(data: EmitData): GeneratedOutput {
   return {
     files: [
       ...formatPresetFiles(data.presetFiles),
-      ...formatTokenFiles(data.tokenData),
+      ...formatTokenFiles(data.tokenFiles),
       formatMetaFile(data.metadata),
-      formatLspFile(data.tokenData, data.lspData),
+      formatLspFile(data.lspData),
       formatExtensionFile(data.extensionData)
     ],
     patches: [
-      ...formatTokenPatch(data.metadata)
+      ...formatPathPatches(data.metadata)
     ]
   }
 }

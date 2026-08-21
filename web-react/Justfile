@@ -88,11 +88,17 @@ tokens *args:
 # ==================== EXTENSIONS ====================
 
 install-cvc:
-    cd extensions/css-variable-completion && npm run package
-    code --install-extension extensions/css-variable-completion/css-variable-completion-0.0.1.vsix --force
+    cd tools/extensions/css-variable-completion && npm run package
+    code --install-extension tools/extensions/css-variable-completion/css-variable-completion-0.0.1.vsix --force
 
-uninstall-cvc:
-    code --uninstall-extension ad-web-launcher.css-variable-completion
+install-tcv:
+    cd tools/extensions/token-compiler-vscode && npm run package
+    code --install-extension tools/extensions/token-compiler-vscode/token-compiler-vscode-0.0.1.vsix --force
+
+build-tc:
+    cd tools/token-compiler && npm run build
+
+install-tokens: build-tc install-tcv
 
 # ==================== WORKSPACE ====================
 

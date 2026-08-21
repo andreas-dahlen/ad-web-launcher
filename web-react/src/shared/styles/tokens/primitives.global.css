@@ -26,9 +26,9 @@ neutral = greys / blacks / whites  */
   --_col-neutral-dark-1: oklch(41.283% 0.00005 271.152);
   --_col-neutral-dark-2: oklch(32.504% 0.00004 271.152);
 
-  --_text-col: oklch(0% 0 0);
-
+  --_test-col: black;
   --_deg: 15deg;
+  --_brown: oklch(0% 0 0);
 
   /* global defaults */
   --_button-size-xl: 60px;

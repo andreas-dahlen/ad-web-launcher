@@ -10,13 +10,10 @@ import { analyzeIssues } from './analyzers/analyzeIssues.ts';
 import { analyzeVariableDeclarations } from './analyzers/analyzeVariableDeclarations.ts';
 import type { TokenCache } from '@styleTokens/compiler/tracking/tokenCache.ts';
 
-export function buildData({
-  cache,
-  run
-}: {
+export function buildData(
   cache: TokenCache,
   run: CompilerRun
-}): DiagnosticData {
+): DiagnosticData {
 
   const missingClasses: MissingClass[] = []
   const unusableSelectors: UnusableSelector[] = []

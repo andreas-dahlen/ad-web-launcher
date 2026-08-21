@@ -88,6 +88,7 @@
 					"ad-web-launcher/web-react/src/styleTokens/**"
 				]
 			}
-		]
+		],
+		"cssModulesIntellisense.diagnostics.classNotUsed.enabled": false
 	}
 }

@@ -1,0 +1,78 @@
+{
+  "groups": {
+    "button": {
+      "cssPath": "/home/david/repos/ad-web-launcher/web-react/src/primitives/Button/Button.module.css",
+      "tokenPaths": [
+        "/home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/button/button.jsonc",
+        "/home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/button/visual.jsonc"
+      ]
+    },
+    "carousel": {
+      "cssPath": "/home/david/repos/ad-web-launcher/web-react/src/primitives/Carousel/Carousel.module.css",
+      "tokenPaths": [
+        "/home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/carousel.jsonc"
+      ]
+    },
+    "label": {
+      "cssPath": "/home/david/repos/ad-web-launcher/web-react/src/blocks/Label/Label.module.css",
+      "tokenPaths": [
+        "/home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/label.jsonc"
+      ]
+    },
+    "layout": {
+      "cssPath": "/home/david/repos/ad-web-launcher/web-react/src/blocks/Layout/Layout.module.css",
+      "tokenPaths": [
+        "/home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/layout.jsonc"
+      ]
+    },
+    "scroll": {
+      "cssPath": "/home/david/repos/ad-web-launcher/web-react/src/primitives/Scroll/Scroll.module.css",
+      "tokenPaths": [
+        "/home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/scroll/knob.jsonc",
+        "/home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/scroll/scroll.jsonc"
+      ]
+    },
+    "slider": {
+      "cssPath": "/home/david/repos/ad-web-launcher/web-react/src/primitives/Slider/Slider.module.css",
+      "tokenPaths": [
+        "/home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/slider/slider.jsonc",
+        "/home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/slider/thumb.jsonc",
+        "/home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/slider/track.jsonc"
+      ]
+    },
+    "svg": {
+      "cssPath": "/home/david/repos/ad-web-launcher/web-react/src/blocks/Svg/Svg.module.css",
+      "tokenPaths": [
+        "/home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/svg.jsonc"
+      ]
+    },
+    "visual": {
+      "cssPath": "/home/david/repos/ad-web-launcher/web-react/src/blocks/visual/Visual.module.css",
+      "tokenPaths": [
+        "/home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/visual.jsonc"
+      ]
+    }
+  },
+  "files": {
+    "/home/david/repos/ad-web-launcher/web-react/src/primitives/Button/Button.module.css": "button",
+    "/home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/button/button.jsonc": "button",
+    "/home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/button/visual.jsonc": "button",
+    "/home/david/repos/ad-web-launcher/web-react/src/primitives/Carousel/Carousel.module.css": "carousel",
+    "/home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/carousel.jsonc": "carousel",
+    "/home/david/repos/ad-web-launcher/web-react/src/blocks/Label/Label.module.css": "label",
+    "/home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/label.jsonc": "label",
+    "/home/david/repos/ad-web-launcher/web-react/src/blocks/Layout/Layout.module.css": "layout",
+    "/home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/layout.jsonc": "layout",
+    "/home/david/repos/ad-web-launcher/web-react/src/primitives/Scroll/Scroll.module.css": "scroll",
+    "/home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/scroll/knob.jsonc": "scroll",
+    "/home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/scroll/scroll.jsonc": "scroll",
+    "/home/david/repos/ad-web-launcher/web-react/src/primitives/Slider/Slider.module.css": "slider",
+    "/home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/slider/slider.jsonc": "slider",
+    "/home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/slider/thumb.jsonc": "slider",
+    "/home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/slider/track.jsonc": "slider",
+    "/home/david/repos/ad-web-launcher/web-react/src/blocks/Svg/Svg.module.css": "svg",
+    "/home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/svg.jsonc": "svg",
+    "/home/david/repos/ad-web-launcher/web-react/src/blocks/visual/Visual.module.css": "visual",
+    "/home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/visual.jsonc": "visual"
+  }
+}
