@@ -1,11 +1,11 @@
 import { spawn, type ChildProcess } from 'node:child_process'
 import * as vscode from 'vscode'
+import { resolveSettings } from './config/resolveSettings'
 
-import { paths } from './config/paths'
 
 export function activate(context: vscode.ExtensionContext): void {
 
-  const workspace = paths.resolveWorkspace()
+  // const workspace = paths.resolveWorkspace()
 
   const output = vscode.window.createOutputChannel('Token Compiler')
 
@@ -13,21 +13,23 @@ export function activate(context: vscode.ExtensionContext): void {
 
   function startCompiler() {
 
-    const cliFile = paths.getCliPath(workspace)
-    const tokenFolder = paths.getTokenPath(workspace)
-    const outDir = paths.getGeneratedPath(workspace)
+    const settings = vscode.workspace.getConfiguration(
+      'tokenCompilerVscode')
+
+    const cliFile = resolveSettings.getCliSpawnPath(settings)
+    const projectRoot = resolveSettings.getProjectRootArg(settings)
 
     const config = {
-      rootDir: workspace.uri.fsPath,
-      tokenFolder: tokenFolder.fsPath,
-      outDir: outDir.fsPath
+      tokenFolder: resolveSettings.getTokenFolder(settings),
+      outDir: resolveSettings.getOutDir(settings)
     }
 
     compiler = spawn(
       process.execPath,
       [
-        cliFile.fsPath,
-        'run',
+        cliFile,
+        'exe',
+        projectRoot,
         JSON.stringify(config),
       ],
     )

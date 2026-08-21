@@ -19,9 +19,9 @@ export function applyTokenChange({
   const groupPath =
     staleGroup?.groupPath ?? resolveTokenGroupPath(tokenPath);
 
-  const { rootPath } = cache.getConfig()
+  const { rootDir } = cache.getConfig()
 
-  const cssPath = findCssModulePath(rootPath, groupPath);
+  const cssPath = findCssModulePath(rootDir, groupPath);
 
   const tokenPaths = findTokenPaths(groupPath);
   const results = tokenPaths.map(tokenPath =>

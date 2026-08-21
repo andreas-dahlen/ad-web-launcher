@@ -1,28 +1,29 @@
 import { initializeCompiler } from '../compiler/compilerService.js'
-import { paths } from './paths.js'
+import { handlePathAuthority } from './pathAuthority.js'
 import { watch } from './watcher.js'
 
-export type UserConfig = {
-  rootDir?: string
+export type UserOverrides = {
   tokenFolder?: string
   outDir?: string
 }
 export type CompilerConfig = {
-  rootPath: string
+  rootDir: string
   tokenPath: string
   outPath: string
 }
 
 
-export function run(config: UserConfig) {
+export function run(rootDir: string, overrides: UserOverrides) {
 
-  const rootPath = config.rootDir ?? paths.getRoot()
-  const tokenPath = config.tokenFolder ?? paths.getTokenRoot()
-  const outPath = config.outDir ?? paths.getOutRoot()
+  const config = handlePathAuthority(rootDir, overrides)
 
-  const compiler = initializeCompiler({ rootPath, tokenPath, outPath })
+  // const rootPath = rootDir ?? paths.getRoot()
+  // const tokenPath = config.tokenFolder ?? paths.getTokenRoot()
+  // const outPath = config.outDir ?? paths.getOutRoot()
+
+  const compiler = initializeCompiler(config)
 
   console.log("RUN: starts watcher")
 
-  watch(rootPath, tokenPath, compiler)
+  watch(config, compiler)
 }

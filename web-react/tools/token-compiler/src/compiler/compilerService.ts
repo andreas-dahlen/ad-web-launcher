@@ -22,7 +22,7 @@ export type TokenCompiler = ReturnType<typeof initializeCompiler>;
 export function initializeCompiler(config: CompilerConfig) {
 
   const tokenPaths = findTokenPaths(config.tokenPath)
-  const loaded = compileTokenGroups(config.rootPath, tokenPaths)
+  const loaded = compileTokenGroups(config.rootDir, tokenPaths)
   const cache = createTokenCache(loaded.groups, config)
   const run = createCompilerRun(loaded.issues)
 

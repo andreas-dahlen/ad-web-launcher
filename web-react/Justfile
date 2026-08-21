@@ -100,6 +100,9 @@ build-tc:
 
 install-tokens: build-tc install-tcv
 
+compiler:
+    cd tools/token-compiler && npm run cli -- exe ../..
+
 # ==================== WORKSPACE ====================
 
 open:

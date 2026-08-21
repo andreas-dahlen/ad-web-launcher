@@ -1,11 +1,18 @@
 import chokidar from 'chokidar'
 import { whatChanged } from './resolveChange.js'
 import type { TokenCompiler } from '../compiler/compilerService.js'
-export function watch(rootPath: string, tokenPath: string, compiler: TokenCompiler) {
+export function watch({
+  rootDir,
+  tokenPath }
+  : {
+    rootDir: string,
+    tokenPath: string
+  },
+  compiler: TokenCompiler) {
 
-  console.log('WATCH ROOT:', rootPath)
+  console.log('WATCH ROOT:', rootDir)
 
-  const watcher = chokidar.watch(rootPath, {
+  const watcher = chokidar.watch(rootDir, {
     ignoreInitial: true,
   })
 

@@ -20,7 +20,7 @@ export function assemblePresetData(
   const name = extractGroupName(cssData.groupPath)
 
   const camelName = toCamelCase(name)
-  const outputFile = path.join(outDir, `${camelName}.preset.ts`)
+  const outputFile = path.join(outDir, `presets/${camelName}.preset.ts`)
 
   const presetName = `${camelName}Preset`
   const typeName = `${toPascalCase(name)}Preset`

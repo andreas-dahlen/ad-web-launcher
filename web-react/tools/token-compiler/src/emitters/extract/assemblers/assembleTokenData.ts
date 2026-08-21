@@ -32,7 +32,7 @@ export function assembleTokenData(group: CssTokenGroup, outPath: string): TokenG
   const styleName = `${name}Style`;
   const typeName = `${toPascalCase(rawName)}Style`
 
-  const outputFile = path.join(outPath, `${name}.token.ts`);
+  const outputFile = path.join(outPath, `tokens/${name}.token.ts`);
 
   const tokens: TokenData[] = []
 

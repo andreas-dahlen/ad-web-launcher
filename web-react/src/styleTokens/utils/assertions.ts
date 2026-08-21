@@ -1,7 +1,7 @@
 import { printParseErrorCode, type ParseError } from 'jsonc-parser';
-import type { CssDataTokenGroup, CssTokenGroup, TokenGroup } from "../types/compiler.types.ts";
-import type { RawToken, RawVariable } from "../types/compiler.types.ts"
-import type { CssVarString } from '../../shared/tokenUtils/compiler.types.ts';
+import type { CssDataTokenGroup, CssTokenGroup, TokenGroup } from "../types/compiler.types.js";
+import type { RawToken, RawVariable } from "../types/compiler.types.js"
+import type { CssVarString } from '../oldSharedUtils/oldSharedCompiler.types.js';
 
 type Assertions = {
   token(errors: ParseError[], json: RawToken, fullPath: string): void;

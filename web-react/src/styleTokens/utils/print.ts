@@ -1,6 +1,6 @@
-import type { CompilerVariable } from '../types/compiler.types.ts';
-import { isValidPrefix } from '../../shared/tokenUtils/prefixes.ts'
-import { colors, formatLogPath, paint } from './string.ts';
+import type { CompilerVariable } from '../types/compiler.types.js';
+import { isValidPrefix } from '../oldSharedUtils/prefixes.js';
+import { colors, formatLogPath, paint } from './string.js';
 
 type Print = {
   injecting(file: string): void;
