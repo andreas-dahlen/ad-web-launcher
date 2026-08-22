@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 
-import { presetSection } from '@styleTokens/diagnostics/report/sections/presetSection'
-import type { FileStatus } from '@styleTokens/types/diagnostics.types'
+import { presetSection } from '../../../../diagnostics/report/sections/presetSection.js'
+import type { FileStatus } from '../../../../types/diagnostics.types.js'
 
 vi.mock('@styleTokens/utils/string', () => ({
   colors: {

@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 
-import { variableSection } from '@styleTokens/diagnostics/report/sections/variableSection'
-import type { VariableMismatch } from '@styleTokens/types/diagnostics.types'
+import { variableSection } from '../../../../diagnostics/report/sections/variableSection.js'
+import type { VariableMismatch } from '../../../../types/diagnostics.types.js'
 
 vi.mock('@styleTokens/utils/string', () => ({
   colors: {

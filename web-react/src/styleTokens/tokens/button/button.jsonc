@@ -4,19 +4,19 @@
   "component": "button",
   "infix": "button",
 
-  "alwaysAllowed": ["o", "p", "f"],
+  "alwaysAllowed": [ "o", "p", "f" ],
   "vars": {
 
-    "position": {"values": {"f": "relative"}},
-    "display": {"values": {"f": "flex"}},
-    "align": {"values": {"f": "center"}},
-    "justify": {"values": {"f": "center"}},
-    "opacity": {"allowed": ["s", "i", "m"], "values": {"f": "1"}},
+    "position": { "values": { "f": "relative" } },
+    "display": { "values": { "f": "flex" } },
+    "align": { "values": { "f": "center" } },
+    "justify": { "values": { "f": "center" } },
+    "opacity": { "allowed": [ "s", "m" ], "values": { "f": "1" } },
     // "stateCanceledOpacity": {"allowed": ["s"], "values": {"f": "0.8"}},
-    "modeDisabledOpacity":{"allowed": ["m"], "values": {"f":"0.7"}},
-    "interactiveFalseOpacity":{"allowed": ["i"], "values": {"f": "0.4"}},
+    "modeDisabledOpacity": { "allowed": [ "m" ], "values": { "f": "0.7" } },
+    "interactiveFalseOpacity": { "values": { "f": "0.4" } },
 
-    "width": {"values": {"f": "50px"}},
-    "height": {"values": {"f": "50px"}}
+    "width": { "values": { "f": "50px" } },
+    "height": { "values": { "f": "50px" } }
   }
 }

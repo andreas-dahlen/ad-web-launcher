@@ -37,7 +37,7 @@ export default defineConfig({
       '@hooks': fromRoot('src/shared/state/hooks'),
       '@types': fromRoot('src/shared/types'),
       '@styles': fromRoot('src/shared/styles'),
-      '@generated': fromRoot('src/shared/generated'),
+      '@generated': fromRoot('src/styleTokens/generated'),
 
       '@styleTokens': fromRoot('src/styleTokens'),
 

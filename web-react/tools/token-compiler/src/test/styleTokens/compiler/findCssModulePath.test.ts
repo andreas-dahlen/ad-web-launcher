@@ -4,7 +4,7 @@ import path from "node:path";
 
 import { afterEach, describe, expect, it } from "vitest";
 
-import { findCssModulePath } from '@styleTokens/compiler/discovery/findCssModulePath';
+import { findCssModulePath } from '../../../compiler/discovery/findCssModulePath.js';
 
 const tmpRoot = path.join(os.tmpdir(), "find-css-module-tests");
 

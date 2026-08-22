@@ -3,7 +3,7 @@ import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
 
-import { loadTokenFile } from '@styleTokens/compiler/loaders/loadTokenFile'
+import { loadTokenFile } from '../../../compiler/loaders/loadTokenFile.js'
 
 function createTempDir() {
   return fs.mkdtempSync(

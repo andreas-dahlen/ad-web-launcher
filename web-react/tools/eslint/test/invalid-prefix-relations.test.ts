@@ -3,7 +3,7 @@ import parser from '@typescript-eslint/parser'
 import { Linter } from 'eslint'
 import { describe, expect, it } from 'vitest'
 
-import rule from '../../../../eslint/tokens/no-invalid-prefixes-relations'
+import rule from '../tokens/no-invalid-prefixes-relations'
 
 const config = [
   {

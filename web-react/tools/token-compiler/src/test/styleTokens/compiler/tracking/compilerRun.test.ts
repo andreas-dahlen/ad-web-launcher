@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
-import { createCompilerRun } from '@styleTokens/compiler/tracking/compilerRun'
-import type { EmitResult } from '@styleTokens/types/compiler.types'
-import type { IssueGroup } from '@styleTokens/types/issueCollector.types'
+import { createCompilerRun } from '../../../../compiler/tracking/compilerRun.js'
+import type { EmitResult } from '../../../../types/compiler.types.js'
+import type { IssueGroup } from '../../../../types/issueCollector.types.js'
 
 describe('[COMPILER]', () => {
   describe('createCompilerRun', () => {

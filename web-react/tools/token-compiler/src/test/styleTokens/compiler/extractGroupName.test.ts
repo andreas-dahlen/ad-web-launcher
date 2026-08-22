@@ -1,4 +1,4 @@
-import { extractGroupName } from '@styleTokens/compiler/resolvers/extractGroupName';
+import { extractGroupName } from '../../../compiler/resolvers/extractGroupName.js';
 import { describe, expect, it } from 'vitest';
 
 

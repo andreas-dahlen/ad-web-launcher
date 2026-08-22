@@ -23,7 +23,6 @@ export default mergeConfig(
               'src/**/*.test.ts',
             ],
             exclude: [
-              'src/test/node/**',
               'src/test/react/**'
             ],
             setupFiles: [
@@ -32,7 +31,7 @@ export default mergeConfig(
           },
         },
         {
-          extends: "./vite.base.ts",
+          extends: true,
 
           test: {
             name: 'react',
@@ -44,19 +43,6 @@ export default mergeConfig(
 
             setupFiles: [
               'src/test/react/setup.utils.ts',
-            ],
-          },
-        },
-        {
-          extends: true,
-          test: {
-            name: 'styleTokens',
-            environment: 'node',
-            include: [
-              'src/test/node/**/*.test.ts'
-            ],
-            setupFiles: [
-              'src/test/node/setup.utils.ts',
             ]
           }
         }

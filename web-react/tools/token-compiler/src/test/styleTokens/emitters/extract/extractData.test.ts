@@ -1,12 +1,12 @@
 import { describe, expect, it, vi } from 'vitest'
 
-import { extractData } from '@styleTokens/emitters/extract/extractData'
-import { assembleMetadata } from '@styleTokens/emitters/extract/assemblers/assembleMetadata'
-import { assembleTokenData } from '@styleTokens/emitters/extract/assemblers/assembleTokenData'
-import { assemblePresetData } from '@styleTokens/emitters/extract/assemblers/assemblePresetData'
-import { assembleLspData } from '@styleTokens/emitters/extract/assemblers/assembleLspData'
-import { assembleExtensionData } from '@styleTokens/emitters/extract/assemblers/assembleExtensionData'
-import type { CssVarString } from '@shared/tokenUtils/compiler.types'
+import { extractData } from '../../../../emitters/extract/extractData.js'
+import { assembleMetadata } from '../../../../emitters/extract/assemblers/assembleMetadata.js'
+import { assembleTokenData } from '../../../../emitters/extract/assemblers/assembleTokenData.js'
+import { assemblePresetData } from '../../../../emitters/extract/assemblers/assemblePresetData.js'
+import { assembleLspData } from '../../../../emitters/extract/assemblers/assembleLspData.js'
+import { assembleExtensionData } from '../../../../emitters/extract/assemblers/assembleExtensionData.js'
+import type { CssVarString } from '../../../../oldSharedUtils/oldSharedCompiler.types.js'
 
 vi.mock(
   '@styleTokens/emitters/extract/assemblers/assembleMetadata',

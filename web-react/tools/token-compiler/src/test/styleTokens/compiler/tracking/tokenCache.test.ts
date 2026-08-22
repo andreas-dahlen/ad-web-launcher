@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest'
 
-import { createTokenCache } from '@styleTokens/compiler/tracking/tokenCache'
+import { createTokenCache } from '../../../../compiler/tracking/tokenCache.js'
 import {
   createCompilerToken,
   createCssTokenGroup,
   createTokenGroup,
-} from '../../compiler.factory'
+} from '../../compiler.factory.js'
 
 describe('[COMPILER]', () => {
   describe('createTokenCache', () => {

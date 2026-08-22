@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { analyzeWriteResult } from '@styleTokens/diagnostics/data/analyzers/analyzeWriteResult'
+import { analyzeWriteResult } from '../../../../diagnostics/data/analyzers/analyzeWriteResult.js'
 
 describe('[DIAGNOSTICS]', () => {
   describe('analyzeWriteResult', () => {

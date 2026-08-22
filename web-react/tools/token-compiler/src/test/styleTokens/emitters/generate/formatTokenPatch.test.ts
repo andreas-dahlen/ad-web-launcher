@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
-import { formatTokenPatch } from '@styleTokens/emitters/generate/format/formatTokenPatch'
-import type { GroupMetadata } from '@styleTokens/emitters/extract/assemblers/assembleMetadata'
+
+import type { GroupMetadata } from '../../../../emitters/extract/assemblers/assembleMetadata.js'
+import { formatPathPatches } from '../../../../emitters/generate/format/formatPathPatches.js'
 
 function createGroup(
   overrides: Partial<GroupMetadata> = {},
@@ -21,11 +22,11 @@ function createGroup(
 describe('[EMITTER]', () => {
   describe('formatTokenPatch', () => {
     it('returns no patches when there is no metadata', () => {
-      expect(formatTokenPatch([])).toEqual([])
+      expect(formatPathPatches([])).toEqual([])
     })
 
     it('creates a JSONC patch pointing to the CSS file', () => {
-      const [result] = formatTokenPatch([
+      const [result] = formatPathPatches([
         createGroup({
           tokenFiles: ['/tokens/button/default.jsonc'],
         }),
@@ -39,7 +40,7 @@ describe('[EMITTER]', () => {
     })
 
     it('creates a CSS patch containing all token files', () => {
-      const results = formatTokenPatch([
+      const results = formatPathPatches([
         createGroup({
           tokenFiles: [
             '/tokens/button/default.jsonc',
@@ -63,7 +64,7 @@ describe('[EMITTER]', () => {
     })
 
     it('creates one JSONC patch for each JSONC token file', () => {
-      const results = formatTokenPatch([
+      const results = formatPathPatches([
         createGroup(),
       ])
 
@@ -73,7 +74,7 @@ describe('[EMITTER]', () => {
     })
 
     it('ignores token files that are not JSONC', () => {
-      const results = formatTokenPatch([
+      const results = formatPathPatches([
         createGroup({
           tokenFiles: [
             '/tokens/button/default.jsonc',
@@ -92,7 +93,7 @@ describe('[EMITTER]', () => {
     })
 
     it('does not create a CSS patch for a non-CSS file', () => {
-      const results = formatTokenPatch([
+      const results = formatPathPatches([
         createGroup({
           cssFile: '/components/Button/Button.module',
         }),
@@ -112,7 +113,7 @@ describe('[EMITTER]', () => {
     })
 
     it('creates patches for multiple groups', () => {
-      const results = formatTokenPatch([
+      const results = formatPathPatches([
         createGroup(),
         createGroup({
           name: 'surface',

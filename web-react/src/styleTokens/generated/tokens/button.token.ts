@@ -16,9 +16,9 @@ export const buttonStyle = {
          display: { name: "display", allowed: ["o","p","f"]},
          align: { name: "align", allowed: ["o","p","f"]},
          justify: { name: "justify", allowed: ["o","p","f"]},
-         opacity: { name: "opacity", allowed: ["s","i","o","m","p","f"]},
+         opacity: { name: "opacity", allowed: ["o","s","m","p","f"]},
          modeDisabledOpacity: { name: "mode-disabled-opacity", allowed: ["o","m","p","f"]},
-         interactiveFalseOpacity: { name: "interactive-false-opacity", allowed: ["i","o","p","f"]},
+         interactiveFalseOpacity: { name: "interactive-false-opacity", allowed: ["o","p","f"]},
          width: { name: "width", allowed: ["o","p","f"]},
          height: { name: "height", allowed: ["o","p","f"]} 
 },

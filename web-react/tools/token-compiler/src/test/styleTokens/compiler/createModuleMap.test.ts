@@ -3,7 +3,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 
-import { createModuleMap } from "@styleTokens/compiler/discovery/createModuleMap";
+import { createModuleMap } from "../../../compiler/discovery/createModuleMap.js";
 
 function createTempDir() {
   return fs.mkdtempSync(

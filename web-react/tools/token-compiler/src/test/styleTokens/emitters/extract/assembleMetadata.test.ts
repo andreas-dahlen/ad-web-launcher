@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
-import { assembleMetadata } from '@styleTokens/emitters/extract/assemblers/assembleMetadata'
-import type { CompilerToken, CssTokenGroup } from '@styleTokens/types/compiler.types'
+import { assembleMetadata } from '../../../../emitters/extract/assemblers/assembleMetadata.js'
+import type { CompilerToken, CssTokenGroup } from '../../../../types/compiler.types.js'
 
 function createToken(
   overrides: Partial<CompilerToken> = {},

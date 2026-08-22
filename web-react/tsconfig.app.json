@@ -36,8 +36,5 @@
     "src",
     "vite-env.d.ts"
   ],
-  "exclude": [
-    "src/styleTokens",
-    "src/test/node",
-  ]
+  "exclude": [ "tools" ]
 }

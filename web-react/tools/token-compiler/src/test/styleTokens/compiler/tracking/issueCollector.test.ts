@@ -3,8 +3,8 @@ import {
   createIssueCollector,
   createNullIssueCollector,
   mergeIssueGroups,
-} from '@styleTokens/compiler/tracking/issueCollector'
-import type { IssueGroup } from '@styleTokens/types/issueCollector.types'
+} from '../../../../compiler/tracking/issueCollector.js'
+import type { IssueGroup } from '../../../../types/issueCollector.types.js'
 
 describe('[COMPILER]', () => {
   describe('createIssueCollector', () => {

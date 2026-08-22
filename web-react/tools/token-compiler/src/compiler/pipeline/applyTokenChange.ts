@@ -5,7 +5,6 @@ import { resolveTokenGroupPath } from '../resolvers/resolveTokenGroupPath.js'
 import { processToken } from '../processing/processToken.js';
 import { findCssModulePath } from '../discovery/findCssModulePath.js';
 import { findTokenPaths } from '../discovery/findTokenPaths.js';
-// import type { TokenGroup } from '@styleTokens/types/compiler.types.js';
 
 export function applyTokenChange({
   tokenPath,

@@ -2,12 +2,12 @@ import { describe, expect, it } from 'vitest'
 import postcss from 'postcss'
 import type { Root } from 'postcss'
 
-import { processModule } from '@styleTokens/postCss/processModule'
+import { processModule } from '../../../postCss/processModule.js'
 import type {
   CompilerToken,
   CompilerVariable,
   CssTokenGroup,
-} from '@styleTokens/types/compiler.types'
+} from '../../../types/compiler.types.js'
 
 function parseCss(css: string): Root {
   return postcss.parse(css)

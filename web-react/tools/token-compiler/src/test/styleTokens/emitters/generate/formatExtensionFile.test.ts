@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
-import { formatExtensionFile } from '@styleTokens/emitters/generate/format/formatExtensionFile'
-import type { ExtensionData } from '@styleTokens/emitters/extract/assemblers/assembleExtensionData'
+import { formatExtensionFile } from '../../../../emitters/generate/format/formatExtensionFile.js'
+import type { ExtensionData } from '../../../../emitters/extract/assemblers/assembleExtensionData.js'
 
 function createExtensionData(
   overrides: Partial<ExtensionData> = {},

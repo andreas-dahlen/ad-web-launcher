@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
+import type { TokenData } from '../../../../emitters/extract/assemblers/assembleTokenData.js'
+import type { ValidPrefix } from '../../../../oldSharedUtils/oldSharedCompiler.types.js'
+import { assembleExtensionData } from '../../../../emitters/extract/assemblers/assembleExtensionData.js'
 
-import { assembleExtensionData } from '@styleTokens/emitters/extract/assemblers/assembleExtensionData'
-import type { TokenData } from '@styleTokens/emitters/extract/assemblers/assembleTokenData'
-import type { CssVarString, ValidPrefix } from '@shared/tokenUtils/compiler.types'
 
 function createToken(
   overrides: Partial<TokenData> = {},

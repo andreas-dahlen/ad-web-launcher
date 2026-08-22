@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest'
 
-import { analyzeVariableDeclarations } from '@styleTokens/diagnostics/data/analyzers/analyzeVariableDeclarations'
+import { analyzeVariableDeclarations } from '../../../../diagnostics/data/analyzers/analyzeVariableDeclarations.js'
 import type {
   CompilerToken,
   CompilerVariable,
   CssData,
   CssDataTokenGroup,
-} from '@styleTokens/types/compiler.types'
+} from '../../../../types/compiler.types.js'
 
 function createVariable(
   overrides: Partial<CompilerVariable> = {},

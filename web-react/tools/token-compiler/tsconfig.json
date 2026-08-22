@@ -11,13 +11,9 @@
     "strict": true,
     "skipLibCheck": true,
 
-    "rootDir": "src",
-    "outDir": "dist",
-    "noEmit": false,
-
     "noUnusedLocals": true,
-    "noUnusedParameters": true
+    "noUnusedParameters": true,
+
   },
   "include": [ "src/**/*.ts" ],
-  "exclude": [ "src/test" ]
 }

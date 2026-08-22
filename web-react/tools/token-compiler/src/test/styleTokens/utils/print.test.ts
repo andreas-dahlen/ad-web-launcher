@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import { print } from '@styleTokens/utils/print'
+import { print } from '../../../utils/print.js'
 
 vi.mock('@styleTokens/utils/string', () => ({
   colors: {

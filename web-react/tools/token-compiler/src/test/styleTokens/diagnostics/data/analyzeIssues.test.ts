@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest'
 
-import { analyzeIssues } from '@styleTokens/diagnostics/data/analyzers/analyzeIssues'
+import { analyzeIssues } from '../../../../diagnostics/data/analyzers/analyzeIssues.js'
 import type {
   Issue,
   IssueGroup,
-} from '@styleTokens/types/issueCollector.types'
+} from '../../../../types/issueCollector.types.js'
 
 function createIssue(
   overrides: Partial<Issue> = {},

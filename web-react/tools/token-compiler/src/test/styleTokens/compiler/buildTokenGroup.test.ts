@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest'
 
-import { buildTokenGroup } from '@styleTokens/compiler/builders/buildTokenGroup'
+import { buildTokenGroup } from '../../../compiler/builders/buildTokenGroup.js'
 import {
   createCompilerToken,
-} from '../compiler.factory'
+} from '../compiler.factory.js'
 
 describe('[COMPILER]', () => {
   describe('buildTokenGroup', () => {

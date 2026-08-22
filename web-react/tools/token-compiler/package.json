@@ -3,11 +3,15 @@
   "version": "0.0.1",
   "private": true,
   "type": "module",
+
   "scripts": {
+    "test:coverage": "vitest run --coverage",
+    "test": "vitest",
     "check": "tsc --noEmit",
-    "build": "tsc",
+    "build": "tsc -p tsconfig.build.json",
     "cli": "npm run build && node dist/cli.js"
   },
+
   "dependencies": {
     "chokidar": "^5.0.0",
     "colorjs.io": "^0.7.1",
@@ -19,6 +23,7 @@
     "@types/node": "^26.1.2",
     "knip": "^6.32.2",
     "typescript": "^6.0.3",
-    "vitest": "^4.1.11"
+    "vitest": "^4.1.11",
+    "@vitest/coverage-v8": "^4.1.11"
   }
 }

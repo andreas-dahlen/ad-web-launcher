@@ -1,9 +1,9 @@
-import { assert } from '@styleTokens/utils/assertions'
+import { assert } from '../../../utils/assertions.js'
 import type {
   CssDataTokenGroup,
   RawToken,
   TokenGroup,
-} from '@styleTokens/types/compiler.types'
+} from '../../../types/compiler.types.js'
 import { describe, expect, it } from 'vitest'
 import type { ParseError } from 'jsonc-parser'
 

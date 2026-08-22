@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
-import { formatPresetFiles } from '@styleTokens/emitters/generate/format/formatPresetFiles'
-import type { PresetFileData } from '@styleTokens/emitters/extract/assemblers/assemblePresetData'
+import { formatPresetFiles } from '../../../../emitters/generate/format/formatPresetFiles.js'
+import type { PresetFileData } from '../../../../emitters/extract/assemblers/assemblePresetData.js'
 
 function createPreset(
   overrides: Partial<PresetFileData> = {},

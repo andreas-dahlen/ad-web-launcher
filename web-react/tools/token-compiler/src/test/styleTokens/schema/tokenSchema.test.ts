@@ -3,7 +3,7 @@ import path from 'node:path'
 
 import { describe, expect, it } from 'vitest'
 
-import { prefixPriority } from '@shared/tokenUtils/prefixes'
+import { prefixPriority } from '../../../oldSharedUtils/prefixes.js'
 
 const schemaPath = path.resolve(
   './src/styleTokens/schema/token.schema.json',

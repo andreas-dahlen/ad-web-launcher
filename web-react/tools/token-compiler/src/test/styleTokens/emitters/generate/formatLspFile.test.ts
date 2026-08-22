@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
-import { formatLspFile } from '@styleTokens/emitters/generate/format/formatLspFile'
-import type { TokenGroupData } from '@styleTokens/emitters/extract/assemblers/assembleTokenData'
-import type { LspData } from '@styleTokens/emitters/extract/assemblers/assembleLspData'
+import { formatLspFile } from '../../../../emitters/generate/format/formatLspFile.js'
+import type { TokenGroupData } from '../../../../emitters/extract/assemblers/assembleTokenData.js'
+import type { LspData } from '../../../../emitters/extract/assemblers/assembleLspData.js'
 
 function createTokenGroup(
   overrides: Partial<TokenGroupData> = {},

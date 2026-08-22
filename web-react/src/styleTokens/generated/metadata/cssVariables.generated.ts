@@ -8,9 +8,9 @@
 //--final-button-display: 🔮 display: o → p → f:flex;
 //--final-button-align: 🔮 align: o → p → f:center;
 //--final-button-justify: 🔮 justify: o → p → f:center;
-//--final-button-opacity: 🔮 opacity: s → i → o → m → p → f:1;
+//--final-button-opacity: 🔮 opacity: o → s → m → p → f:1;
 //--final-button-mode-disabled-opacity: 🔮 modeDisabledOpacity: o → m → p → f:0.7;
-//--final-button-interactive-false-opacity: 🔮 interactiveFalseOpacity: i → o → p → f:0.4;
+//--final-button-interactive-false-opacity: 🔮 interactiveFalseOpacity: o → p → f:0.4;
 //--final-button-width: 🔮 width: o → p → f:50px;
 //--final-button-height: 🔮 height: o → p → f:50px;
 //--f-button-position: relative;

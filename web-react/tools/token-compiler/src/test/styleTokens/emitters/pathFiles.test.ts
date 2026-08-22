@@ -2,7 +2,7 @@ import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
 import { beforeEach, afterEach, describe, expect, it } from 'vitest'
-import { patchFiles } from '@styleTokens/emitters/write/patchFiles'
+import { patchFiles } from '../../../emitters/write/patchFiles.js'
 
 
 describe('[EMITTER]', () => {

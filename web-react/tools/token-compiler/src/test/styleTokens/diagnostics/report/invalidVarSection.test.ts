@@ -1,8 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 
-import { invalidVarSection } from '@styleTokens/diagnostics/report/sections/invalidVarSection'
-import type { InvalidVarDeclaration } from '@styleTokens/types/diagnostics.types'
-
+import { invalidVarSection } from '../../../../diagnostics/report/sections/invalidVarSection.js'
+import type { InvalidVarDeclaration } from '../../../../types/diagnostics.types.js'
 vi.mock('@styleTokens/utils/string', () => ({
   colors: {
     error: 'error',

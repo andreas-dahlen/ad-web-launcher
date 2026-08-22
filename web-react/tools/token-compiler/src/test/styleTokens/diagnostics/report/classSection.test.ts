@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 
-import { classSection } from '@styleTokens/diagnostics/report/sections/classSection'
-import type { MissingClass } from '@styleTokens/types/diagnostics.types'
+import { classSection } from '../../../../diagnostics/report/sections/classSection.js'
+import type { MissingClass } from '../../../../types/diagnostics.types.js'
 
 vi.mock('@styleTokens/utils/string', () => ({
   colors: {

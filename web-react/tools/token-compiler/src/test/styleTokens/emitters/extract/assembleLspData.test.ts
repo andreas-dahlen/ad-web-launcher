@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { assembleLspData } from '@styleTokens/emitters/extract/assemblers/assembleLspData'
+import { assembleLspData } from '../../../../emitters/extract/assemblers/assembleLspData.js'
 
 describe('[EMITTERS]', () => {
   describe('assembleLspData', () => {

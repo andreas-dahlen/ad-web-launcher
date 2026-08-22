@@ -1,12 +1,12 @@
 import { describe, expect, it, vi } from 'vitest'
 
-import { buildData } from '@styleTokens/diagnostics/data/buildData'
+import { buildData } from '../../../../diagnostics/data/buildData.js'
 import type {
   CssData,
   CssDataTokenGroup,
-} from '@styleTokens/types/compiler.types'
-import type { CompilerRun } from '@styleTokens/compiler/tracking/compilerRun'
-import type { TokenCache } from '@styleTokens/compiler/tracking/tokenCache'
+} from '../../../../types/compiler.types.js'
+import type { CompilerRun } from '../../../../compiler/tracking/compilerRun.js'
+import type { TokenCache } from '../../../../compiler/tracking/tokenCache.js'
 
 function createCssData(
   overrides: Partial<CssData> = {},

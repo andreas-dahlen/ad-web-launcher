@@ -5,10 +5,10 @@ import type { CarouselPreset } from '@generated/presets/carousel.preset.ts'
 import type { SliderPreset } from '@generated/presets/slider.preset.ts'
 import type { ScrollPreset } from '@generated/presets/scroll.preset.ts'
 import type { ButtonPreset } from '@generated/presets/button.preset.ts'
-import type { CarouselStyle } from '@shared/generated/tokenModules/carousel.token.ts'
-import type { SliderStyle } from '@shared/generated/tokenModules/slider.token.ts'
-import type { ScrollStyle } from '@shared/generated/tokenModules/scroll.token.ts'
-import type { ButtonStyle } from '@shared/generated/tokenModules/button.token.ts'
+import type { CarouselStyle } from '@generated/tokenModules/carousel.token.ts'
+import type { SliderStyle } from '@generated/tokenModules/slider.token.ts'
+import type { ScrollStyle } from '@generated/tokenModules/scroll.token.ts'
+import type { ButtonStyle } from '@generated/tokenModules/button.token.ts'
 
 //discriminating unions - capabilities
 export type SnapConfig = //default is false

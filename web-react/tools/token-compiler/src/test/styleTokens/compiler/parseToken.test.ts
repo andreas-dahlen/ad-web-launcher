@@ -1,5 +1,5 @@
-import { parseToken } from '@styleTokens/compiler/processing/parseToken';
-import { createRawVariable, createTestCollector } from '@test/node/styleTokens/compiler.factory';
+import { parseToken } from '../../../compiler/processing/parseToken.js';
+import { createRawVariable, createTestCollector } from '../compiler.factory.js';
 import { describe, expect, it } from 'vitest';
 
 describe('[COMPILER]', () => {

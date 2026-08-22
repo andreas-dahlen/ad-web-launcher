@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import { printReport } from '@styleTokens/diagnostics/print/printReport'
-import type { ReportSection } from '@styleTokens/diagnostics/report/buildReport'
+import { printReport } from '../../../diagnostics/print/printReport.js'
+import type { ReportSection } from '../../../diagnostics/report/buildReport.js'
 
 describe('[DIAGNOSTICS]', () => {
   describe('printReport', () => {

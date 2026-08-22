@@ -1,18 +1,18 @@
 import { describe, expect, it, vi } from 'vitest'
 
-import { applyTokenChange } from '@styleTokens/compiler/pipeline/applyTokenChange'
-import { createTokenCache } from '@styleTokens/compiler/tracking/tokenCache'
+import { applyTokenChange } from '../../../compiler/pipeline/applyTokenChange.js'
+import { createTokenCache } from '../../../compiler/tracking/tokenCache.js'
 
-import * as processTokenModule from '@styleTokens/compiler/processing/processToken'
-import * as findCssModulePathModule from '@styleTokens/compiler/discovery/findCssModulePath'
-import * as findTokenPathsModule from '@styleTokens/compiler/discovery/findTokenPaths'
+import * as processTokenModule from '../../../compiler/processing/processToken.js'
+import * as findCssModulePathModule from '../../../compiler/discovery/findCssModulePath.js'
+import * as findTokenPathsModule from '../../../compiler/discovery/findTokenPaths.js'
 
 import {
   createCompilerToken,
   createCssTokenGroup,
-} from '../compiler.factory'
+} from '../compiler.factory.js'
 
-import type { Issue } from '@styleTokens/types/issueCollector.types'
+import type { Issue } from '../../../types/issueCollector.types.js'
 
 describe('[COMPILER]', () => {
   describe('applyTokenChange', () => {

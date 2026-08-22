@@ -1,22 +1,23 @@
 import { describe, expect, it, vi } from 'vitest'
 
-import { issuesSection } from '@styleTokens/diagnostics/report/sections/issuesSection'
-import type { AnalyzedIssueGroup } from '@styleTokens/types/diagnostics.types'
+import { issuesSection } from '../../../../diagnostics/report/sections/issuesSection.js'
+import type { AnalyzedIssueGroup } from '../../../../types/diagnostics.types.js'
 
-vi.mock('@styleTokens/utils/string', () => ({
-  colors: {
-    subHeading: 'subHeading',
-    value: 'value',
-    symbol: 'symbol',
-    error: 'error',
-    muted: 'muted',
-    file: 'file',
-    heading: 'heading',
-  },
+vi.mock
+  ('@styleTokens/utils/string', () => ({
+    colors: {
+      subHeading: 'subHeading',
+      value: 'value',
+      symbol: 'symbol',
+      error: 'error',
+      muted: 'muted',
+      file: 'file',
+      heading: 'heading',
+    },
 
-  paint: String,
-  formatLogPath: (value: string) => value,
-}))
+    paint: String,
+    formatLogPath: (value: string) => value,
+  }))
 
 function createIssueGroup(
   overrides: Partial<AnalyzedIssueGroup> = {},
