@@ -2,35 +2,36 @@
 file://wsl.localhost/Ubuntu/home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/scroll/knob.jsonc
 file://wsl.localhost/Ubuntu/home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/scroll/scroll.jsonc
 */
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev
 .container {
   position: absolute;
   inset: 0;
-  --scroll-height: 100%;
-  --scroll-width: 100%;
-  min-height: var(--scroll-height);
+  /* min-height: var(--final-scroll-height); */
 }
 
 .scroll {
   position: relative;
-  min-height: var(--scroll-height);
-  min-width: var(--scroll-width);
-  opacity: var(--scroll-opacity, 90%);
+  min-height: var(--final-scroll-height);
+  min-width: var(--final-scroll-width);
+  opacity: var(--final-scroll-opacity);
   background: linear-gradient(to bottom, rgb(0, 0, 0), rgb(255, 255, 255));
 
 }
 
 
-.test-frame {
+/* .test-frame {
   height: 2000px;
   background: linear-gradient(to bottom, hotPink, black, royalBlue, black, hotPink, black, royalBlue)
-}
+} */
 
 .knob {
   position: absolute;
-  background: yellowgreen;
-  width: var(--knob-width, 100%);
-  --knob-height: 200px;
-  height: var(--knob-height);
-  top: calc(-1*var(--knob-height));
+  background: var(--final-knob-bg);
+  width: var(--final-knob-width, 100%);
+  height: var(--final-knob-height);
+  top: calc(-1*var(--final-knob-height));
   pointer-events: auto;
 }

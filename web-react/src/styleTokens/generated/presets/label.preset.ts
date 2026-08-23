@@ -5,6 +5,7 @@
   import css from "../../../blocks/Label/Label.module.css";
   
   export const labelPreset = {
+<<<<<<< HEAD
     base: css.base,
   bottom: css.bottom,
   center: css.center,
@@ -12,6 +13,12 @@
   left: css.left,
   right: css.right,
   sexy: css.sexy,
+=======
+    bottom: css.bottom,
+  center: css.center,
+  left: css.left,
+  right: css.right,
+>>>>>>> dev
   top: css.top,
   } as const;
   

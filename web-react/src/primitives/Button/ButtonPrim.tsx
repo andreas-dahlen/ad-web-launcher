@@ -6,7 +6,7 @@ import { dasx } from '../../shared/sxCompiler/dasx'
 import type { ButtonPrimProps } from '@primitives/types/prim.types'
 import { svsx } from '../../shared/sxCompiler/svsx'
 import { cpsx } from '../../shared/sxCompiler/cpsx'
-import { buttonStyle } from '@shared/generated/tokenStyles/tokenStyles'
+import { buttonStyle } from '@shared/generated/tokenModules/button.token'
 import { buttonPreset } from '@generated/presets/button.preset'
 
 export default function ButtonPrim({
@@ -55,9 +55,9 @@ export default function ButtonPrim({
         ...buttonDataAttrs
       })}
     >
-      <div className={css.transformWrapper} />
+      <div className={css.visual} />
 
-      <div className={css.contentWrapper}>
+      <div className={css.content}>
         {children}
       </div>
 

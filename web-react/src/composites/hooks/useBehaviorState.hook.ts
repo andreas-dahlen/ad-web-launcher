@@ -3,21 +3,22 @@ import { settingsStore } from '@stores/settings.store'
 
 export function useBehaviorState({
   mode: inputMode,
+  interactive,
   movable = false,
   isInFlow: inputIsInFlow = true
 }: Directive) {
 
   const dragEnabled = settingsStore(s => s.settings.dragEnabled)
 
-  const mode = ({
-    true: "on",
-    false: "off",
-    default: "default"
-  })[
-    inputMode === undefined ? "default" : String(inputMode)
-  ] as Mode
+  let mode: Mode = "default";
 
-  const isInteractive = mode !== "disabled"
+  if (typeof inputMode === "boolean") {
+    mode = inputMode ? "on" : "off";
+  } else if (inputMode) {
+    mode = inputMode;
+  }
+
+  const isInteractive = interactive ?? true
 
   const isDragInteractive = dragEnabled && isInteractive && movable
   const isCompInteractive = (!dragEnabled || !movable) && isInteractive

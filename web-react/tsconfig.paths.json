@@ -1,28 +1,28 @@
 {
   "compilerOptions": {
     "paths": {
-      "@api/*": ["./src/api/*"],
-      "@app/*": ["./src/app/*"],
-      "@assets/*": ["./src/assets/*"],
-      "@blocks/*": ["./src/blocks/*"],
-      "@composites/*": ["./src/composites/*"],
-      "@config/*": ["./src/config/*"],
-      "@data/*": ["./src/data/*"],
-      "@features/*": ["./src/features/*"],
-      "@interaction/*": ["./src/interaction/*"],
-      "@panels/*": ["./src/panels/*"],
-      "@primitives/*": ["./src/primitives/*"],
+      "@api/*": [ "./src/api/*" ],
+      "@app/*": [ "./src/app/*" ],
+      "@assets/*": [ "./src/assets/*" ],
+      "@blocks/*": [ "./src/blocks/*" ],
+      "@composites/*": [ "./src/composites/*" ],
+      "@config/*": [ "./src/config/*" ],
+      "@data/*": [ "./src/data/*" ],
+      "@features/*": [ "./src/features/*" ],
+      "@interaction/*": [ "./src/interaction/*" ],
+      "@panels/*": [ "./src/panels/*" ],
+      "@primitives/*": [ "./src/primitives/*" ],
 
-      "@shared/*": ["./src/shared/*"],
-      "@stores/*": ["./src/shared/state/stores/*"],
-      "@hooks/*": ["./src/shared/state/hooks/*"],
-      "@types/*": ["./src/shared/types/*"],
-      "@styles/*": ["./src/shared/styles/*"],
-      "@generated/*": ["./src/shared/generated/*"],
-      
-      "@styleTokens/*": ["./src/styleTokens/*"],
+      "@shared/*": [ "./src/shared/*" ],
+      "@stores/*": [ "./src/shared/state/stores/*" ],
+      "@hooks/*": [ "./src/shared/state/hooks/*" ],
+      "@types/*": [ "./src/shared/types/*" ],
+      "@styles/*": [ "./src/shared/styles/*" ],
+      "@generated/*": [ "./src/styleTokens/generated/*" ],
 
-      "@test/*": ["./src/test/*"]
+      "@styleTokens/*": [ "./src/styleTokens/*" ],
+
+      "@test/*": [ "./src/test/*" ]
     }
   }
 }

@@ -6,7 +6,7 @@ import type { CarouselAction } from '@interaction/types/runtime/action.types'
 import { assertNever } from '@shared/assertions/assertions'
 export type NodeId = 0 | 1 | 2
 
-export type Node = {
+type Node = {
   nodeId: NodeId
   sceneIdx: number
 }
@@ -41,7 +41,7 @@ export type CarouselStore = {
 
   setCount: (id: string, count: number) => void
 
-  setLayout: (id: string, packet: StoreLayout) => void
+  // setLayout: (id: string, packet: StoreLayout) => void
 
   setContainerSize: (id: string, size: Size2D) => void
 
@@ -87,31 +87,19 @@ export const carouselStore = create<CarouselStore>()(
       })
     },
 
-    setLayout(id, packet) {
-      set(state => {
-        const s = state.bindings[id]
-        if (!s) return
-        s.layout = {
-          containerSize: packet.containerSize,
-          itemSize: packet.itemSize,
-        }
-      })
-    }, //TODO delete this function
-
-
-
+    //specifically doesnt use a single size function because carousel is split in two.
     setContainerSize(id, size) {
       set(state => {
         const s = state.bindings[id]
         if (!s) return
-        s.layout.itemSize = size
+        s.layout.containerSize = size
       })
     },
     setItemSize(id, size) {
       set(state => {
         const s = state.bindings[id]
         if (!s) return
-        s.layout.containerSize = size
+        s.layout.itemSize = size
 
       })
     },
@@ -264,3 +252,5 @@ function applyCommit(s: CarouselBinding) {
   s.nodeBindings.nodes[staleNode].sceneIdx = newSceneIdx
   s.nodeBindings.currentNode = leadingNode
 }
+
+export const __TEST_ONLY_API = applyCommit

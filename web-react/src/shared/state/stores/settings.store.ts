@@ -10,7 +10,7 @@ import { persist } from 'zustand/middleware'
 type SettingsMode = "default" | "layout" // 📦 The main structural tabs
 type LayoutMode = "lanes" | "scenes" | "locks" // 🎬 The active canvas tool
 
-type ReactiveSettings = {
+export type ReactiveSettings = {
   panelOpen: boolean
   settingsMode: SettingsMode
 

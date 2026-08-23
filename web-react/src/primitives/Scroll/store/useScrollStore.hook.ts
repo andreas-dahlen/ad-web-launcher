@@ -16,7 +16,7 @@ export const scroll_DEFAULTS = {
   }
 } as const
 
-export const scroll_DEFAULTS_OFFSCREEN = {
+const scroll_DEFAULTS_OFFSCREEN = {
   overflowValue: 800,
   isVisible: false,
   liveValue: 0,

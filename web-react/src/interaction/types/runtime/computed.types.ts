@@ -2,7 +2,7 @@ export type ComputedPackage = ComputedPatch & {
   pointerId: number
 }
 
-export type ComputedPatch = Computed
+type ComputedPatch = Computed
 export type Computed = SliderComputed | ScrollComputed | null
 
 export type SliderComputed = {

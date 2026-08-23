@@ -17,7 +17,7 @@ neutral = greys / blacks / whites  */
   --_col-warm-dark-1: oklch(46.471% 0.08561 46.801);
   --_col-warm-dark-2: oklch(33.91% 0.06862 80.189 / 0.671);
 
-  --_col-cool-light-1: oklch(87.69% 0.05335 196.325);
+  --_col-cool-light-1: oklch(87.14% 0.05246 196.335);
   --_col-cool-mid-1: oklch(61.542% 0.17363 274.593);
   --_col-cool-dark-1: oklch(38.853% 0.07925 317.83);
 
@@ -26,9 +26,9 @@ neutral = greys / blacks / whites  */
   --_col-neutral-dark-1: oklch(41.283% 0.00005 271.152);
   --_col-neutral-dark-2: oklch(32.504% 0.00004 271.152);
 
-  --_text-col: oklch(0% 0 0);
-
+  --_test-col: black;
   --_deg: 15deg;
+  --_brown: oklch(0% 0 0);
 
   /* global defaults */
   --_button-size-xl: 60px;

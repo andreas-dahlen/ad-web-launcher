@@ -5,8 +5,14 @@
   import css from "../../../primitives/Button/Button.module.css";
   
   export const buttonPreset = {
+<<<<<<< HEAD
     contentWrapper: css.contentWrapper,
   transformWrapper: css.transformWrapper,
+=======
+    close: css.close,
+  content: css.content,
+  visual: css.visual,
+>>>>>>> dev
   } as const;
   
   export type ButtonPreset = keyof typeof buttonPreset;

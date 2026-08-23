@@ -11,7 +11,7 @@ import { svsx } from '../../shared/sxCompiler/svsx.ts'
 import type { ScrollPrimProps } from '@primitives/types/prim.types.ts'
 
 import { cpsx } from '../../shared/sxCompiler/cpsx.ts'
-import { scrollStyle } from '@shared/generated/tokenStyles/tokenStyles.ts'
+import { scrollStyle } from '@shared/generated/tokenModules/scroll.token.ts'
 import { scrollPreset } from '@generated/presets/scroll.preset.ts'
 
 export default function ScrollPrim({

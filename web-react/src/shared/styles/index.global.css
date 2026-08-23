@@ -1,6 +1,5 @@
 @import './core/core.global.css';
 @import './tokens/primitives.global.css';
-@import './tokens/fallback.global.css';
 @import './tokens/default.theme.css';
 @import './core/utils.global.css';
 @import './debug.global.css';

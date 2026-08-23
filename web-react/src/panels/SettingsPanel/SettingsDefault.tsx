@@ -53,13 +53,16 @@ export default function SettingsDefault() {
             variant: "fill",
             styleVars: {
               rotate: "rotate(90deg)",
+              modeOnCol: "m:modeDisabledCol"
             }
-            // settings: {adjust: {rotate: 90 }, variant: "fill" }
+            // settings: { adjust: { rotate: 90 }, variant: "fill" }
           }}
         />
       </Frame>
 
-      <Frame presets={["row"]}>
+      <Frame
+        layout={{ presets: ["row"] }}
+      >
         <Button
           directive={{ mode: dragEnabled }}
           button={{
@@ -94,7 +97,7 @@ export default function SettingsDefault() {
         />
         <ButtonPair axis="vertical" middle={dragSnapX}>
           <Button
-            directive={{ mode: snapX.canIncrement ? "default" : "disabled" }}
+            directive={{ mode: snapEnabled ? "default" : "disabled", interactive: snapX.canIncrement }}
             button={{
               onPressRelease: snapX.increment,
               styleVars: { width: "40px", height: "40px" }
@@ -106,7 +109,7 @@ export default function SettingsDefault() {
             }}
           />
           <Button
-            directive={{ mode: snapX.canDecrement ? "default" : "disabled" }}
+            directive={{ mode: snapEnabled ? "default" : "disabled", interactive: snapX.canDecrement }}
             button={{
               onPressRelease: snapX.decrement,
               styleVars: { width: "40px", height: "40px" }
@@ -120,7 +123,7 @@ export default function SettingsDefault() {
 
         <ButtonPair axis="vertical" middle={dragSnapY}>
           <Button
-            directive={{ mode: snapY.canIncrement ? "default" : "disabled" }}
+            directive={{ mode: snapEnabled ? "default" : "disabled", interactive: snapY.canIncrement }}
             button={{
               onPressRelease: snapY.increment,
               styleVars: { width: "40px", height: "40px" }
@@ -132,7 +135,7 @@ export default function SettingsDefault() {
             }}
           />
           <Button
-            directive={{ mode: snapY.canDecrement ? "default" : "disabled" }}
+            directive={{ mode: snapEnabled ? "default" : "disabled", interactive: snapY.canDecrement }}
             button={{
               onPressRelease: snapY.decrement,
               styleVars: { width: "40px", height: "40px" }

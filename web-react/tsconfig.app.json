@@ -20,8 +20,7 @@
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
     "moduleDetection": "force",
-    "noEmit": false,
-    "emitDeclarationOnly": true,
+    "noEmit": true,
     "jsx": "react-jsx",
     /* Linting */
     "strict": true,
@@ -34,15 +33,8 @@
     "resolveJsonModule": true
   },
   "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    "vite-env.d.ts"],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "build",
-    "src/styleTokens/compiler",
-    "plugins",
-    "eslint"
-  ]
+    "src",
+    "vite-env.d.ts"
+  ],
+  "exclude": [ "tools" ]
 }

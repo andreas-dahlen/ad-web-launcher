@@ -1,17 +1,11 @@
 import { useEffect } from 'react'
 import { useShallow } from 'zustand/shallow'
-import { dragStore, type DragStore } from './drag.store'
+import { dragStore, type DragBinding, type DragStore } from './drag.store'
 import { debugRegisterBinding, debugUnregisterBinding } from '@test/functions.debug'
 
-export const drag_DEFAULTS = {
+export const drag_DEFAULTS: DragBinding = {
   settledOffset: { x: 0, y: 0 },
   liveOffset: { x: 0, y: 0 },
-  frame: {
-    left: 0,
-    top: 0,
-    width: 0,
-    height: 0
-  },
   dragging: false,
   constraints: {
     minX: -Infinity,
@@ -25,9 +19,7 @@ export const drag_DEFAULTS = {
   },
   frameRect: {
     left: 0,
-    top: 0,
-    width: 0,
-    height: 0
+    top: 0
   }
 } as const
 

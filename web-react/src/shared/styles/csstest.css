@@ -1,0 +1,9 @@
+:root {
+  --f-test: black;
+  --f-test: var(--f-test);
+}
+
+.test {
+  background-color: var(--f-test);
+
+}

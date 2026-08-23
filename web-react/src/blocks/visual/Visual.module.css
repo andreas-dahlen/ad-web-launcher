@@ -1,0 +1,71 @@
+/* 
+file://wsl.localhost/Ubuntu/home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/visual.jsonc
+*/
+
+.visual {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: var(--final-visual-overflow);
+  border: var(--final-visual-border);
+  border-radius: var(--final-visual-radius);
+  box-shadow: var(--final-visual-shadow);
+  backdrop-filter: var(--final-visual-blur);
+  z-index: -1;
+
+  &::after {
+    position: absolute;
+    inset: 0;
+    content: "";
+    z-index: -1;
+    pointer-events: none;
+    opacity: var(--final-visual-opacity);
+    background: var(--final-visual-bg);
+  }
+}
+
+.settingsPanel {
+  --p-visual-shadow: inset 0px 0px 13px black;
+}
+
+/* .bg {
+  --p-surface-overflow: hidden;
+  --p-surface-radius: 10px;
+  --p-surface-opacity: 50%;
+  --p-surface-blur: blur(15px);
+  --p-surface-before-content: "";
+
+  &::after {
+    content: var(--final-surface-before-content);
+    inset: 0;
+    position: var(--final-surface-position);
+    opacity: var(--final-surface-opacity, 50%);
+    background: var(--final-surface-bg);
+    z-index: -1;
+    pointer-events: none;
+  }
+} */
+
+/* .frame {
+  --p-surface-display: flex;
+  --p-surface-direction: column;
+  --p-surface-position: absolute;
+  --p-surface-margin: 1rem 0 0 0;
+  --p-surface-padding: 1rem;
+  --p-surface-gap: 1rem;
+}
+
+.row {
+  --p-surface-display: flex;
+  --p-surface-align: center;
+  --p-surface-gap: 5px;
+}
+
+
+.emptyRow {
+  --p-surface-direction: row;
+  --p-surface-bg: none;
+  --p-surface-shadow: none;
+  --p-surface-position: relative;
+} */

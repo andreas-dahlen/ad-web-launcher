@@ -1,31 +1,29 @@
-# ==================== SETTINGS & VARIABLES ====================
-# Force bash to execute the commands cleanly inside WSL
+# ==================== SETTINGS ====================
+
 set shell := ["bash", "-c"]
 
-# Path to the workspace file relative to this web-react folder
 workspace := "../ad-web-launcher.code-workspace"
 
+# ================== DEFAULT ====================
 
-# ==================== RECIPES ====================
-# Runs help on just
 default: help
+
+# ================== DEVELOPMENT ====================
+
+audit:
+    npm audit
+
+outdated:
+    npm outdated
+
+doctor:
+    npm doctor
 
 install:
     npm install
 
 dev:
     npm run dev
-
-test:
-    npm run test
-
-lint *args:
-    if [ -z "{{args}}" ]; then npm run lint; else npx eslint {{args}}; fi
-
-eslint: lint
-
-knip:
-    npx knip --no-exit-code
 
 build:
     npm run build
@@ -37,15 +35,97 @@ build-prod:
 preview:
     npm run preview
 
-# Open the parent folder's VS Code workspace file from WSL
+# ==================== QUALITY ====================
+
+type:
+    npm run typecheck
+
+test *args:
+    if [ -z "{{ args }}" ]; then \
+        npm run test; \
+    else \
+        npm run test -- "src/test/{{ args }}"; \
+    fi
+
+coverage *args:
+    if [ -z "{{ args }}" ]; then \
+        npm run test:coverage; \
+    else \
+        npm run test:coverage -- "src/test/{{ args }}"; \
+    fi
+
+coverage-open:
+    npm run test:coverage:open
+
+lint *args:
+    if [ -z "{{ args }}" ]; then \
+        npm run lint; \
+    else \
+        npx eslint {{ args }}; \
+    fi
+
+eslint: lint
+
+knip *args:
+    npx knip --no-exit-code {{ args }}
+
+# Run the full project audit without stopping on individual failures.
+check:
+    npm run typecheck || true; \
+    npm run test -- --run || true; \
+    npx knip --no-exit-code; \
+    npm run lint || true
+
+test-script:
+    ./scripts/index.sh
+    
+# chmod +x scripts/index.sh -- enables a script
+
+# ============== STYLE TOKENS LOG ==================
+
+# tokens *args:
+#     if [ -z "{{ args }}" ]; then \
+#         npx tsx src/styleTokens/compiler/dryLogCompiler.ts; \
+#     else \
+#         npx tsx src/styleTokens/compiler/dryLogCompiler.ts {{ args }}; \
+#     fi
+
+# ==================== EXTENSIONS ====================
+
+install-cvc:
+    cd tools/extensions/css-variable-completion && npm run package
+    code --install-extension tools/extensions/css-variable-completion/css-variable-completion-0.0.1.vsix --force
+
+install-tcv:
+    cd tools/extensions/token-compiler-vscode && npm run package
+    code --install-extension tools/extensions/token-compiler-vscode/token-compiler-vscode-0.0.1.vsix --force
+
+build-tc:
+    cd tools/token-compiler && npm run build
+
+install-tokens: build-tc install-tcv
+
+compiler:
+    cd tools/token-compiler && npm run cli -- exe ../..
+
+# ==================== WORKSPACE ====================
+
 open:
     @echo "🤖 Opening workspace from WSL..."
-    code {{workspace}}
+    code {{ workspace }}
 
-# Optional: Open the workspace in a totally new VS Code window
 open-new:
     @echo "🤖 Opening workspace in a new window..."
-    code -n {{workspace}}
+    code -n {{ workspace }}
+
+# ==================== DELETABLES ====================
+
+# Check whether the current TypeScript version is supported by typescript-eslint
+check-ts-v:
+    npm view typescript-eslint@latest peerDependencies
+    npm view @typescript-eslint/parser@latest peerDependencies
+    
+# ==================== HELP ====================
 
 help:
     @echo ""
@@ -55,6 +135,6 @@ help:
     @echo "→ just"
     @just --list
     @echo ""
-    @echo "[NPM] legacy script layer"
+    @echo "[NPM] package scripts"
     @echo "→ npm run"
     @npm pkg get scripts

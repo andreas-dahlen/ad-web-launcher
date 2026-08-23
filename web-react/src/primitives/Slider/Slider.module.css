@@ -44,24 +44,18 @@ file://wsl.localhost/Ubuntu/home/david/repos/ad-web-launcher/web-react/src/style
   background: var(--final-track-bg);
   opacity: var(--final-track-opacity);
 
-
   border-radius: var(--final-track-radius);
-
-  &[data-axis="horizontal"] {
-    width: var(--final-track-main-size);
-    height: var(--final-track-cross-size);
-  }
-
-  &[data-axis="vertical"] {
-    width: var(--final-track-cross-size);
-    height: var(--final-track-main-size);
-  }
 }
 
-.thumb {
-  background: var(--o-thumb-bg);
+[data-axis="horizontal"] .track {
+  width: var(--final-track-main-size);
+  height: var(--final-track-cross-size);
 }
 
+&[data-axis="vertical"] .track {
+  width: var(--final-track-cross-size);
+  height: var(--final-track-main-size);
+}
 
 .thumb {
   background: var(--final-thumb-bg);
@@ -88,7 +82,7 @@ file://wsl.localhost/Ubuntu/home/david/repos/ad-web-launcher/web-react/src/style
 }
 
 [data-state="pressed"] .thumb {
-  --s-thumb-bg: blue;
+  --s-thumb-bg: var(--final-thumb-state-pressing-bg);
 }
 
 [data-state="committed"] .thumb {

@@ -1,0 +1,33 @@
+import type { CssVarString } from '../../oldSharedUtils/oldSharedCompiler.types.js';
+import type { PostData } from '../processPost.js';
+import { assert } from '../../utils/assertions.js';
+import type { Root } from 'postcss';
+
+
+export function walkProject(
+  root: Root,
+  cssPath: string,
+): PostData {
+  const variables = new Set<CssVarString>();
+  const oklchVariables = new Map<CssVarString, string>();
+
+  root.walkDecls(decl => {
+    if (!decl.prop.startsWith('--')) {
+      return;
+    }
+    assert.cssVariable(decl.prop)
+
+    variables.add(decl.prop);
+
+    const value = decl.value.trim();
+    if (value.startsWith('oklch(')) {
+      oklchVariables.set(decl.prop, value);
+    }
+  })
+
+  return {
+    cssPath,
+    variables: [...variables],
+    oklchVariables: [...oklchVariables]
+  }
+}

@@ -17,7 +17,6 @@ export default function InputCarouselPrim({
   const containerRef = useRef<HTMLDivElement>(null)
 
   useContainerSizing({ elRef: containerRef, id })
-  //useCarouselSIzing needs to be split in two... inputCarousel owns containerRef and itemRef is owned by ContentRef...
 
   // ── Pointer forwarding for gestures ──────────────────────────────────────
   usePointerBridge({

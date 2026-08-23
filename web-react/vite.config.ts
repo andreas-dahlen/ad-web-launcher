@@ -3,20 +3,15 @@ import react from '@vitejs/plugin-react-swc'
 import { viteSingleFile } from 'vite-plugin-singlefile'
 import path from 'path'
 import svgr from "vite-plugin-svgr";
-import tokenWatcher from './plugins/vite.token-watcher';
-import jsoncPlugin from './plugins/vite.plugin-jsonc';
 
-const fromRoot = (relativePath: string) => path.resolve(__dirname, relativePath)
+const fromRoot = (relativePath: string) => path.resolve(import.meta.dirname, relativePath)
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
     react(),
     viteSingleFile(),
-    svgr(),
-    tokenWatcher(),
-    jsoncPlugin()
-
+    svgr()
   ],
   base: './',
   build: {
@@ -42,7 +37,7 @@ export default defineConfig({
       '@hooks': fromRoot('src/shared/state/hooks'),
       '@types': fromRoot('src/shared/types'),
       '@styles': fromRoot('src/shared/styles'),
-      '@generated': fromRoot('src/shared/generated'),
+      '@generated': fromRoot('src/styleTokens/generated'),
 
       '@styleTokens': fromRoot('src/styleTokens'),
 

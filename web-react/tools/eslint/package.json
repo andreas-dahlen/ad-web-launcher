@@ -1,0 +1,8 @@
+{
+  "name": "@ad-web-launcher/eslint-config",
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "@types/node": "^26.2.0"
+  }
+}

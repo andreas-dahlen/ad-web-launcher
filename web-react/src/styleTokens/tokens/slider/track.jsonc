@@ -1,0 +1,16 @@
+// file://wsl.localhost/Ubuntu/home/david/repos/ad-web-launcher/web-react/src/primitives/Slider/Slider.module.css
+// file://wsl.localhost/Ubuntu//home/david/repos/ad-web-launcher/web-react/src/primitives/Slider/Slider.module.css
+{
+  "component": "slider",
+  "infix": "track",
+
+  "alwaysAllowed": [ "o", "p", "f" ],
+  "vars": {
+    "bg": { "values": { "f": "hotPink" } },
+    "opacity": { "values": { "f": "0.5" } },
+
+    "radius": { "values": { "f": "50px" } },
+    "mainSize": { "values": { "f": "100%" } },
+    "crossSize": { "values": { "f": "4px" } }
+  }
+}

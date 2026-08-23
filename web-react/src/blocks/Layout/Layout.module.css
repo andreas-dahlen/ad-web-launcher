@@ -1,0 +1,99 @@
+/* 
+file://wsl.localhost/Ubuntu/home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/layout.jsonc
+*/
+/* 
+file://wsl.localhost/Ubuntu//home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/layout.jsonc
+*/
+.layout {
+  position: relative;
+  inset: var(--final-layout-inset);
+  display: var(--final-layout-display);
+  flex-direction: var(--final-layout-flex-direction);
+  margin: var(--final-layout-margin);
+  padding: var(--final-layout-padding);
+  gap: var(--final-layout-gap);
+  width: var(--final-layout-width);
+  height: var(--final-layout-height);
+  min-height: var(--final-layout-min-height);
+  min-width: var(--final-layout-min-width);
+  align-items: var(--final-layout-align);
+  justify-content: var(--final-layout-justify);
+}
+
+
+/* vertical stack */
+.column {
+  --p-layout-display: flex;
+  --p-layout-flex-direction: column;
+}
+
+
+/* horizontal row */
+.row {
+  --p-layout-display: flex;
+  --p-layout-flex-direction: row;
+  --p-layout-gap: 10px;
+  --p-layout-align: center;
+}
+
+
+/* centered content */
+.center {
+  --p-layout-display: flex;
+  --p-layout-justify: center;
+  --p-layout-align: center;
+  /* --p-layout-width: 200px; */
+}
+
+.settingsPanel {
+  --p-layout-margin: 60px 0;
+  composes: column center;
+  --p-layout-padding: 20px;
+  --p-layout-gap: 20px;
+}
+
+.unsued {
+  background: black;
+}
+
+/* .bg { */
+/* --p-layout-display: flex;
+  --p-layout-flex-direction: column;
+  --p-layout-gap: 1rem;
+  --p-layout-min-width: 250px;
+  --p-layout-justify: center;
+  --p-layout-align: center; */
+/* position: relative;
+  --p-layout-display: inline-block;
+  --p-layout-padding: none;
+  --p-layout-height: contain;
+  --p-layout-position: static; */
+
+/* --p-layout-flex-direction: row; */
+/* --p-layout-position: relative; */
+/* --p-layout-height: ; */
+/* --p-layout-gap: 10px; */
+
+
+/* .frame {
+  --p-surface-display: flex;
+  --p-surface-direction: column;
+  --p-surface-position: absolute;
+  --p-surface-margin: 1rem 0 0 0;
+  --p-surface-padding: 1rem;
+  --p-surface-gap: 1rem;
+}
+
+.row {
+  --p-surface-display: flex;
+  --p-surface-align: center;
+  --p-surface-gap: 5px;
+}
+
+
+.emptyRow {
+  --p-surface-direction: row;
+  --p-surface-bg: none;
+  --p-surface-shadow: none;
+  --p-surface-position: relative;
+} */

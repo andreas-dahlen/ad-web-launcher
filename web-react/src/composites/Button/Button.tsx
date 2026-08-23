@@ -2,7 +2,7 @@ import ButtonPrim from '@primitives/Button/ButtonPrim'
 import DragPrim from '@primitives/Drag/DragPrim'
 import { createId, generateId } from '@data/generators/idGenerator'
 import Label, { type LabelSettings } from '../../blocks/Label/Label'
-import SvgIcon, { type IconSettings } from '../../blocks/SvgIcon/SvgIcon'
+import Svg, { type IconSettings } from '../../blocks/Svg/Svg'
 import type { ButtonSettings, Directive, DragSettings } from '@composites/types/comp.types'
 import { useBehaviorState } from '@composites/hooks/useBehaviorState.hook'
 type ButtonProps = {
@@ -51,7 +51,7 @@ export default function Button({
           "state": "released"
         }}
       >
-        {icon && <SvgIcon
+        {icon && <Svg
           Svg={icon.Svg}
           mode={mode}
           variant={icon.variant}

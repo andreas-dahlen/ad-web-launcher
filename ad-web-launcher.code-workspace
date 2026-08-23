@@ -5,14 +5,90 @@
 		}
 	],
 	"settings": {
+
+		"cssVariables.lookupFiles": [
+			"**/*.less",
+			"**/*.scss",
+			"**/*.sass",
+			"**/*.css",
+			"**/*.html",
+			"**/*.vue",
+			"**/*.svelte",
+			"**/*.astro",
+			"**/*.ripple",
+			"**/*.jsx",
+			"**/*.tsx",
+			"**/*.ts",
+			"**/*.js",
+		],
+		"cssVariables.blacklistFolders": [
+			"**/.cache/**",
+			"**/.DS_Store",
+			"**/.git/**",
+			"**/.hg/**",
+			"**/.next/**",
+			"**/.svn/**",
+			"**/bower_components/**",
+			"**/CVS/**",
+			"**/dist/**",
+			"**/node_modules/**",
+			"**/tmp/**",
+			"**/tests/**",
+			"**/test/**",
+			"web-react/src/test/**",
+			"**/web-react/src/test/**",
+			// "**ad-web-launcher/web-react/src/test/**",
+		],
 		"files.exclude": {
 			"**/android": true,
 			"**/archive": true,
 			"**/ADWebWallpaper": true,
 			"**/md": true,
-			"**/dist": true,
 			"**/node_modules": true,
+			"*/coverage": true
 		},
-		"terminal.integrated.cwd": "${workspaceFolder}/web-react"
+		"terminal.integrated.cwd": "${workspaceFolder}/web-react",
+		"scopesManager.localScopes": [
+			{
+				"id": "msarlp1lgzu1f",
+				"name": "src",
+				"patterns": [
+					"ad-web-launcher/web-react/src/**"
+				]
+			},
+			{
+				"id": "msaro3tcz6j9n",
+				"name": "visuals",
+				"patterns": [
+					"ad-web-launcher/web-react/src/styleTokens/tokens/**",
+					"ad-web-launcher/web-react/src/panels/**",
+					"ad-web-launcher/web-react/src/features/**",
+					"ad-web-launcher/web-react/src/composites/**",
+					"ad-web-launcher/web-react/src/blocks/**",
+					"ad-web-launcher/web-react/src/primitives/**"
+				]
+			},
+			{
+				"id": "msc05evzzsobo",
+				"name": "compiler",
+				"patterns": [
+					"ad-web-launcher/web-react/src/styleTokens/**",
+					"ad-web-launcher/web-react/src/shared/tokenUtils/**",
+					"ad-web-launcher/web-react/src/shared/sxCompiler/**",
+					"ad-web-launcher/web-react/eslint/**",
+					"ad-web-launcher/web-react/src/test/**",
+					"ad-web-launcher/web-react/src/shared/generated/**"
+				]
+			},
+			{
+				"id": "msi1k6fk2gsps",
+				"name": "compiler tests",
+				"patterns": [
+					"ad-web-launcher/web-react/src/test/**",
+					"ad-web-launcher/web-react/src/styleTokens/**"
+				]
+			}
+		],
+		"cssModulesIntellisense.diagnostics.classNotUsed.enabled": false
 	}
 }

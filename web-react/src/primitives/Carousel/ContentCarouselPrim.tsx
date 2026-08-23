@@ -1,5 +1,5 @@
 import { useRef, useEffect } from "react"
-import { useMotion } from "./hooks/useMotion.hook.ts"
+import { useCarouselMotion } from "./hooks/useCarouselMotion.hook.ts"
 import { useItemSizing } from './hooks/useItemSizing.hook.ts'
 import { useCarouselStore } from './store/useCarouselStore.hook.ts'
 import { carouselStore, type NodeId } from './store/carousel.store.ts'
@@ -11,7 +11,7 @@ import type { ContentCarouselPrimProps } from '@primitives/types/prim.types.ts'
 import type { SceneRole } from '../../shared/types/core.types.ts'
 
 import { cpsx } from '../../shared/sxCompiler/cpsx.ts'
-import { carouselStyle } from '@shared/generated/tokenStyles/tokenStyles.ts'
+import { carouselStyle } from '@shared/generated/tokenModules/carousel.token.ts'
 import { carouselPreset } from '@generated/presets/carousel.preset.ts'
 
 
@@ -52,7 +52,7 @@ export default function ContentCarouselPrim({
   const {
     onTransitionEnd,
     styleForRole
-  } = useMotion({
+  } = useCarouselMotion({
     store: { liveOffset, dragging, settling },
     horizontal: axis === "horizontal",
     axisSize,

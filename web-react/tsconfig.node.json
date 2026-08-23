@@ -29,12 +29,10 @@
   },
   "include": [
     "vite.config.ts",
-    "plugins/**/*.ts",
-    "src/shared/tokenUtils/**/*.ts",
-    "src/styleTokens/compiler",
-    "src/styleTokens/compiler/**/*.ts",
-    "eslint/**/*.ts",
-    "eslint",
-    "eslint/**.ts"
-    ]
+    "tools" //for eslint and stuff that doesn't own their own project in tools
+  ],
+  "exclude": [
+    "tools/extensions/css-variable-completion",
+    "tools/token-compiler"
+  ]
 }

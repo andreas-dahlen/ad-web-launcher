@@ -1,0 +1,25 @@
+// file://wsl.localhost/Ubuntu/home/david/repos/ad-web-launcher/web-react/src/primitives/Button/Button.module.css
+// file://wsl.localhost/Ubuntu//home/david/repos/ad-web-launcher/web-react/src/primitives/Button/Button.module.css
+{
+  "component": "button",
+  "infix": "visual",
+
+  "alwaysAllowed": ["o", "f"],
+  "vars": {
+
+
+    "bg": {"allowed": ["t", "m"],"values": {"f": "#747474"}},
+    "radius": {"values": {"f": "var(--_border-radius-xs)"}},
+    "border": {"allowed": ["s", "p"],"values": {"f": "none"}},
+    "shadow": {"allowed": ["s"], "values": {"f": "0px 0px 10px var(--_col-neutral-dark-1)"}},
+    "filter": {"allowed": ["s"],"values":{ "f": "none"}},
+    "statePressedScale": {"allowed": ["s"],  "values": {"f": "scale(0.98)"}},
+    "stateReleasedScale": {"allowed": ["s"],"values": {"f": "scale(1)"}},
+    "stateCanceledScale": {"allowed": ["s"],"values": {"f": "scale(1)"}},
+    "statePressedFilter": {"allowed": ["s"],"values": {"f": "brightness(0.95)"}},
+    "statePressedShadow": {"allowed": ["s"], "values": {"f": "inset 0px 0px 10px gray"}},
+    "statePressedBorder":{"allowed": ["s"], "values": {"f": "none"}},
+    "modeOffBg":{"allowed": ["s"], "values": {"f": "#535353"}},
+    "modeOnBg":{"allowed": ["s"], "values": {"f": "#BCBCBC"}}
+  }
+}

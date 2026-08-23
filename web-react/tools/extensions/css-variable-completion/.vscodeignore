@@ -1,0 +1,7 @@
+src/
+.vscode/
+node_modules/
+tsconfig.json
+*.ts
+*.map
+dist/extension-backup.js

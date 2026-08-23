@@ -1,0 +1,64 @@
+{
+  "publisher": "ad-web-launcher",
+  "name": "token-compiler-vscode",
+  "type": "module",
+  "displayName": "Token Compiler",
+  "description": "Integrates the Token Compiler with VS Code.",
+  "version": "0.0.1",
+  "private": true,
+  "engines": {
+    "vscode": "^1.125.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "scripts": {
+    "build": "tsc && esbuild src/extension.ts --bundle --platform=node --format=esm --external:vscode --main-fields=module,main --outfile=dist/extension.js",
+    "watch": "tsc --watch",
+    "package": "npm run build && vsce package --allow-missing-repository"
+  },
+  "dependencies": { },
+  "devDependencies": {
+    "@types/node": "^26.1.2",
+    "@types/vscode": "^1.125.0",
+    "@vscode/vsce": "^3.9.2",
+    "esbuild": "^0.28.2",
+    "typescript": "^6.0.3"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true
+  },
+  "contributes": {
+    "configuration": {
+      "properties": {
+        "tokenCompilerVscode.tokenFolder": {
+          "type": "string",
+          "default": "compiler/tokens",
+          "description": "Path to the tokens folder, relative to the project root."
+        },
+
+        "tokenCompilerVscode.outDir": {
+          "type": "string",
+          "default": "compiler/generated",
+          "description": "Path to generated output, relative to the project root."
+        },
+
+        "tokenCompilerVscode.cliFile": {
+          "type": "string",
+          "default": "tools/token-compiler/dist/cli.js",
+          "description": "Path to the compiler CLI, relative to the project root."
+        },
+
+        "tokenCompilerVscode.projectRoot": {
+          "type": "string",
+          "default": ".",
+          "description": "Path to the projectRoot, relative to the workspace."
+        }
+      }
+    }
+  }
+}

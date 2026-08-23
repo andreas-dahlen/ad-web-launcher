@@ -146,7 +146,7 @@ export type Normalized1D = normalize1DBase & {
   crossitemSize: number
 }
 
-export type carouselNormalized1D = normalize1DBase & {
-  mainSize: number
-  crossSize: number
-}
+// export type carouselNormalized1D = normalize1DBase & {
+//   mainSize: number
+//   crossSize: number
+// }
