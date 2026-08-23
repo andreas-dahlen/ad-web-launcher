@@ -5,16 +5,13 @@
   "type": "module",
   "scripts": {
     "test": "vitest",
-    "test:coverage": "vitest run --coverage",
-    "test:coverage:open": "xdg-open coverage/index.html",
+    "type": "tsc -b --noEmit",
+    "knip": "knip",
+    "coverage": "vitest run --coverage",
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "build:prod": "tsc -b && vite build --mode production && node scripts/deploy.js",
     "lint": "eslint .",
-    "preview": "vite preview",
-    "knip": "knip",
-    "tokens": "tsx src/styleTokens/compiler/dryLogCompiler.ts",
-    "typecheck": "tsc -b --noEmit"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.10",
@@ -32,7 +29,7 @@
     "@testing-library/react": "^16.3.2",
     "@types/node": "^26.2.0",
     "@types/react": "^19.2.18",
-    "@types/react-dom": "^19.2.4",
+    "@types/react-dom": "^19.2.5",
     "@vitejs/plugin-react-swc": "^4.3.3",
     "@vitest/coverage-v8": "^4.1.11",
     "eslint": "^10.9.0",

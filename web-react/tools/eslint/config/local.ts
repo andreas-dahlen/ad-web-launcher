@@ -4,7 +4,7 @@ import type { Linter } from 'eslint'
 
 const config: Linter.Config[] = [
   {
-    files: ['src/**/*.{ts,tsx}'],
+    files: ['**/src/**/*.{ts,tsx}'],
     rules: {
       // 'boundaries/no-unknown-dependencies': ['error'],
       'local/no-test-only-api': 'error',

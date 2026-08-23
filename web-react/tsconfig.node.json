@@ -29,10 +29,8 @@
   },
   "include": [
     "vite.config.ts",
-    "tools" //for eslint and stuff that doesn't own their own project in tools
   ],
   "exclude": [
-    "tools/extensions/css-variable-completion",
-    "tools/token-compiler"
+    "tools"
   ]
 }

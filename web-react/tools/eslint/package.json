@@ -2,7 +2,19 @@
   "name": "@ad-web-launcher/eslint-config",
   "private": true,
   "type": "module",
+
+  "scripts": {
+    "test": "vitest",
+    "coverage": "vitest run --coverage",
+    "type": "tsc --noEmit",
+    "knip": "knip"
+  },
+
   "devDependencies": {
-    "@types/node": "^26.2.0"
+    "@types/node": "^26.2.0",
+    "typescript": "^6.0.3",
+    "knip": "^6.32.2",
+    "vitest": "^4.1.11",
+    "@vitest/coverage-v8": "^4.1.11"
   }
 }

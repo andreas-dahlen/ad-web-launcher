@@ -1,40 +1,5 @@
-"use strict";
-var __create = Object.create;
-var __defProp = Object.defineProperty;
-var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
-var __getOwnPropNames = Object.getOwnPropertyNames;
-var __getProtoOf = Object.getPrototypeOf;
-var __hasOwnProp = Object.prototype.hasOwnProperty;
-var __export = (target, all) => {
-  for (var name in all)
-    __defProp(target, name, { get: all[name], enumerable: true });
-};
-var __copyProps = (to, from, except, desc) => {
-  if (from && typeof from === "object" || typeof from === "function") {
-    for (let key of __getOwnPropNames(from))
-      if (!__hasOwnProp.call(to, key) && key !== except)
-        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
-  }
-  return to;
-};
-var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
-  // If the importer is in node compatibility mode or this is not an ESM
-  // file that has been converted to a CommonJS file using a Babel-
-  // compatible transform (i.e. "__esModule" has not been set), then set
-  // "default" to the CommonJS "module.exports" for node compatibility.
-  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
-  mod
-));
-var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
-
 // src/extension.ts
-var extension_exports = {};
-__export(extension_exports, {
-  activate: () => activate,
-  deactivate: () => deactivate
-});
-module.exports = __toCommonJS(extension_exports);
-var vscode6 = __toESM(require("vscode"), 1);
+import * as vscode6 from "vscode";
 
 // src/config/languages.ts
 var cssLanguages = [
@@ -44,7 +9,7 @@ var cssLanguages = [
 ];
 
 // src/config/paths.ts
-var vscode = __toESM(require("vscode"), 1);
+import * as vscode from "vscode";
 function resolveVariablesUri(workspaceFolder) {
   const config = vscode.workspace.getConfiguration(
     "cssVariableCompletion"
@@ -66,7 +31,7 @@ function resolveLspPath(workspaceFolder) {
 }
 
 // src/completion/cssVarCompletionProvider.ts
-var vscode2 = __toESM(require("vscode"), 1);
+import * as vscode2 from "vscode";
 var CssVariableCompletionProvider = class {
   constructor(variables) {
     this.variables = variables;
@@ -956,10 +921,10 @@ var ParseErrorCode;
 })(ParseErrorCode || (ParseErrorCode = {}));
 
 // src/variables/loadVariables.ts
-var import_node_fs = require("node:fs");
-var vscode3 = require("vscode");
+import { readFileSync } from "node:fs";
+import "vscode";
 function loadVariables(fileUri) {
-  const contents = (0, import_node_fs.readFileSync)(fileUri.fsPath, "utf8");
+  const contents = readFileSync(fileUri.fsPath, "utf8");
   const parsed = parse2(contents);
   if (!Array.isArray(parsed)) {
     throw new Error(
@@ -975,7 +940,7 @@ function loadVariables(fileUri) {
 }
 
 // src/variables/watchVariables.ts
-var vscode4 = __toESM(require("vscode"), 1);
+import * as vscode4 from "vscode";
 function watchVariables(context, variablesUri, provider) {
   const watcher = vscode4.workspace.createFileSystemWatcher(
     variablesUri.fsPath
@@ -1004,7 +969,7 @@ function watchVariables(context, variablesUri, provider) {
 }
 
 // src/lsp/watchCssSave.ts
-var vscode5 = __toESM(require("vscode"), 1);
+import * as vscode5 from "vscode";
 var pendingCssDocument;
 function watchCssSave(context, lspPath) {
   const watcher = vscode5.workspace.createFileSystemWatcher(
@@ -1078,8 +1043,7 @@ function activate(context) {
 }
 function deactivate() {
 }
-// Annotate the CommonJS export names for ESM import in node:
-0 && (module.exports = {
+export {
   activate,
   deactivate
-});
+};

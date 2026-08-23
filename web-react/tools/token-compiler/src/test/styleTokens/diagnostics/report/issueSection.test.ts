@@ -3,8 +3,8 @@ import { describe, expect, it, vi } from 'vitest'
 import { issuesSection } from '../../../../diagnostics/report/sections/issuesSection.js'
 import type { AnalyzedIssueGroup } from '../../../../types/diagnostics.types.js'
 
-vi.mock
-  ('@styleTokens/utils/string', () => ({
+vi.mock(
+  '@styleTokens/utils/string', () => ({
     colors: {
       subHeading: 'subHeading',
       value: 'value',

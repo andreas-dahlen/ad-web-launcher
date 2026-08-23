@@ -13,32 +13,47 @@ default: help
 audit:
     npm audit
 
+audit-all:
+    ./scripts/run-cmd.sh audit
+
 outdated:
     npm outdated
+
+outdated-all:
+    ./scripts/run-cmd.sh outdated || true
 
 doctor:
     npm doctor
 
+doctor-all:
+    ./scripts/run-cmd.sh doctor
+
 install:
     npm install
+
+install-all:
+    ./scripts/run-cmd.sh install
+    ./scripts/run-cmd.sh install-scripts ls
+
+install-force package:
+    ./scripts/install-force.sh {{ package }}
 
 dev:
     npm run dev
 
-build:
-    npm run build
-
-build-prod:
-    vite build --mode production
-    node scripts/deploy.js
-
 preview:
     npm run preview
+
+build:
+    npm run build && ./scripts/deploy-android.sh
 
 # ==================== QUALITY ====================
 
 type:
-    tsc -b --noEmit
+    npm run type
+
+type-all: 
+    ./scripts/run-script.sh type
 
 test *args:
     if [ -z "{{ args }}" ]; then \
@@ -47,15 +62,18 @@ test *args:
         npm run test -- "src/test/{{ args }}"; \
     fi
 
+test-all *args:
+    ./scripts/run-script.sh test -- --run --reporter=dot {{args}}
+
 coverage *args:
     if [ -z "{{ args }}" ]; then \
-        npm run test:coverage; \
+        npm run coverage; \
     else \
-        npm run test:coverage -- "src/test/{{ args }}"; \
+        npm run coverage -- "src/test/{{ args }}"; \
     fi
 
 coverage-open:
-    npm run test:coverage:open
+    xdg-open coverage/index.html
 
 lint *args:
     if [ -z "{{ args }}" ]; then \
@@ -66,31 +84,15 @@ lint *args:
 
 eslint: lint
 
+# lint-all *args:
+#     ./scripts/run-script.sh lint -- {{args}}
+
 knip *args:
-    npx knip --no-exit-code {{ args }}
+    npm run knip -- --no-exit-code {{ args }}
 
-# Run the full project audit without stopping on individual failures.
-check:
-    tsc -b --noEmit || true; \
-    npm run test -- --run || true; \
-    npx knip --no-exit-code; \
-    npm run lint || true
+knip-all *args:
+    ./scripts/run-script.sh knip --no-exit-code {{ args }}
 
-test-all *args:
-    ./scripts/run-script.sh test -- --run --reporter=dot {{args}}
-
-lint-all *args:
-    ./scripts/run-script.sh lint -- {{args}}
-
-outdated-all:
-    ./scripts/run-cmd.sh outdated
-
-audit-all:
-    ./scripts/run-cmd.sh audit
-
-doctor-all:
-    ./scripts/run-cmd.sh doctor
-    
 # chmod +x scripts/index.sh <- an example for enabling a script
 
 # ============== STYLE TOKENS LOG ==================

@@ -7,7 +7,7 @@
   "version": "0.0.1",
   "private": true,
   "engines": {
-    "vscode": "^1.125.0"
+    "vscode": "^1.134.0"
   },
   "categories": [
     "Other"
@@ -17,20 +17,28 @@
     "onStartupFinished"
   ],
   "scripts": {
+    "coverage": "vitest run --coverage",
+    "test": "vitest",
+    "type": "tsc --noEmit",
+    "knip": "knip",
     "build": "tsc && esbuild src/extension.ts --bundle --platform=node --format=esm --external:vscode --main-fields=module,main --outfile=dist/extension.js",
-    "watch": "tsc --watch",
     "package": "npm run build && vsce package --allow-missing-repository"
   },
-  "dependencies": { },
   "devDependencies": {
     "@types/node": "^26.1.2",
-    "@types/vscode": "^1.125.0",
+    "@types/vscode": "^1.134.0",
+    "@vitest/coverage-v8": "^4.1.11",
     "@vscode/vsce": "^3.9.2",
     "esbuild": "^0.28.2",
-    "typescript": "^6.0.3"
+    "knip": "^6.32.2",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.11"
   },
   "allowScripts": {
-    "esbuild@0.28.2": true
+    "esbuild@0.28.2": true,
+    "@vscode/vsce-sign@2.0.9": true,
+    "@types/vscode@1.125.0": true,
+    "keytar@7.9.0": true
   },
   "contributes": {
     "configuration": {
@@ -40,19 +48,16 @@
           "default": "compiler/tokens",
           "description": "Path to the tokens folder, relative to the project root."
         },
-
         "tokenCompilerVscode.outDir": {
           "type": "string",
           "default": "compiler/generated",
           "description": "Path to generated output, relative to the project root."
         },
-
         "tokenCompilerVscode.cliFile": {
           "type": "string",
           "default": "tools/token-compiler/dist/cli.js",
           "description": "Path to the compiler CLI, relative to the project root."
         },
-
         "tokenCompilerVscode.projectRoot": {
           "type": "string",
           "default": ".",

@@ -14,7 +14,10 @@ const config: Linter.Config = {
             from: { element: { type: "*" } },
             allow: {
               to: [
-                { element: { type: 'shared', captured: { mod: "types" } }, file: { categories: "types" } },
+                {
+                  element: { type: 'shared', captured: { mod: "types" } },
+                  file: { categories: "types" }
+                },
                 { element: { type: 'shared', captured: { mod: "assertions" } } },
                 { element: { type: 'config' } },
                 { element: { type: 'api' } },
@@ -28,9 +31,7 @@ const config: Linter.Config = {
 
           {
             from: { element: { type: "app", captured: { mod: "*" } } },
-            allow: {
-              to: { element: { type: "panels" } }
-            }
+            allow: { to: { element: { type: "panels" } } }
           },
           {
             from: { element: { type: "app", captured: { mod: "layers" } } },
@@ -38,6 +39,7 @@ const config: Linter.Config = {
               to: [
                 { element: { type: "app", captured: { mod: "scenes" } } },
                 { element: { type: "primitives", captured: { mod: "Carousel" } } },
+                { element: { type: "features" } },
               ]
             }
           },
@@ -72,8 +74,7 @@ const config: Linter.Config = {
               to: [
                 { element: { type: "composites", captured: { mod: "types" } } },
                 { element: { type: "shared", captured: { mod: "sxCompiler" } } },
-                { element: { type: "shared", captured: { mod: "generated" } } }
-
+                { element: { type: "styleTokens", captured: { mod: "generated" } } }
               ]
             }
           },
@@ -89,10 +90,13 @@ const config: Linter.Config = {
                 { element: { type: "primitives", captured: { mod: "*" } } },
                 { element: { type: "blocks" } },
                 { element: { type: "data", captured: { mod: "generators" } } },
-                { element: { type: "shared", captured: { mod: "state" } }, file: { categories: "stores" } },
-                { element: { type: "shared", captured: { mod: "generated" } } }
+                { element: { type: "shared", captured: { mod: "state" } }, file: { categories: "stores" } }
               ]
             }
+          },
+          {
+            from: { element: { type: "composites", captured: { mod: "types" } }, files: { categories: "types" } },
+            allow: { to: { element: { type: "styleTokens", captured: { mod: "generated" } } } }
           },
           // ----------------------------------
           // DATA
@@ -207,9 +211,14 @@ const config: Linter.Config = {
                 { element: { type: "composites", captured: { mod: "styleVars" } } },
                 { element: { type: "shared", captured: { mod: "sxCompiler" } } },
                 { element: { type: "shared", captured: { mod: "state" } }, file: { categories: "stores" } },
-                { element: { type: "shared", captured: { mod: "generated" } } }
+                { element: { type: "styleTokens", captured: { mod: "generated" } } }
               ]
             }
+          },
+
+          {
+            from: { element: { type: "primitives", captured: { mod: "types" } }, file: { categories: "types" } },
+            allow: { to: { element: { type: "styleTokens", captured: { mod: "generated" } } } }
           },
           // ----------------------------------
           // SHARED
@@ -228,167 +237,22 @@ const config: Linter.Config = {
             allow: { to: { element: { type: "shared", captured: { mod: "tokenUtils" } } } }
           },
           // ----------------------------------
-          // shared/generated
-          // ----------------------------------
-          {
-            from: { element: { type: "shared", element: { type: "generated", captured: { mod: "presets" } } } },
-            allow: {
-              to: [
-                { element: { type: "blocks" } },
-                { element: { type: "primitives" } },
-              ]
-            }
-          },
-          // ----------------------------------
           // styleTokens
           // ----------------------------------
 
           {
-            from: [
-              { element: { type: "compiler", captured: { mod: "*" } } },
-              { element: { type: "diagnostics", captured: { mod: "*" } } },
-              { element: { type: "emitters", captured: { mod: "*" } } },
-              { element: { type: "postCss", captured: { mod: "*" } } },
-              { element: { type: "tokenTypes" } },
-              { element: { type: "utils" } },
-              { file: { categories: "emitFiles" } },
-              { file: { categories: "processModule" } }
-            ],
+            from: { element: { type: "styleTokens", captured: { mod: "*" } } },
+            allow: { to: { file: { categories: "types" } } }
+          },
+
+          {
+            from: { element: { type: "styleTokens", captured: { mod: "generated" } } },
             allow: {
               to: [
-                { element: { type: "tokenTypes" } },
-                { element: { type: "shared", captured: { mod: "tokenUtils" } } },
-                { element: { type: "utils" } }
-              ]
-            }
-          },
-          // //compiler
-          {
-            from: { element: { type: "compiler", captured: { mod: "discovery" } } },
-            allow: { to: { element: { type: "compiler", captured: { mod: "resolvers" } } } }
-          },
-          {
-            from: { element: { type: "compiler", captured: { mod: "pipeline" } } },
-            allow: {
-              to: [
-                { element: { type: "compiler", captured: { mod: "builders" } } },
-                { element: { type: "compiler", captured: { mod: "resolvers" } } },
-                { element: { type: "compiler", captured: { mod: "discovery" } } },
-                { element: { type: "compiler", captured: { mod: "processing" } } },
-                { element: { type: "compiler", captured: { mod: "tracking" } } }
-              ]
-            }
-          },
-          {
-            from: { element: { type: "compiler", captured: { mod: "processing" } } },
-            allow: {
-              to: [
-                { element: { type: "compiler", captured: { mod: "tracking" } } },
-                { element: { type: "compiler", captured: { mod: "loaders" } } },
-                { element: { type: "compiler", captured: { mod: "resolvers" } } },
-              ]
-            }
-          },
-          {
-            from: { element: { type: "compiler", captured: { mod: "resolvers" } } },
-            allow: {
-              to: { element: { type: "compiler", captured: { mod: "tracking" } } }
-            }
-          },
-          {
-            from: { file: { categories: "compilerService" } },
-            allow: {
-              to: [
-                { element: { type: "compiler", captured: { mod: "discovery" } } },
-                { element: { type: "compiler", captured: { mod: "pipeline" } } },
-                { element: { type: "compiler", captured: { mod: "tracking" } } },
-                { element: { type: "compiler", captured: { mod: "processing" } } },
-                { file: { categories: "processModule" } },
-                { file: { categories: "emitFiles" } },
-                { file: { categories: "runDiagnostics" } }
-              ]
-            }
-          },
-          // //emitters
-          {
-            from: { element: { type: "emitters", captured: { mod: "extract" } } },
-            allow: {
-              to: [
-                { element: { type: "compiler", captured: { mod: "resolvers" } } },
-                { element: { type: "compiler", captured: { mod: "tracking" } } },
-                { element: { type: "emitters", captured: { mod: "extract" } } },
-              ]
-            }
-          },
-          {
-            from: { element: { type: "emitters", captured: { mod: "generate" } } },
-            allow: {
-              to: [
-                { element: { type: "emitters", captured: { mod: "extract" } } },
-                { element: { type: "emitters", captured: { mod: "generate" } } },
-              ]
-            }
-          },
-          {
-            from: { element: { type: "emitters", captured: { mod: "write" } } },
-            allow: {
-              to: { element: { type: "emitters", captured: { mod: "generate" } } }
-            }
-          },
-          {
-            from: { file: { categories: "emitFiles" } },
-            allow: {
-              to: [
-                { element: { type: "compiler", captured: { mod: "tracking" } } },
-                { element: { type: "emitters", captured: { mod: "extract" } } },
-                { element: { type: "emitters", captured: { mod: "generate" } } },
-                { element: { type: "emitters", captured: { mod: "write" } } }
-              ]
-            }
-          },
-          // //diagnostics
-          {
-            from: { element: { type: "diagnostics", captured: { mod: "data" } } },
-            allow: {
-              to: [
-                { element: { type: "diagnostics", captured: { mod: "print" } } },
-                { element: { type: "diagnostics", captured: { mod: "data" } } },
-                { element: { type: "emitters", captured: { mod: "write" } } },
-                { element: { type: "compiler", captured: { mod: "resolvers" } } },
-                { element: { type: "compiler", captured: { mod: "tracking" } } }
-              ]
-            }
-          },
-          {
-            from: { element: { type: "diagnostics", captured: { mod: "print" } } },
-            allow: {
-              to: { element: { type: "diagnostics", captured: { mod: "report" } } }
-            }
-          },
-          {
-            from: { element: { type: "diagnostics", captured: { mod: "report" } } },
-            allow: {
-              to: { element: { type: "diagnostics", captured: { mod: "report" } } }
-            }
-          },
-          {
-            from: { file: { categories: "runDiagnostics" } },
-            allow: {
-              to: [
-                { element: { type: "compiler", captured: { mod: "tracking" } } },
-                { element: { type: "diagnostics", captured: { mod: "data" } } },
-                { element: { type: "diagnostics", captured: { mod: "report" } } },
-                { element: { type: "diagnostics", captured: { mod: "print" } } }
-              ]
-            }
-          },
-          // postCss
-          {
-            from: { file: { categories: "processModule" } },
-            allow: {
-              to: [
-                { element: { type: "postCss", captured: { mod: "resolvers" } } },
-                { element: { type: "postCss", captured: { mod: "inject" } } }
+                { element: { type: "shared", captured: { mod: "tokenUtils" } }, file: { categories: "types" } },
+                { element: { type: "blocks" } },
+                { element: { type: "primitives", captured: { mod: "*" } } },
+
               ]
             }
           },

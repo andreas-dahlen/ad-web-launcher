@@ -31,16 +31,7 @@ const config: Linter.Config = {
       { type: 'panels', pattern: 'src/panels/*/**', capture: ['mod'] },
       { type: 'primitives', pattern: 'src/primitives/*/**', capture: ['mod'] },
       { type: 'shared', pattern: 'src/shared/*/**', capture: ['mod'] },
-      { type: 'generated', pattern: 'src/styleTokens/*/**', capture: ['mod'] },
-
-
-
-      // { type: 'compiler', pattern: 'src/styleTokens/compiler/*/**', capture: ['mod'] },
-      // { type: 'diagnostics', pattern: 'src/styleTokens/diagnostics/*/**', capture: ['mod'] },
-      // { type: 'emitters', pattern: 'src/styleTokens/emitters/*/**', capture: ['mod'] },
-      // { type: 'postCss', pattern: 'src/styleTokens/postCss/*/**', capture: ['mod'] },
-      // { type: 'tokenTypes', pattern: 'src/styleTokens/types/**' },
-      // { type: 'utils', pattern: 'src/styleTokens/utils/**' }
+      { type: 'styleTokens', pattern: 'src/styleTokens/*/**', capture: ['mod'] },
     ],
     'boundaries/files': [
 
@@ -56,11 +47,6 @@ const config: Linter.Config = {
       { pattern: '**/pipeline.ts', category: 'pipeline' },
       { pattern: '**/solverRouter.ts', category: 'solverRouter' },
       { pattern: '**/gesture.utils.ts', category: 'gestureUtils' },
-
-      { pattern: '**/compilerService.ts', category: 'compilerService' },
-      { pattern: '**/runDiagnostics.ts', category: 'runDiagnostics' },
-      { pattern: '**/emitFiles.ts', category: 'emitFiles' },
-      { pattern: '**/processModule.ts', category: 'processModule' },
 
       { pattern: "src/styleTokens/tokens/**/*.{json,jsonc}", category: "tokenData" }
     ],

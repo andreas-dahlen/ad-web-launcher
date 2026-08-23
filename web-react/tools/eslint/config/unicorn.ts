@@ -2,7 +2,7 @@ import type { Linter } from 'eslint'
 
 const config: Linter.Config[] = [
   {
-    files: ['src/**/*.{ts,tsx}'],
+    files: ['**/src/**/*.{ts,tsx}'],
     rules: {
       'unicorn/no-unused-properties': 'warn',
       'unicorn/filename-case': 'off',
@@ -34,7 +34,7 @@ const config: Linter.Config[] = [
     }
   },
   {
-    files: ['src/test/**/*.{ts,tsx}'],
+    files: ['**/src/test/**/*.{ts,tsx}'],
     rules: {
       'unicorn/no-useless-spread': 'off',
       'unicorn/prefer-early-return': 'off',
@@ -42,7 +42,7 @@ const config: Linter.Config[] = [
     }
   },
   {
-    files: ['src/**/*.{tsx,jsx,module.css,svg}'],
+    files: ['**/src/**/*.{tsx,jsx,module.css,svg}'],
     ignores: [
       "**/*.test.tsx",
       "**/main.tsx"
@@ -55,7 +55,7 @@ const config: Linter.Config[] = [
     }
   },
   {
-    files: ['src/**/*.{ts,js}'],
+    files: ['**/src/**/*.{ts,js}'],
     ignores: [
       "**/test/**/*.ts",
     ],

@@ -1,7 +1,7 @@
 import type { Linter } from 'eslint'
 
 const config: Linter.Config = {
-  files: ['src/**/*.{ts,tsx}'],
+  files: ['**/src/**/*.{ts,tsx}'],
 
   rules: {
     '@typescript-eslint/no-unused-vars': [

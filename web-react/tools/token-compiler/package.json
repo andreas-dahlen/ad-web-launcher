@@ -5,9 +5,10 @@
   "type": "module",
 
   "scripts": {
-    "test:coverage": "vitest run --coverage",
+    "coverage": "vitest run --coverage",
     "test": "vitest",
-    "check": "tsc --noEmit",
+    "type": "tsc --noEmit",
+    "knip": "knip",
     "build": "tsc -p tsconfig.build.json",
     "cli": "npm run build && node dist/cli.js"
   },
