@@ -76,14 +76,19 @@ check:
     npx knip --no-exit-code; \
     npm run lint || true
 
+test-script:
+    ./scripts/index.sh
+    
+# chmod +x scripts/index.sh -- enables a script
+
 # ============== STYLE TOKENS LOG ==================
 
-tokens *args:
-    if [ -z "{{ args }}" ]; then \
-        npx tsx src/styleTokens/compiler/dryLogCompiler.ts; \
-    else \
-        npx tsx src/styleTokens/compiler/dryLogCompiler.ts {{ args }}; \
-    fi
+# tokens *args:
+#     if [ -z "{{ args }}" ]; then \
+#         npx tsx src/styleTokens/compiler/dryLogCompiler.ts; \
+#     else \
+#         npx tsx src/styleTokens/compiler/dryLogCompiler.ts {{ args }}; \
+#     fi
 
 # ==================== EXTENSIONS ====================
 
