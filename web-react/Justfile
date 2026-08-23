@@ -38,7 +38,7 @@ preview:
 # ==================== QUALITY ====================
 
 type:
-    npm run typecheck
+    tsc -b --noEmit
 
 test *args:
     if [ -z "{{ args }}" ]; then \
@@ -71,18 +71,31 @@ knip *args:
 
 # Run the full project audit without stopping on individual failures.
 check:
-    npm run typecheck || true; \
+    tsc -b --noEmit || true; \
     npm run test -- --run || true; \
     npx knip --no-exit-code; \
     npm run lint || true
 
-test-script:
-    ./scripts/index.sh
+test-all *args:
+    ./scripts/run-script.sh test -- --run --reporter=dot {{args}}
+
+lint-all *args:
+    ./scripts/run-script.sh lint -- {{args}}
+
+outdated-all:
+    ./scripts/run-cmd.sh outdated
+
+audit-all:
+    ./scripts/run-cmd.sh audit
+
+doctor-all:
+    ./scripts/run-cmd.sh doctor
     
-# chmod +x scripts/index.sh -- enables a script
+# chmod +x scripts/index.sh <- an example for enabling a script
 
 # ============== STYLE TOKENS LOG ==================
 
+# CURRENTLY DEAD.... but needs to be implemented
 # tokens *args:
 #     if [ -z "{{ args }}" ]; then \
 #         npx tsx src/styleTokens/compiler/dryLogCompiler.ts; \
