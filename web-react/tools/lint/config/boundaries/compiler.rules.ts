@@ -1,5 +1,5 @@
 import { Linter } from 'eslint'
-const config: Linter.Config = {
+export const compilerRules: Linter.Config = {
   files: ['tools/token-compiler/**/*.{ts,js}'],
 
   rules: {
@@ -184,5 +184,3 @@ const config: Linter.Config = {
 //     ]
 //   }
 // }
-
-export default config

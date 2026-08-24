@@ -3,7 +3,6 @@ import { APP_CONFIG } from '@config/app.config.ts';
 import DebugWrapper from './infrastructure/DebugWrapper.tsx';
 import Root from './Root.tsx'
 import LoadingScene from './infrastructure/LoadingScene.tsx';
-
 export default function App() {
 
   const [isLoading, setIsLoading] = useState(true)

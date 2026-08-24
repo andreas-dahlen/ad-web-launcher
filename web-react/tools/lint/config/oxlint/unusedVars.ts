@@ -1,20 +1,19 @@
-import type { Linter } from 'eslint'
+import type { OxlintOverride } from 'oxlint'
 
-const config: Linter.Config = {
+export const unusedVars: OxlintOverride = {
   files: ['**/src/**/*.{ts,tsx}'],
 
   rules: {
-    '@typescript-eslint/no-unused-vars': [
+    'eslint/no-unused-vars': [
       'error',
       {
         args: 'all',
         argsIgnorePattern: '^_',
         varsIgnorePattern: '^_',
+        caughtErrors: 'all',
         caughtErrorsIgnorePattern: '^_',
         ignoreRestSiblings: true,
       },
     ],
   },
 }
-
-export default config

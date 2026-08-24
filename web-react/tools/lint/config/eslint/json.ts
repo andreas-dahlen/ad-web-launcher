@@ -2,7 +2,7 @@ import type { Linter } from 'eslint'
 
 import jsonSchemaValidator from 'eslint-plugin-json-schema-validator'
 
-const config: Linter.Config[] = [
+export const json: Linter.Config[] = [
   ...jsonSchemaValidator.configs.base,
   {
     files: ['src/styleTokens/tokens/**/*.{json,jsonc}'],
@@ -24,5 +24,3 @@ const config: Linter.Config[] = [
     }
   }
 ]
-
-export default config

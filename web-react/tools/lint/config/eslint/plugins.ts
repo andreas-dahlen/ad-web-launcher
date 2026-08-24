@@ -4,9 +4,9 @@ import boundaries from 'eslint-plugin-boundaries'
 import unicorn from 'eslint-plugin-unicorn'
 import jsonSchemaValidator from 'eslint-plugin-json-schema-validator'
 
-import localRules from '../index'
+import localRules from '../../index'
 
-const config: Linter.Config = {
+export const plugins: Linter.Config = {
   plugins: {
     boundaries,
     unicorn,
@@ -14,5 +14,3 @@ const config: Linter.Config = {
     local: localRules,
   }
 }
-
-export default config

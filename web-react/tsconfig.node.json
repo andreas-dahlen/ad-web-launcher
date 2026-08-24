@@ -29,8 +29,10 @@
   },
   "include": [
     "vite.config.ts",
+    "oxlint.config.ts",
+    "tools/lint/**/*.ts"
   ],
   "exclude": [
-    "tools"
+    // "tools"
   ]
 }

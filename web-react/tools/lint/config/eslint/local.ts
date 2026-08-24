@@ -1,8 +1,8 @@
 import * as jsoncParser from 'jsonc-eslint-parser'
-import localRules from '../index'
+import localRules from '../../index'
 import type { Linter } from 'eslint'
 
-const config: Linter.Config[] = [
+export const local: Linter.Config[] = [
   {
     files: ['**/src/**/*.{ts,tsx}'],
     rules: {
@@ -23,5 +23,3 @@ const config: Linter.Config[] = [
     }
   }
 ]
-
-export default config

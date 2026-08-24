@@ -79,13 +79,14 @@ lint *args:
     if [ -z "{{ args }}" ]; then \
         npm run lint; \
     else \
-        npx eslint {{ args }}; \
+        npx oxlint {{ args }} && npx eslint {{ args }}; \
     fi
 
-eslint: lint
+eslint:
+    npm run eslint
 
-# lint-all *args:
-#     ./scripts/run-script.sh lint -- {{args}}
+oxlint:
+    npm run oxlint
 
 knip *args:
     npm run knip -- --no-exit-code {{ args }}

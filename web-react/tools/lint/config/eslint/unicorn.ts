@@ -1,6 +1,6 @@
 import type { Linter } from 'eslint'
 
-const config: Linter.Config[] = [
+export const unicorn: Linter.Config[] = [
   {
     files: ['**/src/**/*.{ts,tsx}'],
     rules: {
@@ -67,5 +67,3 @@ const config: Linter.Config[] = [
     }
   },
 ]
-
-export default config
