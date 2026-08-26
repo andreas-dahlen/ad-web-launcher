@@ -38,8 +38,9 @@ export const useScrollStore = (id: string, isInitialVisible: boolean) => {
       debugUnregisterBinding(id, 'useScrollStore')
       scrollStore.getState().delete(id)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // oxlint-disable-next-line react/exhaustive-deps
   }, [id])
+
 
   return scrollStore(
     useShallow((s: ScrollStore) => s.bindings[id] ??

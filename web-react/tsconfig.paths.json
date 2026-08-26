@@ -20,7 +20,7 @@
       "@styles/*": [ "./src/shared/styles/*" ],
       "@generated/*": [ "./src/styleTokens/generated/*" ],
 
-      "@styleTokens/*": [ "./src/styleTokens/*" ],
+      // "@styleTokens/*": [ "./src/styleTokens/*" ],
 
       "@test/*": [ "./src/test/*" ]
     }

@@ -4,14 +4,14 @@ import { useSliderSizing } from './hooks/useSliderSizing.hook.ts'
 import { useSliderMotion } from './hooks/useSliderMotion.hook.ts'
 import { useSliderStore } from './store/useSliderStore.hook.ts'
 import { sliderStore } from './store/slider.store.ts'
+import type { SliderPrimProps } from '@primitives/types/prim.types.ts'
 import css from './Slider.module.css'
 import clsx from 'clsx'
 import { dasx } from '../../shared/sxCompiler/dasx.ts'
 import { svsx } from '../../shared/sxCompiler/svsx.ts'
-import type { SliderPrimProps } from '@primitives/types/prim.types.ts'
-import { sliderPreset } from '@generated/presets/slider.preset.ts'
 import { cpsx } from '../../shared/sxCompiler/cpsx.ts'
-import { sliderStyle } from '@shared/generated/tokenModules/slider.token.ts'
+import { sliderPreset } from '@generated/presets/slider.preset.ts'
+import { sliderStyle } from '@generated/tokenModules/slider.token.ts'
 
 export default function SliderPrim({
   id,

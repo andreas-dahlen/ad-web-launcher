@@ -39,7 +39,7 @@ export default defineConfig({
       '@styles': fromRoot('src/shared/styles'),
       '@generated': fromRoot('src/styleTokens/generated'),
 
-      '@styleTokens': fromRoot('src/styleTokens'),
+      // '@styleTokens': fromRoot('src/styleTokens'),
 
       '@test': fromRoot('src/test')
     }

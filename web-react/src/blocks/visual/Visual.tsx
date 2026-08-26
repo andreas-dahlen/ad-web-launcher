@@ -3,8 +3,8 @@ import css from './Visual.module.css'
 import { svsx } from '../../shared/sxCompiler/svsx'
 
 import { cpsx } from '../../shared/sxCompiler/cpsx'
-import { visualStyle, type VisualStyle } from '@shared/generated/tokenModules/visual.token'
-import { visualPreset, type VisualPreset } from '@shared/generated/presets/visual.preset'
+import { visualStyle, type VisualStyle } from '@generated/tokenModules/visual.token'
+import { visualPreset, type VisualPreset } from '@generated/presets/visual.preset'
 
 export type VisualSettings = {
   styleVars?: VisualStyle

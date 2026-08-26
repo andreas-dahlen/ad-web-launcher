@@ -22,19 +22,26 @@ export default defineConfig({
 
   ],
 
-  // plugins: ['react'],
-  // rules: {
-  //   'react/static-components': 'error',
-  //   'react/use-memo': 'error',
-  //   'react/preserve-manual-memoization': 'error',
-  //   'react/incompatible-library': 'error',
-  //   'react/immutability': 'error',
-  //   'react/globals': 'error',
-  //   'react/refs': 'error',
-  //   'react/set-state-in-effect': 'error',
-  //   'react/error-boundaries': 'error',
-  //   'react/purity': 'error',
-  //   'react/set-state-in-render': 'error',
-  // },
+  plugins: [
+    'eslint',
+    'typescript',
+    'unicorn',
+    'oxc',
+    'react',
+  ],
+
+  rules: {
+    'react/static-components': 'error',
+    'react/use-memo': 'error',
+    'react/preserve-manual-memoization': 'error',
+    'react/incompatible-library': 'error',
+    'react/immutability': 'error',
+    'react/globals': 'error',
+    'react/refs': 'error',
+    'react/set-state-in-effect': 'error',
+    'react/error-boundaries': 'error',
+    'react/purity': 'error',
+    'react/set-state-in-render': 'error',
+  },
 
 })

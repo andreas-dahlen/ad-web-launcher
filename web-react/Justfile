@@ -31,8 +31,8 @@ doctor-all:
 install:
     npm install
 
-install-all:
-    ./scripts/run-cmd.sh install
+update-all:
+    ./scripts/run-cmd.sh update
     ./scripts/run-cmd.sh install-scripts ls
 
 install-force package:

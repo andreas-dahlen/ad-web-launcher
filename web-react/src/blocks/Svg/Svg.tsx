@@ -8,7 +8,7 @@ import { cpsx } from '../../shared/sxCompiler/cpsx';
 import type { DynamicIconComponent } from '@shared/types/svg'
 import type { Icon } from '@phosphor-icons/react';
 import type { Mode } from '@composites/types/comp.types';
-import { svgStyle, type SvgStyle } from '@shared/generated/tokenModules/svg.token';
+import { svgStyle, type SvgStyle } from '@generated/tokenModules/svg.token';
 
 export type IconSettings = {
   Svg: Icon | DynamicIconComponent
