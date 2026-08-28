@@ -2,10 +2,7 @@ import { initializeCompiler } from '../compiler/compilerService.js'
 import type { UserOptions } from '../types/run.types.js'
 import { resolveConfig } from './resolveConfig.js'
 
-
-import { watch } from './watcher.js'
-
-export function run(rootDir: string, options: UserOptions) {
+export function build(rootDir: string, options: UserOptions) {
   const config = resolveConfig(rootDir, options)
 
   if (config === null) {
@@ -13,8 +10,5 @@ export function run(rootDir: string, options: UserOptions) {
     return
   }
 
-  const compiler = initializeCompiler(config)
-
-  console.log("RUN: starts watcher")
-  watch(config, compiler)
+  initializeCompiler(config)
 }

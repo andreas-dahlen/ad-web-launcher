@@ -2,12 +2,15 @@ import { printParseErrorCode, type ParseError } from 'jsonc-parser';
 import type { CssDataTokenGroup, CssTokenGroup, TokenGroup } from "../types/compiler.types.js";
 import type { RawToken, RawVariable } from "../types/compiler.types.js"
 import type { CssVarString } from '../oldSharedUtils/oldSharedCompiler.types.js';
+import type { CompilerConfig, EmitConfig } from '../types/run.types.js';
+
 
 type Assertions = {
   token(errors: ParseError[], json: RawToken, fullPath: string): void;
   variable(key: string, def: unknown, fullPath: string): asserts def is RawVariable;
   cssVariable(value: string): asserts value is CssVarString;
   hasCssPath(group: TokenGroup | undefined): asserts group is CssTokenGroup
+  hasOutPath(config: CompilerConfig): asserts config is EmitConfig
   groupsHaveCssPath(groups: TokenGroup[]): asserts groups is CssTokenGroup[]
   groupsHaveCssData(groups: TokenGroup[]): asserts groups is CssDataTokenGroup[]
 };
@@ -96,6 +99,14 @@ export const assert: Assertions = {
       throw new Error(
         `Invariant violated: Token group "${group?.groupPath}" has no cssPath.`,
       );
+    }
+  },
+
+  hasOutPath(
+    config: CompilerConfig,
+  ): asserts config is EmitConfig & { outPath: string } {
+    if (!config.outPath) {
+      throw new Error('Expected compiler config to have an outPath')
     }
   },
 

@@ -3,12 +3,14 @@ import react from '@vitejs/plugin-react-swc'
 import { viteSingleFile } from 'vite-plugin-singlefile'
 import path from 'path'
 import svgr from "vite-plugin-svgr";
+import { tokenCompiler } from './tools/plugins/vite.token-compiler.ts';
 
 const fromRoot = (relativePath: string) => path.resolve(import.meta.dirname, relativePath)
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
+    tokenCompiler(),
     react(),
     viteSingleFile(),
     svgr()

@@ -1,6 +1,6 @@
 import { spawn, type ChildProcess } from 'node:child_process'
 import * as vscode from 'vscode'
-import { resolveSettings } from './config/resolveSettings'
+import { createSettingsResolver } from './config/resolveSettings'
 
 
 export function activate(context: vscode.ExtensionContext): void {
@@ -12,16 +12,20 @@ export function activate(context: vscode.ExtensionContext): void {
   let compiler: ChildProcess | undefined
 
   function startCompiler() {
+    output.appendLine(`Started extension`)
 
     const settings = vscode.workspace.getConfiguration(
       'tokenCompilerVscode')
 
-    const cliFile = resolveSettings.getCliSpawnPath(settings)
-    const projectRoot = resolveSettings.getProjectRootArg(settings)
+    const resolver = createSettingsResolver(settings, output)
+
+    const cliFile = resolver.getCliSpawnPath()
+    const projectRoot = resolver.getProjectRootArg()
 
     const config = {
-      tokenFolder: resolveSettings.getTokenFolder(settings),
-      outDir: resolveSettings.getOutDir(settings)
+      tokenFolder: resolver.getTokenFolder(),
+      outDir: resolver.getOutDir(),
+      mute: resolver.getMuteSetting()
     }
 
     compiler = spawn(

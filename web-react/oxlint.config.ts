@@ -1,7 +1,7 @@
 import { defineConfig } from 'oxlint'
 
 import { boundarySettings } from './tools/lint/config/boundaries/settings.ts'
-import { appBoundaries } from './tools/lint/config/boundaries/wrappers/app-oxlint.ts'
+import { appBoundaries, compilerBoundaries } from './tools/lint/config/boundaries/wrappers/oxlint.ts'
 import { ignores } from './tools/lint/config/globalIgnores.ts'
 import { unusedVars } from './tools/lint/config/oxlint/unusedVars.ts'
 
@@ -18,6 +18,7 @@ export default defineConfig({
 
   overrides: [
     appBoundaries,
+    compilerBoundaries,
     unusedVars,
 
   ],
@@ -42,6 +43,5 @@ export default defineConfig({
     'react/error-boundaries': 'error',
     'react/purity': 'error',
     'react/set-state-in-render': 'error',
-  },
-
+  }
 })

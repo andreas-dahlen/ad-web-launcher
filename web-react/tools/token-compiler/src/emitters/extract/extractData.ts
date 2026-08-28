@@ -36,7 +36,7 @@ export function extractData(cache: TokenCache,
   const groups = cache.getCssDataGroups()
   const runGroups = cache.getCssDataGroupsByPaths(run.getProcessedPaths())
   const postData = cache.getAllPostData()
-  const config = cache.getConfig()
+  const config = cache.getEmitConfig()
 
   /*---------------------------------------
         all groups

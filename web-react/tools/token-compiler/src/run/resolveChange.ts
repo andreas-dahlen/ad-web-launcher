@@ -1,14 +1,15 @@
 import path from 'node:path';
+import { formatLogPath } from '../utils/string.js';
 
-export type ChangeType = 'CSS' | 'TOKEN'
+type ChangeType = 'CSS' | 'TOKEN'
 export function whatChanged(filePath: string, tokenPath: string): ChangeType | null {
 
   if (isCssFile(filePath)) {
-    console.log('CSS:', filePath)
+    console.log('CSS change:', formatLogPath(filePath))
     return 'CSS'
   }
   if (isTokenFile(filePath, tokenPath)) {
-    console.log('TOKEN:', filePath)
+    console.log('Token change:', formatLogPath(filePath))
     return 'TOKEN'
   }
   return null

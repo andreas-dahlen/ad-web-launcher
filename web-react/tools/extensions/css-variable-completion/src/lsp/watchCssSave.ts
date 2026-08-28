@@ -2,7 +2,6 @@ import * as vscode from "vscode"
 import { cssLanguages } from '../config/languages'
 
 
-let pendingCssDocument: vscode.TextDocument | undefined
 
 export function watchCssSave(
   context: vscode.ExtensionContext,
@@ -11,12 +10,13 @@ export function watchCssSave(
   const watcher = vscode.workspace.createFileSystemWatcher(
     lspPath.fsPath,
   )
+  let pendingCssDocument: vscode.TextDocument | undefined
 
   context.subscriptions.push(
     watcher,
 
     vscode.workspace.onDidSaveTextDocument(document => {
-      if (!cssLanguages.some(({ language }) => document.languageId === language)) {
+      if (cssLanguages.every(({ language }) => document.languageId !== language)) {
         return
       }
 

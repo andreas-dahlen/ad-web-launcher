@@ -1,32 +1,29 @@
 // import { run } from './run/run.js'
+import { compilerConfigSchema } from './configSchema.js'
+import { build } from './run/build.js'
 import { run } from './run/run.js'
 
-console.log('STYLE TOKEN COMPILER')
+console.log('TOKEN COMPILER INITIALIZED')
 
 const [command, rootDir, configJson] = process.argv.slice(2)
 
+const options = configJson
+  ? compilerConfigSchema.parse(JSON.parse(configJson))
+  : {}
+
 switch (command) {
   case 'exe': {
-    const overrides = configJson
-      ? JSON.parse(configJson)
-      : {}
 
-    // const cliDirectory = path.dirname(process.argv[1])
-    // const compilerDirectory = path.dirname(cliDirectory)
-
-    // const projectRoot = path.resolve(
-    //   compilerDirectory,
-    //   rootDir,
-    // )
-
-    // console.log(overrides)
-    // console.log('projectRoot:', projectRoot)
-    run(rootDir, overrides)
+    run(rootDir, options)
     break
   }
+
+  case 'build':
+    build(rootDir, options)
+    break
 
   default:
     console.log('Options:')
     console.log('  run <rootDir>                Use specified root directory')
-    console.log('  run <rootDir> <configJson>   Use optional JSON configuration overrides')
+    console.log('  run <rootDir> <configJson>   Use optional JSON configuration options')
 }

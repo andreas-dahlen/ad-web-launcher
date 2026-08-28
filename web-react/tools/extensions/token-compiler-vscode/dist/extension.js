@@ -5,45 +5,43 @@ import * as vscode2 from "vscode";
 // src/config/resolveSettings.ts
 import path from "node:path";
 import * as vscode from "vscode";
-var resolveSettings = {
-  getCliSpawnPath(settings) {
-    const projectRoot = getProjectRoot(settings);
-    const cliFile = settings.get("cliFile");
-    if (!cliFile) {
-      throw new Error("cliFile setting is missing");
-    }
-    return path.resolve(projectRoot, cliFile);
-  },
-  getProjectRootArg(settings) {
-    const projectRoot = getProjectRoot(settings);
-    const cliFile = this.getCliSpawnPath(settings);
-    const cliDirectory = path.dirname(cliFile);
-    const compilerDirectory = path.dirname(cliDirectory);
-    return path.relative(compilerDirectory, projectRoot);
-  },
-  getTokenFolder(settings) {
-    const tokenFolder = settings.get("tokenFolder");
-    if (!tokenFolder) {
-      throw new Error("tokenFolder setting is missing");
-    }
-    return tokenFolder;
-  },
-  getOutDir(settings) {
-    const outDir = settings.get("outDir");
-    if (!outDir) {
-      throw new Error("outDir setting is missing");
-    }
-    return outDir;
+function createSettingsResolver(settings, output) {
+  const projectRoot = getProjectRoot(settings, output);
+  const cliFile = settings.get("cliFile");
+  if (!cliFile) {
+    output.appendLine("ERROR: cliFile setting is missing");
+    throw new Error(" ");
   }
-};
-function getProjectRoot(settings) {
+  const cliPath = path.resolve(projectRoot, cliFile);
+  const compilerDirectory = path.dirname(path.dirname(cliPath));
+  return {
+    getCliSpawnPath() {
+      return cliPath;
+    },
+    getProjectRootArg() {
+      return path.relative(compilerDirectory, projectRoot);
+    },
+    getTokenFolder() {
+      return settings.get("tokenFolder") ?? null;
+    },
+    getOutDir() {
+      return settings.get("outDir") ?? null;
+    },
+    getMuteSetting() {
+      return settings.get("mute") ?? false;
+    }
+  };
+}
+function getProjectRoot(settings, output) {
   const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
   if (!workspaceFolder) {
-    throw new Error("workspace folder is missing");
+    output.appendLine("ERROR: workspace folder is missing");
+    throw new Error(" ");
   }
   const projectRoot = settings.get("projectRoot");
   if (!projectRoot) {
-    throw new Error("projectRoot setting is missing");
+    output.appendLine("ERROR: projectRoot setting is missing");
+    throw new Error(" ");
   }
   return vscode.Uri.joinPath(
     workspaceFolder.uri,
@@ -56,14 +54,17 @@ function activate(context) {
   const output = vscode2.window.createOutputChannel("Token Compiler");
   let compiler;
   function startCompiler() {
+    output.appendLine(`Started extension`);
     const settings = vscode2.workspace.getConfiguration(
       "tokenCompilerVscode"
     );
-    const cliFile = resolveSettings.getCliSpawnPath(settings);
-    const projectRoot = resolveSettings.getProjectRootArg(settings);
+    const resolver = createSettingsResolver(settings, output);
+    const cliFile = resolver.getCliSpawnPath();
+    const projectRoot = resolver.getProjectRootArg();
     const config = {
-      tokenFolder: resolveSettings.getTokenFolder(settings),
-      outDir: resolveSettings.getOutDir(settings)
+      tokenFolder: resolver.getTokenFolder(),
+      outDir: resolver.getOutDir(),
+      mute: resolver.getMuteSetting()
     };
     compiler = spawn(
       process.execPath,

@@ -10,7 +10,7 @@ export function watch({
   },
   compiler: TokenCompiler) {
 
-  console.log('WATCH ROOT:', rootDir)
+  // console.log('WATCH ROOT:', rootDir)
 
   const watcher = chokidar.watch(rootDir, {
     ignoreInitial: true,

@@ -10,7 +10,7 @@ import { processPost } from '../postCss/processPost.js';
 import { processModule } from '../postCss/processModule.js';
 import { emitFiles } from '../emitters/emitFiles.js';
 import { runDiagnostics } from '../diagnostics/runDiagnostics.js';
-import type { CompilerConfig } from '../run/run.js';
+import type { CompilerConfig } from '../types/run.types.js';
 
 function parseCss(cssPath: string): Root {
   const source = readFileSync(cssPath, "utf8");
@@ -62,7 +62,7 @@ export function initializeCompiler(config: CompilerConfig) {
     const root = parseCss(cssPath)
 
     const postData = processPost({
-      root, cssPath,// mutate: config.mutate
+      root, cssPath, mute: config.mute
     })
     cache.addPostData(postData)
 
@@ -70,7 +70,7 @@ export function initializeCompiler(config: CompilerConfig) {
     if (!group) return
 
     const cssData = processModule({
-      root, group,// mutate: config.mutate
+      root, group, mute: config.mute
     })
     cache.addCssData(cssData)
     run.recordProcessed(cssPath)
@@ -79,9 +79,15 @@ export function initializeCompiler(config: CompilerConfig) {
 
 
   function finalize(): void {
-    const emitResult = emitFiles(cache, run)
-    run.recordEmitResult(emitResult)
-    runDiagnostics(cache, run)
+    if (config.outPath) {
+      const emitResult = emitFiles(cache, run)
+      run.recordEmitResult(emitResult)
+    } else {
+      console.log("EMITTER: disabled. Couldn't find an output path")
+    }
+    if (!config.mute) {
+      runDiagnostics(cache, run)
+    }
     run.reset()
   }
 }

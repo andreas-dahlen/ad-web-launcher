@@ -1,6 +1,6 @@
 import type { PostData } from '../../postCss/processPost.js';
-import type { CompilerConfig } from '../../run/run.js';
 import type { CssData, CssDataTokenGroup, CssTokenGroup, TokenGroup } from '../../types/compiler.types.js';
+import type { CompilerConfig, EmitConfig } from '../../types/run.types.js';
 import { assert } from '../../utils/assertions.js';
 
 export type TokenCache = ReturnType<typeof createTokenCache>;
@@ -57,6 +57,11 @@ export function createTokenCache(initialGroups: TokenGroup[], config: CompilerCo
     },
 
     getConfig(): CompilerConfig {
+      return config
+    },
+
+    getEmitConfig(): EmitConfig {
+      assert.hasOutPath(config)
       return config
     },
 

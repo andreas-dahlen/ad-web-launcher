@@ -45,12 +45,10 @@
       "properties": {
         "tokenCompilerVscode.tokenFolder": {
           "type": "string",
-          "default": "compiler/tokens",
           "description": "Path to the tokens folder, relative to the project root."
         },
         "tokenCompilerVscode.outDir": {
           "type": "string",
-          "default": "compiler/generated",
           "description": "Path to generated output, relative to the project root."
         },
         "tokenCompilerVscode.cliFile": {
@@ -61,7 +59,12 @@
         "tokenCompilerVscode.projectRoot": {
           "type": "string",
           "default": ".",
-          "description": "Path to the projectRoot, relative to the workspace."
+          "description": "Path to the project root, relative to the workspace."
+        },
+        "tokenCompilerVscode.mute": {
+          "type": "boolean",
+          "default": true,
+          "description": "Removes verbose compiler output messages."
         }
       }
     }
