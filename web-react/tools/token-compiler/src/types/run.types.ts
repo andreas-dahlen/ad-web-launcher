@@ -1,5 +1,7 @@
 import type z from 'zod';
 import { compilerConfigSchema } from '../configSchema.js';
+import type { TokenCompiler } from '../compiler/compilerService.js';
+import type { FSWatcher } from 'chokidar';
 
 export type CompilerOptions = z.infer<typeof compilerConfigSchema>
 
@@ -17,4 +19,11 @@ export type CompilerConfig = {
 
 export type EmitConfig = CompilerConfig & {
   outPath: string
+}
+
+export type CompilerRuntime = {
+  compiler: TokenCompiler
+  contentWatcher: FSWatcher
+  configWatcher: FSWatcher
+  dispose(): Promise<void>
 }

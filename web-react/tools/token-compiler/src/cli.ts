@@ -1,7 +1,7 @@
 // import { run } from './run/run.js'
 import { compilerConfigSchema } from './configSchema.js'
-import { build } from './run/build.js'
-import { run } from './run/run.js'
+import { build } from './runtime/build.js'
+import { run } from './runtime/run.js'
 
 console.log('TOKEN COMPILER INITIALIZED')
 
@@ -14,7 +14,7 @@ const options = configJson
 switch (command) {
   case 'exe': {
 
-    run(rootDir, options)
+    void run(rootDir, options)
     break
   }
 

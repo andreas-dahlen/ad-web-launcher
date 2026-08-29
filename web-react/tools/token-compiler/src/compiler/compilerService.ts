@@ -21,6 +21,7 @@ function parseCss(cssPath: string): Root {
 export type TokenCompiler = ReturnType<typeof initializeCompiler>;
 export function initializeCompiler(config: CompilerConfig) {
 
+  console.log(config.mute ? "COMPILER: running in muted mode" : "COMPILER: running")
   const tokenPaths = findTokenPaths(config.tokenPath)
   const loaded = compileTokenGroups(config.rootDir, tokenPaths)
   const cache = createTokenCache(loaded.groups, config)

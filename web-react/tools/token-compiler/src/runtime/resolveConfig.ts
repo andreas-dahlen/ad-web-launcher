@@ -13,15 +13,6 @@ export function resolveConfig(rootDir: string, options: UserOptions): CompilerCo
     rootDir,
   )
 
-  // console.log(`
-  //   argv1:${process.argv[1]}
-  //   cwd: ${process.cwd()}
-  //   rootDir: ${rootDir}
-  //   cliDirectory: ${cliDirectory}
-  //   compilerDirectory: ${compilerDirectory}
-  //   projectRoot: ${projectRoot}
-  // `)
-
   const config = loadCompilerConfig(projectRoot)
 
   const tokenRaw = config.tokenFolder ?? options.tokenFolder

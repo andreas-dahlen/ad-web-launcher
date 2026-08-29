@@ -176,7 +176,9 @@ export const compilerRules: {
           allow: {
             to: [
               { element: { captured: { mod: "{{from.element.captured.mod}}" } } },
-              { file: { categories: "types" } }
+              { file: { categories: "types" } },
+              { file: { categories: "compilerService" } }
+              // There is no policy allowing dependencies from file of categories "types", "types" belonging to elements of type "tokenTypes" to file of category "compilerService"
             ]
           }
         }

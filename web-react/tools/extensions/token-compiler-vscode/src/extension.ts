@@ -1,69 +1,41 @@
-import { spawn, type ChildProcess } from 'node:child_process'
 import * as vscode from 'vscode'
 import { createSettingsResolver } from './config/resolveSettings'
+import { createTerminal } from './terminal/createTerminal'
+import { updateStatusBar } from './vscode/statusBar'
+import { createCommandSubscriptions } from './vscode/subscriptions'
 
 
 export function activate(context: vscode.ExtensionContext): void {
-
-  // const workspace = paths.resolveWorkspace()
-
   const output = vscode.window.createOutputChannel('Token Compiler')
+  output.appendLine('Extension loading...')
+  const statusBar = vscode.window.createStatusBarItem(
+    vscode.StatusBarAlignment.Left,
+  )
+  let terminal: vscode.Terminal | undefined
 
-  let compiler: ChildProcess | undefined
 
-  function startCompiler() {
-    output.appendLine(`Started extension`)
+  context.subscriptions.push(...createCommandSubscriptions({
+    startCompiler,
+    stopCompiler,
+    restartCompiler
+  }),
+    vscode.window.onDidCloseTerminal(closedTerminal => {
+      if (closedTerminal !== terminal) {
+        return
+      }
+      output.appendLine('Stopping compiler service')
+      terminal = undefined
+      updateStatusBar(statusBar, terminal)
+    }),
 
-    const settings = vscode.workspace.getConfiguration(
-      'tokenCompilerVscode')
-
-    const resolver = createSettingsResolver(settings, output)
-
-    const cliFile = resolver.getCliSpawnPath()
-    const projectRoot = resolver.getProjectRootArg()
-
-    const config = {
-      tokenFolder: resolver.getTokenFolder(),
-      outDir: resolver.getOutDir(),
-      mute: resolver.getMuteSetting()
-    }
-
-    compiler = spawn(
-      process.execPath,
-      [
-        cliFile,
-        'exe',
-        projectRoot,
-        JSON.stringify(config),
-      ],
-    )
-
-    compiler.stdout?.on('data', data => {
-      output.append(data.toString())
-    })
-
-    compiler.stderr?.on('data', data => {
-      output.append(data.toString())
-    })
-  }
-
-  function stopCompiler() {
-    compiler?.kill()
-    compiler = undefined
-  }
-
-  startCompiler()
-
-  context.subscriptions.push(
     vscode.workspace.onDidChangeConfiguration(event => {
-
       if (!event.affectsConfiguration('tokenCompilerVscode')) {
         return
       }
-
-      stopCompiler()
-      startCompiler()
+      output.appendLine('Configuration changed')
+      restartCompiler()
     }),
+
     {
       dispose() {
         stopCompiler()
@@ -71,7 +43,41 @@ export function activate(context: vscode.ExtensionContext): void {
     },
   )
 
-  output.show(true)
+  statusBar.show()
+  startCompiler()
+
+  function startCompiler() {
+    output.appendLine('Starting compiler service')
+    if (terminal) {
+      terminal.show()
+      return
+    }
+    const settings = vscode.workspace.getConfiguration(
+      'tokenCompilerVscode')
+
+    const resolver = createSettingsResolver(settings, output)
+
+    terminal = createTerminal(
+      resolver.getCliSpawnPath(),
+      resolver.getProjectRootArg(),
+      resolver.getUserOptions(),
+    )
+
+    updateStatusBar(statusBar, terminal)
+    terminal.show()
+  }
+
+  function stopCompiler() {
+    output.appendLine('Stopping compiler service')
+    terminal?.dispose()
+    terminal = undefined
+    updateStatusBar(statusBar, terminal)
+  }
+
+  function restartCompiler() {
+    stopCompiler()
+    startCompiler()
+  }
 }
 
 export function deactivate(): void { }

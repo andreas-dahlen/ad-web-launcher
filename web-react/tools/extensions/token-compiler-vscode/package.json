@@ -67,6 +67,20 @@
           "description": "Removes verbose compiler output messages."
         }
       }
-    }
+    },
+    "commands": [
+      {
+        "command": "tokenCompilerVscode.start",
+        "title": "Token Compiler: Start"
+      },
+      {
+        "command": "tokenCompilerVscode.stop",
+        "title": "Token Compiler: Stop"
+      },
+      {
+        "command": "tokenCompilerVscode.restart",
+        "title": "Token Compiler: Restart"
+      }
+    ]
   }
 }
