@@ -1,22 +1,22 @@
 import fs from "node:fs";
-import { parse, type ParseError } from 'jsonc-parser';
+import { parse, printParseErrorCode, type ParseError } from 'jsonc-parser';
 import type { RawToken } from '../../types/compiler.types.js';
+import { rawTokenSchema } from './zodValidation.js';
 
-type TokenFile = {
-  fullPath: string;
-  json: RawToken;
-  errors: ParseError[];
-}
+export function loadTokenFile(fullPath: string): RawToken {
+  const text = fs.readFileSync(fullPath, 'utf8')
 
-export function loadTokenFile(fullPath: string): TokenFile {
-  const text = fs.readFileSync(fullPath, 'utf8');
+  const errors: ParseError[] = []
+  const jsonc = parse(text, errors)
 
-  const errors: ParseError[] = [];
-  const json = parse(text, errors);
+  if (errors.length > 0) {
+    const details = errors
+      .map(error => printParseErrorCode(error.error))
+      .join(', ')
 
-  return {
-    fullPath,
-    json,
-    errors,
-  };
+    throw new Error(
+      `Invalid JSON in ${fullPath}: ${details}`,
+    )
+  }
+  return rawTokenSchema.parse(jsonc)
 }

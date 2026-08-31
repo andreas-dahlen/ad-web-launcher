@@ -42,7 +42,9 @@ export function compileTokenGroups(
     const result = processToken(tokenPath);
 
     issues.push(...result.issues);
-    group.tokens.push(result.token);
+    if (result.token) {
+      group.tokens.push(result.token);
+    }
   }
   // eslint-disable-next-line unicorn/prefer-iterator-to-array
   return { groups: [...groups.values()], issues };

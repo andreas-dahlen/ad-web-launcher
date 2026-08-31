@@ -24,7 +24,7 @@ export function assembleExtensionData(allVariables: CssVarString[], tokenData: T
     }
   }
 
-  const outputFile = path.join(outPath, "metadata/variables.generated.json")
+  const outputFile = path.join(outPath, "metadata/extension.generated.jsonc")
 
   return { variables: [...variables], outputFile }
 }

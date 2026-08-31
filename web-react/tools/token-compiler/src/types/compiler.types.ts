@@ -2,33 +2,11 @@ import type { Rule } from 'postcss';
 import type { CssVarString, ValidPrefix } from '../oldSharedUtils/oldSharedCompiler.types.js';
 
 import type { IssueGroup } from './issueCollector.types.js';
+import type { rawTokenSchema, rawVariableSchema } from '../compiler/loaders/zodValidation.js';
+import * as z from "zod"
 
-//postcss
-export type PresetResetData = Array<[Rule, Set<CssVarString>]>
-export type WalkModuleResult = {
-  rules: Map<string, Rule>
-  foundSelectors: string[]
-  usableSelectors: string[]
-  foundFinalVariables: CssVarString[]
-  declaredVariables: CssVarString[]
-  presetResetData: PresetResetData
-};
-
-//raw tokens
-export type RawToken = {
-  component: string
-  infix?: string
-  alwaysAllowed?: ValidPrefix[]
-  vars: Record<string, RawVariable>
-}
-
-export type RawVariable = {
-  name?: string
-  allowed?: ValidPrefix[]
-  exclude?: ValidPrefix[]
-  values?: Partial<Record<ValidPrefix, string>>
-}
-
+export type RawToken = z.infer<typeof rawTokenSchema>
+export type RawVariable = z.infer<typeof rawVariableSchema>
 
 //resolved Token
 export type CompilerToken = {
@@ -45,7 +23,7 @@ export type CompilerVariable = {
   effectiveAllowed: ValidPrefix[]
 };
 export type TokenResult = {
-  token: CompilerToken
+  token?: CompilerToken
   issues: IssueGroup[]
 }
 export type TokenGroup = {
@@ -109,3 +87,14 @@ export type FileResult = {
   updated: string[]
   skipped: string[]
 }
+
+//postcss
+export type PresetResetData = Array<[Rule, Set<CssVarString>]>
+export type WalkModuleResult = {
+  rules: Map<string, Rule>
+  foundSelectors: string[]
+  usableSelectors: string[]
+  foundFinalVariables: CssVarString[]
+  declaredVariables: CssVarString[]
+  presetResetData: PresetResetData
+};

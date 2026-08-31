@@ -14,11 +14,13 @@ export function activate(context: vscode.ExtensionContext): void {
   let terminal: vscode.Terminal | undefined
 
 
-  context.subscriptions.push(...createCommandSubscriptions({
-    startCompiler,
-    stopCompiler,
-    restartCompiler
-  }),
+  context.subscriptions.push(
+    output,
+    ...createCommandSubscriptions({
+      startCompiler,
+      stopCompiler,
+      restartCompiler
+    }),
     vscode.window.onDidCloseTerminal(closedTerminal => {
       if (closedTerminal !== terminal) {
         return

@@ -46,7 +46,7 @@ export function createIssueCollector(): IssueCollector {
   function set(issue: SetIssue) {
     const group = ensureCurrentGroup()
     const { path, value, context } = currentScope
-    if (!path || !value) {
+    if (path === undefined || value === undefined) {
       throw new Error("scope() must initialize path and value")
     }
     group.issues.push({

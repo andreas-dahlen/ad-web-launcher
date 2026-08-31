@@ -161,6 +161,7 @@ function activate(context) {
   );
   let terminal;
   context.subscriptions.push(
+    output,
     ...createCommandSubscriptions({
       startCompiler,
       stopCompiler,

@@ -1,37 +1,8 @@
 // src/extension.ts
-import * as vscode6 from "vscode";
-
-// src/config/languages.ts
-var cssLanguages = [
-  { language: "css" },
-  { language: "scss" },
-  { language: "less" }
-];
-
-// src/config/paths.ts
-import * as vscode from "vscode";
-function resolveVariablesUri(workspaceFolder) {
-  const config = vscode.workspace.getConfiguration(
-    "cssVariableCompletion"
-  );
-  const variablesFile = config.get("variablesFile");
-  if (!variablesFile) {
-    throw new Error("variablesFile setting is missing");
-  }
-  return vscode.Uri.joinPath(
-    workspaceFolder.uri,
-    ...variablesFile.split("/")
-  );
-}
-function resolveLspPath(workspaceFolder) {
-  return vscode.Uri.joinPath(
-    workspaceFolder.uri,
-    "web-react/src/shared/generated/metadata/cssVariables.generated.ts"
-  );
-}
+import * as vscode10 from "vscode";
 
 // src/completion/cssVarCompletionProvider.ts
-import * as vscode2 from "vscode";
+import * as vscode from "vscode";
 var CssVariableCompletionProvider = class {
   constructor(variables) {
     this.variables = variables;
@@ -44,13 +15,13 @@ var CssVariableCompletionProvider = class {
     const line = document.lineAt(position.line).text;
     const beforeCursor = line.slice(0, position.character);
     if (!/(?:^|[;{])\s*-$/.test(beforeCursor)) {
-      return new vscode2.CompletionList([], false);
+      return new vscode.CompletionList([], false);
     }
-    return new vscode2.CompletionList(
+    return new vscode.CompletionList(
       this.variables.map((variable) => {
-        const item = new vscode2.CompletionItem(
+        const item = new vscode.CompletionItem(
           variable,
-          vscode2.CompletionItemKind.Variable
+          vscode.CompletionItemKind.Variable
         );
         item.insertText = variable;
         item.filterText = variable;
@@ -60,6 +31,9 @@ var CssVariableCompletionProvider = class {
     );
   }
 };
+
+// src/variables/variableEntry.ts
+import * as vscode5 from "vscode";
 
 // node_modules/jsonc-parser/lib/esm/impl/scanner.js
 function createScanner(text, ignoreTrivia = false) {
@@ -924,86 +898,135 @@ var ParseErrorCode;
 import { readFileSync } from "node:fs";
 import "vscode";
 function loadVariables(fileUri) {
-  const contents = readFileSync(fileUri.fsPath, "utf8");
+  let contents;
+  try {
+    contents = readFileSync(fileUri.fsPath, "utf8");
+  } catch {
+    return [];
+  }
   const parsed = parse2(contents);
   if (!Array.isArray(parsed)) {
-    throw new Error(
-      "cssVariables.generated.jsonc must contain an array"
+    throw new TypeError(
+      "extension.generated.jsonc must contain an array"
     );
   }
   if (!parsed.every((value) => typeof value === "string")) {
     throw new Error(
-      "cssVariables.generated.jsonc must contain only strings"
+      "extension.generated.jsonc must contain only strings"
     );
   }
   return parsed;
 }
 
 // src/variables/watchVariables.ts
-import * as vscode4 from "vscode";
-function watchVariables(context, variablesUri, provider) {
-  const watcher = vscode4.workspace.createFileSystemWatcher(
+import * as vscode3 from "vscode";
+function watchVariables(variablesUri, provider, output) {
+  const watcher = vscode3.workspace.createFileSystemWatcher(
     variablesUri.fsPath
   );
-  context.subscriptions.push(
+  const reloadVariables = () => {
+    try {
+      provider.updateVariables(loadVariables(variablesUri));
+    } catch (error) {
+      output.appendLine(
+        `[css variable completion] failed to load variables: ${String(error)}`
+      );
+    }
+  };
+  return vscode3.Disposable.from(
     watcher,
-    watcher.onDidChange(() => {
-      try {
-        provider.updateVariables(loadVariables(variablesUri));
-      } catch (error) {
-        vscode4.window.showErrorMessage(
-          `[css variable completion] failed to reload variables: ${String(error)}`
-        );
-      }
-    }),
-    watcher.onDidCreate(() => {
-      try {
-        provider.updateVariables(loadVariables(variablesUri));
-      } catch (error) {
-        vscode4.window.showErrorMessage(
-          `[css variable completion] failed to load variables: ${String(error)}`
-        );
-      }
-    })
+    watcher.onDidChange(reloadVariables),
+    watcher.onDidCreate(reloadVariables)
   );
 }
 
-// src/lsp/watchCssSave.ts
-import * as vscode5 from "vscode";
-var pendingCssDocument;
-function watchCssSave(context, lspPath) {
-  const watcher = vscode5.workspace.createFileSystemWatcher(
-    lspPath.fsPath
+// src/config/languages.ts
+var cssLanguages = [
+  { language: "css" },
+  { language: "scss" },
+  { language: "less" }
+];
+
+// src/config/paths.ts
+import * as vscode4 from "vscode";
+function resolveVariablesUri(workspaceFolder) {
+  const config = vscode4.workspace.getConfiguration(
+    "cssVariableCompletion"
   );
-  context.subscriptions.push(
-    watcher,
-    vscode5.workspace.onDidSaveTextDocument((document) => {
-      if (!cssLanguages.some(({ language }) => document.languageId === language)) {
-        return;
-      }
-      pendingCssDocument = document;
-    }),
-    watcher.onDidChange(async () => {
-      const document = pendingCssDocument;
-      pendingCssDocument = void 0;
-      if (!document) return;
-      await nudgeCssModule(document);
-    })
+  const variablesFile = config.get("variablesFile");
+  if (!variablesFile) return;
+  return vscode4.Uri.joinPath(
+    workspaceFolder.uri,
+    ...variablesFile.split("/")
   );
 }
+function resolveLspPath(workspaceFolder) {
+  const config = vscode4.workspace.getConfiguration(
+    "cssVariableCompletion"
+  );
+  const lspFile = config.get("lspFile");
+  if (!lspFile) return;
+  return vscode4.Uri.joinPath(
+    workspaceFolder.uri,
+    ...lspFile.split("/")
+  );
+}
+
+// src/variables/variableEntry.ts
+function variableEntry(workspaceFolder, output) {
+  const variablesUri = resolveVariablesUri(workspaceFolder);
+  if (!variablesUri) return null;
+  const variables = loadVariables(variablesUri);
+  const provider = new CssVariableCompletionProvider(variables);
+  const watcher = watchVariables(
+    variablesUri,
+    provider,
+    output
+  );
+  const completion = vscode5.languages.registerCompletionItemProvider(
+    cssLanguages,
+    provider,
+    "-"
+  );
+  return vscode5.Disposable.from(
+    watcher,
+    completion
+  );
+}
+
+// src/lsp/lspEntry.ts
+import "vscode";
+
+// src/lsp/watchCssSave.ts
+import * as vscode8 from "vscode";
+
+// src/lsp/openLspDocument.ts
+import * as vscode6 from "vscode";
+async function openLspDocument(lspPath) {
+  try {
+    await vscode6.workspace.openTextDocument(lspPath);
+  } catch (error) {
+    console.error(
+      `[css variable completion] failed to open LSP document: ${String(error)}`
+    );
+  }
+}
+
+// src/lsp/nudgeModule.ts
+import * as vscode7 from "vscode";
 async function nudgeCssModule(document) {
-  const editor = vscode5.window.visibleTextEditors.find(
+  const editor = vscode7.window.visibleTextEditors.find(
     (editor2) => editor2.document === document
   );
   if (!editor) return;
-  const position = new vscode5.Position(0, 0);
+  const position = new vscode7.Position(0, 0);
   const inserted = await editor.edit((editBuilder) => {
     editBuilder.insert(position, " ");
   });
   if (!inserted) return;
   const removed = await editor.edit((editBuilder) => {
     editBuilder.delete(
-      new vscode5.Range(
+      new vscode7.Range(
         position,
         position.translate(0, 1)
       )
@@ -1013,32 +1036,72 @@ async function nudgeCssModule(document) {
   await document.save();
 }
 
+// src/lsp/watchCssSave.ts
+function watchCssSave(lspPath) {
+  const watcher = vscode8.workspace.createFileSystemWatcher(
+    lspPath.fsPath
+  );
+  let pendingCssDocument;
+  void openLspDocument(lspPath);
+  const saveListener = vscode8.workspace.onDidSaveTextDocument((document) => {
+    if (cssLanguages.every(({ language }) => document.languageId !== language)) {
+      return;
+    }
+    pendingCssDocument = document;
+  });
+  const changeListener = watcher.onDidChange(async () => {
+    const document = pendingCssDocument;
+    pendingCssDocument = void 0;
+    if (!document) return;
+    await nudgeCssModule(document);
+  });
+  return vscode8.Disposable.from(
+    watcher,
+    saveListener,
+    changeListener
+  );
+}
+
+// src/lsp/lspEntry.ts
+function lspEntry(workspaceFolder) {
+  const lspUri = resolveLspPath(workspaceFolder);
+  if (!lspUri) return null;
+  return watchCssSave(lspUri);
+}
+
 // src/extension.ts
 function activate(context) {
-  vscode6.window.showInformationMessage(
-    "[css variable completion loaded]"
-  );
-  const workspaceFolder = vscode6.workspace.workspaceFolders?.[0];
+  const output = vscode10.window.createOutputChannel("CSS Variable Completion");
+  context.subscriptions.push(output);
+  output.appendLine("[css variable completion] loaded");
+  const workspaceFolder = vscode10.workspace.workspaceFolders?.[0];
   if (!workspaceFolder) {
-    vscode6.window.showErrorMessage(
-      "[css variable completion] no workspace folder"
+    output.appendLine(
+      "[css variable completion] no workspace folder. Shutting down."
     );
     return;
   }
-  const variablesUri = resolveVariablesUri(workspaceFolder);
-  const variables = loadVariables(variablesUri);
-  const provider = new CssVariableCompletionProvider(variables);
-  watchVariables(context, variablesUri, provider);
-  watchCssSave(context, resolveLspPath(workspaceFolder));
+  let runtime;
+  const launch = () => {
+    runtime?.dispose();
+    const disposables = [];
+    const variable = variableEntry(workspaceFolder, output);
+    const lsp = lspEntry(workspaceFolder);
+    if (variable) disposables.push(variable);
+    if (lsp) disposables.push(lsp);
+    runtime = vscode10.Disposable.from(...disposables);
+  };
+  launch();
   context.subscriptions.push(
-    vscode6.languages.registerCompletionItemProvider(
-      cssLanguages,
-      provider,
-      "-"
-    )
-  );
-  vscode6.window.showInformationMessage(
-    "[css variable completion] provider registered"
+    vscode10.workspace.onDidChangeConfiguration((event) => {
+      if (!event.affectsConfiguration("cssVariableCompletion")) {
+        return;
+      }
+      output.appendLine(
+        "[css variable completion] configuration changed. Relaunching."
+      );
+      launch();
+    })
   );
 }
 function deactivate() {

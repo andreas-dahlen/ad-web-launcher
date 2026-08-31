@@ -11,30 +11,49 @@ export function analyzeWriteResult(result: FileResult | undefined): GeneratedFil
     tokens: {
       written: [],
       skipped: []
+    },
+    metadata: {
+      written: [],
+      skipped: []
+    },
+    lsp: {
+      written: [],
+      skipped: []
+    },
+    extension: {
+      written: [],
+      skipped: []
     }
   }
 
   const writtenPaths = result?.updated ?? []
   const skippedPaths = result?.skipped ?? []
 
-  // const writtenFiles = writtenPaths.map(formatLogPath)
-  // const skippedFiles = skippedPaths.map(formatLogPath)
-
   for (const file of writtenPaths) {
     if (file.endsWith(".preset.ts")) {
       generatedFiles.presets.written.push(file)
-    }
-    if (file.endsWith(".token.ts")) {
+    } else if (file.endsWith(".token.ts")) {
       generatedFiles.tokens.written.push(file)
+    } else if (file.endsWith("metadata.generated.json")) {
+      generatedFiles.metadata.written.push(file)
+    } else if (file.endsWith("lsp.generated.ts")) {
+      generatedFiles.lsp.written.push(file)
+    } else if (file.endsWith("extension.generated.json")) {
+      generatedFiles.extension.written.push(file)
     }
   }
 
   for (const file of skippedPaths) {
     if (file.endsWith(".preset.ts")) {
       generatedFiles.presets.skipped.push(file)
-    }
-    if (file.endsWith(".token.ts")) {
+    } else if (file.endsWith(".token.ts")) {
       generatedFiles.tokens.skipped.push(file)
+    } else if (file.endsWith("metadata.generated.json")) {
+      generatedFiles.metadata.skipped.push(file)
+    } else if (file.endsWith("lsp.generated.ts")) {
+      generatedFiles.lsp.skipped.push(file)
+    } else if (file.endsWith("extension.generated.json")) {
+      generatedFiles.extension.skipped.push(file)
     }
   }
 

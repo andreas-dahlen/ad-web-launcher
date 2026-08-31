@@ -25,7 +25,7 @@ export function assembleLspData(
     rgbVariables.add(`${variable}: ${rgb.toString()}`)
   }
 
-  const outputFile = path.join(outPath, "metadata/cssVariables.generated.ts")
+  const outputFile = path.join(outPath, "metadata/lsp.generated.ts")
 
   return {
     rgbVariables: [...rgbVariables],

@@ -1,6 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import type { CompilerOptions } from '../types/run.types.js'
+import { parse } from 'jsonc-parser'
 import { compilerConfigSchema } from '../configSchema.js'
 
 export function loadCompilerConfig(projectRoot: string): CompilerOptions {
@@ -13,7 +14,7 @@ export function loadCompilerConfig(projectRoot: string): CompilerOptions {
     return {}
   }
 
-  const raw = JSON.parse(
+  const raw = parse(
     fs.readFileSync(configPath, 'utf8'),
   )
 

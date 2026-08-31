@@ -2,21 +2,54 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Lint workspace",
+      "label": "Lint: Oxlint",
       "type": "shell",
-      "command": "npm run lint",
+      "command": "npm run oxlint -- --format=unix",
       "options": {
         "cwd": "${workspaceFolder}/web-react"
-      },
-      "problemMatcher": {
-        "base": "$eslint-stylish",
-        "applyTo": "allDocuments",
-        "owner": "eslint-workspace"
       },
       "presentation": {
         "reveal": "never",
         "panel": "shared"
       },
+      "problemMatcher": {
+        "owner": "oxlint",
+        "source": "Oxlint",
+        "fileLocation": [
+          "relative",
+          "${workspaceFolder}/web-react"
+        ],
+        "pattern": {
+          "regexp": "^(.+):(\\d+):(\\d+):\\s+(.*)\\s+\\[(Error|Warning)\\/([^\\]]+)\\]$",
+          "file": 1,
+          "line": 2,
+          "column": 3,
+          "message": 4,
+          "severity": 5,
+          "code": 6
+        }
+      }
+    },
+    {
+      "label": "Lint: ESLint",
+      "type": "shell",
+      "command": "npm run eslint",
+      "options": {
+        "cwd": "${workspaceFolder}/web-react"
+      },
+      "presentation": {
+        "reveal": "never",
+        "panel": "shared"
+      },
+      "problemMatcher": "$eslint-stylish"
+    },
+    {
+      "label": "Lint workspace",
+      "dependsOn": [
+        "Lint: Oxlint",
+        "Lint: ESLint"
+      ],
+      "dependsOrder": "parallel",
       "runOptions": {
         "runOn": "folderOpen"
       }

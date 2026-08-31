@@ -3,4 +3,5 @@
   "outDir": "src/styleTokens/generated",
   "mute": false,
   "cliFile": "tools/token-compiler/dist/cli.js"
+  // "sdfsdfsd": "sdgsdg"
 }

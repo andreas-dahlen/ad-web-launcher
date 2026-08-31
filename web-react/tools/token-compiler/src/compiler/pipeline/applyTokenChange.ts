@@ -27,7 +27,9 @@ export function applyTokenChange({
     processToken(tokenPath)
   )
 
-  const tokens = results.map(result => result.token);
+  const tokens = results.flatMap(result =>
+    result.token ? [result.token] : []
+  )
   const issues = results.flatMap(result => result.issues);
 
   const group = buildTokenGroup(groupPath, tokens, cssPath);

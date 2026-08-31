@@ -1,23 +1,54 @@
-import { loadTokenFile } from '../loaders/loadTokenFile.js';
-import type { TokenResult } from '../../types/compiler.types.js'
-import { assert } from '../../utils/assertions.js';
-import { parseToken } from './parseToken.js';
-import { createIssueCollector } from '../tracking/issueCollector.js';
+import { loadTokenFile } from '../loaders/loadTokenFile.js'
+import type { RawToken, TokenResult } from '../../types/compiler.types.js'
+import { parseToken } from './parseToken.js'
+import { createIssueCollector } from '../tracking/issueCollector.js'
 
 export function processToken(fullPath: string): TokenResult {
-  const { json, errors } = loadTokenFile(fullPath)
   const collector = createIssueCollector()
 
-  assert.token(errors, json, fullPath)
+  let json: RawToken
 
-  collector.setSubject("String Parsing")
+  try {
+    json = loadTokenFile(fullPath)
+  } catch (error) {
+    collector.setSubject('Token File')
 
-  collector.scope({ value: json.component, path: fullPath, context: "component" })
+    collector.scope({
+      value: fullPath,
+      path: fullPath,
+      context: 'file',
+    })
 
-  const componentResult = parseToken.identifier(json.component, collector)
+    collector.set({
+      reason: error instanceof Error
+        ? error.message
+        : String(error),
+    })
+
+    return {
+      token: undefined,
+      issues: collector.flush(),
+    }
+  }
+
+  collector.setSubject('String Parsing')
+
+  collector.scope({
+    value: json.component,
+    path: fullPath,
+    context: 'component',
+  })
+
+  const componentResult = parseToken.identifier(
+    json.component,
+    collector,
+  )
 
   if (json.infix) {
-    collector.editScope({ value: json.infix, context: "infix" })
+    collector.editScope({
+      value: json.infix,
+      context: 'infix',
+    })
   }
 
   const infixResult = json.infix
@@ -34,16 +65,18 @@ export function processToken(fullPath: string): TokenResult {
       tokenPath: fullPath,
       infix,
       vars: Object.entries(json.vars ?? {}).map(([key, def]) => {
-
-        assert.variable(key, def, fullPath)
-
-        const variableResult = parseToken.variable(def, key, alwaysAllowed, collector)
+        const variableResult = parseToken.variable(
+          def,
+          key,
+          alwaysAllowed,
+          collector,
+        )
 
         return {
           ...variableResult.variable,
-        };
-      })
+        }
+      }),
     },
-    issues: collector.flush()
+    issues: collector.flush(),
   }
 }

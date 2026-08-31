@@ -1,49 +1,54 @@
 import * as vscode from 'vscode'
 
-import { cssLanguages } from './config/languages'
-import { resolveVariablesUri, resolveLspPath } from './config/paths'
-
-import { CssVariableCompletionProvider } from './completion/cssVarCompletionProvider'
-
-import { loadVariables } from './variables/loadVariables'
-import { watchVariables } from './variables/watchVariables'
-
-import { watchCssSave } from './lsp/watchCssSave'
+import { variableEntry } from './variables/variableEntry'
+import { lspEntry } from './lsp/lspEntry'
 
 export function activate(context: vscode.ExtensionContext): void {
-  vscode.window.showInformationMessage(
-    '[css variable completion loaded]',
-  )
+  const output = vscode.window.createOutputChannel('CSS Variable Completion')
+
+  context.subscriptions.push(output)
+
+  output.appendLine('[css variable completion] loaded')
 
   const workspaceFolder = vscode.workspace.workspaceFolders?.[0]
 
-
   if (!workspaceFolder) {
-    vscode.window.showErrorMessage(
-      '[css variable completion] no workspace folder',
+    output.appendLine(
+      '[css variable completion] no workspace folder. Shutting down.',
     )
     return
   }
 
-  const variablesUri = resolveVariablesUri(workspaceFolder)
+  let runtime: vscode.Disposable | undefined
 
-  const variables = loadVariables(variablesUri)
-  const provider = new CssVariableCompletionProvider(variables)
+  const launch = (): void => {
+    runtime?.dispose()
 
-  watchVariables(context, variablesUri, provider)
-  watchCssSave(context, resolveLspPath(workspaceFolder))
+    const disposables: vscode.Disposable[] = []
 
+    const variable = variableEntry(workspaceFolder, output)
+    const lsp = lspEntry(workspaceFolder) //output
+
+    if (variable) disposables.push(variable)
+    if (lsp) disposables.push(lsp)
+
+    runtime = vscode.Disposable.from(...disposables)
+  }
+
+  launch()
 
   context.subscriptions.push(
-    vscode.languages.registerCompletionItemProvider(
-      cssLanguages,
-      provider,
-      '-',
-    ),
-  )
+    vscode.workspace.onDidChangeConfiguration(event => {
+      if (!event.affectsConfiguration('cssVariableCompletion')) {
+        return
+      }
 
-  vscode.window.showInformationMessage(
-    '[css variable completion] provider registered',
+      output.appendLine(
+        '[css variable completion] configuration changed. Relaunching.',
+      )
+
+      launch()
+    }),
   )
 }
 

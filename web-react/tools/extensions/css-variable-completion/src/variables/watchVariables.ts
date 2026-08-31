@@ -3,35 +3,27 @@ import { loadVariables } from './loadVariables'
 import { CssVariableCompletionProvider } from '../completion/cssVarCompletionProvider'
 
 export function watchVariables(
-  context: vscode.ExtensionContext,
   variablesUri: vscode.Uri,
   provider: CssVariableCompletionProvider,
-): void {
+  output: vscode.OutputChannel,
+): vscode.Disposable {
   const watcher = vscode.workspace.createFileSystemWatcher(
     variablesUri.fsPath,
   )
 
-  context.subscriptions.push(
+  const reloadVariables = (): void => {
+    try {
+      provider.updateVariables(loadVariables(variablesUri))
+    } catch (error) {
+      output.appendLine(
+        `[css variable completion] failed to load variables: ${String(error)}`,
+      )
+    }
+  }
+
+  return vscode.Disposable.from(
     watcher,
-
-    watcher.onDidChange(() => {
-      try {
-        provider.updateVariables(loadVariables(variablesUri))
-      } catch (error) {
-        vscode.window.showErrorMessage(
-          `[css variable completion] failed to reload variables: ${String(error)}`,
-        )
-      }
-    }),
-
-    watcher.onDidCreate(() => {
-      try {
-        provider.updateVariables(loadVariables(variablesUri))
-      } catch (error) {
-        vscode.window.showErrorMessage(
-          `[css variable completion] failed to load variables: ${String(error)}`,
-        )
-      }
-    })
+    watcher.onDidChange(reloadVariables),
+    watcher.onDidCreate(reloadVariables),
   )
 }

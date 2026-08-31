@@ -50,8 +50,13 @@
       "properties": {
         "cssVariableCompletion.variablesFile": {
           "type": "string",
-          "default": "web-react/src/shared/generated/metadata/cssVariables.generated.jsonc",
+          "default": "web-react/src/styleTokens/generated/metadata/extension.generated.jsonc",
           "description": "Path to the CSS variable metadata file, relative to the workspace."
+        },
+        "cssVariableCompletion.lspFile": {
+          "type": "string",
+          "default": "web-react/src/styleTokens/generated/metadata/lsp.generated.ts",
+          "description": "Path to the LSP variable metadata file, relative to the workspace."
         }
       }
     }

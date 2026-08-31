@@ -68,6 +68,13 @@
         }
       }
     },
+
+    "configurationDefaults": {
+      "files.associations": {
+        "compiler.config.json": "jsonc"
+      }
+    },
+
     "commands": [
       {
         "command": "tokenCompilerVscode.start",

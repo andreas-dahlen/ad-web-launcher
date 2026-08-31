@@ -50,6 +50,9 @@ export type InvalidVarDeclaration = {
 export type GeneratedFiles = {
   presets: FileStatus
   tokens: FileStatus
+  metadata: FileStatus
+  lsp: FileStatus
+  extension: FileStatus
 }
 
 export type FileStatus = {
