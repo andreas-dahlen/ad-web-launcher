@@ -7,25 +7,30 @@ import type { IssueGroup } from '../../../../types/issueCollector.types.js'
 describe('[COMPILER]', () => {
   describe('createCompilerRun', () => {
     it('starts with no processed paths', () => {
-      const run = createCompilerRun()
+      const run = createCompilerRun([])
 
       expect(run.getProcessedPaths()).toEqual([])
     })
 
     it('starts with no emit result', () => {
-      const run = createCompilerRun()
+      const run = createCompilerRun([])
 
       expect(run.getEmitResult()).toBeUndefined()
     })
 
-    it('starts with no issues', () => {
-      const run = createCompilerRun()
+    it('starts with loaded issues', () => {
+      const issues = [
+        {} as IssueGroup,
+        {} as IssueGroup,
+      ]
 
-      expect(run.getIssues()).toEqual([])
+      const run = createCompilerRun(issues)
+
+      expect(run.getIssues()).toEqual(issues)
     })
 
     it('records a processed path', () => {
-      const run = createCompilerRun()
+      const run = createCompilerRun([])
 
       run.recordProcessed('button.module.css')
 
@@ -35,7 +40,7 @@ describe('[COMPILER]', () => {
     })
 
     it('does not duplicate a processed path', () => {
-      const run = createCompilerRun()
+      const run = createCompilerRun([])
 
       run.recordProcessed('button.module.css')
       run.recordProcessed('button.module.css')
@@ -46,7 +51,7 @@ describe('[COMPILER]', () => {
     })
 
     it('preserves processed path insertion order', () => {
-      const run = createCompilerRun()
+      const run = createCompilerRun([])
 
       run.recordProcessed('button.module.css')
       run.recordProcessed('surface.module.css')
@@ -60,7 +65,7 @@ describe('[COMPILER]', () => {
     })
 
     it('records an emit result', () => {
-      const run = createCompilerRun()
+      const run = createCompilerRun([])
       const result = {} as EmitResult
 
       run.recordEmitResult(result)
@@ -69,7 +74,7 @@ describe('[COMPILER]', () => {
     })
 
     it('replaces the previous emit result', () => {
-      const run = createCompilerRun()
+      const run = createCompilerRun([])
 
       const first = {} as EmitResult
       const second = {} as EmitResult
@@ -81,7 +86,7 @@ describe('[COMPILER]', () => {
     })
 
     it('records issues', () => {
-      const run = createCompilerRun()
+      const run = createCompilerRun([])
 
       const issues = [
         {} as IssueGroup,
@@ -94,7 +99,7 @@ describe('[COMPILER]', () => {
     })
 
     it('appends issues from multiple calls', () => {
-      const run = createCompilerRun()
+      const run = createCompilerRun([])
 
       const first = [{} as IssueGroup]
       const second = [{} as IssueGroup]
@@ -109,7 +114,7 @@ describe('[COMPILER]', () => {
     })
 
     it('returns a snapshot of processed paths', () => {
-      const run = createCompilerRun()
+      const run = createCompilerRun([])
 
       run.recordProcessed('button.module.css')
 
@@ -122,7 +127,7 @@ describe('[COMPILER]', () => {
     })
 
     it('returns a snapshot of issues', () => {
-      const run = createCompilerRun()
+      const run = createCompilerRun([])
 
       const issue = {} as IssueGroup
 
@@ -135,7 +140,9 @@ describe('[COMPILER]', () => {
     })
 
     it('resets the entire run', () => {
-      const run = createCompilerRun()
+      const run = createCompilerRun([
+        {} as IssueGroup,
+      ])
 
       run.recordProcessed('button.module.css')
       run.recordProcessed('surface.module.css')
@@ -150,7 +157,9 @@ describe('[COMPILER]', () => {
     })
 
     it('can be reused after reset', () => {
-      const run = createCompilerRun()
+      const run = createCompilerRun([
+        {} as IssueGroup,
+      ])
 
       run.recordProcessed('button.module.css')
       run.recordEmitResult({} as EmitResult)

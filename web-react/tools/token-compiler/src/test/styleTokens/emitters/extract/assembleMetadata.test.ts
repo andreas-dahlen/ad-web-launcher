@@ -1,7 +1,12 @@
 import { describe, expect, it } from 'vitest'
 
 import { assembleMetadata } from '../../../../emitters/extract/assemblers/assembleMetadata.js'
-import type { CompilerToken, CssTokenGroup } from '../../../../types/compiler.types.js'
+import type {
+  CompilerToken,
+  CssTokenGroup,
+} from '../../../../types/compiler.types.js'
+
+const outPath = '/generated'
 
 function createToken(
   overrides: Partial<CompilerToken> = {},
@@ -38,7 +43,7 @@ describe('[EMITTER]', () => {
     it('assembles metadata from a token group', () => {
       const group = createGroup()
 
-      expect(assembleMetadata(group)).toEqual({
+      expect(assembleMetadata(group, outPath)).toEqual({
         name: 'button',
         groupPath: '/tokens/button',
         tokenFiles: [
@@ -46,6 +51,7 @@ describe('[EMITTER]', () => {
           '/tokens/button/hover.jsonc',
         ],
         cssFile: '/components/Button/Button.module.css',
+        outputFile: '/generated/metadata/metadata.generated.json',
       })
     })
 
@@ -54,20 +60,33 @@ describe('[EMITTER]', () => {
         groupPath: '/styleTokens/components/button',
       })
 
-      expect(assembleMetadata(group).name).toBe('button')
+      expect(
+        assembleMetadata(group, outPath).name,
+      ).toBe('button')
     })
 
     it('collects token paths without modifying the group', () => {
       const group = createGroup()
       const originalTokens = [...group.tokens]
 
-      const result = assembleMetadata(group)
+      const result = assembleMetadata(group, outPath)
 
       expect(result.tokenFiles).toEqual(
         originalTokens.map(token => token.tokenPath),
       )
 
       expect(group.tokens).toEqual(originalTokens)
+    })
+
+    it('creates the metadata output path', () => {
+      const result = assembleMetadata(
+        createGroup(),
+        outPath,
+      )
+
+      expect(result.outputFile).toBe(
+        '/generated/metadata/metadata.generated.json',
+      )
     })
   })
 })

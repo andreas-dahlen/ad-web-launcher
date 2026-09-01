@@ -2,26 +2,26 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import { print } from '../../../utils/print.js'
 
-vi.mock('@styleTokens/utils/string', () => ({
-  colors: {
-    subHeading: 'subHeading',
-    file: 'file',
-    heading: 'heading',
-    muted: 'muted',
-    variable: 'variable',
-    symbol: 'symbol',
-    reset: 'reset',
-    success: 'success',
-  },
+vi.mock(
+  '../../../utils/string.js',
+  () => ({
+    colors: {
+      subHeading: 'subHeading',
+      file: 'file',
+      heading: 'heading',
+      muted: 'muted',
+      variable: 'variable',
+      symbol: 'symbol',
+      reset: 'reset',
+      success: 'success',
+    },
 
-  paint: String,
+    paint: String,
 
-  formatLogPath: (value: string) => `formatted:${value}`,
-}))
-
-vi.mock('@shared/tokenUtils/prefixes', () => ({
-  isValidPrefix: vi.fn(() => false),
-}))
+    formatLogPath: (value: string) =>
+      `formatted:${value}`,
+  }),
+)
 
 describe('[CONSOLE]', () => {
   describe('print', () => {
@@ -61,7 +61,9 @@ describe('[CONSOLE]', () => {
       print.buildingChains('button')
 
       expect(log).toHaveBeenCalled()
-      expect(log.mock.calls[0][0]).toContain('button')
+      expect(log.mock.calls[0][0]).toContain(
+        '--final-button-*',
+      )
     })
 
     it('logs the variable key when printing a cascade', () => {

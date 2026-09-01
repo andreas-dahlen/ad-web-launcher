@@ -161,5 +161,34 @@ describe('[COMPILER]', () => {
 
       expect(result.variable.values).toEqual({ p: 'red' })
     })
+
+    it('records issues for identifier transformations', () => {
+      const collector = createTestCollector()
+
+      const result = parseToken.identifier(
+        '123 button-primary',
+        collector
+      )
+
+      expect(result).toEqual({
+        name: '_123buttonPrimary',
+      })
+
+      const [group] = collector.flush()
+
+      expect(group.issues).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            reason: 'removed whitespace',
+          }),
+          expect.objectContaining({
+            reason: 'converted to camelCase',
+          }),
+          expect.objectContaining({
+            reason: 'prefix being a number',
+          }),
+        ])
+      )
+    })
   })
 })

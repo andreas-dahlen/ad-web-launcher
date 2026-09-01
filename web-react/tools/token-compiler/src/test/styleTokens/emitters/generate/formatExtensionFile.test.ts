@@ -11,6 +11,8 @@ function createExtensionData(
       '--button-color',
       '--button-radius',
     ],
+    outputFile:
+      '/generated/metadata/extension.generated.jsonc',
     ...overrides,
   }
 }
@@ -18,13 +20,12 @@ function createExtensionData(
 describe('[EMITTER]', () => {
   describe('formatExtensionFile', () => {
     it('returns the generated extension file path', () => {
-      const result = formatExtensionFile(
-        createExtensionData(),
-      )
+      const data = createExtensionData()
 
-      expect(result.filePath).toContain(
-        '/src/shared/generated/metadata/cssVariables.generated.jsonc',
-      )
+      const result = formatExtensionFile(data)
+
+      expect(result.outputFile)
+        .toBe(data.outputFile)
     })
 
     it('emits the generated file header', () => {

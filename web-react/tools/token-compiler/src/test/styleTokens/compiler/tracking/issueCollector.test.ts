@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+
 import {
   createIssueCollector,
   createNullIssueCollector,
@@ -30,7 +31,7 @@ describe('[COMPILER]', () => {
       }).toThrow('scope() must initialize path and value')
     })
 
-    it('throws when the scope has an empty path', () => {
+    it('allows an empty path', () => {
       const collector = createIssueCollector()
 
       collector.setSubject('button')
@@ -39,14 +40,25 @@ describe('[COMPILER]', () => {
         value: 'red',
       })
 
-      expect(() => {
-        collector.set({
-          reason: 'invalid declaration',
-        })
-      }).toThrow('scope() must initialize path and value')
+      collector.set({
+        reason: 'invalid declaration',
+      })
+
+      expect(collector.flush()).toEqual([
+        {
+          subject: 'button',
+          issues: [
+            {
+              path: '',
+              value: 'red',
+              reason: 'invalid declaration',
+            },
+          ],
+        },
+      ])
     })
 
-    it('throws when the scope has an empty value', () => {
+    it('allows an empty value', () => {
       const collector = createIssueCollector()
 
       collector.setSubject('button')
@@ -55,11 +67,22 @@ describe('[COMPILER]', () => {
         value: '',
       })
 
-      expect(() => {
-        collector.set({
-          reason: 'invalid declaration',
-        })
-      }).toThrow('scope() must initialize path and value')
+      collector.set({
+        reason: 'invalid declaration',
+      })
+
+      expect(collector.flush()).toEqual([
+        {
+          subject: 'button',
+          issues: [
+            {
+              path: '--s-button-color',
+              value: '',
+              reason: 'invalid declaration',
+            },
+          ],
+        },
+      ])
     })
 
     it('records an issue using the current subject and scope', () => {

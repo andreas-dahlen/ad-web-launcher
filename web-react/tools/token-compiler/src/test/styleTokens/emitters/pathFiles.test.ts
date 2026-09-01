@@ -4,7 +4,6 @@ import path from 'node:path'
 import { beforeEach, afterEach, describe, expect, it } from 'vitest'
 import { patchFiles } from '../../../emitters/write/patchFiles.js'
 
-
 describe('[EMITTER]', () => {
   let tempDir: string
 
@@ -20,6 +19,7 @@ describe('[EMITTER]', () => {
       force: true,
     })
   })
+
   describe('patchFiles', () => {
     it('skips files that do not exist', () => {
       const filePath = path.join(
@@ -29,7 +29,7 @@ describe('[EMITTER]', () => {
 
       const result = patchFiles([
         {
-          filePath,
+          outputFile: filePath,
           content: '/* generated */',
         },
       ])
@@ -55,7 +55,7 @@ describe('[EMITTER]', () => {
 
       const result = patchFiles([
         {
-          filePath,
+          outputFile: filePath,
           content: '/* generated */',
         },
       ])
@@ -82,7 +82,7 @@ describe('[EMITTER]', () => {
 
       const result = patchFiles([
         {
-          filePath,
+          outputFile: filePath,
           content: '/* generated */',
         },
       ])
@@ -121,15 +121,15 @@ ${current}`,
 
       const result = patchFiles([
         {
-          filePath: updatedPath,
+          outputFile: updatedPath,
           content: '/* generated */',
         },
         {
-          filePath: skippedPath,
+          outputFile: skippedPath,
           content: '/* generated */',
         },
         {
-          filePath: path.join(tempDir, 'missing.css'),
+          outputFile: path.join(tempDir, 'missing.css'),
           content: '/* generated */',
         },
       ])

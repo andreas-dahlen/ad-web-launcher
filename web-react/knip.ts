@@ -1,16 +1,46 @@
-import type { KnipConfig } from "knip";
+import type { KnipConfig } from 'knip'
 
 const config: KnipConfig = {
-  project: [
-    "src/**/*.{ts,tsx}",
-    "plugins/**/*.ts"
-  ],
+  workspaces: {
+    '.': {
+      project: [
+        'src/**/*.{ts,tsx}',
+      ],
+    },
 
-  // ignoreIssues: {
+    'tools/lint': {
+      project: [
+        '**/*.ts',
+      ],
+      entry: [
+        'index.ts',
+      ],
+    },
 
-  //   "src/test/**": [""]
-  // }
+    'tools/plugins': {
+      project: [
+        '**/*.ts',
+      ],
+    },
 
-};
+    'tools/token-compiler': {
+      project: [
+        'src/**/*.ts',
+      ],
+    },
 
-export default config;
+    'tools/extensions/css-variable-completion': {
+      project: [
+        'src/**/*.ts',
+      ],
+    },
+
+    'tools/extensions/token-compiler-vscode': {
+      project: [
+        'src/**/*.ts',
+      ],
+    },
+  },
+}
+
+export default config

@@ -2,6 +2,7 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { spawn } from 'node:child_process'
 import type { Plugin } from 'vite'
+import { parse } from 'jsonc-parser'
 
 type CompilerConfig = {
   cliFile: string
@@ -38,7 +39,7 @@ function loadConfig(projectRoot: string): CompilerConfig | null {
     return null
   }
 
-  return JSON.parse(
+  return parse(
     fs.readFileSync(configPath, 'utf8'),
   )
 }

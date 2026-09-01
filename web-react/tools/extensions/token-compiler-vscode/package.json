@@ -20,7 +20,6 @@
     "coverage": "vitest run --coverage",
     "test": "vitest",
     "type": "tsc --noEmit",
-    "knip": "knip",
     "build": "tsc && esbuild src/extension.ts --bundle --platform=node --format=esm --external:vscode --main-fields=module,main --outfile=dist/extension.js",
     "package": "npm run build && vsce package --allow-missing-repository"
   },
@@ -30,7 +29,6 @@
     "@vitest/coverage-v8": "^4.1.11",
     "@vscode/vsce": "^3.9.2",
     "esbuild": "^0.28.2",
-    "knip": "^6.32.2",
     "typescript": "^6.0.3",
     "vitest": "^4.1.11"
   },

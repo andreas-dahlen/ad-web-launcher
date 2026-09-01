@@ -9,54 +9,93 @@ import { assembleExtensionData } from '../../../../emitters/extract/assemblers/a
 import type { CssVarString } from '../../../../oldSharedUtils/oldSharedCompiler.types.js'
 
 vi.mock(
-  '@styleTokens/emitters/extract/assemblers/assembleMetadata',
+  '../../../../emitters/extract/assemblers/assembleMetadata.js',
 )
 
 vi.mock(
-  '@styleTokens/emitters/extract/assemblers/assembleTokenData',
+  '../../../../emitters/extract/assemblers/assembleTokenData.js',
 )
 
 vi.mock(
-  '@styleTokens/emitters/extract/assemblers/assemblePresetData',
+  '../../../../emitters/extract/assemblers/assemblePresetData.js',
 )
 
 vi.mock(
-  '@styleTokens/emitters/extract/assemblers/assembleLspData',
+  '../../../../emitters/extract/assemblers/assembleLspData.js',
 )
 
 vi.mock(
-  '@styleTokens/emitters/extract/assemblers/assembleExtensionData',
+  '../../../../emitters/extract/assemblers/assembleExtensionData.js',
 )
 
 describe('[EMITTERS]', () => {
   describe('extractData', () => {
+    const outPath = '/generated'
+
+    function createCache({
+      groups = [],
+      postData = [],
+    }: {
+      groups?: Array<{ groupPath: string }>
+      postData?: unknown[]
+    } = {}) {
+      return {
+        getCssDataGroups: vi.fn(() => groups),
+        getCssDataGroupsByPaths: vi.fn((paths: string[]) =>
+          groups.filter(group =>
+            paths.includes(group.groupPath)
+          )
+        ),
+        getAllPostData: vi.fn(() => postData),
+        getEmitConfig: vi.fn(() => ({
+          outPath,
+        })),
+      } as never
+    }
+
+    function createRun({
+      processedPaths = [],
+    }: {
+      processedPaths?: string[]
+    } = {}) {
+      return {
+        getProcessedPaths: vi.fn(() => processedPaths),
+      } as never
+    }
     it('returns empty collections when there are no groups', () => {
+      const cache = createCache()
+      const run = createRun()
+
       vi.mocked(assembleExtensionData)
         .mockReturnValue({
           variables: [],
+          outputFile: '/generated/metadata/extension.generated.jsonc',
         })
 
       vi.mocked(assembleLspData)
         .mockReturnValue({
           rgbVariables: [],
+          tokens: [],
+          outputFile: '/generated/metadata/lsp.generated.ts',
         })
 
-      const result = extractData({
-        groups: [],
-        postData: [],
-        runGroups: [],
-      })
+      const result = extractData(cache, run)
 
       expect(result).toEqual({
         outputData: {
           presetFiles: [],
-          tokenData: [],
+          tokenFiles: [],
           metadata: [],
           extensionData: {
             variables: [],
+            outputFile:
+              '/generated/metadata/extension.generated.jsonc',
           },
           lspData: {
             rgbVariables: [],
+            tokens: [],
+            outputFile:
+              '/generated/metadata/lsp.generated.ts',
           },
         },
         extractResult: {
@@ -65,128 +104,73 @@ describe('[EMITTERS]', () => {
       })
 
       expect(assembleExtensionData)
-        .toHaveBeenCalledWith([], [])
+        .toHaveBeenCalledWith([], [], outPath)
 
       expect(assembleLspData)
-        .toHaveBeenCalledWith([])
+        .toHaveBeenCalledWith([], [], outPath)
     })
 
-    it('assembles token and preset data from run groups', () => {
-      const runGroup = {
+    it('assembles token and metadata data from all groups', () => {
+      const group = {
         groupPath: '/tokens/button',
         cssPath: '/components/Button/Button.module.css',
         cssData: {},
+        tokens: [],
       }
 
       const tokenData = {
+        groupPath: group.groupPath,
         name: 'button',
         tokens: [],
       }
 
-      const presetData = {
-        presetName: 'buttonPreset',
+      const metadata = {
+        name: 'button',
+        groupPath: group.groupPath,
+        tokenFiles: [],
+        cssFile: group.cssPath,
+        outputFile: '/generated/metadata/metadata.generated.json',
       }
 
       vi.mocked(assembleTokenData)
         .mockReturnValue(tokenData as never)
 
-      vi.mocked(assemblePresetData)
-        .mockReturnValue(presetData as never)
-
-      vi.mocked(assembleExtensionData)
-        .mockReturnValue({ variables: [] })
-
-      vi.mocked(assembleLspData)
-        .mockReturnValue({ rgbVariables: [] })
-
-      const result = extractData({
-        groups: [],
-        postData: [],
-        runGroups: [runGroup as never],
-      })
-
-      expect(result.outputData.tokenData)
-        .toEqual([tokenData])
-
-      expect(result.outputData.presetFiles)
-        .toEqual([presetData])
-
-      expect(assembleTokenData)
-        .toHaveBeenCalledWith(runGroup)
-
-      expect(assemblePresetData)
-        .toHaveBeenCalledWith(runGroup.cssData)
-    })
-
-    it('collects metadata from groups', () => {
-      const group = {
-        groupPath: '/tokens/button',
-      }
-
-      const metadata = {
-        name: 'button',
-      }
-
       vi.mocked(assembleMetadata)
         .mockReturnValue(metadata as never)
 
       vi.mocked(assembleExtensionData)
-        .mockReturnValue({ variables: [] })
+        .mockReturnValue({
+          variables: [],
+          outputFile:
+            '/generated/metadata/extension.generated.jsonc',
+        })
 
       vi.mocked(assembleLspData)
-        .mockReturnValue({ rgbVariables: [] })
+        .mockReturnValue({
+          rgbVariables: [],
+          tokens: [],
+          outputFile:
+            '/generated/metadata/lsp.generated.ts',
+        })
 
-      const result = extractData({
-        groups: [group as never],
-        postData: [],
-        runGroups: [],
+      const cache = createCache({
+        groups: [group],
       })
+      const run = createRun()
+
+      const result = extractData(cache, run)
 
       expect(result.outputData.metadata)
         .toEqual([metadata])
 
+      expect(assembleTokenData)
+        .toHaveBeenCalledWith(group, outPath)
+
       expect(assembleMetadata)
-        .toHaveBeenCalledWith(group)
+        .toHaveBeenCalledWith(group, outPath)
     })
 
-    it('records omitted preset files when preset assembly returns null', () => {
-      const runGroup = {
-        groupPath: '/tokens/button',
-        cssPath: '/components/Button/Button.module.css',
-        cssData: {},
-      }
-
-      vi.mocked(assembleTokenData)
-        .mockReturnValue({
-          name: 'button',
-          tokens: [],
-        } as never)
-
-      vi.mocked(assemblePresetData)
-        .mockReturnValue(null)
-
-      vi.mocked(assembleExtensionData)
-        .mockReturnValue({ variables: [] })
-
-      vi.mocked(assembleLspData)
-        .mockReturnValue({ rgbVariables: [] })
-
-      const result = extractData({
-        groups: [],
-        postData: [],
-        runGroups: [runGroup as never],
-      })
-
-      expect(result.outputData.presetFiles)
-        .toEqual([])
-
-      expect(result.extractResult.omittedPresetFiles)
-        .toEqual([
-          '/components/Button/Button.module.css',
-        ])
-    })
-
-    it('only collects successful run-group token and preset results', () => {
+    it('collects token files only for processed groups', () => {
       const firstGroup = {
         groupPath: '/tokens/button',
         cssPath: '/components/Button/Button.module.css',
@@ -199,56 +183,177 @@ describe('[EMITTERS]', () => {
         cssData: {},
       }
 
-      const tokenData = {
+      const firstTokenData = {
+        groupPath: firstGroup.groupPath,
         name: 'button',
         tokens: [],
       }
 
-      const presetData = {
-        presetName: 'buttonPreset',
+      const secondTokenData = {
+        groupPath: secondGroup.groupPath,
+        name: 'input',
+        tokens: [],
       }
 
       vi.mocked(assembleTokenData)
-        .mockReturnValueOnce(tokenData as never)
-        .mockReturnValueOnce(undefined as never)
+        .mockReturnValueOnce(firstTokenData as never)
+        .mockReturnValueOnce(secondTokenData as never)
 
       vi.mocked(assemblePresetData)
-        .mockReturnValueOnce(presetData as never)
-        .mockReturnValueOnce(null)
+        .mockReturnValue(null)
 
       vi.mocked(assembleExtensionData)
-        .mockReturnValue({ variables: [] })
+        .mockReturnValue({
+          variables: [],
+          outputFile:
+            '/generated/metadata/extension.generated.jsonc',
+        })
 
       vi.mocked(assembleLspData)
-        .mockReturnValue({ rgbVariables: [] })
+        .mockReturnValue({
+          rgbVariables: [],
+          tokens: [],
+          outputFile:
+            '/generated/metadata/lsp.generated.ts',
+        })
 
-      const result = extractData({
-        groups: [],
-        postData: [],
-        runGroups: [
-          firstGroup as never,
-          secondGroup as never,
-        ],
+      const cache = createCache({
+        groups: [firstGroup, secondGroup],
       })
 
-      expect(result.outputData.tokenData)
-        .toEqual([tokenData])
+      const run = createRun({
+        processedPaths: [secondGroup.groupPath],
+      })
+
+      const result = extractData(cache, run)
+
+      expect(result.outputData.tokenFiles)
+        .toEqual([secondTokenData])
+
+      expect(assemblePresetData)
+        .toHaveBeenCalledWith(
+          secondGroup.cssData,
+          outPath,
+        )
+    })
+
+    it('records omitted preset files when preset assembly returns null', () => {
+      const runGroup = {
+        groupPath: '/tokens/button',
+        cssPath: '/components/Button/Button.module.css',
+        cssData: {},
+      }
+
+      const tokenData = {
+        groupPath: runGroup.groupPath,
+        name: 'button',
+        tokens: [],
+      }
+
+      vi.mocked(assembleTokenData)
+        .mockReturnValue(tokenData as never)
+
+      vi.mocked(assemblePresetData)
+        .mockReturnValue(null)
+
+      vi.mocked(assembleExtensionData)
+        .mockReturnValue({
+          variables: [],
+          outputFile:
+            '/generated/metadata/extension.generated.jsonc',
+        })
+
+      vi.mocked(assembleLspData)
+        .mockReturnValue({
+          rgbVariables: [],
+          tokens: [],
+          outputFile:
+            '/generated/metadata/lsp.generated.ts',
+        })
+
+      const cache = createCache({
+        groups: [runGroup],
+      })
+
+      const run = createRun({
+        processedPaths: [runGroup.groupPath],
+      })
+
+      const result = extractData(cache, run)
+
+      expect(result.outputData.presetFiles)
+        .toEqual([])
+
+      expect(result.extractResult.omittedPresetFiles)
+        .toEqual([
+          '/components/Button/Button.module.css',
+        ])
+    })
+
+    it('includes successful preset data for processed groups', () => {
+      const runGroup = {
+        groupPath: '/tokens/button',
+        cssPath: '/components/Button/Button.module.css',
+        cssData: {},
+      }
+
+      const presetData = {
+        presetName: 'buttonPreset',
+        typeName: 'ButtonPreset',
+        cssImport: './Button.module.css',
+        selectors: ['primary'],
+        outputFile: '/generated/presets/button.preset.ts',
+      }
+
+      vi.mocked(assembleTokenData)
+        .mockReturnValue({
+          groupPath: runGroup.groupPath,
+          name: 'button',
+          tokens: [],
+        } as never)
+
+      vi.mocked(assemblePresetData)
+        .mockReturnValue(presetData as never)
+
+      vi.mocked(assembleExtensionData)
+        .mockReturnValue({
+          variables: [],
+          outputFile:
+            '/generated/metadata/extension.generated.jsonc',
+        })
+
+      vi.mocked(assembleLspData)
+        .mockReturnValue({
+          rgbVariables: [],
+          tokens: [],
+          outputFile:
+            '/generated/metadata/lsp.generated.ts',
+        })
+
+      const cache = createCache({
+        groups: [runGroup],
+      })
+
+      const run = createRun({
+        processedPaths: [runGroup.groupPath],
+      })
+
+      const result = extractData(cache, run)
 
       expect(result.outputData.presetFiles)
         .toEqual([presetData])
 
       expect(result.extractResult.omittedPresetFiles)
-        .toEqual([
-          '/components/Input/Input.module.css',
-        ])
+        .toEqual([])
     })
 
-    it('passes post data variables and assembled token variables to extension assembly', () => {
+    it('passes post data and assembled token variables to extension assembly', () => {
       const group = {
         groupPath: '/tokens/button',
       }
 
       const tokenData = {
+        groupPath: group.groupPath,
         name: 'button',
         tokens: [
           {
@@ -278,19 +383,27 @@ describe('[EMITTERS]', () => {
         .mockReturnValue({
           variables: [
             '--existing-color',
-          ],
+          ] as CssVarString[],
+          outputFile:
+            '/generated/metadata/extension.generated.jsonc',
         })
 
       vi.mocked(assembleLspData)
         .mockReturnValue({
           rgbVariables: [],
+          tokens: [],
+          outputFile:
+            '/generated/metadata/lsp.generated.ts',
         })
 
-      extractData({
-        groups: [group as never],
-        postData: postData as never,
-        runGroups: [],
+      const cache = createCache({
+        groups: [group],
+        postData,
       })
+
+      const run = createRun()
+
+      extractData(cache, run)
 
       expect(assembleExtensionData)
         .toHaveBeenCalledWith(
@@ -299,10 +412,26 @@ describe('[EMITTERS]', () => {
             '--existing-radius',
           ],
           tokenData.tokens,
+          outPath,
         )
     })
 
-    it('passes all OKLCH variables to LSP assembly', () => {
+    it('passes all OKLCH variables and token data to LSP assembly', () => {
+      const group = {
+        groupPath: '/tokens/button',
+      }
+
+      const tokenData = {
+        groupPath: group.groupPath,
+        name: 'button',
+        tokens: [
+          {
+            infix: 'button',
+            variables: [],
+          },
+        ],
+      }
+
       const postData = [
         {
           oklchVariables: [
@@ -316,25 +445,42 @@ describe('[EMITTERS]', () => {
         },
       ]
 
+      vi.mocked(assembleTokenData)
+        .mockReturnValue(tokenData as never)
+
       vi.mocked(assembleExtensionData)
-        .mockReturnValue({ variables: [] })
+        .mockReturnValue({
+          variables: [],
+          outputFile:
+            '/generated/metadata/extension.generated.jsonc',
+        })
 
       vi.mocked(assembleLspData)
         .mockReturnValue({
           rgbVariables: [],
+          tokens: [],
+          outputFile:
+            '/generated/metadata/lsp.generated.ts',
         })
 
-      extractData({
-        groups: [],
-        postData: postData as never,
-        runGroups: [],
+      const cache = createCache({
+        groups: [group],
+        postData,
       })
 
+      const run = createRun()
+
+      extractData(cache, run)
+
       expect(assembleLspData)
-        .toHaveBeenCalledWith([
-          ['--button-color', 'oklch(70% 0.2 30)'],
-          ['--button-bg', 'oklch(80% 0.1 120)'],
-        ])
+        .toHaveBeenCalledWith(
+          [
+            ['--button-color', 'oklch(70% 0.2 30)'],
+            ['--button-bg', 'oklch(80% 0.1 120)'],
+          ],
+          tokenData.tokens,
+          outPath,
+        )
     })
 
     it('returns assembled extension and LSP data', () => {
@@ -342,12 +488,17 @@ describe('[EMITTERS]', () => {
         variables: [
           '--button-color',
         ] as CssVarString[],
+        outputFile:
+          '/generated/metadata/extension.generated.jsonc',
       }
 
       const lspData = {
         rgbVariables: [
           '--button-color: rgb(100% 0% 0%)',
         ],
+        tokens: [],
+        outputFile:
+          '/generated/metadata/lsp.generated.ts',
       }
 
       vi.mocked(assembleExtensionData)
@@ -356,11 +507,10 @@ describe('[EMITTERS]', () => {
       vi.mocked(assembleLspData)
         .mockReturnValue(lspData)
 
-      const result = extractData({
-        groups: [],
-        postData: [],
-        runGroups: [],
-      })
+      const cache = createCache()
+      const run = createRun()
+
+      const result = extractData(cache, run)
 
       expect(result.outputData.extensionData)
         .toBe(extensionData)
@@ -369,9 +519,10 @@ describe('[EMITTERS]', () => {
         .toBe(lspData)
     })
 
-    it('assembles token data from groups independently of run groups', () => {
+    it('assembles token data for all groups, while only emitting processed token files', () => {
       const group = {
         groupPath: '/tokens/button',
+        cssPath: '/components/Button/Button.module.css',
         cssData: {},
       }
 
@@ -382,42 +533,67 @@ describe('[EMITTERS]', () => {
       }
 
       const groupTokenData = {
+        groupPath: group.groupPath,
         name: 'button',
         tokens: [],
       }
 
       const runTokenData = {
+        groupPath: runGroup.groupPath,
         name: 'input',
         tokens: [],
       }
 
       vi.mocked(assembleTokenData)
-        .mockReturnValueOnce(runTokenData as never)
         .mockReturnValueOnce(groupTokenData as never)
+        .mockReturnValueOnce(runTokenData as never)
 
       vi.mocked(assemblePresetData)
         .mockReturnValue(null)
 
       vi.mocked(assembleExtensionData)
-        .mockReturnValue({ variables: [] })
+        .mockReturnValue({
+          variables: [],
+          outputFile:
+            '/generated/metadata/extension.generated.jsonc',
+        })
 
       vi.mocked(assembleLspData)
-        .mockReturnValue({ rgbVariables: [] })
+        .mockReturnValue({
+          rgbVariables: [],
+          tokens: [],
+          outputFile:
+            '/generated/metadata/lsp.generated.ts',
+        })
 
-      extractData({
-        groups: [group as never],
-        postData: [],
-        runGroups: [runGroup as never],
+      const cache = createCache({
+        groups: [group, runGroup],
       })
 
-      expect(assembleTokenData)
-        .toHaveBeenNthCalledWith(1, runGroup)
+      const run = createRun({
+        processedPaths: [runGroup.groupPath],
+      })
+
+      const result = extractData(cache, run)
 
       expect(assembleTokenData)
-        .toHaveBeenNthCalledWith(2, group)
+        .toHaveBeenNthCalledWith(1, group, outPath)
+
+      expect(assembleTokenData)
+        .toHaveBeenNthCalledWith(2, runGroup, outPath)
+
+      expect(result.outputData.tokenFiles)
+        .toEqual([runTokenData])
 
       expect(assembleExtensionData)
-        .toHaveBeenCalledWith([], groupTokenData.tokens)
+        .toHaveBeenCalledWith(
+          [],
+          [
+            ...groupTokenData.tokens,
+            ...runTokenData.tokens,
+          ],
+          outPath,
+        )
     })
   })
 })

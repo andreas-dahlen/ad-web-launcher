@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest'
 
 import { fileSection } from '../../../../diagnostics/report/sections/fileSection.js'
 
-vi.mock('@styleTokens/utils/string', () => ({
+vi.mock('../../../../utils/string.js', () => ({
   colors: {
     muted: 'muted',
     file: 'file',
@@ -53,9 +53,7 @@ describe('[DIAGNOSTICS]', () => {
         '/components/Button',
       ])
 
-      const entry = result?.entries[0]
-
-      expect(entry?.title).toContain(
+      expect(result?.entries[0].title).toContain(
         '/components/Button.module.css',
       )
     })

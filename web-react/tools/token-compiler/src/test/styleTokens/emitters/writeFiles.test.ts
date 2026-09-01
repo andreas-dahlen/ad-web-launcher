@@ -30,7 +30,7 @@ describe('[EMITTER]', () => {
 
       const result = writeFiles([
         {
-          filePath,
+          outputFile: filePath,
           content: 'export const button = {}',
         },
       ])
@@ -55,7 +55,7 @@ describe('[EMITTER]', () => {
 
       const result = writeFiles([
         {
-          filePath,
+          outputFile: filePath,
           content: 'generated',
         },
       ])
@@ -82,7 +82,7 @@ describe('[EMITTER]', () => {
 
       const result = writeFiles([
         {
-          filePath,
+          outputFile: filePath,
           content,
         },
       ])
@@ -108,7 +108,7 @@ describe('[EMITTER]', () => {
 
       const result = writeFiles([
         {
-          filePath,
+          outputFile: filePath,
           content: 'export const button = "new"',
         },
       ])
@@ -151,15 +151,15 @@ describe('[EMITTER]', () => {
 
       const result = writeFiles([
         {
-          filePath: newPath,
+          outputFile: newPath,
           content: 'new',
         },
         {
-          filePath: skippedPath,
+          outputFile: skippedPath,
           content: 'same',
         },
         {
-          filePath: updatedPath,
+          outputFile: updatedPath,
           content: 'new',
         },
       ])

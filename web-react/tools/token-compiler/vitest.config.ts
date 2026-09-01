@@ -7,7 +7,7 @@ export default defineConfig({
     environment: 'node',
 
     include: [
-      'src/test/styleTokens/**/*.ts',
+      'src/test/styleTokens/**/*.test.ts',
     ],
 
     setupFiles: [
@@ -15,9 +15,13 @@ export default defineConfig({
     ],
     coverage: {
       provider: 'v8',
+      include: [
+        'src/**/*.ts'
+      ],
       exclude: [
         'src/test/**',
         '**/*.css',
+        '**/*.types.ts'
       ],
     },
 

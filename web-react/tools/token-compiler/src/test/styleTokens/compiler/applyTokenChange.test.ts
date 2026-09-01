@@ -12,7 +12,15 @@ import {
   createCssTokenGroup,
 } from '../compiler.factory.js'
 
+import type { CompilerConfig } from '../../../types/run.types.js'
 import type { Issue } from '../../../types/issueCollector.types.js'
+
+const config: CompilerConfig = {
+  rootDir: '/project',
+  tokenPath: '/project/tokens',
+  outPath: '/project/output',
+  mute: false,
+}
 
 describe('[COMPILER]', () => {
   describe('applyTokenChange', () => {
@@ -35,7 +43,7 @@ describe('[COMPILER]', () => {
           issues: [],
         })
 
-      const cache = createTokenCache([])
+      const cache = createTokenCache([], config)
 
       const result = applyTokenChange({
         tokenPath,
@@ -70,7 +78,7 @@ describe('[COMPILER]', () => {
           issues: [],
         })
 
-      const cache = createTokenCache([])
+      const cache = createTokenCache([], config)
 
       const result = applyTokenChange({
         tokenPath,
@@ -107,7 +115,7 @@ describe('[COMPILER]', () => {
           issues: [],
         })
 
-      const cache = createTokenCache([staleGroup])
+      const cache = createTokenCache([staleGroup], config)
 
       const result = applyTokenChange({
         tokenPath,
@@ -119,6 +127,37 @@ describe('[COMPILER]', () => {
 
       expect(result.group.cssPath)
         .toBe('/css/OldButton.module.css')
+    })
+
+    it('uses the cache root directory when resolving the css path', () => {
+      const tokenPath = '/tokens/button/default.jsonc'
+
+      const findCssModulePath = vi.spyOn(
+        findCssModulePathModule,
+        'findCssModulePath',
+      ).mockReturnValue(undefined)
+
+      vi.spyOn(findTokenPathsModule, 'findTokenPaths')
+        .mockReturnValue([tokenPath])
+
+      vi.spyOn(processTokenModule, 'processToken')
+        .mockReturnValue({
+          token: createCompilerToken({ tokenPath }),
+          issues: [],
+        })
+
+      const cache = createTokenCache([], config)
+
+      applyTokenChange({
+        tokenPath,
+        cache,
+      })
+
+      expect(findCssModulePath)
+        .toHaveBeenCalledWith(
+          config.rootDir,
+          '/tokens/button',
+        )
     })
 
     it('removes the stale group from the cache', () => {
@@ -148,7 +187,7 @@ describe('[COMPILER]', () => {
           issues: [],
         })
 
-      const cache = createTokenCache([staleGroup])
+      const cache = createTokenCache([staleGroup], config)
 
       const result = applyTokenChange({
         tokenPath,
@@ -200,7 +239,7 @@ describe('[COMPILER]', () => {
           issues: [],
         })
 
-      const cache = createTokenCache([])
+      const cache = createTokenCache([], config)
 
       applyTokenChange({
         tokenPath: changedTokenPath,
@@ -247,7 +286,7 @@ describe('[COMPILER]', () => {
           issues: [],
         })
 
-      const cache = createTokenCache([])
+      const cache = createTokenCache([], config)
 
       const result = applyTokenChange({
         tokenPath: firstToken.tokenPath,
@@ -312,7 +351,7 @@ describe('[COMPILER]', () => {
           ],
         })
 
-      const cache = createTokenCache([])
+      const cache = createTokenCache([], config)
 
       const result = applyTokenChange({
         tokenPath: firstToken.tokenPath,
@@ -350,7 +389,7 @@ describe('[COMPILER]', () => {
           issues: [],
         })
 
-      const cache = createTokenCache([])
+      const cache = createTokenCache([], config)
 
       const result = applyTokenChange({
         tokenPath,

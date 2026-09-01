@@ -31,6 +31,10 @@ doctor-all:
 install:
     npm install
 
+install-all:
+    ./scripts/run-cmd.sh install
+    ./scripts/run-cmd.sh install-scripts ls
+
 update-all:
     ./scripts/run-cmd.sh update
     ./scripts/run-cmd.sh install-scripts ls
@@ -59,7 +63,7 @@ test *args:
     if [ -z "{{ args }}" ]; then \
         npm run test; \
     else \
-        npm run test -- "src/test/{{ args }}"; \
+        ./scripts/test-project.sh "{{ args }}"; \
     fi
 
 test-all *args:
@@ -69,7 +73,7 @@ coverage *args:
     if [ -z "{{ args }}" ]; then \
         npm run coverage; \
     else \
-        npm run coverage -- "src/test/{{ args }}"; \
+        npm run coverage -- "{{ args }}"; \
     fi
 
 coverage-open:
@@ -79,26 +83,39 @@ lint *args:
     if [ -z "{{ args }}" ]; then \
         npm run lint; \
     else \
-        npx oxlint {{ args }} && npx eslint {{ args }}; \
+        ./scripts/lint.sh {{ args }}; \
     fi
 
-eslint:
-    npm run eslint
+stylelint *args:
+    if [ -z "{{ args }}" ]; then \
+        npm run stylelint; \
+    else \
+        npx stylelint {{ args }}; \
+    fi
 
-oxlint:
-    npm run oxlint
+eslint *args:
+    npx eslint {{ args }}
+
+oxlint *args:
+    npx oxlint {{ args }}
+
+style: stylelint
+
+ox: oxlint
+
+es: eslint
 
 knip *args:
-    npm run knip -- --no-exit-code {{ args }}
+    npm run knip -- {{ args }}
 
 knip-all *args:
-    ./scripts/run-script.sh knip --no-exit-code {{ args }}
+    ./scripts/knip-all.sh {{ args }}
 
 # chmod +x scripts/index.sh <- an example for enabling a script
 
 # ============== STYLE TOKENS LOG ==================
 
-# CURRENTLY DEAD.... but needs to be implemented
+# CURRENTLY DEAD.... but needs to be implemented NO EMIT MODE
 # tokens *args:
 #     if [ -z "{{ args }}" ]; then \
 #         npx tsx src/styleTokens/compiler/dryLogCompiler.ts; \
@@ -140,6 +157,10 @@ open-new:
 check-ts-v:
     npm view typescript-eslint@latest peerDependencies
     npm view @typescript-eslint/parser@latest peerDependencies
+
+check-deps *args:
+    scripts/dependencies.sh {{ args }}
+
     
 # ==================== HELP ====================
 

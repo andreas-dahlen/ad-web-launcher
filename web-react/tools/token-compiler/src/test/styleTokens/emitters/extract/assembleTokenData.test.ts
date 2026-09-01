@@ -32,6 +32,8 @@ function createGroup(
   }
 }
 
+const outPath = '/generated'
+
 describe('[EMITTERS]', () => {
   describe('assembleTokenData', () => {
     it('builds names from the group name', () => {
@@ -39,6 +41,7 @@ describe('[EMITTERS]', () => {
         createGroup({
           groupPath: '/tokens/button',
         }),
+        outPath,
       )
 
       expect(result).toMatchObject({
@@ -53,10 +56,11 @@ describe('[EMITTERS]', () => {
         createGroup({
           groupPath: '/tokens/button',
         }),
+        outPath,
       )
 
-      expect(result.tokenFile).toContain(
-        '/src/shared/generated/tokenModules/button.token.ts',
+      expect(result.outputFile).toBe(
+        '/generated/tokenModules/button.token.ts',
       )
     })
 
@@ -65,6 +69,7 @@ describe('[EMITTERS]', () => {
         createGroup({
           groupPath: '/styleTokens/components/button',
         }),
+        outPath,
       )
 
       expect(result.name).toBe('button')
@@ -86,6 +91,7 @@ describe('[EMITTERS]', () => {
             }),
           ],
         }),
+        outPath,
       )
 
       expect(result.tokens).toEqual([
@@ -109,7 +115,7 @@ describe('[EMITTERS]', () => {
             createToken({
               vars: [
                 {
-                  name: "buttonColor",
+                  name: 'buttonColor',
                   cssName: 'button-color',
                   key: 'color',
                   effectiveAllowed: allowed,
@@ -122,6 +128,7 @@ describe('[EMITTERS]', () => {
             }),
           ],
         }),
+        outPath,
       )
 
       expect(result.tokens).toEqual([
@@ -150,7 +157,7 @@ describe('[EMITTERS]', () => {
               infix: 'button',
               vars: [
                 {
-                  name: "buttonColor",
+                  name: 'buttonColor',
                   cssName: 'button-color',
                   key: 'color',
                   effectiveAllowed: ['o'] as ValidPrefix[],
@@ -164,7 +171,7 @@ describe('[EMITTERS]', () => {
               infix: 'button_hover',
               vars: [
                 {
-                  name: "buttonColor",
+                  name: 'buttonColor',
                   cssName: 'button-hover-color',
                   key: 'color',
                   effectiveAllowed: ['s'] as ValidPrefix[],
@@ -176,6 +183,7 @@ describe('[EMITTERS]', () => {
             }),
           ],
         }),
+        outPath,
       )
 
       expect(result.tokens).toEqual([
@@ -213,6 +221,7 @@ describe('[EMITTERS]', () => {
         createGroup({
           tokens: [],
         }),
+        outPath,
       )
 
       expect(result.tokens).toEqual([])
@@ -224,7 +233,7 @@ describe('[EMITTERS]', () => {
           createToken({
             vars: [
               {
-                name: "buttonColor",
+                name: 'buttonColor',
                 cssName: 'button-color',
                 key: 'color',
                 effectiveAllowed: ['o'] as ValidPrefix[],
@@ -239,9 +248,20 @@ describe('[EMITTERS]', () => {
 
       const originalGroup = structuredClone(group)
 
-      assembleTokenData(group)
+      assembleTokenData(group, outPath)
 
       expect(group).toEqual(originalGroup)
+    })
+
+    it('creates the token output path', () => {
+      const result = assembleTokenData(
+        createGroup(),
+        outPath,
+      )
+
+      expect(result.outputFile).toBe(
+        '/generated/tokenModules/button.token.ts',
+      )
     })
   })
 })

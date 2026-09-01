@@ -1,31 +1,23 @@
 import { describe, expect, it } from 'vitest'
 
 import { formatLspFile } from '../../../../emitters/generate/format/formatLspFile.js'
-import type { TokenGroupData } from '../../../../emitters/extract/assemblers/assembleTokenData.js'
+import type { TokenData } from '../../../../emitters/extract/assemblers/assembleTokenData.js'
 import type { LspData } from '../../../../emitters/extract/assemblers/assembleLspData.js'
 
-function createTokenGroup(
-  overrides: Partial<TokenGroupData> = {},
-): TokenGroupData {
+function createTokenData(
+  overrides: Partial<TokenData> = {},
+): TokenData {
   return {
-    name: 'button',
-    styleName: 'buttonStyle',
-    typeName: 'ButtonStyle',
-    tokenFile: '/generated/tokenModules/button.token.ts',
-    tokens: [
+    infix: 'button',
+    variables: [
       {
-        infix: 'button',
-        variables: [
-          {
-            key: 'color',
-            cssName: 'color',
-            allowed: ['p', 'f'],
-            values: {
-              p: '#ff0000',
-              f: '#000000',
-            },
-          },
-        ],
+        key: 'color',
+        cssName: 'color',
+        allowed: ['p', 'f'],
+        values: {
+          p: '#ff0000',
+          f: '#000000',
+        },
       },
     ],
     ...overrides,
@@ -37,6 +29,9 @@ function createLspData(
 ): LspData {
   return {
     rgbVariables: [],
+    tokens: [],
+    outputFile:
+      '/generated/metadata/lsp.generated.ts',
     ...overrides,
   }
 }
@@ -44,15 +39,18 @@ function createLspData(
 describe('[EMITTER]', () => {
   describe('formatLspFile', () => {
     it('returns the generated metadata file path', () => {
-      const result = formatLspFile([], createLspData())
+      const data = createLspData()
 
-      expect(result.filePath).toContain(
-        '/src/shared/generated/metadata/cssVariables.generated.ts',
-      )
+      const result = formatLspFile(data)
+
+      expect(result.outputFile)
+        .toBe(data.outputFile)
     })
 
     it('emits the generated file header', () => {
-      const result = formatLspFile([], createLspData())
+      const result = formatLspFile(
+        createLspData(),
+      )
 
       expect(result.content).toContain(
         '// AUTO-GENERATED FILE.',
@@ -68,13 +66,10 @@ describe('[EMITTER]', () => {
     })
 
     it('emits a token variable with its allowed value chain', () => {
-      const [group] = [
-        createTokenGroup(),
-      ]
-
       const result = formatLspFile(
-        [group],
-        createLspData(),
+        createLspData({
+          tokens: [createTokenData()],
+        }),
       )
 
       expect(result.content).toContain(
@@ -88,8 +83,9 @@ describe('[EMITTER]', () => {
 
     it('emits defined prefix variables with their values', () => {
       const result = formatLspFile(
-        [createTokenGroup()],
-        createLspData(),
+        createLspData({
+          tokens: [createTokenData()],
+        }),
       )
 
       expect(result.content).toContain(
@@ -103,26 +99,22 @@ describe('[EMITTER]', () => {
 
     it('emits prefixes without values in the chain', () => {
       const result = formatLspFile(
-        [
-          createTokenGroup({
-            tokens: [
-              {
-                infix: 'button',
-                variables: [
-                  {
-                    key: 'color',
-                    cssName: 'color',
-                    allowed: ['p', 'f'],
-                    values: {
-                      p: '#ff0000',
-                    },
+        createLspData({
+          tokens: [
+            createTokenData({
+              variables: [
+                {
+                  key: 'color',
+                  cssName: 'color',
+                  allowed: ['p', 'f'],
+                  values: {
+                    p: '#ff0000',
                   },
-                ],
-              },
-            ],
-          }),
-        ],
-        createLspData(),
+                },
+              ],
+            }),
+          ],
+        }),
       )
 
       expect(result.content).toContain(
@@ -134,78 +126,49 @@ describe('[EMITTER]', () => {
       )
     })
 
-    it('uses the group name when the token infix matches it', () => {
+    it('uses the token infix as the block name', () => {
       const result = formatLspFile(
-        [
-          createTokenGroup({
-            name: 'button',
-            tokens: [
-              {
-                infix: 'button',
-                variables: [],
-              },
-            ],
-          }),
-        ],
-        createLspData(),
+        createLspData({
+          tokens: [
+            createTokenData({
+              infix: 'hover',
+              variables: [],
+            }),
+          ],
+        }),
       )
 
       expect(result.content).toContain(
-        '//button {',
-      )
-    })
-
-    it('includes the token infix in the block name when it differs from the group name', () => {
-      const result = formatLspFile(
-        [
-          createTokenGroup({
-            name: 'button',
-            tokens: [
-              {
-                infix: 'hover',
-                variables: [],
-              },
-            ],
-          }),
-        ],
-        createLspData(),
-      )
-
-      expect(result.content).toContain(
-        '//button-hover {',
+        '//hover {',
       )
     })
 
     it('emits multiple token variables', () => {
       const result = formatLspFile(
-        [
-          createTokenGroup({
-            tokens: [
-              {
-                infix: 'button',
-                variables: [
-                  {
-                    key: 'background',
-                    cssName: 'background',
-                    allowed: ['p'],
-                    values: {
-                      p: '#fff',
-                    },
+        createLspData({
+          tokens: [
+            createTokenData({
+              variables: [
+                {
+                  key: 'background',
+                  cssName: 'background',
+                  allowed: ['p'],
+                  values: {
+                    p: '#fff',
                   },
-                  {
-                    key: 'color',
-                    cssName: 'color',
-                    allowed: ['f'],
-                    values: {
-                      f: '#000',
-                    },
+                },
+                {
+                  key: 'color',
+                  cssName: 'color',
+                  allowed: ['f'],
+                  values: {
+                    f: '#000',
                   },
-                ],
-              },
-            ],
-          }),
-        ],
-        createLspData(),
+                },
+              ],
+            }),
+          ],
+        }),
       )
 
       expect(result.content).toContain(
@@ -219,7 +182,6 @@ describe('[EMITTER]', () => {
 
     it('emits LSP RGB variables in the root block', () => {
       const result = formatLspFile(
-        [],
         createLspData({
           rgbVariables: [
             '--button-color: rgb(100% 0% 0%)',
@@ -243,7 +205,6 @@ describe('[EMITTER]', () => {
 
     it('emits empty token and root collections', () => {
       const result = formatLspFile(
-        [],
         createLspData(),
       )
 

@@ -1,4 +1,4 @@
-export const appBoundaryElements = [
+const appBoundaryElements = [
   { type: 'api', pattern: 'src/api/**/*' },
   { type: 'app', pattern: 'src/app/*/**', capture: ['mod'] },
   { type: 'blocks', pattern: 'src/blocks/**/*' },
@@ -13,7 +13,7 @@ export const appBoundaryElements = [
   { type: 'styleTokens', pattern: 'src/styleTokens/*/**', capture: ['mod'] },
 ]
 
-export const compilerBoundaryElements = [
+const compilerBoundaryElements = [
   { type: 'compiler', pattern: 'tools/token-compiler/src/compiler/*/**', capture: ['mod'] },
   { type: 'diagnostics', pattern: 'tools/token-compiler/src/diagnostics/*/**', capture: ['mod'] },
   { type: 'emitters', pattern: 'tools/token-compiler/src/emitters/*/**', capture: ['mod'] },

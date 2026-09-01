@@ -1,5 +1,5 @@
 import type { CssVarString } from '../../oldSharedUtils/oldSharedCompiler.types.js';
-import type { PostData } from '../processPost.js';
+import type { PostData } from '../../types/compiler.types.js';
 import { assert } from '../../utils/assertions.js';
 import type { Root } from 'postcss';
 

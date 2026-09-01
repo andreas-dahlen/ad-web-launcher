@@ -4,7 +4,8 @@ import { issuesSection } from '../../../../diagnostics/report/sections/issuesSec
 import type { AnalyzedIssueGroup } from '../../../../types/diagnostics.types.js'
 
 vi.mock(
-  '@styleTokens/utils/string', () => ({
+  '../../../../utils/string.js',
+  () => ({
     colors: {
       subHeading: 'subHeading',
       value: 'value',

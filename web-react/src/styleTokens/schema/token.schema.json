@@ -64,8 +64,7 @@
             "m": { "type": "string" },
             "p": { "type": "string" },
             "t": { "type": "string" },
-            "f": { "type": "string" },
-            "i": { "type": "string" }
+            "f": { "type": "string" }
           },
           "additionalProperties": false
         }

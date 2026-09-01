@@ -4,15 +4,18 @@ import { boundarySettings } from './tools/lint/config/boundaries/settings.ts'
 import { appBoundaries, compilerBoundaries } from './tools/lint/config/boundaries/wrappers/oxlint.ts'
 import { ignores } from './tools/lint/config/globalIgnores.ts'
 import { unusedVars } from './tools/lint/config/oxlint/unusedVars.ts'
+import { jsPlugins } from './tools/lint/config/oxlint/plugins.ts'
 
 export default defineConfig({
   ignorePatterns: ignores,
-  jsPlugins: [
-    {
-      name: 'boundaries',
-      specifier: 'eslint-plugin-boundaries',
-    }
-  ],
+  // jsPlugins: [
+  //   {
+  //     name: 'boundaries',
+  //     specifier: 'eslint-plugin-boundaries',
+  //   }
+  // ],
+
+  jsPlugins,
 
   settings: boundarySettings,
 

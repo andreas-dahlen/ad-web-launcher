@@ -1,6 +1,5 @@
 import { describe, expect, it } from 'vitest'
 
-
 import type { GroupMetadata } from '../../../../emitters/extract/assemblers/assembleMetadata.js'
 import { formatPathPatches } from '../../../../emitters/generate/format/formatPathPatches.js'
 
@@ -15,12 +14,13 @@ function createGroup(
       '/tokens/button/hover.jsonc',
     ],
     cssFile: '/components/Button/Button.module.css',
+    outputFile: '/generated/metadata/metadata.generated.json',
     ...overrides,
   }
 }
 
 describe('[EMITTER]', () => {
-  describe('formatTokenPatch', () => {
+  describe('formatPathPatches', () => {
     it('returns no patches when there is no metadata', () => {
       expect(formatPathPatches([])).toEqual([])
     })
@@ -33,7 +33,7 @@ describe('[EMITTER]', () => {
       ])
 
       expect(result).toEqual({
-        filePath: '/tokens/button/default.jsonc',
+        outputFile: '/tokens/button/default.jsonc',
         content:
           '// file://wsl.localhost/Ubuntu/components/Button/Button.module.css',
       })
@@ -41,20 +41,15 @@ describe('[EMITTER]', () => {
 
     it('creates a CSS patch containing all token files', () => {
       const results = formatPathPatches([
-        createGroup({
-          tokenFiles: [
-            '/tokens/button/default.jsonc',
-            '/tokens/button/hover.jsonc',
-          ],
-        }),
+        createGroup(),
       ])
 
       const result = results.find(
-        file => file.filePath === '/components/Button/Button.module.css',
+        file => file.outputFile === '/components/Button/Button.module.css',
       )
 
       expect(result).toEqual({
-        filePath: '/components/Button/Button.module.css',
+        outputFile: '/components/Button/Button.module.css',
         content:
           '/* \n' +
           'file://wsl.localhost/Ubuntu/tokens/button/default.jsonc\n' +
@@ -69,7 +64,7 @@ describe('[EMITTER]', () => {
       ])
 
       expect(
-        results.filter(file => file.filePath.endsWith('.jsonc')),
+        results.filter(file => file.outputFile.endsWith('.jsonc')),
       ).toHaveLength(2)
     })
 
@@ -85,7 +80,7 @@ describe('[EMITTER]', () => {
       ])
 
       expect(
-        results.map(file => file.filePath),
+        results.map(file => file.outputFile),
       ).toEqual([
         '/tokens/button/default.jsonc',
         '/components/Button/Button.module.css',
@@ -101,13 +96,13 @@ describe('[EMITTER]', () => {
 
       expect(
         results.some(
-          file => file.filePath === '/components/Button/Button.module',
+          file => file.outputFile === '/components/Button/Button.module',
         ),
       ).toBe(false)
 
       expect(
         results.some(
-          file => file.filePath === '/tokens/button/default.jsonc',
+          file => file.outputFile === '/tokens/button/default.jsonc',
         ),
       ).toBe(true)
     })
@@ -125,7 +120,7 @@ describe('[EMITTER]', () => {
         }),
       ])
 
-      expect(results.map(file => file.filePath)).toEqual([
+      expect(results.map(file => file.outputFile)).toEqual([
         '/tokens/button/default.jsonc',
         '/tokens/button/hover.jsonc',
         '/components/Button/Button.module.css',

@@ -14,7 +14,7 @@ file://wsl.localhost/Ubuntu/home/david/repos/ad-web-launcher/web-react/src/style
   min-height: var(--final-scroll-height);
   min-width: var(--final-scroll-width);
   opacity: var(--final-scroll-opacity);
-  background: linear-gradient(to bottom, rgb(0, 0, 0), rgb(255, 255, 255));
+  background: linear-gradient(to bottom, rgb(0 0 0), rgb(255 255 255));
 
 }
 

@@ -19,6 +19,8 @@ function createCssData(
   }
 }
 
+const outDir = '/generated'
+
 describe('[EMITTERS]', () => {
   describe('assemblePresetData', () => {
     it('builds preset names from the group name', () => {
@@ -26,6 +28,7 @@ describe('[EMITTERS]', () => {
         createCssData({
           groupPath: '/tokens/button',
         }),
+        outDir,
       )
 
       expect(result).toMatchObject({
@@ -39,16 +42,18 @@ describe('[EMITTERS]', () => {
         createCssData({
           groupPath: '/tokens/button',
         }),
+        outDir,
       )
 
-      expect(result?.presetFile).toContain(
-        '/src/shared/generated/presets/button.preset.ts',
+      expect(result?.outputFile).toBe(
+        '/generated/presets/button.preset.ts',
       )
     })
 
     it('creates a relative CSS import path', () => {
-      const generatedDir = path.resolve(
-        './src/shared/generated/presets',
+      const generatedDir = path.join(
+        outDir,
+        'presets',
       )
 
       const cssPath = path.resolve(
@@ -57,6 +62,7 @@ describe('[EMITTERS]', () => {
 
       const result = assemblePresetData(
         createCssData({ cssPath }),
+        outDir,
       )
 
       expect(result?.cssImport).toBe(
@@ -69,6 +75,7 @@ describe('[EMITTERS]', () => {
         createCssData({
           cssPath: String.raw`C:\project\src\components\Button\Button.module.css`,
         }),
+        outDir,
       )
 
       expect(result?.cssImport).not.toContain('\\')
@@ -85,6 +92,7 @@ describe('[EMITTERS]', () => {
             'focusUtil',
           ],
         }),
+        outDir,
       )
 
       expect(result?.selectors).toEqual([
@@ -103,6 +111,7 @@ describe('[EMITTERS]', () => {
             'debugUtil',
           ],
         }),
+        outDir,
       )
 
       expect(result).toBeNull()
@@ -113,6 +122,7 @@ describe('[EMITTERS]', () => {
         createCssData({
           cssPath: '/components/Layout/Layout.module.css',
         }),
+        outDir,
       )
 
       expect(result?.cssImport).toContain(

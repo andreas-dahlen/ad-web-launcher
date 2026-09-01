@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { selectorSection } from '../../../../diagnostics/report/sections/selectorSection.js'
 import type { UnusableSelector } from '../../../../types/diagnostics.types.js'
 
-vi.mock('@styleTokens/utils/string', () => ({
+vi.mock('../../../../utils/string', () => ({
   colors: {
     subHeading: 'subHeading',
     value: 'value',

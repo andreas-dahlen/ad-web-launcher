@@ -1,12 +1,7 @@
 import { walkProject } from './resolvers/walkProject.js';
-import type { CssVarString } from '../oldSharedUtils/oldSharedCompiler.types.js';
 import type { Root } from 'postcss';
+import type { PostData } from '../types/compiler.types.js';
 
-export type PostData = {
-  cssPath: string;
-  variables: CssVarString[];
-  oklchVariables: Array<[CssVarString, string]>;
-};
 
 export function processPost({
   root,

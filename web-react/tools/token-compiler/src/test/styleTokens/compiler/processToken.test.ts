@@ -42,7 +42,7 @@ describe('[COMPILER]', () => {
         infix: 'button',
       });
 
-      expect(result.token.vars).toHaveLength(1);
+      expect(result.token?.vars).toHaveLength(1);
     });
 
     it('uses component as infix when infix is missing', () => {
@@ -55,8 +55,8 @@ describe('[COMPILER]', () => {
 
       const result = processToken(path);
 
-      expect(result.token.name).toBe('button');
-      expect(result.token.infix).toBe('button');
+      expect(result.token?.name).toBe('button');
+      expect(result.token?.infix).toBe('button');
     });
 
     it('uses provided infix instead of component', () => {
@@ -93,26 +93,51 @@ describe('[COMPILER]', () => {
 
       const result = processToken(path);
 
-      expect(result.token.vars).toHaveLength(2);
+      expect(result.token?.vars).toHaveLength(2);
 
       expect(
-        result.token.vars.map(variable => variable.name)
+        result.token?.vars.map(variable => variable.name)
       ).toEqual([
         'color',
         'background',
       ]);
     });
 
-    it('throws when token structure is invalid', () => {
-      const path = createTokenFile(`
+    it('throws when the component identifier is empty', () => {
+      const filePath = createTokenFile(`
     {
       "component": "",
       "vars": {}
     }
-  `);
+  `)
 
-      expect(() => processToken(path))
-        .toThrow('component');
+      expect(() => processToken(filePath))
+        .toThrow('Identifier was empty after parsing')
+    })
+    it('returns an issue when the token file is invalid', () => {
+      const filePath = createTokenFile(`
+    {
+      "component": "button",
+  `)
+
+      const result = processToken(filePath)
+
+      expect(result.token).toBeUndefined()
+
+      expect(result.issues).toEqual([
+        expect.objectContaining({
+          subject: 'Token File',
+          issues: [
+            expect.objectContaining({
+              // eslint-disable-next-line unicorn/max-nested-calls
+              reason: expect.stringContaining('Invalid JSON'),
+              path: filePath,
+              value: filePath,
+              context: 'file',
+            }),
+          ],
+        }),
+      ])
     })
   })
 })

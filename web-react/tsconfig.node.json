@@ -32,8 +32,5 @@
     "oxlint.config.ts",
     "tools/lint/**/*.ts",
     "tools/plugins/**/*.ts"
-  ],
-  "exclude": [
-    // "tools"
   ]
 }

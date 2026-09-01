@@ -2,7 +2,8 @@ import { describe, expect, it, vi } from 'vitest'
 
 import { invalidVarSection } from '../../../../diagnostics/report/sections/invalidVarSection.js'
 import type { InvalidVarDeclaration } from '../../../../types/diagnostics.types.js'
-vi.mock('@styleTokens/utils/string', () => ({
+
+vi.mock('../../../../utils/string.js', () => ({
   colors: {
     error: 'error',
     value: 'value',
@@ -76,8 +77,8 @@ describe('[DIAGNOSTICS]', () => {
             '--s-button-background',
             '--p-button-background',
             '--f-button-background',
-          ],
-        }),
+          ]
+        })
       ])
 
       const lines = result?.entries[0].lines ?? []
@@ -92,10 +93,12 @@ describe('[DIAGNOSTICS]', () => {
       const invalid = [
         '--s-button-background',
         '--p-button-background',
-      ]
+      ] satisfies InvalidVarDeclaration['invalid']
 
       const result = invalidVarSection([
-        createInvalidVariable({ invalid } as unknown as Partial<InvalidVarDeclaration>),
+        createInvalidVariable({
+          invalid,
+        }),
       ])
 
       const lines = result?.entries[0].lines ?? []

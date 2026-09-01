@@ -11,27 +11,29 @@ import {
 import type { Issue } from '../../../types/issueCollector.types.js'
 
 vi.mock(
-  '@styleTokens/compiler/discovery/createModuleMap',
+  '../../../compiler/discovery/createModuleMap',
   () => ({
     createModuleMap: vi.fn(),
   })
 )
 
 vi.mock(
-  '@styleTokens/compiler/processing/processToken',
+  '../../../compiler/processing/processToken',
   () => ({
     processToken: vi.fn(),
   })
 )
 
 describe('[COMPILER]', () => {
+  const rootPath = '/project'
+
   describe('compileTokenGroups', () => {
     it('returns no groups or issues for an empty token list', () => {
       vi.mocked(createModuleMap).mockReturnValue(
         new Map()
       )
 
-      const result = compileTokenGroups([])
+      const result = compileTokenGroups(rootPath, [])
 
       expect(result).toEqual({
         groups: [],
@@ -74,7 +76,7 @@ describe('[COMPILER]', () => {
           issues: [],
         })
 
-      const result = compileTokenGroups([
+      const result = compileTokenGroups(rootPath, [
         firstPath,
         secondPath,
         sliderPath,
@@ -110,7 +112,7 @@ describe('[COMPILER]', () => {
         issues: [],
       })
 
-      const result = compileTokenGroups([
+      const result = compileTokenGroups(rootPath, [
         tokenPath,
       ])
 
@@ -132,22 +134,24 @@ describe('[COMPILER]', () => {
         new Map()
       )
 
-      vi.mocked(processToken)
-        .mockReturnValue({
-          token: createCompilerToken(),
-          issues: [],
-        })
+      vi.mocked(processToken).mockReturnValue({
+        token: createCompilerToken(),
+        issues: [],
+      })
 
-      compileTokenGroups([
+      compileTokenGroups(rootPath, [
         buttonDefault,
         buttonHover,
         sliderDefault,
       ])
 
-      expect(createModuleMap).toHaveBeenCalledWith([
-        '/tokens/button',
-        '/tokens/slider',
-      ])
+      expect(createModuleMap).toHaveBeenCalledWith(
+        rootPath,
+        [
+          '/tokens/button',
+          '/tokens/slider',
+        ],
+      )
     })
 
     it('processes every token path', () => {
@@ -160,13 +164,12 @@ describe('[COMPILER]', () => {
         new Map()
       )
 
-      vi.mocked(processToken)
-        .mockReturnValue({
-          token: createCompilerToken(),
-          issues: [],
-        })
+      vi.mocked(processToken).mockReturnValue({
+        token: createCompilerToken(),
+        issues: [],
+      })
 
-      compileTokenGroups(paths)
+      compileTokenGroups(rootPath, paths)
 
       expect(processToken).toHaveBeenCalledTimes(2)
       expect(processToken).toHaveBeenNthCalledWith(
@@ -207,7 +210,7 @@ describe('[COMPILER]', () => {
           issues: [],
         })
 
-      const result = compileTokenGroups([
+      const result = compileTokenGroups(rootPath, [
         buttonPath,
         sliderPath,
       ])
@@ -220,6 +223,28 @@ describe('[COMPILER]', () => {
         expect.objectContaining({
           groupPath: '/tokens/slider',
           tokens: [sliderToken],
+        }),
+      ])
+    })
+
+    it('does not attach a token when processing produces no token', () => {
+      const tokenPath = '/tokens/button/default.jsonc'
+
+      vi.mocked(createModuleMap).mockReturnValue(
+        new Map()
+      )
+
+      vi.mocked(processToken).mockReturnValue({
+        token: undefined,
+        issues: [],
+      })
+
+      const result = compileTokenGroups(rootPath, [tokenPath])
+
+      expect(result.groups).toEqual([
+        expect.objectContaining({
+          groupPath: '/tokens/button',
+          tokens: [],
         }),
       ])
     })
@@ -274,7 +299,7 @@ describe('[COMPILER]', () => {
           ],
         })
 
-      const result = compileTokenGroups([
+      const result = compileTokenGroups(rootPath, [
         firstPath,
         secondPath,
       ])
@@ -323,7 +348,7 @@ describe('[COMPILER]', () => {
           issues: [],
         })
 
-      const result = compileTokenGroups(paths)
+      const result = compileTokenGroups(rootPath, paths)
 
       expect(result.groups[0].tokens).toEqual(tokens)
     })

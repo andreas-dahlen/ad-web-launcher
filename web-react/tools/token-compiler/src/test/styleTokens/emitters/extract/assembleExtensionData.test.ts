@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
-import type { TokenData } from '../../../../emitters/extract/assemblers/assembleTokenData.js'
-import type { ValidPrefix } from '../../../../oldSharedUtils/oldSharedCompiler.types.js'
-import { assembleExtensionData } from '../../../../emitters/extract/assemblers/assembleExtensionData.js'
 
+import type { TokenData } from '../../../../emitters/extract/assemblers/assembleTokenData.js'
+import { assembleExtensionData } from '../../../../emitters/extract/assemblers/assembleExtensionData.js'
+import type { CssVarString, ValidPrefix } from '../../../../oldSharedUtils/oldSharedCompiler.types.js'
 
 function createToken(
   overrides: Partial<TokenData> = {},
@@ -21,6 +21,8 @@ function createToken(
   }
 }
 
+const outPath = '/generated'
+
 describe('[EMITTERS]', () => {
   describe('assembleExtensionData', () => {
     it('preserves existing variables', () => {
@@ -32,32 +34,29 @@ describe('[EMITTERS]', () => {
       const result = assembleExtensionData(
         allVariables,
         [],
+        outPath,
       )
 
-      expect(result).toEqual({
-        variables: allVariables,
-      })
+      expect(result.variables).toEqual(allVariables)
     })
 
     it('adds the final variable for each token variable', () => {
       const result = assembleExtensionData(
         [],
-        [
-          createToken(),
-        ],
+        [createToken()],
+        outPath,
       )
 
       expect(result.variables).toContain(
-        '--final-button-test-color'
+        '--final-button-test-color',
       )
     })
 
     it('adds variables for every allowed prefix', () => {
       const result = assembleExtensionData(
         [],
-        [
-          createToken(),
-        ],
+        [createToken()],
+        outPath,
       )
 
       expect(result.variables).toEqual([
@@ -94,6 +93,7 @@ describe('[EMITTERS]', () => {
             ],
           }),
         ],
+        outPath,
       )
 
       expect(result.variables).toEqual([
@@ -107,21 +107,20 @@ describe('[EMITTERS]', () => {
     it('deduplicates existing and generated variables', () => {
       const allVariables = [
         '--final-button-test-color',
-        '--existing-color'
+        '--existing-color',
       ] as CssVarString[]
 
       const result = assembleExtensionData(
         allVariables,
-        [
-          createToken(),
-        ],
+        [createToken()],
+        outPath,
       )
 
       expect(result.variables).toEqual([
         '--final-button-test-color',
         '--existing-color',
         '--o-button-test-color',
-        '--s-button-test-color'
+        '--s-button-test-color',
       ])
     })
 
@@ -140,6 +139,7 @@ describe('[EMITTERS]', () => {
             ],
           }),
         ],
+        outPath,
       )
 
       expect(result.variables).toEqual([
@@ -148,9 +148,25 @@ describe('[EMITTERS]', () => {
     })
 
     it('returns an empty collection when there are no variables', () => {
-      expect(assembleExtensionData([], [])).toEqual({
-        variables: [],
-      })
+      const result = assembleExtensionData(
+        [],
+        [],
+        outPath,
+      )
+
+      expect(result.variables).toEqual([])
+    })
+
+    it('creates the extension output path', () => {
+      const result = assembleExtensionData(
+        [],
+        [],
+        outPath,
+      )
+
+      expect(result.outputFile).toBe(
+        '/generated/metadata/extension.generated.jsonc',
+      )
     })
   })
 })

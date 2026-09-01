@@ -52,7 +52,7 @@ file://wsl.localhost/Ubuntu/home/david/repos/ad-web-launcher/web-react/src/style
   height: var(--final-track-cross-size);
 }
 
-&[data-axis="vertical"] .track {
+[data-axis="vertical"] .track {
   width: var(--final-track-cross-size);
   height: var(--final-track-main-size);
 }

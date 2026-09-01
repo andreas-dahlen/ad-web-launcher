@@ -5,7 +5,7 @@ file://wsl.localhost/Ubuntu/home/david/repos/ad-web-launcher/web-react/src/style
 .button {
 
   user-select: none;
-  -webkit-tap-highlight-color: transparent;
+  /* -webkit-tap-highlight-color: transparent; */
 
   position: var(--final-button-position);
   display: var(--final-button-display);

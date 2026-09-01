@@ -8,6 +8,10 @@ export default mergeConfig(
       reporters: ['verbose'],
       coverage: {
         provider: 'v8',
+        include: [
+          'src/**/*.ts',
+          'src/**/*.tsx'
+        ],
         exclude: [
           'src/test/**',
           '**/*.css'

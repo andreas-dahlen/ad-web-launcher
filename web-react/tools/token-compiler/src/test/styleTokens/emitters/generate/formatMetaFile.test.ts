@@ -14,21 +14,21 @@ function createGroup(
       '/tokens/button/hover.jsonc',
     ],
     cssFile: '/components/Button/Button.module.css',
+    outputFile:
+      '/generated/metadata/metadata.generated.json',
     ...overrides,
   }
 }
 
 describe('[EMITTER]', () => {
   describe('formatMetaFile', () => {
-    it('returns a metadata file', () => {
-      const result = formatMetaFile([])
+    it('returns the generated metadata file path', () => {
+      const group = createGroup()
 
-      expect(result).toBeDefined()
-      expect(result).toMatchObject({
-        filePath: expect.stringContaining(
-          'src/shared/generated/metadata/metadata.json',
-        ),
-      })
+      const result = formatMetaFile([group])
+
+      expect(result.outputFile)
+        .toBe(group.outputFile)
     })
 
     it('formats group metadata', () => {
@@ -110,15 +110,6 @@ describe('[EMITTER]', () => {
 
       expect(result.content).toContain('\n  "groups":')
       expect(result.content).toContain('\n  "files":')
-    })
-
-    it('returns valid JSON for no groups', () => {
-      const result = formatMetaFile([])
-
-      expect(JSON.parse(result.content)).toEqual({
-        groups: {},
-        files: {},
-      })
     })
   })
 })

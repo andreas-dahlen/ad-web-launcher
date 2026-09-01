@@ -7,10 +7,11 @@ function createTokenGroup(
   overrides: Partial<TokenGroupData> = {},
 ): TokenGroupData {
   return {
+    groupPath: '/tokens/button',
     name: 'button',
     styleName: 'buttonStyle',
     typeName: 'ButtonStyle',
-    tokenFile: '/generated/tokenModules/button.token.ts',
+    outputFile: '/generated/tokenModules/button.token.ts',
     tokens: [
       {
         infix: 'button',
@@ -19,13 +20,13 @@ function createTokenGroup(
             key: 'bg',
             cssName: 'back-ground',
             allowed: ['f'],
-            values: {}
+            values: {},
           },
           {
             key: 'color',
             cssName: 'color',
             allowed: ['p', 'f'],
-            values: {}
+            values: {},
           },
         ],
       },
@@ -33,6 +34,7 @@ function createTokenGroup(
     ...overrides,
   }
 }
+
 
 describe('[EMITTER]', () => {
   describe('formatTokenFiles', () => {
@@ -45,9 +47,9 @@ describe('[EMITTER]', () => {
         createTokenGroup(),
       ])
 
-      expect(result).toMatchObject({
-        filePath: '/generated/tokenModules/button.token.ts',
-      })
+      expect(result.outputFile).toBe(
+        '/generated/tokenModules/button.token.ts',
+      )
 
       expect(result.content).toContain(
         '// AUTO-GENERATED FILE.',
@@ -127,7 +129,7 @@ describe('[EMITTER]', () => {
                   key: 'bg',
                   cssName: 'back-ground',
                   allowed: ['f'],
-                  values: {}
+                  values: {},
                 },
               ],
             },
@@ -138,7 +140,7 @@ describe('[EMITTER]', () => {
                   key: 'bg',
                   cssName: 'back-ground',
                   allowed: ['s', 'f'],
-                  values: {}
+                  values: {},
                 },
               ],
             },
@@ -192,13 +194,13 @@ describe('[EMITTER]', () => {
           name: 'surface',
           styleName: 'surfaceStyle',
           typeName: 'SurfaceStyle',
-          tokenFile: '/generated/tokenModules/surface.token.ts',
+          outputFile: '/generated/tokenModules/surface.token.ts',
         }),
       ])
 
       expect(results).toHaveLength(2)
 
-      expect(results.map(result => result.filePath)).toEqual([
+      expect(results.map(result => result.outputFile)).toEqual([
         '/generated/tokenModules/button.token.ts',
         '/generated/tokenModules/surface.token.ts',
       ])

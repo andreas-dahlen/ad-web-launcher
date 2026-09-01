@@ -1,4 +1,4 @@
-export const appBoundaryFiles = [
+const appBoundaryFiles = [
   { pattern: '**/*.boundary.ts', category: 'boundary' },
   { pattern: 'src/app/*.{ts,tsx}', category: 'app-entry' },
 
@@ -14,7 +14,7 @@ export const appBoundaryFiles = [
   { pattern: 'src/styleTokens/tokens/**/*.{json,jsonc}', category: 'tokenData' },
 ]
 
-export const compilerBoundaryFiles = [
+const compilerBoundaryFiles = [
   { pattern: 'tools/token-compiler/**/*.boundary.ts', category: 'boundary' },
   { pattern: 'tools/token-compiler/**/*.types.ts', category: 'types' },
   { pattern: 'tools/token-compiler/**/compilerService.ts', category: 'compilerService' },

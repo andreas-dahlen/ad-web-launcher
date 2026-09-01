@@ -7,7 +7,7 @@ import { loadTokenFile } from '../../../compiler/loaders/loadTokenFile.js'
 
 function createTempDir() {
   return fs.mkdtempSync(
-    path.join(os.tmpdir(), 'token-load-test-')
+    path.join(os.tmpdir(), 'token-load-test-'),
   )
 }
 
@@ -28,7 +28,7 @@ function createFile(
 
 describe('[COMPILER]', () => {
   describe('loadTokenFile', () => {
-    it('loads and parses a token file', () => {
+    it('loads and validates a token file', () => {
       const dir = createTempDir()
       const filePath = path.join(
         dir,
@@ -38,21 +38,29 @@ describe('[COMPILER]', () => {
       createFile(
         filePath,
         `{
-          "background": {
-            "f": "black"
+          "component": "button",
+          "vars": {
+            "background": {
+              "values": {
+                "f": "black"
+              }
+            }
           }
         }`,
       )
 
       const result = loadTokenFile(filePath)
 
-      expect(result.fullPath).toBe(filePath)
-      expect(result.json).toEqual({
-        background: {
-          f: 'black',
+      expect(result).toEqual({
+        component: 'button',
+        vars: {
+          background: {
+            values: {
+              f: 'black',
+            },
+          },
         },
       })
-      expect(result.errors).toEqual([])
     })
 
     it('supports JSONC comments', () => {
@@ -65,25 +73,33 @@ describe('[COMPILER]', () => {
       createFile(
         filePath,
         `{
-          // Button background
-          "background": {
-            "f": "black"
+          // Button component
+          "component": "button",
+          "vars": {
+            // Button background
+            "background": {
+              "values": {
+                // Fallback value
+                "f": "black"
+              }
+            }
           }
         }`,
       )
 
-      const result = loadTokenFile(filePath)
-
-      expect(result.json).toEqual({
-        background: {
-          f: 'black',
+      expect(loadTokenFile(filePath)).toEqual({
+        component: 'button',
+        vars: {
+          background: {
+            values: {
+              f: 'black',
+            },
+          },
         },
       })
-
-      expect(result.errors).toEqual([])
     })
 
-    it('returns parse errors without throwing', () => {
+    it('throws when the file contains invalid JSON', () => {
       const dir = createTempDir()
       const filePath = path.join(
         dir,
@@ -93,15 +109,19 @@ describe('[COMPILER]', () => {
       createFile(
         filePath,
         `{
-          "background": {
-            "f": "black"
+          "component": "button",
+          "vars": {
+            "background": {
+              "values": {
+                "f": "black"
+              }
+            }
         `,
       )
 
-      const result = loadTokenFile(filePath)
-
-      expect(result.fullPath).toBe(filePath)
-      expect(result.errors.length).toBeGreaterThan(0)
+      expect(() =>
+        loadTokenFile(filePath),
+      ).toThrow(/Invalid JSON/)
     })
   })
 })

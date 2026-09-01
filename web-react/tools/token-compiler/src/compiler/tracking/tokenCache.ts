@@ -1,4 +1,4 @@
-import type { PostData } from '../../postCss/processPost.js';
+import type { PostData } from '../../types/compiler.types.js';
 import type { CssData, CssDataTokenGroup, CssTokenGroup, TokenGroup } from '../../types/compiler.types.js';
 import type { CompilerConfig, EmitConfig } from '../../types/run.types.js';
 import { assert } from '../../utils/assertions.js';

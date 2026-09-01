@@ -10,7 +10,7 @@ function createPreset(
     presetName: 'buttonPreset',
     typeName: 'ButtonPreset',
     cssImport: '../../../components/Button/Button.module.css',
-    presetFile: '/generated/presets/button.preset.ts',
+    outputFile: '/generated/presets/button.preset.ts',
     selectors: [
       'button',
       'active',
@@ -26,14 +26,20 @@ describe('[EMITTER]', () => {
       expect(formatPresetFiles([])).toEqual([])
     })
 
-    it('formats a preset file', () => {
+    it('forwards the output file path', () => {
       const [result] = formatPresetFiles([
         createPreset(),
       ])
 
-      expect(result).toMatchObject({
-        filePath: '/generated/presets/button.preset.ts',
-      })
+      expect(result.outputFile).toBe(
+        '/generated/presets/button.preset.ts',
+      )
+    })
+
+    it('formats a preset file', () => {
+      const [result] = formatPresetFiles([
+        createPreset(),
+      ])
 
       expect(result.content).toContain(
         '// AUTO-GENERATED FILE.',
@@ -103,18 +109,18 @@ describe('[EMITTER]', () => {
         createPreset({
           presetName: 'buttonPreset',
           typeName: 'ButtonPreset',
-          presetFile: '/generated/presets/button.preset.ts',
+          outputFile: '/generated/presets/button.preset.ts',
         }),
         createPreset({
           presetName: 'surfacePreset',
           typeName: 'SurfacePreset',
-          presetFile: '/generated/presets/surface.preset.ts',
+          outputFile: '/generated/presets/surface.preset.ts',
         }),
       ])
 
       expect(results).toHaveLength(2)
 
-      expect(results.map(result => result.filePath)).toEqual([
+      expect(results.map(result => result.outputFile)).toEqual([
         '/generated/presets/button.preset.ts',
         '/generated/presets/surface.preset.ts',
       ])

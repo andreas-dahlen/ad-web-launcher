@@ -93,7 +93,7 @@ describe('[DIAGNOSTICS]', () => {
       const cache = createCache()
       const run = createRun()
 
-      expect(buildData({ cache, run })).toEqual({
+      expect(buildData(cache, run)).toEqual({
         missingClasses: [],
         unusableSelectors: [],
         mismatchedVariables: [],
@@ -107,6 +107,18 @@ describe('[DIAGNOSTICS]', () => {
             skipped: [],
           },
           tokens: {
+            written: [],
+            skipped: [],
+          },
+          metadata: {
+            written: [],
+            skipped: [],
+          },
+          lsp: {
+            written: [],
+            skipped: [],
+          },
+          extension: {
             written: [],
             skipped: [],
           },
@@ -124,7 +136,7 @@ describe('[DIAGNOSTICS]', () => {
         ],
       })
 
-      buildData({ cache, run })
+      buildData(cache, run)
 
       expect(cache.getCssDataGroupsByPaths)
         .toHaveBeenCalledWith([
@@ -151,7 +163,7 @@ describe('[DIAGNOSTICS]', () => {
         ],
       })
 
-      const result = buildData({ cache, run })
+      const result = buildData(cache, run)
 
       expect(result.processedGroupCount).toBe(2)
     })
@@ -167,7 +179,7 @@ describe('[DIAGNOSTICS]', () => {
 
       const run = createRun()
 
-      const result = buildData({ cache, run })
+      const result = buildData(cache, run)
 
       expect(result.missingCssModules).toEqual([
         'button',
@@ -210,7 +222,7 @@ describe('[DIAGNOSTICS]', () => {
         ],
       })
 
-      const result = buildData({ cache, run })
+      const result = buildData(cache, run)
 
       expect(result.unusableSelectors).toEqual([
         {
@@ -260,7 +272,7 @@ describe('[DIAGNOSTICS]', () => {
         ],
       })
 
-      const result = buildData({ cache, run })
+      const result = buildData(cache, run)
 
       expect(result.processedGroupCount).toBe(0)
       expect(result.missingClasses).toEqual([])
@@ -278,6 +290,9 @@ describe('[DIAGNOSTICS]', () => {
             updated: [
               '/src/shared/generated/presets/button.preset.ts',
               '/src/shared/generated/tokenModules/button.token.ts',
+              '/src/shared/generated/metadata.generated.json',
+              '/src/shared/generated/lsp.generated.ts',
+              '/src/shared/generated/extension.generated.json',
             ],
             skipped: [],
           },
@@ -291,7 +306,7 @@ describe('[DIAGNOSTICS]', () => {
         },
       })
 
-      const result = buildData({ cache, run })
+      const result = buildData(cache, run)
 
       expect(result.generatedFiles).toEqual({
         presets: {
@@ -303,6 +318,24 @@ describe('[DIAGNOSTICS]', () => {
         tokens: {
           written: [
             '/src/shared/generated/tokenModules/button.token.ts',
+          ],
+          skipped: [],
+        },
+        metadata: {
+          written: [
+            '/src/shared/generated/metadata.generated.json',
+          ],
+          skipped: [],
+        },
+        lsp: {
+          written: [
+            '/src/shared/generated/lsp.generated.ts',
+          ],
+          skipped: [],
+        },
+        extension: {
+          written: [
+            '/src/shared/generated/extension.generated.json',
           ],
           skipped: [],
         },
@@ -330,7 +363,7 @@ describe('[DIAGNOSTICS]', () => {
         },
       })
 
-      const result = buildData({ cache, run })
+      const result = buildData(cache, run)
 
       expect(result.omittedPresetFiles).toEqual([
         '/components/Button/Button.module.css',
@@ -341,7 +374,7 @@ describe('[DIAGNOSTICS]', () => {
       const cache = createCache()
       const run = createRun()
 
-      const result = buildData({ cache, run })
+      const result = buildData(cache, run)
 
       expect(result.omittedPresetFiles).toEqual([])
     })

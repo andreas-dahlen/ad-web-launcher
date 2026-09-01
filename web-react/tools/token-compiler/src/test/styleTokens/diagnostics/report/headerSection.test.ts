@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest'
 
 import { headerSection } from '../../../../diagnostics/report/sections/headerSection.js'
 
-vi.mock('@styleTokens/utils/string', () => ({
+vi.mock('../../../../utils/string.js', () => ({
   colors: {
     heading: 'heading',
     value: 'value',
@@ -53,7 +53,9 @@ describe('[DIAGNOSTICS]', () => {
     it('uses update mode for zero processed modules', () => {
       const result = headerSection(0)
 
-      expect(result.entries[0].title).toContain('Update complete!')
+      expect(result.entries[0].title).toContain(
+        'Update complete!',
+      )
       expect(result.entries[0].title).not.toContain(
         'Initialization complete!',
       )

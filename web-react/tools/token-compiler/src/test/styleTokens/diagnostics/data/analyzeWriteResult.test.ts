@@ -26,6 +26,18 @@ describe('[DIAGNOSTICS]', () => {
           ],
           skipped: [],
         },
+        metadata: {
+          written: [],
+          skipped: [],
+        },
+        lsp: {
+          written: [],
+          skipped: [],
+        },
+        extension: {
+          written: [],
+          skipped: [],
+        },
       })
     })
 
@@ -51,17 +63,68 @@ describe('[DIAGNOSTICS]', () => {
             '/src/shared/generated/tokenModules/button.token.ts',
           ],
         },
+        metadata: {
+          written: [],
+          skipped: [],
+        },
+        lsp: {
+          written: [],
+          skipped: [],
+        },
+        extension: {
+          written: [],
+          skipped: [],
+        },
       })
     })
 
-    it('ignores files that are not generated preset or token files', () => {
+    it('groups written metadata, lsp, and extension files', () => {
       const result = analyzeWriteResult({
         updated: [
-          '/src/shared/generated/metadata/metadata.json',
-          '/src/components/Button/Button.module.css',
+          '/src/shared/generated/metadata.generated.json',
+          '/src/shared/generated/lsp.generated.ts',
+          '/src/shared/generated/extension.generated.json',
         ],
+        skipped: [],
+      })
+
+      expect(result).toEqual({
+        presets: {
+          written: [],
+          skipped: [],
+        },
+        tokens: {
+          written: [],
+          skipped: [],
+        },
+        metadata: {
+          written: [
+            '/src/shared/generated/metadata.generated.json',
+          ],
+          skipped: [],
+        },
+        lsp: {
+          written: [
+            '/src/shared/generated/lsp.generated.ts',
+          ],
+          skipped: [],
+        },
+        extension: {
+          written: [
+            '/src/shared/generated/extension.generated.json',
+          ],
+          skipped: [],
+        },
+      })
+    })
+
+    it('groups skipped metadata, lsp, and extension files', () => {
+      const result = analyzeWriteResult({
+        updated: [],
         skipped: [
-          '/src/shared/generated/metadata/metadata.json',
+          '/src/shared/generated/metadata.generated.json',
+          '/src/shared/generated/lsp.generated.ts',
+          '/src/shared/generated/extension.generated.json',
         ],
       })
 
@@ -71,6 +134,59 @@ describe('[DIAGNOSTICS]', () => {
           skipped: [],
         },
         tokens: {
+          written: [],
+          skipped: [],
+        },
+        metadata: {
+          written: [],
+          skipped: [
+            '/src/shared/generated/metadata.generated.json',
+          ],
+        },
+        lsp: {
+          written: [],
+          skipped: [
+            '/src/shared/generated/lsp.generated.ts',
+          ],
+        },
+        extension: {
+          written: [],
+          skipped: [
+            '/src/shared/generated/extension.generated.json',
+          ],
+        },
+      })
+    })
+
+    it('ignores files that are not generated files', () => {
+      const result = analyzeWriteResult({
+        updated: [
+          '/src/shared/generated/other.json',
+          '/src/components/Button/Button.module.css',
+        ],
+        skipped: [
+          '/src/shared/generated/other.json',
+        ],
+      })
+
+      expect(result).toEqual({
+        presets: {
+          written: [],
+          skipped: [],
+        },
+        tokens: {
+          written: [],
+          skipped: [],
+        },
+        metadata: {
+          written: [],
+          skipped: [],
+        },
+        lsp: {
+          written: [],
+          skipped: [],
+        },
+        extension: {
           written: [],
           skipped: [],
         },
@@ -87,10 +203,22 @@ describe('[DIAGNOSTICS]', () => {
           written: [],
           skipped: [],
         },
+        metadata: {
+          written: [],
+          skipped: [],
+        },
+        lsp: {
+          written: [],
+          skipped: [],
+        },
+        extension: {
+          written: [],
+          skipped: [],
+        },
       })
     })
 
-    it('preserves file order', () => {
+    it('sorts written and skipped preset and token files', () => {
       const result = analyzeWriteResult({
         updated: [
           '/src/shared/generated/presets/zebra.preset.ts',
@@ -98,18 +226,35 @@ describe('[DIAGNOSTICS]', () => {
           '/src/shared/generated/tokenModules/zebra.token.ts',
           '/src/shared/generated/tokenModules/alpha.token.ts',
         ],
-        skipped: [],
+        skipped: [
+          '/src/shared/generated/presets/zulu.preset.ts',
+          '/src/shared/generated/presets/bravo.preset.ts',
+          '/src/shared/generated/tokenModules/zulu.token.ts',
+          '/src/shared/generated/tokenModules/bravo.token.ts',
+        ],
       })
 
-      expect(result.presets.written).toEqual([
-        '/src/shared/generated/presets/alpha.preset.ts',
-        '/src/shared/generated/presets/zebra.preset.ts',
-      ])
+      expect(result.presets).toEqual({
+        written: [
+          '/src/shared/generated/presets/alpha.preset.ts',
+          '/src/shared/generated/presets/zebra.preset.ts',
+        ],
+        skipped: [
+          '/src/shared/generated/presets/bravo.preset.ts',
+          '/src/shared/generated/presets/zulu.preset.ts',
+        ],
+      })
 
-      expect(result.tokens.written).toEqual([
-        '/src/shared/generated/tokenModules/alpha.token.ts',
-        '/src/shared/generated/tokenModules/zebra.token.ts',
-      ])
+      expect(result.tokens).toEqual({
+        written: [
+          '/src/shared/generated/tokenModules/alpha.token.ts',
+          '/src/shared/generated/tokenModules/zebra.token.ts',
+        ],
+        skipped: [
+          '/src/shared/generated/tokenModules/bravo.token.ts',
+          '/src/shared/generated/tokenModules/zulu.token.ts',
+        ],
+      })
     })
   })
 })
