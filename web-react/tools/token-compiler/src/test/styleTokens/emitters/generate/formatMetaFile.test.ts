@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
-import { formatMetaFile } from '../../../../emitters/generate/format/formatMetaFile.js'
-import type { GroupMetadata } from '../../../../emitters/extract/assemblers/assembleMetadata.js'
+import { formatMetaFile } from '../../../../emitters/generate/format/formatMetaFile.ts'
+import type { GroupMetadata } from '../../../../emitters/extract/assemblers/assembleMetadata.ts'
 
 function createGroup(
   overrides: Partial<GroupMetadata> = {},

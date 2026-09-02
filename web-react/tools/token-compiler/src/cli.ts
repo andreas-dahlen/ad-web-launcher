@@ -1,7 +1,7 @@
-// import { run } from './run/run.js'
-import { compilerConfigSchema } from './configSchema.js'
-import { build } from './runtime/build.js'
-import { run } from './runtime/run.js'
+// import { run } from './run/run.ts'
+import { compilerConfigSchema } from './configSchema.ts'
+import { build } from './runtime/build.ts'
+import { run } from './runtime/run.ts'
 
 console.log('TOKEN COMPILER INITIALIZED')
 

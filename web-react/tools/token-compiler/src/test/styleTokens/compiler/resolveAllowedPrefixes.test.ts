@@ -1,8 +1,8 @@
-import { resolveAllowedPrefixes } from '../../../compiler/resolvers/resolveAllowedPrefixes.js';
-import type { IssueCollector } from '../../../compiler/tracking/issueCollector.js';
+import { resolveAllowedPrefixes } from '../../../compiler/resolvers/resolveAllowedPrefixes.ts';
+import type { IssueCollector } from '../../../compiler/tracking/issueCollector.ts';
 import { describe, expect, it } from 'vitest';
-import { createTestCollector } from '../compiler.factory.js';
-import type { ValidPrefix } from '../../../oldSharedUtils/oldSharedCompiler.types.js';
+import { createTestCollector } from '../compiler.factory.ts';
+import type { ValidPrefix } from '../../../oldSharedUtils/oldSharedCompiler.types.ts';
 
 
 function hasIssue(

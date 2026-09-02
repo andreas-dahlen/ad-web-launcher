@@ -1,5 +1,5 @@
-import type { TokenGroupData } from '../../extract/assemblers/assembleTokenData.js';
-import type { FormatResult } from '../generateOutput.js';
+import type { TokenGroupData } from '../../extract/assemblers/assembleTokenData.ts';
+import type { FormatResult } from '../generateOutput.ts';
 
 
 export function formatTokenFiles(tokenGroupData: TokenGroupData[]): FormatResult[] {

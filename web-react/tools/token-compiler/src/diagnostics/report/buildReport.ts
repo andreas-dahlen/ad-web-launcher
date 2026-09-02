@@ -1,14 +1,14 @@
-import type { DiagnosticData } from '../../types/diagnostics.types.js';
-import { presetSection } from './sections/presetSection.js';
-import { tokenSection } from './sections/tokenSection.js';
-import { variableSection } from './sections/variableSection.js';
-import { classSection } from './sections/classSection.js';
-import { selectorSection } from './sections/selectorSection.js';
-import { fileSection } from './sections/fileSection.js';
-import { headerSection } from './sections/headerSection.js';
-import { issuesSection } from './sections/issuesSection.js';
-import { invalidVarSection } from './sections/invalidVarSection.js';
-import { omittedPresetSection } from './sections/omittedPresetSection.js';
+import type { DiagnosticData } from '../../types/diagnostics.types.ts';
+import { presetSection } from './sections/presetSection.ts';
+import { tokenSection } from './sections/tokenSection.ts';
+import { variableSection } from './sections/variableSection.ts';
+import { classSection } from './sections/classSection.ts';
+import { selectorSection } from './sections/selectorSection.ts';
+import { fileSection } from './sections/fileSection.ts';
+import { headerSection } from './sections/headerSection.ts';
+import { issuesSection } from './sections/issuesSection.ts';
+import { invalidVarSection } from './sections/invalidVarSection.ts';
+import { omittedPresetSection } from './sections/omittedPresetSection.ts';
 
 export type ReportSection = {
   title: string;

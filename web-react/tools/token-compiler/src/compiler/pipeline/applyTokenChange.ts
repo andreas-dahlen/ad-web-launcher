@@ -1,10 +1,10 @@
-import type { TokenGroupResult } from '../../types/compiler.types.js';
-import type { TokenCache } from '../tracking/tokenCache.js';
-import { buildTokenGroup } from '../builders/buildTokenGroup.js';
-import { resolveTokenGroupPath } from '../resolvers/resolveTokenGroupPath.js'
-import { processToken } from '../processing/processToken.js';
-import { findCssModulePath } from '../discovery/findCssModulePath.js';
-import { findTokenPaths } from '../discovery/findTokenPaths.js';
+import type { TokenGroupResult } from '../../types/compiler.types.ts';
+import type { TokenCache } from '../tracking/tokenCache.ts';
+import { buildTokenGroup } from '../builders/buildTokenGroup.ts';
+import { resolveTokenGroupPath } from '../resolvers/resolveTokenGroupPath.ts'
+import { processToken } from '../processing/processToken.ts';
+import { findCssModulePath } from '../discovery/findCssModulePath.ts';
+import { findTokenPaths } from '../discovery/findTokenPaths.ts';
 
 export function applyTokenChange({
   tokenPath,

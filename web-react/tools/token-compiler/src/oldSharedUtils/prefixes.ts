@@ -1,4 +1,4 @@
-import type { ValidPrefix } from './oldSharedCompiler.types.js';
+import type { ValidPrefix } from './oldSharedCompiler.types.ts';
 
 export function isValidPrefix(
   value: unknown,

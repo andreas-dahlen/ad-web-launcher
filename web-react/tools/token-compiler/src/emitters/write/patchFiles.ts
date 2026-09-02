@@ -1,6 +1,6 @@
 import fs from 'node:fs';
-import type { FormatResult } from '../../emitters/generate/generateOutput.js';
-import type { FileResult } from '../../types/compiler.types.js';
+import type { FormatResult } from '../../emitters/generate/generateOutput.ts';
+import type { FileResult } from '../../types/compiler.types.ts';
 export function patchFiles(files: FormatResult[]): FileResult {
   const updated: string[] = []
   const skipped: string[] = []

@@ -1,6 +1,6 @@
-import type { FormatResult } from '../generateOutput.js';
-import { toCssVar } from '../../../oldSharedUtils/stringFormaters.js';
-import type { LspData } from '../../extract/assemblers/assembleLspData.js';
+import type { FormatResult } from '../generateOutput.ts';
+import { toCssVar } from '../../../oldSharedUtils/stringFormaters.ts';
+import type { LspData } from '../../extract/assemblers/assembleLspData.ts';
 
 
 export function formatLspFile(data: LspData): FormatResult {

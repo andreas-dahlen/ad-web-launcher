@@ -1,4 +1,4 @@
-import type { EditScope, IssueGroup, IssueScope, SetIssue } from '../../types/issueCollector.types.js'
+import type { EditScope, IssueGroup, IssueScope, SetIssue } from '../../types/issueCollector.types.ts'
 
 export type IssueCollector = {
   setSubject(subject: string): void

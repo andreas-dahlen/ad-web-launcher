@@ -1,8 +1,8 @@
-import type { ValidPrefix } from '../../oldSharedUtils/oldSharedCompiler.types.js'
-import type { CompilerVariable, RawVariable } from '../../types/compiler.types.js'
-import { prefixLeadingNumber, removeInvalidCharacters, toCamelCase, escapeReservedWord, removeWhitespace, toKebab } from '../../oldSharedUtils/stringFormaters.js'
-import { createNullIssueCollector, type IssueCollector } from '../tracking/issueCollector.js'
-import { resolveAllowedPrefixes } from '../resolvers/resolveAllowedPrefixes.js'
+import type { ValidPrefix } from '../../oldSharedUtils/oldSharedCompiler.types.ts'
+import type { CompilerVariable, RawVariable } from '../../types/compiler.types.ts'
+import { prefixLeadingNumber, removeInvalidCharacters, toCamelCase, escapeReservedWord, removeWhitespace, toKebab } from '../../oldSharedUtils/stringFormaters.ts'
+import { createNullIssueCollector, type IssueCollector } from '../tracking/issueCollector.ts'
+import { resolveAllowedPrefixes } from '../resolvers/resolveAllowedPrefixes.ts'
 
 type ParseToken = {
   identifier(inputString: string, collector?: IssueCollector): { name: string }

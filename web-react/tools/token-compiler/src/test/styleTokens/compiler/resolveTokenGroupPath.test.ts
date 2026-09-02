@@ -1,4 +1,4 @@
-import { resolveTokenGroupPath } from '../../../compiler/resolvers/resolveTokenGroupPath.js';
+import { resolveTokenGroupPath } from '../../../compiler/resolvers/resolveTokenGroupPath.ts';
 import { describe, it, expect } from "vitest";
 describe("[COMPILER]", () => {
   describe("[resolveTokenGroupPath]", () => {

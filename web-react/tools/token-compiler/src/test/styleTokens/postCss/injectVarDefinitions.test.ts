@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest'
 import postcss from 'postcss'
 
-import { injectVarDefinitions } from '../../../postCss/inject/injectVarDefinitions.js'
+import { injectVarDefinitions } from '../../../postCss/inject/injectVarDefinitions.ts'
 import type {
   CompilerToken,
   CompilerVariable,
-} from '../../../types/compiler.types.js'
-import { normalizeCssValue } from '../../../oldSharedUtils/stringFormaters.js'
+} from '../../../types/compiler.types.ts'
+import { normalizeCssValue } from '../../../oldSharedUtils/stringFormaters.ts'
 
 function createRule() {
   const root = postcss.parse(`

@@ -1,7 +1,7 @@
 import path from 'node:path';
 
-import { loadCompilerConfig } from './loadCompilerConfig.js';
-import type { CompilerConfig, UserOptions } from '../types/run.types.js';
+import { loadCompilerConfig } from './loadCompilerConfig.ts';
+import type { CompilerConfig, UserOptions } from '../types/run.types.ts';
 
 
 export function resolveConfig(rootDir: string, options: UserOptions): CompilerConfig | null {

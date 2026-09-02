@@ -1,5 +1,5 @@
-import type { CssVarString } from '../../oldSharedUtils/oldSharedCompiler.types.js';
-import type { CompilerVariable, CssTokenGroup, PresetResetData } from '../../types/compiler.types.js';
+import type { CssVarString } from '../../oldSharedUtils/oldSharedCompiler.types.ts';
+import type { CompilerVariable, CssTokenGroup, PresetResetData } from '../../types/compiler.types.ts';
 
 export function injectPresetResets(
   data: PresetResetData,

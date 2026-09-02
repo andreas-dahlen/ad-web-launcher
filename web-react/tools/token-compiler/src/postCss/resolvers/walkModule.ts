@@ -1,10 +1,10 @@
-import { toCssVarPrefix } from '../../oldSharedUtils/stringFormaters.js';
-import type { CssVarString } from '../../oldSharedUtils/oldSharedCompiler.types.js';
+import { toCssVarPrefix } from '../../oldSharedUtils/stringFormaters.ts';
+import type { CssVarString } from '../../oldSharedUtils/oldSharedCompiler.types.ts';
 import type { Rule, Root } from "postcss";
 import selectorParser from "postcss-selector-parser";
-import { prefixPriority } from '../../oldSharedUtils/prefixes.js';
-import type { WalkModuleResult } from '../../types/compiler.types.js';
-import { assert } from '../../utils/assertions.js'
+import { prefixPriority } from '../../oldSharedUtils/prefixes.ts';
+import type { WalkModuleResult } from '../../types/compiler.types.ts';
+import { assert } from '../../utils/assertions.ts'
 
 const VALID_IDENTIFIER = /^[A-Za-z_$][A-Za-z0-9_$]*$/;
 

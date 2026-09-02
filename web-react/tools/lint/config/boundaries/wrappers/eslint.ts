@@ -1,6 +1,6 @@
 import type { Linter } from 'eslint'
-import { appRules } from '../app.rules'
-import { compilerRules } from '../compiler.rules'
+import { appRules } from '../app.rules.ts'
+import { compilerRules } from '../compiler.rules.ts'
 
 export const appBoundaries: Linter.Config = {
   files: ['src/**/*.{ts,tsx}'],

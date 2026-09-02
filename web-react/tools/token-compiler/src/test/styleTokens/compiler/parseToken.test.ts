@@ -1,5 +1,5 @@
-import { parseToken } from '../../../compiler/processing/parseToken.js';
-import { createRawVariable, createTestCollector } from '../compiler.factory.js';
+import { parseToken } from '../../../compiler/processing/parseToken.ts';
+import { createRawVariable, createTestCollector } from '../compiler.factory.ts';
 import { describe, expect, it } from 'vitest';
 
 describe('[COMPILER]', () => {

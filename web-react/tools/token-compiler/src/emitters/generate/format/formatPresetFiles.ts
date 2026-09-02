@@ -1,5 +1,5 @@
-import type { PresetFileData } from '../../extract/assemblers/assemblePresetData.js';
-import type { FormatResult } from '../generateOutput.js';
+import type { PresetFileData } from '../../extract/assemblers/assemblePresetData.ts';
+import type { FormatResult } from '../generateOutput.ts';
 
 
 export function formatPresetFiles(presetData: PresetFileData[]): FormatResult[] {

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
-import { assembleLspData } from '../../../../emitters/extract/assemblers/assembleLspData.js'
-import type { TokenData } from '../../../../emitters/extract/assemblers/assembleTokenData.js'
+import { assembleLspData } from '../../../../emitters/extract/assemblers/assembleLspData.ts'
+import type { TokenData } from '../../../../emitters/extract/assemblers/assembleTokenData.ts'
 
 const outPath = '/generated'
 

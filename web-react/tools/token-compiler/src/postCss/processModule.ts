@@ -1,10 +1,10 @@
 import type { Root } from "postcss";
-import type { CssData, CssTokenGroup, ProcessedToken } from '../types/compiler.types.js';
-import { print } from '../utils/print.js';
-import { walkModule } from './resolvers/walkModule.js';
-import { injectVarDefinitions } from './inject/injectVarDefinitions.js';
-import { injectCascade } from './inject/injectCascade.js';
-import { injectPresetResets } from './inject/injectPresetResets.js';
+import type { CssData, CssTokenGroup, ProcessedToken } from '../types/compiler.types.ts';
+import { print } from '../utils/print.ts';
+import { walkModule } from './resolvers/walkModule.ts';
+import { injectVarDefinitions } from './inject/injectVarDefinitions.ts';
+import { injectCascade } from './inject/injectCascade.ts';
+import { injectPresetResets } from './inject/injectPresetResets.ts';
 
 export function processModule({
   root,

@@ -1,6 +1,6 @@
-import type { ReportEntry, ReportSection } from '../buildReport.js';
-import { colors, formatLogPath, paint } from '../../../utils/string.js';
-import type { AnalyzedIssueGroup } from '../../../types/diagnostics.types.js';
+import type { ReportEntry, ReportSection } from '../buildReport.ts';
+import { colors, formatLogPath, paint } from '../../../utils/string.ts';
+import type { AnalyzedIssueGroup } from '../../../types/diagnostics.types.ts';
 
 export function issuesSection(groups: AnalyzedIssueGroup[]): ReportSection | undefined {
   const entries: ReportEntry[] = []

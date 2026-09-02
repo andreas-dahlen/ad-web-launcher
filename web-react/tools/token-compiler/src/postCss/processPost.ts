@@ -1,6 +1,6 @@
-import { walkProject } from './resolvers/walkProject.js';
+import { walkProject } from './resolvers/walkProject.ts';
 import type { Root } from 'postcss';
-import type { PostData } from '../types/compiler.types.js';
+import type { PostData } from '../types/compiler.types.ts';
 
 
 export function processPost({

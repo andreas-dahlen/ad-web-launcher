@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { analyzeWriteResult } from '../../../../diagnostics/data/analyzers/analyzeWriteResult.js'
+import { analyzeWriteResult } from '../../../../diagnostics/data/analyzers/analyzeWriteResult.ts'
 
 describe('[DIAGNOSTICS]', () => {
   describe('analyzeWriteResult', () => {

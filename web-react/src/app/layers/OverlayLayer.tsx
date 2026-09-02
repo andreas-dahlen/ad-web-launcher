@@ -1,9 +1,9 @@
-import SettingsPanel from '../../panels/SettingsPanel/SettingsPanel.js';
-import { Z } from '@config/zIndex.config.js';
-import ScrollPrim from '../../primitives/Scroll/ScrollPrim.js';
+import SettingsPanel from '../../panels/SettingsPanel/SettingsPanel.ts';
+import { Z } from '@config/zIndex.config.ts';
+import ScrollPrim from '../../primitives/Scroll/ScrollPrim.tsx';
 import css from './Layers.module.css'
-import ButtonPrim from '@primitives/Button/ButtonPrim.js';
-import { settingsStore } from '@stores/settings.store.js';
+import ButtonPrim from '@primitives/Button/ButtonPrim.tsx';
+import { settingsStore } from '@stores/settings.store.ts';
 import clsx from 'clsx';
 /** LAYER 3/4! */
 export default function OverlayLayer() {

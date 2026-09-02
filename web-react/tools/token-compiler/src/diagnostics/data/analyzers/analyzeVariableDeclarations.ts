@@ -1,7 +1,7 @@
-import type { CssVarString } from '../../../oldSharedUtils/oldSharedCompiler.types.js';
-import { toCssVar } from '../../../oldSharedUtils/stringFormaters.js';
-import type { CssDataTokenGroup } from '../../../types/compiler.types.js';
-import type { InvalidVarDeclaration } from '../../../types/diagnostics.types.js';
+import type { CssVarString } from '../../../oldSharedUtils/oldSharedCompiler.types.ts';
+import { toCssVar } from '../../../oldSharedUtils/stringFormaters.ts';
+import type { CssDataTokenGroup } from '../../../types/compiler.types.ts';
+import type { InvalidVarDeclaration } from '../../../types/diagnostics.types.ts';
 export function analyzeVariableDeclarations(group: CssDataTokenGroup): InvalidVarDeclaration[] {
 
   const result: InvalidVarDeclaration[] = []

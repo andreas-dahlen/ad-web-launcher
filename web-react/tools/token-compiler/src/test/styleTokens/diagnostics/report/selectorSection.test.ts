@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 
-import { selectorSection } from '../../../../diagnostics/report/sections/selectorSection.js'
-import type { UnusableSelector } from '../../../../types/diagnostics.types.js'
+import { selectorSection } from '../../../../diagnostics/report/sections/selectorSection.ts'
+import type { UnusableSelector } from '../../../../types/diagnostics.types.ts'
 
 vi.mock('../../../../utils/string', () => ({
   colors: {

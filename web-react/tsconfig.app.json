@@ -1,6 +1,9 @@
 {
   "extends": "./tsconfig.paths.json",
   "compilerOptions": {
+    "paths": {
+      "@generated/*": [ "./src/styleTokens/generated/*" ]
+    },
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
     "composite": true,
     "target": "ES2022",

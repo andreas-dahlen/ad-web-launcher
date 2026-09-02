@@ -1,13 +1,13 @@
-import type { PresetFileData } from './assemblers/assemblePresetData.js'
-import type { TokenGroupData } from './assemblers/assembleTokenData.js'
-import { assembleTokenData } from './assemblers/assembleTokenData.js'
-import { assemblePresetData } from './assemblers/assemblePresetData.js'
-import { assembleLspData, type LspData } from './assemblers/assembleLspData.js'
-import { assembleMetadata, type GroupMetadata } from './assemblers/assembleMetadata.js'
-import { assembleExtensionData, type ExtensionData } from './assemblers/assembleExtensionData.js'
-import type { ExtractResult } from '../../types/compiler.types.js'
-import type { TokenCache } from '../../compiler/tracking/tokenCache.js'
-import type { CompilerRun } from '../../compiler/tracking/compilerRun.js'
+import type { PresetFileData } from './assemblers/assemblePresetData.ts'
+import type { TokenGroupData } from './assemblers/assembleTokenData.ts'
+import { assembleTokenData } from './assemblers/assembleTokenData.ts'
+import { assemblePresetData } from './assemblers/assemblePresetData.ts'
+import { assembleLspData, type LspData } from './assemblers/assembleLspData.ts'
+import { assembleMetadata, type GroupMetadata } from './assemblers/assembleMetadata.ts'
+import { assembleExtensionData, type ExtensionData } from './assemblers/assembleExtensionData.ts'
+import type { ExtractResult } from '../../types/compiler.types.ts'
+import type { TokenCache } from '../../compiler/tracking/tokenCache.ts'
+import type { CompilerRun } from '../../compiler/tracking/compilerRun.ts'
 
 
 export type EmitData = {

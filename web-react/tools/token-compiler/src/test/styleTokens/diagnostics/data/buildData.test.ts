@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
 
-import { buildData } from '../../../../diagnostics/data/buildData.js'
+import { buildData } from '../../../../diagnostics/data/buildData.ts'
 import type {
   CssData,
   CssDataTokenGroup,

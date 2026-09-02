@@ -1,5 +1,5 @@
-import type { IssueGroup } from '../../types/issueCollector.types.js';
-import type { EmitResult } from '../../types/compiler.types.js';
+import type { IssueGroup } from '../../types/issueCollector.types.ts';
+import type { EmitResult } from '../../types/compiler.types.ts';
 
 export type CompilerRun = ReturnType<typeof createCompilerRun>;
 export function createCompilerRun(loadedIssues: IssueGroup[]) {

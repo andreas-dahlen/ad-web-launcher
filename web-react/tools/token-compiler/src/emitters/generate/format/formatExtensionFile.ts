@@ -1,5 +1,5 @@
-import type { FormatResult } from '../generateOutput.js';
-import type { ExtensionData } from '../../extract/assemblers/assembleExtensionData.js';
+import type { FormatResult } from '../generateOutput.ts';
+import type { ExtensionData } from '../../extract/assemblers/assembleExtensionData.ts';
 
 export function formatExtensionFile(
   data: ExtensionData,

@@ -1,5 +1,5 @@
-import type { FileResult } from '../../types/compiler.types.js';
-import type { FormatResult } from '../generate/generateOutput.js';
+import type { FileResult } from '../../types/compiler.types.ts';
+import type { FormatResult } from '../generate/generateOutput.ts';
 import fs from "node:fs";
 import path from "node:path";
 

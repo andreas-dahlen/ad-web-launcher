@@ -1,9 +1,9 @@
-import { resolveTokenGroupPath } from '../resolvers/resolveTokenGroupPath.js'
-import { processToken } from '../processing/processToken.js';
-import { buildTokenGroup } from '../builders/buildTokenGroup.js';
-import type { TokenGroupsResult, TokenGroup } from '../../types/compiler.types.js';
-import { createModuleMap } from '../discovery/createModuleMap.js'
-import { type IssueGroup } from '../../types/issueCollector.types.js';
+import { resolveTokenGroupPath } from '../resolvers/resolveTokenGroupPath.ts'
+import { processToken } from '../processing/processToken.ts';
+import { buildTokenGroup } from '../builders/buildTokenGroup.ts';
+import type { TokenGroupsResult, TokenGroup } from '../../types/compiler.types.ts';
+import { createModuleMap } from '../discovery/createModuleMap.ts'
+import { type IssueGroup } from '../../types/issueCollector.types.ts';
 
 export function compileTokenGroups(
   rootPath: string,

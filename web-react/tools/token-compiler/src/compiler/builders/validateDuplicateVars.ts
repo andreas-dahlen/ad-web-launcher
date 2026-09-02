@@ -1,5 +1,5 @@
-import { formatLogPath } from '../../utils/string.js';
-import type { CompilerToken } from '../../types/compiler.types.js';
+import { formatLogPath } from '../../utils/string.ts';
+import type { CompilerToken } from '../../types/compiler.types.ts';
 
 export function validateDuplicateVars(tokens: CompilerToken[]) {
   const seenVariables = new Map<string, { tokenPath: string }>();

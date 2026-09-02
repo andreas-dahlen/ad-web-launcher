@@ -1,6 +1,6 @@
 import path from 'node:path'
-import { extractGroupName } from '../../../compiler/resolvers/extractGroupName.js'
-import type { CssTokenGroup } from '../../../types/compiler.types.js'
+import { extractGroupName } from '../../../compiler/resolvers/extractGroupName.ts'
+import type { CssTokenGroup } from '../../../types/compiler.types.ts'
 
 export type GroupMetadata = {
   name: string

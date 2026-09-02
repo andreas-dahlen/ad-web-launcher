@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { analyzeVariableDeclarations } from '../../../../diagnostics/data/analyzers/analyzeVariableDeclarations.js'
+import { analyzeVariableDeclarations } from '../../../../diagnostics/data/analyzers/analyzeVariableDeclarations.ts'
 import type {
   CompilerToken,
   CompilerVariable,

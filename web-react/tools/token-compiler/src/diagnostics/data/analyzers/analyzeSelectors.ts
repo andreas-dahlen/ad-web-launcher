@@ -1,5 +1,5 @@
-import type { UnusableSelector } from '../../../types/diagnostics.types.js';
-import type { CssData } from '../../../types/compiler.types.js';
+import type { UnusableSelector } from '../../../types/diagnostics.types.ts';
+import type { CssData } from '../../../types/compiler.types.ts';
 
 export function analyzeSelectors(
   cssData: CssData,

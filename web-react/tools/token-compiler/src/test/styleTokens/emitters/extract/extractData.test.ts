@@ -1,12 +1,12 @@
 import { describe, expect, it, vi } from 'vitest'
 
-import { extractData } from '../../../../emitters/extract/extractData.js'
-import { assembleMetadata } from '../../../../emitters/extract/assemblers/assembleMetadata.js'
-import { assembleTokenData } from '../../../../emitters/extract/assemblers/assembleTokenData.js'
-import { assemblePresetData } from '../../../../emitters/extract/assemblers/assemblePresetData.js'
-import { assembleLspData } from '../../../../emitters/extract/assemblers/assembleLspData.js'
-import { assembleExtensionData } from '../../../../emitters/extract/assemblers/assembleExtensionData.js'
-import type { CssVarString } from '../../../../oldSharedUtils/oldSharedCompiler.types.js'
+import { extractData } from '../../../../emitters/extract/extractData.ts'
+import { assembleMetadata } from '../../../../emitters/extract/assemblers/assembleMetadata.ts'
+import { assembleTokenData } from '../../../../emitters/extract/assemblers/assembleTokenData.ts'
+import { assemblePresetData } from '../../../../emitters/extract/assemblers/assemblePresetData.ts'
+import { assembleLspData } from '../../../../emitters/extract/assemblers/assembleLspData.ts'
+import { assembleExtensionData } from '../../../../emitters/extract/assemblers/assembleExtensionData.ts'
+import type { CssVarString } from '../../../../oldSharedUtils/oldSharedCompiler.types.ts'
 
 vi.mock(
   '../../../../emitters/extract/assemblers/assembleMetadata.js',

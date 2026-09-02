@@ -1,5 +1,5 @@
-import type { GroupMetadata } from '../../extract/assemblers/assembleMetadata.js';
-import type { FormatResult } from '../generateOutput.js';
+import type { GroupMetadata } from '../../extract/assemblers/assembleMetadata.ts';
+import type { FormatResult } from '../generateOutput.ts';
 
 export function formatMetaFile(groups: GroupMetadata[]): FormatResult {
 

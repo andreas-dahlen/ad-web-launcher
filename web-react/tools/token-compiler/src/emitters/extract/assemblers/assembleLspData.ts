@@ -1,6 +1,6 @@
 import path from 'node:path';
-import type { CssVarString } from '../../../oldSharedUtils/oldSharedCompiler.types.js';
-import type { TokenData } from './assembleTokenData.js';
+import type { CssVarString } from '../../../oldSharedUtils/oldSharedCompiler.types.ts';
+import type { TokenData } from './assembleTokenData.ts';
 import Color from 'colorjs.io';
 
 export type LspData = {

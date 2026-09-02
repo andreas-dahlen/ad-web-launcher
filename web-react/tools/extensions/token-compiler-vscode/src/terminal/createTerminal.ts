@@ -1,7 +1,7 @@
 
 import * as vscode from 'vscode'
-import { CompilerTerminal } from './terminal'
-import type { UserOptions } from './terminal.types'
+import { CompilerTerminal } from './terminal.ts'
+import type { UserOptions } from './terminal.types.ts'
 
 export function createTerminal(
   cliFile: string,

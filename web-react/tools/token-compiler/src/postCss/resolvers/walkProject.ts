@@ -1,6 +1,6 @@
-import type { CssVarString } from '../../oldSharedUtils/oldSharedCompiler.types.js';
-import type { PostData } from '../../types/compiler.types.js';
-import { assert } from '../../utils/assertions.js';
+import type { CssVarString } from '../../oldSharedUtils/oldSharedCompiler.types.ts';
+import type { PostData } from '../../types/compiler.types.ts';
+import { assert } from '../../utils/assertions.ts';
 import type { Root } from 'postcss';
 
 

@@ -1,5 +1,5 @@
-import type { AnalyzedIssueGroup } from '../../../types/diagnostics.types.js'
-import type { Issue, IssueGroup } from '../../../types/issueCollector.types.js'
+import type { AnalyzedIssueGroup } from '../../../types/diagnostics.types.ts'
+import type { Issue, IssueGroup } from '../../../types/issueCollector.types.ts'
 
 export function analyzeIssues(groups: IssueGroup[]): AnalyzedIssueGroup[] {
   return groups

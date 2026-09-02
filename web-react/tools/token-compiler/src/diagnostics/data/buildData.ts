@@ -1,14 +1,14 @@
-import type { DiagnosticData, InvalidVarDeclaration, MissingClass, UnusableSelector, VariableMismatch } from '../../types/diagnostics.types.js';
-import type { CompilerRun } from '../../compiler/tracking/compilerRun.js';
-import { mergeIssueGroups } from '../../compiler/tracking/issueCollector.js';
-import { extractGroupName } from '../../compiler/resolvers/extractGroupName.js';
-import { analyzeSelectors } from "./analyzers/analyzeSelectors.js";
-import { analyzeTokens } from './analyzers/analyzeTokens.js';
-import { analyzeVariableUsage } from './analyzers/analyzeVariableUsage.js';
-import { analyzeWriteResult } from './analyzers/analyzeWriteResult.js'
-import { analyzeIssues } from './analyzers/analyzeIssues.js';
-import { analyzeVariableDeclarations } from './analyzers/analyzeVariableDeclarations.js';
-import type { TokenCache } from '../../compiler/tracking/tokenCache.js';
+import type { DiagnosticData, InvalidVarDeclaration, MissingClass, UnusableSelector, VariableMismatch } from '../../types/diagnostics.types.ts';
+import type { CompilerRun } from '../../compiler/tracking/compilerRun.ts';
+import { mergeIssueGroups } from '../../compiler/tracking/issueCollector.ts';
+import { extractGroupName } from '../../compiler/resolvers/extractGroupName.ts';
+import { analyzeSelectors } from "./analyzers/analyzeSelectors.ts";
+import { analyzeTokens } from './analyzers/analyzeTokens.ts';
+import { analyzeVariableUsage } from './analyzers/analyzeVariableUsage.ts';
+import { analyzeWriteResult } from './analyzers/analyzeWriteResult.ts'
+import { analyzeIssues } from './analyzers/analyzeIssues.ts';
+import { analyzeVariableDeclarations } from './analyzers/analyzeVariableDeclarations.ts';
+import type { TokenCache } from '../../compiler/tracking/tokenCache.ts';
 
 export function buildData(
   cache: TokenCache,

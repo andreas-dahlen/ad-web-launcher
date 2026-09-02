@@ -1,4 +1,4 @@
-import { extractGroupName } from '../resolvers/extractGroupName.js';
+import { extractGroupName } from '../resolvers/extractGroupName.ts';
 import path from "node:path"
 import fs from "node:fs"
 export function findCssModulePath(

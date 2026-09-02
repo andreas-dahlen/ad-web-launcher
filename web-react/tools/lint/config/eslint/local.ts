@@ -1,5 +1,5 @@
 import * as jsoncParser from 'jsonc-eslint-parser'
-import localRules from '../../index'
+import localRules from '../../index.ts'
 import type { Linter } from 'eslint'
 
 export const local: Linter.Config[] = [

@@ -1,7 +1,7 @@
 import * as vscode from 'vscode'
 
-import { variableEntry } from './variables/variableEntry'
-import { lspEntry } from './lsp/lspEntry'
+import { variableEntry } from './variables/variableEntry.ts'
+import { lspEntry } from './lsp/lspEntry.ts'
 
 export function activate(context: vscode.ExtensionContext): void {
   const output = vscode.window.createOutputChannel('CSS Variable Completion')

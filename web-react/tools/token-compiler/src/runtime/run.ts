@@ -1,5 +1,5 @@
-import type { CompilerRuntime, UserOptions } from '../types/run.types.js'
-import { createRuntime } from './createRuntime.js'
+import type { CompilerRuntime, UserOptions } from '../types/run.types.ts'
+import { createRuntime } from './createRuntime.ts'
 
 export async function run(
   rootDir: string,

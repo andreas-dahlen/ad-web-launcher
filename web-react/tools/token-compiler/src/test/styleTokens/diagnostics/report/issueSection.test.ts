@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 
-import { issuesSection } from '../../../../diagnostics/report/sections/issuesSection.js'
-import type { AnalyzedIssueGroup } from '../../../../types/diagnostics.types.js'
+import { issuesSection } from '../../../../diagnostics/report/sections/issuesSection.ts'
+import type { AnalyzedIssueGroup } from '../../../../types/diagnostics.types.ts'
 
 vi.mock(
   '../../../../utils/string.js',

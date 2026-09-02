@@ -1,6 +1,6 @@
 import chokidar, { FSWatcher } from 'chokidar'
-import { whatChanged } from '../resolveChange.js'
-import type { TokenCompiler } from '../../compiler/compilerService.js'
+import { whatChanged } from '../resolveChange.ts'
+import type { TokenCompiler } from '../../compiler/compilerService.ts'
 export function watchContent({
   rootDir,
   tokenPath }

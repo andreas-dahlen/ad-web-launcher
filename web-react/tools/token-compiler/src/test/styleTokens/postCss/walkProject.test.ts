@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import postcss from 'postcss'
 
-import { walkProject } from '../../../postCss/resolvers/walkProject.js'
+import { walkProject } from '../../../postCss/resolvers/walkProject.ts'
 
 function parseCss(css: string) {
   return postcss.parse(css)

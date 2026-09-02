@@ -1,16 +1,16 @@
 import type { Root } from 'postcss';
 import { readFileSync } from 'node:fs'
 import postcss from 'postcss';
-import { findTokenPaths } from './discovery/findTokenPaths.js';
-import { compileTokenGroups } from './pipeline/compileTokenGroups.js';
-import { createTokenCache } from './tracking/tokenCache.js';
-import { createCompilerRun } from './tracking/compilerRun.js';
-import { applyTokenChange } from './pipeline/applyTokenChange.js';
-import { processPost } from '../postCss/processPost.js';
-import { processModule } from '../postCss/processModule.js';
-import { emitFiles } from '../emitters/emitFiles.js';
-import { runDiagnostics } from '../diagnostics/runDiagnostics.js';
-import type { CompilerConfig } from '../types/run.types.js';
+import { findTokenPaths } from './discovery/findTokenPaths.ts';
+import { compileTokenGroups } from './pipeline/compileTokenGroups.ts';
+import { createTokenCache } from './tracking/tokenCache.ts';
+import { createCompilerRun } from './tracking/compilerRun.ts';
+import { applyTokenChange } from './pipeline/applyTokenChange.ts';
+import { processPost } from '../postCss/processPost.ts';
+import { processModule } from '../postCss/processModule.ts';
+import { emitFiles } from '../emitters/emitFiles.ts';
+import { runDiagnostics } from '../diagnostics/runDiagnostics.ts';
+import type { CompilerConfig } from '../types/run.types.ts';
 
 function parseCss(cssPath: string): Root {
   const source = readFileSync(cssPath, "utf8");

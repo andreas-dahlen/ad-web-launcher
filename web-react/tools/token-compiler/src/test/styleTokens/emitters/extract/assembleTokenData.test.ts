@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest'
 
-import { assembleTokenData } from '../../../../emitters/extract/assemblers/assembleTokenData.js'
+import { assembleTokenData } from '../../../../emitters/extract/assemblers/assembleTokenData.ts'
 import type {
   CompilerToken,
   CssTokenGroup,
-} from '../../../../types/compiler.types.js'
-import type { ValidPrefix } from '../../../../oldSharedUtils/oldSharedCompiler.types.js'
+} from '../../../../types/compiler.types.ts'
+import type { ValidPrefix } from '../../../../oldSharedUtils/oldSharedCompiler.types.ts'
 
 function createToken(
   overrides: Partial<CompilerToken> = {},

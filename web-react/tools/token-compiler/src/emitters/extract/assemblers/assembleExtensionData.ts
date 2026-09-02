@@ -1,6 +1,6 @@
-import type { TokenData } from './assembleTokenData.js';
-import type { CssVarString } from '../../../oldSharedUtils/oldSharedCompiler.types.js';
-import { toCssVar } from '../../../oldSharedUtils/stringFormaters.js';
+import type { TokenData } from './assembleTokenData.ts';
+import type { CssVarString } from '../../../oldSharedUtils/oldSharedCompiler.types.ts';
+import { toCssVar } from '../../../oldSharedUtils/stringFormaters.ts';
 import path from 'node:path';
 
 export type ExtensionData = {

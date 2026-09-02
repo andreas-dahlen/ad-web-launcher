@@ -1,6 +1,6 @@
-import type { CssDataTokenGroup, CssTokenGroup, TokenGroup } from "../types/compiler.types.js";
-import type { CssVarString } from '../oldSharedUtils/oldSharedCompiler.types.js';
-import type { CompilerConfig, EmitConfig } from '../types/run.types.js';
+import type { CssDataTokenGroup, CssTokenGroup, TokenGroup } from "../types/compiler.types.ts";
+import type { CssVarString } from '../oldSharedUtils/oldSharedCompiler.types.ts';
+import type { CompilerConfig, EmitConfig } from '../types/run.types.ts';
 
 
 type Assertions = {

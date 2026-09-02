@@ -1,7 +1,7 @@
-import type { PostData } from '../../types/compiler.types.js';
-import type { CssData, CssDataTokenGroup, CssTokenGroup, TokenGroup } from '../../types/compiler.types.js';
-import type { CompilerConfig, EmitConfig } from '../../types/run.types.js';
-import { assert } from '../../utils/assertions.js';
+import type { PostData } from '../../types/compiler.types.ts';
+import type { CssData, CssDataTokenGroup, CssTokenGroup, TokenGroup } from '../../types/compiler.types.ts';
+import type { CompilerConfig, EmitConfig } from '../../types/run.types.ts';
+import { assert } from '../../utils/assertions.ts';
 
 export type TokenCache = ReturnType<typeof createTokenCache>;
 

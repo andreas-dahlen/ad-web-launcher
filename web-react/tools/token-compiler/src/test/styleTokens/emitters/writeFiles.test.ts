@@ -3,7 +3,7 @@ import os from 'node:os'
 import path from 'node:path'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
-import { writeFiles } from '../../../emitters/write/writeFiles.js'
+import { writeFiles } from '../../../emitters/write/writeFiles.ts'
 
 describe('[EMITTER]', () => {
   let tempDir: string

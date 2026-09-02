@@ -1,8 +1,8 @@
 import * as vscode from 'vscode'
-import { createSettingsResolver } from './config/resolveSettings'
-import { createTerminal } from './terminal/createTerminal'
-import { updateStatusBar } from './vscode/statusBar'
-import { createCommandSubscriptions } from './vscode/subscriptions'
+import { createSettingsResolver } from './config/resolveSettings.ts'
+import { createTerminal } from './terminal/createTerminal.ts'
+import { updateStatusBar } from './vscode/statusBar.ts'
+import { createCommandSubscriptions } from './vscode/subscriptions.ts'
 
 
 export function activate(context: vscode.ExtensionContext): void {

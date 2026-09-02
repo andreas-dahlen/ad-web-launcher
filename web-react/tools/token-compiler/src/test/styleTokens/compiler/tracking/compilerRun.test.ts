@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
-import { createCompilerRun } from '../../../../compiler/tracking/compilerRun.js'
-import type { EmitResult } from '../../../../types/compiler.types.js'
-import type { IssueGroup } from '../../../../types/issueCollector.types.js'
+import { createCompilerRun } from '../../../../compiler/tracking/compilerRun.ts'
+import type { EmitResult } from '../../../../types/compiler.types.ts'
+import type { IssueGroup } from '../../../../types/issueCollector.types.ts'
 
 describe('[COMPILER]', () => {
   describe('createCompilerRun', () => {

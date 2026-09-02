@@ -1,5 +1,5 @@
-import type { CssVarString } from './oldSharedCompiler.types.js';
-import { reserved } from './reservedList.js';
+import type { CssVarString } from './oldSharedCompiler.types.ts';
+import { reserved } from './reservedList.ts';
 
 export function toKebab(str: string): string {
   return str

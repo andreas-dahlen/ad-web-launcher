@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest'
 
-import { assert } from '../../../utils/assertions.js'
+import { assert } from '../../../utils/assertions.ts'
 import type {
   CssDataTokenGroup,
   TokenGroup,
-} from '../../../types/compiler.types.js'
+} from '../../../types/compiler.types.ts'
 
 describe('[COMPILER]', () => {
   describe('assert.cssVariable', () => {

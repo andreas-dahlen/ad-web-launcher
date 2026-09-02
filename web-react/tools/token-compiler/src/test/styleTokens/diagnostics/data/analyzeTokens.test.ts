@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
-import { analyzeTokens } from '../../../../diagnostics/data/analyzers/analyzeTokens.js'
-import type { CssData } from '../../../../types/compiler.types.js'
+import { analyzeTokens } from '../../../../diagnostics/data/analyzers/analyzeTokens.ts'
+import type { CssData } from '../../../../types/compiler.types.ts'
 
 function createCssData(
   overrides: Partial<CssData> = {},

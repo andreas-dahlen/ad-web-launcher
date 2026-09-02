@@ -3,7 +3,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 
-import { findTokenPaths } from '../../../compiler/discovery/findTokenPaths.js';
+import { findTokenPaths } from '../../../compiler/discovery/findTokenPaths.ts';
 
 
 function createTempDir() {

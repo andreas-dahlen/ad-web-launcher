@@ -1,6 +1,6 @@
-import { colors, paint, formatLogPath } from '../../../utils/string.js';
-import type { FileStatus } from '../../../types/diagnostics.types.js';
-import type { ReportEntry, ReportSection } from '../buildReport.js';
+import { colors, paint, formatLogPath } from '../../../utils/string.ts';
+import type { FileStatus } from '../../../types/diagnostics.types.ts';
+import type { ReportEntry, ReportSection } from '../buildReport.ts';
 
 export function tokenSection(data: FileStatus): ReportSection | undefined {
   const entries: ReportEntry[] = [];

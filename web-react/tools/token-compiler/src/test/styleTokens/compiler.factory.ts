@@ -1,5 +1,5 @@
-import { createIssueCollector } from '../../compiler/tracking/issueCollector.js';
-import type { CompilerToken, CompilerVariable, CssTokenGroup, RawVariable, TokenGroup } from '../../types/compiler.types.js';
+import { createIssueCollector } from '../../compiler/tracking/issueCollector.ts';
+import type { CompilerToken, CompilerVariable, CssTokenGroup, RawVariable, TokenGroup } from '../../types/compiler.types.ts';
 
 export function createRawVariable(
   overrides: Partial<RawVariable> = {}

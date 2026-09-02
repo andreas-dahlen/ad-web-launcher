@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest'
 import postcss from 'postcss'
 
-import { injectCascade } from '../../../postCss/inject/injectCascade.js'
+import { injectCascade } from '../../../postCss/inject/injectCascade.ts'
 import type {
   CompilerToken,
   CompilerVariable,
-} from '../../../types/compiler.types.js'
+} from '../../../types/compiler.types.ts'
 
 function createRule() {
   const root = postcss.parse(`

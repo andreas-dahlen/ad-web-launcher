@@ -8,12 +8,6 @@ import { jsPlugins } from './tools/lint/config/oxlint/plugins.ts'
 
 export default defineConfig({
   ignorePatterns: ignores,
-  // jsPlugins: [
-  //   {
-  //     name: 'boundaries',
-  //     specifier: 'eslint-plugin-boundaries',
-  //   }
-  // ],
 
   jsPlugins,
 
@@ -32,6 +26,7 @@ export default defineConfig({
     'unicorn',
     'oxc',
     'react',
+    'import'
   ],
 
   rules: {
@@ -46,5 +41,26 @@ export default defineConfig({
     'react/error-boundaries': 'error',
     'react/purity': 'error',
     'react/set-state-in-render': 'error',
+
+    'import/extensions': [
+      'error',
+      'always',
+      {
+        js: 'never',
+        jsx: 'never',
+        ignorePackages: true,
+        pathGroupOverrides: [
+          {
+            pattern: '@generated/**',
+            action: 'enforce',
+          },
+          {
+            pattern: 'zustand/**',
+            action: 'enforce',
+          },
+
+        ],
+      }
+    ]
   }
 })

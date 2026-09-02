@@ -1,7 +1,7 @@
 import path from "node:path"
-import { extractGroupName } from '../../../compiler/resolvers/extractGroupName.js';
-import { toCamelCase, toPascalCase } from '../../../oldSharedUtils/stringFormaters.js';
-import type { CssData } from '../../../types/compiler.types.js';
+import { extractGroupName } from '../../../compiler/resolvers/extractGroupName.ts';
+import { toCamelCase, toPascalCase } from '../../../oldSharedUtils/stringFormaters.ts';
+import type { CssData } from '../../../types/compiler.types.ts';
 
 const NON_PRESET_SUFFIX = 'Util'
 export type PresetFileData = {

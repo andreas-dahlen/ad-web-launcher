@@ -1,7 +1,7 @@
-import { loadTokenFile } from '../loaders/loadTokenFile.js'
-import type { RawToken, TokenResult } from '../../types/compiler.types.js'
-import { parseToken } from './parseToken.js'
-import { createIssueCollector } from '../tracking/issueCollector.js'
+import { loadTokenFile } from '../loaders/loadTokenFile.ts'
+import type { RawToken, TokenResult } from '../../types/compiler.types.ts'
+import { parseToken } from './parseToken.ts'
+import { createIssueCollector } from '../tracking/issueCollector.ts'
 
 export function processToken(fullPath: string): TokenResult {
   const collector = createIssueCollector()

@@ -1,9 +1,9 @@
-import { CssVariableCompletionProvider } from '../completion/cssVarCompletionProvider'
+import { CssVariableCompletionProvider } from '../completion/cssVarCompletionProvider.ts'
 import * as vscode from 'vscode'
-import { loadVariables } from './loadVariables'
-import { watchVariables } from './watchVariables'
-import { cssLanguages } from '../config/languages'
-import { resolveVariablesUri } from '../config/paths'
+import { loadVariables } from './loadVariables.ts'
+import { watchVariables } from './watchVariables.ts'
+import { cssLanguages } from '../config/languages.ts'
+import { resolveVariablesUri } from '../config/paths.ts'
 
 
 

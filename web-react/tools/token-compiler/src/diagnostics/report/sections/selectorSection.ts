@@ -1,8 +1,8 @@
 
 
-import type { UnusableSelector } from '../../../types/diagnostics.types.js';
-import type { ReportEntry, ReportSection } from '../buildReport.js';
-import { colors, formatLogPath, paint } from '../../../utils/string.js';
+import type { UnusableSelector } from '../../../types/diagnostics.types.ts';
+import type { ReportEntry, ReportSection } from '../buildReport.ts';
+import { colors, formatLogPath, paint } from '../../../utils/string.ts';
 
 export function selectorSection(data: UnusableSelector[]): ReportSection | undefined {
   const entries: ReportEntry[] = [];

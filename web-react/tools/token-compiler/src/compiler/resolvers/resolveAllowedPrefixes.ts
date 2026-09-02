@@ -1,6 +1,6 @@
-import type { ValidPrefix } from '../../oldSharedUtils/oldSharedCompiler.types.js';
-import { prefixPriority } from '../../oldSharedUtils/prefixes.js';
-import { createNullIssueCollector, type IssueCollector } from '../tracking/issueCollector.js';
+import type { ValidPrefix } from '../../oldSharedUtils/oldSharedCompiler.types.ts';
+import { prefixPriority } from '../../oldSharedUtils/prefixes.ts';
+import { createNullIssueCollector, type IssueCollector } from '../tracking/issueCollector.ts';
 
 const priority = new Map(
   prefixPriority.map((prefix, index) => [prefix, index]),

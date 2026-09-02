@@ -1,5 +1,5 @@
-import type { CompilerToken, TokenGroup } from "../../types/compiler.types.js"
-import { validateDuplicateVars } from './validateDuplicateVars.js';
+import type { CompilerToken, TokenGroup } from "../../types/compiler.types.ts"
+import { validateDuplicateVars } from './validateDuplicateVars.ts';
 export function buildTokenGroup(
   groupPath: string,
   tokens: CompilerToken[],

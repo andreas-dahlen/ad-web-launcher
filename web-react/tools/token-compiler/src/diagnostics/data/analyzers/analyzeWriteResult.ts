@@ -1,5 +1,5 @@
-import type { FileResult } from '../../../types/compiler.types.js'
-import type { GeneratedFiles } from '../../../types/diagnostics.types.js'
+import type { FileResult } from '../../../types/compiler.types.ts'
+import type { GeneratedFiles } from '../../../types/diagnostics.types.ts'
 
 export function analyzeWriteResult(result: FileResult | undefined): GeneratedFiles {
 

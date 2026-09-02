@@ -1,6 +1,6 @@
-import { colors, formatLogPath, paint } from '../../../utils/string.js';
-import type { MissingClass } from '../../../types/diagnostics.types.js';
-import type { ReportEntry, ReportSection } from '../buildReport.js';
+import { colors, formatLogPath, paint } from '../../../utils/string.ts';
+import type { MissingClass } from '../../../types/diagnostics.types.ts';
+import type { ReportEntry, ReportSection } from '../buildReport.ts';
 
 export function classSection(data: MissingClass[]): ReportSection | undefined {
   const entries: ReportEntry[] = [];

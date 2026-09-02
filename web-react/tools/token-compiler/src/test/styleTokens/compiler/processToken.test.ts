@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { processToken } from '../../../compiler/processing/processToken.js';
+import { processToken } from '../../../compiler/processing/processToken.ts';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { mkdirSync, writeFileSync } from 'node:fs';

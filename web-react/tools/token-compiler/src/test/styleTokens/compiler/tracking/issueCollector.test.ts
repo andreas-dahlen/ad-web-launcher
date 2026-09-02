@@ -4,8 +4,8 @@ import {
   createIssueCollector,
   createNullIssueCollector,
   mergeIssueGroups,
-} from '../../../../compiler/tracking/issueCollector.js'
-import type { IssueGroup } from '../../../../types/issueCollector.types.js'
+} from '../../../../compiler/tracking/issueCollector.ts'
+import type { IssueGroup } from '../../../../types/issueCollector.types.ts'
 
 describe('[COMPILER]', () => {
   describe('createIssueCollector', () => {

@@ -1,8 +1,8 @@
-import { initializeCompiler } from '../compiler/compilerService.js'
-import type { CompilerRuntime, UserOptions } from '../types/run.types.js'
-import { resolveConfig } from './resolveConfig.js'
-import { watchConfig } from './watchers/watchConfig.js'
-import { watchContent } from './watchers/watchContent.js'
+import { initializeCompiler } from '../compiler/compilerService.ts'
+import type { CompilerRuntime, UserOptions } from '../types/run.types.ts'
+import { resolveConfig } from './resolveConfig.ts'
+import { watchConfig } from './watchers/watchConfig.ts'
+import { watchContent } from './watchers/watchContent.ts'
 
 export function createRuntime(
   rootDir: string,

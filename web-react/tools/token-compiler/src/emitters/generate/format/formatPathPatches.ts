@@ -1,5 +1,5 @@
-import type { FormatResult } from '../generateOutput.js';
-import type { GroupMetadata } from '../../extract/assemblers/assembleMetadata.js';
+import type { FormatResult } from '../generateOutput.ts';
+import type { GroupMetadata } from '../../extract/assemblers/assembleMetadata.ts';
 export function formatPathPatches(metadata: GroupMetadata[]): FormatResult[] {
   const files: FormatResult[] = []
 

@@ -1,5 +1,5 @@
-import type { CssVarString } from '../oldSharedUtils/oldSharedCompiler.types.js';
-import type { Issue } from './issueCollector.types.js';
+import type { CssVarString } from '../oldSharedUtils/oldSharedCompiler.types.ts';
+import type { Issue } from './issueCollector.types.ts';
 
 export type DiagnosticData = {
   missingClasses: MissingClass[];

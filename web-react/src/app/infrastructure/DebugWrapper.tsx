@@ -1,4 +1,4 @@
-import { sizeStore } from '../../shared/state/stores/size.store'
+import { sizeStore } from '../../shared/state/stores/size.store.ts'
 import type { PropsWithChildren } from 'react'
 import css from './System.module.css'
 

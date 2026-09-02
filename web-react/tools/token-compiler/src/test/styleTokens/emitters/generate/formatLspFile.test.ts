@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 
-import { formatLspFile } from '../../../../emitters/generate/format/formatLspFile.js'
-import type { TokenData } from '../../../../emitters/extract/assemblers/assembleTokenData.js'
-import type { LspData } from '../../../../emitters/extract/assemblers/assembleLspData.js'
+import { formatLspFile } from '../../../../emitters/generate/format/formatLspFile.ts'
+import type { TokenData } from '../../../../emitters/extract/assemblers/assembleTokenData.ts'
+import type { LspData } from '../../../../emitters/extract/assemblers/assembleLspData.ts'
 
 function createTokenData(
   overrides: Partial<TokenData> = {},

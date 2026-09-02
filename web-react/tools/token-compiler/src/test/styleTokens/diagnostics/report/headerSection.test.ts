@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
 
-import { headerSection } from '../../../../diagnostics/report/sections/headerSection.js'
+import { headerSection } from '../../../../diagnostics/report/sections/headerSection.ts'
 
 vi.mock('../../../../utils/string.js', () => ({
   colors: {

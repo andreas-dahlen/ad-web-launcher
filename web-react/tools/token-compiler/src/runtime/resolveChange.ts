@@ -1,5 +1,5 @@
 import path from 'node:path';
-import { formatLogPath } from '../utils/string.js';
+import { formatLogPath } from '../utils/string.ts';
 
 type ChangeType = 'CSS' | 'TOKEN'
 export function whatChanged(filePath: string, tokenPath: string): ChangeType | null {

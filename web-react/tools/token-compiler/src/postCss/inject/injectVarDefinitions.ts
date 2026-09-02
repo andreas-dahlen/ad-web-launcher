@@ -1,7 +1,7 @@
 import type { Rule } from "postcss";
-import { normalizeCssValue, toCssVar } from '../../oldSharedUtils/stringFormaters.js';
-import { isValidPrefix, prefixPriority } from '../../oldSharedUtils/prefixes.js';
-import type { CompilerToken, CompilerVariable } from "../../types/compiler.types.js";
+import { normalizeCssValue, toCssVar } from '../../oldSharedUtils/stringFormaters.ts';
+import { isValidPrefix, prefixPriority } from '../../oldSharedUtils/prefixes.ts';
+import type { CompilerToken, CompilerVariable } from "../../types/compiler.types.ts";
 
 export function injectVarDefinitions(
   rule: Rule,

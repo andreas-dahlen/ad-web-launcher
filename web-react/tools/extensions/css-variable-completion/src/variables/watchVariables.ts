@@ -1,6 +1,6 @@
 import * as vscode from 'vscode'
-import { loadVariables } from './loadVariables'
-import { CssVariableCompletionProvider } from '../completion/cssVarCompletionProvider'
+import { loadVariables } from './loadVariables.ts'
+import { CssVariableCompletionProvider } from '../completion/cssVarCompletionProvider.ts'
 
 export function watchVariables(
   variablesUri: vscode.Uri,

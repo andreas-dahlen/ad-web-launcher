@@ -1,7 +1,7 @@
 
-import { colors, paint } from '../../../utils/string.js';
-import type { InvalidVarDeclaration } from '../../../types/diagnostics.types.js';
-import type { ReportEntry, ReportSection } from '../buildReport.js';
+import { colors, paint } from '../../../utils/string.ts';
+import type { InvalidVarDeclaration } from '../../../types/diagnostics.types.ts';
+import type { ReportEntry, ReportSection } from '../buildReport.ts';
 
 export function invalidVarSection(data: InvalidVarDeclaration[]): ReportSection | undefined {
   const entries: ReportEntry[] = [];

@@ -1,10 +1,10 @@
-import type { EmitData } from '../extract/extractData.js';
-import { formatTokenFiles } from './format/formatTokenFiles.js';
-import { formatPresetFiles } from './format/formatPresetFiles.js';
-import { formatMetaFile } from './format/formatMetaFile.js';
-import { formatPathPatches } from './format/formatPathPatches.js';
-import { formatLspFile } from './format/formatLspFile.js';
-import { formatExtensionFile } from './format/formatExtensionFile.js';
+import type { EmitData } from '../extract/extractData.ts';
+import { formatTokenFiles } from './format/formatTokenFiles.ts';
+import { formatPresetFiles } from './format/formatPresetFiles.ts';
+import { formatMetaFile } from './format/formatMetaFile.ts';
+import { formatPathPatches } from './format/formatPathPatches.ts';
+import { formatLspFile } from './format/formatLspFile.ts';
+import { formatExtensionFile } from './format/formatExtensionFile.ts';
 
 export type FormatResult = {
   outputFile: string;

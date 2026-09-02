@@ -1,8 +1,8 @@
-import type { CompilerRun } from '../compiler/tracking/compilerRun.js';
-import type { TokenCache } from '../compiler/tracking/tokenCache.js';
-import { buildData } from './data/buildData.js';
-import { buildReport } from './report/buildReport.js';
-import { printReport } from './print/printReport.js';
+import type { CompilerRun } from '../compiler/tracking/compilerRun.ts';
+import type { TokenCache } from '../compiler/tracking/tokenCache.ts';
+import { buildData } from './data/buildData.ts';
+import { buildReport } from './report/buildReport.ts';
+import { printReport } from './print/printReport.ts';
 
 export function runDiagnostics(
   cache: TokenCache,

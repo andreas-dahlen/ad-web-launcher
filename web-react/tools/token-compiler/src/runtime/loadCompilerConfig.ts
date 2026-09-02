@@ -1,8 +1,8 @@
 import fs from 'node:fs'
 import path from 'node:path'
-import type { CompilerOptions } from '../types/run.types.js'
+import type { CompilerOptions } from '../types/run.types.ts'
 import { parse } from 'jsonc-parser'
-import { compilerConfigSchema } from '../configSchema.js'
+import { compilerConfigSchema } from '../configSchema.ts'
 
 export function loadCompilerConfig(projectRoot: string): CompilerOptions {
   const configPath = path.join(
