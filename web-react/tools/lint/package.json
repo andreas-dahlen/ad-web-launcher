@@ -9,8 +9,9 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@oxlint/plugins": "^1.81.0",
     "@types/node": "^26.2.0",
-    "@vitest/coverage-v8": "^4.1.11",
+    "@vitest/coverage-v8": "^5.0.0",
     "eslint-plugin-json-schema-validator": "^6.3.1",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.4",
@@ -19,9 +20,11 @@
     "jsonc-eslint-parser": "^3.3.0",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.68.0",
-    "vitest": "^4.1.11"
+    "vitest": "^5.0.0"
   },
   "allowScripts": {
-    "unrs-resolver@1.12.2": true
+    "unrs-resolver@1.12.2": true,
+    "@vitest/coverage-v8@5.0.0": true,
+    "vitest@5.0.0": true
   }
 }

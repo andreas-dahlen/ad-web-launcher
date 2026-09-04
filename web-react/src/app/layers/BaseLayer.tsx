@@ -1,11 +1,11 @@
 import { Z } from '@config/zIndex.config';
 // import useRuntimeBindings from '../compositions/useRuntimeBindings.hook';
 import css from './Layers.module.css'
-import InputCarouselPrim from '@primitives/Carousel/InputCarouselPrim';
+import InputCarouselPrim from '@primitives/Carousel/InputCarouselPrim.tsx';
 import clsx from 'clsx';
-import { layoutStore } from '@stores/layout.store';
+import { layoutStore } from '@stores/layout.store.ts';
 import React from 'react';
-import type { Axis1D } from '../../shared/types/core.types';
+import type { Axis1D } from '../../shared/types/core.types.ts';
 
 // Layer 1/4 scenes read inputs here!
 const LaneInputRenderer = React.memo(function LaneInputRenderer({

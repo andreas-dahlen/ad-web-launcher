@@ -2,21 +2,22 @@
   "name": "@ad-web-launcher/plugin-config",
   "private": true,
   "type": "module",
-
   "scripts": {
     "test": "vitest",
     "coverage": "vitest run --coverage",
     "type": "tsc --noEmit"
   },
-
   "dependencies": {
     "jsonc-parser": "^3.3.1"
   },
-
   "devDependencies": {
     "@types/node": "^26.2.0",
+    "@vitest/coverage-v8": "^5.0.0",
     "typescript": "^6.0.3",
-    "vitest": "^4.1.11",
-    "@vitest/coverage-v8": "^4.1.11"
+    "vitest": "^5.0.0"
+  },
+  "allowScripts": {
+    "@vitest/coverage-v8@5.0.0": true,
+    "vitest@5.0.0": true
   }
 }

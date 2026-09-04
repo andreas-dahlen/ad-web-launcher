@@ -1,9 +1,9 @@
 {
   "publisher": "ad-web-launcher",
-  "name": "run-on-save",
+  "name": "lint-on-start",
   "type": "module",
-  "displayName": "Run on save",
-  "description": "Runs tasks on save.",
+  "displayName": "Lint on Start",
+  "description": "Lints the workspace on startup.",
   "version": "0.0.1",
   "private": true,
   "engines": {
@@ -26,37 +26,39 @@
   "devDependencies": {
     "@types/node": "^26.1.2",
     "@types/vscode": "^1.134.0",
+    "@vitest/coverage-v8": "^5.0.0",
     "@vscode/vsce": "^3.9.2",
     "esbuild": "^0.28.2",
     "typescript": "^6.0.3",
-    "vitest": "^4.1.11",
-    "@vitest/coverage-v8": "^4.1.11"
+    "vitest": "^5.0.0"
   },
   "allowScripts": {
     "esbuild@0.28.2": true,
     "keytar@7.9.0": true,
     "@types/vscode@1.125.0": true,
-    "@vscode/vsce-sign@2.1.0": true
+    "@vscode/vsce-sign@2.1.0": true,
+    "@vitest/coverage-v8@4.1.11": true,
+    "vitest@4.1.11": true
   },
   "contributes": {
     "configuration": {
       "properties": {
-        "runOnSave.oxlint": {
+        "lintOnStart.oxlint": {
           "type": "boolean",
           "default": true,
-          "description": "runs oxlint on save."
+          "description": "runs Oxlint on startup."
         },
-        "runOnSave.eslint": {
+        "lintOnStart.eslint": {
           "type": "boolean",
           "default": false,
-          "description": "runs eslint on save."
+          "description": "runs ESLint on startup."
         },
-        "runOnSave.stylelint": {
+        "lintOnStart.stylelint": {
           "type": "boolean",
           "default": false,
-          "description": "runs stylelint on save."
+          "description": "runs Stylelint on startup."
         },
-        "runOnSave.projectRoot": {
+        "lintOnStart.projectRoot": {
           "type": "string",
           "default": ".",
           "description": "Path to the project root, relative to the workspace."

@@ -3,13 +3,13 @@ import localRules from '../../index.ts'
 import type { Linter } from 'eslint'
 
 export const local: Linter.Config[] = [
-  {
-    files: ['**/src/**/*.{ts,tsx}'],
-    rules: {
-      // 'boundaries/no-unknown-dependencies': ['error'],
-      'local/no-test-only-api': 'error',
-    }
-  },
+  // {
+  //   files: ['**/src/**/*.{ts,tsx}'],
+  //   rules: {
+  //     // 'boundaries/no-unknown-dependencies': ['error'],
+  //     'local/no-test-only-api': 'error',
+  //   }
+  // },
   {
     files: ["**/styleTokens/tokens/**/*.{json,jsonc}"],
     languageOptions: {

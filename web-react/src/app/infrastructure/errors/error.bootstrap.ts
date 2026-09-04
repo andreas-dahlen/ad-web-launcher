@@ -1,4 +1,4 @@
-import type { AppConfig } from '@config/app.config';
+import type { AppConfig } from '@config/app.config.ts';
 
 type CapturedError = Error | string | unknown;
 

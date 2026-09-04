@@ -1,5 +1,5 @@
 import type { AST } from 'jsonc-eslint-parser';
-import { isArrayProperty, isJSONProperty, isLiteralProperty, isObjectProperty, type ObjectExpression, type Property } from './typeChecks';
+import { isArrayProperty, isJSONProperty, isLiteralProperty, isObjectProperty, type ObjectExpression, type Property } from './typeChecks.ts';
 
 function getProperty(
   root: ObjectExpression | undefined,

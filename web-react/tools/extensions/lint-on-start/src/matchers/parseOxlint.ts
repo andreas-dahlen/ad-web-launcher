@@ -3,15 +3,21 @@ import * as vscode from 'vscode'
 const pattern =
   /^(.+):(\d+):(\d+):\s+(.*)\s+\[(Error|Warning)\/([^\]]+)\]$/
 
+export type ParsedDiagnostic = {
+  filePath: string
+  diagnostic: vscode.Diagnostic
+}
+
 export function parseDiagnostic(
   line: string,
-): vscode.Diagnostic | undefined {
+): ParsedDiagnostic | undefined {
   const match = pattern.exec(line)
 
   if (!match) {
     return
   }
 
+  const filePath = match[1]
   const lineNumber = Number(match[2]) - 1
   const columnNumber = Number(match[3]) - 1
   const message = match[4]
@@ -30,8 +36,11 @@ export function parseDiagnostic(
       ? vscode.DiagnosticSeverity.Error
       : vscode.DiagnosticSeverity.Warning,
   )
-
+  diagnostic.source = 'LoS'
   diagnostic.code = code
 
-  return diagnostic
+  return {
+    filePath,
+    diagnostic,
+  }
 }

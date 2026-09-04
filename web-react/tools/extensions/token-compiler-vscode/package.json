@@ -26,17 +26,19 @@
   "devDependencies": {
     "@types/node": "^26.1.2",
     "@types/vscode": "^1.134.0",
-    "@vitest/coverage-v8": "^4.1.11",
+    "@vitest/coverage-v8": "^5.0.0",
     "@vscode/vsce": "^3.9.2",
     "esbuild": "^0.28.2",
     "typescript": "^6.0.3",
-    "vitest": "^4.1.11"
+    "vitest": "^5.0.0"
   },
   "allowScripts": {
     "esbuild@0.28.2": true,
     "@types/vscode@1.125.0": true,
     "keytar@7.9.0": true,
-    "@vscode/vsce-sign@2.1.0": true
+    "@vscode/vsce-sign@2.1.0": true,
+    "@vitest/coverage-v8@5.0.0": true,
+    "vitest@5.0.0": true
   },
   "contributes": {
     "configuration": {
@@ -66,13 +68,11 @@
         }
       }
     },
-
     "configurationDefaults": {
       "files.associations": {
         "compiler.config.json": "jsonc"
       }
     },
-
     "commands": [
       {
         "command": "tokenCompilerVscode.start",

@@ -4,21 +4,50 @@ import { boundarySettings } from './tools/lint/config/boundaries/settings.ts'
 import { appBoundaries, compilerBoundaries } from './tools/lint/config/boundaries/wrappers/oxlint.ts'
 import { ignores } from './tools/lint/config/globalIgnores.ts'
 import { unusedVars } from './tools/lint/config/oxlint/unusedVars.ts'
-import { jsPlugins } from './tools/lint/config/oxlint/plugins.ts'
-
+// import { jsPlugins } from './tools/lint/config/oxlint/plugins.ts'
+// import { jsPlugins } from './tools/lint/custom/index.ts'
 export default defineConfig({
   ignorePatterns: ignores,
 
-  jsPlugins,
+  // jsPlugins,
+  settings: {
+    custom: {
+      rootDir: 'web-react',
+    },
+  },
 
-  settings: boundarySettings,
+  jsPlugins: [
+    {
+      name: 'internal-imports',
+      specifier: './tools/lint/custom/internalImports/no-internal-import-extensions-plugin.ts',
+    },
 
-  overrides: [
-    appBoundaries,
-    compilerBoundaries,
-    unusedVars,
-
+    {
+      name: 'test-api',
+      specifier: './tools/lint/custom/testApi-ox/no-test-only-api-plugin.ts',
+    },
   ],
+
+  // {
+  //   name: 'test',
+  //   specifier: './tools/lint/custom/test-plugin.js'
+  // }
+  //   {
+  //     name: 'custom',
+  //     specifier: './tools/lint/custom/index.ts'
+
+  //   }
+
+  // ],
+
+  // settings: boundarySettings,
+
+  // overrides: [
+  //   appBoundaries,
+  //   compilerBoundaries,
+  //   unusedVars,
+
+  // ],
 
   plugins: [
     'eslint',
@@ -30,6 +59,9 @@ export default defineConfig({
   ],
 
   rules: {
+    // 'test/test-rule': 'error',
+    'test-api/no-test-only-api': 'error',
+    'internal-imports/no-internal-import-extensions': 'error',
     'react/static-components': 'error',
     'react/use-memo': 'error',
     'react/preserve-manual-memoization': 'error',
@@ -49,13 +81,18 @@ export default defineConfig({
         js: 'never',
         jsx: 'never',
         ignorePackages: true,
+        checkTypeImports: true,
         pathGroupOverrides: [
           {
-            pattern: '@generated/**',
+            pattern: '@interaction/**',
             action: 'enforce',
           },
           {
-            pattern: 'zustand/**',
+            pattern: '@composites/**',
+            action: 'enforce',
+          },
+          {
+            pattern: '@data/**',
             action: 'enforce',
           },
 

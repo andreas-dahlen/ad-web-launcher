@@ -8,7 +8,7 @@ import {
   getObjectProperty,
   getValueLoc,
   getKeyLoc
-} from "./helpers/tokenAst";
+} from "./helpers/tokenAst.ts";
 
 const rule: Rule.RuleModule = {
   meta: {

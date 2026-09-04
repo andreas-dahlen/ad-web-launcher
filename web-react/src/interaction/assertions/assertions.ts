@@ -1,5 +1,5 @@
 import type { Computed, ScrollComputed, SliderComputed } from '@interaction/types/runtime/computed.types'
-import type { Axis, InteractionType, BoxSide } from '../../shared/types/core.types'
+import type { Axis, InteractionType, BoxSide } from '../../shared/types/core.types.ts'
 
 const VALID_DIRS = new Set<BoxSide>(['left', 'right', 'top', 'bottom'])
 

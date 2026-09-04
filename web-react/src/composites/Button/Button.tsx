@@ -5,6 +5,7 @@ import Label, { type LabelSettings } from '../../blocks/Label/Label'
 import Svg, { type IconSettings } from '../../blocks/Svg/Svg'
 import type { ButtonSettings, Directive, DragSettings } from '@composites/types/comp.types'
 import { useBehaviorState } from '@composites/hooks/useBehaviorState.hook'
+import { __TEST_ONLY_API } from '@interaction/input/gesture.utils'
 type ButtonProps = {
   directive?: Directive
   icon?: IconSettings

@@ -1,18 +1,22 @@
 import * as vscode from 'vscode'
-import type { ResolvedPaths } from './resolvePath.ts'
 import { resolveRunners } from './resolveRunners.ts'
 import { runOxlint } from '../runners/runOxlint.ts'
+import { resolveRoot } from './resolveRoot.ts'
 
-export async function handleRun(
-  settings: vscode.WorkspaceConfiguration,
-  filePaths: ResolvedPaths,
+export function handleLaunch(
   output: vscode.OutputChannel,
   diagnostics: vscode.DiagnosticCollection
-): Promise<void> {
-  const allowed = resolveRunners(settings, filePaths.filePath)
+): void {
+
+  const settings = vscode.workspace.getConfiguration(
+    'lintOnStart',
+  )
+
+  const projectRoot = resolveRoot(settings, output)
+  const allowed = resolveRunners(settings)
 
   if (allowed.oxlint) {
-    runOxlint(filePaths, output, diagnostics)
+    runOxlint(projectRoot, output, diagnostics)
   }
 
   if (allowed.eslint) {

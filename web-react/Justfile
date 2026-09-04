@@ -39,8 +39,8 @@ update-all:
     ./scripts/run-cmd.sh update
     ./scripts/run-cmd.sh install-scripts ls
 
-install-force package:
-    ./scripts/install-force.sh {{ package }}
+install-force +packages:
+    ./scripts/install-force.sh {{ packages }}
 
 dev:
     npm run dev
@@ -133,9 +133,9 @@ install-tcv:
     cd tools/extensions/token-compiler-vscode && npm run package
     code --install-extension tools/extensions/token-compiler-vscode/token-compiler-vscode-0.0.1.vsix --force
 
-install-ros:
-    cd tools/extensions/run-on-save && npm run package
-    code --install-extension tools/extensions/run-on-save/run-on-save-0.0.1.vsix --force
+install-los:
+    cd tools/extensions/lint-on-start && npm run package
+    code --install-extension tools/extensions/lint-on-start/lint-on-start-0.0.1.vsix --force
 
 build-tc:
     cd tools/token-compiler && npm run build

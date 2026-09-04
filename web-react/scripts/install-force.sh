@@ -5,10 +5,10 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/projects.sh"
 source "$SCRIPT_DIR/lib.sh"
 
-package="$1"
+packages=("$@")
 
-if [[ -z "$package" ]]; then
-    echo "Usage: install-force.sh <package>" >&2
+if ((${#packages[@]} == 0)); then
+    echo "Usage: install-force.sh <package> [package ...]" >&2
     exit 1
 fi
 
@@ -17,26 +17,36 @@ failed=()
 for project in "${PROJECTS[@]}"; do
     echo
     echo "========================================"
-    echo "[install-force $package] $project"
+    echo "[install-force ${packages[*]}] $project"
     echo "========================================"
 
     if ! (
         cd "$project"
 
-        dependency="$(npm pkg get "dependencies.$package" --json 2>/dev/null)"
-        dev_dependency="$(npm pkg get "devDependencies.$package" --json 2>/dev/null)"
+        install_packages=()
 
-        if [[ "$dependency" == "undefined" && "$dev_dependency" == "undefined" ]]; then
-            echo "SKIP: $package is not a dependency"
+        for package in "${packages[@]}"; do
+            dependency="$(npm pkg get "dependencies.$package" --json 2>/dev/null)"
+            dev_dependency="$(npm pkg get "devDependencies.$package" --json 2>/dev/null)"
+
+            if [[ "$dependency" == "undefined" && "$dev_dependency" == "undefined" ]]; then
+                echo "SKIP: $package is not a dependency"
+                continue
+            fi
+
+            echo "APPROVE: $package"
+            npm install-scripts approve "$package"
+
+            install_packages+=("$package@latest")
+        done
+
+        if ((${#install_packages[@]} == 0)); then
             exit 0
         fi
 
-        echo "APPROVE: $package"
-        npm install-scripts approve "$package"
-
         echo
-        echo "INSTALL: $package@latest"
-        npm install "$package@latest"
+        echo "INSTALL: ${install_packages[*]}"
+        npm install "${install_packages[@]}"
     ); then
         failed+=("$project")
     fi
