@@ -2,9 +2,9 @@ import { render } from '@testing-library/react'
 import type { ComponentProps } from 'react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import ButtonPrim from '@primitives/Button/ButtonPrim'
-import { usePointerBridge } from '@interaction/adapter/usePointerBridge.hook'
-import type { EventType } from '@shared/types/core.types'
+import ButtonPrim from '@primitives/Button/ButtonPrim.tsx'
+import { usePointerBridge } from '@interaction/adapter/usePointerBridge.hook.ts'
+import type { EventType } from '@shared/types/core.types.ts'
 
 vi.mock('@interaction/adapter/usePointerBridge.hook', () => ({
   usePointerBridge: vi.fn()

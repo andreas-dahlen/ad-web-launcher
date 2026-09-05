@@ -1,7 +1,7 @@
 import { renderHook } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 
-import { useSnapInput } from '@panels/SettingsPanel/hooks/useSnapInput'
+import { useSnapInput } from '@panels/SettingsPanel/hooks/useSnapInput.ts'
 
 describe('[USE SNAP INPUT]', () => {
   function renderSnapInput(

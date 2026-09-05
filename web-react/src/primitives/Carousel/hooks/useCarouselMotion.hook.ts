@@ -1,7 +1,7 @@
 import { useMemo, useCallback } from "react"
-import { APP_CONFIG } from '@config/app.config'
-import { carouselStore } from '../store/carousel.store'
-import type { AxisDirection } from '../../../shared/types/core.types'
+import { APP_CONFIG } from '@config/app.config.ts'
+import { carouselStore } from '../store/carousel.store.ts'
+import type { AxisDirection } from '@shared/types/core.types.ts'
 
 type Role = "prev" | "current" | "next"
 

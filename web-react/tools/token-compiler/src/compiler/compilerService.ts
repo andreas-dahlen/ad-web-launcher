@@ -21,7 +21,7 @@ function parseCss(cssPath: string): Root {
 export type TokenCompiler = ReturnType<typeof initializeCompiler>;
 export function initializeCompiler(config: CompilerConfig) {
 
-  console.log(config.mute ? "COMPILER: running in muted mode" : "COMPILER: running")
+  console.log("COMPILER LOGGING SETTINGS:", config.logging)
   const tokenPaths = findTokenPaths(config.tokenPath)
   const loaded = compileTokenGroups(config.rootDir, tokenPaths)
   const cache = createTokenCache(loaded.groups, config)
@@ -63,7 +63,7 @@ export function initializeCompiler(config: CompilerConfig) {
     const root = parseCss(cssPath)
 
     const postData = processPost({
-      root, cssPath, mute: config.mute
+      root, cssPath, trace: config.logging.trace
     })
     cache.addPostData(postData)
 
@@ -71,7 +71,7 @@ export function initializeCompiler(config: CompilerConfig) {
     if (!group) return
 
     const cssData = processModule({
-      root, group, mute: config.mute
+      root, group, trace: config.logging.trace
     })
     cache.addCssData(cssData)
     run.recordProcessed(cssPath)
@@ -86,9 +86,7 @@ export function initializeCompiler(config: CompilerConfig) {
     } else {
       console.log("EMITTER: disabled. Couldn't find an output path")
     }
-    if (!config.mute) {
-      runDiagnostics(cache, run)
-    }
+    runDiagnostics(cache, run)
     run.reset()
   }
 }

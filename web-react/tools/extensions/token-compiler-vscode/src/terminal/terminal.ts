@@ -1,6 +1,6 @@
 import { spawn, type ChildProcess } from 'node:child_process'
 import * as vscode from 'vscode'
-import type { UserOptions } from './terminal.types'
+import type { UserOptions } from './terminal.types.ts'
 
 export class CompilerTerminal implements vscode.Pseudoterminal {
 

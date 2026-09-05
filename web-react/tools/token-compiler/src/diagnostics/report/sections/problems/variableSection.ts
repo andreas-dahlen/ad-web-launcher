@@ -1,7 +1,7 @@
 
-import { colors, paint } from '../../../utils/string.ts';
-import type { VariableMismatch } from '../../../types/diagnostics.types.ts';
-import type { ReportEntry, ReportSection } from '../buildReport.ts';
+import { colors, paint } from '../../../../utils/string.ts';
+import type { VariableMismatch } from '../../../../types/diagnostics.types.ts';
+import type { ReportEntry, ReportSection } from '../../buildReport.ts';
 
 export function variableSection(data: VariableMismatch[]): ReportSection | undefined {
   const entries: ReportEntry[] = [];

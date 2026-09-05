@@ -5,7 +5,7 @@
 import type {
   StyleFromComponent,
   TokenComponent
-} from "@shared/tokenUtils/compiler.types"
+} from "@shared/tokenUtils/compiler.types.ts"
 
 export const labelStyle = {
   component: "label",

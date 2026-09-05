@@ -2,13 +2,13 @@ import { renderHook } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 
-import { drag_DEFAULTS, useDragStore } from '@primitives/Drag/store/useDragStore.hook'
+import { drag_DEFAULTS, useDragStore } from '@primitives/Drag/store/useDragStore.hook.ts'
 
 import {
   debugRegisterBinding,
   debugUnregisterBinding
-} from '@test/functions.debug'
-import { dragStore } from '@primitives/Drag/store/drag.store'
+} from '@test/functions.debug.ts'
+import { dragStore } from '@primitives/Drag/store/drag.store.ts'
 
 vi.mock('@test/functions.debug', () => ({
   debugRegisterBinding: vi.fn(),

@@ -2,8 +2,8 @@ import clsx from 'clsx'
 import css from './Layout.module.css'
 import { svsx } from '../../shared/sxCompiler/svsx.ts'
 import { cpsx } from '../../shared/sxCompiler/cpsx.ts'
-import { layoutStyle, type LayoutStyle } from '@generated/tokenModules/layout.token'
-import { layoutPreset, type LayoutPreset } from '@generated/presets/layout.preset'
+import { layoutStyle, type LayoutStyle } from '@generated/tokenModules/layout.token.ts'
+import { layoutPreset, type LayoutPreset } from '@generated/presets/layout.preset.ts'
 
 export type LayoutSettings = {
   styleVars?: LayoutStyle

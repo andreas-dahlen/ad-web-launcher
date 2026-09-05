@@ -1,4 +1,4 @@
-import { toKebab } from '@shared/tokenUtils/stringFormaters'
+import { toKebab } from '@shared/tokenUtils/stringFormaters.ts'
 
 type DataValue =
   | string

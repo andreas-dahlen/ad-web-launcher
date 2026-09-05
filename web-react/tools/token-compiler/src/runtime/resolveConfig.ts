@@ -20,16 +20,28 @@ export function resolveConfig(rootDir: string, options: UserOptions): CompilerCo
   if (!tokenRaw) {
     throw new Error("Error: Couldn't resolve token path in either compiler.config.json or vsCode settings")
   }
-  const outRaw = config.outDir ?? options.outDir
 
-  const outPath = outRaw ? path.resolve(projectRoot, outRaw) : null
+  const outPath = config.outDir ? path.resolve(projectRoot, config.outDir) : null
 
-  const mute = config.mute ?? options.mute ?? false
+  const outputs = {
+    extension: config.outputs?.extension ?? false,
+    lsp: config.outputs?.lsp ?? false,
+    meta: config.outputs?.meta ?? false,
+    pathPatches: config.outputs?.pathPatches ?? false,
+    presets: config.outputs?.presets ?? false,
+    tokens: config.outputs?.tokens ?? false,
+  }
+
+  const logging = {
+    trace: config.logging?.trace ?? false,
+    emissions: config.logging?.emissions ?? "summary"
+  }
 
   return {
     rootDir: projectRoot,
     tokenPath: path.resolve(projectRoot, tokenRaw),
     outPath,
-    mute
+    logging,
+    outputs
   }
 }

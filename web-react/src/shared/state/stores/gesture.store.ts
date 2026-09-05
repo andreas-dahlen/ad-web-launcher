@@ -1,4 +1,4 @@
-import type { InteractionType } from '../../types/core.types';
+import type { InteractionType } from '../../types/core.types.ts';
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 

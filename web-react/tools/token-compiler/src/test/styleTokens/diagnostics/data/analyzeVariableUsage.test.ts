@@ -6,7 +6,7 @@ import type {
   CompilerVariable,
   CssData,
   CssDataTokenGroup,
-} from '../../../../types/compiler.types.js'
+} from '../../../../types/compiler.types.ts'
 
 function createVariable(
   overrides: Partial<CompilerVariable> = {},

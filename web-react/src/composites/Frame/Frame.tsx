@@ -1,11 +1,11 @@
-import type { Directive, DragSettings } from '@composites/types/comp.types'
+import type { Directive, DragSettings } from '@composites/types/comp.types.ts'
 import type React from 'react'
-import { createId, generateId } from '@data/generators/idGenerator'
-import DragPrim from '@primitives/Drag/DragPrim'
-import { useBehaviorState } from '@composites/hooks/useBehaviorState.hook'
-import { Layout, type LayoutSettings } from '@blocks/Layout/Layout'
+import { createId, generateId } from '@data/generators/idGenerator.ts'
+import DragPrim from '@primitives/Drag/DragPrim.tsx'
+import { useBehaviorState } from '@composites/hooks/useBehaviorState.hook.ts'
+import { Layout, type LayoutSettings } from '@blocks/Layout/Layout.tsx'
 import Label, { type LabelSettings } from '../../blocks/Label/Label.ts'
-import { Visual, type VisualSettings } from '@blocks/visual/Visual'
+import { Visual, type VisualSettings } from '@blocks/visual/Visual.tsx'
 
 type FrameProps = {
   directive?: Directive
@@ -67,7 +67,7 @@ export default function Frame({
       useSettingsSnap={drag?.useSettingsSnap}
       interactive={isDragInteractive}
       isInFlow={isInFlow}
-      onSwipeCommit={drag?.onSwipeCommit && drag.onSwipeCommit}
+      onSwipeCommit={drag?.onSwipeCommit}
       snapX={drag?.useSettingsSnap ? drag?.snapX : undefined}
       snapY={drag?.useSettingsSnap ? drag?.snapY : undefined}
     >

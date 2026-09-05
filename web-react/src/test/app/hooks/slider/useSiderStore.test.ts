@@ -1,14 +1,14 @@
 import { renderHook } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { sliderStore } from '@primitives/Slider/store/slider.store'
+import { sliderStore } from '@primitives/Slider/store/slider.store.ts'
 
-import { useSliderStore, slider_DEFAULTS } from '@primitives/Slider/store/useSliderStore.hook'
+import { useSliderStore, slider_DEFAULTS } from '@primitives/Slider/store/useSliderStore.hook.ts'
 
 import {
   debugRegisterBinding,
   debugUnregisterBinding
-} from '@test/functions.debug'
+} from '@test/functions.debug.ts'
 
 vi.mock('@test/functions.debug', () => ({
   debugRegisterBinding: vi.fn(),

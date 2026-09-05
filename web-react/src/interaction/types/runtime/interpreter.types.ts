@@ -1,7 +1,7 @@
-import type { Computed } from '@interaction/types/runtime/computed.types'
-import type { Descriptor, SwipeableDescriptor } from '@interaction/types/descriptor/descriptor.types'
-import type { RuntimePress, RuntimePressRelease, RuntimeSwipe, RuntimeCommit, RuntimeStart } from '@interaction/types/runtime/runtime.types'
-import type { Axis, Vec2 } from '../../../shared/types/core.types'
+import type { Computed } from '@interaction/types/runtime/computed.types.ts'
+import type { Descriptor, SwipeableDescriptor } from '@interaction/types/descriptor/descriptor.types.ts'
+import type { RuntimePress, RuntimePressRelease, RuntimeSwipe, RuntimeCommit, RuntimeStart } from '@interaction/types/runtime/runtime.types.ts'
+import type { Axis, Vec2 } from '@shared/types/core.types.ts'
 /*
   UTILS
 */

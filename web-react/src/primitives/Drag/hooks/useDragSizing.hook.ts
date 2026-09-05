@@ -1,5 +1,5 @@
 import { useLayoutEffect } from "react"
-import { dragStore } from '../store/drag.store'
+import { dragStore } from '../store/drag.store.ts'
 
 interface UseDragSizingProps {
   elRef: React.RefObject<HTMLElement | null>

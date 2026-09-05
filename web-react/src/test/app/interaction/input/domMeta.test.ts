@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { createMetaByType } from '@test/app/interaction/builders/domAndMeta.factory'
+import { createMetaByType } from '@test/app/interaction/builders/domAndMeta.factory.ts'
 
 describe('[EXTRACT DOMMETA]', () => {
   it('[CAROUSEL] meta package extracted', () => {

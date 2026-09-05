@@ -9,6 +9,7 @@ import { analyzeWriteResult } from './analyzers/analyzeWriteResult.ts'
 import { analyzeIssues } from './analyzers/analyzeIssues.ts';
 import { analyzeVariableDeclarations } from './analyzers/analyzeVariableDeclarations.ts';
 import type { TokenCache } from '../../compiler/tracking/tokenCache.ts';
+import { analyzePatchResult } from './analyzers/analyzePatchResult.ts';
 
 export function buildData(
   cache: TokenCache,
@@ -36,6 +37,7 @@ export function buildData(
   const generatedFiles = analyzeWriteResult(emitResult?.writeResult)
 
   //patchResult currently unused... needs to use all emitResults...
+  const generatedPatches = analyzePatchResult(emitResult?.patchResult)
 
   const omittedPresetFiles =
     emitResult?.extractResult.omittedPresetFiles ?? []
@@ -65,6 +67,7 @@ export function buildData(
     missingCssModules,
     processedGroupCount: runGroups.length,
     generatedFiles,
+    generatedPatches,
     issues,
     omittedPresetFiles
   }

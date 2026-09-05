@@ -1,5 +1,5 @@
-import { colors, formatLogPath, paint } from '../../../utils/string.ts';
-import type { ReportEntry, ReportSection } from '../buildReport.ts';
+import { colors, formatLogPath, paint } from '../../../../utils/string.ts';
+import type { ReportEntry, ReportSection } from '../../buildReport.ts';
 
 export function omittedPresetSection(data: string[]): ReportSection | undefined {
   const entries: ReportEntry[] = [];

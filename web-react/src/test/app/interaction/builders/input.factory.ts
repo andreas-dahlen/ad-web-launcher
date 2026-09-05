@@ -1,9 +1,9 @@
-import { createButtonDesc, createCarouselDesc, createDragDesc, createScrollDesc, createSliderDesc } from '@test/app/interaction/builders/desc.factory'
-import type { DescriptorMap, DescriptorSwipeMap, InterpreterPressOverrides, InterpreterPressReleaseOverrides, InterpreterSwipeCommitOverrides, InterpreterSwipeOverrides, InterpreterSwipeStartOverrides, SwipeTypeMap, TypeMap } from '@test/app/interaction/override.types'
-import type { InterpreterPress, InterpreterPressRelease, InterpreterSwipe, InterpreterSwipeCommit, InterpreterSwipeStart, SwipingSession } from '@interaction/types/runtime/interpreter.types'
-import { createRuntimePress, createRuntimePressRelease, createRuntimeSwipe, createRuntimeSwipeCommit, createRuntimeswipeStart } from '@test/app/interaction/builders/runtime.factory'
-import { modifyGestureForTests } from '@interaction/input/interpreter'
-import { createComputedSlider } from '@test/app/interaction/builders/computed.factory'
+import { createButtonDesc, createCarouselDesc, createDragDesc, createScrollDesc, createSliderDesc } from '@test/app/interaction/builders/desc.factory.ts'
+import type { DescriptorMap, DescriptorSwipeMap, InterpreterPressOverrides, InterpreterPressReleaseOverrides, InterpreterSwipeCommitOverrides, InterpreterSwipeOverrides, InterpreterSwipeStartOverrides, SwipeTypeMap, TypeMap } from '@test/app/interaction/override.types.ts'
+import type { InterpreterPress, InterpreterPressRelease, InterpreterSwipe, InterpreterSwipeCommit, InterpreterSwipeStart, SwipingSession } from '@interaction/types/runtime/interpreter.types.ts'
+import { createRuntimePress, createRuntimePressRelease, createRuntimeSwipe, createRuntimeSwipeCommit, createRuntimeswipeStart } from '@test/app/interaction/builders/runtime.factory.ts'
+import { modifyGestureForTests } from '@interaction/input/interpreter.ts'
+import { createComputedSlider } from '@test/app/interaction/builders/computed.factory.ts'
 
 const typeMap: TypeMap = {
   carousel: createCarouselDesc,

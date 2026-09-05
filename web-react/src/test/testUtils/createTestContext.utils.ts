@@ -1,9 +1,9 @@
-import { testBuildDesc } from '../testApi'
-import { createMetaByType } from '@test/app/interaction/builders/domAndMeta.factory'
-import { resetInteractionStores } from '@test/testUtils/storeReset.utils'
+import { testBuildDesc } from '../testApi.ts'
+import { createMetaByType } from '@test/app/interaction/builders/domAndMeta.factory.ts'
+import { resetInteractionStores } from '@test/testUtils/storeReset.utils.ts'
 
-import { seedStoreByType } from '@test/testUtils/storeSeed.utils'
-import type { InteractionType } from '../../shared/types/core.types'
+import { seedStoreByType } from '@test/testUtils/storeSeed.utils.ts'
+import type { InteractionType } from '../../shared/types/core.types.ts'
 
 export function createMetaContext(type: Exclude<InteractionType, "button">) {
   const id = "test"

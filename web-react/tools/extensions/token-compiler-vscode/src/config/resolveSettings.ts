@@ -1,6 +1,6 @@
 import path from 'node:path'
 import * as vscode from 'vscode'
-import type { UserOptions } from '../terminal/terminal.types'
+import type { UserOptions } from '../terminal/terminal.types.ts'
 
 export function createSettingsResolver(settings: vscode.WorkspaceConfiguration, output: vscode.OutputChannel) {
   const projectRoot = getProjectRoot(settings, output)
@@ -27,7 +27,6 @@ export function createSettingsResolver(settings: vscode.WorkspaceConfiguration, 
     getUserOptions(): UserOptions {
       return {
         tokenFolder: settings.get<string>('tokenFolder'),
-        outDir: settings.get<string>('outDir'),
         mute: settings.get<boolean>('mute'),
       }
     }

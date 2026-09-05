@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { cpsx } from '@shared/sxCompiler/cpsx'
+import { cpsx } from '@shared/sxCompiler/cpsx.ts'
 
 describe('[CPSX]', () => {
   it('returns an empty array when presets are undefined', () => {

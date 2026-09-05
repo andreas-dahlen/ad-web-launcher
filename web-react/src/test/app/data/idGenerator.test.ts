@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 import {
   createId,
   generateId
-} from '@data/generators/idGenerator'
+} from '@data/generators/idGenerator.ts'
 
 describe('[DATA] idGenerator', () => {
   describe('generateId', () => {

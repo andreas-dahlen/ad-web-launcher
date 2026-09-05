@@ -1,5 +1,5 @@
 import { useLayoutEffect } from "react"
-import { scrollStore } from '../store/scroll.store'
+import { scrollStore } from '../store/scroll.store.ts'
 
 
 interface UseScrollSizingProps {

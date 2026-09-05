@@ -6,16 +6,16 @@ import type { PostData } from '../types/compiler.types.ts';
 export function processPost({
   root,
   cssPath,
-  mute,
+  trace,
   mutate = true
 }: {
   root: Root
   cssPath: string
-  mute: boolean
+  trace: boolean
   mutate?: boolean
 }): PostData {
   void mutate // possible to avoid css mutations
-  void mute //possible later mute... nothing to mute now though
+  void trace //possible later trace... no tracing currently though
   const postData = walkProject(root, cssPath)
 
   return postData

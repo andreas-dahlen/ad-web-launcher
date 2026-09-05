@@ -4,7 +4,7 @@ import { analyzeIssues } from '../../../../diagnostics/data/analyzers/analyzeIss
 import type {
   Issue,
   IssueGroup,
-} from '../../../../types/issueCollector.types.js'
+} from '../../../../types/issueCollector.types.ts'
 
 function createIssue(
   overrides: Partial<Issue> = {},

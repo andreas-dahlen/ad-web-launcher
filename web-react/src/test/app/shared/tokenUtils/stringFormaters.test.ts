@@ -11,7 +11,7 @@ import {
   escapeReservedWord,
   normalizeCssValue,
   removeWhitespace,
-} from '@shared/tokenUtils/stringFormaters'
+} from '@shared/tokenUtils/stringFormaters.ts'
 
 describe('[TOKEN UTILS] string formatters', () => {
   describe('toKebab', () => {

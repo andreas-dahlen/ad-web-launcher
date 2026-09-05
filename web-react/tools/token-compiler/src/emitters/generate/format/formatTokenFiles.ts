@@ -23,7 +23,7 @@ export function formatTokenFiles(tokenGroupData: TokenGroupData[]): FormatResult
     const importStatement = `import type {
   StyleFromComponent,
   TokenComponent
-} from "@shared/tokenUtils/compiler.types"`
+} from "@shared/tokenUtils/compiler.types.ts"`
 
     const content = `// AUTO-GENERATED FILE.
 // DO NOT EDIT.

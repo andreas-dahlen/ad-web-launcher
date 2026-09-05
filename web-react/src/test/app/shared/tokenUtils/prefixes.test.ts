@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 import {
   isValidPrefix,
   prefixPriority,
-} from '@shared/tokenUtils/prefixes'
+} from '@shared/tokenUtils/prefixes.ts'
 
 describe('[TOKEN UTILS]', () => {
   describe('isValidPrefix', () => {

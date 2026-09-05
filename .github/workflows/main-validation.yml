@@ -31,22 +31,32 @@ jobs:
         working-directory: web-react
         run: npm ci # 'npm ci' is faster and stricter than 'npm install' for CI pipelines
 
-      # 4. Run Linter (ESLint)
+      # 4. Run Linter (Oxint)
+      - name: Run Oxint
+        working-directory: web-react
+        run: npm run oxlint
+
+      # 5. Run Linter (ESLint)
       - name: Run ESLint
         working-directory: web-react
-        run: npm run lint
+        run: npm run eslint
 
-      # 5. Run Unit Tests
+      # 6. Run Linter (stylelint)
+      - name: Run Stylelint
+        working-directory: web-react
+        run: npm run stylelint
+
+      # 7. Run Unit Tests
       - name: Run Tests
         working-directory: web-react
         run: npm run test
 
-# 6. Build Production Bundle (Single File)
+# 8. Build Production Bundle (Single File)
       - name: Build Production Bundle
         working-directory: web-react
         run: npm run build
 
-      # 7. Copy single-file build -> android assets directory
+      # 9. Copy single-file build -> android assets directory
       # "if false" is used to STOP building.. need to config android stuff before i allow building from main push
       - name: Copy web build into Android assets
         if: false
@@ -54,7 +64,7 @@ jobs:
           mkdir -p android/app/src/main/assets
           cp web-react/dist/index.html android/app/src/main/assets/index.html
 
-      # 8. Setup Java + Android SDK
+      # 10. Setup Java + Android SDK
       - name: Setup JDK
         if: false
         uses: actions/setup-java@v4
@@ -62,13 +72,13 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      # 9. Build Production Release APK
+      # 11. Build Production Release APK
       - name: Build Release APK
         if: false
         working-directory: android
         run: ./gradlew assembleRelease
 
-      # 10. Determine next production version (Increments MINOR version like v1.1.0)
+      # 12. Determine next production version (Increments MINOR version like v1.1.0)
       - name: Determine next production version
         id: versioning
         if: github.event_name == 'push' && github.ref == 'refs/heads/main' && false
@@ -86,7 +96,7 @@ jobs:
           echo "New production version: $NEW_VERSION"
           echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
 
-      # 11. Create Official Production GitHub Release
+      # 13. Create Official Production GitHub Release
       - name: Create Production Release
         if: github.event_name == 'push' && github.ref == 'refs/heads/main' && false
         uses: softprops/action-gh-release@v2

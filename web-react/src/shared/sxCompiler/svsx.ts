@@ -2,16 +2,16 @@ import type {
   TokenComponent,
   TokenGroup,
   ValidPrefix
-} from "../tokenUtils/compiler.types";
+} from "../tokenUtils/compiler.types.ts";
 
 import {
   normalizeCssValue,
   toCssVar
-} from "../tokenUtils/stringFormaters";
+} from "../tokenUtils/stringFormaters.ts";
 
 import {
   isValidPrefix
-} from "../tokenUtils/prefixes";
+} from "../tokenUtils/prefixes.ts";
 
 type StyleInput = Record<string, unknown>;
 

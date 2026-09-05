@@ -1,10 +1,10 @@
 import { renderHook } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { useDragSizing } from '@primitives/Drag/hooks/useDragSizing.hook'
-import { dragStore } from '@primitives/Drag/store/drag.store'
+import { useDragSizing } from '@primitives/Drag/hooks/useDragSizing.hook.ts'
+import { dragStore } from '@primitives/Drag/store/drag.store.ts'
 
-import { createResizeObserverMock } from '@test/testUtils/resizeObserver.utils'
+import { createResizeObserverMock } from '@test/testUtils/resizeObserver.utils.ts'
 
 vi.mock('@primitives/Drag/store/drag.store', () => ({
   dragStore: {

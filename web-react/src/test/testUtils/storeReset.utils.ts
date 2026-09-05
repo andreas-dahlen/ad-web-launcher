@@ -1,10 +1,10 @@
-import { carouselStore } from '@primitives/Carousel/store/carousel.store'
-import { dragStore } from '@primitives/Drag/store/drag.store'
-import { scrollStore } from '@primitives/Scroll/store/scroll.store'
-import { sliderStore } from '@primitives/Slider/store/slider.store'
-import { gestureStore } from '../../shared/state/stores/gesture.store'
-import { wallpaperStore } from '@stores/wallpaper.store'
-import { settingsStore } from '@stores/settings.store'
+import { carouselStore } from '@primitives/Carousel/store/carousel.store.ts'
+import { dragStore } from '@primitives/Drag/store/drag.store.ts'
+import { scrollStore } from '@primitives/Scroll/store/scroll.store.ts'
+import { sliderStore } from '@primitives/Slider/store/slider.store.ts'
+import { gestureStore } from '../../shared/state/stores/gesture.store.ts'
+import { wallpaperStore } from '@stores/wallpaper.store.ts'
+import { settingsStore } from '@stores/settings.store.ts'
 
 export function resetInteractionStores() {
   carouselStore.setState({ bindings: {} })

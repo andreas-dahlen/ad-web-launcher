@@ -11,7 +11,7 @@ export function runDiagnostics(
 
   const data = buildData(cache, run)
 
-  const report = buildReport(data)
+  const report = buildReport(data, cache.getConfig())
 
   printReport(report)
 

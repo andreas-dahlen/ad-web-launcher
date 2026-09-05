@@ -2,18 +2,18 @@ import { render } from '@testing-library/react'
 import type { ComponentProps } from 'react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-import ContentCarouselPrim from '@primitives/Carousel/ContentCarouselPrim'
+import ContentCarouselPrim from '@primitives/Carousel/ContentCarouselPrim.tsx'
 
-import { useCarouselMotion } from '@primitives/Carousel/hooks/useCarouselMotion.hook'
-import { useItemSizing } from '@primitives/Carousel/hooks/useItemSizing.hook'
-import { useCarouselStore } from '@primitives/Carousel/store/useCarouselStore.hook'
-import { carouselStore, type CarouselStore } from '@primitives/Carousel/store/carousel.store'
+import { useCarouselMotion } from '@primitives/Carousel/hooks/useCarouselMotion.hook.ts'
+import { useItemSizing } from '@primitives/Carousel/hooks/useItemSizing.hook.ts'
+import { useCarouselStore } from '@primitives/Carousel/store/useCarouselStore.hook.ts'
+import { carouselStore, type CarouselStore } from '@primitives/Carousel/store/carousel.store.ts'
 
-import { svsx } from '@shared/sxCompiler/svsx'
+import { svsx } from '@shared/sxCompiler/svsx.ts'
 
 import css from '../../../primitives/Carousel/Carousel.module.css'
 
-import { carousel_DEFAULTS } from '@primitives/Carousel/store/useCarouselStore.hook'
+import { carousel_DEFAULTS } from '@primitives/Carousel/store/useCarouselStore.hook.ts'
 
 vi.mock('@primitives/Carousel/hooks/useCarouselMotion.hook', () => ({
   useCarouselMotion: vi.fn()

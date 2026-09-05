@@ -1,6 +1,6 @@
 import { defineRule } from '@oxlint/plugins'
 
-import { getInternalAliases } from './helpers/readPath.ts'
+import { getInternalAliases } from './helpers/getInternalAliases.ts'
 import { resolveProjectRoot } from '../helpers/resolveProjectRoot.ts'
 
 let internalAliases: string[] | undefined
@@ -29,7 +29,10 @@ export default defineRule({
 
         if (
           typeof source !== 'string' ||
-          !aliases.some(alias => source.startsWith(alias))
+          !aliases.some(alias => source.startsWith(alias)) ||
+          node.specifiers.some(
+            specifier => specifier.type === 'ImportNamespaceSpecifier'
+          )
         ) {
           return
         }

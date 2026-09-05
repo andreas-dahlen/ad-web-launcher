@@ -2,7 +2,7 @@ import parser from '@typescript-eslint/parser'
 import { Linter } from 'eslint'
 import { describe, expect, it } from 'vitest'
 
-import rule from '../testApi/no-test-only-api'
+import rule from '../testApi/no-test-only-api.ts'
 
 const config = [
   {

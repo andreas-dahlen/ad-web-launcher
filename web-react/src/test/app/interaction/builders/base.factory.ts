@@ -1,6 +1,6 @@
-import type { BaseInteraction, BaseWithAxis1D, BaseWithAxis2D } from '@interaction/types/descriptor/base.types';
-import { merge } from '@test/testUtils/factory.utils';
-import { base_DEFAULT, baseSwipe_DEFAULT } from '@test/app/interaction/fixtures/base.fixture';
+import type { BaseInteraction, BaseWithAxis1D, BaseWithAxis2D } from '@interaction/types/descriptor/base.types.ts';
+import { merge } from '@test/testUtils/factory.utils.ts';
+import { base_DEFAULT, baseSwipe_DEFAULT } from '@test/app/interaction/fixtures/base.fixture.ts';
 
 export function createBaseInteraction(overrides: Partial<BaseInteraction> = {}): BaseInteraction {
   return merge(base_DEFAULT.base, overrides)

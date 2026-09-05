@@ -1,11 +1,11 @@
 import { svsx } from '../../shared/sxCompiler/svsx.ts'
 import clsx from 'clsx'
 import css from './Label.module.css'
-import type { Mode } from '@composites/types/comp.types'
-import type { BoxSide } from '../../shared/types/core.types'
+import type { Mode } from '@composites/types/comp.types.ts'
+import type { BoxSide } from '../../shared/types/core.types.ts'
 import { cpsx } from '../../shared/sxCompiler/cpsx.ts'
-import { labelPreset, type LabelPreset } from '@generated/presets/label.preset'
-import { labelStyle, type LabelStyle } from '@generated/tokenModules/label.token'
+import { labelPreset, type LabelPreset } from '@generated/presets/label.preset.ts'
+import { labelStyle, type LabelStyle } from '@generated/tokenModules/label.token.ts'
 import type { ElementType } from 'react'
 
 export type LabelSettings = {

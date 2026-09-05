@@ -1,4 +1,4 @@
-import type { CssVarString } from '@shared/tokenUtils/compiler.types';
+import type { CssVarString } from '@shared/tokenUtils/compiler.types.ts';
 import { reserved } from './reservedList.ts';
 
 export function toKebab(str: string): string {

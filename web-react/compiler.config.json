@@ -1,7 +1,17 @@
 {
   "tokenFolder": "src/styleTokens/tokens",
   "outDir": "src/styleTokens/generated",
-  "mute": false,
-  "cliFile": "tools/token-compiler/dist/cli.js"
-  // "sdfsdfsd": "sdgsdg"
+  "cliFile": "tools/token-compiler/dist/cli.js",
+  "outputs": {
+    "extension": true,
+    "lsp": true,
+    "meta": false,
+    "pathPatches": true,
+    "presets": true,
+    "tokens": true
+  },
+  "logging": {
+    "trace": false,
+    "emissions": "summary" //or verbose or off
+  }
 }

@@ -1,9 +1,9 @@
 import { renderHook } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 
-import { useDragMotion } from '@primitives/Drag/hooks/useDragMotion.hook'
+import { useDragMotion } from '@primitives/Drag/hooks/useDragMotion.hook.ts'
 
-import { Z } from '@config/zIndex.config'
+import { Z } from '@config/zIndex.config.ts'
 
 describe('[USE DRAG MOTION]', () => {
   function renderMotion(

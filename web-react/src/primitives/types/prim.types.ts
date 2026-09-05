@@ -1,5 +1,5 @@
-import type { Axis1D, EventType, BoxSide } from '../../shared/types/core.types.ts'
-import type { DataAttributes } from '../../shared/types/utils.types.ts'
+import type { Axis1D, EventType, BoxSide } from '@shared/types/core.types.ts'
+import type { DataAttributes } from '@shared/types/utils.types.ts'
 import type React from 'react'
 import type { CarouselPreset } from '@generated/presets/carousel.preset.ts'
 import type { SliderPreset } from '@generated/presets/slider.preset.ts'

@@ -1,10 +1,10 @@
 import { describe, expect, it, vi } from 'vitest'
 
-import { svsx } from '@shared/sxCompiler/svsx'
-import { prefixPriority } from '@shared/tokenUtils/prefixes'
+import { svsx } from '@shared/sxCompiler/svsx.ts'
+import { prefixPriority } from '@shared/tokenUtils/prefixes.ts'
 import type {
   TokenComponent
-} from '@shared/tokenUtils/compiler.types'
+} from '@shared/tokenUtils/compiler.types.ts'
 
 const component: TokenComponent = {
   component: 'button',

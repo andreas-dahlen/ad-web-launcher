@@ -1,10 +1,10 @@
-import { layoutStore, type Scene } from '@stores/layout.store';
-import type { Axis1D } from '../../shared/types/core.types';
-import { useSceneContext } from '@primitives/Carousel/hooks/useSceneContext.hook';
-import Button from '@composites/Button/Button';
-import { carouselStore } from '@primitives/Carousel/store/carousel.store';
-import Frame from '@composites/Frame/Frame';
-import Label from '../../blocks/Label/Label';
+import { layoutStore, type Scene } from '@stores/layout.store.ts';
+import type { Axis1D } from '../../shared/types/core.types.ts';
+import { useSceneContext } from '@primitives/Carousel/hooks/useSceneContext.hook.ts';
+import Button from '@composites/Button/Button.ts';
+import { carouselStore } from '@primitives/Carousel/store/carousel.store.ts';
+import Frame from '@composites/Frame/Frame.ts';
+import Label from '../../blocks/Label/Label.tsx';
 import * as Icons from '@data/icons'
 
 type SceneLayoutPanel = {

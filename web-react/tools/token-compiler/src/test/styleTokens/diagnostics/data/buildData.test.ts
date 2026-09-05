@@ -4,9 +4,9 @@ import { buildData } from '../../../../diagnostics/data/buildData.ts'
 import type {
   CssData,
   CssDataTokenGroup,
-} from '../../../../types/compiler.types.js'
-import type { CompilerRun } from '../../../../compiler/tracking/compilerRun.js'
-import type { TokenCache } from '../../../../compiler/tracking/tokenCache.js'
+} from '../../../../types/compiler.types.ts'
+import type { CompilerRun } from '../../../../compiler/tracking/compilerRun.ts'
+import type { TokenCache } from '../../../../compiler/tracking/tokenCache.ts'
 
 function createCssData(
   overrides: Partial<CssData> = {},

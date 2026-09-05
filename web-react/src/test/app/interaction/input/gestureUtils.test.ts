@@ -1,11 +1,11 @@
 import { describe, expect, it, vi } from 'vitest'
-import { sizeStore } from '@shared/state/stores/size.store'
-import { APP_CONFIG } from '@config/app.config'
-import { gestureUtils } from '@interaction/input/gesture.utils'
-import { testGestureUtils } from '@test/testApi'
-import { createButtonDesc, createCarouselDesc, createSliderDesc } from '@test/app/interaction/builders/desc.factory'
-import { createBaseWithAxis1D } from '@test/app/interaction/builders/base.factory'
-import { createPressCapabilities } from '@test/app/interaction/builders/capabilities.factory'
+import { sizeStore } from '@shared/state/stores/size.store.ts'
+import { APP_CONFIG } from '@config/app.config.ts'
+import { gestureUtils } from '@interaction/input/gesture.utils.ts'
+import { testGestureUtils } from '@test/testApi.ts'
+import { createButtonDesc, createCarouselDesc, createSliderDesc } from '@test/app/interaction/builders/desc.factory.ts'
+import { createBaseWithAxis1D } from '@test/app/interaction/builders/base.factory.ts'
+import { createPressCapabilities } from '@test/app/interaction/builders/capabilities.factory.ts'
 
 
 function mockDeviceSize(width = 400, height = 800) {

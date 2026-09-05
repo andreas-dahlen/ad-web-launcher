@@ -1,10 +1,10 @@
 import { describe, expect, it, vi } from 'vitest'
 
-import { domUpdater } from '@interaction/updater/domUpdater'
+import { domUpdater } from '@interaction/updater/domUpdater.ts'
 
-import { createRuntimePress, createRuntimeSwipe, createRuntimeswipeStart, createRuntimeSwipeCommit } from '@test/app/interaction/builders/runtime.factory'
+import { createRuntimePress, createRuntimeSwipe, createRuntimeswipeStart, createRuntimeSwipeCommit } from '@test/app/interaction/builders/runtime.factory.ts'
 
-import type { Runtime } from '@interaction/types/runtime/runtime.types'
+import type { Runtime } from '@interaction/types/runtime/runtime.types.ts'
 
 describe('[DOM UPDATER]', () => {
   const createElement = () => document.createElement('div')

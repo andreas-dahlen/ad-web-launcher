@@ -1,5 +1,5 @@
 import { useEffect } from "react"
-import { sliderStore } from '../store/slider.store'
+import { sliderStore } from '../store/slider.store.ts'
 
 interface UseSliderSizingProps {
   elRef: React.RefObject<HTMLElement | null>

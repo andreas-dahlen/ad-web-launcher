@@ -1,4 +1,4 @@
-import type { Constraints1D, Constraints2D, BoxSide, Vec2 } from '../../../shared/types/core.types'
+import type { Constraints1D, Constraints2D, BoxSide, Vec2 } from '@shared/types/core.types.ts'
 
 export type CarouselData = CarouselDatabase & CarouselModifiers
 

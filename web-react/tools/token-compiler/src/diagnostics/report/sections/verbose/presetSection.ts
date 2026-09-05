@@ -1,6 +1,6 @@
-import { colors, formatLogPath, paint } from '../../../utils/string.ts';
-import type { FileStatus } from '../../../types/diagnostics.types.ts';
-import type { ReportEntry, ReportSection } from '../buildReport.ts';
+import { colors, formatLogPath, paint } from '../../../../utils/string.ts';
+import type { FileStatus } from '../../../../types/diagnostics.types.ts';
+import type { ReportEntry, ReportSection } from '../../buildReport.ts';
 
 export function presetSection(data: FileStatus): ReportSection | undefined {
   const entries: ReportEntry[] = [];

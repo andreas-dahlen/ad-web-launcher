@@ -9,6 +9,7 @@ export type DiagnosticData = {
   missingCssModules: string[]
   processedGroupCount: number
   generatedFiles: GeneratedFiles
+  generatedPatches: GeneratedPatches
   issues: AnalyzedIssueGroup[]
   omittedPresetFiles: string[]
 }
@@ -53,6 +54,11 @@ export type GeneratedFiles = {
   metadata: FileStatus
   lsp: FileStatus
   extension: FileStatus
+}
+
+export type GeneratedPatches = {
+  css: FileStatus
+  jsonc: FileStatus
 }
 
 export type FileStatus = {

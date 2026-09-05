@@ -1,7 +1,7 @@
-import type { ButtonDesc, CarouselDesc, DragDesc, ScrollDesc, SliderDesc } from '@interaction/types/descriptor/descriptor.types';
-import { createBaseInteraction, createBaseWithAxis1D, createBaseWithAxis2D } from '@test/app/interaction/builders/base.factory';
-import { createCarouselData, createDragData, createScrollData, createSliderData } from '@test/app/interaction/builders/data.factory';
-import { createInstantCapabilities, createPressCapabilities, createSwipeCapabilities } from '@test/app/interaction/builders/capabilities.factory';
+import type { ButtonDesc, CarouselDesc, DragDesc, ScrollDesc, SliderDesc } from '@interaction/types/descriptor/descriptor.types.ts';
+import { createBaseInteraction, createBaseWithAxis1D, createBaseWithAxis2D } from '@test/app/interaction/builders/base.factory.ts';
+import { createCarouselData, createDragData, createScrollData, createSliderData } from '@test/app/interaction/builders/data.factory.ts';
+import { createInstantCapabilities, createPressCapabilities, createSwipeCapabilities } from '@test/app/interaction/builders/capabilities.factory.ts';
 export function createButtonDesc(
   overrides: Partial<ButtonDesc> = {}): ButtonDesc {
   return {

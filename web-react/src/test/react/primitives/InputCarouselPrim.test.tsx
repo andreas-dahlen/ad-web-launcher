@@ -3,12 +3,12 @@ import type { ComponentProps } from 'react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import css from '../../../primitives/Carousel/Carousel.module.css'
 
-import InputCarouselPrim from '@primitives/Carousel/InputCarouselPrim'
+import InputCarouselPrim from '@primitives/Carousel/InputCarouselPrim.tsx'
 
-import { usePointerBridge } from '@interaction/adapter/usePointerBridge.hook'
-import { useContainerSizing } from '@primitives/Carousel/hooks/useContainerSizing.hook'
+import { usePointerBridge } from '@interaction/adapter/usePointerBridge.hook.ts'
+import { useContainerSizing } from '@primitives/Carousel/hooks/useContainerSizing.hook.ts'
 
-import type { EventType } from '@shared/types/core.types'
+import type { EventType } from '@shared/types/core.types.ts'
 
 vi.mock('@interaction/adapter/usePointerBridge.hook', () => ({
   usePointerBridge: vi.fn()

@@ -1,7 +1,7 @@
-import { log } from '../../../test/functions.debug'
+import { log } from '../../../test/functions.debug.ts'
 import { immer } from 'zustand/middleware/immer'
 import { create } from 'zustand'
-import { APP_CONFIG } from '@config/app.config'
+import { APP_CONFIG } from '@config/app.config.ts'
 
 /* -------------------------
 Device info (works for web and APK)

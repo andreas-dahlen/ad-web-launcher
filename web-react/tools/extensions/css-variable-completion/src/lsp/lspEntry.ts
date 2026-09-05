@@ -1,6 +1,6 @@
 import * as vscode from 'vscode'
-import { resolveLspPath } from '../config/paths'
-import { watchCssSave } from './watchCssSave'
+import { resolveLspPath } from '../config/paths.ts'
+import { watchCssSave } from './watchCssSave.ts'
 
 
 export function lspEntry(

@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest'
 
-import { dragUtils } from '@interaction/solvers/dragSolver/drag.utils'
+import { dragUtils } from '@interaction/solvers/dragSolver/drag.utils.ts'
 
-import { createDragDesc } from '@test/app/interaction/builders/desc.factory'
+import { createDragDesc } from '@test/app/interaction/builders/desc.factory.ts'
 
-import type { DragData } from '@interaction/types/descriptor/data.types'
+import type { DragData } from '@interaction/types/descriptor/data.types.ts'
 
 describe('[DRAG UTILS]', () => {
   describe('resolveSwipe', () => {

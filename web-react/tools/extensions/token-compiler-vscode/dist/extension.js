@@ -23,7 +23,6 @@ function createSettingsResolver(settings, output) {
     getUserOptions() {
       return {
         tokenFolder: settings.get("tokenFolder"),
-        outDir: settings.get("outDir"),
         mute: settings.get("mute")
       };
     }

@@ -1,5 +1,5 @@
-import { colors, paint } from '../../../utils/string.ts';
-import type { ReportEntry, ReportSection } from '../buildReport.ts';
+import { colors, paint } from '../../../../utils/string.ts';
+import type { ReportEntry, ReportSection } from '../../buildReport.ts';
 export function fileSection(data: string[]): ReportSection | undefined {
   const entries: ReportEntry[] = [];
 

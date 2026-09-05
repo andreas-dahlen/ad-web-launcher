@@ -13,7 +13,7 @@ const config: KnipConfig = {
         '**/*.ts',
       ],
       entry: [
-        'index.ts',
+        'custom/**/*-plugin.ts',
       ],
     },
 

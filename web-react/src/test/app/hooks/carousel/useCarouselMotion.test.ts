@@ -1,8 +1,8 @@
 import { renderHook } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { useCarouselMotion } from '@primitives/Carousel/hooks/useCarouselMotion.hook'
-import { carouselStore } from '@primitives/Carousel/store/carousel.store'
+import { useCarouselMotion } from '@primitives/Carousel/hooks/useCarouselMotion.hook.ts'
+import { carouselStore } from '@primitives/Carousel/store/carousel.store.ts'
 
 vi.mock('@primitives/Carousel/store/carousel.store', () => ({
   carouselStore: {

@@ -1,14 +1,14 @@
 import clsx from 'clsx';
-import { dasx } from '../../shared/sxCompiler/dasx';
+import { dasx } from '../../shared/sxCompiler/dasx.ts';
 import css from './Svg.module.css'
-import { svsx } from '../../shared/sxCompiler/svsx';
+import { svsx } from '../../shared/sxCompiler/svsx.ts';
 
-import { svgPreset, type SvgPreset } from '@generated/presets/svg.preset'
-import { cpsx } from '../../shared/sxCompiler/cpsx';
-import type { DynamicIconComponent } from '@shared/types/svg'
+import { svgPreset, type SvgPreset } from '@generated/presets/svg.preset.ts'
+import { cpsx } from '../../shared/sxCompiler/cpsx.ts';
+import type { DynamicIconComponent } from '@shared/types/svg.ts'
 import type { Icon } from '@phosphor-icons/react';
-import type { Mode } from '@composites/types/comp.types';
-import { svgStyle, type SvgStyle } from '@generated/tokenModules/svg.token';
+import type { Mode } from '@composites/types/comp.types.ts';
+import { svgStyle, type SvgStyle } from '@generated/tokenModules/svg.token.ts';
 
 export type IconSettings = {
   Svg: Icon | DynamicIconComponent

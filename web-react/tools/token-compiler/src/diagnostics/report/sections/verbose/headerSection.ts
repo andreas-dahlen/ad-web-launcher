@@ -1,5 +1,5 @@
-import { colors, paint } from '../../../utils/string.ts';
-import type { ReportEntry, ReportSection } from '../../report/buildReport.ts';
+import { colors, paint } from '../../../../utils/string.ts';
+import type { ReportEntry, ReportSection } from '../../buildReport.ts';
 
 export function headerSection(processedGroupCount: number): ReportSection {
   const entries: ReportEntry[] = [];

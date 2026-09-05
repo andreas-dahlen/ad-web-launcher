@@ -6,7 +6,7 @@ import clsx from 'clsx'
 import React from 'react'
 import { layoutStore } from '@stores/layout.store.ts'
 import type { Axis1D } from '../../shared/types/core.types.ts'
-import { SceneContext } from '@primitives/Carousel/hooks/useSceneContext.hook'
+import { SceneContext } from '@primitives/Carousel/hooks/useSceneContext.hook.ts'
 import DragGrid from '@features/DragGrid/DragGrid.ts'
 /** LAYER 2/4! Interactive=false carousel. Contents are mounted inside!
  * The carousel swipes are handled by baseLayer. */

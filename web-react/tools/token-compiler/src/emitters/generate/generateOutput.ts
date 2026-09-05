@@ -5,6 +5,7 @@ import { formatMetaFile } from './format/formatMetaFile.ts';
 import { formatPathPatches } from './format/formatPathPatches.ts';
 import { formatLspFile } from './format/formatLspFile.ts';
 import { formatExtensionFile } from './format/formatExtensionFile.ts';
+import type { CompilerConfig } from '../../types/run.types.ts';
 
 export type FormatResult = {
   outputFile: string;
@@ -16,17 +17,16 @@ export type GeneratedOutput = {
   patches: FormatResult[]
 }
 
-export function generateOutput(data: EmitData): GeneratedOutput {
+export function generateOutput(data: EmitData, config: CompilerConfig): GeneratedOutput {
+
   return {
     files: [
-      ...formatPresetFiles(data.presetFiles),
-      ...formatTokenFiles(data.tokenFiles),
-      formatMetaFile(data.metadata),
-      formatLspFile(data.lspData),
-      formatExtensionFile(data.extensionData)
+      ...(config.outputs.presets ? formatPresetFiles(data.presetFiles) : []),
+      ...(config.outputs.tokens ? formatTokenFiles(data.tokenFiles) : []),
+      ...(config.outputs.meta ? [formatMetaFile(data.metadata)] : []),
+      ...(config.outputs.lsp ? [formatLspFile(data.lspData)] : []),
+      ...(config.outputs.extension ? [formatExtensionFile(data.extensionData)] : [])
     ],
-    patches: [
-      ...formatPathPatches(data.metadata)
-    ]
+    patches: config.outputs.pathPatches ? formatPathPatches(data.metadata) : []
   }
 }

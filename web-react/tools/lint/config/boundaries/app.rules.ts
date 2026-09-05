@@ -2,7 +2,7 @@
 // const boundariesPolicy = {
 //   default: 'disallow',
 
-import type { BoundaryRule } from './lint.types'
+import type { BoundaryRule } from './lint.types.ts'
 
 
 //   policies: [

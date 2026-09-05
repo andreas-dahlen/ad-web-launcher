@@ -1,12 +1,12 @@
-import { carouselSolver } from '@interaction/solvers/carouselSolver/carousel.solver';
-import { dragSolver } from '@interaction/solvers/dragSolver/drag.solver';
-import { scrollSolver } from '@interaction/solvers/scrollSolver/scroll.solver';
-import { sliderSolver } from '@interaction/solvers/sliderSolver/slider.solver';
-import type { CarouselAction, DragAction, RouterPackage, ScrollAction, SliderAction } from '@interaction/types/runtime/action.types';
-import type { Computed } from '@interaction/types/runtime/computed.types';
-import type { CarouselDesc, DragDesc, ScrollDesc, SliderDesc } from '@interaction/types/descriptor/descriptor.types';
-import type { Runtime } from '@interaction/types/runtime/runtime.types';
-import { assertScrollComputed, assertSliderComputed } from '../assertions/assertions';
+import { carouselSolver } from '@interaction/solvers/carouselSolver/carousel.solver.ts';
+import { dragSolver } from '@interaction/solvers/dragSolver/drag.solver.ts';
+import { scrollSolver } from '@interaction/solvers/scrollSolver/scroll.solver.ts';
+import { sliderSolver } from '@interaction/solvers/sliderSolver/slider.solver.ts';
+import type { CarouselAction, DragAction, RouterPackage, ScrollAction, SliderAction } from '@interaction/types/runtime/action.types.ts';
+import type { Computed } from '@interaction/types/runtime/computed.types.ts';
+import type { CarouselDesc, DragDesc, ScrollDesc, SliderDesc } from '@interaction/types/descriptor/descriptor.types.ts';
+import type { Runtime } from '@interaction/types/runtime/runtime.types.ts';
+import { assertScrollComputed, assertSliderComputed } from '../assertions/assertions.ts';
 
 export const router = {
   carousel(runtime: Runtime, desc: CarouselDesc): RouterPackage<CarouselAction> | null {

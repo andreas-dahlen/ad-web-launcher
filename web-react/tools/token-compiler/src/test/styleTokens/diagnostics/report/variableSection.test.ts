@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
 
-import { variableSection } from '../../../../diagnostics/report/sections/variableSection.ts'
+import { variableSection } from '../../../../diagnostics/report/sections/problems/variableSection.ts'
 import type { VariableMismatch } from '../../../../types/diagnostics.types.ts'
 
 vi.mock('../../../../utils/string', () => ({

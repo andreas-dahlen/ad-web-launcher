@@ -1,6 +1,6 @@
-import type { ScrollComputed, SliderComputed } from '@interaction/types/runtime/computed.types'
-import { merge } from '@test/testUtils/factory.utils'
-import { computed_DEFAULT } from '@test/app/interaction/fixtures/computed.fixture'
+import type { ScrollComputed, SliderComputed } from '@interaction/types/runtime/computed.types.ts'
+import { merge } from '@test/testUtils/factory.utils.ts'
+import { computed_DEFAULT } from '@test/app/interaction/fixtures/computed.fixture.ts'
 
 export function createComputedSlider(overrides?: Partial<SliderComputed>): SliderComputed {
   return merge(computed_DEFAULT.slider, overrides)

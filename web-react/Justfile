@@ -129,18 +129,16 @@ install-cvc:
     cd tools/extensions/css-variable-completion && npm run package
     code --install-extension tools/extensions/css-variable-completion/css-variable-completion-0.0.1.vsix --force
 
-install-tcv:
-    cd tools/extensions/token-compiler-vscode && npm run package
-    code --install-extension tools/extensions/token-compiler-vscode/token-compiler-vscode-0.0.1.vsix --force
-
 install-los:
     cd tools/extensions/lint-on-start && npm run package
     code --install-extension tools/extensions/lint-on-start/lint-on-start-0.0.1.vsix --force
 
-build-tc:
+install-tokens:
     cd tools/token-compiler && npm run build
+    cd tools/extensions/token-compiler-vscode && npm run package
+    code --install-extension tools/extensions/token-compiler-vscode/token-compiler-vscode-0.0.1.vsix --force
 
-install-tokens: build-tc install-tcv
+install-extensions: install-cvc install-los install-tokens
 
 compiler:
     cd tools/token-compiler && npm run cli -- exe ../..

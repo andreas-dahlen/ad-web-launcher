@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useShallow } from 'zustand/shallow'
 import { carouselStore, type CarouselBinding, type CarouselStore, type NodeBindings } from './carousel.store.ts'
-import { debugRegisterBinding, debugUnregisterBinding } from '@test/functions.debug'
+import { debugRegisterBinding, debugUnregisterBinding } from '@test/functions.debug.ts'
 
 const NODE_1 = { nodeId: 0, sceneIdx: 0 }
 const NODE_2 = { nodeId: 1, sceneIdx: 1 }

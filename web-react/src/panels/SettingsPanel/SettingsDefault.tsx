@@ -1,11 +1,11 @@
-import Button from '@composites/Button/Button'
-import { settingsStore } from '@stores/settings.store'
+import SliderPrim from '@primitives/Slider/SliderPrim.tsx'
+import Button from '@composites/Button/Button.tsx'
+import { settingsStore } from '@stores/settings.store.tsx'
 import { useState } from 'react'
-import SliderPrim from '@primitives/Slider/SliderPrim'
 import * as Icons from '@data/icons';
-import ButtonPair from '../../blocks/ButtonPair/ButtonPair'
-import { useSnapInput } from './hooks/useSnapInput'
-import Frame from '@composites/Frame/Frame'
+import ButtonPair from '../../blocks/ButtonPair/ButtonPair.ts'
+import Frame from '@composites/Frame/Frame.tsx'
+import { useSnapInput } from './hooks/useSnapInput.ts';
 
 export default function SettingsDefault() {
 

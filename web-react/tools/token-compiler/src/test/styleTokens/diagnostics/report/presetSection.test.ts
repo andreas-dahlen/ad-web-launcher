@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
 
-import { presetSection } from '../../../../diagnostics/report/sections/presetSection.ts'
+import { presetSection } from '../../../../diagnostics/report/sections/verbose/presetSection.ts'
 import type { FileStatus } from '../../../../types/diagnostics.types.ts'
 
 vi.mock('../../../../utils/string.js', () => ({

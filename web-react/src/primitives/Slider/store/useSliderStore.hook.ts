@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useShallow } from 'zustand/shallow'
-import { sliderStore, type SliderStore } from './slider.store'
-import { debugRegisterBinding, debugUnregisterBinding } from '@test/functions.debug'
+import { sliderStore, type SliderStore } from './slider.store.ts'
+import { debugRegisterBinding, debugUnregisterBinding } from '@test/functions.debug.ts'
 
 export const slider_DEFAULTS = {
   value: 0,

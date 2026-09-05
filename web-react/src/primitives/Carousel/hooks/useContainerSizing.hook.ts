@@ -1,5 +1,5 @@
 import { useEffect } from "react"
-import { carouselStore } from '../store/carousel.store'
+import { carouselStore } from '../store/carousel.store.ts'
 
 interface UseCarouselSizingProps {
   elRef: React.RefObject<HTMLElement | null>

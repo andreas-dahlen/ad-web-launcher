@@ -23,5 +23,6 @@ export function patchFiles(files: FormatResult[]): FileResult {
     fs.writeFileSync(file.outputFile, update);
     updated.push(file.outputFile);
   }
+  console.log(updated.length, skipped.length)
   return { updated, skipped }
 }

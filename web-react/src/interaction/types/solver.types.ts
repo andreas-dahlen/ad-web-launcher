@@ -1,8 +1,8 @@
-import type { FrameSnapshot } from './descriptor/base.types'
-import type { ScrollComputed, SliderComputed } from './runtime/computed.types'
-import type { CarouselDesc, DragDesc, ScrollDesc, SliderDesc } from './descriptor/descriptor.types'
-import type { Delta, AxisDirection } from '../../shared/types/core.types'
-import type { RuntimePress, RuntimeSwipe, RuntimeCommit, RuntimeStart } from './runtime/runtime.types'
+import type { FrameSnapshot } from './descriptor/base.types.ts'
+import type { ScrollComputed, SliderComputed } from './runtime/computed.types.ts'
+import type { CarouselDesc, DragDesc, ScrollDesc, SliderDesc } from './descriptor/descriptor.types.ts'
+import type { Delta, AxisDirection } from '@shared/types/core.types.ts'
+import type { RuntimePress, RuntimeSwipe, RuntimeCommit, RuntimeStart } from './runtime/runtime.types.ts'
 
 type Payload<T> = {
   payload: T

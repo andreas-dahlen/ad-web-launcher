@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 
-import { layoutStore, type LaneSystem } from '@shared/state/stores/layout.store'
+import { layoutStore, type LaneSystem } from '@shared/state/stores/layout.store.ts'
 
 const emptyDefaults = (): {
   vertical: LaneSystem

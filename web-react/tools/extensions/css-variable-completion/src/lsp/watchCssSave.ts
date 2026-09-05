@@ -1,7 +1,7 @@
 import * as vscode from "vscode"
-import { cssLanguages } from '../config/languages'
-import { openLspDocument } from './openLspDocument'
-import { nudgeCssModule } from './nudgeModule'
+import { cssLanguages } from '../config/languages.ts'
+import { openLspDocument } from './openLspDocument.ts'
+import { nudgeCssModule } from './nudgeModule.ts'
 
 export function watchCssSave(
   lspPath: vscode.Uri,

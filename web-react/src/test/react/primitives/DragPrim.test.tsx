@@ -2,24 +2,24 @@ import { render } from '@testing-library/react'
 import type { ComponentProps } from 'react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-import DragPrim from '@primitives/Drag/DragPrim'
+import DragPrim from '@primitives/Drag/DragPrim.tsx'
 
-import { usePointerBridge } from '@interaction/adapter/usePointerBridge.hook'
-import { useDragSizing } from '@primitives/Drag/hooks/useDragSizing.hook'
-import { useDragMotion } from '@primitives/Drag/hooks/useDragMotion.hook'
+import { usePointerBridge } from '@interaction/adapter/usePointerBridge.hook.ts'
+import { useDragSizing } from '@primitives/Drag/hooks/useDragSizing.hook.ts'
+import { useDragMotion } from '@primitives/Drag/hooks/useDragMotion.hook.ts'
 
 
-import type { DragBinding } from '@primitives/Drag/store/drag.store'
+import type { DragBinding } from '@primitives/Drag/store/drag.store.ts'
 
 import {
   settingsStore,
   type ReactiveSettings
-} from '@stores/settings.store'
+} from '@stores/settings.store.ts'
 
-import type { EventType } from '@shared/types/core.types'
+import type { EventType } from '@shared/types/core.types.ts'
 
-import { settingsStore_DEFAULT } from './store.fixture'
-import { drag_DEFAULTS, useDragStore } from '@primitives/Drag/store/useDragStore.hook'
+import { settingsStore_DEFAULT } from './store.fixture.ts'
+import { drag_DEFAULTS, useDragStore } from '@primitives/Drag/store/useDragStore.hook.ts'
 
 vi.mock('@interaction/adapter/usePointerBridge.hook', () => ({
   usePointerBridge: vi.fn()

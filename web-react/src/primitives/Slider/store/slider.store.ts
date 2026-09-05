@@ -1,8 +1,8 @@
 import { create } from 'zustand'
 import { immer } from 'zustand/middleware/immer'
-import type { StoreLayout } from '../../../shared/types/store.types'
-import type { Constraints1D } from '../../../shared/types/core.types'
-import type { SliderAction } from '@interaction/types/runtime/action.types'
+import type { StoreLayout } from '@shared/types/store.types.ts'
+import type { Constraints1D } from '@shared/types/core.types.ts'
+import type { SliderAction } from '@interaction/types/runtime/action.types.ts'
 export type SliderBinding = {
   //react motion
   value: number         // logical position

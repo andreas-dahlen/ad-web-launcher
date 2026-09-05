@@ -1,8 +1,8 @@
 import { renderHook } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 
-import { useBehaviorState } from '@composites/hooks/useBehaviorState.hook'
-import { settingsStore } from '@stores/settings.store'
+import { useBehaviorState } from '@composites/hooks/useBehaviorState.hook.ts'
+import { settingsStore } from '@stores/settings.store.ts'
 
 describe('[USE BEHAVIOR STATE]', () => {
   function renderBehaviorState(

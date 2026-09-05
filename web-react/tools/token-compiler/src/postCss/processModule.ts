@@ -9,16 +9,16 @@ import { injectPresetResets } from './inject/injectPresetResets.ts';
 export function processModule({
   root,
   group,
-  mute,
+  trace,
   mutate = true
 }: {
   root: Root
   group: CssTokenGroup
-  mute: boolean
+  trace: boolean
   mutate?: boolean
 }): CssData {
 
-  if (!mute) { print.injecting(group.cssPath) }
+  if (trace) { print.injecting(group.cssPath) }
 
   const { rules, foundSelectors, usableSelectors, foundFinalVariables, declaredVariables, presetResetData } = walkModule(
     root, group.tokens.map(token => token.infix)
@@ -26,7 +26,7 @@ export function processModule({
 
   const tokenResults: ProcessedToken[] = [];
   for (const token of group.tokens) {
-    if (!mute) { print.processing(token.infix) }
+    if (trace) { print.processing(token.infix) }
 
     const rule = rules.get(`.${token.infix}`);
 
@@ -41,10 +41,10 @@ export function processModule({
       continue;
     }
 
-    if (!mute) { print.buildingChains(token.infix) }
+    if (trace) { print.buildingChains(token.infix) }
 
     for (const variable of token.vars) {
-      if (!mute) { print.resultCascade(variable) }
+      if (trace) { print.resultCascade(variable) }
 
       if (mutate) {
         injectVarDefinitions(rule, token, variable);

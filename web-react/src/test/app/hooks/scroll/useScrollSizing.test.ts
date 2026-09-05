@@ -1,10 +1,10 @@
 import { renderHook } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { useScrollSizing } from '@primitives/Scroll/hooks/useScrollSizing.hook'
-import { scrollStore } from '@primitives/Scroll/store/scroll.store'
+import { useScrollSizing } from '@primitives/Scroll/hooks/useScrollSizing.hook.ts'
+import { scrollStore } from '@primitives/Scroll/store/scroll.store.ts'
 
-import { createResizeObserverMock } from '@test/testUtils/resizeObserver.utils'
+import { createResizeObserverMock } from '@test/testUtils/resizeObserver.utils.ts'
 
 vi.mock('@primitives/Scroll/store/scroll.store', () => ({
   scrollStore: {

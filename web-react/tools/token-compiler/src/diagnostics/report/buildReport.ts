@@ -1,14 +1,16 @@
 import type { DiagnosticData } from '../../types/diagnostics.types.ts';
-import { presetSection } from './sections/presetSection.ts';
-import { tokenSection } from './sections/tokenSection.ts';
-import { variableSection } from './sections/variableSection.ts';
-import { classSection } from './sections/classSection.ts';
-import { selectorSection } from './sections/selectorSection.ts';
-import { fileSection } from './sections/fileSection.ts';
-import { headerSection } from './sections/headerSection.ts';
-import { issuesSection } from './sections/issuesSection.ts';
-import { invalidVarSection } from './sections/invalidVarSection.ts';
-import { omittedPresetSection } from './sections/omittedPresetSection.ts';
+import type { CompilerConfig } from '../../types/run.types.ts';
+import { presetSection } from './sections/verbose/presetSection.ts';
+import { tokenSection } from './sections/verbose/tokenSection.ts';
+import { omittedPresetSection } from './sections/verbose/omittedPresetSection.ts';
+import { headerSection } from './sections/verbose/headerSection.ts';
+import { selectorSection } from './sections/problems/selectorSection.ts';
+import { fileSection } from './sections/problems/fileSection.ts';
+import { issuesSection } from './sections/problems/issuesSection.ts';
+import { invalidVarSection } from './sections/problems/invalidVarSection.ts';
+import { classSection } from './sections/problems/classSection.ts';
+import { variableSection } from './sections/problems/variableSection.ts';
+import { summarySection } from './sections/summary/summarySection.ts';
 
 export type ReportSection = {
   title: string;
@@ -20,19 +22,39 @@ export type ReportEntry = {
   lines?: string[];
 };
 
-export function buildReport(data: DiagnosticData): ReportSection[] {
+export function buildReport(data: DiagnosticData, config: CompilerConfig): ReportSection[] {
   const sections: ReportSection[] = [];
 
-  const header = headerSection(data.processedGroupCount)
-  sections.push(header)
 
-  const preset = presetSection(data.generatedFiles.presets)
-  if (preset) sections.push(preset)
-  const omittedPreset = omittedPresetSection(data.omittedPresetFiles)
-  if (omittedPreset) sections.push(omittedPreset)
-  const token = tokenSection(data.generatedFiles.tokens)
-  if (token) sections.push(token)
-
+  //Emission report
+  switch (config.logging.emissions) {
+    case "verbose": {
+      const header = headerSection(data.processedGroupCount)
+      sections.push(header)
+      const preset = presetSection(data.generatedFiles.presets)
+      if (preset) sections.push(preset)
+      const omittedPreset = omittedPresetSection(data.omittedPresetFiles)
+      if (omittedPreset) sections.push(omittedPreset)
+      const token = tokenSection(data.generatedFiles.tokens)
+      if (token) sections.push(token)
+      //     extension
+      // lsp
+      // metadata
+      // patches
+      break;
+    }
+    case "summary": {
+      const summary = summarySection(data, config.outputs)
+      if (summary) sections.push(summary)
+      //     extension
+      // lsp
+      // metadata
+      // patches
+      break;
+    }
+    case "off": break;
+  }
+  //Diagnostics - always reported
   const variableReport = variableSection(data.mismatchedVariables)
   if (variableReport) sections.push(variableReport)
   const selectorReport = selectorSection(data.unusableSelectors);

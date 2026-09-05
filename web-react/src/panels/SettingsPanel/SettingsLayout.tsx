@@ -1,11 +1,11 @@
-import { settingsStore } from '@stores/settings.store'
-import Button from '@composites/Button/Button'
-import { alertStore } from '@stores/alert.store'
-import { layoutStore } from '@stores/layout.store'
-import { layout_DEFAULTS } from '@data/generators/dataGenerator'
+import { settingsStore } from '@stores/settings.store.ts'
+import Button from '@composites/Button/Button.ts'
+import { alertStore } from '@stores/alert.store.ts'
+import { layoutStore } from '@stores/layout.store.ts'
+import { layout_DEFAULTS } from '@data/generators/dataGenerator.ts'
 import * as Icons from '@data/icons';
-import Frame from '@composites/Frame/Frame'
-import Label from '../../blocks/Label/Label'
+import Frame from '@composites/Frame/Frame.tsx'
+import Label from '../../blocks/Label/Label.tsx'
 
 
 export default function SettingsLayout() {

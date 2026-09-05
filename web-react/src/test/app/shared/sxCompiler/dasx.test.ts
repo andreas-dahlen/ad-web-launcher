@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { dasx } from '@shared/sxCompiler/dasx'
+import { dasx } from '@shared/sxCompiler/dasx.ts'
 
 describe('[DASX]', () => {
   it('should convert camelCase to kebab-case with data-prefix', () => {

@@ -1,13 +1,13 @@
-import { carouselStore } from '@primitives/Carousel/store/carousel.store'
-import { carousel_DEFAULTS } from '@primitives/Carousel/store/useCarouselStore.hook'
-import { dragStore } from '@primitives/Drag/store/drag.store'
-import { drag_DEFAULTS } from '@primitives/Drag/store/useDragStore.hook'
-import { scrollStore } from '@primitives/Scroll/store/scroll.store'
-import { scroll_DEFAULTS } from '@primitives/Scroll/store/useScrollStore.hook'
-import { sliderStore } from '@primitives/Slider/store/slider.store'
-import { slider_DEFAULTS } from '@primitives/Slider/store/useSliderStore.hook'
-import { merge } from '@test/testUtils/factory.utils'
-import type { InteractionType } from '../../shared/types/core.types'
+import { carouselStore } from '@primitives/Carousel/store/carousel.store.ts'
+import { carousel_DEFAULTS } from '@primitives/Carousel/store/useCarouselStore.hook.ts'
+import { dragStore } from '@primitives/Drag/store/drag.store.ts'
+import { drag_DEFAULTS } from '@primitives/Drag/store/useDragStore.hook.ts'
+import { scrollStore } from '@primitives/Scroll/store/scroll.store.ts'
+import { scroll_DEFAULTS } from '@primitives/Scroll/store/useScrollStore.hook.ts'
+import { sliderStore } from '@primitives/Slider/store/slider.store.ts'
+import { slider_DEFAULTS } from '@primitives/Slider/store/useSliderStore.hook.ts'
+import { merge } from '@test/testUtils/factory.utils.ts'
+import type { InteractionType } from '../../shared/types/core.types.ts'
 
 export function seedStoreByType(type: Exclude<InteractionType, "button">, id: string = "test", overrides = {}) {
   switch (type) {

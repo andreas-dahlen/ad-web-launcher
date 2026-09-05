@@ -1,10 +1,10 @@
 import { renderHook } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { useSliderSizing } from '@primitives/Slider/hooks/useSliderSizing.hook'
-import { sliderStore } from '@primitives/Slider/store/slider.store'
+import { useSliderSizing } from '@primitives/Slider/hooks/useSliderSizing.hook.ts'
+import { sliderStore } from '@primitives/Slider/store/slider.store.ts'
 
-import { createResizeObserverMock } from '@test/testUtils/resizeObserver.utils'
+import { createResizeObserverMock } from '@test/testUtils/resizeObserver.utils.ts'
 
 vi.mock('@primitives/Slider/store/slider.store', () => ({
   sliderStore: {
