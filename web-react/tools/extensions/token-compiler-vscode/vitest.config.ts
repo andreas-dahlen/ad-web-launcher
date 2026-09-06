@@ -7,7 +7,7 @@ export default defineConfig({
     environment: 'node',
 
     include: [
-      'src/test/styleTokens/**/*.test.ts',
+      'src/test/**/*.test.ts',
     ],
 
     setupFiles: [
@@ -19,10 +19,9 @@ export default defineConfig({
         'src/**/*.ts'
       ],
       exclude: [
-        'src/test/**',
-        '**/*.css',
+        'test/**',
         '**/*.types.ts'
-      ]
-    }
-  }
+      ],
+    },
+  },
 })

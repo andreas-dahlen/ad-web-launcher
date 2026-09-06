@@ -49,7 +49,11 @@ export default mergeConfig(
               'src/test/react/setup.utils.ts',
             ]
           }
-        }
+        },
+        './tools/token-compiler/vitest.config.ts',
+        './tools/lint/vitest.config.ts',
+        './tools/plugins/vitest.config.ts',
+        './tools/extensions/*/vitest.config.ts'
       ]
     }
   })

@@ -1,9 +1,7 @@
 import * as vscode from 'vscode'
 import { resolveRunners } from './resolveRunners.ts'
-import { runOxlint } from '../runners/runOxlint.ts'
+import { runOxlint } from '../oxlint/runOxlint.ts'
 import { resolveRoot } from './resolveRoot.ts'
-import { runEslint } from '../runners/runEslint.ts'
-// import { runStylelint } from '../runners/runStylelint.ts'
 
 export function handleLaunch(
   output: vscode.OutputChannel,
@@ -19,13 +17,5 @@ export function handleLaunch(
 
   if (allowed.oxlint) {
     runOxlint(projectRoot, output, diagnostics)
-  }
-
-  if (allowed.eslint) {
-    runEslint(projectRoot, output, diagnostics)
-  }
-
-  if (allowed.stylelint) {
-    // runStylelint(projectRoot, output, diagnostics)
   }
 }

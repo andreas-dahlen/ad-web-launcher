@@ -234,4 +234,4 @@ describe('[EXTENSION] deactivate', () => {
   it('can deactivate without errors', () => {
     expect(() => deactivate()).not.toThrow()
   })
-})
+}) 

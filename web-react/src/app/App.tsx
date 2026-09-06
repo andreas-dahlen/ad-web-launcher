@@ -3,7 +3,9 @@ import { APP_CONFIG } from '@config/app.config.ts';
 import DebugWrapper from './infrastructure/DebugWrapper.tsx';
 import Root from './Root.tsx'
 import LoadingScene from './infrastructure/LoadingScene.tsx';
-import { __TEST_ONLY_API } from '../interaction/input/gesture.utils.ts';
+import ButtonPrim from '@primitives/Button/ButtonPrim.tsx';
+import ButtonPrimer from '../../primitives/Button/ButtonPrim.tsx';
+
 export default function App() {
 
   const [isLoading, setIsLoading] = useState(true)
@@ -19,6 +21,7 @@ export default function App() {
 
   return (
     <>
+      <ButtonPrim id='4'></ButtonPrim>
       {content}
       <LoadingScene visible={isLoading} />
     </>

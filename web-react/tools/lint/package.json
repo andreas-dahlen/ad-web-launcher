@@ -1,5 +1,5 @@
 {
-  "name": "@ad-web-launcher/lint",
+  "name": "lint",
   "private": true,
   "type": "module",
   "scripts": {

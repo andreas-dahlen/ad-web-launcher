@@ -31,23 +31,7 @@ export function activate(context: vscode.ExtensionContext): void {
       launch()
     }),
 
-    // vscode.window.onDidChangeActiveTextEditor(editor => {
-    //   if (!editor) {
-    //     return
-    //   }
-
-    //   output.appendLine(
-    //     `[Lint on Start] active: ${editor.document.uri.fsPath}`,
-    //   )
-
-    //   diagnostics.delete(editor.document.uri)
-    // }),
-
     vscode.workspace.onDidSaveTextDocument(document => {
-      // output.appendLine(
-      //   `[Lint on Start] saved: ${document.uri.fsPath}`,
-      // )
-
       diagnostics.delete(document.uri)
     })
   )

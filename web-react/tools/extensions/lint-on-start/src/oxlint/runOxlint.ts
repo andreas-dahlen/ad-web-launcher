@@ -2,7 +2,7 @@ import path from 'node:path'
 import { spawn } from 'node:child_process'
 import * as vscode from 'vscode'
 
-import { parseDiagnostic } from '../matchers/parseOxlint.ts'
+import { parseDiagnostic } from './parseOxlint.ts'
 
 export function runOxlint(
   projectRoot: string,

@@ -48,16 +48,6 @@
           "default": true,
           "description": "runs Oxlint on startup."
         },
-        "lintOnStart.eslint": {
-          "type": "boolean",
-          "default": false,
-          "description": "runs ESLint on startup."
-        },
-        "lintOnStart.stylelint": {
-          "type": "boolean",
-          "default": false,
-          "description": "runs Stylelint on startup."
-        },
         "lintOnStart.projectRoot": {
           "type": "string",
           "default": ".",

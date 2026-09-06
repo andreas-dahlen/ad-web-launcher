@@ -53,16 +53,16 @@
 				"id": "msarlp1lgzu1f",
 				"name": "app",
 				"patterns": [
-					"ad-web-launcher/web-react/src/**"
+					"ad-web-launcher/web-react/ad-web-launcher/web-react/src/**"
 				]
 			},
 			{
 				"id": "mt6cwmpyqswqt",
 				"name": "tools",
 				"patterns": [
-					"ad-web-launcher/web-react/tools/**",
-					"ad-web-launcher/web-react/eslint.config.ts",
-					"ad-web-launcher/web-react/oxlint.config.ts"
+					"ad-web-launcher/web-react/ad-web-launcher/web-react/tools/**",
+					"ad-web-launcher/web-react/ad-web-launcher/web-react/eslint.config.ts",
+					"ad-web-launcher/web-react/ad-web-launcher/web-react/oxlint.config.ts"
 				]
 			}
 		],

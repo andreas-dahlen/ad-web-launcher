@@ -59,22 +59,29 @@ type:
 type-all: 
     ./scripts/run-script.sh type
 
-test *args:
-    if [ -z "{{ args }}" ]; then \
-        npm run test; \
+test project="" *args:
+    if [ -z "{{project}}" ]; then \
+        npm run test -- --project=react --project=app --silent {{args}}; \
     else \
-        ./scripts/test-project.sh "{{ args }}"; \
+        npm run test -- --project={{project}} --silent {{args}}; \
     fi
 
 test-all *args:
-    ./scripts/run-script.sh test -- --run --reporter=dot {{args}}
+    npm run test -- --silent=passed-only --reporter=dot {{args}}
 
-coverage *args:
-    if [ -z "{{ args }}" ]; then \
-        npm run coverage; \
+# List available Vitest projects.
+test-help:
+    ./scripts/test-project.sh
+
+coverage project="" *args:
+    if [ -z "{{project}}" ]; then \
+        npm run test -- --project=react --project=app --silent=passed-only {{args}}; \
     else \
-        npm run coverage -- "{{ args }}"; \
+        npm run test -- --project={{project}} --silent=passed-only {{args}}; \
     fi
+
+coverage-all:
+    just test-all --coverage
 
 coverage-open:
     xdg-open coverage/index.html
@@ -113,33 +120,28 @@ knip-all *args:
 
 # chmod +x scripts/index.sh <- an example for enabling a script
 
-# ============== STYLE TOKENS LOG ==================
-
-# CURRENTLY DEAD.... but needs to be implemented NO EMIT MODE
-# tokens *args:
-#     if [ -z "{{ args }}" ]; then \
-#         npx tsx src/styleTokens/compiler/dryLogCompiler.ts; \
-#     else \
-#         npx tsx src/styleTokens/compiler/dryLogCompiler.ts {{ args }}; \
-#     fi
-
 # ==================== EXTENSIONS ====================
 
+# Builds and installs css-variable-completion (includes css-lsp helper).
 install-cvc:
     cd tools/extensions/css-variable-completion && npm run package
     code --install-extension tools/extensions/css-variable-completion/css-variable-completion-0.0.1.vsix --force
 
+# Builds and installs lint-on-start.
 install-los:
     cd tools/extensions/lint-on-start && npm run package
     code --install-extension tools/extensions/lint-on-start/lint-on-start-0.0.1.vsix --force
 
+# Builds compiler and installs the compiler extension.
 install-tokens:
     cd tools/token-compiler && npm run build
     cd tools/extensions/token-compiler-vscode && npm run package
     code --install-extension tools/extensions/token-compiler-vscode/token-compiler-vscode-0.0.1.vsix --force
 
+# Builds and installs all tools.
 install-extensions: install-cvc install-los install-tokens
 
+# Runs the compiler in CLI. File emissions disabled.
 compiler:
     cd tools/token-compiler && npm run cli -- exe ../..
 
@@ -160,6 +162,7 @@ check-ts-v:
     npm view typescript-eslint@latest peerDependencies
     npm view @typescript-eslint/parser@latest peerDependencies
 
+# Lists the dependencies of project versus tools. Takes dependency as args.
 check-deps *args:
     scripts/dependencies.sh {{ args }}
 

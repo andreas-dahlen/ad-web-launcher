@@ -1,7 +1,35 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import {
+  beforeEach,
+  describe,
+  expect,
+  it,
+  vi,
+} from 'vitest'
 import * as vscode from 'vscode'
 
-import { resolveRoot } from '../../helpers/resolveRoot.ts'
+const workspaceFolders = vi.hoisted(
+  () => [] as unknown[],
+)
+
+const joinPathMock = vi.hoisted(() =>
+  vi.fn(),
+)
+
+vi.mock('vscode', () => ({
+  Uri: {
+    joinPath: joinPathMock,
+  },
+
+  workspace: {
+    get workspaceFolders() {
+      return workspaceFolders.length > 0
+        ? workspaceFolders
+        : undefined
+    },
+  },
+}))
+
+import { resolveRoot } from '../helpers/resolveRoot.ts'
 
 describe('[Lint on Start] resolveRoot', () => {
   const appendLine = vi.fn()
@@ -21,17 +49,16 @@ describe('[Lint on Start] resolveRoot', () => {
 
     get.mockReturnValue('web-react')
 
-    vi.spyOn(vscode.Uri, 'joinPath').mockReturnValue({
+    workspaceFolders.length = 0
+    workspaceFolders.push({
+      uri: {
+        fsPath: '/workspace',
+      } as vscode.Uri,
+    } as vscode.WorkspaceFolder)
+
+    joinPathMock.mockReturnValue({
       fsPath: '/workspace/web-react',
     } as vscode.Uri)
-
-    vi.spyOn(vscode.workspace, 'workspaceFolders', 'get').mockReturnValue([
-      {
-        uri: {
-          fsPath: '/workspace',
-        } as vscode.Uri,
-      } as vscode.WorkspaceFolder,
-    ])
   })
 
   it('resolves projectRoot relative to the workspace folder', () => {
@@ -62,8 +89,7 @@ describe('[Lint on Start] resolveRoot', () => {
   })
 
   it('throws when the workspace folder is missing', () => {
-    vi.spyOn(vscode.workspace, 'workspaceFolders', 'get')
-      .mockReturnValue(undefined)
+    workspaceFolders.length = 0
 
     expect(() => resolveRoot(settings, output))
       .toThrow('Workspace folder is missing')
