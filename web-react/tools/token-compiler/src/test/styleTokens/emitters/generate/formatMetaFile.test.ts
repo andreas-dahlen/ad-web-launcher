@@ -15,7 +15,7 @@ function createGroup(
     ],
     cssFile: '/components/Button/Button.module.css',
     outputFile:
-      '/generated/metadata/metadata.generated.json',
+      '/generated/metadata/metadata.generated.jsonc',
     ...overrides,
   }
 }

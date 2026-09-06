@@ -1,15 +1,15 @@
 import { initializeCompiler } from '../compiler/compilerService.ts'
-import type { CompilerRuntime, UserOptions } from '../types/run.types.ts'
+import type { CompilerRuntime } from '../types/run.types.ts'
 import { resolveConfig } from './resolveConfig.ts'
 import { watchConfig } from './watchers/watchConfig.ts'
 import { watchContent } from './watchers/watchContent.ts'
 
 export function createRuntime(
   rootDir: string,
-  options: UserOptions,
+  tokenFolder: string | undefined,
   onConfigChange: () => Promise<void>,
 ): CompilerRuntime | null {
-  const config = resolveConfig(rootDir, options)
+  const config = resolveConfig(rootDir, tokenFolder)
 
   if (config === null) {
     return null

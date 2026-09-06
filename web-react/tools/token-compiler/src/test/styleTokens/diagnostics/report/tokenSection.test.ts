@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
 
-import { tokenSection } from '../../../../diagnostics/report/sections/tokenSection.ts'
+import { tokenSection } from '../../../../diagnostics/report/sections/verbose/tokenSection.ts'
 import type { FileStatus } from '../../../../types/diagnostics.types.ts'
 
 vi.mock('../../../../utils/string', () => ({
@@ -43,7 +43,7 @@ describe('[DIAGNOSTICS]', () => {
       )
 
       expect(result).toBeDefined()
-      expect(result?.title).toContain('Tokens')
+      expect(result?.title).toContain('Token files')
       expect(result?.title).toContain('(1)')
       expect(result?.entries).toHaveLength(1)
     })
@@ -56,7 +56,7 @@ describe('[DIAGNOSTICS]', () => {
       )
 
       expect(result).toBeDefined()
-      expect(result?.title).toContain('Tokens')
+      expect(result?.title).toContain('Token files')
       expect(result?.title).toContain('(1)')
       expect(result?.entries).toHaveLength(1)
     })
@@ -180,10 +180,9 @@ describe('[DIAGNOSTICS]', () => {
       ).toBe(false)
     })
 
-    it('returns undefined when there are no files', () => {
-      expect(
-        tokenSection(createFileStatus()),
-      ).toBeUndefined()
+    it('returns disabled message when there are no files', () => {
+      const result = tokenSection(createFileStatus())
+      expect(result.title).toBeDefined()
     })
   })
 })

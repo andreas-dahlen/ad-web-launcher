@@ -2,7 +2,7 @@ import { colors, formatLogPath, paint } from '../../../../utils/string.ts';
 import type { FileStatus } from '../../../../types/diagnostics.types.ts';
 import type { ReportEntry, ReportSection } from '../../buildReport.ts';
 
-export function presetSection(data: FileStatus): ReportSection | undefined {
+export function presetSection(data: FileStatus): ReportSection {
   const entries: ReportEntry[] = [];
 
   const skippedLines: string[] = [];
@@ -31,7 +31,10 @@ export function presetSection(data: FileStatus): ReportSection | undefined {
     });
   }
 
-  if (entries.length === 0) return;
+  if (entries.length === 0) return {
+    title: `📁 ${paint(`[Preset files]`, colors.heading)} (☠️ ) \n`,
+    entries: []
+  }
 
   return {
     title: ` 📁 ${paint(`[Preset files]`, colors.heading)} (${paint(data.skipped.length + data.written.length, colors.value)}) \n`,

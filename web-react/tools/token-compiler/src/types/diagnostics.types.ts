@@ -1,5 +1,6 @@
 import type { CssVarString } from '../oldSharedUtils/oldSharedCompiler.types.ts';
 import type { Issue } from './issueCollector.types.ts';
+import type { CompilerOutputs } from './run.types.ts';
 
 export type DiagnosticData = {
   missingClasses: MissingClass[];
@@ -49,11 +50,7 @@ export type InvalidVarDeclaration = {
 };
 
 export type GeneratedFiles = {
-  presets: FileStatus
-  tokens: FileStatus
-  metadata: FileStatus
-  lsp: FileStatus
-  extension: FileStatus
+  [K in Exclude<keyof CompilerOutputs, 'pathPatches'>]: FileStatus
 }
 
 export type GeneratedPatches = {

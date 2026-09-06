@@ -1,8 +1,8 @@
 // src/extension.ts
-import * as vscode6 from "vscode";
+import * as vscode8 from "vscode";
 
 // src/helpers/handleLaunch.ts
-import * as vscode5 from "vscode";
+import * as vscode7 from "vscode";
 
 // src/helpers/resolveRunners.ts
 import "vscode";
@@ -63,7 +63,6 @@ function runOxlint(projectRoot, output, diagnostics) {
   const parsed = /* @__PURE__ */ new Map();
   child.stdout.on("data", (data) => {
     const text = data.toString();
-    output.append(text);
     for (const line of text.split("\n")) {
       const result = parseDiagnostic(line);
       if (!result) {
@@ -88,6 +87,13 @@ function runOxlint(projectRoot, output, diagnostics) {
         fileDiagnostics
       );
     }
+    let problemCount = 0;
+    for (const fileDiagnostics of parsed.values()) {
+      problemCount += fileDiagnostics.length;
+    }
+    output.appendLine(
+      `oxlint: ${problemCount} problem${problemCount === 1 ? "" : "s"}`
+    );
   });
 }
 
@@ -114,9 +120,74 @@ function resolveRoot(settings, output) {
   ).fsPath;
 }
 
+// src/runners/runEslint.ts
+import path2 from "node:path";
+import { spawn as spawn2 } from "node:child_process";
+import * as vscode6 from "vscode";
+
+// src/matchers/parseEslint.ts
+import * as vscode5 from "vscode";
+function parseESLint(output) {
+  const results = JSON.parse(output);
+  return results.map((result) => ({
+    filePath: result.filePath,
+    diagnostics: result.messages.map((message) => {
+      const diagnostic = new vscode5.Diagnostic(
+        new vscode5.Range(
+          message.line - 1,
+          message.column - 1,
+          (message.endLine ?? message.line) - 1,
+          (message.endColumn ?? message.column) - 1
+        ),
+        message.message,
+        message.severity === 2 ? vscode5.DiagnosticSeverity.Error : vscode5.DiagnosticSeverity.Warning
+      );
+      diagnostic.code = message.ruleId ?? void 0;
+      diagnostic.source = "Lint on Start";
+      return diagnostic;
+    })
+  }));
+}
+
+// src/runners/runEslint.ts
+function runEslint(projectRoot, output, diagnostics) {
+  const child = spawn2(
+    "npm",
+    ["run", "eslint", "--", "--format=json"],
+    {
+      cwd: projectRoot
+    }
+  );
+  let stdout = "";
+  child.stdout.on("data", (data) => {
+    stdout += data.toString();
+  });
+  child.stderr.on("data", (data) => {
+    output.append(data.toString());
+  });
+  child.on("close", () => {
+    const parsed = parseESLint(stdout);
+    let problemCount = 0;
+    for (const result of parsed) {
+      const filePath = path2.resolve(
+        projectRoot,
+        result.filePath
+      );
+      diagnostics.set(
+        vscode6.Uri.file(filePath),
+        result.diagnostics
+      );
+      problemCount += result.diagnostics.length;
+    }
+    output.appendLine(
+      `eslint: ${problemCount} problem${problemCount === 1 ? "" : "s"}`
+    );
+  });
+}
+
 // src/helpers/handleLaunch.ts
 function handleLaunch(output, diagnostics) {
-  const settings = vscode5.workspace.getConfiguration(
+  const settings = vscode7.workspace.getConfiguration(
     "lintOnStart"
   );
   const projectRoot = resolveRoot(settings, output);
@@ -125,6 +196,7 @@ function handleLaunch(output, diagnostics) {
     runOxlint(projectRoot, output, diagnostics);
   }
   if (allowed.eslint) {
+    runEslint(projectRoot, output, diagnostics);
   }
   if (allowed.stylelint) {
   }
@@ -132,9 +204,9 @@ function handleLaunch(output, diagnostics) {
 
 // src/extension.ts
 function activate(context) {
-  const output = vscode6.window.createOutputChannel("Lint on Start");
+  const output = vscode8.window.createOutputChannel("Lint on Start");
   context.subscriptions.push(output);
-  const diagnostics = vscode6.languages.createDiagnosticCollection("lint-on-start");
+  const diagnostics = vscode8.languages.createDiagnosticCollection("lint-on-start");
   context.subscriptions.push(diagnostics);
   output.appendLine("[Lint on Start] loaded");
   const launch = () => {
@@ -143,7 +215,7 @@ function activate(context) {
   };
   launch();
   context.subscriptions.push(
-    vscode6.workspace.onDidChangeConfiguration((event) => {
+    vscode8.workspace.onDidChangeConfiguration((event) => {
       if (!event.affectsConfiguration("lintOnStart")) {
         return;
       }
@@ -161,7 +233,7 @@ function activate(context) {
     //   )
     //   diagnostics.delete(editor.document.uri)
     // }),
-    vscode6.workspace.onDidSaveTextDocument((document) => {
+    vscode8.workspace.onDidSaveTextDocument((document) => {
       diagnostics.delete(document.uri);
     })
   );

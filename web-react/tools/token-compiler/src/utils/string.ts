@@ -7,6 +7,16 @@ export function formatLogPath(file: string) {
     .join("/");
 }
 
+export function emitValueMsg(
+  data: string[],
+  isEnabled: boolean,
+): string {
+  if (!isEnabled) return '☠️'
+  if (data.length > 1) return `${data.length}`
+  if (data.length === 1) return '✔️'
+  return '⏩'
+}
+
 export const ESC = "\u{1B}" as const
 /**
  * Terminal color theme

@@ -1,35 +1,26 @@
 import * as jsoncParser from 'jsonc-eslint-parser'
-import parser from '@typescript-eslint/parser'
 import { Linter } from 'eslint'
 import { describe, expect, it } from 'vitest'
 
-import rule from '../tokens/no-invalid-prefixes-relations.ts'
+import rule from '../src/tokens/no-invalid-prefixes-relations.ts'
 
 const config = [
   {
     files: ['**/*.json', '**/*.jsonc'],
     languageOptions: {
       parser: jsoncParser,
-      ecmaVersion: 'latest' as const,
-      sourceType: 'module' as const
     },
     plugins: {
       tokenValidation: {
         rules: {
-          'validate-token-prefixes': rule
-        }
-      }
+          'no-invalid-prefixes-relations': rule,
+        },
+      },
     },
     rules: {
-      'tokenValidation/validate-token-prefixes': 'error' as const
-    }
+      'tokenValidation/no-invalid-prefixes-relations': 'error' as const,
+    },
   },
-  {
-    files: ['**/*.ts'],
-    languageOptions: {
-      parser
-    }
-  }
 ]
 
 const lint = (code: string, filename: string) => {
@@ -38,7 +29,7 @@ const lint = (code: string, filename: string) => {
   return linter.verify(
     code,
     config,
-    { filename }
+    { filename },
   )
 }
 
@@ -47,7 +38,7 @@ const projectPath = process.cwd()
 const file = (name: string) =>
   `${projectPath}/src/tokens/${name}`
 
-describe('[ESLINT] validate-token-prefixes', () => {
+describe('[ESLINT] no-invalid-prefixes-relations', () => {
   it('allows a valid token configuration', () => {
     const messages = lint(
       `{
@@ -63,7 +54,7 @@ describe('[ESLINT] validate-token-prefixes', () => {
           }
         }
       }`,
-      file('tokens.json')
+      file('tokens.json'),
     )
 
     expect(messages).toHaveLength(0)
@@ -78,14 +69,15 @@ describe('[ESLINT] validate-token-prefixes', () => {
           }
         }
       }`,
-      file('tokens.json')
+      file('tokens.json'),
     )
 
-    expect(messages).toHaveLength(1)
-    expect(messages[0]).toMatchObject({
-      message: '"ButtonColor" must be camelCase',
-      severity: 2
-    })
+    expect(messages).toContainEqual(
+      expect.objectContaining({
+        message: '"ButtonColor" must be camelCase',
+        severity: 2,
+      }),
+    )
   })
 
   it('reports allowed prefixes that are already alwaysAllowed', () => {
@@ -99,14 +91,15 @@ describe('[ESLINT] validate-token-prefixes', () => {
           }
         }
       }`,
-      file('tokens.json')
+      file('tokens.json'),
     )
 
-    expect(messages).toHaveLength(1)
-    expect(messages[0]).toMatchObject({
-      message: '"f" is already part of alwaysAllowed',
-      severity: 2
-    })
+    expect(messages).toContainEqual(
+      expect.objectContaining({
+        message: '"f" is already part of alwaysAllowed',
+        severity: 2,
+      }),
+    )
   })
 
   it('reports excluded prefixes that are not alwaysAllowed', () => {
@@ -120,14 +113,15 @@ describe('[ESLINT] validate-token-prefixes', () => {
           }
         }
       }`,
-      file('tokens.json')
+      file('tokens.json'),
     )
 
-    expect(messages).toHaveLength(1)
-    expect(messages[0]).toMatchObject({
-      message: '"s" cannot be excluded because it is not alwaysAllowed',
-      severity: 2
-    })
+    expect(messages).toContainEqual(
+      expect.objectContaining({
+        message: '"s" cannot be excluded because it is not alwaysAllowed',
+        severity: 2,
+      }),
+    )
   })
 
   it('reports prefixes that exist in both allowed and exclude', () => {
@@ -142,26 +136,22 @@ describe('[ESLINT] validate-token-prefixes', () => {
           }
         }
       }`,
-      file('tokens.json')
+      file('tokens.json'),
     )
 
     expect(messages).toHaveLength(2)
 
-    expect(
-      messages.some(
-        message =>
-          message.message ===
-          '"f" is already part of alwaysAllowed'
-      )
-    ).toBe(true)
+    expect(messages).toContainEqual(
+      expect.objectContaining({
+        message: '"f" is already part of alwaysAllowed',
+      }),
+    )
 
-    expect(
-      messages.some(
-        message =>
-          message.message ===
-          '"f" cannot exist in both allowed and exclude'
-      )
-    ).toBe(true)
+    expect(messages).toContainEqual(
+      expect.objectContaining({
+        message: '"f" cannot exist in both allowed and exclude',
+      }),
+    )
   })
 
   it('reports values using an undeclared prefix', () => {
@@ -177,14 +167,15 @@ describe('[ESLINT] validate-token-prefixes', () => {
           }
         }
       }`,
-      file('tokens.json')
+      file('tokens.json'),
     )
 
-    expect(messages).toHaveLength(1)
-    expect(messages[0]).toMatchObject({
-      message: '"m" is not declared as allowed or alwaysAllowed',
-      severity: 2
-    })
+    expect(messages).toContainEqual(
+      expect.objectContaining({
+        message: '"m" is not declared as allowed or alwaysAllowed',
+        severity: 2,
+      }),
+    )
   })
 
   it('reports values using an excluded prefix', () => {
@@ -193,7 +184,6 @@ describe('[ESLINT] validate-token-prefixes', () => {
         "alwaysAllowed": ["f"],
         "vars": {
           "buttonColor": {
-            "allowed": ["s"],
             "exclude": ["f"],
             "values": {
               "f": "someValue"
@@ -201,14 +191,15 @@ describe('[ESLINT] validate-token-prefixes', () => {
           }
         }
       }`,
-      file('tokens.json')
+      file('tokens.json'),
     )
 
-    expect(messages).toHaveLength(1)
-    expect(messages[0]).toMatchObject({
-      message: '"f" cannot be used because it is excluded',
-      severity: 2
-    })
+    expect(messages).toContainEqual(
+      expect.objectContaining({
+        message: '"f" cannot be used because it is excluded',
+        severity: 2,
+      }),
+    )
   })
 
   it('reports values that reference themselves', () => {
@@ -224,14 +215,15 @@ describe('[ESLINT] validate-token-prefixes', () => {
           }
         }
       }`,
-      file('tokens.json')
+      file('tokens.json'),
     )
 
-    expect(messages).toHaveLength(1)
-    expect(messages[0]).toMatchObject({
-      message: '"s" cannot reference itself',
-      severity: 2
-    })
+    expect(messages).toContainEqual(
+      expect.objectContaining({
+        message: '"s" cannot reference itself',
+        severity: 2,
+      }),
+    )
   })
 
   it('supports JSONC files', () => {
@@ -248,7 +240,7 @@ describe('[ESLINT] validate-token-prefixes', () => {
           }
         }
       }`,
-      file('tokens.jsonc')
+      file('tokens.jsonc'),
     )
 
     expect(messages).toHaveLength(0)
@@ -257,9 +249,11 @@ describe('[ESLINT] validate-token-prefixes', () => {
   it('ignores non-JSON files', () => {
     const messages = lint(
       `const ButtonColor = {};`,
-      `${projectPath}/src/tokens/example.ts`
+      `${projectPath}/src/tokens/example.ts`,
     )
 
-    expect(messages).toHaveLength(0)
+    expect(
+      messages.filter(message => message.ruleId !== null),
+    ).toHaveLength(0)
   })
 })

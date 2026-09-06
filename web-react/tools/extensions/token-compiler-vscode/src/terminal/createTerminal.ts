@@ -1,18 +1,17 @@
 
 import * as vscode from 'vscode'
 import { CompilerTerminal } from './terminal.ts'
-import type { UserOptions } from './terminal.types.ts'
 
 export function createTerminal(
   cliFile: string,
   projectRoot: string,
-  config: UserOptions,
+  tokenFolder: string | undefined,
 ): vscode.Terminal {
 
   const pty = new CompilerTerminal(
     cliFile,
     projectRoot,
-    config,
+    tokenFolder,
   )
 
   return vscode.window.createTerminal({

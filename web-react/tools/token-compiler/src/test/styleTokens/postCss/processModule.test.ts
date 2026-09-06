@@ -102,7 +102,7 @@ describe('[POSTCSS]', () => {
       const result = processModule({
         root,
         group,
-        mute: true
+        trace: true
       })
 
       expect(result.tokens).toEqual([
@@ -131,7 +131,7 @@ describe('[POSTCSS]', () => {
       const result = processModule({
         root,
         group: createGroup(),
-        mute: true
+        trace: true
       })
 
       expect(result.tokens).toEqual([
@@ -168,7 +168,7 @@ describe('[POSTCSS]', () => {
             }),
           ],
         }),
-        mute: true
+        trace: true
       })
 
       const declarations = getDeclarations(root, '.button')
@@ -209,7 +209,7 @@ describe('[POSTCSS]', () => {
             }),
           ],
         }),
-        mute: true
+        trace: true
       })
 
       const declarations = getDeclarations(root, '.button')
@@ -235,7 +235,7 @@ describe('[POSTCSS]', () => {
         root,
         group: createGroup(),
         mutate: false,
-        mute: true,
+        trace: true,
       })
 
       expect(root.toString()).toBe(before)
@@ -270,7 +270,7 @@ describe('[POSTCSS]', () => {
         root,
         group: createGroup(),
         mutate: false,
-        mute: true
+        trace: true
       })
 
       expect(result.groupPath).toBe('/tokens/button')

@@ -1,7 +1,12 @@
 import fs from 'node:fs'
 import path from 'node:path'
+import {
+  parse,
+  printParseErrorCode,
+  type ParseError,
+} from 'jsonc-parser'
+
 import type { CompilerOptions } from '../types/run.types.ts'
-import { parse } from 'jsonc-parser'
 import { compilerConfigSchema } from '../configSchema.ts'
 
 export function loadCompilerConfig(projectRoot: string): CompilerOptions {
@@ -14,9 +19,20 @@ export function loadCompilerConfig(projectRoot: string): CompilerOptions {
     return {}
   }
 
-  const raw = parse(
-    fs.readFileSync(configPath, 'utf8'),
-  )
+  const text = fs.readFileSync(configPath, 'utf8')
+
+  const errors: ParseError[] = []
+  const raw = parse(text, errors)
+
+  if (errors.length > 0) {
+    const details = errors
+      .map(error => printParseErrorCode(error.error))
+      .join(', ')
+
+    throw new Error(
+      `Invalid JSONC in ${configPath}: ${details}`,
+    )
+  }
 
   return compilerConfigSchema.parse(raw)
 }

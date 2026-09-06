@@ -1,9 +1,9 @@
-import type { CompilerRuntime, UserOptions } from '../types/run.types.ts'
+import type { CompilerRuntime } from '../types/run.types.ts'
 import { createRuntime } from './createRuntime.ts'
 
 export async function run(
   rootDir: string,
-  options: UserOptions,
+  tokenFolder: string | undefined,
 ): Promise<void> {
   let runtime: CompilerRuntime | null = null
 
@@ -12,14 +12,14 @@ export async function run(
 
     runtime = createRuntime(
       rootDir,
-      options,
+      tokenFolder,
       restart
     )
   }
 
   runtime = createRuntime(
     rootDir,
-    options,
+    tokenFolder,
     restart
   )
 

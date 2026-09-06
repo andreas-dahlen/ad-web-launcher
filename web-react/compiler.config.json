@@ -1,7 +1,6 @@
 {
   "tokenFolder": "src/styleTokens/tokens",
   "outDir": "src/styleTokens/generated",
-  "cliFile": "tools/token-compiler/dist/cli.js",
   "outputs": {
     "extension": true,
     "lsp": true,
@@ -12,6 +11,6 @@
   },
   "logging": {
     "trace": false,
-    "emissions": "summary" //or verbose or off
+    "emissions": "verbose" //summary | verbose | off
   }
 }

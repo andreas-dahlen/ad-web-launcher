@@ -22,8 +22,6 @@ export function runOxlint(
   child.stdout.on('data', data => {
     const text = data.toString()
 
-    output.append(text)
-
     for (const line of text.split('\n')) {
       const result = parseDiagnostic(line)
 
@@ -53,5 +51,15 @@ export function runOxlint(
         fileDiagnostics,
       )
     }
+
+    let problemCount = 0
+
+    for (const fileDiagnostics of parsed.values()) {
+      problemCount += fileDiagnostics.length
+    }
+
+    output.appendLine(
+      `oxlint: ${problemCount} problem${problemCount === 1 ? '' : 's'}`,
+    )
   })
 }

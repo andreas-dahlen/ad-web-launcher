@@ -1,71 +1,43 @@
-import parser from '@typescript-eslint/parser'
-import { Linter } from 'eslint'
-import { describe, expect, it } from 'vitest'
+import { RuleTester } from 'oxlint/plugins-dev'
+import { describe, it } from 'vitest'
 
-import rule from '../testApi/no-test-only-api.ts'
+import rule from '../src/testApi-ox/no-test-only-api.ts'
 
-const config = [
-  {
-    files: ['**/*.ts'],
-    languageOptions: {
-      parser,
-      ecmaVersion: 'latest' as const,
-      sourceType: 'module' as const
-    },
-    plugins: {
-      testApi: {
-        rules: {
-          'no-test-only-api': rule
-        }
-      }
-    },
-    rules: {
-      'testApi/no-test-only-api': 'error' as const
-    }
-  }
-]
+const ruleTester = new RuleTester()
 
-const lint = (code: string, filename: string) => {
-  const linter = new Linter()
-
-  return linter.verify(
-    code,
-    config,
-    { filename }
-  )
-}
-
-const projectPath = process.cwd()
-
-describe('[ESLINT] no-test-only-api', () => {
-  it('allows __TEST_ONLY_API in test files', () => {
-    expect(
-      lint(
-        `import { __TEST_ONLY_API } from './testApi'`,
-        `${projectPath}/src/test/foo.test.ts`
-      )
-    ).toHaveLength(0)
-  })
-
-  it('reports __TEST_ONLY_API outside test files', () => {
-    const messages = lint(
-      `import { __TEST_ONLY_API } from './testApi'`,
-      `${projectPath}/src/foo.ts`
-    )
-
-    expect(messages).toHaveLength(1)
-    expect(messages[0]).toMatchObject({
-      message: '__TEST_ONLY_API is only available in test files',
-      severity: 2
+describe('[OXLINT] no-test-only-api', () => {
+  it('enforces test-only API imports', () => {
+    ruleTester.run('no-test-only-api', rule, {
+      valid: [
+        {
+          code: `import { __TEST_ONLY_API } from './testApi'`,
+          filename: 'src/test/foo.test.ts',
+        },
+        {
+          code: `import { something } from './module'`,
+          filename: 'src/foo.ts',
+        },
+      ],
+      invalid: [
+        {
+          code: `import { __TEST_ONLY_API } from './testApi'`,
+          filename: 'src/foo.ts',
+          errors: [
+            {
+              message: '__TEST_ONLY_API is only available in test files',
+            },
+          ],
+        },
+        {
+          code: `import { __TEST_ONLY_API as testApi } from './testApi'`,
+          filename: 'src/foo.ts',
+          errors: [
+            {
+              message: '__TEST_ONLY_API is only available in test files',
+            },
+          ],
+        },
+      ],
     })
-  })
-
-  it('allows unrelated imports outside test files', () => {
-    expect(
-      lint(
-        `import { something } from './module'`,
-        `${projectPath}/src/foo.ts`
-      )
-    ).toHaveLength(0)
   })
 })

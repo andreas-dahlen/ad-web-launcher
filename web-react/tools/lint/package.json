@@ -1,5 +1,5 @@
 {
-  "name": "@ad-web-launcher/eslint-config",
+  "name": "@ad-web-launcher/lint",
   "private": true,
   "type": "module",
   "scripts": {

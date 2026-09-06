@@ -51,7 +51,7 @@ describe('[EMITTER]', () => {
           '/tokens/button/hover.jsonc',
         ],
         cssFile: '/components/Button/Button.module.css',
-        outputFile: '/generated/metadata/metadata.generated.json',
+        outputFile: '/generated/metadata/metadata.generated.jsonc',
       })
     })
 
@@ -85,7 +85,7 @@ describe('[EMITTER]', () => {
       )
 
       expect(result.outputFile).toBe(
-        '/generated/metadata/metadata.generated.json',
+        '/generated/metadata/metadata.generated.jsonc',
       )
     })
   })

@@ -129,7 +129,7 @@ describe('[EMITTERS]', () => {
         groupPath: group.groupPath,
         tokenFiles: [],
         cssFile: group.cssPath,
-        outputFile: '/generated/metadata/metadata.generated.json',
+        outputFile: '/generated/metadata/metadata.generated.jsonc',
       }
 
       vi.mocked(assembleTokenData)

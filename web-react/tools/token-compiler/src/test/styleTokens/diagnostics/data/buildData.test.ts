@@ -104,24 +104,34 @@ describe('[DIAGNOSTICS]', () => {
         generatedFiles: {
           presets: {
             written: [],
-            skipped: [],
+            skipped: []
           },
           tokens: {
             written: [],
-            skipped: [],
+            skipped: []
           },
-          metadata: {
+          meta: {
             written: [],
-            skipped: [],
+            skipped: []
           },
           lsp: {
             written: [],
-            skipped: [],
+            skipped: []
           },
           extension: {
             written: [],
+            skipped: []
+          }
+        },
+        generatedPatches: {
+          css: {
             skipped: [],
+            written: []
           },
+          jsonc: {
+            skipped: [],
+            written: []
+          }
         },
         issues: [],
       })
@@ -290,9 +300,9 @@ describe('[DIAGNOSTICS]', () => {
             updated: [
               '/src/shared/generated/presets/button.preset.ts',
               '/src/shared/generated/tokenModules/button.token.ts',
-              '/src/shared/generated/metadata.generated.json',
+              '/src/shared/generated/metadata.generated.jsonc',
               '/src/shared/generated/lsp.generated.ts',
-              '/src/shared/generated/extension.generated.json',
+              '/src/shared/generated/extension.generated.jsonc',
             ],
             skipped: [],
           },
@@ -321,9 +331,9 @@ describe('[DIAGNOSTICS]', () => {
           ],
           skipped: [],
         },
-        metadata: {
+        meta: {
           written: [
-            '/src/shared/generated/metadata.generated.json',
+            '/src/shared/generated/metadata.generated.jsonc',
           ],
           skipped: [],
         },
@@ -335,7 +345,7 @@ describe('[DIAGNOSTICS]', () => {
         },
         extension: {
           written: [
-            '/src/shared/generated/extension.generated.json',
+            '/src/shared/generated/extension.generated.jsonc',
           ],
           skipped: [],
         },

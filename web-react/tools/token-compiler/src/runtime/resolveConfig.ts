@@ -1,10 +1,10 @@
 import path from 'node:path';
 
 import { loadCompilerConfig } from './loadCompilerConfig.ts';
-import type { CompilerConfig, UserOptions } from '../types/run.types.ts';
+import type { CompilerConfig } from '../types/run.types.ts';
 
 
-export function resolveConfig(rootDir: string, options: UserOptions): CompilerConfig | null {
+export function resolveConfig(rootDir: string, tokenFolder: string | undefined): CompilerConfig | null {
 
   const cliDirectory = path.dirname(process.argv[1])
   const compilerDirectory = path.dirname(cliDirectory)
@@ -15,7 +15,7 @@ export function resolveConfig(rootDir: string, options: UserOptions): CompilerCo
 
   const config = loadCompilerConfig(projectRoot)
 
-  const tokenRaw = config.tokenFolder ?? options.tokenFolder
+  const tokenRaw = config.tokenFolder ?? tokenFolder
 
   if (!tokenRaw) {
     throw new Error("Error: Couldn't resolve token path in either compiler.config.json or vsCode settings")

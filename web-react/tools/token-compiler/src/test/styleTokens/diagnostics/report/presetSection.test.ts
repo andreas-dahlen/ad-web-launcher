@@ -193,9 +193,8 @@ describe('[DIAGNOSTICS]', () => {
     })
 
     it('returns undefined when there are no files', () => {
-      expect(
-        presetSection(createFileStatus()),
-      ).toBeUndefined()
+      const result = presetSection(createFileStatus())
+      expect(result.title).toBeDefined()
     })
   })
 })

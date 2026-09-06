@@ -5,6 +5,7 @@ import type {
   CssDataTokenGroup,
   TokenGroup,
 } from '../../../types/compiler.types.ts'
+import type { CompilerConfig } from '../../../types/run.types.ts'
 
 describe('[COMPILER]', () => {
   describe('assert.cssVariable', () => {
@@ -66,11 +67,24 @@ describe('[COMPILER]', () => {
 
   describe('assert.hasOutPath', () => {
     it('accepts config with outPath', () => {
-      const config = {
+      const config: CompilerConfig = {
         rootDir: '/project',
-        tokenPath: '/tokens',
-        outPath: '/generated',
-        mute: true,
+        tokenPath: '/project/tokens',
+        outPath: '/project/output',
+
+
+        outputs: {
+          extension: false,
+          lsp: false,
+          meta: false,
+          pathPatches: false,
+          presets: false,
+          tokens: false
+        },
+        logging: {
+          trace: false,
+          emissions: "summary"
+        }
       }
 
       expect(() =>
@@ -79,11 +93,24 @@ describe('[COMPILER]', () => {
     })
 
     it('rejects config without outPath', () => {
-      const config = {
+      const config: CompilerConfig = {
         rootDir: '/project',
-        tokenPath: '/tokens',
+        tokenPath: '/project/tokens',
         outPath: null,
-        mute: true,
+
+
+        outputs: {
+          extension: false,
+          lsp: false,
+          meta: false,
+          pathPatches: false,
+          presets: false,
+          tokens: false
+        },
+        logging: {
+          trace: false,
+          emissions: "summary"
+        }
       }
 
       expect(() =>

@@ -1,6 +1,5 @@
 import { spawn, type ChildProcess } from 'node:child_process'
 import * as vscode from 'vscode'
-import type { UserOptions } from './terminal.types.ts'
 
 export class CompilerTerminal implements vscode.Pseudoterminal {
 
@@ -12,7 +11,7 @@ export class CompilerTerminal implements vscode.Pseudoterminal {
   constructor(
     private readonly cliFile: string,
     private readonly projectRoot: string,
-    private readonly config: UserOptions,
+    private readonly config: string | undefined,
   ) { }
 
   private write(data: string): void {
@@ -24,15 +23,17 @@ export class CompilerTerminal implements vscode.Pseudoterminal {
   open(): void {
     this.write('Starting Token Compiler...\r\n')
 
-    this.compiler = spawn(
-      process.execPath,
-      [
-        this.cliFile,
-        'exe',
-        this.projectRoot,
-        JSON.stringify(this.config),
-      ],
-    )
+    const args = [
+      this.cliFile,
+      'exe',
+      this.projectRoot,
+    ]
+
+    if (this.config !== undefined) {
+      args.push(this.config)
+    }
+
+    this.compiler = spawn(process.execPath, args)
 
     this.compiler.stdout?.on('data', data => {
       this.write(data.toString())

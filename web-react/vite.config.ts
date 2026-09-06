@@ -3,7 +3,7 @@ import react from '@vitejs/plugin-react-swc'
 import { viteSingleFile } from 'vite-plugin-singlefile'
 import path from 'path'
 import svgr from "vite-plugin-svgr";
-import { tokenCompiler } from './tools/plugins/vite.token-compiler.ts';
+import { tokenCompiler } from './tools/plugins/src/vite.token-compiler.ts';
 
 const fromRoot = (relativePath: string) => path.resolve(import.meta.dirname, relativePath)
 

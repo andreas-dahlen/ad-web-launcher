@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
 
-import { classSection } from '../../../../diagnostics/report/sections/classSection.ts'
+import { classSection } from '../../../../diagnostics/report/sections/problems/classSection.ts'
 import type { MissingClass } from '../../../../types/diagnostics.types.ts'
 
 vi.mock('../../../../utils/string.js', () => ({

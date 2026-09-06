@@ -2,7 +2,7 @@ import { colors, paint, formatLogPath } from '../../../../utils/string.ts';
 import type { FileStatus } from '../../../../types/diagnostics.types.ts';
 import type { ReportEntry, ReportSection } from '../../buildReport.ts';
 
-export function tokenSection(data: FileStatus): ReportSection | undefined {
+export function tokenSection(data: FileStatus): ReportSection {
   const entries: ReportEntry[] = [];
 
   const skippedLines: string[] = [];
@@ -32,11 +32,13 @@ export function tokenSection(data: FileStatus): ReportSection | undefined {
     });
   }
 
-  if (entries.length === 0) return;
+  if (entries.length === 0) return {
+    title: ` 🎯 ${paint(`[Token files]`, colors.heading)} (☠️ ) \n`,
+    entries: []
+  }
 
-  // title: `🎯 [Tokens] (${entries.length}) \n`,
   return {
-    title: ` 🎯 ${paint(`[Tokens]`, colors.heading)} (${paint(data.skipped.length + data.written.length, colors.value)}) \n`,
+    title: ` 🎯 ${paint(`[Token files]`, colors.heading)} (${paint(data.skipped.length + data.written.length, colors.value)}) \n`,
     entries
   };
 }

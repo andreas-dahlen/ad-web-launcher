@@ -15,7 +15,7 @@ export function loadTokenFile(fullPath: string): RawToken {
       .join(', ')
 
     throw new Error(
-      `Invalid JSON in ${fullPath}: ${details}`,
+      `Invalid JSONC in ${fullPath}: ${details}`,
     )
   }
   return rawTokenSchema.parse(jsonc)

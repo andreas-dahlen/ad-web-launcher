@@ -26,7 +26,7 @@ describe('[DIAGNOSTICS]', () => {
           ],
           skipped: [],
         },
-        metadata: {
+        meta: {
           written: [],
           skipped: [],
         },
@@ -63,7 +63,7 @@ describe('[DIAGNOSTICS]', () => {
             '/src/shared/generated/tokenModules/button.token.ts',
           ],
         },
-        metadata: {
+        meta: {
           written: [],
           skipped: [],
         },
@@ -81,9 +81,9 @@ describe('[DIAGNOSTICS]', () => {
     it('groups written metadata, lsp, and extension files', () => {
       const result = analyzeWriteResult({
         updated: [
-          '/src/shared/generated/metadata.generated.json',
+          '/src/shared/generated/metadata.generated.jsonc',
           '/src/shared/generated/lsp.generated.ts',
-          '/src/shared/generated/extension.generated.json',
+          '/src/shared/generated/extension.generated.jsonc',
         ],
         skipped: [],
       })
@@ -97,9 +97,9 @@ describe('[DIAGNOSTICS]', () => {
           written: [],
           skipped: [],
         },
-        metadata: {
+        meta: {
           written: [
-            '/src/shared/generated/metadata.generated.json',
+            '/src/shared/generated/metadata.generated.jsonc',
           ],
           skipped: [],
         },
@@ -111,7 +111,7 @@ describe('[DIAGNOSTICS]', () => {
         },
         extension: {
           written: [
-            '/src/shared/generated/extension.generated.json',
+            '/src/shared/generated/extension.generated.jsonc',
           ],
           skipped: [],
         },
@@ -122,9 +122,9 @@ describe('[DIAGNOSTICS]', () => {
       const result = analyzeWriteResult({
         updated: [],
         skipped: [
-          '/src/shared/generated/metadata.generated.json',
+          '/src/shared/generated/metadata.generated.jsonc',
           '/src/shared/generated/lsp.generated.ts',
-          '/src/shared/generated/extension.generated.json',
+          '/src/shared/generated/extension.generated.jsonc',
         ],
       })
 
@@ -137,10 +137,10 @@ describe('[DIAGNOSTICS]', () => {
           written: [],
           skipped: [],
         },
-        metadata: {
+        meta: {
           written: [],
           skipped: [
-            '/src/shared/generated/metadata.generated.json',
+            '/src/shared/generated/metadata.generated.jsonc',
           ],
         },
         lsp: {
@@ -152,7 +152,7 @@ describe('[DIAGNOSTICS]', () => {
         extension: {
           written: [],
           skipped: [
-            '/src/shared/generated/extension.generated.json',
+            '/src/shared/generated/extension.generated.jsonc',
           ],
         },
       })
@@ -161,11 +161,11 @@ describe('[DIAGNOSTICS]', () => {
     it('ignores files that are not generated files', () => {
       const result = analyzeWriteResult({
         updated: [
-          '/src/shared/generated/other.json',
+          '/src/shared/generated/other.jsonc',
           '/src/components/Button/Button.module.css',
         ],
         skipped: [
-          '/src/shared/generated/other.json',
+          '/src/shared/generated/other.jsonc',
         ],
       })
 
@@ -178,7 +178,7 @@ describe('[DIAGNOSTICS]', () => {
           written: [],
           skipped: [],
         },
-        metadata: {
+        meta: {
           written: [],
           skipped: [],
         },
@@ -203,7 +203,7 @@ describe('[DIAGNOSTICS]', () => {
           written: [],
           skipped: [],
         },
-        metadata: {
+        meta: {
           written: [],
           skipped: [],
         },

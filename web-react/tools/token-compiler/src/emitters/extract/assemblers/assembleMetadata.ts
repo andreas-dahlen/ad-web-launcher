@@ -10,7 +10,7 @@ export type GroupMetadata = {
   outputFile: string
 }
 export function assembleMetadata(group: CssTokenGroup, outPath: string): GroupMetadata {
-  const outputFile = path.join(outPath, "metadata/metadata.generated.json")
+  const outputFile = path.join(outPath, "metadata/metadata.generated.jsonc")
   const name = extractGroupName(group.groupPath)
   return {
 

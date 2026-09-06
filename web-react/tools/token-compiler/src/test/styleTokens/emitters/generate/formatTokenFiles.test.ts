@@ -76,7 +76,7 @@ describe('[EMITTER]', () => {
       )
 
       expect(result.content).toContain(
-        'from "@shared/tokenUtils/compiler.types"',
+        'from "@shared/tokenUtils/compiler.types.ts"',
       )
     })
 

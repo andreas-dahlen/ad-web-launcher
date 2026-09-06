@@ -1,12 +1,7 @@
 import type z from 'zod';
-import { compilerConfigSchema } from '../configSchema.ts';
+import { compilerConfigSchema, compilerOutputsSchema } from '../configSchema.ts';
 import type { TokenCompiler } from '../compiler/compilerService.ts';
 import type { FSWatcher } from 'chokidar';
-
-
-export type UserOptions = {
-  tokenFolder?: string
-}
 export type CompilerOptions = z.infer<typeof compilerConfigSchema>
 
 export type CompilerConfig = {
@@ -16,15 +11,7 @@ export type CompilerConfig = {
   outputs: CompilerOutputs
   logging: CompilerLogs
 }
-
-export type CompilerOutputs = {
-  extension: boolean,
-  lsp: boolean
-  meta: boolean
-  pathPatches: boolean
-  presets: boolean
-  tokens: boolean
-}
+export type CompilerOutputs = Required<z.infer<typeof compilerOutputsSchema>>
 
 type CompilerLogs = {
   trace: boolean

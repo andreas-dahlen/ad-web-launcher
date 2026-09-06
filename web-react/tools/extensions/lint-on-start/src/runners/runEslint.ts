@@ -20,10 +20,7 @@ export function runEslint(
   let stdout = ''
 
   child.stdout.on('data', data => {
-    const text = data.toString()
-
-    output.append(text)
-    stdout += text
+    stdout += data.toString()
   })
 
   child.stderr.on('data', data => {
@@ -32,6 +29,8 @@ export function runEslint(
 
   child.on('close', () => {
     const parsed = parseESLint(stdout)
+
+    let problemCount = 0
 
     for (const result of parsed) {
       const filePath = path.resolve(
@@ -43,6 +42,12 @@ export function runEslint(
         vscode.Uri.file(filePath),
         result.diagnostics,
       )
+
+      problemCount += result.diagnostics.length
     }
+
+    output.appendLine(
+      `eslint: ${problemCount} problem${problemCount === 1 ? '' : 's'}`,
+    )
   })
 }

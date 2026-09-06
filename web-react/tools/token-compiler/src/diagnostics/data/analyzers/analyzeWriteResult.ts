@@ -12,7 +12,7 @@ export function analyzeWriteResult(result: FileResult | undefined): GeneratedFil
       written: [],
       skipped: []
     },
-    metadata: {
+    meta: {
       written: [],
       skipped: []
     },
@@ -34,11 +34,11 @@ export function analyzeWriteResult(result: FileResult | undefined): GeneratedFil
       generatedFiles.presets.written.push(file)
     } else if (file.endsWith(".token.ts")) {
       generatedFiles.tokens.written.push(file)
-    } else if (file.endsWith("metadata.generated.json")) {
-      generatedFiles.metadata.written.push(file)
+    } else if (file.endsWith("metadata.generated.jsonc")) {
+      generatedFiles.meta.written.push(file)
     } else if (file.endsWith("lsp.generated.ts")) {
       generatedFiles.lsp.written.push(file)
-    } else if (file.endsWith("extension.generated.json")) {
+    } else if (file.endsWith("extension.generated.jsonc")) {
       generatedFiles.extension.written.push(file)
     }
   }
@@ -48,11 +48,11 @@ export function analyzeWriteResult(result: FileResult | undefined): GeneratedFil
       generatedFiles.presets.skipped.push(file)
     } else if (file.endsWith(".token.ts")) {
       generatedFiles.tokens.skipped.push(file)
-    } else if (file.endsWith("metadata.generated.json")) {
-      generatedFiles.metadata.skipped.push(file)
+    } else if (file.endsWith("metadata.generated.jsonc")) {
+      generatedFiles.meta.skipped.push(file)
     } else if (file.endsWith("lsp.generated.ts")) {
       generatedFiles.lsp.skipped.push(file)
-    } else if (file.endsWith("extension.generated.json")) {
+    } else if (file.endsWith("extension.generated.jsonc")) {
       generatedFiles.extension.skipped.push(file)
     }
   }

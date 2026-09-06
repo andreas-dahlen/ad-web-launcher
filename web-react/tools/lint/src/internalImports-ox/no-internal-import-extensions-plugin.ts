@@ -1,5 +1,3 @@
-// no-internal-import-extensions-plugin.ts
-
 import noInternalImportExtensions from './no-internal-import-extensions.ts'
 
 

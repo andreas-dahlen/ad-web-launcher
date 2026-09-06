@@ -7,10 +7,10 @@ export const jsPlugins: OxlintConfig['jsPlugins'] = [
   },
   {
     name: 'test-api',
-    specifier: './tools/lint/custom/testApi-ox/no-test-only-api-plugin.ts',
+    specifier: './tools/lint/src/testApi-ox/no-test-only-api-plugin.ts',
   },
   {
     name: 'internal-imports',
-    specifier: './tools/lint/custom/internalImports-ox/no-internal-import-extensions-plugin.ts',
+    specifier: './tools/lint/src/internalImports-ox/no-internal-import-extensions-plugin.ts',
   },
 ]

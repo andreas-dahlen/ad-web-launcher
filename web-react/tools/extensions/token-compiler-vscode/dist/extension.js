@@ -21,10 +21,7 @@ function createSettingsResolver(settings, output) {
       return path.relative(compilerDirectory, projectRoot);
     },
     getUserOptions() {
-      return {
-        tokenFolder: settings.get("tokenFolder"),
-        mute: settings.get("mute")
-      };
+      return settings.get("tokenFolder");
     }
   };
 }
@@ -71,15 +68,15 @@ var CompilerTerminal = class {
   }
   open() {
     this.write("Starting Token Compiler...\r\n");
-    this.compiler = spawn(
-      process.execPath,
-      [
-        this.cliFile,
-        "exe",
-        this.projectRoot,
-        JSON.stringify(this.config)
-      ]
-    );
+    const args = [
+      this.cliFile,
+      "exe",
+      this.projectRoot
+    ];
+    if (this.config !== void 0) {
+      args.push(this.config);
+    }
+    this.compiler = spawn(process.execPath, args);
     this.compiler.stdout?.on("data", (data) => {
       this.write(data.toString());
     });
@@ -102,11 +99,11 @@ Compiler exited with code ${code ?? 0}\r
 };
 
 // src/terminal/createTerminal.ts
-function createTerminal(cliFile, projectRoot, config) {
+function createTerminal(cliFile, projectRoot, tokenFolder) {
   const pty = new CompilerTerminal(
     cliFile,
     projectRoot,
-    config
+    tokenFolder
   );
   return vscode3.window.createTerminal({
     name: "Token Compiler",

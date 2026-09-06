@@ -12,7 +12,20 @@ const config: CompilerConfig = {
   rootDir: '/project',
   tokenPath: '/project/tokens',
   outPath: '/project/output',
-  mute: false,
+
+
+  outputs: {
+    extension: false,
+    lsp: false,
+    meta: false,
+    pathPatches: false,
+    presets: false,
+    tokens: false
+  },
+  logging: {
+    trace: false,
+    emissions: "summary"
+  }
 }
 
 describe('[COMPILER]', () => {

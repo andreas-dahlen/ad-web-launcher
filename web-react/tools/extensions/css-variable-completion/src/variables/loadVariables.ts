@@ -1,6 +1,6 @@
 import { parse } from 'jsonc-parser'
 import { readFileSync } from 'node:fs'
-import * as vscode from 'vscode'
+import type * as vscode from 'vscode'
 
 export function loadVariables(fileUri: vscode.Uri): string[] {
   let contents: string
