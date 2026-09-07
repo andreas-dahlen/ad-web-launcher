@@ -920,12 +920,25 @@ function loadVariables(fileUri) {
 // src/variables/watchVariables.ts
 import * as vscode2 from "vscode";
 function watchVariables(variablesUri, provider, output) {
+  output.appendLine(
+    `[css variable completion] watching: ${variablesUri.fsPath}`
+  );
   const watcher = vscode2.workspace.createFileSystemWatcher(
     variablesUri.fsPath
   );
   const reloadVariables = () => {
+    output.appendLine(
+      `[css variable completion] variables changed: ${variablesUri.fsPath}`
+    );
     try {
-      provider.updateVariables(loadVariables(variablesUri));
+      const variables = loadVariables(variablesUri);
+      output.appendLine(
+        `[css variable completion] loaded ${variables.length} variables`
+      );
+      provider.updateVariables(variables);
+      output.appendLine(
+        `[css variable completion] provider updated`
+      );
     } catch (error) {
       output.appendLine(
         `[css variable completion] failed to load variables: ${String(error)}`

@@ -4,7 +4,7 @@ import { boundariesFiles } from './files.ts'
 export const boundarySettings = {
   'import/resolver': {
     typescript: {
-      project: './web-react/tsconfig.json',
+      project: './tsconfig.json',
       alwaysTryTypes: true,
     },
     node: true,

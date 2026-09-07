@@ -5,3 +5,5 @@ tsconfig.json
 *.ts
 *.map
 dist/extension-backup.js
+coverage/
+.vitest/

@@ -2,6 +2,8 @@
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+
 source "$SCRIPT_DIR/projects.sh"
 source "$SCRIPT_DIR/lib.sh"
 
@@ -21,7 +23,7 @@ for project in "${PROJECTS[@]}"; do
     echo "========================================"
 
     if ! (
-        cd "$project"
+        cd "$ROOT/$project"
 
         install_packages=()
 

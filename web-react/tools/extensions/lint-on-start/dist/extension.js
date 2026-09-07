@@ -12,12 +12,12 @@ function resolveRunners(settings) {
   };
 }
 
-// src/runners/runOxlint.ts
+// src/oxlint/runOxlint.ts
 import path from "node:path";
 import { spawn } from "node:child_process";
 import * as vscode3 from "vscode";
 
-// src/matchers/parseOxlint.ts
+// src/oxlint/parseOxlint.ts
 import * as vscode2 from "vscode";
 var pattern = /^(.+):(\d+):(\d+):\s+(.*)\s+\[(Error|Warning)\/([^\]]+)\]$/;
 function parseDiagnostic(line) {
@@ -49,7 +49,7 @@ function parseDiagnostic(line) {
   };
 }
 
-// src/runners/runOxlint.ts
+// src/oxlint/runOxlint.ts
 function runOxlint(projectRoot, output, diagnostics) {
   const child = spawn(
     "npm",
@@ -152,15 +152,6 @@ function activate(context) {
       );
       launch();
     }),
-    // vscode.window.onDidChangeActiveTextEditor(editor => {
-    //   if (!editor) {
-    //     return
-    //   }
-    //   // output.appendLine(
-    //   //   `[Lint on Start] active: ${editor.document.uri.fsPath}`,
-    //   // )
-    //   diagnostics.delete(editor.document.uri)
-    // }),
     vscode6.workspace.onDidSaveTextDocument((document) => {
       diagnostics.delete(document.uri);
     })

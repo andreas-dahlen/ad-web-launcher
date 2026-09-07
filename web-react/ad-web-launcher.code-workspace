@@ -1,0 +1,18 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"terminal.integrated.cwd": "${workspaceFolder}",
+		"scopesManager.localScopes": [
+			{
+				"id": "mtqg3l7p3d6q8",
+				"name": "test",
+				"patterns": [ ]
+			}
+		],
+		"cssModulesIntellisense.diagnostics.classNotUsed.enabled": false
+	}
+}

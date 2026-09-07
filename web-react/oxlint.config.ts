@@ -13,7 +13,7 @@ export default defineConfig({
   settings: {
     ...boundarySettings,
     custom: {
-      rootDir: 'web-react',
+      rootDir: '.',
     },
   },
 

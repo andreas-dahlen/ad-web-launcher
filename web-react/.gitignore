@@ -23,4 +23,6 @@ dist-ssr
 *.sw?
 .env
 coverage
-.vitest
+
+# generated json .vitest folders... TODO needs evaluation...
+.vitest/*

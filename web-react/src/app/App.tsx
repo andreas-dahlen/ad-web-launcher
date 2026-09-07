@@ -4,7 +4,7 @@ import DebugWrapper from './infrastructure/DebugWrapper.tsx';
 import Root from './Root.tsx'
 import LoadingScene from './infrastructure/LoadingScene.tsx';
 import ButtonPrim from '@primitives/Button/ButtonPrim.tsx';
-import ButtonPrimer from '../../primitives/Button/ButtonPrim.tsx';
+import ButtonPrimer from '../primitives/Button/ButtonPrim.tsx';
 
 export default function App() {
 

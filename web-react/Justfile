@@ -2,7 +2,7 @@
 
 set shell := ["bash", "-c"]
 
-workspace := "../ad-web-launcher.code-workspace"
+workspace := "ad-web-launcher.code-workspace"
 
 # ================== DEFAULT ====================
 
