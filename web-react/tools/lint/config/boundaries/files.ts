@@ -2,14 +2,14 @@ const appBoundaryFiles = [
   { pattern: '**/*.boundary.ts', category: 'boundary' },
   { pattern: 'src/app/*.{ts,tsx}', category: 'app-entry' },
 
-  { pattern: '**/*.store.ts', category: 'stores' },
-  { pattern: '**/*.types.ts', category: 'types' },
-  { pattern: '**/*.d.ts', category: 'types' },
+  { pattern: 'src/**/*.store.ts', category: 'stores' },
+  { pattern: 'src/**/*.types.ts', category: 'types' },
+  { pattern: 'src/**/*.d.ts', category: 'types' },
 
-  { pattern: '**/buildDesc.ts', category: 'buildDesc' },
-  { pattern: '**/pipeline.ts', category: 'pipeline' },
-  { pattern: '**/solverRouter.ts', category: 'solverRouter' },
-  { pattern: '**/gesture.utils.ts', category: 'gestureUtils' },
+  { pattern: 'src/**/buildDesc.ts', category: 'buildDesc' },
+  { pattern: 'src/**/pipeline.ts', category: 'pipeline' },
+  { pattern: 'src/**/solverRouter.ts', category: 'solverRouter' },
+  { pattern: 'src/**/gesture.utils.ts', category: 'gestureUtils' },
 
   { pattern: 'src/styleTokens/tokens/**/*.{json,jsonc}', category: 'tokenData' },
 ]

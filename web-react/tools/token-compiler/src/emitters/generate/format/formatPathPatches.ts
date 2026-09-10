@@ -1,7 +1,7 @@
-import type { FormatResult } from '../generateOutput.ts';
-import type { GroupMetadata } from '../../extract/assemblers/assembleMetadata.ts';
-export function formatPathPatches(metadata: GroupMetadata[]): FormatResult[] {
-  const files: FormatResult[] = []
+import type { FormatPatchResult, GroupMetadata } from '../../../types/emitter.types.ts'
+
+export function formatPathPatches(metadata: GroupMetadata[]): FormatPatchResult[] {
+  const files: FormatPatchResult[] = []
 
   const basePath = "file://wsl.localhost/Ubuntu"
 
@@ -12,7 +12,8 @@ export function formatPathPatches(metadata: GroupMetadata[]): FormatResult[] {
       if (!tokenPath.endsWith(".jsonc")) continue
       files.push({
         outputFile: tokenPath,
-        content: createFileComment(cssFile, "jsonc")
+        content: createFileComment(cssFile, "jsonc"),
+        kind: "jsonc"
       })
     }
 
@@ -22,7 +23,8 @@ export function formatPathPatches(metadata: GroupMetadata[]): FormatResult[] {
 
     files.push({
       outputFile: data.cssFile,
-      content: createFileComment(tokenPaths, "css")
+      content: createFileComment(tokenPaths, "css"),
+      kind: "css"
     })
 
   }

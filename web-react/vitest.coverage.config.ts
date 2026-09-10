@@ -17,6 +17,7 @@ export default mergeConfig(
           'tools/lint/src/**/*.ts',
           'tools/plugins/src/**/*.ts',
           'tools/extensions/*/src/**/*.ts',
+          'packages/*/src/**/*.ts',
         ],
 
         exclude: [

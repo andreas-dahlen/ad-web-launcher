@@ -1,5 +1,5 @@
 import { settingsStore } from '@stores/settings.store.ts'
-import Button from '@composites/Button/Button.ts'
+import Button from '@composites/Button/Button.tsx'
 import { alertStore } from '@stores/alert.store.ts'
 import { layoutStore } from '@stores/layout.store.ts'
 import { layout_DEFAULTS } from '@data/generators/dataGenerator.ts'

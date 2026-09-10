@@ -20,21 +20,21 @@ export function summarySection(data: DiagnosticData, outputs: CompilerOutputs): 
   const { css, jsonc } = data.generatedPatches
 
   entries.push({
-    title: `🎯 ${paint(`[Token files]`, colors.heading)}  (${paint(emitValueMsg(tokens.written, outputs.tokens), colors.value)})   `
+    title: `🎯 ${paint(`[Token files]`, colors.heading)}   ${paint(emitValueMsg(tokens.written, outputs.tokens), colors.value)} `
   }, {
-    title: `📁 ${paint(`[Preset files]`, colors.heading)} (${paint(emitValueMsg(presets.written, outputs.presets), colors.value)}) `
+    title: `📁 ${paint(`[Preset files]`, colors.heading)}  ${paint(emitValueMsg(presets.written, outputs.presets), colors.value)} `
   }, {
-    title: `🧩 ${paint(`[Metadata]`, colors.heading)}     (${paint(emitValueMsg(meta.written, outputs.meta), colors.value)} )`
+    title: `🧩 ${paint(`[Metadata]`, colors.heading)}      ${paint(emitValueMsg(meta.written, outputs.meta), colors.value)}`
   }, {
-    title: `🔌 ${paint(`[Extension]`, colors.heading)}    (${paint(emitValueMsg(extension.written, outputs.extension), colors.value)})`
+    title: `🔌 ${paint(`[Extension]`, colors.heading)}     ${paint(emitValueMsg(extension.written, outputs.extension), colors.value)}`
   }, {
-    title: `🔮 ${paint(`[LSP]`, colors.heading)}          (${paint(emitValueMsg(lsp.written, outputs.lsp), colors.value)}) `
+    title: `🔮 ${paint(`[LSP]`, colors.heading)}           ${paint(emitValueMsg(lsp.written, outputs.lsp), colors.value)} `
   }, {
-    title: `📐 ${paint(`[JSON Schema]`, colors.heading)}  (${paint(emitValueMsg(schema.written, outputs.schema), colors.value)} ) `
+    title: `📐 ${paint(`[JSON Schema]`, colors.heading)}   ${paint(emitValueMsg(schema.written, outputs.schema), colors.value)} `
   }, {
-    title: `\n  🩹 ${paint(`[Css patches]`, colors.heading)}  (${paint(emitValueMsg(css.written, outputs.pathPatches), colors.value)})  `
+    title: `\n  🩹 ${paint(`[Css patches]`, colors.heading)}   ${paint(emitValueMsg(css.written, outputs.pathPatches), colors.value)}  `
   }, {
-    title: `🩹 ${paint(`[Jsonc patches]`, colors.heading)}(${paint(emitValueMsg(jsonc.written, outputs.pathPatches), colors.value)})  `
+    title: `🩹 ${paint(`[Jsonc patches]`, colors.heading)} ${paint(emitValueMsg(jsonc.written, outputs.pathPatches), colors.value)}  `
   })
 
   return {

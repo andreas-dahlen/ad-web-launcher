@@ -1,7 +1,7 @@
-import type { GroupMetadata } from '../../extract/assemblers/assembleMetadata.ts';
-import type { FormatResult } from '../generateOutput.ts';
+import type { FormatFileResult, GroupMetadata } from '../../../types/emitter.types.ts'
 
-export function formatMetaFile(groups: GroupMetadata[]): FormatResult {
+
+export function formatMetaFile(groups: GroupMetadata[]): FormatFileResult {
 
   const content = JSON.stringify(
     {
@@ -29,5 +29,6 @@ export function formatMetaFile(groups: GroupMetadata[]): FormatResult {
   return {
     outputFile: groups[0].outputFile,
     content,
+    kind: "meta"
   }
 }

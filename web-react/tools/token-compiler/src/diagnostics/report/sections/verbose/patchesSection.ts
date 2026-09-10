@@ -20,7 +20,7 @@ export function patchesSection(
         title: `${paint('File', colors.muted)}: ${paint(
           formatLogPath(file),
           colors.file
-        )} (✔️)`
+        )} ✔️`
       })
     }
 
@@ -29,7 +29,7 @@ export function patchesSection(
         title: `${paint('File', colors.muted)}: ${paint(
           formatLogPath(file),
           colors.file
-        )} (⏩)`
+        )} ⏩`
       })
     }
   }
@@ -41,17 +41,17 @@ export function patchesSection(
       )
     }
     return {
-      title: `🩹 ${paint(`[File patches]`, colors.heading)} (☠️ ) \n`,
+      title: `🩹 ${paint(`[File patches]`, colors.heading)} ☠️ \n`,
       entries: []
     }
   }
 
 
   return {
-    title: ` 🩹 ${paint(`[File patches]`, colors.heading)} (${paint(
+    title: ` 🩹 ${paint(`[File patches]`, colors.heading)} ${paint(
       emitValueMsg(files, true),
       colors.value,
-    )})\n`,
+    )}\n`,
     entries
   }
 }

@@ -54,3 +54,7 @@ file://wsl.localhost/Ubuntu/home/david/repos/ad-web-launcher/web-react/src/style
     fill: var(--final-svg-mode-disabled-col, currentColor);
   }
 }
+
+.usedPlaceholder {
+  background: honeydew;
+}

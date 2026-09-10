@@ -1,5 +1,5 @@
 
-import type { EmitResult } from '../types/compiler.types.ts';
+import type { EmitResult } from '../types/emitter.types.ts';
 import type { TokenCache } from '../compiler/tracking/tokenCache.ts';
 import { extractData } from './extract/extractData.ts';
 import { generateOutput } from './generate/generateOutput.ts';
@@ -19,7 +19,7 @@ export function emitFiles(cache: TokenCache, run: CompilerRun): EmitResult {
 
   return {
     extractResult,
-    writeResult,
-    patchResult
+    patchResult,
+    writeResult
   }
 }

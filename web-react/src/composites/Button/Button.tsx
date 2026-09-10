@@ -1,8 +1,8 @@
-import ButtonPrim from '@primitives/Button/ButtonPrim.ts'
-import DragPrim from '@primitives/Drag/DragPrim.ts'
+import ButtonPrim from '@primitives/Button/ButtonPrim.tsx'
+import DragPrim from '@primitives/Drag/DragPrim.tsx'
 import { createId, generateId } from '@data/generators/idGenerator.ts'
-import Label, { type LabelSettings } from '../../blocks/Label/Label.ts'
-import Svg, { type IconSettings } from '../../blocks/Svg/Svg.ts'
+import Label, { type LabelSettings } from '../../blocks/Label/Label.tsx'
+import Svg, { type IconSettings } from '../../blocks/Svg/Svg.tsx'
 import type { ButtonSettings, Directive, DragSettings } from '@composites/types/comp.types.ts'
 import { useBehaviorState } from '@composites/hooks/useBehaviorState.hook.ts'
 

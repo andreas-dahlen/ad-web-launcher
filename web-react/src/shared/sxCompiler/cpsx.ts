@@ -9,6 +9,14 @@ export function cpsx<P extends string>(
   return presets.map(p => map[p])
 }
 
+//TODO possible way to avoid having to spread the return
+// export function cpsx<P extends string>(
+//   presets: P[] | undefined,
+//   map: Record<P, string>
+// ): string {
+//   return presets?.map(p => map[p]).join(" ") ?? ""
+// }
+
 
 /* [USAGE]: mergePresets( buttonPresetMap, presets, !conditional && "presetClassName")
 export function mergePresets<

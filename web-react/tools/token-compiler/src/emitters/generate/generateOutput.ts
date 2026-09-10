@@ -1,4 +1,3 @@
-import type { EmitData } from '../extract/extractData.ts';
 import { formatTokenFiles } from './format/formatTokenFiles.ts';
 import { formatPresetFiles } from './format/formatPresetFiles.ts';
 import { formatMetaFile } from './format/formatMetaFile.ts';
@@ -6,18 +5,12 @@ import { formatPathPatches } from './format/formatPathPatches.ts';
 import { formatLspFile } from './format/formatLspFile.ts';
 import { formatExtensionFile } from './format/formatExtensionFile.ts';
 import type { CompilerConfig } from '../../types/run.types.ts';
+import type { EmitData, GeneratedOutput } from '../../types/emitter.types.ts';
 
-export type FormatResult = {
-  outputFile: string;
-  content: string;
-};
-
-export type GeneratedOutput = {
-  files: FormatResult[]
-  patches: FormatResult[]
-}
-
-export function generateOutput(data: EmitData, config: CompilerConfig): GeneratedOutput {
+export function generateOutput(
+  data: EmitData,
+  config: CompilerConfig
+): GeneratedOutput {
 
   return {
     files: [
@@ -28,6 +21,8 @@ export function generateOutput(data: EmitData, config: CompilerConfig): Generate
       ...(config.outputs.extension ? [formatExtensionFile(data.extensionData)] : []),
       ...(config.outputs.schema ? [data.jsonSchema] : [])
     ],
-    patches: config.outputs.pathPatches ? formatPathPatches(data.metadata) : []
+    patches: config.outputs.pathPatches
+      ? formatPathPatches(data.metadata)
+      : []
   }
 }

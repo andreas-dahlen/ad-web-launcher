@@ -1,26 +1,14 @@
-import type { PresetFileData } from './assemblers/assemblePresetData.ts'
-import type { TokenGroupData } from './assemblers/assembleTokenData.ts'
 import { assembleTokenData } from './assemblers/assembleTokenData.ts'
 import { assemblePresetData } from './assemblers/assemblePresetData.ts'
-import { assembleLspData, type LspData } from './assemblers/assembleLspData.ts'
-import { assembleMetadata, type GroupMetadata } from './assemblers/assembleMetadata.ts'
-import { assembleExtensionData, type ExtensionData } from './assemblers/assembleExtensionData.ts'
-import type { ExtractResult } from '../../types/compiler.types.ts'
+import { assembleLspData } from './assemblers/assembleLspData.ts'
+import { assembleMetadata } from './assemblers/assembleMetadata.ts'
+import { assembleExtensionData } from './assemblers/assembleExtensionData.ts'
 import type { TokenCache } from '../../compiler/tracking/tokenCache.ts'
 import type { CompilerRun } from '../../compiler/tracking/compilerRun.ts'
-import { assembleJsonSchema, type SchemaData } from './assemblers/assembleJsonSchema.ts'
+import { assembleJsonSchema } from './assemblers/assembleJsonSchema.ts'
+import type { EmitData, ExtractResult, GroupMetadata, PresetFileData, TokenGroupData } from '../../types/emitter.types.ts'
 
-
-export type EmitData = {
-  presetFiles: PresetFileData[]
-  tokenFiles: TokenGroupData[]
-  jsonSchema: SchemaData
-  metadata: GroupMetadata[]
-  extensionData: ExtensionData
-  lspData: LspData
-}
-
-export type ExtractData = {
+type ExtractData = {
   outputData: EmitData
   extractResult: ExtractResult
 }

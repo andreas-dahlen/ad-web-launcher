@@ -2,15 +2,9 @@ import path from "node:path"
 import { extractGroupName } from '../../../compiler/resolvers/extractGroupName.ts';
 import { toCamelCase, toPascalCase } from '../../../oldSharedUtils/stringFormaters.ts';
 import type { CssData } from '../../../types/compiler.types.ts';
+import type { PresetFileData } from '../../../types/emitter.types.ts';
 
 const NON_PRESET_SUFFIX = 'Util'
-export type PresetFileData = {
-  presetName: string
-  typeName: string
-  cssImport: string
-  selectors: string[];
-  outputFile: string
-};
 
 export function assemblePresetData(
   cssData: CssData,

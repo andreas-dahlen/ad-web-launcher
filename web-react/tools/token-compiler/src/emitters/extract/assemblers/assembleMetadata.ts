@@ -1,16 +1,10 @@
 import path from 'node:path'
 import { extractGroupName } from '../../../compiler/resolvers/extractGroupName.ts'
 import type { CssTokenGroup } from '../../../types/compiler.types.ts'
+import type { GroupMetadata } from '../../../types/emitter.types.ts'
 
-export type GroupMetadata = {
-  name: string
-  groupPath: string
-  tokenFiles: string[]
-  cssFile: string
-  outputFile: string
-}
 export function assembleMetadata(group: CssTokenGroup, outPath: string): GroupMetadata {
-  const outputFile = path.join(outPath, "metadata/metadata.generated.jsonc")
+  const outputFile = path.join(outPath, "metadata/metadata.jsonc")
   const name = extractGroupName(group.groupPath)
   return {
 

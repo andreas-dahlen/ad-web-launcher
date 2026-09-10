@@ -1,12 +1,7 @@
-import type { TokenData } from './assembleTokenData.ts';
 import type { CssVarString } from '../../../oldSharedUtils/oldSharedCompiler.types.ts';
 import { toCssVar } from '../../../oldSharedUtils/stringFormaters.ts';
 import path from 'node:path';
-
-export type ExtensionData = {
-  variables: CssVarString[]
-  outputFile: string
-}
+import type { ExtensionData, TokenData } from '../../../types/emitter.types.ts';
 
 export function assembleExtensionData(allVariables: CssVarString[], tokenData: TokenData[], outPath: string): ExtensionData {
   const variables = new Set<CssVarString>(allVariables)
@@ -24,7 +19,7 @@ export function assembleExtensionData(allVariables: CssVarString[], tokenData: T
     }
   }
 
-  const outputFile = path.join(outPath, "metadata/extension.generated.jsonc")
+  const outputFile = path.join(outPath, "metadata/extension.jsonc")
 
   return { variables: [...variables], outputFile }
 }

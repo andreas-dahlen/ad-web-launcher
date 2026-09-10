@@ -17,7 +17,7 @@ export default defineConfig({
   ],
   base: './',
   build: {
-    target: 'es2015',
+    target: 'es2022',
     minify: true
   },
   resolve: {

@@ -51,6 +51,9 @@ preview:
 build:
     npm run build && ./scripts/deploy-android.sh
 
+build-all:
+    ./scripts/run-script.sh build
+
 # ==================== QUALITY ====================
 
 type:
@@ -114,9 +117,6 @@ es: eslint
 
 knip *args:
     npm run knip -- {{ args }}
-
-knip-all *args:
-    ./scripts/knip-all.sh {{ args }}
 
 # chmod +x scripts/index.sh <- an example for enabling a script
 

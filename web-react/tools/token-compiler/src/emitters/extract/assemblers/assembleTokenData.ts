@@ -1,27 +1,8 @@
 import path from 'node:path'
 import type { CssTokenGroup } from '../../../types/compiler.types.ts'
-import type { ValidPrefix } from '../../../oldSharedUtils/oldSharedCompiler.types.ts'
 import { toCamelCase, toPascalCase } from '../../../oldSharedUtils/stringFormaters.ts'
 import { extractGroupName } from '../../../compiler/resolvers/extractGroupName.ts'
-
-export type TokenGroupData = {
-  groupPath: string
-  name: string
-  styleName: string
-  typeName: string
-  outputFile: string
-  tokens: TokenData[]
-}
-export type TokenData = {
-  infix: string
-  variables: VarData[];
-}
-type VarData = {
-  cssName: string
-  key: string
-  allowed: ValidPrefix[]
-  values: Partial<Record<ValidPrefix, string>>
-}
+import type { TokenData, TokenGroupData } from '../../../types/emitter.types.ts'
 
 export function assembleTokenData(group: CssTokenGroup, outPath: string): TokenGroupData {
 

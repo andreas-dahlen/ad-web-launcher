@@ -4,7 +4,7 @@ import { createId, generateId } from '@data/generators/idGenerator.ts'
 import DragPrim from '@primitives/Drag/DragPrim.tsx'
 import { useBehaviorState } from '@composites/hooks/useBehaviorState.hook.ts'
 import { Layout, type LayoutSettings } from '@blocks/Layout/Layout.tsx'
-import Label, { type LabelSettings } from '../../blocks/Label/Label.ts'
+import Label, { type LabelSettings } from '../../blocks/Label/Label.tsx'
 import { Visual, type VisualSettings } from '@blocks/visual/Visual.tsx'
 
 type FrameProps = {

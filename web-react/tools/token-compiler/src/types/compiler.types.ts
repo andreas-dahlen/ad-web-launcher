@@ -74,20 +74,6 @@ export type ProcessedToken = {
   processed: boolean
 }
 
-export type ExtractResult = {
-  omittedPresetFiles: string[]
-}
-
-export type EmitResult = {
-  extractResult: ExtractResult
-  writeResult: FileResult
-  patchResult: FileResult
-}
-export type FileResult = {
-  updated: string[]
-  skipped: string[]
-}
-
 //postcss
 export type PresetResetData = Array<[Rule, Set<CssVarString>]>
 export type WalkModuleResult = {

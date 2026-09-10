@@ -4,7 +4,8 @@ export function formatLogPath(file: string) {
     .replaceAll("\\", "/")
     .split("/")
     .slice(-2)
-    .join("/");
+    .join("/")
+    .padEnd(33);
 }
 
 export function emitValueMsg(

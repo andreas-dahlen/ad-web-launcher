@@ -1,9 +1,8 @@
-import type { FormatResult } from '../generateOutput.ts';
-import type { ExtensionData } from '../../extract/assemblers/assembleExtensionData.ts';
+import type { ExtensionData, FormatFileResult } from '../../../types/emitter.types.ts';
 
 export function formatExtensionFile(
   data: ExtensionData,
-): FormatResult {
+): FormatFileResult {
 
   const content = `// AUTO-GENERATED FILE.
   // DO NOT EDIT.
@@ -13,5 +12,5 @@ export function formatExtensionFile(
   ]
   `;
 
-  return { outputFile: data.outputFile, content };
+  return { outputFile: data.outputFile, content, kind: "extension" };
 }

@@ -1,50 +1,31 @@
-import type { FileResult } from '../../../types/compiler.types.ts';
-import type { GeneratedPatches } from '../../../types/diagnostics.types.ts';
+import type { GeneratedPatches } from '../../../types/diagnostics.types.ts'
+import type { PatchResult } from '../../../types/emitter.types.ts'
 
+export function analyzePatchResult(
+  result: PatchResult | undefined
+): GeneratedPatches {
+  const generated: GeneratedPatches = {
+    css: { written: [], skipped: [] },
+    jsonc: { written: [], skipped: [] }
+  }
+  const written = result?.written ?? []
+  const skipped = result?.skipped ?? []
 
-
-export function analyzePatchResult(result: FileResult | undefined): GeneratedPatches {
-
-  const generatedPatches: GeneratedPatches = {
-    css: {
-      written: [],
-      skipped: []
-    },
-    jsonc: {
-      written: [],
-      skipped: []
-    },
+  for (const file of written) {
+    generated[file.kind].written.push(file.outputFile)
+  }
+  for (const file of skipped) {
+    generated[file.kind].skipped.push(file.outputFile)
   }
 
-  const writtenPatchs = result?.updated ?? []
-  const skippedPatchs = result?.skipped ?? []
+  sortFiles(generated)
 
-  for (const file of writtenPatchs) {
-    if (file.endsWith("module.css")) {
-      generatedPatches.css.written.push(file)
-    } else if (file.endsWith(".jsonc")) {
-      generatedPatches.jsonc.written.push(file)
-    }
-  }
-
-  for (const file of skippedPatchs) {
-    if (file.endsWith("module.css")) {
-      generatedPatches.css.skipped.push(file)
-    } else if (file.endsWith(".jsonc")) {
-      generatedPatches.jsonc.skipped.push(file)
-    }
-  }
-
-  sortFiles(generatedPatches.css.written)
-  sortFiles(generatedPatches.css.skipped)
-  sortFiles(generatedPatches.jsonc.written)
-  sortFiles(generatedPatches.jsonc.skipped)
-
-
-  return generatedPatches
-
+  return generated
 }
 
-function sortFiles(files: string[]) {
-  files.sort((a, b) => a.localeCompare(b))
+function sortFiles(generated: GeneratedPatches) {
+  for (const status of Object.values(generated)) {
+    status.written.sort((a, b) => a.localeCompare(b))
+    status.skipped.sort((a, b) => a.localeCompare(b))
+  }
 }

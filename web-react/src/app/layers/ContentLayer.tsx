@@ -1,13 +1,13 @@
 import { Z } from '@config/zIndex.config.ts'
 import css from './Layers.module.css'
-import ContentCarouselPrim from '@primitives/Carousel/ContentCarouselPrim.ts'
-import { Scenes } from '@app/scenes/Scenes.ts'
+import ContentCarouselPrim from '@primitives/Carousel/ContentCarouselPrim.tsx'
+import { Scenes } from '@app/scenes/Scenes.tsx'
 import clsx from 'clsx'
 import React from 'react'
 import { layoutStore } from '@stores/layout.store.ts'
 import type { Axis1D } from '../../shared/types/core.types.ts'
 import { SceneContext } from '@primitives/Carousel/hooks/useSceneContext.hook.ts'
-import DragGrid from '@features/DragGrid/DragGrid.ts'
+import DragGrid from '@features/DragGrid/DragGrid.tsx'
 /** LAYER 2/4! Interactive=false carousel. Contents are mounted inside!
  * The carousel swipes are handled by baseLayer. */
 

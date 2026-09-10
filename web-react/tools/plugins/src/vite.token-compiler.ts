@@ -5,7 +5,7 @@ import type { Plugin } from 'vite'
 import { parse } from 'jsonc-parser'
 
 type CompilerConfig = {
-  cliFile: string
+  cliFile?: string
 }
 
 export function tokenCompiler(): Plugin {
@@ -22,7 +22,8 @@ export function tokenCompiler(): Plugin {
         return
       }
 
-      const cliFile = path.resolve(projectRoot, config.cliFile)
+      const cliFile = path.resolve(projectRoot, config.cliFile ?? 'tools/token-compiler/dist/cli.js'
+      )
 
       await runCompiler(cliFile, projectRoot)
     },

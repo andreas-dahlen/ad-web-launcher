@@ -1,6 +1,7 @@
 import type { PostData } from '../../types/compiler.types.ts';
 import type { CssData, CssDataTokenGroup, CssTokenGroup, TokenGroup } from '../../types/compiler.types.ts';
-import type { CompilerConfig, EmitConfig } from '../../types/run.types.ts';
+import type { CompilerConfig } from '../../types/run.types.ts';
+import type { EmitConfig } from '../../types/emitter.types.ts';
 import { assert } from '../../utils/assertions.ts';
 
 export type TokenCache = ReturnType<typeof createTokenCache>;

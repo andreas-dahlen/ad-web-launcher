@@ -8,6 +8,15 @@ const config: KnipConfig = {
       ],
     },
 
+    'packages/dasx': {
+      project: [
+        'src/**/*.ts',
+      ],
+      entry: [
+        'src/index.ts'
+      ]
+    },
+
     'tools/lint': {
       project: [
         '**/*.ts',

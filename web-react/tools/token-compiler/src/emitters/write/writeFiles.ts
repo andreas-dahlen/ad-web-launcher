@@ -1,11 +1,11 @@
-import type { FileResult } from '../../types/compiler.types.ts';
-import type { FormatResult } from '../generate/generateOutput.ts';
+import type { EmittedFile, FileResult, FormatFileResult } from '../../types/emitter.types.ts';
 import fs from "node:fs";
 import path from "node:path";
+export function writeFiles(files: FormatFileResult[]): FileResult {
+  const written: EmittedFile[] = []
+  const skipped: EmittedFile[] = []
 
-export function writeFiles(files: FormatResult[]): FileResult {
-  const written: string[] = []
-  const skipped: string[] = []
+
 
   for (const file of files) {
     fs.mkdirSync(path.dirname(file.outputFile), { recursive: true })
@@ -14,17 +14,24 @@ export function writeFiles(files: FormatResult[]): FileResult {
       const current = fs.readFileSync(file.outputFile, "utf8")
 
       if (current === file.content) {
-        skipped.push(file.outputFile)
+        skipped.push(resultOf(file))
         continue
       }
     }
 
     fs.writeFileSync(file.outputFile, file.content)
-    written.push(file.outputFile)
+    written.push(resultOf(file))
   }
 
   return {
-    updated: written,
+    written,
     skipped
+  }
+}
+
+function resultOf(file: FormatFileResult): EmittedFile {
+  return {
+    outputFile: file.outputFile,
+    kind: file.kind
   }
 }

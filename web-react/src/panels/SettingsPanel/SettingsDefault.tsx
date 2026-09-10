@@ -1,9 +1,9 @@
 import SliderPrim from '@primitives/Slider/SliderPrim.tsx'
 import Button from '@composites/Button/Button.tsx'
-import { settingsStore } from '@stores/settings.store.tsx'
+import { settingsStore } from '@stores/settings.store.ts'
 import { useState } from 'react'
 import * as Icons from '@data/icons';
-import ButtonPair from '../../blocks/ButtonPair/ButtonPair.ts'
+import ButtonPair from '../../blocks/ButtonPair/ButtonPair.tsx'
 import Frame from '@composites/Frame/Frame.tsx'
 import { useSnapInput } from './hooks/useSnapInput.ts';
 

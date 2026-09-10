@@ -1,9 +1,9 @@
-import type { FormatResult } from '../generateOutput.ts';
 import { toCssVar } from '../../../oldSharedUtils/stringFormaters.ts';
-import type { LspData } from '../../extract/assemblers/assembleLspData.ts';
+import type { FormatFileResult, LspData } from '../../../types/emitter.types.ts';
 
 
-export function formatLspFile(data: LspData): FormatResult {
+
+export function formatLspFile(data: LspData): FormatFileResult {
   const output: string[] = []
 
   for (const token of data.tokens) {
@@ -50,5 +50,5 @@ export function formatLspFile(data: LspData): FormatResult {
 ${output}
 `;
 
-  return { outputFile: data.outputFile, content }
+  return { outputFile: data.outputFile, content, kind: 'lsp' }
 }

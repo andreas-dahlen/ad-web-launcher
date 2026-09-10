@@ -1,4 +1,4 @@
-import SceneLayoutPanel from '../../panels/SceneLayoutPanel/SceneLayoutPanel.ts'
+import SceneLayoutPanel from '../../panels/SceneLayoutPanel/SceneLayoutPanel.tsx'
 import { settingsStore } from '@stores/settings.store.ts'
 
 import clsx from 'clsx'

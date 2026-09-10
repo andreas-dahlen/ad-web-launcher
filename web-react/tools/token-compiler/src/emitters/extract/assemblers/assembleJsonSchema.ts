@@ -1,18 +1,11 @@
 import path from 'node:path';
 import { rawTokenSchema, rawValuesSchema, rawVarsSchema } from '../../../schema/tokenSchema.ts';
 import * as z from 'zod';
-
-
-
-export type SchemaData = {
-  outputFile: string,
-  content: string
-}
-
+import type { FormatFileResult } from '../../../types/emitter.types.ts';
 
 export function assembleJsonSchema(
   outPath: string
-): SchemaData {
+): FormatFileResult {
 
   return {
     outputFile: path.join(outPath, "metadata/token.schema.json"),
@@ -26,6 +19,7 @@ export function assembleJsonSchema(
           jsonSchema.minProperties = 1
         }
       },
-    }), null, 2) + '\n'
+    }), null, 2) + '\n',
+    kind: "schema"
   }
 }

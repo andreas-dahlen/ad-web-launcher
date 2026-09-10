@@ -1,9 +1,9 @@
-import type { PresetFileData } from '../../extract/assemblers/assemblePresetData.ts';
-import type { FormatResult } from '../generateOutput.ts';
+import type { FormatFileResult, PresetFileData } from '../../../types/emitter.types.ts';
 
 
-export function formatPresetFiles(presetData: PresetFileData[]): FormatResult[] {
-  const files: FormatResult[] = []
+
+export function formatPresetFiles(presetData: PresetFileData[]): FormatFileResult[] {
+  const files: FormatFileResult[] = []
 
   for (const entry of presetData) {
 
@@ -25,7 +25,7 @@ export function formatPresetFiles(presetData: PresetFileData[]): FormatResult[] 
   export type ${entry.typeName} = keyof typeof ${entry.presetName};
   `;
 
-    files.push({ outputFile: entry.outputFile, content })
+    files.push({ outputFile: entry.outputFile, content, kind: "presets" })
   }
 
   return files

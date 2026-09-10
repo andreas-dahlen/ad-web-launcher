@@ -2,7 +2,7 @@ import { useRef } from "react"
 import { usePointerBridge } from '@interaction/adapter/usePointerBridge.hook.ts'
 import css from './Button.module.css'
 import clsx from 'clsx'
-import { dasx } from '../../shared/sxCompiler/dasx.ts'
+import dasx from 'dasx'
 import type { ButtonPrimProps } from '@primitives/types/prim.types.ts'
 import { svsx } from '../../shared/sxCompiler/svsx.ts'
 import { cpsx } from '../../shared/sxCompiler/cpsx.ts'

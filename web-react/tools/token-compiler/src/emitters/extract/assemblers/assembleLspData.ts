@@ -1,13 +1,7 @@
 import path from 'node:path';
 import type { CssVarString } from '../../../oldSharedUtils/oldSharedCompiler.types.ts';
-import type { TokenData } from './assembleTokenData.ts';
 import Color from 'colorjs.io';
-
-export type LspData = {
-  rgbVariables: string[]
-  tokens: TokenData[]
-  outputFile: string
-}
+import type { LspData, TokenData } from '../../../types/emitter.types.ts';
 
 export function assembleLspData(
   oklchVariables: Array<[CssVarString, string]>,
@@ -25,7 +19,7 @@ export function assembleLspData(
     rgbVariables.add(`${variable}: ${rgb.toString()}`)
   }
 
-  const outputFile = path.join(outPath, "metadata/lsp.generated.ts")
+  const outputFile = path.join(outPath, "metadata/lsp.ts")
 
   return {
     rgbVariables: [...rgbVariables],
