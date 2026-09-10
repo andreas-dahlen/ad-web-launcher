@@ -57,4 +57,5 @@ file://wsl.localhost/Ubuntu/home/david/repos/ad-web-launcher/web-react/src/style
 
 .usedPlaceholder {
   background: honeydew;
+  border: 2px solid black;
 }
