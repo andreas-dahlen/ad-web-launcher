@@ -24,6 +24,15 @@ jobs:
         with:
           node-version: 24
 
+        # Install dependencies + build token-compiler
+      - name: Install dependencies
+        working-directory: web-react/tools/token-compiler
+        run: npm install
+
+      - name: Build token compiler
+        working-directory: web-react/tools/token-compiler
+        run: npm run build
+
       # Install dependencies + build web-react
       - name: Install dependencies
         working-directory: web-react
