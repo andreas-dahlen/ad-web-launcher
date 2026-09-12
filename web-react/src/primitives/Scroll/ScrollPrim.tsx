@@ -7,7 +7,7 @@ import { useScrollStore } from './store/useScrollStore.hook.ts'
 import type { ScrollPrimProps } from '@primitives/types/prim.types.ts'
 import css from './Scroll.module.css'
 import clsx from 'clsx'
-import { dasx } from '@shared/sxCompiler/dasx.ts'
+import dasx from 'dasx'
 import { svsx } from '@shared/sxCompiler/svsx.ts'
 
 import { cpsx } from '@shared/sxCompiler/cpsx.ts'

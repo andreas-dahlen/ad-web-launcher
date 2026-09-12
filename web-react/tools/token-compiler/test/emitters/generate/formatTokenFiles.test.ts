@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
-import { formatTokenFiles } from '../../../emitters/generate/format/formatTokenFiles.ts'
-import type { TokenGroupData } from '../../../emitters/extract/assemblers/assembleTokenData.ts'
+import { formatTokenFiles } from '../../../src/emitters/generate/format/formatTokenFiles.ts'
+import type { TokenGroupData } from '../../../src/types/emitter.types.ts'
 
 function createTokenGroup(
   overrides: Partial<TokenGroupData> = {},

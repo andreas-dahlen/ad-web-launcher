@@ -5,11 +5,17 @@ import type { FSWatcher } from 'chokidar';
 export type CompilerOptions = z.infer<typeof compilerConfigSchema>
 
 export type CompilerConfig = {
-  rootDir: string
+  projectRoot: string
   tokenPath: string
   outPath: string | null
   outputs: CompilerOutputs
   logging: CompilerLogs
+  internal: InternalConfig
+}
+
+type InternalConfig = {
+  willEmitCss: boolean
+  initialProcessing: boolean
 }
 export type CompilerOutputs = Required<z.infer<typeof compilerOutputsSchema>>
 
@@ -20,4 +26,18 @@ export type CompilerRuntime = {
   contentWatcher: FSWatcher
   configWatcher: FSWatcher
   dispose(): Promise<void>
+}
+
+export type CompilerInternalConfig = {
+  outPath?: string | null
+  emissions?: CompilerLogs["emissions"]
+  trace?: CompilerLogs["trace"]
+  willEmitCss?: boolean
+  initialProcessing?: boolean
+  outputs?: Partial<CompilerOutputs>
+}
+
+export type CssReturn = {
+  compiler: TokenCompiler
+  tokenFolder: string | undefined
 }

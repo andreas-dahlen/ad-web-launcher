@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
 import path from 'node:path'
 
-import { assemblePresetData } from '../../../emitters/extract/assemblers/assemblePresetData.ts'
-import type { CssData } from '../../../types/compiler.types.ts'
+import { assemblePresetData } from '../../../src/emitters/extract/assemblers/assemblePresetData.ts'
+import type { CssData } from '../../../src/types/compiler.types.ts'
 
 function createCssData(
   overrides: Partial<CssData> = {},

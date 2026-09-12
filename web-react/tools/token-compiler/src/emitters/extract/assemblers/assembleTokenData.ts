@@ -4,7 +4,10 @@ import { toCamelCase, toPascalCase } from '../../../oldSharedUtils/stringFormate
 import { extractGroupName } from '../../../compiler/resolvers/extractGroupName.ts'
 import type { TokenData, TokenGroupData } from '../../../types/emitter.types.ts'
 
-export function assembleTokenData(group: CssTokenGroup, outPath: string): TokenGroupData {
+export function assembleTokenData(
+  group: CssTokenGroup,
+  outPath: string
+): TokenGroupData {
 
   const rawName = extractGroupName(group.groupPath)
 

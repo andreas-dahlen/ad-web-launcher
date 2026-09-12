@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 
-import { tokenSection } from '../../../diagnostics/report/sections/verbose/tokenSection.ts'
-import type { FileStatus } from '../../../types/diagnostics.types.ts'
+import { tokenSection } from '../../../src/diagnostics/report/sections/verbose/tokenSection.ts'
+import type { FileStatus } from '../../../src/types/diagnostics.types.ts'
 
 vi.mock('../../../../utils/string', () => ({
   colors: {

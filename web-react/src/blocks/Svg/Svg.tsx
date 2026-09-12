@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { dasx } from '../../shared/sxCompiler/dasx.ts';
+import dasx from 'dasx'
 import css from './Svg.module.css'
 import { svsx } from '../../shared/sxCompiler/svsx.ts';
 

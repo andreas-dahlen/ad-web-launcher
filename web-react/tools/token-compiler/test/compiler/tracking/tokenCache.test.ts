@@ -1,15 +1,15 @@
 import { describe, expect, it } from 'vitest'
 
-import { createTokenCache } from '../../../compiler/tracking/tokenCache.ts'
+import { createTokenCache } from '../../../src/compiler/tracking/tokenCache.ts'
 import {
   createCompilerToken,
   createCssTokenGroup,
   createTokenGroup,
 } from '../../compiler.factory.ts'
-import type { CompilerConfig } from '../../../types/run.types.ts'
+import type { CompilerConfig } from '../../../src/types/run.types.ts'
 
 const config: CompilerConfig = {
-  rootDir: '/project',
+  projectRoot: '/project',
   tokenPath: '/project/tokens',
   outPath: '/project/output',
 

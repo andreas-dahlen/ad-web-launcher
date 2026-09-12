@@ -1,4 +1,4 @@
-import { validateDuplicateVars } from '../../compiler/builders/validateDuplicateVars.ts';
+import { validateDuplicateVars } from '../../src/compiler/builders/validateDuplicateVars.ts';
 import { createCompilerToken, createCompilerVariable } from '../compiler.factory.ts';
 import { describe, expect, it } from 'vitest';
 describe('[COMPILER]', () => {

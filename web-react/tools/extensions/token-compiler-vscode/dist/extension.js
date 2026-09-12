@@ -70,7 +70,7 @@ var CompilerTerminal = class {
     this.write("Starting Token Compiler...\r\n");
     const args = [
       this.cliFile,
-      "exe",
+      "watch",
       this.projectRoot
     ];
     if (this.config !== void 0) {

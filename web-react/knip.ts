@@ -28,14 +28,20 @@ const config: KnipConfig = {
 
     'tools/plugins': {
       project: [
-        '**/*.ts',
+        'src/**/*.ts',
       ],
+      entry: [
+        'src/**/vite.*.ts'
+      ]
     },
 
     'tools/token-compiler': {
       project: [
         'src/**/*.ts',
       ],
+      entry: [
+        'cli.ts'
+      ]
     },
 
     'tools/extensions/css-variable-completion': {

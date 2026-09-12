@@ -1,8 +1,8 @@
-import type { CompilerRuntime } from '../types/run.types.ts'
+import type { CompilerRuntime } from '../../types/run.types.ts'
 import { createRuntime } from './createRuntime.ts'
 
-export async function run(
-  rootDir: string,
+export async function watch(
+  projectRoot: string,
   tokenFolder: string | undefined,
 ): Promise<void> {
   let runtime: CompilerRuntime | null = null
@@ -11,14 +11,14 @@ export async function run(
     await runtime?.dispose()
 
     runtime = createRuntime(
-      rootDir,
+      projectRoot,
       tokenFolder,
       restart
     )
   }
 
   runtime = createRuntime(
-    rootDir,
+    projectRoot,
     tokenFolder,
     restart
   )

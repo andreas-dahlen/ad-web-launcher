@@ -2,7 +2,7 @@ import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
 import { beforeEach, afterEach, describe, expect, it } from 'vitest'
-import { patchFiles } from '../../emitters/write/patchFiles.ts'
+import { patchFiles } from '../../src/emitters/write/patchFiles.ts'
 
 describe('[EMITTER]', () => {
   let tempDir: string
@@ -31,6 +31,7 @@ describe('[EMITTER]', () => {
         {
           outputFile: filePath,
           content: '/* generated */',
+          kind: 'css',
         },
       ])
 
@@ -57,6 +58,7 @@ describe('[EMITTER]', () => {
         {
           outputFile: filePath,
           content: '/* generated */',
+          kind: 'css',
         },
       ])
 
@@ -84,6 +86,7 @@ describe('[EMITTER]', () => {
         {
           outputFile: filePath,
           content: '/* generated */',
+          kind: 'css',
         },
       ])
 
@@ -123,14 +126,17 @@ ${current}`,
         {
           outputFile: updatedPath,
           content: '/* generated */',
+          kind: 'css',
         },
         {
           outputFile: skippedPath,
           content: '/* generated */',
+          kind: 'css',
         },
         {
           outputFile: path.join(tempDir, 'missing.css'),
           content: '/* generated */',
+          kind: 'css',
         },
       ])
 

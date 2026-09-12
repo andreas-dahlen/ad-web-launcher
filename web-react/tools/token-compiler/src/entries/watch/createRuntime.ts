@@ -1,15 +1,15 @@
-import { initializeCompiler } from '../compiler/compilerService.ts'
-import type { CompilerRuntime } from '../types/run.types.ts'
-import { resolveConfig } from './resolveConfig.ts'
+import { initializeCompiler } from '../../compiler/compilerService.ts'
+import type { CompilerRuntime } from '../../types/run.types.ts'
+import { resolveConfig } from '../config/resolveConfig.ts'
 import { watchConfig } from './watchers/watchConfig.ts'
 import { watchContent } from './watchers/watchContent.ts'
 
 export function createRuntime(
-  rootDir: string,
+  projectRoot: string,
   tokenFolder: string | undefined,
   onConfigChange: () => Promise<void>,
 ): CompilerRuntime | null {
-  const config = resolveConfig(rootDir, tokenFolder)
+  const config = resolveConfig(projectRoot, tokenFolder)
 
   if (config === null) {
     return null
@@ -19,7 +19,7 @@ export function createRuntime(
 
   const contentWatcher = watchContent(config, compiler)
 
-  const configWatcher = watchConfig(config.rootDir, onConfigChange)
+  const configWatcher = watchConfig(config.projectRoot, onConfigChange)
 
   async function dispose() {
     await contentWatcher.close()

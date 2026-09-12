@@ -6,8 +6,8 @@ import {
   type ParseError,
 } from 'jsonc-parser'
 
-import type { CompilerOptions } from '../types/run.types.ts'
-import { compilerConfigSchema } from '../schema/configSchema.ts'
+import type { CompilerOptions } from '../../types/run.types.ts'
+import { compilerConfigSchema } from '../../schema/configSchema.ts'
 
 export function loadCompilerConfig(projectRoot: string): CompilerOptions {
   const configPath = path.join(

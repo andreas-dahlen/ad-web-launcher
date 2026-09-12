@@ -3,7 +3,7 @@ import os from 'node:os'
 import path from 'node:path'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
-import { writeFiles } from '../../emitters/write/writeFiles.ts'
+import { writeFiles } from '../../src/emitters/write/writeFiles.ts'
 
 describe('[EMITTER]', () => {
   let tempDir: string
@@ -32,6 +32,7 @@ describe('[EMITTER]', () => {
         {
           outputFile: filePath,
           content: 'export const button = {}',
+          kind: 'tokens'
         },
       ])
 
@@ -57,6 +58,7 @@ describe('[EMITTER]', () => {
         {
           outputFile: filePath,
           content: 'generated',
+          kind: 'tokens'
         },
       ])
 
@@ -84,6 +86,7 @@ describe('[EMITTER]', () => {
         {
           outputFile: filePath,
           content,
+          kind: 'tokens'
         },
       ])
 
@@ -110,6 +113,7 @@ describe('[EMITTER]', () => {
         {
           outputFile: filePath,
           content: 'export const button = "new"',
+          kind: 'tokens'
         },
       ])
 
@@ -153,14 +157,17 @@ describe('[EMITTER]', () => {
         {
           outputFile: newPath,
           content: 'new',
+          kind: 'tokens'
         },
         {
           outputFile: skippedPath,
           content: 'same',
+          kind: 'tokens'
         },
         {
           outputFile: updatedPath,
           content: 'new',
+          kind: 'tokens'
         },
       ])
 

@@ -36,4 +36,5 @@ file://wsl.localhost/Ubuntu/home/david/repos/ad-web-launcher/web-react/src/style
   position: var(--final-label-position);
   text-align: var(--final-label-align);
   color: var(--final-label-col);
+  /* background-color: hotpink; */
 }

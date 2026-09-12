@@ -4,7 +4,7 @@ import path from 'node:path'
 
 import { afterEach, describe, expect, it } from 'vitest'
 
-import { findCssModulePath } from '../../compiler/discovery/findCssModulePath.ts'
+import { findCssModulePath } from '../../src/compiler/discovery/findCssModulePath.ts'
 
 const tmpRoot = path.join(
   os.tmpdir(),

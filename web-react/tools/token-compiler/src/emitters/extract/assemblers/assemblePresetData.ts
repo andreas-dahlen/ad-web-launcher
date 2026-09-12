@@ -8,18 +8,18 @@ const NON_PRESET_SUFFIX = 'Util'
 
 export function assemblePresetData(
   cssData: CssData,
-  outDir: string
+  outPath: string
 ): PresetFileData | null {
 
   const name = extractGroupName(cssData.groupPath)
 
   const camelName = toCamelCase(name)
-  const outputFile = path.join(outDir, `presets/${camelName}.preset.ts`)
+  const outputFile = path.join(outPath, `presets/${camelName}.preset.ts`)
 
   const presetName = `${camelName}Preset`
   const typeName = `${toPascalCase(name)}Preset`
 
-  const generatedDir = path.join(outDir, "presets")
+  const generatedDir = path.join(outPath, "presets")
 
   let cssImport = path.relative(
     generatedDir,

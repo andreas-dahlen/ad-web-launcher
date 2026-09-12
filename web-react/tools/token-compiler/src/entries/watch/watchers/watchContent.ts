@@ -1,16 +1,16 @@
 import chokidar, { FSWatcher } from 'chokidar'
-import { whatChanged } from '../resolveChange.ts'
-import type { TokenCompiler } from '../../compiler/compilerService.ts'
+import { whatChanged } from './resolveChange.ts'
+import type { TokenCompiler } from '../../../compiler/compilerService.ts'
 export function watchContent({
-  rootDir,
+  projectRoot,
   tokenPath }
   : {
-    rootDir: string,
+    projectRoot: string,
     tokenPath: string
   },
   compiler: TokenCompiler): FSWatcher {
 
-  const watcher = chokidar.watch(rootDir, {
+  const watcher = chokidar.watch(projectRoot, {
     ignoreInitial: true,
   })
 
@@ -20,9 +20,11 @@ export function watchContent({
     switch (change) {
       case 'CSS':
         compiler.handleCssChange(filePath)
+        compiler.finalize()
         break
       case 'TOKEN':
         compiler.handleTokenChange(filePath)
+        compiler.finalize()
         break
     }
   })

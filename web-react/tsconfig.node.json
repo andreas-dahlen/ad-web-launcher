@@ -29,6 +29,7 @@
   },
   "include": [
     "vite.config.ts",
+    "vite.base.config.ts",
     "vitest.config.ts",
     "vitest.app.config.ts",
     "vitest.react.config.ts",
@@ -36,6 +37,7 @@
     "eslint.config.ts",
     "oxlint.config.ts",
     "tools/lint/**/*.ts",
-    "tools/plugins/**/*.ts"
+    "tools/plugins/**/*.ts",
+    "tools/token-compiler/**/*.ts"
   ]
 }

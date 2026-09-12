@@ -5,7 +5,7 @@ import {
   ESC,
   formatLogPath,
   paint,
-} from '../../utils/string.ts'
+} from '../../src/utils/string.ts'
 
 describe('[CONSOLE]', () => {
   describe('formatLogPath', () => {

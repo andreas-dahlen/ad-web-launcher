@@ -1,78 +1,66 @@
-import fs from 'node:fs'
-import path from 'node:path'
-import { spawn } from 'node:child_process'
+import { compiler } from '../../token-compiler/src/entries/entry.ts'
+import type { TokenCompiler } from '../../token-compiler/src/compiler/compilerService.ts'
 import type { Plugin } from 'vite'
-import { parse } from 'jsonc-parser'
+import fs from 'node:fs'
+import { isTokenFile } from './helpers/isTokenFile.ts'
+import { createFinalizeScheduler } from './helpers/finalizeScheduler.ts'
 
-type CompilerConfig = {
-  cliFile?: string
-}
+export function createTokenCompilerPlugin(
+  projectRoot: string,
+): Plugin {
+  let tokenCompiler: TokenCompiler
+  let tokenFolder: string | undefined
 
-export function tokenCompiler(): Plugin {
+  const finalizeScheduler = createFinalizeScheduler(
+    () => tokenCompiler.finalize()
+  )
+
   return {
     name: 'token-compiler',
-    apply: 'build',
+    enforce: 'pre',
 
-    async buildStart() {
-      const projectRoot = process.cwd()
-      const config = loadConfig(projectRoot)
+    configResolved(config) {
+      if (config.command === 'serve') {
+        const result = compiler.runCss(projectRoot)
 
-      if (!config) {
-        this.warn('compiler.config.json not found — token compiler disabled')
-        return
+        tokenCompiler = result.compiler
+        tokenFolder = result.tokenFolder
+      } else {
+        tokenCompiler = compiler.runBuild(projectRoot)
       }
+    },
 
-      const cliFile = path.resolve(projectRoot, config.cliFile ?? 'tools/token-compiler/dist/cli.js'
-      )
+    transform(code, cssPath) {
+      if (!cssPath.endsWith('.css')) return
 
-      await runCompiler(cliFile, projectRoot)
+      const result = tokenCompiler.handleCssChange(cssPath, code)
+
+      if (tokenFolder) {
+        finalizeScheduler.schedule()
+      }
+      return result
+    },
+
+    buildEnd() {
+      if (!tokenFolder) {
+        tokenCompiler.finalize()
+      }
+    },
+
+    configureServer(server) {
+      if (!tokenFolder) return
+
+      const resolvedFolder = tokenFolder
+
+      server.watcher.on('change', tokenPath => {
+        if (!isTokenFile(resolvedFolder, tokenPath)) return
+
+        const cssPath = tokenCompiler.handleTokenChange(tokenPath)
+
+        if (!cssPath || !fs.existsSync(cssPath)) return
+
+        fs.utimesSync(cssPath, new Date(), new Date())
+      })
     },
   }
-}
-
-function loadConfig(projectRoot: string): CompilerConfig | null {
-  const configPath = path.join(
-    projectRoot,
-    'compiler.config.json',
-  )
-
-  if (!fs.existsSync(configPath)) {
-    return null
-  }
-
-  return parse(
-    fs.readFileSync(configPath, 'utf8'),
-  )
-}
-
-function runCompiler(
-  cliFile: string,
-  projectRoot: string,
-): Promise<void> {
-  return new Promise((resolve, reject) => {
-    const compiler = spawn(
-      process.execPath,
-      [
-        cliFile,
-        'build',
-        projectRoot,
-      ],
-      {
-        stdio: 'inherit',
-      },
-    )
-
-    compiler.on('error', reject)
-
-    compiler.on('close', code => {
-      if (code === 0) {
-        resolve()
-        return
-      }
-
-      reject(
-        new Error(`Token compiler exited with code ${code}`),
-      )
-    })
-  })
 }

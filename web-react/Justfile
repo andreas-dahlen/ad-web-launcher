@@ -141,9 +141,11 @@ install-tokens:
 # Builds and installs all tools.
 install-extensions: install-cvc install-pl install-tokens
 
-# Runs the compiler in CLI. File emissions disabled.
+# Runs the compiler in watchMode. File emissions disabled.
 compiler:
-    cd tools/token-compiler && npm run cli -- exe ../..
+    cd tools/token-compiler && npm run cli -- watch ../..
+
+all: build-all install-extensions
 
 # ==================== WORKSPACE ====================
 

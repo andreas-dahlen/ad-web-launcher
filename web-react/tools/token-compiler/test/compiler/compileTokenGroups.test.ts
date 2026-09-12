@@ -1,15 +1,15 @@
 
 import { describe, expect, it, vi } from 'vitest'
 
-import { compileTokenGroups } from '../../compiler/pipeline/compileTokenGroups.ts'
-import { createModuleMap } from '../../compiler/discovery/createModuleMap.ts'
-import { processToken } from '../../compiler/processing/processToken.ts'
+import { compileTokenGroups } from '../../src/compiler/pipeline/compileTokenGroups.ts'
+import { createModuleMap } from '../../src/compiler/discovery/createModuleMap.ts'
+import { processToken } from '../../src/compiler/processing/processToken.ts'
 
 import {
   createCompilerToken,
 } from '../compiler.factory.ts'
 
-import type { Issue } from '../../types/issueCollector.types.ts'
+import type { Issue } from '../../src/types/issueCollector.types.ts'
 
 vi.mock(
   '../../../compiler/discovery/createModuleMap',

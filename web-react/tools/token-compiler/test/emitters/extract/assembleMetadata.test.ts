@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest'
 
-import { assembleMetadata } from '../../../emitters/extract/assemblers/assembleMetadata.ts'
+import { assembleMetadata } from '../../../src/emitters/extract/assemblers/assembleMetadata.ts'
 import type {
   CompilerToken,
   CssTokenGroup,
-} from '../../../types/compiler.types.ts'
+} from '../../../src/types/compiler.types.ts'
 
 const outPath = '/generated'
 

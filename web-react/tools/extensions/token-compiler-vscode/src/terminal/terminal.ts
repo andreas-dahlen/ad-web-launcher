@@ -25,7 +25,7 @@ export class CompilerTerminal implements vscode.Pseudoterminal {
 
     const args = [
       this.cliFile,
-      'exe',
+      'watch',
       this.projectRoot,
     ]
 

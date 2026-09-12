@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest'
 
-import { analyzeVariableDeclarations } from '../../../diagnostics/data/analyzers/analyzeVariableDeclarations.ts'
+import { analyzeVariableDeclarations } from '../../../src/diagnostics/data/analyzers/analyzeVariableDeclarations.ts'
 import type {
   CompilerToken,
   CompilerVariable,
   CssData,
   CssDataTokenGroup,
-} from '../../../types/compiler.types.ts'
+} from '../../../src/types/compiler.types.ts'
 
 function createVariable(
   overrides: Partial<CompilerVariable> = {},

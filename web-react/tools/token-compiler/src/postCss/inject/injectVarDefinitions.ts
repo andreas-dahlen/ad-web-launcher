@@ -26,4 +26,5 @@ export function injectVarDefinitions(
         : normalizeCssValue(value),
     });
   }
+  // console.log(rule.toString());
 }

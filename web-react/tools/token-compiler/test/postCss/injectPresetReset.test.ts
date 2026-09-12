@@ -1,14 +1,14 @@
 import { describe, expect, it } from 'vitest'
 import postcss from 'postcss'
 
-import { injectPresetResets } from '../../postCss/inject/injectPresetResets.ts'
+import { injectPresetResets } from '../../src/postCss/inject/injectPresetResets.ts'
 import type {
   CompilerToken,
   CompilerVariable,
   CssTokenGroup,
   PresetResetData,
-} from '../../types/compiler.types.ts'
-import type { CssVarString } from '../../oldSharedUtils/oldSharedCompiler.types.ts'
+} from '../../src/types/compiler.types.ts'
+import type { CssVarString } from '../../src/oldSharedUtils/oldSharedCompiler.types.ts'
 
 function createRule() {
   const root = postcss.parse(`

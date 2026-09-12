@@ -10,12 +10,12 @@ export function processModule({
   root,
   group,
   trace,
-  mutate = true
+  mutate
 }: {
   root: Root
   group: CssTokenGroup
   trace: boolean
-  mutate?: boolean
+  mutate: boolean
 }): CssData {
 
   if (trace) { print.injecting(group.cssPath) }

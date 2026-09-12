@@ -1,7 +1,7 @@
 import { defineConfig, mergeConfig } from 'vitest/config'
-import viteConfig from './vite.config.ts'
+import viteBaseConfig from './vite.base.config.ts'
 export default mergeConfig(
-  viteConfig,
+  viteBaseConfig,
   defineConfig({
     test: {
       reporters: ['verbose'],

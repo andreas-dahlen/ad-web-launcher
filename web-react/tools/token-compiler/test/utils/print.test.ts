@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import { print } from '../../utils/print.ts'
+import { print } from '../../src/utils/print.ts'
 
 vi.mock(
   '../../../utils/string.js',

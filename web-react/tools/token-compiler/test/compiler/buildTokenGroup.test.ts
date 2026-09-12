@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { buildTokenGroup } from '../../compiler/builders/buildTokenGroup.ts'
+import { buildTokenGroup } from '../../src/compiler/builders/buildTokenGroup.ts'
 import {
   createCompilerToken,
 } from '../compiler.factory.ts'

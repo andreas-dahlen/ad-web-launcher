@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest'
 
-import { assert } from '../../utils/assertions.ts'
+import { assert } from '../../src/utils/assertions.ts'
 import type {
   CssDataTokenGroup,
   TokenGroup,
-} from '../../types/compiler.types.ts'
-import type { CompilerConfig } from '../../types/run.types.ts'
+} from '../../src/types/compiler.types.ts'
+import type { CompilerConfig } from '../../src/types/run.types.ts'
 
 describe('[COMPILER]', () => {
   describe('assert.cssVariable', () => {
@@ -68,7 +68,7 @@ describe('[COMPILER]', () => {
   describe('assert.hasOutPath', () => {
     it('accepts config with outPath', () => {
       const config: CompilerConfig = {
-        rootDir: '/project',
+        projectRoot: '/project',
         tokenPath: '/project/tokens',
         outPath: '/project/output',
 
@@ -95,7 +95,7 @@ describe('[COMPILER]', () => {
 
     it('rejects config without outPath', () => {
       const config: CompilerConfig = {
-        rootDir: '/project',
+        projectRoot: '/project',
         tokenPath: '/project/tokens',
         outPath: null,
 

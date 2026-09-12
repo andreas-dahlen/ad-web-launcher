@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
-import type { GroupMetadata } from '../../../emitters/extract/assemblers/assembleMetadata.ts'
-import { formatPathPatches } from '../../../emitters/generate/format/formatPathPatches.ts'
+import type { GroupMetadata } from '../../../src/types/emitter.types.ts'
+import { formatPathPatches } from '../../../src/emitters/generate/format/formatPathPatches.ts'
 
 function createGroup(
   overrides: Partial<GroupMetadata> = {},

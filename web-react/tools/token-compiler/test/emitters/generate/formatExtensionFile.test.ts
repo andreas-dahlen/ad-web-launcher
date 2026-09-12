@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
-import { formatExtensionFile } from '../../../emitters/generate/format/formatExtensionFile.ts'
-import type { ExtensionData } from '../../../emitters/extract/assemblers/assembleExtensionData.ts'
+import { formatExtensionFile } from '../../../src/emitters/generate/format/formatExtensionFile.ts'
+import type { ExtensionData } from '../../../src/types/emitter.types.ts'
 
 function createExtensionData(
   overrides: Partial<ExtensionData> = {},

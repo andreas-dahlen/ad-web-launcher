@@ -1,24 +1,34 @@
-// import { run } from './run/run.ts'
-import { build } from './runtime/build.ts'
-import { run } from './runtime/run.ts'
-
-console.log('TOKEN COMPILER INITIALIZED')
+import path from 'node:path'
+import { compiler } from './entries/entry.ts'
 
 const [command, rootDir, tokenFolder] = process.argv.slice(2)
 
-switch (command) {
-  case 'exe': {
+const cliDirectory = path.dirname(process.argv[1])
+const compilerDirectory = path.dirname(cliDirectory)
+const projectRoot = path.resolve(
+  compilerDirectory,
+  rootDir,
+)
 
-    void run(rootDir, tokenFolder)
+switch (command) {
+  case 'watch': {
+    console.log('TOKEN COMPILER INITIALIZED')
+    compiler.runWatch(projectRoot, tokenFolder)
     break
   }
 
-  case 'build':
-    build(rootDir, tokenFolder)
+  case 'build': {
+    compiler.runBuild(projectRoot)
     break
+  }
+
+  case 'css': {
+    compiler.runCss(projectRoot)
+    break
+  }
 
   default:
     console.log('Options:')
-    console.log('  run <rootDir>                Use specified root directory')
-    console.log('  run <rootDir> <tokenFolder>   Use optional tokenFolder')
+    console.log('  watch <rootDir>                Use specified root directory')
+    console.log('  watch <rootDir> <tokenFolder>   Use optional tokenFolder')
 }

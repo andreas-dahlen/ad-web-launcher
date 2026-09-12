@@ -1,22 +1,22 @@
 import { describe, expect, it, vi } from 'vitest'
 
-import { applyTokenChange } from '../../compiler/pipeline/applyTokenChange.ts'
-import { createTokenCache } from '../../compiler/tracking/tokenCache.ts'
+import { applyTokenChange } from '../../src/compiler/pipeline/applyTokenChange.ts'
+import { createTokenCache } from '../../src/compiler/tracking/tokenCache.ts'
 
-import * as processTokenModule from '../../compiler/processing/processToken.ts'
-import * as findCssModulePathModule from '../../compiler/discovery/findCssModulePath.ts'
-import * as findTokenPathsModule from '../../compiler/discovery/findTokenPaths.ts'
+import * as processTokenModule from '../../src/compiler/processing/processToken.ts'
+import * as findCssModulePathModule from '../../src/compiler/discovery/findCssModulePath.ts'
+import * as findTokenPathsModule from '../../src/compiler/discovery/findTokenPaths.ts'
 
 import {
   createCompilerToken,
   createCssTokenGroup,
 } from '../compiler.factory.ts'
 
-import type { CompilerConfig } from '../../types/run.types.ts'
-import type { Issue } from '../../types/issueCollector.types.ts'
+import type { CompilerConfig } from '../../src/types/run.types.ts'
+import type { Issue } from '../../src/types/issueCollector.types.ts'
 
 const config: CompilerConfig = {
-  rootDir: '/project',
+  projectRoot: '/project',
   tokenPath: '/project/tokens',
   outPath: '/project/output',
 

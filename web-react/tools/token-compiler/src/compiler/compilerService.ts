@@ -1,6 +1,5 @@
-import type { Root } from 'postcss';
 import { readFileSync } from 'node:fs'
-import postcss from 'postcss';
+import postcss, { Root } from 'postcss';
 import { findTokenPaths } from './discovery/findTokenPaths.ts';
 import { compileTokenGroups } from './pipeline/compileTokenGroups.ts';
 import { createTokenCache } from './tracking/tokenCache.ts';
@@ -12,35 +11,24 @@ import { emitFiles } from '../emitters/emitFiles.ts';
 import { runDiagnostics } from '../diagnostics/runDiagnostics.ts';
 import type { CompilerConfig } from '../types/run.types.ts';
 
-function parseCss(cssPath: string): Root {
-  const source = readFileSync(cssPath, "utf8");
-  return postcss.parse(source, { from: cssPath });
-}
-
-
 export type TokenCompiler = ReturnType<typeof initializeCompiler>;
 export function initializeCompiler(config: CompilerConfig) {
-
-  console.log("COMPILER LOGGING SETTINGS:", config.logging)
   const tokenPaths = findTokenPaths(config.tokenPath)
-  const loaded = compileTokenGroups(config.rootDir, tokenPaths)
+  const loaded = compileTokenGroups(config.projectRoot, tokenPaths)
   const cache = createTokenCache(loaded.groups, config)
   const run = createCompilerRun(loaded.issues)
 
-  for (const cssPath of cache.getCssPaths()) {
-    processCss(cssPath)
+  if (config.internal.initialProcessing) {
+    for (const cssPath of cache.getCssPaths()) {
+      handleCssChange(cssPath)
+    }
+    finalize()
   }
-
-  finalize()
 
   return {
     handleCssChange,
-    handleTokenChange
-  }
-
-  function handleCssChange(filePath: string) {
-    processCss(filePath)
-    finalize()
+    handleTokenChange,
+    finalize
   }
   function handleTokenChange(tokenPath: string) {
     const { group, issues } = applyTokenChange({
@@ -53,28 +41,45 @@ export function initializeCompiler(config: CompilerConfig) {
     }
     run.recordIssues(issues)
 
-    processCss(group.cssPath)
-    finalize()
+    handleCssChange(group.cssPath)
+    return group.cssPath
   }
 
+  function handleCssChange(
+    cssPath: string,
+    source = readFileSync(cssPath, 'utf8')): string {
+    const root = postcss.parse(source, { from: cssPath })
+    return processCss(cssPath, root)
+  }
 
-  function processCss(cssPath: string) {
-
-    const root = parseCss(cssPath)
+  function processCss(
+    cssPath: string,
+    root: Root
+  ): string {
 
     const postData = processPost({
-      root, cssPath, trace: config.logging.trace
+      root,
+      cssPath,
+      trace: config.logging.trace,
+      mutate: config.internal.willEmitCss
     })
     cache.addPostData(postData)
 
     const group = cache.getGroupByCssPath(cssPath)
-    if (!group) return
+    if (!group) {
+      return root.toString()
+    }
 
     const cssData = processModule({
-      root, group, trace: config.logging.trace
+      root,
+      group,
+      trace: config.logging.trace,
+      mutate: config.internal.willEmitCss
     })
     cache.addCssData(cssData)
     run.recordProcessed(cssPath)
+
+    return root.toString()
   }
 
 
@@ -84,7 +89,7 @@ export function initializeCompiler(config: CompilerConfig) {
       const emitResult = emitFiles(cache, run)
       run.recordEmitResult(emitResult)
     } else {
-      console.log("EMITTER: disabled. Couldn't find an output path")
+      console.log("EMITTER: disabled. No output path")
     }
     runDiagnostics(cache, run)
     run.reset()

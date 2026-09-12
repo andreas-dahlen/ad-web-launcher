@@ -8,6 +8,7 @@ export default mergeConfig(
     test: {
       coverage: {
         provider: 'v8',
+        reportOnFailure: true,
 
         include: [
           'src/**/*.ts',

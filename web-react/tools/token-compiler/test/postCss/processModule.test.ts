@@ -2,12 +2,12 @@ import { describe, expect, it } from 'vitest'
 import postcss from 'postcss'
 import type { Root } from 'postcss'
 
-import { processModule } from '../../postCss/processModule.ts'
+import { processModule } from '../../src/postCss/processModule.ts'
 import type {
   CompilerToken,
   CompilerVariable,
   CssTokenGroup,
-} from '../../types/compiler.types.ts'
+} from '../../src/types/compiler.types.ts'
 
 function parseCss(css: string): Root {
   return postcss.parse(css)
@@ -102,7 +102,8 @@ describe('[POSTCSS]', () => {
       const result = processModule({
         root,
         group,
-        trace: true
+        trace: true,
+        mutate: true
       })
 
       expect(result.tokens).toEqual([
@@ -131,7 +132,8 @@ describe('[POSTCSS]', () => {
       const result = processModule({
         root,
         group: createGroup(),
-        trace: true
+        trace: true,
+        mutate: true
       })
 
       expect(result.tokens).toEqual([
@@ -168,7 +170,8 @@ describe('[POSTCSS]', () => {
             }),
           ],
         }),
-        trace: true
+        trace: true,
+        mutate: true
       })
 
       const declarations = getDeclarations(root, '.button')
@@ -209,7 +212,8 @@ describe('[POSTCSS]', () => {
             }),
           ],
         }),
-        trace: true
+        trace: true,
+        mutate: true
       })
 
       const declarations = getDeclarations(root, '.button')
