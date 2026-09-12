@@ -14,20 +14,20 @@ jobs:
     steps:
       # Checkout repo
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0   # required for versioning
 
       # Setup Node
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: 24
 
-        # Install dependencies + build token-compiler
+      # Install dependencies + build token-compiler
       - name: Install dependencies
         working-directory: web-react/tools/token-compiler
-        run: npm install
+        run: npm ci
 
       - name: Build token compiler
         working-directory: web-react/tools/token-compiler
@@ -36,7 +36,7 @@ jobs:
       # Install dependencies + build web-react
       - name: Install dependencies
         working-directory: web-react
-        run: npm install
+        run: npm ci
 
       - name: Build web-react
         working-directory: web-react
@@ -50,7 +50,7 @@ jobs:
 
       # Setup Java + Android SDK
       - name: Setup JDK
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v6
         with:
           distribution: 'temurin'
           java-version: '17'
@@ -86,7 +86,7 @@ jobs:
 
       # Create GitHub Release
       - name: Create Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ steps.versioning.outputs.new_version }}
           name: Dev Build ${{ steps.versioning.outputs.new_version }}

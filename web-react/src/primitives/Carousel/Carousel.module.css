@@ -1,23 +1,12 @@
 /* 
 file://wsl.localhost/Ubuntu/home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/carousel.jsonc
 */
-/* 
-
-*/
-/* 
-file://wsl.localhost/Ubuntu/home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/carousel.jsonc
-*/
-/* 
-
-*/
-/* 
-file://wsl.localhost/Ubuntu/home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/carousel.jsonc
-*/
 .carousel {
   width: var(--final-carousel-width);
   height: var(--final-carousel-height);
   position: relative;
   overflow: hidden;
+  background: oklch(72.828% 0.19712 351.97 / 0.133);
   /* transform: translateZ(0); */
 }
 
