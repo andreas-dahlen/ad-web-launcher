@@ -8,7 +8,7 @@ export default mergeConfig(
       projects: [
         './vitest.app.config.ts',
         './vitest.react.config.ts',
-        './tools/token-compiler/vitest.config.ts',
+        './tools/cascade-compiler/vitest.config.ts',
         './tools/lint/vitest.config.ts',
         './tools/plugins/vitest.config.ts',
         './tools/extensions/*/vitest.config.ts',

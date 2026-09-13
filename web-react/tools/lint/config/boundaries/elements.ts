@@ -14,12 +14,12 @@ const appBoundaryElements = [
 ]
 
 const compilerBoundaryElements = [
-  { type: 'compiler', pattern: 'tools/token-compiler/src/compiler/*/**', capture: ['mod'] },
-  { type: 'diagnostics', pattern: 'tools/token-compiler/src/diagnostics/*/**', capture: ['mod'] },
-  { type: 'emitters', pattern: 'tools/token-compiler/src/emitters/*/**', capture: ['mod'] },
-  { type: 'postCss', pattern: 'tools/token-compiler/src/postCss/*/**', capture: ['mod'] },
-  { type: 'tokenTypes', pattern: 'tools/token-compiler/src/types/**' },
-  { type: 'utils', pattern: 'tools/token-compiler/src/oldSharedUtils/**' },
+  { type: 'compiler', pattern: 'tools/cascade-compiler/src/compiler/*/**', capture: ['mod'] },
+  { type: 'diagnostics', pattern: 'tools/cascade-compiler/src/diagnostics/*/**', capture: ['mod'] },
+  { type: 'emitters', pattern: 'tools/cascade-compiler/src/emitters/*/**', capture: ['mod'] },
+  { type: 'postCss', pattern: 'tools/cascade-compiler/src/postCss/*/**', capture: ['mod'] },
+  { type: 'tokenTypes', pattern: 'tools/cascade-compiler/src/types/**' },
+  { type: 'utils', pattern: 'tools/cascade-compiler/src/oldSharedUtils/**' },
 ]
 
 export const boundariesElements = [

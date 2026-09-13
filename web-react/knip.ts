@@ -17,6 +17,15 @@ const config: KnipConfig = {
       ]
     },
 
+    'packages/cascade': {
+      project: [
+        'src/**/*.ts',
+      ],
+      entry: [
+        'src/index.ts'
+      ]
+    },
+
     'tools/lint': {
       project: [
         '**/*.ts',
@@ -35,7 +44,7 @@ const config: KnipConfig = {
       ]
     },
 
-    'tools/token-compiler': {
+    'tools/cascade-compiler': {
       project: [
         'src/**/*.ts',
       ],
@@ -50,7 +59,7 @@ const config: KnipConfig = {
       ],
     },
 
-    'tools/extensions/token-compiler-vscode': {
+    'tools/extensions/cascade-vscode': {
       project: [
         'src/**/*.ts',
       ],

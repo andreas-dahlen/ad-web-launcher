@@ -8,6 +8,6 @@ export const appBoundaries: OxlintOverride = {
 }
 
 export const compilerBoundaries: OxlintOverride = {
-  files: ['tools/token-compiler/src/**/*.{ts, js}'],
+  files: ['tools/cascade-compiler/src/**/*.{ts, js}'],
   rules: compilerRules
 }

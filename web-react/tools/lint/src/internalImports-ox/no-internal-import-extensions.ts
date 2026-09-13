@@ -1,9 +1,9 @@
 import { defineRule } from '@oxlint/plugins'
 
-import { getInternalAliases } from './helpers/getInternalAliases.ts'
+import { getInternalAliases } from '../helpers/getInternalAliases.ts'
 import { resolveProjectRoot } from '../helpers/resolveProjectRoot.ts'
 
-let internalAliases: string[] | undefined
+// let internalAliases: string[] | undefined
 
 export default defineRule({
   meta: {
@@ -19,9 +19,7 @@ export default defineRule({
       context.settings
     )
 
-    internalAliases ??= getInternalAliases(projectRoot)
-
-    const aliases = internalAliases
+    const aliases = getInternalAliases(projectRoot)
 
     return {
       ImportDeclaration(node) {
@@ -29,7 +27,7 @@ export default defineRule({
 
         if (
           typeof source !== 'string' ||
-          !aliases.some(alias => source.startsWith(alias)) ||
+          aliases.every(alias => !source.startsWith(alias)) ||
           node.specifiers.some(
             specifier => specifier.type === 'ImportNamespaceSpecifier'
           )

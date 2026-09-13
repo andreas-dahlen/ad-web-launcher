@@ -13,4 +13,8 @@ export const jsPlugins: OxlintConfig['jsPlugins'] = [
     name: 'internal-imports',
     specifier: './tools/lint/src/internalImports-ox/no-internal-import-extensions-plugin.ts',
   },
+  {
+    name: 'existing-imports',
+    specifier: './tools/lint/src/importExists-ox/no-nonexistent-import-extensions-plugin.ts'
+  }
 ]

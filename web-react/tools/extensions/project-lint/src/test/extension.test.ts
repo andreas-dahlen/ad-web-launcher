@@ -34,6 +34,10 @@ const onDidChangeConfigurationMock =
 const onDidSaveTextDocumentMock =
   vi.hoisted(() => vi.fn())
 
+const createStatusBarItemMock = vi.hoisted(() =>
+  vi.fn(),
+)
+
 vi.mock('../helpers/resolveRoot.ts', () => ({
   resolveRoot: resolveRootMock,
 }))
@@ -52,8 +56,13 @@ vi.mock('../vscode/subscriptions.ts', () => ({
 }))
 
 vi.mock('vscode', () => ({
+  StatusBarAlignment: {
+    Right: 'right',
+  },
+
   window: {
     createOutputChannel: createOutputChannelMock,
+    createStatusBarItem: createStatusBarItemMock,
   },
 
   languages: {
@@ -77,6 +86,13 @@ describe('[Project Lint] activate', () => {
   const clear = vi.fn()
   const deleteMock = vi.fn()
 
+  const statusBar = {
+    text: '',
+    tooltip: '',
+    command: '',
+    show: vi.fn(),
+  }
+
   const output = {
     appendLine,
   }
@@ -99,6 +115,10 @@ describe('[Project Lint] activate', () => {
     vi.clearAllMocks()
 
     context.subscriptions.length = 0
+
+    createStatusBarItemMock.mockReturnValue(
+      statusBar,
+    )
 
     createOutputChannelMock.mockReturnValue(output)
 

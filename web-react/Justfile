@@ -64,9 +64,9 @@ type-all:
 
 test project="" *args:
     if [ -z "{{project}}" ]; then \
-        npm run test -- --project=react --project=app --silent {{args}}; \
+        npm run test -- --project=react --project=app {{args}} --silent ; \
     else \
-        npm run test -- --project={{project}} --silent {{args}}; \
+        npm run test -- --project={{project}} {{args}} --silent ; \
     fi
 
 test-all *args:
@@ -134,16 +134,16 @@ install-pl:
 
 # Builds compiler and installs the compiler extension.
 install-tokens:
-    cd tools/token-compiler && npm run build
-    cd tools/extensions/token-compiler-vscode && npm run package
-    code --install-extension tools/extensions/token-compiler-vscode/token-compiler-vscode-0.0.1.vsix --force
+    cd tools/cascade-compiler && npm run build
+    cd tools/extensions/cascade-vscode && npm run package
+    code --install-extension tools/extensions/cascade-vscode/cascade-vscode-0.0.1.vsix --force
 
 # Builds and installs all tools.
 install-extensions: install-cvc install-pl install-tokens
 
 # Runs the compiler in watchMode. File emissions disabled.
 compiler:
-    cd tools/token-compiler && npm run cli -- watch ../..
+    cd tools/cascade-compiler && npm run cli -- watch ../..
 
 all: build-all install-extensions
 

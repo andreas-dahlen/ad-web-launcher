@@ -8,6 +8,6 @@ export const appBoundaries: Linter.Config = {
 }
 
 export const compilerBoundaries: Linter.Config = {
-  files: ['tools/token-compiler/src/**/*.{ts, js}'],
+  files: ['tools/cascade-compiler/src/**/*.{ts, js}'],
   rules: compilerRules
 }

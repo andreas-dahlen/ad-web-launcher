@@ -35,6 +35,7 @@ export default defineConfig({
 
   rules: {
     'test-api/no-test-only-api': 'error',
+    'existing-imports/no-nonexistent-import-extensions': 'error',
     'internal-imports/no-internal-import-extensions': 'error',
     'react/static-components': 'error',
     'react/use-memo': 'error',

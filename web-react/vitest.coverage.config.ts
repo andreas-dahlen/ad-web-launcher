@@ -14,7 +14,7 @@ export default mergeConfig(
           'src/**/*.ts',
           'src/**/*.tsx',
 
-          'tools/token-compiler/src/**/*.ts',
+          'tools/cascade-compiler/src/**/*.ts',
           'tools/lint/src/**/*.ts',
           'tools/plugins/src/**/*.ts',
           'tools/extensions/*/src/**/*.ts',

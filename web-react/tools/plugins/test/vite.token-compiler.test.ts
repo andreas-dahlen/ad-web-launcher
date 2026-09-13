@@ -4,7 +4,7 @@ import { tmpdir } from 'node:os'
 
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { createTokenCompilerPlugin } from '../src/vite.token-compiler.ts'
+import { createCascadePlugin } from '../src/vite.cascade-plugin.ts'
 
 const {
   runCss,
@@ -17,7 +17,7 @@ const {
 }))
 
 vi.mock(
-  '../../token-compiler/src/entries/entry.ts',
+  '../../cascade-compiler/src/entries/entry.ts',
   () => ({
     compiler: {
       runCss,
@@ -51,7 +51,7 @@ type TestPlugin = {
 }
 
 const asTestPlugin = (
-  plugin: ReturnType<typeof createTokenCompilerPlugin>,
+  plugin: ReturnType<typeof createCascadePlugin>,
 ): TestPlugin => plugin as unknown as TestPlugin
 
 const createWatcher = () => ({
@@ -60,7 +60,7 @@ const createWatcher = () => ({
 
 const createProject = () => {
   return fs.mkdtempSync(
-    path.join(tmpdir(), 'token-compiler-test-'),
+    path.join(tmpdir(), 'cascade-compiler-test-'),
   )
 }
 
@@ -70,7 +70,7 @@ const createCompiler = () => ({
   finalize: vi.fn(),
 })
 
-describe('[VITE] tokenCompiler', () => {
+describe('[VITE] cascadeCompiler', () => {
   beforeEach(() => {
     vi.clearAllMocks()
   })
@@ -86,7 +86,7 @@ describe('[VITE] tokenCompiler', () => {
       })
 
       const plugin = asTestPlugin(
-        createTokenCompilerPlugin(projectRoot),
+        createCascadePlugin(projectRoot),
       )
 
       plugin.configResolved({
@@ -104,7 +104,7 @@ describe('[VITE] tokenCompiler', () => {
       runBuild.mockReturnValue(compiler)
 
       const plugin = asTestPlugin(
-        createTokenCompilerPlugin(projectRoot),
+        createCascadePlugin(projectRoot),
       )
 
       plugin.configResolved({
@@ -123,7 +123,7 @@ describe('[VITE] tokenCompiler', () => {
       runBuild.mockReturnValue(compiler)
 
       const plugin = asTestPlugin(
-        createTokenCompilerPlugin(createProject()),
+        createCascadePlugin(createProject()),
       )
 
       plugin.configResolved({
@@ -148,7 +148,7 @@ describe('[VITE] tokenCompiler', () => {
       runBuild.mockReturnValue(compiler)
 
       const plugin = asTestPlugin(
-        createTokenCompilerPlugin(createProject()),
+        createCascadePlugin(createProject()),
       )
 
       plugin.configResolved({
@@ -177,7 +177,7 @@ describe('[VITE] tokenCompiler', () => {
       })
 
       const plugin = asTestPlugin(
-        createTokenCompilerPlugin(createProject()),
+        createCascadePlugin(createProject()),
       )
 
       plugin.configResolved({
@@ -198,7 +198,7 @@ describe('[VITE] tokenCompiler', () => {
       runBuild.mockReturnValue(compiler)
 
       const plugin = asTestPlugin(
-        createTokenCompilerPlugin(createProject()),
+        createCascadePlugin(createProject()),
       )
 
       plugin.configResolved({
@@ -221,7 +221,7 @@ describe('[VITE] tokenCompiler', () => {
       runBuild.mockReturnValue(compiler)
 
       const plugin = asTestPlugin(
-        createTokenCompilerPlugin(createProject()),
+        createCascadePlugin(createProject()),
       )
 
       plugin.configResolved({
@@ -242,7 +242,7 @@ describe('[VITE] tokenCompiler', () => {
       })
 
       const plugin = asTestPlugin(
-        createTokenCompilerPlugin(createProject()),
+        createCascadePlugin(createProject()),
       )
 
       plugin.configResolved({
@@ -266,7 +266,7 @@ describe('[VITE] tokenCompiler', () => {
       })
 
       const plugin = asTestPlugin(
-        createTokenCompilerPlugin(createProject()),
+        createCascadePlugin(createProject()),
       )
 
       plugin.configResolved({
@@ -314,7 +314,7 @@ describe('[VITE] tokenCompiler', () => {
       const utimesSync = vi.spyOn(fs, 'utimesSync')
 
       const plugin = asTestPlugin(
-        createTokenCompilerPlugin(createProject()),
+        createCascadePlugin(createProject()),
       )
 
       plugin.configResolved({
@@ -369,7 +369,7 @@ describe('[VITE] tokenCompiler', () => {
       const utimesSync = vi.spyOn(fs, 'utimesSync')
 
       const plugin = asTestPlugin(
-        createTokenCompilerPlugin(createProject()),
+        createCascadePlugin(createProject()),
       )
 
       plugin.configResolved({

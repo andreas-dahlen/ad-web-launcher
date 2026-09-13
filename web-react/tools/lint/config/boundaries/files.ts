@@ -15,12 +15,12 @@ const appBoundaryFiles = [
 ]
 
 const compilerBoundaryFiles = [
-  { pattern: 'tools/token-compiler/**/*.boundary.ts', category: 'boundary' },
-  { pattern: 'tools/token-compiler/**/*.types.ts', category: 'types' },
-  { pattern: 'tools/token-compiler/**/compilerService.ts', category: 'compilerService' },
-  { pattern: 'tools/token-compiler/**/runDiagnostics.ts', category: 'runDiagnostics' },
-  { pattern: 'tools/token-compiler/**/emitFiles.ts', category: 'emitFiles' },
-  { pattern: 'tools/token-compiler/**/processModule.ts', category: 'processModule' },
+  { pattern: 'tools/cascade-compiler/**/*.boundary.ts', category: 'boundary' },
+  { pattern: 'tools/cascade-compiler/**/*.types.ts', category: 'types' },
+  { pattern: 'tools/cascade-compiler/**/compilerService.ts', category: 'compilerService' },
+  { pattern: 'tools/cascade-compiler/**/runDiagnostics.ts', category: 'runDiagnostics' },
+  { pattern: 'tools/cascade-compiler/**/emitFiles.ts', category: 'emitFiles' },
+  { pattern: 'tools/cascade-compiler/**/processModule.ts', category: 'processModule' },
 ]
 
 export const boundariesFiles = [

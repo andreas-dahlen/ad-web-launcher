@@ -24,13 +24,13 @@ jobs:
         with:
           node-version: 24
 
-      # Install dependencies + build token-compiler
+      # Install dependencies + build cascade-compiler
       - name: Install dependencies
-        working-directory: web-react/tools/token-compiler
+        working-directory: web-react/tools/cascade-compiler
         run: npm ci
 
       - name: Build token compiler
-        working-directory: web-react/tools/token-compiler
+        working-directory: web-react/tools/cascade-compiler
         run: npm run build
 
       # Install dependencies + build web-react
@@ -60,28 +60,30 @@ jobs:
         working-directory: android
         run: ./gradlew assembleDebug
 
-      # Extract version + increment PATCH
+      # Determine next version
       - name: Determine next version
         id: versioning
         run: |
-          # Get latest tag or fallback
-          TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v1.0.0")
-          echo "Latest tag: $TAG"
+          # Find the highest valid vX.Y.Z tag.
+          TAG=$(git tag --list 'v*.*.*' --sort=-v:refname | head -n 1)
 
-          # Validate tag format: must match vX.Y.Z
-          if [[ ! "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            echo "Tag $TAG is invalid semver. Resetting to v1.0.0"
+          # Fall back if no version tags exist.
+          if [[ -z "$TAG" ]]; then
             TAG="v1.0.0"
           fi
 
+          echo "Latest version tag: $TAG"
+
+          # Remove the leading "v" and split the version.
           VERSION=${TAG#v}
           IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION"
 
+          # Increment the patch version.
           PATCH=$((PATCH + 1))
           NEW_VERSION="v$MAJOR.$MINOR.$PATCH"
 
-          echo "New version: $NEW_VERSION"
-          echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+          echo "Next version: $NEW_VERSION"
+          echo "new_version=$NEW_VERSION" >> "$GITHUB_OUTPUT"
 
 
       # Create GitHub Release

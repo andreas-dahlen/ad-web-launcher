@@ -5,9 +5,10 @@ import clsx from 'clsx'
 import dasx from 'dasx'
 import type { ButtonPrimProps } from '@primitives/types/prim.types.ts'
 import { svsx } from '../../shared/sxCompiler/svsx.ts'
-import { cpsx } from '../../shared/sxCompiler/cpsx.ts'
+// import { cpsx } from '../../shared/sxCompiler/cpsx.ts'
 import { buttonStyle } from '@generated/tokenModules/button.token.ts'
 import { buttonPreset } from '@generated/presets/button.preset.ts'
+import { cpsx } from 'cascade'
 
 export default function ButtonPrim({
   id,
