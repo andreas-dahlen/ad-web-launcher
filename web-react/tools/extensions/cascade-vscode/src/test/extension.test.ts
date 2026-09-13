@@ -163,8 +163,7 @@ describe('[Cascade Compiler] activate', () => {
 
     expect(createTerminalMock).toHaveBeenCalledWith(
       '/workspace/cli.js',
-      '../..',
-      'tokens',
+      '../..'
     )
 
     expect(updateStatusBarMock).toHaveBeenCalledWith(

@@ -67,8 +67,7 @@ function processGroup(input, definitions, infix, output) {
                 // console.warn(`[svsx] Prefix "${prefix}" not allowed for "${varKey}".`);
                 continue;
             }
-            output[toCssVar(prefix, infix, def.name)] =
-                normalizeCssValue(value);
+            output[toCssVar(prefix, infix, def.name)] = normalizeCssValue(value);
             continue;
         }
         // -----------------------------------------------------
@@ -79,8 +78,7 @@ function processGroup(input, definitions, infix, output) {
             // console.warn(`[svsx] Unknown style key "${key}" in "${infix}".`);
             continue;
         }
-        output[toCssVar("p", infix, def.name)] =
-            normalizeCssValue(value);
+        output[toCssVar("p", infix, def.name)] = normalizeCssValue(value);
     }
 }
 /** [USAGE]: const mergedStyles = mergeStyles( buttonVars, styleVars, { preset: { width: "100px" } } ) */

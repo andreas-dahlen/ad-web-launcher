@@ -4,7 +4,7 @@ import { resolveConfig } from './config/resolveConfig.ts';
 
 export function css(projectRoot: string): CssReturn {
 
-  const config = resolveConfig(projectRoot, '', {
+  const config = resolveConfig(projectRoot, {
     willEmitCss: true,
     outPath: null,
     initialProcessing: false

@@ -68,10 +68,6 @@ describe(
           if (key === 'cliFile') {
             return 'tools/token-compiler/dist/cli.js'
           }
-
-          if (key === 'tokenFolder') {
-            return 'src/styleTokens/tokens'
-          }
         },
       )
     })
@@ -100,42 +96,6 @@ describe(
       expect(
         resolver.getProjectRootArg(),
       ).toBe('../..')
-    })
-
-    it('returns the configured token folder', () => {
-      const resolver =
-        createSettingsResolver(
-          settings as never,
-          output as never,
-        )
-
-      expect(
-        resolver.getUserOptions(),
-      ).toBe('src/styleTokens/tokens')
-    })
-
-    it('returns undefined when tokenFolder is missing', () => {
-      get.mockImplementation(
-        (key: string) => {
-          if (key === 'projectRoot') {
-            return 'web-react'
-          }
-
-          if (key === 'cliFile') {
-            return 'tools/token-compiler/dist/cli.js'
-          }
-        },
-      )
-
-      const resolver =
-        createSettingsResolver(
-          settings as never,
-          output as never,
-        )
-
-      expect(
-        resolver.getUserOptions(),
-      ).toBeUndefined()
     })
 
     it('throws when the workspace folder is missing', () => {

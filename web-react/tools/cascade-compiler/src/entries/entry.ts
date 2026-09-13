@@ -11,7 +11,7 @@ export const compiler = {
   runBuild(projectRoot: string): TokenCompiler {
     return build(projectRoot)
   },
-  runWatch(projectRoot: string, tokenFolder: string): void {
-    watch(projectRoot, tokenFolder)
+  runWatch(projectRoot: string): void {
+    watch(projectRoot)
   }
 }

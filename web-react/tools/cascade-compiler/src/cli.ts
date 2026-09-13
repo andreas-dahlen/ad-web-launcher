@@ -1,7 +1,7 @@
 import path from 'node:path'
 import { compiler } from './entries/entry.ts'
 
-const [command, rootDir, tokenFolder] = process.argv.slice(2)
+const [command, rootDir] = process.argv.slice(2)
 
 const cliDirectory = path.dirname(process.argv[1])
 const compilerDirectory = path.dirname(cliDirectory)
@@ -13,7 +13,7 @@ const projectRoot = path.resolve(
 switch (command) {
   case 'watch': {
     console.log('CASCADE COMPILER INITIALIZED')
-    compiler.runWatch(projectRoot, tokenFolder)
+    compiler.runWatch(projectRoot)
     break
   }
 

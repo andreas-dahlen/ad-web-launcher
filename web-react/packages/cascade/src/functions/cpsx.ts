@@ -11,10 +11,12 @@
 
 //TODO possible way to avoid having to spread the return
 export function cpsx<P extends string>(
-  presets: P[] | undefined,
-  map: Record<P, string>
+  presets: P | P[] | undefined,
+  css: Record<string, string>,
 ): string {
-  return presets?.map(p => map[p]).join(" ") ?? ""
+  const values = presets ? (Array.isArray(presets) ? presets : [presets]) : [];
+
+  return values.map(p => css[p]).filter(Boolean).join(" ");
 }
 
 

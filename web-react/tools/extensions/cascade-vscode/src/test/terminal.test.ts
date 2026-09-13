@@ -54,8 +54,7 @@ describe('[Cascade Compiler] CompilerTerminal', () => {
   it('starts the compiler with the configured token folder', () => {
     const terminal = new CompilerTerminal(
       '/workspace/cli.js',
-      '../..',
-      'src/styleTokens/tokens',
+      '../..'
     )
 
     terminal.open()
@@ -66,7 +65,6 @@ describe('[Cascade Compiler] CompilerTerminal', () => {
         '/workspace/cli.js',
         'watch',
         '../..',
-        'src/styleTokens/tokens',
       ],
     )
   })
@@ -74,8 +72,7 @@ describe('[Cascade Compiler] CompilerTerminal', () => {
   it('starts the compiler without a token folder', () => {
     const terminal = new CompilerTerminal(
       '/workspace/cli.js',
-      '../..',
-      undefined,
+      '../..'
     )
 
     terminal.open()
@@ -93,8 +90,7 @@ describe('[Cascade Compiler] CompilerTerminal', () => {
   it('forwards compiler output and exit status', () => {
     const terminal = new CompilerTerminal(
       '/workspace/cli.js',
-      '../..',
-      undefined,
+      '../..'
     )
 
     terminal.open()
@@ -149,8 +145,7 @@ describe('[Cascade Compiler] CompilerTerminal', () => {
   it('kills the compiler when closed', () => {
     const terminal = new CompilerTerminal(
       '/workspace/cli.js',
-      '../..',
-      undefined,
+      '../..'
     )
 
     terminal.open()

@@ -6,10 +6,9 @@ import { watchContent } from './watchers/watchContent.ts'
 
 export function createRuntime(
   projectRoot: string,
-  tokenFolder: string | undefined,
   onConfigChange: () => Promise<void>,
 ): CompilerRuntime | null {
-  const config = resolveConfig(projectRoot, tokenFolder)
+  const config = resolveConfig(projectRoot)
 
   if (config === null) {
     return null

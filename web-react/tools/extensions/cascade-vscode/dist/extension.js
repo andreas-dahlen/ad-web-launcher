@@ -19,9 +19,6 @@ function createSettingsResolver(settings, output) {
     },
     getProjectRootArg() {
       return path.relative(compilerDirectory, projectRoot);
-    },
-    getUserOptions() {
-      return settings.get("tokenFolder");
     }
   };
 }
@@ -49,14 +46,12 @@ import * as vscode3 from "vscode";
 import { spawn } from "node:child_process";
 import * as vscode2 from "vscode";
 var CompilerTerminal = class {
-  constructor(cliFile, projectRoot, config) {
+  constructor(cliFile, projectRoot) {
     this.cliFile = cliFile;
     this.projectRoot = projectRoot;
-    this.config = config;
   }
   cliFile;
   projectRoot;
-  config;
   writeEmitter = new vscode2.EventEmitter();
   compiler;
   onDidWrite = this.writeEmitter.event;
@@ -73,9 +68,6 @@ var CompilerTerminal = class {
       "watch",
       this.projectRoot
     ];
-    if (this.config !== void 0) {
-      args.push(this.config);
-    }
     this.compiler = spawn(process.execPath, args);
     this.compiler.stdout?.on("data", (data) => {
       this.write(data.toString());
@@ -99,11 +91,10 @@ Compiler exited with code ${code ?? 0}\r
 };
 
 // src/terminal/createTerminal.ts
-function createTerminal(cliFile, projectRoot, tokenFolder) {
+function createTerminal(cliFile, projectRoot) {
   const pty = new CompilerTerminal(
     cliFile,
-    projectRoot,
-    tokenFolder
+    projectRoot
   );
   return vscode3.window.createTerminal({
     name: "Cascade Compiler",
@@ -198,8 +189,7 @@ function activate(context) {
     const resolver = createSettingsResolver(settings, output);
     terminal = createTerminal(
       resolver.getCliSpawnPath(),
-      resolver.getProjectRootArg(),
-      resolver.getUserOptions()
+      resolver.getProjectRootArg()
     );
     updateStatusBar(statusBar, terminal);
     terminal.show();

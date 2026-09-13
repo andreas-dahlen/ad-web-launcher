@@ -21,10 +21,6 @@ export function createSettingsResolver(settings: vscode.WorkspaceConfiguration, 
 
     getProjectRootArg(): string {
       return path.relative(compilerDirectory, projectRoot)
-    },
-
-    getUserOptions(): string | undefined {
-      return settings.get<string>('tokenFolder')
     }
   }
 }

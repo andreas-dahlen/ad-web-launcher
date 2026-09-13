@@ -61,8 +61,7 @@ export function activate(context: vscode.ExtensionContext): void {
 
     terminal = createTerminal(
       resolver.getCliSpawnPath(),
-      resolver.getProjectRootArg(),
-      resolver.getUserOptions(),
+      resolver.getProjectRootArg()
     )
 
     updateStatusBar(statusBar, terminal)

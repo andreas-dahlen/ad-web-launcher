@@ -7,8 +7,9 @@
 //   return presets.map(p => map[p])
 // }
 //TODO possible way to avoid having to spread the return
-export function cpsx(presets, map) {
-    return presets?.map(p => map[p]).join(" ") ?? "";
+export function cpsx(presets, css) {
+    const values = presets ? (Array.isArray(presets) ? presets : [presets]) : [];
+    return values.map(p => css[p]).filter(Boolean).join(" ");
 }
 /* [USAGE]: mergePresets( buttonPresetMap, presets, !conditional && "presetClassName")
 export function mergePresets<

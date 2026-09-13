@@ -26,13 +26,13 @@ export function svsx(
   const output: Record<string, string> = {};
 
   const primaryGroup =
-    component.vars[component.component];
+    component.vars[component.component]
 
   if (!primaryGroup) {
     // console.warn(
     //   `[svsx] Missing primary group "${component.component}".`
     // );
-    return output;
+    return output
   }
 
   if (!input) return output
@@ -50,7 +50,7 @@ export function svsx(
   // -----------------------------------------------------
   for (const [groupName, value] of Object.entries(input)) {
     if (typeof value !== "object" || value == null) {
-      continue;
+      continue
     }
 
     const group =
@@ -58,7 +58,7 @@ export function svsx(
 
     if (!group) {
       // console.warn(`[svsx] Unknown group "${groupName}".`);
-      continue;
+      continue
     }
     processGroup(
       value as StyleInput,
@@ -67,7 +67,7 @@ export function svsx(
       output
     );
   }
-  return output;
+  return output
 }
 
 function processGroup(
@@ -79,13 +79,13 @@ function processGroup(
   for (const [key, value] of Object.entries(input)) {
     if (value == null) continue;
 
-    const hasPrefix = key.includes(":");
+    const hasPrefix = key.includes(":")
     // -----------------------------------------------------
     // PREFIXED KEYS
     // -----------------------------------------------------
     if (hasPrefix) {
       const [prefix, varKey] =
-        key.split(":", 2);
+        key.split(":", 2)
 
       if (!isValidPrefix(prefix)) {
         // console.warn(`[svsx] Invalid prefix "${prefix}".`);
@@ -96,38 +96,31 @@ function processGroup(
         continue
       }
 
-      const def = definitions[varKey];
+      const def = definitions[varKey]
 
       if (!def) {
         // console.warn(`[svsx] Unknown variable "${varKey}" in "${infix}".`);
-        continue;
+        continue
       }
 
       if (!def.allowed.includes(prefix as ValidPrefix)) {
         // console.warn(`[svsx] Prefix "${prefix}" not allowed for "${varKey}".`);
         continue;
       }
-      output[
-        toCssVar(prefix, infix, def.name)
-      ] =
-        normalizeCssValue(value);
-
-      continue;
+      output[toCssVar(prefix, infix, def.name)] = normalizeCssValue(value)
+      continue
     }
     // -----------------------------------------------------
     // UNPREFIXED → PRESET
     // -----------------------------------------------------
     const def =
-      definitions[key];
+      definitions[key]
 
     if (!def) {
       // console.warn(`[svsx] Unknown style key "${key}" in "${infix}".`);
-      continue;
+      continue
     }
-    output[
-      toCssVar("p", infix, def.name)
-    ] =
-      normalizeCssValue(value);
+    output[toCssVar("p", infix, def.name)] = normalizeCssValue(value)
   }
 }
 

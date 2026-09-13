@@ -10,8 +10,7 @@ export class CompilerTerminal implements vscode.Pseudoterminal {
 
   constructor(
     private readonly cliFile: string,
-    private readonly projectRoot: string,
-    private readonly config: string | undefined,
+    private readonly projectRoot: string
   ) { }
 
   private write(data: string): void {
@@ -29,9 +28,9 @@ export class CompilerTerminal implements vscode.Pseudoterminal {
       this.projectRoot,
     ]
 
-    if (this.config !== undefined) {
-      args.push(this.config)
-    }
+    // if (this.config !== undefined) {
+    //   args.push(this.config)
+    // }
 
     this.compiler = spawn(process.execPath, args)
 

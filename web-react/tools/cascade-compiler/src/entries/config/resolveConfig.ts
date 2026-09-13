@@ -5,12 +5,10 @@ import type { CompilerConfig, CompilerInternalConfig } from '../../types/run.typ
 
 export function resolveConfig(
   projectRoot: string,
-  tokenFolder?: string,
   internal?: CompilerInternalConfig
 ): CompilerConfig {
   const config = loadCompilerConfig(projectRoot)
-  const tokenRaw = config.tokenFolder ?? tokenFolder
-  if (!tokenRaw) {
+  if (!config.tokenFolder) {
     throw new Error("Error: Couldn't resolve token path in either cascade.config.json or argument")
   }
 
@@ -39,7 +37,7 @@ export function resolveConfig(
 
   return {
     projectRoot,
-    tokenPath: path.resolve(projectRoot, tokenRaw),
+    tokenPath: path.resolve(projectRoot, config.tokenFolder),
     outPath,
     logging,
     outputs,

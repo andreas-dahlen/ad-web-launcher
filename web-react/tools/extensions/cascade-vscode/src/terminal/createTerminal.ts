@@ -4,14 +4,12 @@ import { CompilerTerminal } from './terminal.ts'
 
 export function createTerminal(
   cliFile: string,
-  projectRoot: string,
-  tokenFolder: string | undefined,
+  projectRoot: string
 ): vscode.Terminal {
 
   const pty = new CompilerTerminal(
     cliFile,
     projectRoot,
-    tokenFolder,
   )
 
   return vscode.window.createTerminal({

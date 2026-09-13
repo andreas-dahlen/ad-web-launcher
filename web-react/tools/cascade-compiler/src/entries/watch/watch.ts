@@ -3,7 +3,6 @@ import { createRuntime } from './createRuntime.ts'
 
 export async function watch(
   projectRoot: string,
-  tokenFolder: string | undefined,
 ): Promise<void> {
   let runtime: CompilerRuntime | null = null
 
@@ -12,14 +11,12 @@ export async function watch(
 
     runtime = createRuntime(
       projectRoot,
-      tokenFolder,
       restart
     )
   }
 
   runtime = createRuntime(
     projectRoot,
-    tokenFolder,
     restart
   )
 
