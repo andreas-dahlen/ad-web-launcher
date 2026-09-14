@@ -7,7 +7,7 @@
   "version": "0.0.1",
   "private": true,
   "engines": {
-    "vscode": "^1.125.0"
+    "vscode": "^1.134.0"
   },
   "categories": [
     "Other"
@@ -19,8 +19,10 @@
     "onLanguage:less"
   ],
   "scripts": {
-    "build": "tsc && esbuild src/extension.ts --bundle --platform=node --external:vscode --main-fields=module,main --outfile=dist/extension.js",
-    "watch": "tsc --watch",
+    "coverage": "vitest run --coverage",
+    "test": "vitest",
+    "type": "tsc --noEmit",
+    "build": "tsc && esbuild src/extension.ts --bundle --platform=node --format=esm --external:vscode --main-fields=module,main --outfile=dist/extension.js",
     "package": "npm run build && vsce package --allow-missing-repository"
   },
   "dependencies": {
@@ -28,21 +30,33 @@
   },
   "devDependencies": {
     "@types/node": "^26.1.2",
-    "@types/vscode": "^1.125.0",
+    "@types/vscode": "^1.134.0",
+    "@vitest/coverage-v8": "^5.0.0",
     "@vscode/vsce": "^3.9.2",
     "esbuild": "^0.28.2",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "vitest": "^5.0.0"
   },
   "allowScripts": {
-    "esbuild@0.28.2": true
+    "esbuild@0.28.2": true,
+    "keytar@7.9.0": true,
+    "@types/vscode@1.125.0": true,
+    "@vscode/vsce-sign@2.1.0": true,
+    "@vitest/coverage-v8@5.0.0": true,
+    "vitest@5.0.0": true
   },
   "contributes": {
     "configuration": {
       "properties": {
         "cssVariableCompletion.variablesFile": {
           "type": "string",
-          "default": "web-react/src/shared/generated/metadata/cssVariables.generated.jsonc",
+          "default": "packages/cascade/src/generated/metadata/extension.jsonc",
           "description": "Path to the CSS variable metadata file, relative to the workspace."
+        },
+        "cssVariableCompletion.lspFile": {
+          "type": "string",
+          "default": "packages/cascade/src/generated/metadata/lsp.ts",
+          "description": "Path to the LSP variable metadata file, relative to the workspace."
         }
       }
     }

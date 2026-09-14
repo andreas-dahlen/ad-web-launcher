@@ -4,15 +4,11 @@ import { useItemSizing } from './hooks/useItemSizing.hook.ts'
 import { useCarouselStore } from './store/useCarouselStore.hook.ts'
 import { carouselStore, type NodeId } from './store/carousel.store.ts'
 import css from './Carousel.module.css'
-import { dasx } from '../../shared/sxCompiler/dasx.ts'
+import dasx from 'dasx'
 import clsx from 'clsx'
-import { svsx } from '../../shared/sxCompiler/svsx.ts'
+import { cpsx, svsx, carouselStyle } from 'cascade'
 import type { ContentCarouselPrimProps } from '@primitives/types/prim.types.ts'
-import type { SceneRole } from '../../shared/types/core.types.ts'
-
-import { cpsx } from '../../shared/sxCompiler/cpsx.ts'
-import { carouselStyle } from '@shared/generated/tokenModules/carousel.token.ts'
-import { carouselPreset } from '@generated/presets/carousel.preset.ts'
+import type { SceneRole } from '@shared/types/core.types.ts'
 
 
 
@@ -77,8 +73,8 @@ export default function ContentCarouselPrim({
           <div
             key={node.nodeId}
             ref={itemRef}
-            className={clsx(css.scene, cpsx(presets, carouselPreset))}
-            style={{ ...styleForRole(role), ...svsx(styleVars ?? {}, carouselStyle) }}
+            className={clsx(css.scene, cpsx(presets, css))}
+            style={{ ...styleForRole(role), ...svsx(styleVars, carouselStyle) }}
             data-role={role}
             onTransitionEnd={onTransitionEnd}
           >

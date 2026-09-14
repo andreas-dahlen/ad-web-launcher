@@ -2,16 +2,16 @@ import { render } from '@testing-library/react'
 import type { ComponentProps } from 'react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-import SliderPrim from '@primitives/Slider/SliderPrim'
+import SliderPrim from '@primitives/Slider/SliderPrim.tsx'
 
-import { usePointerBridge } from '@interaction/adapter/usePointerBridge.hook'
-import { useSliderMotion } from '@primitives/Slider/hooks/useSliderMotion.hook'
-import { useSliderSizing } from '@primitives/Slider/hooks/useSliderSizing.hook'
-import type { SliderBinding } from '@primitives/Slider/store/slider.store'
+import { usePointerBridge } from '@interaction/adapter/usePointerBridge.hook.ts'
+import { useSliderMotion } from '@primitives/Slider/hooks/useSliderMotion.hook.ts'
+import { useSliderSizing } from '@primitives/Slider/hooks/useSliderSizing.hook.ts'
+import type { SliderBinding } from '@primitives/Slider/store/slider.store.ts'
 import {
   slider_DEFAULTS,
   useSliderStore
-} from '@primitives/Slider/store/useSliderStore.hook'
+} from '@primitives/Slider/store/useSliderStore.hook.ts'
 
 vi.mock('@interaction/adapter/usePointerBridge.hook', () => ({
   usePointerBridge: vi.fn()

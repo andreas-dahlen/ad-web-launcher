@@ -1,0 +1,58 @@
+import type { StyleFromComponent } from "../../types/compiler.types.ts";
+export declare const layoutStyle: {
+    readonly component: "layout";
+    readonly vars: {
+        readonly layout: {
+            readonly display: {
+                readonly name: "display";
+                readonly allowed: readonly ["o", "p", "f"];
+            };
+            readonly flexDirection: {
+                readonly name: "flex-direction";
+                readonly allowed: readonly ["o", "p", "f"];
+            };
+            readonly justify: {
+                readonly name: "justify";
+                readonly allowed: readonly ["o", "p", "f"];
+            };
+            readonly align: {
+                readonly name: "align";
+                readonly allowed: readonly ["o", "p", "f"];
+            };
+            readonly width: {
+                readonly name: "width";
+                readonly allowed: readonly ["o", "p", "f"];
+            };
+            readonly height: {
+                readonly name: "height";
+                readonly allowed: readonly ["o", "p", "f"];
+            };
+            readonly gap: {
+                readonly name: "gap";
+                readonly allowed: readonly ["o", "p", "f"];
+            };
+            readonly margin: {
+                readonly name: "margin";
+                readonly allowed: readonly ["o", "p", "f"];
+            };
+            readonly padding: {
+                readonly name: "padding";
+                readonly allowed: readonly ["o", "p", "f"];
+            };
+            readonly inset: {
+                readonly name: "inset";
+                readonly allowed: readonly ["o", "p", "f"];
+            };
+            readonly minWidth: {
+                readonly name: "min-width";
+                readonly allowed: readonly ["o", "p", "f"];
+            };
+            readonly minHeight: {
+                readonly name: "min-height";
+                readonly allowed: readonly ["o", "p", "f"];
+            };
+        };
+    };
+};
+export type LayoutStyle = StyleFromComponent<typeof layoutStyle>;
+//# sourceMappingURL=layout.token.d.ts.map

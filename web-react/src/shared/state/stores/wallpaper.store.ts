@@ -1,8 +1,8 @@
 
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
-import { fetchWallpapers } from '@api/wallpaper';
-import type { SceneRole } from '../../types/core.types';
+import { fetchWallpapers } from '@api/wallpaper.ts';
+import type { SceneRole } from '../../types/core.types.ts';
 
 
 export type WallpaperStore = {

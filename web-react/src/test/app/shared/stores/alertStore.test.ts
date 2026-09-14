@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { alertStore } from '@shared/state/stores/alert.store'
+import { alertStore } from '@shared/state/stores/alert.store.ts'
 
 describe('[ALERT STORE]', () => {
   const reset = () => {

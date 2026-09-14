@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest'
 
-import { vector } from '@interaction/solvers/utils/vector.utils'
+import { vector } from '@interaction/solvers/utils/vector.utils.ts'
 
-import { APP_CONFIG } from '@config/app.config'
-import type { AxisDirection } from '@shared/types/core.types'
+import { APP_CONFIG } from '@config/app.config.ts'
+import type { AxisDirection } from '@shared/types/core.types.ts'
 
 describe('[VECTOR UTILS]', () => {
   describe('clamp', () => {

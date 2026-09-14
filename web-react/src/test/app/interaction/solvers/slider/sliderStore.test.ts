@@ -1,8 +1,8 @@
 import { describe, it, expect, afterEach } from 'vitest'
-import { sliderStore, type SliderBinding } from '@primitives/Slider/store/slider.store'
-import { slider_DEFAULTS } from '@primitives/Slider/store/useSliderStore.hook'
-import { getStoreByType, seedStoreByType } from '@test/testUtils/storeSeed.utils'
-import { resetInteractionStores } from '@test/testUtils/storeReset.utils'
+import { sliderStore, type SliderBinding } from '@primitives/Slider/store/slider.store.ts'
+import { slider_DEFAULTS } from '@primitives/Slider/store/useSliderStore.hook.ts'
+import { getStoreByType, seedStoreByType } from '@test/testUtils/storeSeed.utils.ts'
+import { resetInteractionStores } from '@test/testUtils/storeReset.utils.ts'
 function initTest(data: SliderBinding = slider_DEFAULTS) {
   seedStoreByType("slider", "test", data)
 }

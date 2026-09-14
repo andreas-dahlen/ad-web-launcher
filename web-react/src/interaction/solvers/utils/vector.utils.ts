@@ -1,5 +1,5 @@
-import type { Axis, Axis1D, Constraints2D, AxisDirection, BoxSide, Vec2 } from '../../../shared/types/core.types'
-import { APP_CONFIG } from '@config/app.config'
+import type { Axis, Axis1D, Constraints2D, AxisDirection, BoxSide, Vec2 } from '../../../shared/types/core.types.ts'
+import { APP_CONFIG } from '@config/app.config.ts'
 
 export const vector = {
   clamp(delta: number, min: number, max: number) {

@@ -1,4 +1,4 @@
-import type { ReactiveSettings } from '@shared/state/stores/settings.store'
+import type { ReactiveSettings } from '@shared/state/stores/settings.store.ts'
 
 // export const dragStore_DEFAULT = {
 //   settledOffset: { x: 0, y: 0 },

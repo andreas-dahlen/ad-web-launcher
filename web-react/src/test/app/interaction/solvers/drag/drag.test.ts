@@ -1,9 +1,9 @@
-import { dragSolver } from '@interaction/solvers/dragSolver/drag.solver'
-import type { DragDesc, SwipeableDescriptor } from '@interaction/types/descriptor/descriptor.types'
-import { createDragData } from '@test/app/interaction/builders/data.factory'
-import { createInterpreterSwipe, createInterpreterSwipeCommit, createInterpreterSwipeStart } from '@test/app/interaction/builders/input.factory'
-import { base_DEFAULT } from '@test/app/interaction/fixtures/base.fixture'
-import { event_DEFAULT } from '@test/app/interaction/fixtures/runtimeEvents.fixture'
+import { dragSolver } from '@interaction/solvers/dragSolver/drag.solver.ts'
+import type { DragDesc, SwipeableDescriptor } from '@interaction/types/descriptor/descriptor.types.ts'
+import { createDragData } from '@test/app/interaction/builders/data.factory.ts'
+import { createInterpreterSwipe, createInterpreterSwipeCommit, createInterpreterSwipeStart } from '@test/app/interaction/builders/input.factory.ts'
+import { base_DEFAULT } from '@test/app/interaction/fixtures/base.fixture.ts'
+import { event_DEFAULT } from '@test/app/interaction/fixtures/runtimeEvents.fixture.ts'
 import { describe, expect, it } from 'vitest'
 
 function assertDragDesc(

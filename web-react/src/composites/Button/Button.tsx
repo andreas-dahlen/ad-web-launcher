@@ -1,10 +1,11 @@
-import ButtonPrim from '@primitives/Button/ButtonPrim'
-import DragPrim from '@primitives/Drag/DragPrim'
-import { createId, generateId } from '@data/generators/idGenerator'
-import Label, { type LabelSettings } from '../../blocks/Label/Label'
-import Svg, { type IconSettings } from '../../blocks/Svg/Svg'
-import type { ButtonSettings, Directive, DragSettings } from '@composites/types/comp.types'
-import { useBehaviorState } from '@composites/hooks/useBehaviorState.hook'
+import ButtonPrim from '@primitives/Button/ButtonPrim.tsx'
+import DragPrim from '@primitives/Drag/DragPrim.tsx'
+import { createId, generateId } from '@data/generators/idGenerator.ts'
+import Label, { type LabelSettings } from '../../blocks/Label/Label.tsx'
+import Svg, { type IconSettings } from '../../blocks/Svg/Svg.tsx'
+import type { ButtonSettings, Directive, DragSettings } from '@composites/types/comp.types.ts'
+import { useBehaviorState } from '@composites/hooks/useBehaviorState.hook.ts'
+
 type ButtonProps = {
   directive?: Directive
   icon?: IconSettings
@@ -73,7 +74,7 @@ export default function Button({
       useSettingsSnap={drag?.useSettingsSnap}
       interactive={isDragInteractive}
       isInFlow={isInFlow}
-      onSwipeCommit={drag?.onSwipeCommit && drag.onSwipeCommit}
+      onSwipeCommit={drag?.onSwipeCommit}
       snapX={drag?.useSettingsSnap ? drag?.snapX : undefined}
       snapY={drag?.useSettingsSnap ? drag?.snapY : undefined}
     >

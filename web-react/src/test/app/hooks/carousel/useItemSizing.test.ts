@@ -1,10 +1,10 @@
 import { renderHook } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { useItemSizing } from '@primitives/Carousel/hooks/useItemSizing.hook'
-import { carouselStore } from '@primitives/Carousel/store/carousel.store'
+import { useItemSizing } from '@primitives/Carousel/hooks/useItemSizing.hook.ts'
+import { carouselStore } from '@primitives/Carousel/store/carousel.store.ts'
 
-import { createResizeObserverMock } from '@test/testUtils/resizeObserver.utils'
+import { createResizeObserverMock } from '@test/testUtils/resizeObserver.utils.ts'
 
 vi.mock('@primitives/Carousel/store/carousel.store', () => ({
   carouselStore: {

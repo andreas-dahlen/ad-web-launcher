@@ -1,14 +1,14 @@
 import { describe, expect, it } from 'vitest'
 
-import { sliderSolver } from '@interaction/solvers/sliderSolver/slider.solver'
+import { sliderSolver } from '@interaction/solvers/sliderSolver/slider.solver.ts'
 import {
   createInterpreterPress,
   createInterpreterSwipe,
   createInterpreterSwipeCommit,
   createInterpreterSwipeStart,
-} from '@test/app/interaction/builders/input.factory'
-import { createComputedSlider } from '@test/app/interaction/builders/computed.factory'
-import type { SliderDesc } from '@interaction/types/descriptor/descriptor.types'
+} from '@test/app/interaction/builders/input.factory.ts'
+import { createComputedSlider } from '@test/app/interaction/builders/computed.factory.ts'
+import type { SliderDesc } from '@interaction/types/descriptor/descriptor.types.ts'
 
 
 function assertSliderDesc(

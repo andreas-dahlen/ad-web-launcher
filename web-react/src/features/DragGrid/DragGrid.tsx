@@ -1,8 +1,8 @@
-import { Z } from '@config/zIndex.config'
+import { Z } from '@config/zIndex.config.ts'
 import css from './DragGrid.module.css'
 import clsx from 'clsx'
-import { gestureStore } from '../../shared/state/stores/gesture.store'
-import { settingsStore } from '@stores/settings.store'
+import { gestureStore } from '../../shared/state/stores/gesture.store.ts'
+import { settingsStore } from '@stores/settings.store.ts'
 
 function snapPositions(count: number) {
   if (!count || count <= 0) return []

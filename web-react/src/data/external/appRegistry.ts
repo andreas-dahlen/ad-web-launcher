@@ -1,8 +1,8 @@
-import type { IconName } from '@data/icons';
+import * as Icons from '@data/icons';
 
 export interface AppRegistryItem {
   label: string;
-  iconName: IconName;
+  iconName: keyof typeof Icons
 }
 
 export const appRegistry: Record<string, AppRegistryItem> = {

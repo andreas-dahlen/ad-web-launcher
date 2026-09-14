@@ -1,0 +1,47 @@
+import type { VariableMismatch } from '../../../types/diagnostics.types.ts';
+import { toCssVarPrefix } from '../../../utils/stringFormaters.ts';
+import type { CssDataTokenGroup } from '../../../types/compiler.types.ts';
+import { toCssVar, type CssVarString } from 'cascade';
+
+export function analyzeVariableUsage(group: CssDataTokenGroup): VariableMismatch[] {
+  const result: VariableMismatch[] = []
+
+  const found = new Set(group.cssData.foundFinalVariables);
+
+  for (const token of group.tokens) {
+    const declared = new Set(
+      token.vars.map(variable =>
+        toCssVar("final", token.infix, variable.cssName)
+      )
+    );
+
+    const missing: CssVarString[] = [];
+    const unused: CssVarString[] = [];
+
+    for (const cssVar of found) {
+      if (
+        cssVar.startsWith(toCssVarPrefix("final", token.infix)) &&
+        !declared.has(cssVar)
+      ) {
+        missing.push(cssVar);
+      }
+    }
+
+    for (const cssVar of declared) {
+      if (!found.has(cssVar)) {
+        unused.push(cssVar);
+      }
+    }
+
+    if (missing.length > 0 || unused.length > 0) {
+      result.push({
+        name: token.name,
+        infix: token.infix,
+        missing,
+        unused,
+      });
+    }
+  }
+
+  return result
+}

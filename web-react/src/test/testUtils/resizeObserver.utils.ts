@@ -1,6 +1,13 @@
 import { vi } from 'vitest'
+type ResizeObserverMock = {
+  ResizeObserverMock: ReturnType<typeof vi.fn>
+  observe: ReturnType<typeof vi.fn>
+  unobserve: ReturnType<typeof vi.fn>
+  disconnect: ReturnType<typeof vi.fn>
+  trigger: () => void
+}
 
-export function createResizeObserverMock() {
+export function createResizeObserverMock(): ResizeObserverMock {
   let callback: ResizeObserverCallback | undefined
 
   const observe = vi.fn()

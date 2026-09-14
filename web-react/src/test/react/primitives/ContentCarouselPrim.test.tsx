@@ -2,37 +2,53 @@ import { render } from '@testing-library/react'
 import type { ComponentProps } from 'react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-import ContentCarouselPrim from '@primitives/Carousel/ContentCarouselPrim'
+import ContentCarouselPrim from '@primitives/Carousel/ContentCarouselPrim.tsx'
 
-import { useCarouselMotion } from '@primitives/Carousel/hooks/useCarouselMotion.hook'
-import { useItemSizing } from '@primitives/Carousel/hooks/useItemSizing.hook'
-import { useCarouselStore } from '@primitives/Carousel/store/useCarouselStore.hook'
-import { carouselStore, type CarouselStore } from '@primitives/Carousel/store/carousel.store'
+import { useCarouselMotion } from '@primitives/Carousel/hooks/useCarouselMotion.hook.ts'
+import { useItemSizing } from '@primitives/Carousel/hooks/useItemSizing.hook.ts'
 
-import { svsx } from '@shared/sxCompiler/svsx'
+import {
+  carousel_DEFAULTS,
+  useCarouselStore
+} from '@primitives/Carousel/store/useCarouselStore.hook.ts'
+
+import {
+  carouselStore,
+  type CarouselStore
+} from '@primitives/Carousel/store/carousel.store.ts'
+
+import { cpsx, svsx, type CarouselPreset } from 'cascade'
 
 import css from '../../../primitives/Carousel/Carousel.module.css'
 
-import { carousel_DEFAULTS } from '@primitives/Carousel/store/useCarouselStore.hook'
+vi.mock(
+  '@primitives/Carousel/hooks/useCarouselMotion.hook.ts',
+  () => ({
+    useCarouselMotion: vi.fn()
+  })
+)
 
-vi.mock('@primitives/Carousel/hooks/useCarouselMotion.hook', () => ({
-  useCarouselMotion: vi.fn()
-}))
+vi.mock(
+  '@primitives/Carousel/hooks/useItemSizing.hook.ts',
+  () => ({
+    useItemSizing: vi.fn()
+  })
+)
 
-vi.mock('@primitives/Carousel/hooks/useItemSizing.hook', () => ({
-  useItemSizing: vi.fn()
-}))
-
-vi.mock('@shared/sxCompiler/svsx', () => ({
-  svsx: vi.fn()
+vi.mock('cascade', () => ({
+  cpsx: vi.fn(),
+  svsx: vi.fn(),
+  carouselStyle: {}
 }))
 
 vi.mock(
-  '@primitives/Carousel/store/useCarouselStore.hook',
+  '@primitives/Carousel/store/useCarouselStore.hook.ts',
   async (importOriginal) => {
     const actual =
       await importOriginal<
-        typeof import('@primitives/Carousel/store/useCarouselStore.hook')
+        typeof import(
+        '@primitives/Carousel/store/useCarouselStore.hook.ts'
+        )
       >()
 
     return {
@@ -43,11 +59,13 @@ vi.mock(
 )
 
 vi.mock(
-  '@primitives/Carousel/store/carousel.store',
+  '@primitives/Carousel/store/carousel.store.ts',
   async (importOriginal) => {
     const actual =
       await importOriginal<
-        typeof import('@primitives/Carousel/store/carousel.store')
+        typeof import(
+        '@primitives/Carousel/store/carousel.store.ts'
+        )
       >()
 
     return {
@@ -61,14 +79,13 @@ vi.mock(
 )
 
 describe('[CONTENT CAROUSEL PRIM]', () => {
-
   beforeEach(() => {
     vi.clearAllMocks()
 
     mockCarouselStore()
-
     mockCarouselActions()
 
+    vi.mocked(cpsx).mockReturnValue('')
     vi.mocked(svsx).mockReturnValue({})
 
     vi.mocked(useItemSizing).mockImplementation(() => { })
@@ -93,27 +110,10 @@ describe('[CONTENT CAROUSEL PRIM]', () => {
     vi.mocked(carouselStore.getState).mockImplementation(
       () => ({
         setCount
-      } as unknown as CarouselStore)
+      }) as unknown as CarouselStore
     )
 
     return { setCount }
-  }
-
-  function renderCarousel(
-    props: Partial<ComponentProps<typeof ContentCarouselPrim>> = {}
-  ) {
-    return render(
-      <ContentCarouselPrim
-        id="test-carousel"
-        axis="horizontal"
-        scenes={[
-          <div key="scene-0">Scene 0</div>,
-          <div key="scene-1">Scene 1</div>,
-          <div key="scene-2">Scene 2</div>
-        ]}
-        {...props}
-      />
-    )
   }
 
   function mockCarouselStore(
@@ -149,6 +149,23 @@ describe('[CONTENT CAROUSEL PRIM]', () => {
     })
   }
 
+  function renderCarousel(
+    props: Partial<ComponentProps<typeof ContentCarouselPrim>> = {}
+  ) {
+    return render(
+      <ContentCarouselPrim
+        id="test-carousel"
+        axis="horizontal"
+        scenes={[
+          <div key="scene-0">Scene 0</div>,
+          <div key="scene-1">Scene 1</div>,
+          <div key="scene-2">Scene 2</div>
+        ]}
+        {...props}
+      />
+    )
+  }
+
   function getCarousel(container: HTMLElement) {
     return container.firstElementChild as HTMLElement
   }
@@ -157,10 +174,7 @@ describe('[CONTENT CAROUSEL PRIM]', () => {
     return [...getCarousel(container).children]
   }
 
-  function getScene(
-    container: HTMLElement,
-    index: number
-  ) {
+  function getScene(container: HTMLElement, index = 0) {
     return getScenes(container)[index] as HTMLElement
   }
 
@@ -187,13 +201,13 @@ describe('[CONTENT CAROUSEL PRIM]', () => {
       expect(getCarousel(container)).toBeInTheDocument()
     })
 
-    it('renders three scene nodes', () => {
+    it('renders a scene for every bound node', () => {
       const { container } = renderCarousel()
 
       expect(getScenes(container)).toHaveLength(3)
     })
 
-    it('renders scene content according to sceneIdx', () => {
+    it('renders scenes from their scene indexes', () => {
       const { container } = renderCarousel({
         scenes: [
           <div key="first">First</div>,
@@ -209,6 +223,21 @@ describe('[CONTENT CAROUSEL PRIM]', () => {
       expect(scenes[2]).toHaveTextContent('Third')
     })
 
+    it('does not render scenes when there are no bound nodes', () => {
+      mockCarouselStore({
+        nodeBindings: {
+          currentNode: 0,
+          nodes: [] as never
+        }
+      })
+
+      const { container } = renderCarousel()
+
+      expect(getScenes(container)).toHaveLength(0)
+    })
+  })
+
+  describe('data attributes', () => {
     it('renders carousel data attributes', () => {
       const { container } = renderCarousel()
 
@@ -241,34 +270,6 @@ describe('[CONTENT CAROUSEL PRIM]', () => {
       )
     })
 
-    it('disables pointer interaction on the content carousel', () => {
-      const { container } = renderCarousel()
-
-      expect(getCarousel(container)).toHaveStyle({
-        pointerEvents: 'none'
-      })
-    })
-  })
-
-  describe('css', () => {
-    it('has carousel css module on container', () => {
-      const { container } = renderCarousel()
-
-      expect(getCarousel(container)).toHaveClass(
-        css.carousel
-      )
-    })
-
-    it('has scene css module on every scene', () => {
-      const { container } = renderCarousel()
-
-      for (const scene of getScenes(container)) {
-        expect(scene).toHaveClass(css.scene)
-      }
-    })
-  })
-
-  describe('data attributes', () => {
     it('applies custom carousel data attributes', () => {
       const { container } = renderCarousel({
         carouselDataAttrs: {
@@ -312,6 +313,39 @@ describe('[CONTENT CAROUSEL PRIM]', () => {
     })
   })
 
+  describe('css', () => {
+    it('applies the carousel class', () => {
+      const { container } = renderCarousel()
+
+      expect(getCarousel(container)).toHaveClass(
+        css.carousel
+      )
+    })
+
+    it('applies the scene class to every scene', () => {
+      const { container } = renderCarousel()
+
+      for (const scene of getScenes(container)) {
+        expect(scene).toHaveClass(css.scene)
+      }
+    })
+
+    it('applies preset classes to every scene', () => {
+      vi.mocked(cpsx).mockReturnValue('preset-a preset-b')
+
+      const { container } = renderCarousel({
+        presets: ['preset-a', 'preset-b'] as unknown as CarouselPreset[]
+      })
+
+      for (const scene of getScenes(container)) {
+        expect(scene).toHaveClass(
+          'preset-a',
+          'preset-b'
+        )
+      }
+    })
+  })
+
   describe('roles', () => {
     it('assigns current to the current node', () => {
       const { container } = renderCarousel()
@@ -340,7 +374,7 @@ describe('[CONTENT CAROUSEL PRIM]', () => {
       )
     })
 
-    it('derives roles from currentNode', () => {
+    it('derives roles from the current node', () => {
       mockCarouselStore({
         nodeBindings: {
           currentNode: 1,
@@ -371,31 +405,22 @@ describe('[CONTENT CAROUSEL PRIM]', () => {
     })
   })
 
-  describe('container sizing', () => {
-    it('passes the scene ref and id to useItemSizing', () => {
+  describe('sizing', () => {
+    it('passes the scene ref and carousel id to useItemSizing', () => {
       const { container } = renderCarousel()
 
-      const { itemRef } = getSizingOptions()
+      const { itemRef, id } = getSizingOptions()
 
-      expect(itemRef).toBeDefined()
       expect(itemRef.current).toBe(
         getScene(container, 2)
       )
-    })
 
-    it('passes the carousel id to useItemSizing', () => {
-      renderCarousel()
-
-      expect(getSizingOptions()).toEqual(
-        expect.objectContaining({
-          id: 'test-carousel'
-        })
-      )
+      expect(id).toBe('test-carousel')
     })
   })
 
   describe('motion', () => {
-    it('passes carousel motion state to useMotion', () => {
+    it('passes carousel motion state to useCarouselMotion', () => {
       mockCarouselStore({
         liveOffset: 25,
         dragging: true,
@@ -429,9 +454,7 @@ describe('[CONTENT CAROUSEL PRIM]', () => {
         }
       })
 
-      renderCarousel({
-        axis: 'horizontal'
-      })
+      renderCarousel({ axis: 'horizontal' })
 
       expect(getMotionOptions()).toEqual(
         expect.objectContaining({
@@ -455,9 +478,7 @@ describe('[CONTENT CAROUSEL PRIM]', () => {
         }
       })
 
-      renderCarousel({
-        axis: 'vertical'
-      })
+      renderCarousel({ axis: 'vertical' })
 
       expect(getMotionOptions()).toEqual(
         expect.objectContaining({
@@ -467,7 +488,7 @@ describe('[CONTENT CAROUSEL PRIM]', () => {
       )
     })
 
-    it('passes the carousel id to useMotion', () => {
+    it('passes the carousel id to useCarouselMotion', () => {
       renderCarousel()
 
       expect(getMotionOptions()).toEqual(
@@ -477,7 +498,7 @@ describe('[CONTENT CAROUSEL PRIM]', () => {
       )
     })
 
-    it('uses the motion style for each scene role', () => {
+    it('applies the motion style for each scene role', () => {
       const { container } = renderCarousel()
 
       expect(getScene(container, 0)).toHaveStyle({
@@ -494,6 +515,67 @@ describe('[CONTENT CAROUSEL PRIM]', () => {
         transform: 'translate3d(-100px, 0px, 0px)',
         transition: 'none'
       })
+    })
+  })
+
+  describe('styles', () => {
+    it('passes style variables to svsx', () => {
+      const styleVars = {
+        background: 'red'
+      }
+
+      renderCarousel({ styleVars })
+
+      expect(svsx).toHaveBeenCalledWith(
+        styleVars,
+        expect.anything()
+      )
+    })
+
+    it('applies styles returned by svsx', () => {
+      vi.mocked(svsx).mockReturnValue({
+        '--p-carousel-background': 'red'
+      })
+
+      const { container } = renderCarousel()
+
+      expect(getScene(container)).toHaveStyle({
+        '--p-carousel-background': 'red'
+      })
+    })
+  })
+
+  describe('interaction', () => {
+    it('disables pointer interaction on the carousel', () => {
+      const { container } = renderCarousel()
+
+      expect(getCarousel(container)).toHaveStyle({
+        pointerEvents: 'none'
+      })
+    })
+
+    it('passes the transition handler to every scene', () => {
+      const onTransitionEnd = vi.fn()
+
+      vi.mocked(useCarouselMotion).mockReturnValue({
+        styleForRole: vi.fn(() => ({
+          transform: 'none',
+          transition: 'none'
+        })),
+        onTransitionEnd
+      })
+
+      const { container } = renderCarousel()
+
+      for (const scene of getScenes(container)) {
+        scene.dispatchEvent(
+          new Event('transitionend', {
+            bubbles: true
+          })
+        )
+      }
+
+      expect(onTransitionEnd).toHaveBeenCalledTimes(3)
     })
   })
 

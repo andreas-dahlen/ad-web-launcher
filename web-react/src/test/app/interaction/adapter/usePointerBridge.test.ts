@@ -1,8 +1,8 @@
 import { renderHook } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { usePointerBridge } from '@interaction/adapter/usePointerBridge.hook'
-import { pipeline } from '@interaction/runtime/pipeline'
+import { usePointerBridge } from '@interaction/adapter/usePointerBridge.hook.ts'
+import { pipeline } from '@interaction/runtime/pipeline.ts'
 
 vi.mock('@interaction/runtime/pipeline', () => ({
   pipeline: {

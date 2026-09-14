@@ -1,17 +1,17 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-import { router } from '@interaction/runtime/solverRouter'
-import { carouselSolver } from '@interaction/solvers/carouselSolver/carousel.solver'
-import { dragSolver } from '@interaction/solvers/dragSolver/drag.solver'
-import { scrollSolver } from '@interaction/solvers/scrollSolver/scroll.solver'
-import { sliderSolver } from '@interaction/solvers/sliderSolver/slider.solver'
+import { router } from '@interaction/runtime/solverRouter.ts'
+import { carouselSolver } from '@interaction/solvers/carouselSolver/carousel.solver.ts'
+import { dragSolver } from '@interaction/solvers/dragSolver/drag.solver.ts'
+import { scrollSolver } from '@interaction/solvers/scrollSolver/scroll.solver.ts'
+import { sliderSolver } from '@interaction/solvers/sliderSolver/slider.solver.ts'
 
 import {
   createCarouselDesc,
   createDragDesc,
   createScrollDesc,
   createSliderDesc
-} from '@test/app/interaction/builders/desc.factory'
+} from '@test/app/interaction/builders/desc.factory.ts'
 
 import {
   createRuntimePress,
@@ -19,12 +19,12 @@ import {
   createRuntimeSwipe,
   createRuntimeswipeStart,
   createRuntimeSwipeCommit
-} from '@test/app/interaction/builders/runtime.factory'
+} from '@test/app/interaction/builders/runtime.factory.ts'
 
 import type {
   SliderComputed,
   ScrollComputed
-} from '@interaction/types/runtime/computed.types'
+} from '@interaction/types/runtime/computed.types.ts'
 
 vi.mock('@interaction/solvers/carouselSolver/carousel.solver', () => ({
   carouselSolver: {

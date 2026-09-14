@@ -4,10 +4,10 @@ import {
   normalizeBase,
   exceedsCrossRange,
   getCommitOffset
-} from '@interaction/solvers/utils/axis.utils'
+} from '@interaction/solvers/utils/axis.utils.ts'
 
-import type { Normalized1D } from '@interaction/types/solver.types'
-import type { AxisDirection } from '@shared/types/core.types'
+import type { Normalized1D } from '@interaction/types/solver.types.ts'
+import type { AxisDirection } from '@shared/types/core.types.ts'
 
 describe('[AXIS UTILS]', () => {
   describe('normalizeBase', () => {

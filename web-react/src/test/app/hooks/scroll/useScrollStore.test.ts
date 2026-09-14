@@ -2,15 +2,15 @@ import { renderHook } from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 
-import { scroll_DEFAULTS, useScrollStore } from '@primitives/Scroll/store/useScrollStore.hook'
-import { scrollStore } from '@primitives/Scroll/store/scroll.store'
+import { scroll_DEFAULTS, useScrollStore } from '@primitives/Scroll/store/useScrollStore.hook.ts'
+import { scrollStore } from '@primitives/Scroll/store/scroll.store.ts'
 
 import {
   debugRegisterBinding,
   debugUnregisterBinding
-} from '@test/functions.debug'
+} from '@shared/debug/functions.debug.ts'
 
-vi.mock('@test/functions.debug', () => ({
+vi.mock('@shared/debug/functions.debug', () => ({
   debugRegisterBinding: vi.fn(),
   debugUnregisterBinding: vi.fn()
 }))

@@ -1,9 +1,9 @@
-import { carouselSolver } from '@interaction/solvers/carouselSolver/carousel.solver'
-import type { CarouselDesc, SwipeableDescriptor } from '@interaction/types/descriptor/descriptor.types'
-import { createBaseWithAxis1D } from '@test/app/interaction/builders/base.factory'
-import { createCarouselData } from '@test/app/interaction/builders/data.factory'
-import { createInterpreterSwipe, createInterpreterSwipeCommit } from '@test/app/interaction/builders/input.factory'
-import { createRuntimeSwipe } from '@test/app/interaction/builders/runtime.factory'
+import { carouselSolver } from '@interaction/solvers/carouselSolver/carousel.solver.ts'
+import type { CarouselDesc, SwipeableDescriptor } from '@interaction/types/descriptor/descriptor.types.ts'
+import { createBaseWithAxis1D } from '@test/app/interaction/builders/base.factory.ts'
+import { createCarouselData } from '@test/app/interaction/builders/data.factory.ts'
+import { createInterpreterSwipe, createInterpreterSwipeCommit } from '@test/app/interaction/builders/input.factory.ts'
+import { createRuntimeSwipe } from '@test/app/interaction/builders/runtime.factory.ts'
 import { describe, expect, it } from 'vitest'
 
 function assertCarouselDesc(

@@ -1,5 +1,5 @@
-import type { Directive, Mode } from '@composites/types/comp.types'
-import { settingsStore } from '@stores/settings.store'
+import type { Directive, Mode } from '@composites/types/comp.types.ts'
+import { settingsStore } from '@stores/settings.store.ts'
 
 export function useBehaviorState({
   mode: inputMode,

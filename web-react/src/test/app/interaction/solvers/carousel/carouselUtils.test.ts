@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest'
 
-import { carouselUtils } from '@interaction/solvers/carouselSolver/carousel.utils'
-import { APP_CONFIG } from '@config/app.config'
+import { carouselUtils } from '@interaction/solvers/carouselSolver/carousel.utils.ts'
+import { APP_CONFIG } from '@config/app.config.ts'
 
-import { createCarouselDesc } from '@test/app/interaction/builders/desc.factory'
+import { createCarouselDesc } from '@test/app/interaction/builders/desc.factory.ts'
 
-import type { Normalized1D } from '@interaction/types/solver.types'
+import type { Normalized1D } from '@interaction/types/solver.types.ts'
 
 describe('[CAROUSEL UTILS]', () => {
   describe('normalize', () => {

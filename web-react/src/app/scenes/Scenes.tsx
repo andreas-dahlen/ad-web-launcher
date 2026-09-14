@@ -1,8 +1,8 @@
-import SceneLayoutPanel from '../../panels/SceneLayoutPanel/SceneLayoutPanel'
-import { settingsStore } from '@stores/settings.store'
+import SceneLayoutPanel from '../../panels/SceneLayoutPanel/SceneLayoutPanel.tsx'
+import { settingsStore } from '@stores/settings.store.ts'
 
 import clsx from 'clsx'
-import type { Axis1D } from '../../shared/types/core.types'
+import type { Axis1D } from '../../shared/types/core.types.ts'
 export function Scenes({
   axis,
 }: { axis: Axis1D }) {

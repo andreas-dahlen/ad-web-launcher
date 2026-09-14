@@ -1,4 +1,4 @@
-import { assertScrollComputed, assertSliderComputed, toAxis, toOverflowSide, toType } from '@interaction/assertions/assertions'
+import { assertScrollComputed, assertSliderComputed, toAxis, toOverflowSide, toType } from '@interaction/assertions/assertions.ts'
 import { describe, expect, it } from 'vitest'
 
 

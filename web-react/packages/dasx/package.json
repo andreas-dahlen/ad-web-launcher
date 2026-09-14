@@ -1,0 +1,28 @@
+{
+  "name": "dasx",
+  "version": "1.0.0",
+  "description": "Data attribute converter",
+  "main": "dist/index.js",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "test": "vitest",
+    "coverage": "vitest run --coverage"
+
+  },
+  "keywords": [ ],
+  "type": "module",
+  "devDependencies": {
+    "@vitest/coverage-v8": "^5.0.0",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.0"
+  }
+}

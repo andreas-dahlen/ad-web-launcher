@@ -3,15 +3,15 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 
 
-import { carousel_DEFAULTS, useCarouselStore } from '@primitives/Carousel/store/useCarouselStore.hook'
+import { carousel_DEFAULTS, useCarouselStore } from '@primitives/Carousel/store/useCarouselStore.hook.ts'
 
 import {
   debugRegisterBinding,
   debugUnregisterBinding
-} from '@test/functions.debug'
-import { carouselStore } from '@primitives/Carousel/store/carousel.store'
+} from '@shared/debug/functions.debug.ts'
+import { carouselStore } from '@primitives/Carousel/store/carousel.store.ts'
 
-vi.mock('@test/functions.debug', () => ({
+vi.mock('@shared/debug/functions.debug', () => ({
   debugRegisterBinding: vi.fn(),
   debugUnregisterBinding: vi.fn()
 }))

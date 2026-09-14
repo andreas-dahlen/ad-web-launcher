@@ -1,4 +1,4 @@
-import type { Axis, Axis1D, Axis2D, InteractionType, BoxSide, Size2D, Vec2 } from '../../../shared/types/core.types'
+import type { Axis, Axis1D, Axis2D, InteractionType, BoxSide, Size2D, Vec2 } from '@shared/types/core.types.ts'
 
 
 export interface BaseInteraction {

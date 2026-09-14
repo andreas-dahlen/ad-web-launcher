@@ -3,18 +3,18 @@ import { describe, it, expect, vi, afterEach } from 'vitest'
 import {
   carouselStore,
   type CarouselBinding
-} from '@primitives/Carousel/store/carousel.store'
+} from '@primitives/Carousel/store/carousel.store.ts'
 
-import { applyCommit } from '@test/testApi'
+import { applyCommit } from '@test/testApi.ts'
 
-import { carousel_DEFAULTS } from '@primitives/Carousel/store/useCarouselStore.hook'
+import { carousel_DEFAULTS } from '@primitives/Carousel/store/useCarouselStore.hook.ts'
 
 import {
   getStoreByType,
   seedStoreByType
-} from '@test/testUtils/storeSeed.utils'
+} from '@test/testUtils/storeSeed.utils.ts'
 
-import { resetInteractionStores } from '@test/testUtils/storeReset.utils'
+import { resetInteractionStores } from '@test/testUtils/storeReset.utils.ts'
 
 
 function initTest(data: CarouselBinding = carousel_DEFAULTS) {

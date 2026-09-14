@@ -1,0 +1,30 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../.github"
+		}
+	],
+	"settings": {
+		"terminal.integrated.cwd": "${workspaceFolder}",
+		"scopesManager.localScopes": [
+			{
+				"id": "mtrkipng1asno",
+				"name": "app",
+				"patterns": [
+					"web-react/src/**"
+				]
+			},
+			{
+				"id": "mu1ryhe800jb4",
+				"name": "tools",
+				"patterns": [
+					"web-react/tools/**"
+				]
+			}
+		],
+		"cssModulesIntellisense.diagnostics.classNotUsed.enabled": false
+	}
+}

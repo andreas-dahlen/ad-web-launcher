@@ -1,21 +1,29 @@
 import { defineConfig, globalIgnores } from 'eslint/config'
-import base from './tools/eslint/config/base'
-import boundariesRules from './tools/eslint/config/boundaries.rules'
-import boundariesConfig from './tools/eslint/config/boundaries.config'
-import json from './tools/eslint/config/json'
-import local from './tools/eslint/config/local'
-import plugins from './tools/eslint/config/plugins'
-import typescript from './tools/eslint/config/typescript'
-import unicorn from './tools/eslint/config/unicorn'
+import { ignores } from './tools/lint/config/globalIgnores.ts'
+import base from './tools/lint/config/eslint/base.ts'
+// import { boundarySettings } from './tools/lint/config/boundaries/settings.ts'
+// import { appBoundaries, compilerBoundaries } from './tools/lint/config/boundaries/wrappers/eslint.ts'
+import { json } from './tools/lint/config/eslint/json.ts'
+import { local } from './tools/lint/config/eslint/local.ts'
+import { plugins } from './tools/lint/config/eslint/plugins.ts'
+// import { unusedVars } from './tools/lint/config/eslint/unusedVars'
+import { unicorn } from './tools/lint/config/eslint/unicorn.ts'
+import oxlint from 'eslint-plugin-oxlint'
+
 
 export default defineConfig([
-  globalIgnores(['**/dist/**', '**/node_modules/**', '**/*.css', '**/*.svg', '**/*.generated.ts', '**/coverage/**']),
+  globalIgnores(ignores),
+
+  // {
+  //   settings: boundarySettings
+  // },
+  // appBoundaries,
+  // compilerBoundaries,
+
   base,
-  boundariesConfig,
   plugins,
-  typescript,
-  boundariesRules,
   ...json,
-  ...local,
-  ...unicorn
+  local,
+  ...unicorn,
+  ...oxlint.configs['flat/recommended']
 ])

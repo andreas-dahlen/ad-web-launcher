@@ -1,4 +1,4 @@
-import { SceneContext, useSceneContext, type SceneContextValue } from '@primitives/Carousel/hooks/useSceneContext.hook'
+import { SceneContext, useSceneContext, type SceneContextValue } from '@primitives/Carousel/hooks/useSceneContext.hook.ts'
 import { renderHook } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 
@@ -32,13 +32,13 @@ describe('[USE SCENE CONTEXT]', () => {
       () => useSceneContext(),
       {
         wrapper: ({ children }) => (
-          <SceneContext.Provider value= { context } >
-          { children }
+          <SceneContext.Provider value={context} >
+            {children}
           </SceneContext.Provider>
         )
-  }
-  )
+      }
+    )
 
-  expect(result.current).toEqual(context)
-})
+    expect(result.current).toEqual(context)
+  })
 })

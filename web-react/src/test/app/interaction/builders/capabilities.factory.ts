@@ -1,6 +1,6 @@
-import type { Capabilities } from '@interaction/types/descriptor/base.types';
-import { merge } from '@test/testUtils/factory.utils';
-import { capabilities_DEFAULT } from '@test/app/interaction/fixtures/capabilities.fixture';
+import type { Capabilities } from '@interaction/types/descriptor/base.types.ts';
+import { merge } from '@test/testUtils/factory.utils.ts';
+import { capabilities_DEFAULT } from '@test/app/interaction/fixtures/capabilities.fixture.ts';
 
 export function createPressCapabilities(
   overrides: Partial<Capabilities> = {}): Capabilities {

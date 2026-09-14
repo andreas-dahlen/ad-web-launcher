@@ -1,0 +1,213 @@
+// src/extension.ts
+import * as vscode6 from "vscode";
+
+// src/config/resolveSettings.ts
+import path from "node:path";
+import * as vscode from "vscode";
+function createSettingsResolver(settings, output) {
+  const projectRoot = getProjectRoot(settings, output);
+  const cliFile = settings.get("cliFile");
+  if (!cliFile) {
+    output.appendLine("ERROR: cliFile setting is missing");
+    throw new Error(" ");
+  }
+  const cliPath = path.resolve(projectRoot, cliFile);
+  const compilerDirectory = path.dirname(path.dirname(cliPath));
+  return {
+    getCliSpawnPath() {
+      return cliPath;
+    },
+    getProjectRootArg() {
+      return path.relative(compilerDirectory, projectRoot);
+    }
+  };
+}
+function getProjectRoot(settings, output) {
+  const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
+  if (!workspaceFolder) {
+    output.appendLine("ERROR: workspace folder is missing");
+    throw new Error(" ");
+  }
+  const projectRoot = settings.get("projectRoot");
+  if (!projectRoot) {
+    output.appendLine("ERROR: projectRoot setting is missing");
+    throw new Error(" ");
+  }
+  return vscode.Uri.joinPath(
+    workspaceFolder.uri,
+    ...projectRoot.split("/")
+  ).fsPath;
+}
+
+// src/terminal/createTerminal.ts
+import * as vscode3 from "vscode";
+
+// src/terminal/terminal.ts
+import { spawn } from "node:child_process";
+import * as vscode2 from "vscode";
+var CompilerTerminal = class {
+  constructor(cliFile, projectRoot) {
+    this.cliFile = cliFile;
+    this.projectRoot = projectRoot;
+  }
+  cliFile;
+  projectRoot;
+  writeEmitter = new vscode2.EventEmitter();
+  compiler;
+  onDidWrite = this.writeEmitter.event;
+  write(data) {
+    this.writeEmitter.fire(
+      data.replace(/\r?\n/g, "\r\n")
+      //needed for terminal formatting
+    );
+  }
+  open() {
+    this.write("Starting Cascade Compiler...\r\n");
+    const args = [
+      this.cliFile,
+      "watch",
+      this.projectRoot
+    ];
+    this.compiler = spawn(process.execPath, args);
+    this.compiler.stdout?.on("data", (data) => {
+      this.write(data.toString());
+    });
+    this.compiler.stderr?.on("data", (data) => {
+      this.write(data.toString());
+    });
+    this.compiler.on("exit", (code) => {
+      this.write(`\r
+Compiler exited with code ${code ?? 0}\r
+`);
+      this.compiler = void 0;
+    });
+  }
+  close() {
+    this.compiler?.kill();
+    this.compiler = void 0;
+  }
+  handleInput(_data) {
+  }
+};
+
+// src/terminal/createTerminal.ts
+function createTerminal(cliFile, projectRoot) {
+  const pty = new CompilerTerminal(
+    cliFile,
+    projectRoot
+  );
+  return vscode3.window.createTerminal({
+    name: "Cascade Compiler",
+    pty
+  });
+}
+
+// src/vscode/statusBar.ts
+import "vscode";
+function updateStatusBar(statusBar, terminal) {
+  if (terminal) {
+    statusBar.text = "$(check) Cascade Compiler";
+    statusBar.tooltip = "Cascade Compiler: Active";
+    statusBar.command = "cascade.stop";
+  } else {
+    statusBar.text = "$(circle-outline) Cascade Compiler";
+    statusBar.tooltip = "Cascade Compiler: Inactive";
+    statusBar.command = "cascade.start";
+  }
+}
+
+// src/vscode/subscriptions.ts
+import * as vscode5 from "vscode";
+function createCommandSubscriptions({
+  startCompiler,
+  stopCompiler,
+  restartCompiler
+}) {
+  return [
+    vscode5.commands.registerCommand(
+      "cascade.start",
+      startCompiler
+    ),
+    vscode5.commands.registerCommand(
+      "cascade.stop",
+      stopCompiler
+    ),
+    vscode5.commands.registerCommand(
+      "cascade.restart",
+      restartCompiler
+    )
+  ];
+}
+
+// src/extension.ts
+function activate(context) {
+  const output = vscode6.window.createOutputChannel("Cascade Compiler");
+  output.appendLine("Extension loading...");
+  const statusBar = vscode6.window.createStatusBarItem(
+    vscode6.StatusBarAlignment.Left
+  );
+  let terminal;
+  context.subscriptions.push(
+    output,
+    ...createCommandSubscriptions({
+      startCompiler,
+      stopCompiler,
+      restartCompiler
+    }),
+    vscode6.window.onDidCloseTerminal((closedTerminal) => {
+      if (closedTerminal !== terminal) {
+        return;
+      }
+      output.appendLine("Stopping compiler service");
+      terminal = void 0;
+      updateStatusBar(statusBar, terminal);
+    }),
+    vscode6.workspace.onDidChangeConfiguration((event) => {
+      if (!event.affectsConfiguration("cascade")) {
+        return;
+      }
+      output.appendLine("Configuration changed");
+      restartCompiler();
+    }),
+    {
+      dispose() {
+        stopCompiler();
+      }
+    }
+  );
+  statusBar.show();
+  startCompiler();
+  function startCompiler() {
+    output.appendLine("Starting compiler service");
+    if (terminal) {
+      terminal.show();
+      return;
+    }
+    const settings = vscode6.workspace.getConfiguration(
+      "cascade"
+    );
+    const resolver = createSettingsResolver(settings, output);
+    terminal = createTerminal(
+      resolver.getCliSpawnPath(),
+      resolver.getProjectRootArg()
+    );
+    updateStatusBar(statusBar, terminal);
+    terminal.show();
+  }
+  function stopCompiler() {
+    output.appendLine("Stopping compiler service");
+    terminal?.dispose();
+    terminal = void 0;
+    updateStatusBar(statusBar, terminal);
+  }
+  function restartCompiler() {
+    stopCompiler();
+    startCompiler();
+  }
+}
+function deactivate() {
+}
+export {
+  activate,
+  deactivate
+};

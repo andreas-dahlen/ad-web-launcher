@@ -1,7 +1,7 @@
 import { renderHook } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 
-import { useSliderMotion } from '@primitives/Slider/hooks/useSliderMotion.hook'
+import { useSliderMotion } from '@primitives/Slider/hooks/useSliderMotion.hook.ts'
 
 describe('[USE SLIDER MOTION]', () => {
   function renderMotion(

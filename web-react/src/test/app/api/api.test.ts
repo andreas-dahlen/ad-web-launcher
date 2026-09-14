@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { fetchWallpapers } from '@api/wallpaper'
+import { fetchWallpapers } from '@api/wallpaper.ts'
 
 describe('[FETCH WALLPAPERS]', () => {
   beforeEach(() => {

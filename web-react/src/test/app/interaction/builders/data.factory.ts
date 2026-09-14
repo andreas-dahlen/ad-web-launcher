@@ -1,6 +1,6 @@
-import type { CarouselData, DragData, ScrollData, SliderData } from '@interaction/types/descriptor/data.types';
-import { merge } from '@test/testUtils/factory.utils';
-import { data_DEFAULT } from '@test/app/interaction/fixtures/data.fixture';
+import type { CarouselData, DragData, ScrollData, SliderData } from '@interaction/types/descriptor/data.types.ts';
+import { merge } from '@test/testUtils/factory.utils.ts';
+import { data_DEFAULT } from '@test/app/interaction/fixtures/data.fixture.ts';
 
 export function createCarouselData(
   overrides: Partial<CarouselData> = {}): CarouselData {

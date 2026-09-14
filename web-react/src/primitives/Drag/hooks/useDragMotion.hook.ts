@@ -1,5 +1,5 @@
 import { useMemo } from "react"
-import { Z } from '@config/zIndex.config';
+import { Z } from '@config/zIndex.config.ts';
 
 interface UseDragMotionProps {
   settledOffset: { x?: number; y?: number }

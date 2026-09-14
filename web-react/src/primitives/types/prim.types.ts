@@ -1,14 +1,7 @@
-import type { Axis1D, EventType, BoxSide } from '../../shared/types/core.types.ts'
-import type { DataAttributes } from '../../shared/types/utils.types.ts'
+import type { Axis1D, EventType, BoxSide } from '@shared/types/core.types.ts'
+import type { DataAttributes } from '@shared/types/utils.types.ts'
+import type { ButtonPresets, ButtonStyle, CarouselPresets, CarouselStyle, ScrollPresets, ScrollStyle, SliderPresets, SliderStyle } from 'cascade'
 import type React from 'react'
-import type { CarouselPreset } from '@generated/presets/carousel.preset.ts'
-import type { SliderPreset } from '@generated/presets/slider.preset.ts'
-import type { ScrollPreset } from '@generated/presets/scroll.preset.ts'
-import type { ButtonPreset } from '@generated/presets/button.preset.ts'
-import type { CarouselStyle } from '@generated/tokenModules/carousel.token.ts'
-import type { SliderStyle } from '@generated/tokenModules/slider.token.ts'
-import type { ScrollStyle } from '@generated/tokenModules/scroll.token.ts'
-import type { ButtonStyle } from '@generated/tokenModules/button.token.ts'
 
 //discriminating unions - capabilities
 export type SnapConfig = //default is false
@@ -45,7 +38,7 @@ export type ContentCarouselPrimProps = BasePrimProps & {
   scenes: React.ReactNode[]
   carouselDataAttrs?: DataAttributes
   styleVars?: CarouselStyle
-  presets?: CarouselPreset[]
+  presets?: CarouselPresets
 }
 
 export type SliderPrimProps = BasePrimProps & {
@@ -54,7 +47,7 @@ export type SliderPrimProps = BasePrimProps & {
   children?: React.ReactNode
   sliderDataAttrs?: DataAttributes
   styleVars?: SliderStyle
-  presets?: SliderPreset[]
+  presets?: SliderPresets
   onValueChange?: (value: number) => void
 }
 
@@ -64,7 +57,7 @@ export type ScrollPrimProps = BasePrimProps & OverflowProps & {
   children?: React.ReactNode
   scrollDataAttrs?: DataAttributes
   styleVars?: ScrollStyle
-  presets?: ScrollPreset[]
+  presets?: ScrollPresets
 }
 
 export type ButtonPrimProps = BasePrimProps & {
@@ -72,7 +65,7 @@ export type ButtonPrimProps = BasePrimProps & {
   children?: React.ReactNode
   buttonDataAttrs?: DataAttributes
   styleVars?: ButtonStyle
-  presets?: ButtonPreset[]
+  presets?: ButtonPresets
   onPressRelease?: (detail: EventType) => void
 }
 

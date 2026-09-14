@@ -1,9 +1,9 @@
 import { immer } from "zustand/middleware/immer"
 import { create } from 'zustand'
-import type { AxisDirection, Size2D } from '../../../shared/types/core.types'
-import type { StoreLayout } from '../../../shared/types/store.types'
-import type { CarouselAction } from '@interaction/types/runtime/action.types'
-import { assertNever } from '@shared/assertions/assertions'
+import type { AxisDirection, Size2D } from '@shared/types/core.types.ts'
+import type { StoreLayout } from '@shared/types/store.types.ts'
+import type { CarouselAction } from '@interaction/types/runtime/action.types.ts'
+import { assertNever } from '@shared/assertions/assertions.ts'
 export type NodeId = 0 | 1 | 2
 
 type Node = {

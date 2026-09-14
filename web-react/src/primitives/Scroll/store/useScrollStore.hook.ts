@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useShallow } from 'zustand/shallow'
-import { debugRegisterBinding, debugUnregisterBinding } from '@test/functions.debug'
-import { scrollStore, type ScrollStore } from './scroll.store'
+import { debugRegisterBinding, debugUnregisterBinding } from '@shared/debug/functions.debug.ts'
+import { scrollStore, type ScrollStore } from './scroll.store.ts'
 
 export const scroll_DEFAULTS = {
   overflowValue: 0,
@@ -38,8 +38,9 @@ export const useScrollStore = (id: string, isInitialVisible: boolean) => {
       debugUnregisterBinding(id, 'useScrollStore')
       scrollStore.getState().delete(id)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // oxlint-disable-next-line react/exhaustive-deps
   }, [id])
+
 
   return scrollStore(
     useShallow((s: ScrollStore) => s.bindings[id] ??

@@ -2,7 +2,7 @@
 
 set shell := ["bash", "-c"]
 
-workspace := "../ad-web-launcher.code-workspace"
+workspace := "ad-web-launcher.code-workspace"
 
 # ================== DEFAULT ====================
 
@@ -13,100 +13,139 @@ default: help
 audit:
     npm audit
 
+audit-all:
+    ./scripts/run-cmd.sh audit
+
 outdated:
     npm outdated
+
+outdated-all:
+    ./scripts/run-cmd.sh outdated || true
 
 doctor:
     npm doctor
 
+doctor-all:
+    ./scripts/run-cmd.sh doctor
+
 install:
     npm install
+
+install-all:
+    ./scripts/run-cmd.sh install
+    ./scripts/run-cmd.sh install-scripts ls
+
+update-all:
+    ./scripts/run-cmd.sh update
+    ./scripts/run-cmd.sh install-scripts ls
+
+install-force +packages:
+    ./scripts/install-force.sh {{ packages }}
 
 dev:
     npm run dev
 
-build:
-    npm run build
-
-build-prod:
-    vite build --mode production
-    node scripts/deploy.js
-
 preview:
     npm run preview
+
+build:
+    npm run build && ./scripts/deploy-android.sh
+
+build-all:
+    ./scripts/run-script.sh build
 
 # ==================== QUALITY ====================
 
 type:
-    npm run typecheck
+    npm run type
 
-test *args:
-    if [ -z "{{ args }}" ]; then \
-        npm run test; \
+type-all: 
+    ./scripts/run-script.sh type
+
+test project="" *args:
+    if [ -z "{{project}}" ]; then \
+        npm run test -- --project=react --project=app {{args}} --silent ; \
     else \
-        npm run test -- "src/test/{{ args }}"; \
+        npm run test -- --project={{project}} {{args}} --silent ; \
     fi
 
-coverage *args:
-    if [ -z "{{ args }}" ]; then \
-        npm run test:coverage; \
+test-all *args:
+    npm run test -- --config=vitest.coverage.config.ts --silent=passed-only --reporter=dot {{args}}
+
+# List available Vitest projects.
+test-help:
+    ./scripts/test-project.sh
+
+coverage project="" *args:
+    if [ -z "{{project}}" ]; then \
+        npm run test -- --project=react --project=app --silent=passed-only --coverage {{args}}; \
     else \
-        npm run test:coverage -- "src/test/{{ args }}"; \
+        npm run test -- --project={{project}} --silent=passed-only --coverage {{args}}; \
     fi
+
+coverage-all:
+    just test-all --coverage
 
 coverage-open:
-    npm run test:coverage:open
+    xdg-open coverage/index.html
 
 lint *args:
     if [ -z "{{ args }}" ]; then \
         npm run lint; \
     else \
-        npx eslint {{ args }}; \
+        ./scripts/lint.sh {{ args }}; \
     fi
 
-eslint: lint
+stylelint *args:
+    if [ -z "{{ args }}" ]; then \
+        npm run stylelint; \
+    else \
+        npx stylelint {{ args }}; \
+    fi
+
+eslint *args:
+    npx eslint {{ args }}
+
+oxlint *args:
+    npx oxlint {{ args }}
+
+style: stylelint
+
+ox: oxlint
+
+es: eslint
 
 knip *args:
-    npx knip --no-exit-code {{ args }}
+    npm run knip -- {{ args }}
 
-# Run the full project audit without stopping on individual failures.
-check:
-    npm run typecheck || true; \
-    npm run test -- --run || true; \
-    npx knip --no-exit-code; \
-    npm run lint || true
-
-test-script:
-    ./scripts/index.sh
-    
-# chmod +x scripts/index.sh -- enables a script
-
-# ============== STYLE TOKENS LOG ==================
-
-# tokens *args:
-#     if [ -z "{{ args }}" ]; then \
-#         npx tsx src/styleTokens/compiler/dryLogCompiler.ts; \
-#     else \
-#         npx tsx src/styleTokens/compiler/dryLogCompiler.ts {{ args }}; \
-#     fi
+# chmod +x scripts/index.sh <- an example for enabling a script
 
 # ==================== EXTENSIONS ====================
 
+# Builds and installs css-variable-completion (includes css-lsp helper).
 install-cvc:
     cd tools/extensions/css-variable-completion && npm run package
     code --install-extension tools/extensions/css-variable-completion/css-variable-completion-0.0.1.vsix --force
 
-install-tcv:
-    cd tools/extensions/token-compiler-vscode && npm run package
-    code --install-extension tools/extensions/token-compiler-vscode/token-compiler-vscode-0.0.1.vsix --force
+# Builds and installs project-lint.
+install-pl:
+    cd tools/extensions/project-lint && npm run package
+    code --install-extension tools/extensions/project-lint/project-lint-0.0.1.vsix --force
 
-build-tc:
-    cd tools/token-compiler && npm run build
+# Builds compiler and installs the compiler extension.
+install-tokens:
+    cd tools/cascade-compiler && npm run build
+    cd tools/extensions/cascade-vscode && npm run package
+    code --install-extension tools/extensions/cascade-vscode/cascade-vscode-0.0.1.vsix --force
 
-install-tokens: build-tc install-tcv
+# Builds and installs all tools.
+install-extensions: install-cvc install-pl install-tokens
 
+# Runs the compiler in watchMode. File emissions disabled.
 compiler:
-    cd tools/token-compiler && npm run cli -- exe ../..
+    cd tools/cascade-compiler && npm run cli -- watch ../..
+
+all: build-all install-extensions
 
 # ==================== WORKSPACE ====================
 
@@ -124,6 +163,11 @@ open-new:
 check-ts-v:
     npm view typescript-eslint@latest peerDependencies
     npm view @typescript-eslint/parser@latest peerDependencies
+
+# Lists the dependencies of project versus tools. Takes dependency as args.
+check-deps *args:
+    scripts/dependencies.sh {{ args }}
+
     
 # ==================== HELP ====================
 

@@ -1,5 +1,5 @@
-import type { BaseInteraction, LayoutData } from '@interaction/types/descriptor/base.types'
-import { createEl } from '@test/app/interaction/builders/domAndMeta.factory'
+import type { BaseInteraction, LayoutData } from '@interaction/types/descriptor/base.types.ts'
+import { createEl } from '@test/app/interaction/builders/domAndMeta.factory.ts'
 
 export const base_DEFAULT: {
   base: BaseInteraction

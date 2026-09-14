@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 import {
   createLane,
   layout_DEFAULTS
-} from '@data/generators/dataGenerator'
+} from '@data/generators/dataGenerator.ts'
 
 describe('[DATA GENERATORS]', () => {
   describe('createLane', () => {

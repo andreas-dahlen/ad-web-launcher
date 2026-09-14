@@ -1,0 +1,88 @@
+{
+  "publisher": "ad-web-launcher",
+  "name": "cascade-vscode",
+  "type": "module",
+  "displayName": "Cascade",
+  "description": "Integrates the Cascade Compiler with VS Code.",
+  "version": "0.0.1",
+  "private": true,
+  "engines": {
+    "vscode": "^1.134.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "scripts": {
+    "coverage": "vitest run --coverage",
+    "test": "vitest",
+    "type": "tsc --noEmit",
+    "build": "tsc && esbuild src/extension.ts --bundle --platform=node --format=esm --external:vscode --main-fields=module,main --outfile=dist/extension.js",
+    "package": "npm run build && vsce package --allow-missing-repository"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.2",
+    "@types/vscode": "^1.134.0",
+    "@vitest/coverage-v8": "^5.0.0",
+    "@vscode/vsce": "^3.9.2",
+    "esbuild": "^0.28.2",
+    "typescript": "^6.0.3",
+    "vitest": "^5.0.0"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true,
+    "@types/vscode@1.125.0": true,
+    "keytar@7.9.0": true,
+    "@vscode/vsce-sign@2.1.0": true,
+    "@vitest/coverage-v8@5.0.0": true,
+    "vitest@5.0.0": true
+  },
+  "contributes": {
+    "jsonValidation": [
+      {
+        "fileMatch": [
+          "**/cascade/**/*.json",
+          "**/cascade/**/*.jsonc"
+        ],
+        "url": "./schema/cascade.schema.json"
+      }
+    ],
+    "configuration": {
+      "properties": {
+        "cascade.cliFile": {
+          "type": "string",
+          "default": "tools/cascade-compiler/dist/cli.js",
+          "description": "Path to the compiler CLI, relative to the project root."
+        },
+        "cascade.projectRoot": {
+          "type": "string",
+          "default": ".",
+          "description": "Path to the project root, relative to the workspace."
+        }
+      }
+    },
+    "configurationDefaults": {
+      "files.associations": {
+        "cascade.config.json": "jsonc",
+        "**/cascade/**/*.json": "jsonc"
+      }
+    },
+    "commands": [
+      {
+        "command": "cascade.start",
+        "title": "Cascade: Start"
+      },
+      {
+        "command": "cascade.stop",
+        "title": "Cascade: Stop"
+      },
+      {
+        "command": "cascade.restart",
+        "title": "Cascade: Restart"
+      }
+    ]
+  }
+}

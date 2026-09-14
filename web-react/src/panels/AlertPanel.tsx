@@ -1,6 +1,6 @@
-import { alertStore } from '@stores/alert.store';
-import ButtonPrim from '@primitives/Button/ButtonPrim';
-import Frame from '@composites/Frame/Frame';
+import { alertStore } from '@stores/alert.store.ts';
+import ButtonPrim from '@primitives/Button/ButtonPrim.tsx';
+import Frame from '@composites/Frame/Frame.tsx';
 
 export default function AlertPanel() {
   const { open, message, onConfirm, onCancel, hide } = alertStore()
