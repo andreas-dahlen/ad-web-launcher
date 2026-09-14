@@ -11,7 +11,7 @@ export default defineConfig({
     ],
 
     setupFiles: [
-      'src/test/setup.utils.ts',
+      './src/test/setup.utils.ts',
     ],
     coverage: {
       provider: 'v8',
@@ -21,7 +21,7 @@ export default defineConfig({
       exclude: [
         'test/**',
         '**/*.types.ts'
-      ],
-    },
-  },
+      ]
+    }
+  }
 })

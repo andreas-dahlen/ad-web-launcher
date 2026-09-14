@@ -9,7 +9,7 @@ export function createRawVariable(
     ...overrides,
   };
 }
-export const compilerVariable_DEFAULT = {
+const compilerVariable_DEFAULT = {
   key: "bg",
   name: "backGround",
   cssName: "back-ground",

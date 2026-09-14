@@ -3,12 +3,8 @@ import { usePointerBridge } from '@interaction/adapter/usePointerBridge.hook.ts'
 import css from './Button.module.css'
 import clsx from 'clsx'
 import dasx from 'dasx'
+import { cpsx, svsx, buttonStyle } from 'cascade'
 import type { ButtonPrimProps } from '@primitives/types/prim.types.ts'
-import { svsx } from '../../shared/sxCompiler/svsx.ts'
-// import { cpsx } from '../../shared/sxCompiler/cpsx.ts'
-import { buttonStyle } from '@generated/tokenModules/button.token.ts'
-import { buttonPreset } from '@generated/presets/button.preset.ts'
-import { cpsx } from 'cascade'
 
 export default function ButtonPrim({
   id,
@@ -40,12 +36,12 @@ export default function ButtonPrim({
   return (
     <div
       className={clsx(css.button,
-        ...cpsx(presets, buttonPreset)
+        cpsx(presets, css)
       )}
       style={{
         pointerEvents: interactive ? "auto" : "none",
         position: isInFlow ? "relative" : "absolute",
-        ...svsx(styleVars ?? {}, buttonStyle)
+        ...svsx(styleVars, buttonStyle)
       }}
       ref={buttonRef}
       {...dasx({

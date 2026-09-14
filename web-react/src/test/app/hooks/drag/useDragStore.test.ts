@@ -7,10 +7,10 @@ import { drag_DEFAULTS, useDragStore } from '@primitives/Drag/store/useDragStore
 import {
   debugRegisterBinding,
   debugUnregisterBinding
-} from '@test/functions.debug.ts'
+} from '@shared/debug/functions.debug.ts'
 import { dragStore } from '@primitives/Drag/store/drag.store.ts'
 
-vi.mock('@test/functions.debug', () => ({
+vi.mock('@shared/debug/functions.debug', () => ({
   debugRegisterBinding: vi.fn(),
   debugUnregisterBinding: vi.fn()
 }))

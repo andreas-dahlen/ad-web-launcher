@@ -9,7 +9,7 @@
     "knip": "knip",
     "coverage": "vitest run --coverage",
     "dev": "vite",
-    "build": "tsc -p tsconfig.app.json && vite build",
+    "build": "tsc -p tsconfig.build.json && vite build",
     "preview": "vite preview",
     "lint": "oxlint && eslint && stylelint",
     "eslint": "eslint .",

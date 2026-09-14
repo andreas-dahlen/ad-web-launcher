@@ -36,9 +36,7 @@
     "esbuild@0.28.2": true,
     "keytar@7.9.0": true,
     "@types/vscode@1.125.0": true,
-    "@vscode/vsce-sign@2.1.0": true,
-    "@vitest/coverage-v8@4.1.11": true,
-    "vitest@4.1.11": true
+    "@vscode/vsce-sign@2.1.0": true
   },
   "contributes": {
     "configuration": {

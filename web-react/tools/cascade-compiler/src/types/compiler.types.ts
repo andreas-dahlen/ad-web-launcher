@@ -1,9 +1,8 @@
 import type { Rule } from 'postcss';
-import type { CssVarString, ValidPrefix } from '../oldSharedUtils/oldSharedCompiler.types.ts';
-
 import type { IssueGroup } from './issueCollector.types.ts';
 import type { rawTokenSchema, rawVariableSchema } from '../schema/tokenSchema.ts';
 import * as z from "zod"
+import type { CssVarString, ValidPrefix } from 'cascade';
 
 export type RawToken = z.infer<typeof rawTokenSchema>
 export type RawVariable = z.infer<typeof rawVariableSchema>

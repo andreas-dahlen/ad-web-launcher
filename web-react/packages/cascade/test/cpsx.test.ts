@@ -1,12 +1,13 @@
 import { describe, expect, it } from 'vitest'
 
-import { cpsx } from '@shared/sxCompiler/cpsx.ts'
+import { cpsx } from '../src/index.ts'
 
 describe('[CPSX]', () => {
-  it('returns an empty array when presets are undefined', () => {
+
+  it('returns an empty string when presets are undefined', () => {
     expect(
       cpsx(undefined, {})
-    ).toEqual([])
+    ).toBe('')
   })
 
   it('resolves a preset to its CSS module class', () => {
@@ -17,9 +18,7 @@ describe('[CPSX]', () => {
           primary: 'button-primary'
         }
       )
-    ).toEqual([
-      'button-primary'
-    ])
+    ).toBe('button-primary')
   })
 
   it('resolves multiple presets in order', () => {
@@ -31,15 +30,13 @@ describe('[CPSX]', () => {
           secondary: 'button-secondary'
         }
       )
-    ).toEqual([
-      'button-primary',
-      'button-secondary'
-    ])
+    ).toBe('button-primary button-secondary')
   })
 
-  it('returns an empty array when presets is empty', () => {
+  it('returns an empty string when presets is empty', () => {
     expect(
       cpsx([], {})
-    ).toEqual([])
+    ).toBe('')
   })
+
 })

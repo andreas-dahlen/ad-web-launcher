@@ -1,5 +1,5 @@
 import type { CompilerVariable } from '../types/compiler.types.ts';
-import { isValidPrefix } from '../oldSharedUtils/prefixes.ts';
+import { isValidPrefix } from 'cascade';
 import { colors, formatLogPath, paint } from './string.ts';
 
 type Print = {

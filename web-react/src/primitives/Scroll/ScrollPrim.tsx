@@ -8,11 +8,8 @@ import type { ScrollPrimProps } from '@primitives/types/prim.types.ts'
 import css from './Scroll.module.css'
 import clsx from 'clsx'
 import dasx from 'dasx'
-import { svsx } from '@shared/sxCompiler/svsx.ts'
 
-import { cpsx } from '@shared/sxCompiler/cpsx.ts'
-import { scrollStyle } from '@generated/tokenModules/scroll.token.ts'
-import { scrollPreset } from '@generated/presets/scroll.preset.ts'
+import { cpsx, scrollStyle, svsx } from 'cascade'
 
 export default function ScrollPrim({
   id,
@@ -75,10 +72,10 @@ export default function ScrollPrim({
     >
 
       <div
-        className={clsx(css.scroll, ...cpsx(presets, scrollPreset))}
+        className={clsx(css.scroll, cpsx(presets, css))}
         style={{
           ...contentStyle, pointerEvents: interactive ? 'auto' : 'none',
-          ...svsx(styleVars ?? {}, scrollStyle)
+          ...svsx(styleVars, scrollStyle)
         }}
         ref={contentRef}
         {...dasx({

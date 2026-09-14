@@ -1,17 +1,7 @@
+import { normalizeCssValue, toCssVar, toKebab } from 'cascade'
 import { describe, expect, it } from 'vitest'
+import { escapeReservedWord, prefixLeadingNumber, removeInvalidCharacters, removeWhitespace, toCamelCase, toCssVarPrefix, toPascalCase } from '../../src/utils/stringFormaters.ts'
 
-import {
-  toKebab,
-  toCssVar,
-  toCssVarPrefix,
-  toPascalCase,
-  toCamelCase,
-  removeInvalidCharacters,
-  prefixLeadingNumber,
-  escapeReservedWord,
-  normalizeCssValue,
-  removeWhitespace,
-} from '@shared/tokenUtils/stringFormaters.ts'
 
 describe('[TOKEN UTILS] string formatters', () => {
   describe('toKebab', () => {

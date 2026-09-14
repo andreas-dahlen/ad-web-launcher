@@ -70,7 +70,9 @@ export function extractData(cache: TokenCache,
 
   const jsonSchema = assembleJsonSchema()
 
-  const packageData = assemblePackageData(tokenFiles, presetFiles)
+  // const packageData = assemblePackageData(tokenFiles, presetFiles)
+
+  const packageData = assemblePackageData(groups.map(group => group.groupPath))
 
   return {
     outputData: {

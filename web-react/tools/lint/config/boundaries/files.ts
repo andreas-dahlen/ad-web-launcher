@@ -21,6 +21,12 @@ const compilerBoundaryFiles = [
   { pattern: 'tools/cascade-compiler/**/runDiagnostics.ts', category: 'runDiagnostics' },
   { pattern: 'tools/cascade-compiler/**/emitFiles.ts', category: 'emitFiles' },
   { pattern: 'tools/cascade-compiler/**/processModule.ts', category: 'processModule' },
+  { pattern: 'tools/cascade-compiler/**/processPost.ts', category: 'processPost' },
+  { pattern: 'tools/cascade-compiler/**/cli.ts', category: 'cli' },
+  { pattern: 'tools/cascade-compiler/**/entry.ts', category: 'entry' },
+  { pattern: 'tools/cascade-compiler/**/css.ts', category: 'css' },
+  { pattern: 'tools/cascade-compiler/**/build.ts', category: 'build' },
+  { pattern: 'tools/cascade-compiler/**/watch.ts', category: 'watch' },
 ]
 
 export const boundariesFiles = [

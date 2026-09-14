@@ -8,9 +8,9 @@ import { scrollStore } from '@primitives/Scroll/store/scroll.store.ts'
 import {
   debugRegisterBinding,
   debugUnregisterBinding
-} from '@test/functions.debug.ts'
+} from '@shared/debug/functions.debug.ts'
 
-vi.mock('@test/functions.debug', () => ({
+vi.mock('@shared/debug/functions.debug', () => ({
   debugRegisterBinding: vi.fn(),
   debugUnregisterBinding: vi.fn()
 }))

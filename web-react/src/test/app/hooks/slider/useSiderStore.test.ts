@@ -8,9 +8,9 @@ import { useSliderStore, slider_DEFAULTS } from '@primitives/Slider/store/useSli
 import {
   debugRegisterBinding,
   debugUnregisterBinding
-} from '@test/functions.debug.ts'
+} from '@shared/debug/functions.debug.ts'
 
-vi.mock('@test/functions.debug', () => ({
+vi.mock('@shared/debug/functions.debug', () => ({
   debugRegisterBinding: vi.fn(),
   debugUnregisterBinding: vi.fn()
 }))

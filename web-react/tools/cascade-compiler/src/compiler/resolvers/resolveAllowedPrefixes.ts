@@ -1,5 +1,4 @@
-import type { ValidPrefix } from '../../oldSharedUtils/oldSharedCompiler.types.ts';
-import { prefixPriority } from '../../oldSharedUtils/prefixes.ts';
+import { prefixPriority, type ValidPrefix } from 'cascade';
 import { createNullIssueCollector, type IssueCollector } from '../tracking/issueCollector.ts';
 
 const priority = new Map(
@@ -38,8 +37,7 @@ export function resolveAllowedPrefixes(
       [...allowed, ...alwaysAllowed]
         .filter(prefix => !exclude.includes(prefix))
     ),
-    // eslint-disable-next-line unicorn/no-array-sort
-  ].sort((a, b) => getPriority(a) - getPriority(b));
+  ].toSorted((a, b) => getPriority(a) - getPriority(b));
 
   return {
     effectiveAllowed

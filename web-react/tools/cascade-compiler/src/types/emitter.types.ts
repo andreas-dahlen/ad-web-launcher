@@ -1,13 +1,13 @@
-import type { CssVarString, ValidPrefix } from '../oldSharedUtils/oldSharedCompiler.types.ts'
+import type { CssVarString, ValidPrefix } from 'cascade'
 import type { CompilerConfig, CompilerOutputs } from './run.types.ts'
 
 export type EmitConfig = CompilerConfig & {
   outPath: string
 }
-export type CompilerFileOutput =
+type CompilerFileOutput =
   Exclude<keyof CompilerOutputs, 'pathPatches'>
 
-export type CompilerPatchOutput = "jsonc" | "css"
+type CompilerPatchOutput = "jsonc" | "css"
 
 // extractData types
 export type TokenGroupData = {

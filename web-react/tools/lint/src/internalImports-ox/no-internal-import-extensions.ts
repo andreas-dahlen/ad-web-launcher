@@ -35,10 +35,14 @@ export default defineRule({
           return
         }
 
-        if (!source.endsWith('.ts') && !source.endsWith('.tsx')) {
+        if (
+          !source.endsWith('.ts') &&
+          !source.endsWith('.tsx') &&
+          !source.endsWith('.css')
+        ) {
           context.report({
             node: node.source,
-            message: '@ imports need to end with .ts or .tsx'
+            message: '@ imports need to end with .ts, .tsx, or .css'
           })
         }
       }

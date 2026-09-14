@@ -6,4 +6,7 @@ export * from './external.ts';
 export * from './system.ts';
 
 // Automatically builds a union type: 'settings' | 'home' | 'bomb' etc.
+
+
+//currently unused.... TODO remove?
 export type IconName = keyof typeof import('.');

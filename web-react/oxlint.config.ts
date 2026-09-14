@@ -1,7 +1,7 @@
 import { defineConfig } from 'oxlint'
 
 import { boundarySettings } from './tools/lint/config/boundaries/settings.ts'
-import { appBoundaries, compilerBoundaries } from './tools/lint/config/boundaries/wrappers/oxlint.ts'
+import { appBoundaries, compilerBoundaries } from './tools/lint/config/boundaries/index.ts'
 import { ignores } from './tools/lint/config/globalIgnores.ts'
 import { unusedVars } from './tools/lint/config/oxlint/unusedVars.ts'
 import { jsPlugins } from './tools/lint/config/oxlint/plugins.ts'

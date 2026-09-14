@@ -1,5 +1,5 @@
 import type { CssTokenGroup } from '../../../types/compiler.types.ts'
-import { toCamelCase, toPascalCase } from '../../../oldSharedUtils/stringFormaters.ts'
+import { toCamelCase, toPascalCase } from '../../../utils/stringFormaters.ts'
 import { extractGroupName } from '../../../compiler/resolvers/extractGroupName.ts'
 import type { TokenData, TokenGroupData } from '../../../types/emitter.types.ts'
 

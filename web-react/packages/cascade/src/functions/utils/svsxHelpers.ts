@@ -9,11 +9,11 @@ import type { CssVarString, ValidPrefix } from '../../types/compiler.types.ts';
  * t = Theme (application theme)
  * f = Fallback (component defaults)
  */
-const prefixPriority = [
+export const prefixPriority = [
   "o", "s", "m", "p", "t", "f"
 ] as const satisfies readonly ValidPrefix[]
 
-function toKebab(str: string): string {
+export function toKebab(str: string): string {
   return str
     .replace(/([a-z0-9])([A-Z])/g, "$1-$2")
     .toLowerCase()

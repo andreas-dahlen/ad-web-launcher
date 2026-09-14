@@ -1,5 +1,5 @@
 {
-  "tokenFolder": "src/styleTokens/tokens",
+  "tokenFolder": "src/tokens",
   "outDir": "packages/cascade/src/generated",
   "outputs": {
     "extension": true,

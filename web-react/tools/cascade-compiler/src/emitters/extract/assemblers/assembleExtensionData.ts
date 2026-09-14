@@ -1,5 +1,5 @@
-import type { CssVarString } from '../../../oldSharedUtils/oldSharedCompiler.types.ts';
-import { toCssVar } from '../../../oldSharedUtils/stringFormaters.ts';
+import type { CssVarString } from 'cascade';
+import { toCssVar } from 'cascade'
 import type { ExtensionData, TokenData } from '../../../types/emitter.types.ts';
 
 export function assembleExtensionData(allVariables: CssVarString[], tokenData: TokenData[]): ExtensionData {

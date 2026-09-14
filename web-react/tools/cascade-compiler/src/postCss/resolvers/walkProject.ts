@@ -1,4 +1,5 @@
-import type { CssVarString } from '../../oldSharedUtils/oldSharedCompiler.types.ts';
+
+import type { CssVarString } from 'cascade';
 import type { PostData } from '../../types/compiler.types.ts';
 import { assert } from '../../utils/assertions.ts';
 import type { Root } from 'postcss';

@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useShallow } from 'zustand/shallow'
-import { debugRegisterBinding, debugUnregisterBinding } from '@test/functions.debug.ts'
+import { debugRegisterBinding, debugUnregisterBinding } from '@shared/debug/functions.debug.ts'
 import { scrollStore, type ScrollStore } from './scroll.store.ts'
 
 export const scroll_DEFAULTS = {

@@ -1,14 +1,10 @@
 import clsx from 'clsx';
 import dasx from 'dasx'
 import css from './Svg.module.css'
-import { svsx } from '../../shared/sxCompiler/svsx.ts';
-
-import { svgPreset, type SvgPreset } from '@generated/presets/svg.preset.ts'
-import { cpsx } from '../../shared/sxCompiler/cpsx.ts';
-import type { DynamicIconComponent } from '@shared/types/svg.ts'
+import type { DynamicIconComponent } from '@shared/types/svg.d.ts'
 import type { Icon } from '@phosphor-icons/react';
 import type { Mode } from '@composites/types/comp.types.ts';
-import { svgStyle, type SvgStyle } from '@generated/tokenModules/svg.token.ts';
+import { cpsx, svgStyle, svsx, type SvgPresets, type SvgStyle } from 'cascade';
 
 export type IconSettings = {
   Svg: Icon | DynamicIconComponent
@@ -16,7 +12,7 @@ export type IconSettings = {
   variant?: 'bold' | 'thin' | 'light' | 'regular' | 'fill' | 'duotone'
   phosphorSize?: number
   styleVars?: SvgStyle
-  presets?: SvgPreset[]
+  presets?: SvgPresets
 }
 export default function Svg({
   Svg,
@@ -53,7 +49,7 @@ export default function Svg({
       mirrored={isPhosphorIcon && flipX ? true : undefined}
       {...dasx({ mode: mode })}
       style={{ ...svsx(styleVars ?? {}, svgStyle) }}
-      className={clsx(css.svg, ...cpsx(presets, svgPreset))}
+      className={clsx(css.svg, cpsx(presets, css))}
     />
   )
 }

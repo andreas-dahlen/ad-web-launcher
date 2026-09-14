@@ -18,20 +18,20 @@ describe('[OXLINT] no-internal-import-extensions', () => {
       valid: [
         {
           code: `import foo from '@/foo.ts'`,
-          filename: 'src/foo.ts',
+          filename: 'src/foo.ts'
         },
         {
           code: `import foo from '@/foo.tsx'`,
-          filename: 'src/foo.ts',
+          filename: 'src/foo.ts'
         },
         {
           code: `import foo from './foo'`,
-          filename: 'src/foo.ts',
+          filename: 'src/foo.ts'
         },
         {
           code: `import * as foo from '@/foo'`,
-          filename: 'src/foo.ts',
-        },
+          filename: 'src/foo.ts'
+        }
       ],
       invalid: [
         {
@@ -39,11 +39,11 @@ describe('[OXLINT] no-internal-import-extensions', () => {
           filename: 'src/foo.ts',
           errors: [
             {
-              message: '@ imports need to end with .ts or .tsx',
-            },
-          ],
-        },
-      ],
+              message: "@ imports need to end with .ts, .tsx, or .css"
+            }
+          ]
+        }
+      ]
     })
   })
 })

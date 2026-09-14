@@ -8,10 +8,10 @@
  * t = Theme (application theme)
  * f = Fallback (component defaults)
  */
-const prefixPriority = [
+export const prefixPriority = [
     "o", "s", "m", "p", "t", "f"
 ];
-function toKebab(str) {
+export function toKebab(str) {
     return str
         .replace(/([a-z0-9])([A-Z])/g, "$1-$2")
         .toLowerCase();

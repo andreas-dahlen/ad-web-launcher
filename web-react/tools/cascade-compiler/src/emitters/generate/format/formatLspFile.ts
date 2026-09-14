@@ -1,4 +1,4 @@
-import { toCssVar } from '../../../oldSharedUtils/stringFormaters.ts';
+import { toCssVar } from 'cascade';
 import type { FormatFileResult, LspData } from '../../../types/emitter.types.ts';
 
 

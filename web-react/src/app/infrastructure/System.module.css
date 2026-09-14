@@ -11,11 +11,10 @@
 .frame {
   border-radius: 28px;
   box-shadow:
-    0 0 0px 10px var(--_col-neutral-dark-2);
+    0 0 0 10 var(--_col-neutral-dark-2);
   overflow: hidden;
   display: flex;
   justify-content: center;
-  background: var(--fallback-ui-bg);
 }
 
 .loading {

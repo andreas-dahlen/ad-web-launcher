@@ -1,4 +1,4 @@
-import { log } from '../../../test/functions.debug.ts'
+import { log } from '../../debug/functions.debug.ts'
 import { immer } from 'zustand/middleware/immer'
 import { create } from 'zustand'
 import { APP_CONFIG } from '@config/app.config.ts'

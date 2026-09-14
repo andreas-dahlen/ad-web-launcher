@@ -1,16 +1,4 @@
-
-// const boundariesPolicy = {
-//   default: 'disallow',
-
 import type { BoundaryRule } from './lint.types.ts'
-
-
-//   policies: [
-//     // ...
-//   ] as const,
-// }
-
-
 
 export const appRules: {
   'boundaries/dependencies': BoundaryRule
@@ -87,7 +75,6 @@ export const appRules: {
             to: [
               { element: { type: "composites", captured: { mod: "types" } } },
               { element: { type: "shared", captured: { mod: "sxCompiler" } } },
-              { element: { type: "styleTokens", captured: { mod: "generated" } } }
             ]
           }
         },
@@ -106,10 +93,6 @@ export const appRules: {
               { element: { type: "shared", captured: { mod: "state" } }, file: { categories: "stores" } }
             ]
           }
-        },
-        {
-          from: { element: { type: "composites", captured: { mod: "types" } }, files: { categories: "types" } },
-          allow: { to: { element: { type: "styleTokens", captured: { mod: "generated" } } } }
         },
         // ----------------------------------
         // DATA
@@ -224,14 +207,8 @@ export const appRules: {
               { element: { type: "composites", captured: { mod: "styleVars" } } },
               { element: { type: "shared", captured: { mod: "sxCompiler" } } },
               { element: { type: "shared", captured: { mod: "state" } }, file: { categories: "stores" } },
-              { element: { type: "styleTokens", captured: { mod: "generated" } } }
             ]
           }
-        },
-
-        {
-          from: { element: { type: "primitives", captured: { mod: "types" } }, file: { categories: "types" } },
-          allow: { to: { element: { type: "styleTokens", captured: { mod: "generated" } } } }
         },
         // ----------------------------------
         // SHARED
@@ -248,26 +225,6 @@ export const appRules: {
         {
           from: { element: { type: "shared", captured: { mod: "sxCompiler" } } },
           allow: { to: { element: { type: "shared", captured: { mod: "tokenUtils" } } } }
-        },
-        // ----------------------------------
-        // styleTokens
-        // ----------------------------------
-
-        {
-          from: { element: { type: "styleTokens", captured: { mod: "*" } } },
-          allow: { to: { file: { categories: "types" } } }
-        },
-
-        {
-          from: { element: { type: "styleTokens", captured: { mod: "generated" } } },
-          allow: {
-            to: [
-              { element: { type: "shared", captured: { mod: "tokenUtils" } }, file: { categories: "types" } },
-              { element: { type: "blocks" } },
-              { element: { type: "primitives", captured: { mod: "*" } } },
-
-            ]
-          }
         },
 
         // // ----------------------------------

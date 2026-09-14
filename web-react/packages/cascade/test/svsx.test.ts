@@ -1,10 +1,8 @@
-import { describe, expect, it, vi } from 'vitest'
+import { describe, expect, it } from 'vitest'
 
-import { svsx } from '@shared/sxCompiler/svsx.ts'
-import { prefixPriority } from '@shared/tokenUtils/prefixes.ts'
-import type {
-  TokenComponent
-} from '@shared/tokenUtils/compiler.types.ts'
+import { svsx } from '../src/index.ts'
+import { prefixPriority } from '../src/functions/utils/svsxHelpers.ts'
+import type { TokenComponent } from '../src/index.ts'
 
 const component: TokenComponent = {
   component: 'button',
@@ -77,11 +75,7 @@ describe('[SVSX]', () => {
     }
   })
 
-  it('rejects a prefix that is not in the prefix authority', () => {
-    const warn = vi
-      .spyOn(console, 'warn')
-      .mockImplementation(() => { })
-
+  it('ignores a prefix that is not in the prefix authority', () => {
     expect(
       svsx(
         {
@@ -90,19 +84,9 @@ describe('[SVSX]', () => {
         component
       )
     ).toEqual({})
-
-    expect(warn).toHaveBeenCalledWith(
-      '[svsx] Invalid prefix "x".'
-    )
-
-    warn.mockRestore()
   })
 
-  it('rejects a valid prefix when the variable does not allow it', () => {
-    const warn = vi
-      .spyOn(console, 'warn')
-      .mockImplementation(() => { })
-
+  it('ignores a valid prefix when the variable does not allow it', () => {
     expect(
       svsx(
         {
@@ -111,12 +95,6 @@ describe('[SVSX]', () => {
         component
       )
     ).toEqual({})
-
-    expect(warn).toHaveBeenCalledWith(
-      '[svsx] Prefix "s" not allowed for "padding".'
-    )
-
-    warn.mockRestore()
   })
 
   it('supports named groups', () => {
@@ -176,11 +154,7 @@ describe('[SVSX]', () => {
     ).toEqual({})
   })
 
-  it('warns and ignores an unknown primary variable', () => {
-    const warn = vi
-      .spyOn(console, 'warn')
-      .mockImplementation(() => { })
-
+  it('ignores an unknown primary variable', () => {
     expect(
       svsx(
         {
@@ -189,19 +163,9 @@ describe('[SVSX]', () => {
         component
       )
     ).toEqual({})
-
-    expect(warn).toHaveBeenCalledWith(
-      '[svsx] Unknown style key "doesNotExist" in "button".'
-    )
-
-    warn.mockRestore()
   })
 
-  it('warns and ignores an unknown named group', () => {
-    const warn = vi
-      .spyOn(console, 'warn')
-      .mockImplementation(() => { })
-
+  it('ignores an unknown named group', () => {
     expect(
       svsx(
         {
@@ -212,19 +176,9 @@ describe('[SVSX]', () => {
         component
       )
     ).toEqual({})
-
-    expect(warn).toHaveBeenCalledWith(
-      '[svsx] Unknown group "thumbz".'
-    )
-
-    warn.mockRestore()
   })
 
-  it('warns and returns empty output when the primary group is missing', () => {
-    const warn = vi
-      .spyOn(console, 'warn')
-      .mockImplementation(() => { })
-
+  it('returns empty output when the primary group is missing', () => {
     const brokenComponent: TokenComponent = {
       ...component,
       component: 'missing'
@@ -238,11 +192,5 @@ describe('[SVSX]', () => {
         brokenComponent
       )
     ).toEqual({})
-
-    expect(warn).toHaveBeenCalledWith(
-      '[svsx] Missing primary group "missing".'
-    )
-
-    warn.mockRestore()
   })
 })

@@ -7,9 +7,7 @@
     "coverage": "vitest run --coverage",
     "type": "tsc --noEmit"
   },
-  "dependencies": {
-    "jsonc-parser": "^3.3.1"
-  },
+  "dependencies": { },
   "devDependencies": {
     "@types/node": "^26.2.0",
     "@vitest/coverage-v8": "^5.0.0",

@@ -1,15 +1,21 @@
-import type { PackageData, PresetFileData, TokenGroupData } from '../../../types/emitter.types.ts';
+import { extractGroupName } from '../../../compiler/resolvers/extractGroupName.ts';
+import type { PackageData } from '../../../types/emitter.types.ts';
 
 
-export function assemblePackageData(tokenFiles: TokenGroupData[], presetFiles: PresetFileData[]): PackageData {
+export function assemblePackageData(
+  groupPaths: string[],
+): PackageData {
+  const fileNames = groupPaths.flatMap(groupPath => {
+    const name = extractGroupName(groupPath)
 
-  const fileNames: string[] = Array.from(tokenFiles, file => file.outputFile);
+    return [
+      `presets/${name}.preset.ts`,
+      `tokenModules/${name}.token.ts`,
+    ]
+  })
 
-  for (const file of presetFiles) {
-    fileNames.push(file.outputFile)
-  }
   return {
     fileNames,
-    outputFile: "index.ts"
+    outputFile: 'index.ts',
   }
 }

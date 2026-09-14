@@ -8,7 +8,7 @@ import type {
   CssTokenGroup,
   PresetResetData,
 } from '../../src/types/compiler.types.ts'
-import type { CssVarString } from '../../src/oldSharedUtils/oldSharedCompiler.types.ts'
+import type { CssVarString } from 'cascade'
 
 function createRule() {
   const root = postcss.parse(`

@@ -5,6 +5,10 @@ const config: KnipConfig = {
     '.': {
       project: [
         'src/**/*.{ts,tsx}',
+        '*.config.ts',
+      ],
+      entry: [
+        'vitest.coverage.config.ts',
       ],
     },
 
@@ -22,7 +26,8 @@ const config: KnipConfig = {
         'src/**/*.ts',
       ],
       entry: [
-        'src/index.ts'
+        'src/index.ts',
+        'src/generated/metadata/lsp.ts'
       ]
     },
 
@@ -31,7 +36,7 @@ const config: KnipConfig = {
         '**/*.ts',
       ],
       entry: [
-        'custom/**/*-plugin.ts',
+        'src/**/*-plugin.ts',
       ],
     },
 
@@ -49,7 +54,7 @@ const config: KnipConfig = {
         'src/**/*.ts',
       ],
       entry: [
-        'cli.ts'
+        'src/**/cli.ts'
       ]
     },
 
@@ -60,6 +65,11 @@ const config: KnipConfig = {
     },
 
     'tools/extensions/cascade-vscode': {
+      project: [
+        'src/**/*.ts',
+      ],
+    },
+    'tools/extensions/project-lint': {
       project: [
         'src/**/*.ts',
       ],

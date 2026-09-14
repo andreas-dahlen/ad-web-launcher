@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import type { TokenData } from '../../../src/types/emitter.types.ts'
 import { assembleExtensionData } from '../../../src/emitters/extract/assemblers/assembleExtensionData.ts'
-import type { CssVarString, ValidPrefix } from '../../../src/oldSharedUtils/oldSharedCompiler.types.ts'
+import type { CssVarString, ValidPrefix } from 'cascade'
 
 function createToken(
   overrides: Partial<TokenData> = {},

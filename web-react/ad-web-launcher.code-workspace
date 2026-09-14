@@ -11,22 +11,17 @@
 		"terminal.integrated.cwd": "${workspaceFolder}",
 		"scopesManager.localScopes": [
 			{
-				"id": "mtrkf31rbr42y",
-				"name": "tools",
-				"patterns": [
-					"web-react/tools/lint/**",
-					"web-react/tools/plugins/**",
-					"web-react/tools/cascade/**",
-					"web-react/tools/extensions/cascade-vscode/**",
-					"web-react/tools/extensions/project-lint/**",
-					"web-react/tools/extensions/css-variable-completion/**"
-				]
-			},
-			{
 				"id": "mtrkipng1asno",
 				"name": "app",
 				"patterns": [
 					"web-react/src/**"
+				]
+			},
+			{
+				"id": "mu1ryhe800jb4",
+				"name": "tools",
+				"patterns": [
+					"web-react/tools/**"
 				]
 			}
 		],

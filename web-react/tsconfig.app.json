@@ -33,7 +33,7 @@
     "resolveJsonModule": true
   },
   "include": [
-    "src",
-    "vite-env.d.ts"
-  ]
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "vite-env.d.ts" ]
 }

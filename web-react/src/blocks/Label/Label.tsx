@@ -1,11 +1,8 @@
-import { svsx } from '../../shared/sxCompiler/svsx.ts'
 import clsx from 'clsx'
 import css from './Label.module.css'
 import type { Mode } from '@composites/types/comp.types.ts'
 import type { BoxSide } from '../../shared/types/core.types.ts'
-import { cpsx } from '../../shared/sxCompiler/cpsx.ts'
-import { labelPreset, type LabelPreset } from '@generated/presets/label.preset.ts'
-import { labelStyle, type LabelStyle } from '@generated/tokenModules/label.token.ts'
+import { cpsx, labelStyle, svsx, type LabelPresets, type LabelStyle } from 'cascade'
 import type { ElementType } from 'react'
 
 export type LabelSettings = {
@@ -14,7 +11,7 @@ export type LabelSettings = {
   el?: ElementType
   position?: BoxSide | "center"
   styleVars?: LabelStyle
-  presets?: LabelPreset[]
+  presets?: LabelPresets
 }
 export default function Label({
   msg,
@@ -37,8 +34,8 @@ export default function Label({
   return (
     <div className={clsx(css.label,
       positionClass,
-      ...cpsx(presets, labelPreset))}
-      style={svsx(styleVars ?? {}, labelStyle)}>
+      cpsx(presets, css))}
+      style={svsx(styleVars, labelStyle)}>
 
       <Element>{msg}</Element>
     </div>

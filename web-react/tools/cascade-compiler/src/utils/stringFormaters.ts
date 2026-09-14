@@ -1,16 +1,5 @@
-import type { CssVarString } from './oldSharedCompiler.types.ts';
+import { type CssVarString, toKebab } from 'cascade';
 import { reserved } from './reservedList.ts';
-
-export function toKebab(str: string): string {
-  return str
-    .replace(/([a-z0-9])([A-Z])/g, "$1-$2")
-    .toLowerCase()
-}
-
-export function toCssVar(prefix: string, infix: string, suffix: string): CssVarString {
-
-  return `--${toKebab(prefix)}-${toKebab(infix)}-${toKebab(suffix)}`
-}
 
 export function toCssVarPrefix(prefix: string, infix: string): CssVarString {
   return `--${toKebab(prefix)}-${toKebab(infix)}-`;
@@ -41,10 +30,6 @@ export function escapeReservedWord(name: string): string {
     return `_${name}`;
   }
   return name;
-}
-
-export function normalizeCssValue(value: unknown): string {
-  return String(value).trim().replace(/;\s*$/, "");
 }
 
 export function removeWhitespace(value: string): string {

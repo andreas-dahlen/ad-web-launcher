@@ -1,5 +1,5 @@
 import { extractGroupName } from '../../../compiler/resolvers/extractGroupName.ts';
-import { toCamelCase, toPascalCase } from '../../../oldSharedUtils/stringFormaters.ts';
+import { toCamelCase, toPascalCase } from '../../../utils/stringFormaters.ts';
 import type { CssData } from '../../../types/compiler.types.ts';
 import type { PresetFileData } from '../../../types/emitter.types.ts';
 
