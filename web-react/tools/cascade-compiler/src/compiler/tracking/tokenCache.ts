@@ -73,13 +73,11 @@ export function createTokenCache(initialGroups: TokenGroup[], config: CompilerCo
     },
 
     getAllPostData(): PostData[] {
-      // eslint-disable-next-line unicorn/prefer-iterator-to-array
-      return [...postData.values()]
+      return postData.values().toArray()
     },
 
     getCssPaths(): string[] {
-      // eslint-disable-next-line unicorn/prefer-iterator-to-array
-      return [...groupByCssPath.keys()]
+      return groupByCssPath.keys().toArray()
     },
     getGroupByTokenPath(tokenPath: string) {
       return groupByTokenPath.get(tokenPath)
@@ -90,8 +88,7 @@ export function createTokenCache(initialGroups: TokenGroup[], config: CompilerCo
     },
 
     getCssDataGroups(): CssDataTokenGroup[] {
-      // eslint-disable-next-line unicorn/prefer-iterator-to-array
-      const groups = [...groupByCssPath.values()]
+      const groups = groupByCssPath.values().toArray()
       assert.groupsHaveCssData(groups)
       return groups
     },

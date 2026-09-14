@@ -10,12 +10,12 @@ import type {
 export const carouselStyle = {
   component: "carousel",
 
-  vars: {
-    carousel: {
-      width: { name: "width", allowed: ["o", "p", "f"] },
-      height: { name: "height", allowed: ["o", "p", "f"] },
-      background: { name: "background", allowed: ["o", "p", "f"] }
-    }
+  vars: {   
+   carousel: {
+          width: { name: "width", allowed: ["o","p","f"]},
+         height: { name: "height", allowed: ["o","p","f"]},
+         background: { name: "background", allowed: ["o","p","f"]} 
+}
   }
 } as const satisfies TokenComponent;
 

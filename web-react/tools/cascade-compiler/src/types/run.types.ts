@@ -16,6 +16,7 @@ export type CompilerConfig = {
 type InternalConfig = {
   willEmitCss: boolean
   initialProcessing: boolean
+  buildPackage: boolean
 }
 export type CompilerOutputs = Required<z.infer<typeof compilerOutputsSchema>>
 
@@ -34,6 +35,7 @@ export type CompilerInternalConfig = {
   trace?: CompilerLogs["trace"]
   willEmitCss?: boolean
   initialProcessing?: boolean
+  buildPackage?: boolean
   outputs?: Partial<CompilerOutputs>
 }
 

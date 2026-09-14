@@ -30,5 +30,6 @@ switch (command) {
   default:
     console.log('Options:')
     console.log('  watch <rootDir>                Use specified root directory')
-    console.log('  watch <rootDir> <tokenFolder>   Use optional tokenFolder')
+    console.log('  build <rootDir>                Use specified root directory')
+    console.log('  css <rootDir>                Use specified root directory')
 }

@@ -10,18 +10,18 @@ import type {
 export const svgStyle = {
   component: "svg",
 
-  vars: {
-    svg: {
-      modeOffCol: { name: "mode-off-col", allowed: ["o", "m", "p", "f"] },
-      modeOnCol: { name: "mode-on-col", allowed: ["o", "m", "p", "f"] },
-      modeDefaultCol: { name: "mode-default-col", allowed: ["o", "m", "p", "f"] },
-      modeDisabledCol: { name: "mode-disabled-col", allowed: ["o", "m", "p", "f"] },
-      width: { name: "width", allowed: ["o", "p", "f"] },
-      height: { name: "height", allowed: ["o", "p", "f"] },
-      flipX: { name: "flip-x", allowed: ["o", "p", "f"] },
-      flipY: { name: "flip-y", allowed: ["o", "p", "f"] },
-      rotate: { name: "rotate", allowed: ["o", "p", "f"] }
-    }
+  vars: {   
+   svg: {
+          modeOffCol: { name: "mode-off-col", allowed: ["o","m","p","f"]},
+         modeOnCol: { name: "mode-on-col", allowed: ["o","m","p","f"]},
+         modeDefaultCol: { name: "mode-default-col", allowed: ["o","m","p","f"]},
+         modeDisabledCol: { name: "mode-disabled-col", allowed: ["o","m","p","f"]},
+         width: { name: "width", allowed: ["o","p","f"]},
+         height: { name: "height", allowed: ["o","p","f"]},
+         flipX: { name: "flip-x", allowed: ["o","p","f"]},
+         flipY: { name: "flip-y", allowed: ["o","p","f"]},
+         rotate: { name: "rotate", allowed: ["o","p","f"]} 
+}
   }
 } as const satisfies TokenComponent;
 

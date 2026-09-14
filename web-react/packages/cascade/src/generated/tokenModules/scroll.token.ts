@@ -10,17 +10,17 @@ import type {
 export const scrollStyle = {
   component: "scroll",
 
-  vars: {
-    knob: {
-      bg: { name: "bg", allowed: ["o", "p", "f"] },
-      width: { name: "width", allowed: ["o", "p", "f"] },
-      height: { name: "height", allowed: ["o", "p", "f"] }
-    },
-    scroll: {
-      height: { name: "height", allowed: ["o", "p", "f"] },
-      width: { name: "width", allowed: ["o", "p", "f"] },
-      opacity: { name: "opacity", allowed: ["o", "p", "f"] }
-    }
+  vars: {   
+   knob: {
+          bg: { name: "bg", allowed: ["o","p","f"]},
+         width: { name: "width", allowed: ["o","p","f"]},
+         height: { name: "height", allowed: ["o","p","f"]} 
+},
+   scroll: {
+          height: { name: "height", allowed: ["o","p","f"]},
+         width: { name: "width", allowed: ["o","p","f"]},
+         opacity: { name: "opacity", allowed: ["o","p","f"]} 
+}
   }
 } as const satisfies TokenComponent;
 

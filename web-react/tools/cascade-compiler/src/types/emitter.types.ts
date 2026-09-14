@@ -31,9 +31,7 @@ type VarData = {
 
 
 export type PresetFileData = {
-  presetName: string
   typeName: string
-  cssImport: string
   selectors: string[];
   outputFile: string
 };
@@ -57,6 +55,11 @@ export type ExtensionData = {
   outputFile: string
 }
 
+export type PackageData = {
+  fileNames: string[]
+  outputFile: string
+}
+
 export type EmitData = {
   presetFiles: PresetFileData[]
   tokenFiles: TokenGroupData[]
@@ -64,6 +67,7 @@ export type EmitData = {
   metadata: GroupMetadata[]
   extensionData: ExtensionData
   lspData: LspData
+  packageData: PackageData
 }
 export type GeneratedOutput = {
   files: FormatFileResult[]

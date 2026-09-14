@@ -46,6 +46,5 @@ export function compileTokenGroups(
       group.tokens.push(result.token);
     }
   }
-  // eslint-disable-next-line unicorn/prefer-iterator-to-array
-  return { groups: [...groups.values()], issues };
+  return { groups: groups.values().toArray(), issues };
 }

@@ -1,4 +1,3 @@
-// @knip-ignore
 /**
  * HELPER: Simple resolver function to pull an icon component
  * cleanly by its registered string name.

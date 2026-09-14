@@ -110,6 +110,11 @@ describe('[DIAGNOSTICS]', () => {
             written: [],
             skipped: []
           },
+          package: {
+            written: [],
+            skipped: []
+          },
+
           tokens: {
             written: [],
             skipped: []
@@ -367,6 +372,10 @@ describe('[DIAGNOSTICS]', () => {
           skipped: [],
         },
         schema: {
+          skipped: [],
+          written: [],
+        },
+        package: {
           skipped: [],
           written: [],
         },

@@ -8,14 +8,15 @@ import { patchFiles } from './write/patchFiles.ts';
 import type { CompilerRun } from '../compiler/tracking/compilerRun.ts';
 
 export function emitFiles(cache: TokenCache, run: CompilerRun): EmitResult {
+  const config = cache.getEmitConfig()
 
   const { extractResult, outputData } = extractData(cache, run)
 
-  const { files, patches } = generateOutput(outputData, cache.getConfig())
+  const { files, patches } = generateOutput(outputData, config)
 
-  const patchResult = patchFiles(patches)
+  const patchResult = patchFiles(patches, config.outPath)
 
-  const writeResult = writeFiles(files)
+  const writeResult = writeFiles(files, config.outPath)
 
   return {
     extractResult,

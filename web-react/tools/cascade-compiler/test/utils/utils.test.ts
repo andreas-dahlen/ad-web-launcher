@@ -11,8 +11,7 @@ describe('[CONSOLE]', () => {
   describe('formatLogPath', () => {
     it('normalizes Windows separators', () => {
       expect(
-        // eslint-disable-next-line unicorn/prefer-string-raw
-        formatLogPath('C:\\project\\src\\Button\\Button.module.css'),
+        formatLogPath(String.raw`C:\project\src\Button\Button.module.css`),
       ).toBe('Button/Button.module.css         ')
     })
 

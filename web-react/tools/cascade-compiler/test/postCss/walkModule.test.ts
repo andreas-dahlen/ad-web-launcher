@@ -30,8 +30,7 @@ describe('[POSTCSS]', () => {
           ['button-first', 'button-second'],
         )
 
-        // eslint-disable-next-line unicorn/prefer-iterator-to-array
-        expect([...result.rules.keys()]).toEqual([
+        expect(result.rules.keys().toArray()).toEqual([
           '.button-first',
           '.button-second',
         ])
@@ -67,8 +66,7 @@ describe('[POSTCSS]', () => {
 
         const result = walkModule(root, ['button'])
 
-        // eslint-disable-next-line unicorn/prefer-iterator-to-array
-        expect([...result.rules.keys()]).toEqual([
+        expect(result.rules.keys().toArray()).toEqual([
           '.button',
         ])
       })

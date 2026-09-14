@@ -6,8 +6,6 @@ import type {
   CssTokenGroup,
 } from '../../../src/types/compiler.types.ts'
 
-const outPath = '/generated'
-
 function createToken(
   overrides: Partial<CompilerToken> = {},
 ): CompilerToken {
@@ -43,7 +41,7 @@ describe('[EMITTER]', () => {
     it('assembles metadata from a token group', () => {
       const group = createGroup()
 
-      expect(assembleMetadata(group, outPath)).toEqual({
+      expect(assembleMetadata(group)).toEqual({
         name: 'button',
         groupPath: '/tokens/button',
         tokenFiles: [
@@ -51,7 +49,7 @@ describe('[EMITTER]', () => {
           '/tokens/button/hover.jsonc',
         ],
         cssFile: '/components/Button/Button.module.css',
-        outputFile: '/generated/metadata/metadata.jsonc',
+        outputFile: 'metadata/metadata.jsonc',
       })
     })
 
@@ -61,7 +59,7 @@ describe('[EMITTER]', () => {
       })
 
       expect(
-        assembleMetadata(group, outPath).name,
+        assembleMetadata(group).name,
       ).toBe('button')
     })
 
@@ -69,7 +67,7 @@ describe('[EMITTER]', () => {
       const group = createGroup()
       const originalTokens = [...group.tokens]
 
-      const result = assembleMetadata(group, outPath)
+      const result = assembleMetadata(group)
 
       expect(result.tokenFiles).toEqual(
         originalTokens.map(token => token.tokenPath),
@@ -80,12 +78,11 @@ describe('[EMITTER]', () => {
 
     it('creates the metadata output path', () => {
       const result = assembleMetadata(
-        createGroup(),
-        outPath,
+        createGroup()
       )
 
       expect(result.outputFile).toBe(
-        '/generated/metadata/metadata.jsonc',
+        'metadata/metadata.jsonc',
       )
     })
   })

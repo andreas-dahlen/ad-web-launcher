@@ -11,7 +11,8 @@ export function analyzeWriteResult(
     meta: { written: [], skipped: [] },
     lsp: { written: [], skipped: [] },
     extension: { written: [], skipped: [] },
-    schema: { written: [], skipped: [] }
+    schema: { written: [], skipped: [] },
+    package: { written: [], skipped: [] }
   }
 
   const written = result?.written ?? []

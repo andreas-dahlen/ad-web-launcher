@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
-import { beforeEach, afterEach, describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { patchFiles } from '../../src/emitters/write/patchFiles.ts'
 
 describe('[EMITTER]', () => {
@@ -22,30 +22,25 @@ describe('[EMITTER]', () => {
 
   describe('patchFiles', () => {
     it('skips files that do not exist', () => {
-      const filePath = path.join(
+      const result = patchFiles(
+        [
+          {
+            outputFile: 'missing.css',
+            content: '/* generated */',
+            kind: 'css',
+          },
+        ],
         tempDir,
-        'missing.css',
       )
-
-      const result = patchFiles([
-        {
-          outputFile: filePath,
-          content: '/* generated */',
-          kind: 'css',
-        },
-      ])
 
       expect(result).toEqual({
         written: [],
-        skipped: [{ kind: "css", outputFile: filePath }],
+        skipped: [{ kind: 'css', outputFile: 'missing.css' }],
       })
     })
 
     it('skips files that already contain the patch', () => {
-      const filePath = path.join(
-        tempDir,
-        'button.css',
-      )
+      const filePath = path.join(tempDir, 'button.css')
 
       const content = `/* generated */
 .button {
@@ -54,27 +49,27 @@ describe('[EMITTER]', () => {
 
       fs.writeFileSync(filePath, content)
 
-      const result = patchFiles([
-        {
-          outputFile: filePath,
-          content: '/* generated */',
-          kind: 'css',
-        },
-      ])
+      const result = patchFiles(
+        [
+          {
+            outputFile: 'button.css',
+            content: '/* generated */',
+            kind: 'css',
+          },
+        ],
+        tempDir,
+      )
 
       expect(result).toEqual({
         written: [],
-        skipped: [{ kind: "css", outputFile: filePath }],
+        skipped: [{ kind: 'css', outputFile: 'button.css' }],
       })
 
       expect(fs.readFileSync(filePath, 'utf8')).toBe(content)
     })
 
     it('prepends a patch to an existing file', () => {
-      const filePath = path.join(
-        tempDir,
-        'button.css',
-      )
+      const filePath = path.join(tempDir, 'button.css')
 
       const current = `.button {
   color: red;
@@ -82,16 +77,19 @@ describe('[EMITTER]', () => {
 
       fs.writeFileSync(filePath, current)
 
-      const result = patchFiles([
-        {
-          outputFile: filePath,
-          content: '/* generated */',
-          kind: 'css',
-        },
-      ])
+      const result = patchFiles(
+        [
+          {
+            outputFile: 'button.css',
+            content: '/* generated */',
+            kind: 'css',
+          },
+        ],
+        tempDir,
+      )
 
       expect(result).toEqual({
-        written: [{ kind: "css", outputFile: filePath }],
+        written: [{ kind: 'css', outputFile: 'button.css' }],
         skipped: [],
       })
 
@@ -102,15 +100,8 @@ ${current}`,
     })
 
     it('processes multiple files independently', () => {
-      const updatedPath = path.join(
-        tempDir,
-        'updated.css',
-      )
-
-      const skippedPath = path.join(
-        tempDir,
-        'skipped.css',
-      )
+      const updatedPath = path.join(tempDir, 'updated.css')
+      const skippedPath = path.join(tempDir, 'skipped.css')
 
       fs.writeFileSync(
         updatedPath,
@@ -122,29 +113,32 @@ ${current}`,
         '/* generated */\n.button {}',
       )
 
-      const result = patchFiles([
-        {
-          outputFile: updatedPath,
-          content: '/* generated */',
-          kind: 'css',
-        },
-        {
-          outputFile: skippedPath,
-          content: '/* generated */',
-          kind: 'css',
-        },
-        {
-          outputFile: path.join(tempDir, 'missing.css'),
-          content: '/* generated */',
-          kind: 'css',
-        },
-      ])
+      const result = patchFiles(
+        [
+          {
+            outputFile: 'updated.css',
+            content: '/* generated */',
+            kind: 'css',
+          },
+          {
+            outputFile: 'skipped.css',
+            content: '/* generated */',
+            kind: 'css',
+          },
+          {
+            outputFile: 'missing.css',
+            content: '/* generated */',
+            kind: 'css',
+          },
+        ],
+        tempDir,
+      )
 
       expect(result).toEqual({
-        written: [{ kind: "css", outputFile: updatedPath }],
+        written: [{ kind: 'css', outputFile: 'updated.css' }],
         skipped: [
-          { kind: "css", outputFile: skippedPath },
-          { kind: "css", outputFile: path.join(tempDir, 'missing.css') },
+          { kind: 'css', outputFile: 'skipped.css' },
+          { kind: 'css', outputFile: 'missing.css' },
         ],
       })
     })

@@ -3,9 +3,10 @@ import { assemblePresetData } from './assemblers/assemblePresetData.ts'
 import { assembleLspData } from './assemblers/assembleLspData.ts'
 import { assembleMetadata } from './assemblers/assembleMetadata.ts'
 import { assembleExtensionData } from './assemblers/assembleExtensionData.ts'
+import { assemblePackageData } from './assemblers/assemblaPackageData.ts'
+import { assembleJsonSchema } from './assemblers/assembleJsonSchema.ts'
 import type { TokenCache } from '../../compiler/tracking/tokenCache.ts'
 import type { CompilerRun } from '../../compiler/tracking/compilerRun.ts'
-import { assembleJsonSchema } from './assemblers/assembleJsonSchema.ts'
 import type { EmitData, ExtractResult, GroupMetadata, PresetFileData, TokenGroupData } from '../../types/emitter.types.ts'
 
 type ExtractData = {
@@ -26,19 +27,14 @@ export function extractData(cache: TokenCache,
   const groups = cache.getCssDataGroups()
   const runGroups = cache.getCssDataGroupsByPaths(run.getProcessedPaths())
   const postData = cache.getAllPostData()
-  const config = cache.getEmitConfig()
+  // const config = cache.getEmitConfig()
 
   /*---------------------------------------
         all groups
   -------------------------------------*/
   for (const group of groups) {
-
-    const tokenResult = assembleTokenData(group, config.outPath)
-    if (tokenResult) tokenData.push(tokenResult)
-
-    const metaResult = assembleMetadata(group, config.outPath)
-    if (metaResult) metadata.push(metaResult)
-
+    tokenData.push(assembleTokenData(group))
+    metadata.push(assembleMetadata(group))
   }
 
   /*---------------------------------------
@@ -52,7 +48,7 @@ export function extractData(cache: TokenCache,
       tokenFiles.push(tokenFile)
     }
 
-    const presetResult = assemblePresetData(runGroup.cssData, config.outPath)
+    const presetResult = assemblePresetData(runGroup.cssData)
     if (presetResult) { presetFiles.push(presetResult) }
     else { omittedPresetFiles.add(runGroup.cssPath) }
   }
@@ -64,17 +60,17 @@ export function extractData(cache: TokenCache,
 
   const extensionData = assembleExtensionData(
     postData.flatMap(t => t.variables),
-    tokenData.flatMap(t => t.tokens),
-    config.outPath
+    tokenData.flatMap(t => t.tokens)
   )
 
   const lspData = assembleLspData(
     postData.flatMap(t => t.oklchVariables),
-    tokenData.flatMap(t => t.tokens),
-    config.outPath
+    tokenData.flatMap(t => t.tokens)
   )
 
-  const jsonSchema = assembleJsonSchema(config.outPath)
+  const jsonSchema = assembleJsonSchema()
+
+  const packageData = assemblePackageData(tokenFiles, presetFiles)
 
   return {
     outputData: {
@@ -83,7 +79,8 @@ export function extractData(cache: TokenCache,
       metadata,
       extensionData,
       lspData,
-      jsonSchema
+      jsonSchema,
+      packageData
     },
     extractResult: {
       omittedPresetFiles: [...omittedPresetFiles]

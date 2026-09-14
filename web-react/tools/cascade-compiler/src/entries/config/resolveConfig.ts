@@ -27,12 +27,14 @@ export function resolveConfig(
     pathPatches: internal?.outputs?.pathPatches ?? config.outputs?.pathPatches ?? false,
     presets: internal?.outputs?.presets ?? config.outputs?.presets ?? false,
     tokens: internal?.outputs?.tokens ?? config.outputs?.tokens ?? false,
-    schema: internal?.outputs?.schema ?? config.outputs?.schema ?? false
+    schema: internal?.outputs?.schema ?? config.outputs?.schema ?? false,
+    package: internal?.outputs?.package ?? config.outputs?.package ?? false
   }
 
   const resolvedInternal = {
     willEmitCss: internal?.willEmitCss ?? false,
-    initialProcessing: internal?.initialProcessing ?? true
+    initialProcessing: internal?.initialProcessing ?? true,
+    buildPackage: internal?.buildPackage ?? false,
   }
 
   return {

@@ -8,7 +8,7 @@ export function createRuntime(
   projectRoot: string,
   onConfigChange: () => Promise<void>,
 ): CompilerRuntime | null {
-  const config = resolveConfig(projectRoot)
+  const config = resolveConfig(projectRoot, { buildPackage: true })
 
   if (config === null) {
     return null

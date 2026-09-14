@@ -1,19 +1,22 @@
 import fs from 'node:fs';
 import type { PatchResult, FormatPatchResult, EmittedPatch } from '../../types/emitter.types.ts';
+import path from 'node:path';
 
 
-export function patchFiles(files: FormatPatchResult[]): PatchResult {
+export function patchFiles(files: FormatPatchResult[], outPath: string): PatchResult {
   const written: EmittedPatch[] = []
   const skipped: EmittedPatch[] = []
 
 
   for (const file of files) {
-    if (!fs.existsSync(file.outputFile)) {
+    const outputFile = path.join(outPath, file.outputFile)
+
+    if (!fs.existsSync(outputFile)) {
       skipped.push(resultOf(file))
       continue
     }
 
-    const current = fs.readFileSync(file.outputFile, 'utf8')
+    const current = fs.readFileSync(outputFile, 'utf8')
 
     if (current.startsWith(file.content)) {
       skipped.push(resultOf(file))
@@ -22,7 +25,7 @@ export function patchFiles(files: FormatPatchResult[]): PatchResult {
 
     const update = `${file.content}\n${current}`
 
-    fs.writeFileSync(file.outputFile, update)
+    fs.writeFileSync(outputFile, update)
     written.push(resultOf(file))
   }
 

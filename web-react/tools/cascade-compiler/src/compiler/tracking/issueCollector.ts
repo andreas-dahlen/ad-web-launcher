@@ -66,8 +66,7 @@ export function createIssueCollector(): IssueCollector {
   }
 
   function flush(): IssueGroup[] {
-    // eslint-disable-next-line unicorn/prefer-iterator-to-array
-    const result = [...groups.values()]
+    const result = groups.values().toArray()
 
     groups.clear()
 
@@ -102,8 +101,7 @@ export function mergeIssueGroups(groups: IssueGroup[]): IssueGroup[] {
     }
   }
 
-  // eslint-disable-next-line unicorn/prefer-iterator-to-array
-  return [...merged.values()]
+  return merged.values().toArray()
 }
 
 const nullIssueCollector: IssueCollector = {

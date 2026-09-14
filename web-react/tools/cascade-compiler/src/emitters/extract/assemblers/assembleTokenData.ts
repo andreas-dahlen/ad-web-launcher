@@ -1,12 +1,10 @@
-import path from 'node:path'
 import type { CssTokenGroup } from '../../../types/compiler.types.ts'
 import { toCamelCase, toPascalCase } from '../../../oldSharedUtils/stringFormaters.ts'
 import { extractGroupName } from '../../../compiler/resolvers/extractGroupName.ts'
 import type { TokenData, TokenGroupData } from '../../../types/emitter.types.ts'
 
 export function assembleTokenData(
-  group: CssTokenGroup,
-  outPath: string
+  group: CssTokenGroup
 ): TokenGroupData {
 
   const rawName = extractGroupName(group.groupPath)
@@ -16,7 +14,7 @@ export function assembleTokenData(
   const styleName = `${name}Style`;
   const typeName = `${toPascalCase(rawName)}Style`
 
-  const outputFile = path.join(outPath, `tokenModules/${name}.token.ts`);
+  const outputFile = `tokenModules/${name}.token.ts`
 
   const tokens: TokenData[] = []
 

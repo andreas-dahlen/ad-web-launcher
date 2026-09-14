@@ -19,7 +19,7 @@ const config: CompilerConfig = {
   projectRoot: '/project',
   tokenPath: '/project/tokens',
   outPath: '/project/output',
-  internal: { willEmitCss: false, initialProcessing: true },
+  internal: { willEmitCss: false, initialProcessing: true, buildPackage: false },
 
   outputs: {
     extension: false,
@@ -28,7 +28,8 @@ const config: CompilerConfig = {
     pathPatches: false,
     presets: false,
     tokens: false,
-    schema: false
+    schema: false,
+    package: false
   },
   logging: {
     trace: false,

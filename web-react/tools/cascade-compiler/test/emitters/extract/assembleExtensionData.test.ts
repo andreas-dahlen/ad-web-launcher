@@ -21,8 +21,6 @@ function createToken(
   }
 }
 
-const outPath = '/generated'
-
 describe('[EMITTERS]', () => {
   describe('assembleExtensionData', () => {
     it('preserves existing variables', () => {
@@ -33,8 +31,7 @@ describe('[EMITTERS]', () => {
 
       const result = assembleExtensionData(
         allVariables,
-        [],
-        outPath,
+        []
       )
 
       expect(result.variables).toEqual(allVariables)
@@ -43,20 +40,18 @@ describe('[EMITTERS]', () => {
     it('adds the final variable for each token variable', () => {
       const result = assembleExtensionData(
         [],
-        [createToken()],
-        outPath,
+        [createToken()]
       )
 
       expect(result.variables).toContain(
-        '--final-button-test-color',
+        '--final-button-test-color'
       )
     })
 
     it('adds variables for every allowed prefix', () => {
       const result = assembleExtensionData(
         [],
-        [createToken()],
-        outPath,
+        [createToken()]
       )
 
       expect(result.variables).toEqual([
@@ -92,8 +87,7 @@ describe('[EMITTERS]', () => {
               },
             ],
           }),
-        ],
-        outPath,
+        ]
       )
 
       expect(result.variables).toEqual([
@@ -112,8 +106,7 @@ describe('[EMITTERS]', () => {
 
       const result = assembleExtensionData(
         allVariables,
-        [createToken()],
-        outPath,
+        [createToken()]
       )
 
       expect(result.variables).toEqual([
@@ -138,8 +131,7 @@ describe('[EMITTERS]', () => {
               },
             ],
           }),
-        ],
-        outPath,
+        ]
       )
 
       expect(result.variables).toEqual([
@@ -150,8 +142,7 @@ describe('[EMITTERS]', () => {
     it('returns an empty collection when there are no variables', () => {
       const result = assembleExtensionData(
         [],
-        [],
-        outPath,
+        []
       )
 
       expect(result.variables).toEqual([])
@@ -160,12 +151,11 @@ describe('[EMITTERS]', () => {
     it('creates the extension output path', () => {
       const result = assembleExtensionData(
         [],
-        [],
-        outPath,
+        []
       )
 
       expect(result.outputFile).toBe(
-        '/generated/metadata/extension.jsonc',
+        'metadata/extension.jsonc',
       )
     })
   })

@@ -1,6 +1,6 @@
 {
   "tokenFolder": "src/styleTokens/tokens",
-  "outDir": "src/styleTokens/generated",
+  "outDir": "packages/cascade/src/generated",
   "outputs": {
     "extension": true,
     "lsp": true,
@@ -8,7 +8,8 @@
     "pathPatches": true,
     "presets": true,
     "tokens": true,
-    "schema": true
+    "schema": true,
+    "package": true
   },
   "logging": {
     "trace": false,

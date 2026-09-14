@@ -8,8 +8,8 @@ describe('[DIAGNOSTICS]', () => {
     it('groups written preset and token files', () => {
       const result = analyzeWriteResult({
         written: [
-          { outputFile: '/src/shared/generated/presets/button.preset.ts', kind: "presets" },
-          { outputFile: '/src/shared/generated/tokenModules/button.token.ts', kind: "tokens" }
+          { outputFile: 'presets/button.preset.ts', kind: "presets" },
+          { outputFile: 'tokenModules/button.token.ts', kind: "tokens" }
         ],
         skipped: [],
       })
@@ -17,7 +17,7 @@ describe('[DIAGNOSTICS]', () => {
       expect(result).toEqual({
         presets: {
           written: [
-            '/src/shared/generated/presets/button.preset.ts',
+            'presets/button.preset.ts',
           ],
           skipped: [],
         },
@@ -25,9 +25,13 @@ describe('[DIAGNOSTICS]', () => {
           written: [],
           skipped: []
         },
+        package: {
+          skipped: [],
+          written: [],
+        },
         tokens: {
           written: [
-            '/src/shared/generated/tokenModules/button.token.ts',
+            'tokenModules/button.token.ts',
           ],
           skipped: [],
         },
@@ -50,8 +54,8 @@ describe('[DIAGNOSTICS]', () => {
       const result = analyzeWriteResult({
         written: [],
         skipped: [
-          { outputFile: '/src/shared/generated/presets/button.preset.ts', kind: "presets" },
-          { outputFile: '/src/shared/generated/tokenModules/button.token.ts', kind: "tokens" }
+          { outputFile: 'presets/button.preset.ts', kind: "presets" },
+          { outputFile: 'tokenModules/button.token.ts', kind: "tokens" }
         ]
       })
 
@@ -59,8 +63,12 @@ describe('[DIAGNOSTICS]', () => {
         presets: {
           written: [],
           skipped: [
-            '/src/shared/generated/presets/button.preset.ts',
+            'presets/button.preset.ts',
           ],
+        },
+        package: {
+          skipped: [],
+          written: [],
         },
         schema: {
           written: [],
@@ -69,7 +77,7 @@ describe('[DIAGNOSTICS]', () => {
         tokens: {
           written: [],
           skipped: [
-            '/src/shared/generated/tokenModules/button.token.ts',
+            'tokenModules/button.token.ts',
           ],
         },
         meta: {
@@ -90,9 +98,9 @@ describe('[DIAGNOSTICS]', () => {
     it('groups written metadata, lsp, and extension files', () => {
       const result = analyzeWriteResult({
         written: [
-          { outputFile: '/src/shared/generated/metadata.generated.jsonc', kind: "meta" },
-          { outputFile: '/src/shared/generated/lsp.generated.ts', kind: "lsp" },
-          { outputFile: '/src/shared/generated/extension.generated.jsonc', kind: "extension" }
+          { outputFile: 'metadata/metadata.jsonc', kind: "meta" },
+          { outputFile: 'metadata/lsp.ts', kind: "lsp" },
+          { outputFile: 'metadata/extension.jsonc', kind: "extension" }
         ],
         skipped: [],
       })
@@ -106,25 +114,29 @@ describe('[DIAGNOSTICS]', () => {
           written: [],
           skipped: []
         },
+        package: {
+          skipped: [],
+          written: [],
+        },
         tokens: {
           written: [],
           skipped: [],
         },
         meta: {
           written: [
-            '/src/shared/generated/metadata.generated.jsonc',
+            'metadata/metadata.jsonc',
           ],
           skipped: [],
         },
         lsp: {
           written: [
-            '/src/shared/generated/lsp.generated.ts',
+            'metadata/lsp.ts',
           ],
           skipped: [],
         },
         extension: {
           written: [
-            '/src/shared/generated/extension.generated.jsonc',
+            'metadata/extension.jsonc',
           ],
           skipped: [],
         },
@@ -135,9 +147,9 @@ describe('[DIAGNOSTICS]', () => {
       const result = analyzeWriteResult({
         written: [],
         skipped: [
-          { outputFile: '/src/shared/generated/metadata.generated.jsonc', kind: "meta" },
-          { outputFile: '/src/shared/generated/lsp.generated.ts', kind: "lsp" },
-          { outputFile: '/src/shared/generated/extension.generated.jsonc', kind: "extension" }
+          { outputFile: 'metadata/metadata.jsonc', kind: "meta" },
+          { outputFile: 'metadata/lsp.ts', kind: "lsp" },
+          { outputFile: 'metadata/extension.jsonc', kind: "extension" }
         ],
       })
 
@@ -150,6 +162,10 @@ describe('[DIAGNOSTICS]', () => {
           written: [],
           skipped: []
         },
+        package: {
+          skipped: [],
+          written: [],
+        },
         tokens: {
           written: [],
           skipped: [],
@@ -157,19 +173,19 @@ describe('[DIAGNOSTICS]', () => {
         meta: {
           written: [],
           skipped: [
-            '/src/shared/generated/metadata.generated.jsonc',
+            'metadata/metadata.jsonc',
           ],
         },
         lsp: {
           written: [],
           skipped: [
-            '/src/shared/generated/lsp.generated.ts',
+            'metadata/lsp.ts',
           ],
         },
         extension: {
           written: [],
           skipped: [
-            '/src/shared/generated/extension.generated.jsonc',
+            'metadata/extension.jsonc',
           ],
         },
       })
@@ -185,6 +201,10 @@ describe('[DIAGNOSTICS]', () => {
         schema: {
           written: [],
           skipped: [],
+        },
+        package: {
+          skipped: [],
+          written: [],
         },
         tokens: {
           written: [],
@@ -208,38 +228,38 @@ describe('[DIAGNOSTICS]', () => {
     it('sorts written and skipped preset and token files', () => {
       const result = analyzeWriteResult({
         written: [
-          { outputFile: '/src/shared/generated/presets/zebra.preset.ts', kind: "presets" },
-          { outputFile: '/src/shared/generated/presets/alpha.preset.ts', kind: "presets" },
-          { outputFile: '/src/shared/generated/tokenModules/zebra.token.ts', kind: "tokens" },
-          { outputFile: '/src/shared/generated/tokenModules/alpha.token.ts', kind: "tokens" },
+          { outputFile: 'presets/zebra.preset.ts', kind: "presets" },
+          { outputFile: 'presets/alpha.preset.ts', kind: "presets" },
+          { outputFile: 'tokenModules/zebra.token.ts', kind: "tokens" },
+          { outputFile: 'tokenModules/alpha.token.ts', kind: "tokens" },
         ],
         skipped: [
-          { outputFile: '/src/shared/generated/presets/zulu.preset.ts', kind: "presets" },
-          { outputFile: '/src/shared/generated/presets/bravo.preset.ts', kind: "presets" },
-          { outputFile: '/src/shared/generated/tokenModules/zulu.token.ts', kind: "tokens" },
-          { outputFile: '/src/shared/generated/tokenModules/bravo.token.ts', kind: "tokens" },
+          { outputFile: 'presets/zulu.preset.ts', kind: "presets" },
+          { outputFile: 'presets/bravo.preset.ts', kind: "presets" },
+          { outputFile: 'tokenModules/zulu.token.ts', kind: "tokens" },
+          { outputFile: 'tokenModules/bravo.token.ts', kind: "tokens" },
         ],
       })
 
       expect(result.presets).toEqual({
         written: [
-          '/src/shared/generated/presets/alpha.preset.ts',
-          '/src/shared/generated/presets/zebra.preset.ts',
+          'presets/alpha.preset.ts',
+          'presets/zebra.preset.ts',
         ],
         skipped: [
-          '/src/shared/generated/presets/bravo.preset.ts',
-          '/src/shared/generated/presets/zulu.preset.ts',
+          'presets/bravo.preset.ts',
+          'presets/zulu.preset.ts',
         ],
       })
 
       expect(result.tokens).toEqual({
         written: [
-          '/src/shared/generated/tokenModules/alpha.token.ts',
-          '/src/shared/generated/tokenModules/zebra.token.ts',
+          'tokenModules/alpha.token.ts',
+          'tokenModules/zebra.token.ts',
         ],
         skipped: [
-          '/src/shared/generated/tokenModules/bravo.token.ts',
-          '/src/shared/generated/tokenModules/zulu.token.ts',
+          'tokenModules/bravo.token.ts',
+          'tokenModules/zulu.token.ts',
         ],
       })
     })

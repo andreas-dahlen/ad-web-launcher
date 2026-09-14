@@ -32,16 +32,13 @@ function createGroup(
   }
 }
 
-const outPath = '/generated'
-
 describe('[EMITTERS]', () => {
   describe('assembleTokenData', () => {
     it('builds names from the group name', () => {
       const result = assembleTokenData(
         createGroup({
           groupPath: '/tokens/button',
-        }),
-        outPath,
+        })
       )
 
       expect(result).toMatchObject({
@@ -55,12 +52,11 @@ describe('[EMITTERS]', () => {
       const result = assembleTokenData(
         createGroup({
           groupPath: '/tokens/button',
-        }),
-        outPath,
+        })
       )
 
       expect(result.outputFile).toBe(
-        '/generated/tokenModules/button.token.ts',
+        'tokenModules/button.token.ts',
       )
     })
 
@@ -68,8 +64,7 @@ describe('[EMITTERS]', () => {
       const result = assembleTokenData(
         createGroup({
           groupPath: '/styleTokens/components/button',
-        }),
-        outPath,
+        })
       )
 
       expect(result.name).toBe('button')
@@ -90,8 +85,7 @@ describe('[EMITTERS]', () => {
               tokenPath: '/tokens/button/hover.jsonc',
             }),
           ],
-        }),
-        outPath,
+        })
       )
 
       expect(result.tokens).toEqual([
@@ -121,14 +115,13 @@ describe('[EMITTERS]', () => {
                   effectiveAllowed: allowed,
                   values: {
                     o: '#fff',
-                    s: '#000',
-                  },
-                },
-              ],
-            }),
-          ],
-        }),
-        outPath,
+                    s: '#000'
+                  }
+                }
+              ]
+            })
+          ]
+        })
       )
 
       expect(result.tokens).toEqual([
@@ -142,10 +135,10 @@ describe('[EMITTERS]', () => {
               values: {
                 o: '#fff',
                 s: '#000',
-              },
-            },
-          ],
-        },
+              }
+            }
+          ]
+        }
       ])
     })
 
@@ -162,10 +155,10 @@ describe('[EMITTERS]', () => {
                   key: 'color',
                   effectiveAllowed: ['o'] as ValidPrefix[],
                   values: {
-                    o: '#fff',
-                  },
-                },
-              ],
+                    o: '#fff'
+                  }
+                }
+              ]
             }),
             createToken({
               infix: 'button_hover',
@@ -176,14 +169,13 @@ describe('[EMITTERS]', () => {
                   key: 'color',
                   effectiveAllowed: ['s'] as ValidPrefix[],
                   values: {
-                    s: '#000',
-                  },
-                },
-              ],
-            }),
-          ],
-        }),
-        outPath,
+                    s: '#000'
+                  }
+                }
+              ]
+            })
+          ]
+        })
       )
 
       expect(result.tokens).toEqual([
@@ -196,9 +188,9 @@ describe('[EMITTERS]', () => {
               allowed: ['o'],
               values: {
                 o: '#fff',
-              },
-            },
-          ],
+              }
+            }
+          ]
         },
         {
           infix: 'button_hover',
@@ -209,19 +201,18 @@ describe('[EMITTERS]', () => {
               allowed: ['s'],
               values: {
                 s: '#000',
-              },
-            },
-          ],
-        },
+              }
+            }
+          ]
+        }
       ])
     })
 
     it('returns empty token data when the group has no tokens', () => {
       const result = assembleTokenData(
         createGroup({
-          tokens: [],
-        }),
-        outPath,
+          tokens: []
+        })
       )
 
       expect(result.tokens).toEqual([])
@@ -238,29 +229,28 @@ describe('[EMITTERS]', () => {
                 key: 'color',
                 effectiveAllowed: ['o'] as ValidPrefix[],
                 values: {
-                  o: '#fff',
-                },
-              },
-            ],
-          }),
-        ],
+                  o: '#fff'
+                }
+              }
+            ]
+          })
+        ]
       })
 
       const originalGroup = structuredClone(group)
 
-      assembleTokenData(group, outPath)
+      assembleTokenData(group)
 
       expect(group).toEqual(originalGroup)
     })
 
     it('creates the token output path', () => {
       const result = assembleTokenData(
-        createGroup(),
-        outPath,
+        createGroup()
       )
 
       expect(result.outputFile).toBe(
-        '/generated/tokenModules/button.token.ts',
+        'tokenModules/button.token.ts',
       )
     })
   })

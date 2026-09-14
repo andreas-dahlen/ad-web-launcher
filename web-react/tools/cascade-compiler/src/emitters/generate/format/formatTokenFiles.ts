@@ -22,7 +22,7 @@ export function formatTokenFiles(tokenGroupData: TokenGroupData[]): FormatFileRe
     const importStatement = `import type {
   StyleFromComponent,
   TokenComponent
-} from "@shared/tokenUtils/compiler.types.ts"`
+} from "../../types/compiler.types.ts"`
 
     const content = `// AUTO-GENERATED FILE.
 // DO NOT EDIT.

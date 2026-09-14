@@ -3,8 +3,6 @@ import { describe, expect, it } from 'vitest'
 import { assembleLspData } from '../../../src/emitters/extract/assemblers/assembleLspData.ts'
 import type { TokenData } from '../../../src/types/emitter.types.ts'
 
-const outPath = '/generated'
-
 function createToken(
   overrides: Partial<TokenData> = {},
 ): TokenData {
@@ -22,8 +20,7 @@ describe('[EMITTERS]', () => {
         [
           ['--button-color', 'oklch(70% 0.2 30)'],
         ],
-        [],
-        outPath,
+        []
       )
 
       expect(result.rgbVariables).toEqual([
@@ -37,8 +34,7 @@ describe('[EMITTERS]', () => {
           ['--button-color', 'oklch(70% 0.2 30)'],
           ['--button-background', 'oklch(80% 0.1 120)'],
         ],
-        [],
-        outPath,
+        []
       )
 
       expect(result.rgbVariables).toHaveLength(2)
@@ -56,8 +52,7 @@ describe('[EMITTERS]', () => {
           ['--valid', 'oklch(70% 0.2 30)'],
           ['--invalid', 'not-a-color'],
         ],
-        [],
-        outPath,
+        []
       )
 
       expect(result.rgbVariables).toHaveLength(1)
@@ -72,8 +67,7 @@ describe('[EMITTERS]', () => {
           ['--button-color', 'oklch(70% 0.2 30)'],
           ['--button-color', 'oklch(70% 0.2 30)'],
         ],
-        [],
-        outPath,
+        []
       )
 
       expect(result.rgbVariables).toHaveLength(1)
@@ -85,8 +79,7 @@ describe('[EMITTERS]', () => {
           ['--button-color', 'oklch(70% 0.2 30)'],
           ['--button-background', 'oklch(70% 0.2 30)'],
         ],
-        [],
-        outPath,
+        []
       )
 
       expect(result.rgbVariables).toHaveLength(2)
@@ -106,8 +99,7 @@ describe('[EMITTERS]', () => {
 
       const result = assembleLspData(
         [],
-        tokens,
-        outPath,
+        tokens
       )
 
       expect(result.tokens).toBe(tokens)
@@ -116,20 +108,18 @@ describe('[EMITTERS]', () => {
     it('creates the LSP output path', () => {
       const result = assembleLspData(
         [],
-        [],
-        outPath,
+        []
       )
 
       expect(result.outputFile).toBe(
-        '/generated/metadata/lsp.ts',
+        'metadata/lsp.ts',
       )
     })
 
     it('returns an empty collection when there are no variables', () => {
       const result = assembleLspData(
         [],
-        [],
-        outPath,
+        []
       )
 
       expect(result.rgbVariables).toEqual([])

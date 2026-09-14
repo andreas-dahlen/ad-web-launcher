@@ -1,17 +1,20 @@
 import type { EmittedFile, FileResult, FormatFileResult } from '../../types/emitter.types.ts';
 import fs from "node:fs";
 import path from "node:path";
-export function writeFiles(files: FormatFileResult[]): FileResult {
+export function writeFiles(files: FormatFileResult[], outPath: string): FileResult {
   const written: EmittedFile[] = []
   const skipped: EmittedFile[] = []
 
 
 
   for (const file of files) {
-    fs.mkdirSync(path.dirname(file.outputFile), { recursive: true })
+    const outputFile = path.join(outPath, file.outputFile)
 
-    if (fs.existsSync(file.outputFile)) {
-      const current = fs.readFileSync(file.outputFile, "utf8")
+
+    fs.mkdirSync(path.dirname(outputFile), { recursive: true })
+
+    if (fs.existsSync(outputFile)) {
+      const current = fs.readFileSync(outputFile, "utf8")
 
       if (current === file.content) {
         skipped.push(resultOf(file))
@@ -19,7 +22,7 @@ export function writeFiles(files: FormatFileResult[]): FileResult {
       }
     }
 
-    fs.writeFileSync(file.outputFile, file.content)
+    fs.writeFileSync(outputFile, file.content)
     written.push(resultOf(file))
   }
 

@@ -10,16 +10,16 @@ import type {
 export const visualStyle = {
   component: "visual",
 
-  vars: {
-    visual: {
-      bg: { name: "bg", allowed: ["o", "p", "t", "f"] },
-      overflow: { name: "overflow", allowed: ["o", "p", "f"] },
-      border: { name: "border", allowed: ["o", "p", "t", "f"] },
-      radius: { name: "radius", allowed: ["o", "p", "f"] },
-      shadow: { name: "shadow", allowed: ["o", "p", "f"] },
-      blur: { name: "blur", allowed: ["o", "p", "f"] },
-      opacity: { name: "opacity", allowed: ["o", "p", "f"] }
-    }
+  vars: {   
+   visual: {
+          bg: { name: "bg", allowed: ["o","p","t","f"]},
+         overflow: { name: "overflow", allowed: ["o","p","f"]},
+         border: { name: "border", allowed: ["o","p","t","f"]},
+         radius: { name: "radius", allowed: ["o","p","f"]},
+         shadow: { name: "shadow", allowed: ["o","p","f"]},
+         blur: { name: "blur", allowed: ["o","p","f"]},
+         opacity: { name: "opacity", allowed: ["o","p","f"]} 
+}
   }
 } as const satisfies TokenComponent;
 

@@ -71,7 +71,7 @@ describe('[COMPILER]', () => {
         projectRoot: '/project',
         tokenPath: '/project/tokens',
         outPath: '/project/output',
-        internal: { willEmitCss: false, initialProcessing: true },
+        internal: { willEmitCss: false, initialProcessing: true, buildPackage: false },
 
         outputs: {
           extension: false,
@@ -80,7 +80,8 @@ describe('[COMPILER]', () => {
           pathPatches: false,
           presets: false,
           tokens: false,
-          schema: false
+          schema: false,
+          package: false
         },
         logging: {
           trace: false,
@@ -98,7 +99,7 @@ describe('[COMPILER]', () => {
         projectRoot: '/project',
         tokenPath: '/project/tokens',
         outPath: null,
-        internal: { willEmitCss: false, initialProcessing: true },
+        internal: { willEmitCss: false, initialProcessing: true, buildPackage: false },
 
         outputs: {
           extension: false,
@@ -107,7 +108,8 @@ describe('[COMPILER]', () => {
           pathPatches: false,
           presets: false,
           tokens: false,
-          schema: false
+          schema: false,
+          package: false
         },
         logging: {
           trace: false,
