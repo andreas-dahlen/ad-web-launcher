@@ -1,6 +1,6 @@
 import type { Rule } from 'postcss';
-import { toCssVar } from 'cascade';
 import type { CompilerToken, CompilerVariable } from '../../types/compiler.types.ts'
+import { toCssVar } from '../../utils/stringFormaters.ts';
 
 export function injectCascade(
   rule: Rule,

@@ -10,7 +10,7 @@ import { processModule } from '../postCss/processModule.ts';
 import { emitFiles } from '../emitters/emitFiles.ts';
 import { runDiagnostics } from '../diagnostics/runDiagnostics.ts';
 import type { CompilerConfig } from '../types/run.types.ts';
-import { buildPackage } from '../package/buildPackage.ts';
+// import { buildPackage } from '../package/buildPackage.ts';
 
 export type TokenCompiler = ReturnType<typeof initializeCompiler>;
 export function initializeCompiler(config: CompilerConfig) {
@@ -90,9 +90,9 @@ export function initializeCompiler(config: CompilerConfig) {
       const emitResult = emitFiles(cache, run)
       run.recordEmitResult(emitResult)
 
-      if (config.internal.buildPackage) {
-        buildPackage(config.outPath)
-      }
+      // if (config.internal.buildPackage) {
+      //   buildPackage(config.outPath)
+      // }
 
     } else {
       console.log("EMITTER: disabled. No output path")

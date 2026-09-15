@@ -1,4 +1,4 @@
-import type { CssVarString } from 'cascade';
+import type { CssVarString } from '../../types/cascade.types.ts';
 import type { CompilerVariable, CssTokenGroup, PresetResetData } from '../../types/compiler.types.ts';
 
 export function injectPresetResets(

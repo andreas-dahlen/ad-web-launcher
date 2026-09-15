@@ -2,7 +2,7 @@ import { resolveAllowedPrefixes } from '../../src/compiler/resolvers/resolveAllo
 import type { IssueCollector } from '../../src/compiler/tracking/issueCollector.ts';
 import { describe, expect, it } from 'vitest';
 import { createTestCollector } from '../compiler.factory.ts';
-import type { ValidPrefix } from 'cascade'
+import type { ValidPrefix } from '../../src/types/cascade.types.ts';
 
 function hasIssue(
   collector: IssueCollector,

@@ -1,5 +1,5 @@
 {
-  "name": "cascade",
+  "name": "cascade-old",
   "version": "1.0.0",
   "description": "Cascade compiler system",
   "main": "dist/index.js",

@@ -1,7 +1,7 @@
 import type { VariableMismatch } from '../../../types/diagnostics.types.ts';
-import { toCssVarPrefix } from '../../../utils/stringFormaters.ts';
+import { toCssVar, toCssVarPrefix } from '../../../utils/stringFormaters.ts';
 import type { CssDataTokenGroup } from '../../../types/compiler.types.ts';
-import { toCssVar, type CssVarString } from 'cascade';
+import type { CssVarString } from '../../../types/cascade.types.ts';
 
 export function analyzeVariableUsage(group: CssDataTokenGroup): VariableMismatch[] {
   const result: VariableMismatch[] = []

@@ -1,8 +1,7 @@
 import type { CssDataTokenGroup, CssTokenGroup, TokenGroup } from "../types/compiler.types.ts";
-
 import type { CompilerConfig } from '../types/run.types.ts';
 import type { EmitConfig } from '../types/emitter.types.ts';
-import type { CssVarString } from 'cascade';
+import type { CssVarString } from '../types/cascade.types.ts';
 
 
 type Assertions = {

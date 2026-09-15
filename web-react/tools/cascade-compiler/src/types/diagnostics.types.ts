@@ -1,4 +1,4 @@
-import type { CssVarString } from 'cascade';
+import type { CssVarString } from './cascade.types.ts';
 import type { Issue } from './issueCollector.types.ts';
 import type { CompilerOutputs } from './run.types.ts';
 

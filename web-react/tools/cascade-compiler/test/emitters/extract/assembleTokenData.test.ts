@@ -5,7 +5,7 @@ import type {
   CompilerToken,
   CssTokenGroup,
 } from '../../../src/types/compiler.types.ts'
-import type { ValidPrefix } from 'cascade'
+import type { ValidPrefix } from '../../../src/types/cascade.types.ts'
 
 function createToken(
   overrides: Partial<CompilerToken> = {},

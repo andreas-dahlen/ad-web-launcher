@@ -1,8 +1,13 @@
 {
-  "name": "cascade-compiler",
+  "name": "cascade",
   "version": "0.0.1",
-  "private": true,
   "type": "module",
+  "bin": {
+    "cascade": "./dist/cli.js"
+  },
+  "exports": {
+    ".": "./dist/public/index.js"
+  },
   "scripts": {
     "coverage": "vitest run --coverage",
     "test": "vitest",
@@ -16,8 +21,7 @@
     "jsonc-parser": "^3.3.1",
     "postcss": "^8.5.26",
     "postcss-selector-parser": "^7.1.5",
-    "zod": "^4.5.1",
-    "cascade": "file:packages/cascade"
+    "zod": "^4.5.1"
   },
   "devDependencies": {
     "@types/node": "^26.1.2",

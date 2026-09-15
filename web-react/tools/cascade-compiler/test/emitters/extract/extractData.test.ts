@@ -6,7 +6,7 @@ import { assembleTokenData } from '../../../src/emitters/extract/assemblers/asse
 import { assemblePresetData } from '../../../src/emitters/extract/assemblers/assemblePresetData.ts'
 import { assembleLspData } from '../../../src/emitters/extract/assemblers/assembleLspData.ts'
 import { assembleExtensionData } from '../../../src/emitters/extract/assemblers/assembleExtensionData.ts'
-import type { CssVarString } from 'cascade'
+import type { CssVarString } from '../../../src/types/cascade.types.ts'
 
 vi.mock(
   '../../../src/emitters/extract/assemblers/assembleMetadata.js',

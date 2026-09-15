@@ -1,8 +1,8 @@
 import type { CompilerVariable, RawVariable } from '../../types/compiler.types.ts'
-import { prefixLeadingNumber, removeInvalidCharacters, toCamelCase, escapeReservedWord, removeWhitespace } from '../../utils/stringFormaters.ts'
+import { prefixLeadingNumber, removeInvalidCharacters, toCamelCase, escapeReservedWord, removeWhitespace, toKebab } from '../../utils/stringFormaters.ts'
 import { createNullIssueCollector, type IssueCollector } from '../tracking/issueCollector.ts'
 import { resolveAllowedPrefixes } from '../resolvers/resolveAllowedPrefixes.ts'
-import { toKebab, type ValidPrefix } from 'cascade'
+import type { ValidPrefix } from '../../types/cascade.types.ts'
 
 type ParseToken = {
   identifier(inputString: string, collector?: IssueCollector): { name: string }

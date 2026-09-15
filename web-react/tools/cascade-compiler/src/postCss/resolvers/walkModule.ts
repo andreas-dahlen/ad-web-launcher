@@ -3,7 +3,8 @@ import type { Rule, Root } from "postcss";
 import selectorParser from "postcss-selector-parser";
 import type { WalkModuleResult } from '../../types/compiler.types.ts';
 import { assert } from '../../utils/assertions.ts'
-import { prefixPriority, type CssVarString } from 'cascade';
+import { prefixPriority } from '../../utils/prefix.ts';
+import type { CssVarString } from '../../types/cascade.types.ts';
 
 const VALID_IDENTIFIER = /^[A-Za-z_$][A-Za-z0-9_$]*$/;
 

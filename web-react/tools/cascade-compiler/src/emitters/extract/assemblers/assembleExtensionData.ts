@@ -1,6 +1,6 @@
-import type { CssVarString } from 'cascade';
-import { toCssVar } from 'cascade'
+import type { CssVarString } from '../../../types/cascade.types.ts';
 import type { ExtensionData, TokenData } from '../../../types/emitter.types.ts';
+import { toCssVar } from '../../../utils/stringFormaters.ts';
 
 export function assembleExtensionData(allVariables: CssVarString[], tokenData: TokenData[]): ExtensionData {
   const variables = new Set<CssVarString>(allVariables)
