@@ -1,14 +1,14 @@
 import type { EmittedFile, FileResult, FormatFileResult } from '../../types/emitter.types.ts';
 import fs from "node:fs";
 import path from "node:path";
-export function writeFiles(files: FormatFileResult[], outPath: string): FileResult {
+export function writeFiles(files: FormatFileResult[], generatedPath: string): FileResult {
   const written: EmittedFile[] = []
   const skipped: EmittedFile[] = []
 
 
 
   for (const file of files) {
-    const outputFile = path.join(outPath, file.outputFile)
+    const outputFile = path.join(generatedPath, file.outputFile)
 
 
     fs.mkdirSync(path.dirname(outputFile), { recursive: true })

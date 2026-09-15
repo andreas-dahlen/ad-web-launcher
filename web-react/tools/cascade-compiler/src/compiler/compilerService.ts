@@ -86,13 +86,9 @@ export function initializeCompiler(config: CompilerConfig) {
 
 
   function finalize(): void {
-    if (config.outPath) {
+    if (config.generatedPath) {
       const emitResult = emitFiles(cache, run)
       run.recordEmitResult(emitResult)
-
-      // if (config.internal.buildPackage) {
-      //   buildPackage(config.outPath)
-      // }
 
     } else {
       console.log("EMITTER: disabled. No output path")

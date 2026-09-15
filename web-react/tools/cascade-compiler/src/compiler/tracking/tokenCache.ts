@@ -62,7 +62,7 @@ export function createTokenCache(initialGroups: TokenGroup[], config: CompilerCo
     },
 
     getEmitConfig(): EmitConfig {
-      assert.hasOutPath(config)
+      assert.hasGeneratedPath(config)
       return config
     },
 

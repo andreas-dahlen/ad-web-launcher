@@ -6,7 +6,11 @@
     "cascade": "./dist/cli.js"
   },
   "exports": {
-    ".": "./dist/public/index.js"
+    ".": {
+      "types": "./dist/public/index.d.ts",
+      "import": "./dist/public/index.js",
+      "default": "./dist/public/index.js"
+    }
   },
   "scripts": {
     "coverage": "vitest run --coverage",

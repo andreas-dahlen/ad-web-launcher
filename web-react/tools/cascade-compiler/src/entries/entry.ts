@@ -3,15 +3,16 @@ import { build } from './build.ts'
 import { css } from './css.ts'
 import { watch } from './watch/watch.ts'
 import type { CssReturn } from '../types/run.types.ts'
+import { findProjectRoot } from './config/findProjectRoot.ts'
 
 export const compiler = {
-  runCss(projectRoot: string): CssReturn {
-    return css(projectRoot)
+  runCss(startDirectory: string): CssReturn {
+    return css(findProjectRoot(startDirectory))
   },
-  runBuild(projectRoot: string): TokenCompiler {
-    return build(projectRoot)
+  runBuild(startDirectory: string): TokenCompiler {
+    return build(findProjectRoot(startDirectory))
   },
-  runWatch(projectRoot: string): void {
-    watch(projectRoot)
+  runWatch(startDirectory: string): void {
+    watch(findProjectRoot(startDirectory))
   }
 }

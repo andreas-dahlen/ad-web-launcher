@@ -8,6 +8,7 @@ export type CompilerConfig = {
   projectRoot: string
   tokenPath: string
   outPath: string | null
+  generatedPath: string | null
   outputs: CompilerOutputs
   logging: CompilerLogs
   internal: InternalConfig
@@ -16,7 +17,6 @@ export type CompilerConfig = {
 type InternalConfig = {
   willEmitCss: boolean
   initialProcessing: boolean
-  buildPackage: boolean
 }
 export type CompilerOutputs = Required<z.infer<typeof compilerOutputsSchema>>
 
@@ -35,7 +35,7 @@ export type CompilerInternalConfig = {
   trace?: CompilerLogs["trace"]
   willEmitCss?: boolean
   initialProcessing?: boolean
-  buildPackage?: boolean
+  generatedPath?: string | null
   outputs?: Partial<CompilerOutputs>
 }
 

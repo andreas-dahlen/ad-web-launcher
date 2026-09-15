@@ -2,6 +2,7 @@ import path from 'node:path';
 
 import { loadCompilerConfig } from './loadCompilerConfig.ts';
 import type { CompilerConfig, CompilerInternalConfig } from '../../types/run.types.ts';
+import { findPackageRoot } from './findPackageRoot.ts';
 
 export function resolveConfig(
   projectRoot: string,
@@ -9,8 +10,11 @@ export function resolveConfig(
 ): CompilerConfig {
   const config = loadCompilerConfig(projectRoot)
   if (!config.tokenFolder) {
-    throw new Error("Error: Couldn't resolve token path in either cascade.config.json or argument")
+    throw new Error("Error: Couldn't resolve token path in either cascade.config.json")
   }
+
+  const packageRoot = findPackageRoot()
+  const generatedPath = internal?.generatedPath ?? path.join(packageRoot, 'generated')
 
   const basePath = config.outDir ? path.resolve(projectRoot, config.outDir) : null
   const outPath = internal?.outPath === undefined ? basePath : internal.outPath
@@ -21,25 +25,25 @@ export function resolveConfig(
   }
 
   const outputs = {
-    extension: internal?.outputs?.extension ?? config.outputs?.extension ?? false,
-    lsp: internal?.outputs?.lsp ?? config.outputs?.lsp ?? false,
-    meta: internal?.outputs?.meta ?? config.outputs?.meta ?? false,
-    pathPatches: internal?.outputs?.pathPatches ?? config.outputs?.pathPatches ?? false,
-    presets: internal?.outputs?.presets ?? config.outputs?.presets ?? false,
-    tokens: internal?.outputs?.tokens ?? config.outputs?.tokens ?? false,
-    schema: internal?.outputs?.schema ?? config.outputs?.schema ?? false,
-    package: internal?.outputs?.package ?? config.outputs?.package ?? false
+    extension: config.outputs?.extension ?? false,
+    lsp: config.outputs?.lsp ?? false,
+    meta: config.outputs?.meta ?? false,
+    pathPatches: config.outputs?.pathPatches ?? false,
+    presets: config.outputs?.presets ?? false,
+    tokens: config.outputs?.tokens ?? false,
+    schema: config.outputs?.schema ?? false,
+    package: config.outputs?.package ?? false
   }
 
   const resolvedInternal = {
     willEmitCss: internal?.willEmitCss ?? false,
     initialProcessing: internal?.initialProcessing ?? true,
-    buildPackage: internal?.buildPackage ?? false,
   }
 
   return {
     projectRoot,
     tokenPath: path.resolve(projectRoot, config.tokenFolder),
+    generatedPath,
     outPath,
     logging,
     outputs,

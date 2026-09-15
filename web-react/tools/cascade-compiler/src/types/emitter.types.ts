@@ -2,7 +2,7 @@ import type { CssVarString, ValidPrefix } from './cascade.types.ts'
 import type { CompilerConfig, CompilerOutputs } from './run.types.ts'
 
 export type EmitConfig = CompilerConfig & {
-  outPath: string
+  generatedPath: string
 }
 type CompilerFileOutput =
   Exclude<keyof CompilerOutputs, 'pathPatches'>

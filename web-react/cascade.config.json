@@ -2,14 +2,14 @@
   "tokenFolder": "src/tokens",
   "outDir": "packages/cascade/src/generated",
   "outputs": {
-    "extension": false,
+    "extension": true,
     "lsp": false,
     "meta": false,
     "pathPatches": false,
-    "presets": false,
-    "tokens": false,
-    "schema": false,
-    "package": false
+    "presets": true,
+    "tokens": true,
+    "schema": true,
+    "package": true
   },
   "logging": {
     "trace": false,
