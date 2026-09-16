@@ -1,6 +1,6 @@
 import type { Axis1D, EventType, BoxSide } from '@shared/types/core.types.ts'
 import type { DataAttributes } from '@shared/types/utils.types.ts'
-import type { ButtonPresets, ButtonStyle, CarouselPresets, CarouselStyle, ScrollPresets, ScrollStyle, SliderPresets, SliderStyle } from 'cascade'
+import type { ButtonPresets, ButtonStyle, CarouselPresets, CarouselStyle, ScrollPresets, ScrollStyle, SliderPresets, SliderStyle } from 'cascade/generated'
 import type React from 'react'
 
 //discriminating unions - capabilities

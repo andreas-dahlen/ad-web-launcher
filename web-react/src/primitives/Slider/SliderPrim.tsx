@@ -8,7 +8,8 @@ import { sliderStore } from './store/slider.store.ts'
 import css from './Slider.module.css'
 import clsx from 'clsx'
 import dasx from 'dasx'
-import { svsx, cpsx, sliderStyle } from 'cascade'
+import { svsx, cpsx } from 'cascade'
+import { sliderStyle } from 'cascade/generated'
 
 export default function SliderPrim({
   id,

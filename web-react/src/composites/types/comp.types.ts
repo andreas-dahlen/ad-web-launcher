@@ -1,6 +1,6 @@
 import type { SnapConfig } from '@primitives/types/prim.types.ts'
 import type { Axis1D, EventType } from '../../shared/types/core.types.ts'
-import type { ButtonPresets, ButtonStyle, SliderPresets, SliderStyle } from 'cascade'
+import type { ButtonPresets, ButtonStyle, SliderPresets, SliderStyle } from 'cascade/generated'
 
 // `directive` contains high-level orchestration flags that determine
 // how the composite exists in the UI. These are not drag or button

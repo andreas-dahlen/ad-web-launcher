@@ -1,6 +1,7 @@
 import clsx from 'clsx'
 import css from './Layout.module.css'
-import { cpsx, layoutStyle, svsx, type LayoutPresets, type LayoutStyle } from 'cascade'
+import { cpsx, svsx } from 'cascade'
+import { layoutStyle, type LayoutPresets, type LayoutStyle } from 'cascade/generated'
 
 
 export type LayoutSettings = {

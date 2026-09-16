@@ -86,6 +86,10 @@ export function initializeCompiler(config: CompilerConfig) {
 
 
   function finalize(): void {
+    if (!cache.isCssProcessingComplete()) {
+      return
+    }
+
     if (config.generatedPath) {
       const emitResult = emitFiles(cache, run)
       run.recordEmitResult(emitResult)

@@ -7,8 +7,10 @@ export function formatPresetFiles(presetData: PresetFileData[]): FormatFileResul
 
   for (const entry of presetData) {
 
+    const outputBase = `presets/${entry.name}.preset`
+
     const sortedSelectors = entry.selectors.toSorted((a, b) => a.localeCompare(b));
-    const presetValues = sortedSelectors.map(selector => ` | "${selector}"`).join('\n')
+    const presetValues = sortedSelectors.map(selector => `  | "${selector}"`).join('\n')
 
     const content = `// AUTO-GENERATED FILE.
   // DO NOT EDIT.
@@ -22,7 +24,10 @@ export function formatPresetFiles(presetData: PresetFileData[]): FormatFileResul
     | ${entry.typeName}[]
   `
 
-    files.push({ outputFile: entry.outputFile, content, kind: "presets" })
+    files.push(
+      { outputFile: `${outputBase}.ts`, content: content, kind: "presets" },
+      { outputFile: `${outputBase}.d.ts`, content: content, kind: "presets" }
+    )
   }
 
   return files

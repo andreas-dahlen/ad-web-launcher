@@ -15,14 +15,13 @@ export type TokenGroupData = {
   name: string
   styleName: string
   typeName: string
-  outputFile: string
   tokens: TokenData[]
 }
 export type TokenData = {
   infix: string
   variables: VarData[];
 }
-type VarData = {
+export type VarData = {
   cssName: string
   key: string
   allowed: ValidPrefix[]
@@ -31,9 +30,9 @@ type VarData = {
 
 
 export type PresetFileData = {
+  name: string
   typeName: string
   selectors: string[];
-  outputFile: string
 };
 
 export type GroupMetadata = {
@@ -56,8 +55,8 @@ export type ExtensionData = {
 }
 
 export type PackageData = {
-  fileNames: string[]
-  outputFile: string
+  presetNames: string[]
+  tokenNames: string[]
 }
 
 export type EmitData = {

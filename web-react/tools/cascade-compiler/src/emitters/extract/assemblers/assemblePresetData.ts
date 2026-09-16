@@ -9,24 +9,23 @@ export function assemblePresetData(
   cssData: CssData
 ): PresetFileData | null {
 
-  const name = extractGroupName(cssData.groupPath)
+  const groupName = extractGroupName(cssData.groupPath)
 
-  const camelName = toCamelCase(name)
-  const outputFile = `presets/${camelName}.preset.ts`
+  const name = toCamelCase(groupName)
 
-  const typeName = `${toPascalCase(name)}Preset`
+  const typeName = `${toPascalCase(groupName)}Preset`
 
   const selectors = cssData.usableSelectors.filter(
     selector =>
-      selector !== camelName &&
+      selector !== name &&
       !selector.endsWith(NON_PRESET_SUFFIX)
   )
 
   if (selectors.length === 0) return null
 
   return {
+    name,
     typeName,
-    selectors,
-    outputFile
+    selectors
   }
 }

@@ -5,17 +5,19 @@ import type { PackageData } from '../../../types/emitter.types.ts';
 export function assemblePackageData(
   groupPaths: string[],
 ): PackageData {
-  const fileNames = groupPaths.flatMap(groupPath => {
+
+  const presetNames: string[] = []
+  const tokenNames: string[] = []
+
+  for (const groupPath of groupPaths) {
     const name = extractGroupName(groupPath)
 
-    return [
-      `presets/${name}.preset.ts`,
-      `tokenModules/${name}.token.ts`,
-    ]
-  })
+    presetNames.push(`${name}.preset`)
+    tokenNames.push(`${name}.token`)
+  }
 
   return {
-    fileNames,
-    outputFile: 'index.ts',
+    presetNames,
+    tokenNames
   }
 }

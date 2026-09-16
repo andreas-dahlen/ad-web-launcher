@@ -2,7 +2,8 @@ import clsx from 'clsx'
 import css from './Label.module.css'
 import type { Mode } from '@composites/types/comp.types.ts'
 import type { BoxSide } from '../../shared/types/core.types.ts'
-import { cpsx, labelStyle, svsx, type LabelPresets, type LabelStyle } from 'cascade'
+import { cpsx, svsx } from 'cascade'
+import { type LabelStyle, type LabelPresets, labelStyle } from 'cascade/generated'
 import type { ElementType } from 'react'
 
 export type LabelSettings = {
