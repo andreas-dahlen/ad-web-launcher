@@ -27,7 +27,7 @@
     "@types/node": "^26.1.2",
     "@types/vscode": "^1.134.0",
     "@vitest/coverage-v8": "^5.0.0",
-    "@vscode/vsce": "^3.9.2",
+    "@vscode/vsce": "^4.0.0",
     "esbuild": "^0.28.2",
     "typescript": "^6.0.3",
     "vitest": "^5.0.0"
@@ -52,15 +52,10 @@
     ],
     "configuration": {
       "properties": {
-        "cascade.cliFile": {
-          "type": "string",
-          "default": "tools/cascade-compiler/dist/cli.js",
-          "description": "Path to the compiler CLI, relative to the project root."
-        },
         "cascade.projectRoot": {
           "type": "string",
           "default": ".",
-          "description": "Path to the project root, relative to the workspace."
+          "description": "Starting directory for locating cascade.config.json, relative to the workspace."
         }
       }
     },

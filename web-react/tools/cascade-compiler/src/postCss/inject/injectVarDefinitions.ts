@@ -1,6 +1,7 @@
 import type { Rule } from "postcss";
 import type { CompilerToken, CompilerVariable } from "../../types/compiler.types.ts";
-import { isValidPrefix, normalizeCssValue, prefixPriority, toCssVar } from 'cascade';
+import { isValidPrefix, prefixPriority } from '../../utils/prefix.ts';
+import { normalizeCssValue, toCssVar } from '../../utils/stringFormaters.ts';
 
 export function injectVarDefinitions(
   rule: Rule,

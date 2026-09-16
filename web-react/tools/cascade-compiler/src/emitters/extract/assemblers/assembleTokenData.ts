@@ -14,7 +14,7 @@ export function assembleTokenData(
   const styleName = `${name}Style`;
   const typeName = `${toPascalCase(rawName)}Style`
 
-  const outputFile = `tokenModules/${name}.token.ts`
+  // const outputFile = `tokenModules/${name}.token.ts`
 
   const tokens: TokenData[] = []
 
@@ -31,7 +31,6 @@ export function assembleTokenData(
   }
 
   return {
-    outputFile,
     groupPath: group.groupPath,
     name,
     styleName,

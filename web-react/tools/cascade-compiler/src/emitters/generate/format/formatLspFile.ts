@@ -1,7 +1,5 @@
-import { toCssVar } from 'cascade';
 import type { FormatFileResult, LspData } from '../../../types/emitter.types.ts';
-
-
+import { toCssVar } from '../../../utils/stringFormaters.ts';
 
 export function formatLspFile(data: LspData): FormatFileResult {
   const output: string[] = []

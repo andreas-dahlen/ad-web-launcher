@@ -4,7 +4,8 @@ import css from './Svg.module.css'
 import type { DynamicIconComponent } from '@shared/types/svg.d.ts'
 import type { Icon } from '@phosphor-icons/react';
 import type { Mode } from '@composites/types/comp.types.ts';
-import { cpsx, svgStyle, svsx, type SvgPresets, type SvgStyle } from 'cascade';
+import { cpsx, svsx } from 'cascade';
+import { svgStyle, type SvgPresets, type SvgStyle } from 'cascade/generated';
 
 export type IconSettings = {
   Svg: Icon | DynamicIconComponent

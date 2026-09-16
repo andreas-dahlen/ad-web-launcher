@@ -1,4 +1,6 @@
-import { prefixPriority, type ValidPrefix } from 'cascade';
+
+import type { ValidPrefix } from '../../types/cascade.types.ts';
+import { prefixPriority } from '../../utils/prefix.ts';
 import { createNullIssueCollector, type IssueCollector } from '../tracking/issueCollector.ts';
 
 const priority = new Map(

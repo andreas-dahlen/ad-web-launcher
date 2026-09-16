@@ -1,35 +1,31 @@
-import path from 'node:path'
+#!/usr/bin/env node
+
 import { compiler } from './entries/entry.ts'
 
 const [command, rootDir] = process.argv.slice(2)
 
-const cliDirectory = path.dirname(process.argv[1])
-const compilerDirectory = path.dirname(cliDirectory)
-const projectRoot = path.resolve(
-  compilerDirectory,
-  rootDir,
-)
+const startDirectory = rootDir ?? process.cwd()
 
 switch (command) {
   case 'watch': {
     console.log('CASCADE COMPILER INITIALIZED')
-    compiler.runWatch(projectRoot)
+    compiler.runWatch(startDirectory)
     break
   }
 
   case 'build': {
-    compiler.runBuild(projectRoot)
+    compiler.runBuild(startDirectory)
     break
   }
 
   case 'css': {
-    compiler.runCss(projectRoot)
+    compiler.runCss(startDirectory)
     break
   }
 
   default:
     console.log('Options:')
-    console.log('  watch <rootDir>                Use specified root directory')
-    console.log('  build <rootDir>                Use specified root directory')
-    console.log('  css <rootDir>                Use specified root directory')
+    console.log('  watch [rootDir]')
+    console.log('  build [rootDir]')
+    console.log('  css   [rootDir]')
 }

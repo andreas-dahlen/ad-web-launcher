@@ -10,7 +10,6 @@ export default mergeConfig(
         './vitest.react.config.ts',
         './tools/cascade-compiler/vitest.config.ts',
         './tools/lint/vitest.config.ts',
-        './tools/plugins/vitest.config.ts',
         './tools/extensions/*/vitest.config.ts',
         './packages/*/vitest.config.ts'
       ]

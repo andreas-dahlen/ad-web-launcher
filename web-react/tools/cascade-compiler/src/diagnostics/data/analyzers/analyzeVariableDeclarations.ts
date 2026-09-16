@@ -1,7 +1,9 @@
-import { toCssVar, type CssVarString } from 'cascade';
 
+
+import type { CssVarString } from '../../../types/cascade.types.ts';
 import type { CssDataTokenGroup } from '../../../types/compiler.types.ts';
 import type { InvalidVarDeclaration } from '../../../types/diagnostics.types.ts';
+import { toCssVar } from '../../../utils/stringFormaters.ts';
 export function analyzeVariableDeclarations(group: CssDataTokenGroup): InvalidVarDeclaration[] {
 
   const result: InvalidVarDeclaration[] = []

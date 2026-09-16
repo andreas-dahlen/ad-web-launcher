@@ -3,7 +3,8 @@ import { usePointerBridge } from '@interaction/adapter/usePointerBridge.hook.ts'
 import css from './Button.module.css'
 import clsx from 'clsx'
 import dasx from 'dasx'
-import { cpsx, svsx, buttonStyle } from 'cascade'
+import { cpsx, svsx } from 'cascade'
+import { buttonStyle } from 'cascade/generated'
 import type { ButtonPrimProps } from '@primitives/types/prim.types.ts'
 
 export default function ButtonPrim({

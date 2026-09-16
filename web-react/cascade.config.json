@@ -3,9 +3,9 @@
   "outDir": "packages/cascade/src/generated",
   "outputs": {
     "extension": true,
-    "lsp": true,
+    "lsp": false,
     "meta": false,
-    "pathPatches": true,
+    "pathPatches": false,
     "presets": true,
     "tokens": true,
     "schema": true,

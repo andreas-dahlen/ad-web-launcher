@@ -9,7 +9,8 @@ import css from './Scroll.module.css'
 import clsx from 'clsx'
 import dasx from 'dasx'
 
-import { cpsx, scrollStyle, svsx } from 'cascade'
+import { cpsx, svsx } from 'cascade'
+import { scrollStyle } from 'cascade/generated'
 
 export default function ScrollPrim({
   id,

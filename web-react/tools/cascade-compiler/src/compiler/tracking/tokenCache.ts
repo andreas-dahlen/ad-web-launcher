@@ -44,8 +44,8 @@ export function createTokenCache(initialGroups: TokenGroup[], config: CompilerCo
   }
 
   return {
-    addGroup,
     removeGroup,
+    addGroup,
 
     addCssData(cssData: CssData) {
       const group = groupByCssPath.get(cssData.cssPath)
@@ -57,12 +57,21 @@ export function createTokenCache(initialGroups: TokenGroup[], config: CompilerCo
       postData.set(data.cssPath, data)
     },
 
+    isCssProcessingComplete(): boolean {
+      for (const group of groupByCssPath.values()) {
+        if (!group.cssData) {
+          return false
+        }
+      }
+      return true
+    },
+
     getConfig(): CompilerConfig {
       return config
     },
 
     getEmitConfig(): EmitConfig {
-      assert.hasOutPath(config)
+      assert.hasGeneratedPath(config)
       return config
     },
 

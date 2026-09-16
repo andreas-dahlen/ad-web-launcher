@@ -6,7 +6,7 @@ import type {
   CompilerToken,
   CompilerVariable,
 } from '../../src/types/compiler.types.ts'
-import { normalizeCssValue } from 'cascade'
+import { normalizeCssValue } from '../../src/utils/stringFormaters.ts'
 
 function createRule() {
   const root = postcss.parse(`

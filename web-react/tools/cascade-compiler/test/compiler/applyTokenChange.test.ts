@@ -19,7 +19,8 @@ const config: CompilerConfig = {
   projectRoot: '/project',
   tokenPath: '/project/tokens',
   outPath: '/project/output',
-  internal: { willEmitCss: false, initialProcessing: true, buildPackage: false },
+  generatedPath: '/project/generated',
+  internal: { willEmitCss: false, initialProcessing: true },
 
   outputs: {
     extension: false,

@@ -21,7 +21,7 @@ export function generateOutput(
       ...(config.outputs.lsp ? [formatLspFile(data.lspData)] : []),
       ...(config.outputs.extension ? [formatExtensionFile(data.extensionData)] : []),
       ...(config.outputs.schema ? [data.jsonSchema] : []),
-      ...(config.outputs.package ? [formatPackageFile(data.packageData)] : [])
+      ...(config.outputs.package ? formatPackageFile(data.packageData) : [])
     ],
     patches: config.outputs.pathPatches
       ? formatPathPatches(data.metadata)

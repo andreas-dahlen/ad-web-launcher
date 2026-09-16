@@ -1,14 +1,13 @@
 import type { CssDataTokenGroup, CssTokenGroup, TokenGroup } from "../types/compiler.types.ts";
-
 import type { CompilerConfig } from '../types/run.types.ts';
 import type { EmitConfig } from '../types/emitter.types.ts';
-import type { CssVarString } from 'cascade';
+import type { CssVarString } from '../types/cascade.types.ts';
 
 
 type Assertions = {
   cssVariable(value: string): asserts value is CssVarString;
   hasCssPath(group: TokenGroup | undefined): asserts group is CssTokenGroup
-  hasOutPath(config: CompilerConfig): asserts config is EmitConfig
+  hasGeneratedPath(config: CompilerConfig): asserts config is EmitConfig
   groupsHaveCssPath(groups: TokenGroup[]): asserts groups is CssTokenGroup[]
   groupsHaveCssData(groups: TokenGroup[]): asserts groups is CssDataTokenGroup[]
 };
@@ -34,11 +33,11 @@ export const assert: Assertions = {
     }
   },
 
-  hasOutPath(
+  hasGeneratedPath(
     config: CompilerConfig,
-  ): asserts config is EmitConfig & { outPath: string } {
-    if (!config.outPath) {
-      throw new Error('Expected compiler config to have an outPath')
+  ): asserts config is EmitConfig & { generatedPath: string } {
+    if (!config.generatedPath) {
+      throw new Error('Expected compiler config to have a generatedPath')
     }
   },
 

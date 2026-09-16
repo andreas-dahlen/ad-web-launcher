@@ -2,25 +2,48 @@
 import * as vscode6 from "vscode";
 
 // src/config/resolveSettings.ts
+import fs from "node:fs";
 import path from "node:path";
+import { createRequire } from "node:module";
 import * as vscode from "vscode";
 function createSettingsResolver(settings, output) {
   const projectRoot = getProjectRoot(settings, output);
-  const cliFile = settings.get("cliFile");
-  if (!cliFile) {
-    output.appendLine("ERROR: cliFile setting is missing");
-    throw new Error(" ");
-  }
-  const cliPath = path.resolve(projectRoot, cliFile);
-  const compilerDirectory = path.dirname(path.dirname(cliPath));
+  const cliPath = getCliSpawnPath(projectRoot);
   return {
     getCliSpawnPath() {
       return cliPath;
     },
     getProjectRootArg() {
-      return path.relative(compilerDirectory, projectRoot);
+      return projectRoot;
     }
   };
+}
+function getCliSpawnPath(projectRoot) {
+  const require2 = createRequire(import.meta.url);
+  const entryPath = require2.resolve("cascade", {
+    paths: [projectRoot]
+  });
+  const packageRoot = findPackageRoot(entryPath);
+  return path.join(packageRoot, "dist", "cli.js");
+}
+function findPackageRoot(startPath) {
+  let directory = path.dirname(startPath);
+  while (true) {
+    const packagePath = path.join(directory, "package.json");
+    if (fs.existsSync(packagePath)) {
+      const packageJson = JSON.parse(
+        fs.readFileSync(packagePath, "utf8")
+      );
+      if (packageJson.name === "cascade") {
+        return directory;
+      }
+    }
+    const parent = path.dirname(directory);
+    if (parent === directory) {
+      throw new Error("Could not find installed Cascade package.");
+    }
+    directory = parent;
+  }
 }
 function getProjectRoot(settings, output) {
   const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
@@ -149,6 +172,7 @@ function activate(context) {
   let terminal;
   context.subscriptions.push(
     output,
+    statusBar,
     ...createCommandSubscriptions({
       startCompiler,
       stopCompiler,

@@ -17,7 +17,8 @@ import {
   type CarouselStore
 } from '@primitives/Carousel/store/carousel.store.ts'
 
-import { cpsx, svsx, type CarouselPreset } from 'cascade'
+import { cpsx, svsx } from 'cascade'
+import type { CarouselPreset } from 'cascade/generated'
 
 import css from '../../../primitives/Carousel/Carousel.module.css'
 

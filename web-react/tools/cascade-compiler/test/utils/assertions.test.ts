@@ -71,7 +71,8 @@ describe('[COMPILER]', () => {
         projectRoot: '/project',
         tokenPath: '/project/tokens',
         outPath: '/project/output',
-        internal: { willEmitCss: false, initialProcessing: true, buildPackage: false },
+        generatedPath: '/project/generated',
+        internal: { willEmitCss: false, initialProcessing: true },
 
         outputs: {
           extension: false,
@@ -90,7 +91,7 @@ describe('[COMPILER]', () => {
       }
 
       expect(() =>
-        assert.hasOutPath(config),
+        assert.hasGeneratedPath(config),
       ).not.toThrow()
     })
 
@@ -99,7 +100,8 @@ describe('[COMPILER]', () => {
         projectRoot: '/project',
         tokenPath: '/project/tokens',
         outPath: null,
-        internal: { willEmitCss: false, initialProcessing: true, buildPackage: false },
+        generatedPath: null,
+        internal: { willEmitCss: false, initialProcessing: true },
 
         outputs: {
           extension: false,
@@ -118,7 +120,7 @@ describe('[COMPILER]', () => {
       }
 
       expect(() =>
-        assert.hasOutPath(config),
+        assert.hasGeneratedPath(config),
       ).toThrow('Expected compiler config to have an outPath')
     })
   })

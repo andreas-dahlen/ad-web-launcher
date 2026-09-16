@@ -1,6 +1,7 @@
 import clsx from 'clsx'
 import css from './Visual.module.css'
-import { cpsx, svsx, visualStyle, type VisualPresets, type VisualStyle } from 'cascade'
+import { cpsx, svsx } from 'cascade'
+import { visualStyle, type VisualPresets, type VisualStyle } from 'cascade/generated'
 
 export type VisualSettings = {
   styleVars?: VisualStyle

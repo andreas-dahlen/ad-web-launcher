@@ -16,7 +16,6 @@ export default mergeConfig(
 
           'tools/cascade-compiler/src/**/*.ts',
           'tools/lint/src/**/*.ts',
-          'tools/plugins/src/**/*.ts',
           'tools/extensions/*/src/**/*.ts',
           'packages/*/src/**/*.ts',
         ],

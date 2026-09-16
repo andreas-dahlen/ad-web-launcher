@@ -1,6 +1,6 @@
 import Color from 'colorjs.io';
 import type { LspData, TokenData } from '../../../types/emitter.types.ts';
-import type { CssVarString } from 'cascade';
+import type { CssVarString } from '../../../types/cascade.types.ts';
 
 export function assembleLspData(
   oklchVariables: Array<[CssVarString, string]>,

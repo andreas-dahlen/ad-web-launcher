@@ -2,7 +2,7 @@ import type { Rule } from 'postcss';
 import type { IssueGroup } from './issueCollector.types.ts';
 import type { rawTokenSchema, rawVariableSchema } from '../schema/tokenSchema.ts';
 import * as z from "zod"
-import type { CssVarString, ValidPrefix } from 'cascade';
+import type { CssVarString, ValidPrefix } from './cascade.types.ts';
 
 export type RawToken = z.infer<typeof rawTokenSchema>
 export type RawVariable = z.infer<typeof rawVariableSchema>

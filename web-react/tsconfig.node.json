@@ -37,7 +37,6 @@
     "eslint.config.ts",
     "oxlint.config.ts",
     "tools/lint/**/*.ts",
-    "tools/plugins/**/*.ts",
     "tools/cascade-compiler/**/*.ts"
   ]
 }

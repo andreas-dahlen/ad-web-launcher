@@ -3,13 +3,13 @@ import type { PatchResult, FormatPatchResult, EmittedPatch } from '../../types/e
 import path from 'node:path';
 
 
-export function patchFiles(files: FormatPatchResult[], outPath: string): PatchResult {
+export function patchFiles(files: FormatPatchResult[], generatedPath: string): PatchResult {
   const written: EmittedPatch[] = []
   const skipped: EmittedPatch[] = []
 
 
   for (const file of files) {
-    const outputFile = path.join(outPath, file.outputFile)
+    const outputFile = path.join(generatedPath, file.outputFile)
 
     if (!fs.existsSync(outputFile)) {
       skipped.push(resultOf(file))

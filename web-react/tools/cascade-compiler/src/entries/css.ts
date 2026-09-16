@@ -6,6 +6,7 @@ export function css(projectRoot: string): CssReturn {
 
   const config = resolveConfig(projectRoot, {
     willEmitCss: true,
+    generatedPath: null,
     outPath: null,
     initialProcessing: false
   })

@@ -14,9 +14,9 @@ export function emitFiles(cache: TokenCache, run: CompilerRun): EmitResult {
 
   const { files, patches } = generateOutput(outputData, config)
 
-  const patchResult = patchFiles(patches, config.outPath)
+  const patchResult = patchFiles(patches, config.generatedPath)
 
-  const writeResult = writeFiles(files, config.outPath)
+  const writeResult = writeFiles(files, config.generatedPath)
 
   return {
     extractResult,
