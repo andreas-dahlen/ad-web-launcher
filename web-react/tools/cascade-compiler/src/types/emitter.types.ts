@@ -40,18 +40,15 @@ export type GroupMetadata = {
   groupPath: string
   tokenFiles: string[]
   cssFile: string
-  outputFile: string
 }
 
 export type LspData = {
   rgbVariables: string[]
   tokens: TokenData[]
-  outputFile: string
 }
 
 export type ExtensionData = {
   variables: CssVarString[]
-  outputFile: string
 }
 
 export type PackageData = {
@@ -62,7 +59,7 @@ export type PackageData = {
 export type EmitData = {
   presetFiles: PresetFileData[]
   tokenFiles: TokenGroupData[]
-  jsonSchema: FormatFileResult
+  jsonSchema: string
   metadata: GroupMetadata[]
   extensionData: ExtensionData
   lspData: LspData
@@ -73,15 +70,16 @@ export type GeneratedOutput = {
   patches: FormatPatchResult[]
 }
 
-type FormatResult = {
-  outputFile: string;
+export type FormatResult = {
   content: string;
 };
 export type FormatFileResult = FormatResult & {
   kind: CompilerFileOutput
+  outputFile: string
 }
 export type FormatPatchResult = FormatResult & {
   kind: CompilerPatchOutput
+  outputFile: string
 }
 
 //for diagnostics results

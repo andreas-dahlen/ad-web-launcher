@@ -12,5 +12,7 @@ export function formatExtensionFile(
   ]
   `;
 
-  return { outputFile: data.outputFile, content, kind: "extension" };
+  const outputFile = "metadata/extension.jsonc"
+
+  return { outputFile, content, kind: "extension" };
 }

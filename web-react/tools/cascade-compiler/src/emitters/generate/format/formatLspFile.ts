@@ -48,5 +48,7 @@ export function formatLspFile(data: LspData): FormatFileResult {
 ${output}
 `;
 
-  return { outputFile: data.outputFile, content, kind: 'lsp' }
+  const outputFile = "metadata/lsp.ts"
+
+  return { outputFile, content, kind: 'lsp' }
 }

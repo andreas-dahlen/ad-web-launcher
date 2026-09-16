@@ -2,7 +2,7 @@ import type { FormatFileResult, GroupMetadata } from '../../../types/emitter.typ
 
 
 export function formatMetaFile(groups: GroupMetadata[]): FormatFileResult {
-
+  const outputFile = "metadata/metadata.jsonc"
   const content = JSON.stringify(
     {
       groups: Object.fromEntries(
@@ -27,7 +27,7 @@ export function formatMetaFile(groups: GroupMetadata[]): FormatFileResult {
   )
 
   return {
-    outputFile: groups[0].outputFile,
+    outputFile,
     content,
     kind: "meta"
   }

@@ -7,6 +7,7 @@ import { formatExtensionFile } from './format/formatExtensionFile.ts';
 import type { CompilerConfig } from '../../types/run.types.ts';
 import type { EmitData, GeneratedOutput } from '../../types/emitter.types.ts';
 import { formatPackageFile } from './format/formatPackageFile.ts';
+import { formatJsonSchema } from './format/formatJsonSchema.ts';
 
 export function generateOutput(
   data: EmitData,
@@ -20,7 +21,7 @@ export function generateOutput(
       ...(config.outputs.meta ? [formatMetaFile(data.metadata)] : []),
       ...(config.outputs.lsp ? [formatLspFile(data.lspData)] : []),
       ...(config.outputs.extension ? [formatExtensionFile(data.extensionData)] : []),
-      ...(config.outputs.schema ? [data.jsonSchema] : []),
+      ...(config.outputs.schema ? [formatJsonSchema(data.jsonSchema)] : []),
       ...(config.outputs.package ? formatPackageFile(data.packageData) : [])
     ],
     patches: config.outputs.pathPatches
