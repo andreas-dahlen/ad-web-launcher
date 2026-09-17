@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest'
 
-import { buildData } from '../../../src/diagnostics/data/buildData.ts'
+import { buildAnalysis } from '../../../src/diagnostics/analysis/buildAnalysis.ts'
 import type {
   CssData,
   CssDataTokenGroup,
@@ -88,12 +88,12 @@ function createRun(
 }
 
 describe('[DIAGNOSTICS]', () => {
-  describe('buildData', () => {
+  describe('buildAnalysis', () => {
     it('returns empty diagnostic data when nothing was processed', () => {
       const cache = createCache()
       const run = createRun()
 
-      expect(buildData(cache, run)).toEqual({
+      expect(buildAnalysis(cache, run)).toEqual({
         missingClasses: [],
         unusableSelectors: [],
         mismatchedVariables: [],
@@ -155,7 +155,7 @@ describe('[DIAGNOSTICS]', () => {
         ],
       })
 
-      buildData(cache, run)
+      buildAnalysis(cache, run)
 
       expect(cache.getCssDataGroupsByPaths)
         .toHaveBeenCalledWith([
@@ -182,7 +182,7 @@ describe('[DIAGNOSTICS]', () => {
         ],
       })
 
-      const result = buildData(cache, run)
+      const result = buildAnalysis(cache, run)
 
       expect(result.processedGroupCount).toBe(2)
     })
@@ -198,7 +198,7 @@ describe('[DIAGNOSTICS]', () => {
 
       const run = createRun()
 
-      const result = buildData(cache, run)
+      const result = buildAnalysis(cache, run)
 
       expect(result.missingCssModules).toEqual([
         'button',
@@ -241,7 +241,7 @@ describe('[DIAGNOSTICS]', () => {
         ],
       })
 
-      const result = buildData(cache, run)
+      const result = buildAnalysis(cache, run)
 
       expect(result.unusableSelectors).toEqual([
         {
@@ -291,7 +291,7 @@ describe('[DIAGNOSTICS]', () => {
         ],
       })
 
-      const result = buildData(cache, run)
+      const result = buildAnalysis(cache, run)
 
       expect(result.processedGroupCount).toBe(0)
       expect(result.missingClasses).toEqual([])
@@ -344,7 +344,7 @@ describe('[DIAGNOSTICS]', () => {
         },
       })
 
-      const result = buildData(cache, run)
+      const result = buildAnalysis(cache, run)
 
       expect(result.generatedFiles).toEqual({
         presets: {
@@ -409,7 +409,7 @@ describe('[DIAGNOSTICS]', () => {
         },
       })
 
-      const result = buildData(cache, run)
+      const result = buildAnalysis(cache, run)
 
       expect(result.omittedPresetFiles).toEqual([
         '/components/Button/Button.module.css',
@@ -420,7 +420,7 @@ describe('[DIAGNOSTICS]', () => {
       const cache = createCache()
       const run = createRun()
 
-      const result = buildData(cache, run)
+      const result = buildAnalysis(cache, run)
 
       expect(result.omittedPresetFiles).toEqual([])
     })

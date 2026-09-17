@@ -30,18 +30,6 @@ describe('[EMITTERS]', () => {
       expect(result?.typeName).toBe('ButtonPreset')
     })
 
-    it('builds the generated preset file path', () => {
-      const result = assemblePresetData(
-        createCssData({
-          groupPath: '/tokens/button',
-        }),
-      )
-
-      expect(result?.outputFile).toBe(
-        'presets/button.preset.ts',
-      )
-    })
-
     it('filters non-preset selectors', () => {
       const result = assemblePresetData(
         createCssData({

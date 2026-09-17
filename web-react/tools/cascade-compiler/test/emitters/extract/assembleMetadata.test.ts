@@ -49,7 +49,6 @@ describe('[EMITTER]', () => {
           '/tokens/button/hover.jsonc',
         ],
         cssFile: '/components/Button/Button.module.css',
-        outputFile: 'metadata/metadata.jsonc',
       })
     })
 
@@ -74,16 +73,6 @@ describe('[EMITTER]', () => {
       )
 
       expect(group.tokens).toEqual(originalTokens)
-    })
-
-    it('creates the metadata output path', () => {
-      const result = assembleMetadata(
-        createGroup()
-      )
-
-      expect(result.outputFile).toBe(
-        'metadata/metadata.jsonc',
-      )
     })
   })
 })

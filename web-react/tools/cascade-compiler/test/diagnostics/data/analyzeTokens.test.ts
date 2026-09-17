@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { analyzeTokens } from '../../../src/diagnostics/data/analyzers/analyzeTokens.ts'
+import { analyzeTokens } from '../../../src/diagnostics/analysis/analyzers/analyzeTokens.ts'
 import type { CssData } from '../../../src/types/compiler.types.ts'
 
 function createCssData(

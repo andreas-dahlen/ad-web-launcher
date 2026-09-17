@@ -121,7 +121,7 @@ describe('[COMPILER]', () => {
 
       expect(() =>
         assert.hasGeneratedPath(config),
-      ).toThrow('Expected compiler config to have an outPath')
+      ).toThrow('Expected compiler config to have a generatedPath')
     })
   })
 

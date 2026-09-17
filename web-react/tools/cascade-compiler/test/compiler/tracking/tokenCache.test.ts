@@ -240,7 +240,7 @@ describe('[COMPILER]', () => {
       it('throws when requesting emit config without an output path', () => {
         const noOutputConfig: CompilerConfig = {
           ...config,
-          outPath: null,
+          generatedPath: null,
         }
         const cache = createTokenCache([], noOutputConfig)
 

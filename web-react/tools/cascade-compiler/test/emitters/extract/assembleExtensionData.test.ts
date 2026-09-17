@@ -147,16 +147,5 @@ describe('[EMITTERS]', () => {
 
       expect(result.variables).toEqual([])
     })
-
-    it('creates the extension output path', () => {
-      const result = assembleExtensionData(
-        [],
-        []
-      )
-
-      expect(result.outputFile).toBe(
-        'metadata/extension.jsonc',
-      )
-    })
   })
 })

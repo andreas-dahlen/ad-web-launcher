@@ -57,6 +57,11 @@
           "type": "string",
           "default": "packages/cascade/src/generated/metadata/lsp.ts",
           "description": "Path to the LSP variable metadata file, relative to the workspace."
+        },
+        "cssVariableCompletion.nodeModulesRoot": {
+          "type": "string",
+          "default": ".",
+          "description": "Directory from which to resolve the Cascade package."
         }
       }
     }

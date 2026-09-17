@@ -105,17 +105,6 @@ describe('[EMITTERS]', () => {
       expect(result.tokens).toBe(tokens)
     })
 
-    it('creates the LSP output path', () => {
-      const result = assembleLspData(
-        [],
-        []
-      )
-
-      expect(result.outputFile).toBe(
-        'metadata/lsp.ts',
-      )
-    })
-
     it('returns an empty collection when there are no variables', () => {
       const result = assembleLspData(
         [],

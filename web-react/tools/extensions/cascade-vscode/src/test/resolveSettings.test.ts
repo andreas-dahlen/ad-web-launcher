@@ -14,6 +14,18 @@ const joinPathMock = vi.hoisted(() =>
   vi.fn(),
 )
 
+const resolveMock = vi.hoisted(() =>
+  vi.fn(),
+)
+
+const existsSyncMock = vi.hoisted(() =>
+  vi.fn(),
+)
+
+const readFileSyncMock = vi.hoisted(() =>
+  vi.fn(),
+)
+
 vi.mock('vscode', () => ({
   Uri: {
     joinPath: joinPathMock,
@@ -28,10 +40,23 @@ vi.mock('vscode', () => ({
   },
 }))
 
+vi.mock('node:module', () => ({
+  createRequire: () => ({
+    resolve: resolveMock,
+  }),
+}))
+
+vi.mock('node:fs', () => ({
+  default: {
+    existsSync: existsSyncMock,
+    readFileSync: readFileSyncMock,
+  },
+}))
+
 import { createSettingsResolver } from '../config/resolveSettings.ts'
 
 describe(
-  '[Token Compiler] createSettingsResolver',
+  '[Cascade] createSettingsResolver',
   () => {
     const appendLine = vi.fn()
 
@@ -64,15 +89,35 @@ describe(
           if (key === 'projectRoot') {
             return 'web-react'
           }
-
-          if (key === 'cliFile') {
-            return 'tools/token-compiler/dist/cli.js'
-          }
         },
+      )
+
+      resolveMock.mockReturnValue(
+        '/workspace/web-react/node_modules/cascade/index.js',
+      )
+
+      existsSyncMock.mockReturnValue(true)
+
+      readFileSyncMock.mockReturnValue(
+        JSON.stringify({
+          name: 'cascade',
+        }),
       )
     })
 
-    it('resolves the CLI path', () => {
+    it('resolves the project root', () => {
+      const resolver =
+        createSettingsResolver(
+          settings as never,
+          output as never,
+        )
+
+      expect(
+        resolver.getProjectRootArg(),
+      ).toBe('/workspace/web-react')
+    })
+
+    it('resolves the installed Cascade CLI', () => {
       const resolver =
         createSettingsResolver(
           settings as never,
@@ -82,20 +127,15 @@ describe(
       expect(
         resolver.getCliSpawnPath(),
       ).toBe(
-        '/workspace/web-react/tools/token-compiler/dist/cli.js',
+        '/workspace/web-react/node_modules/cascade/dist/cli.js',
       )
-    })
 
-    it('resolves the project root argument', () => {
-      const resolver =
-        createSettingsResolver(
-          settings as never,
-          output as never,
-        )
-
-      expect(
-        resolver.getProjectRootArg(),
-      ).toBe('../..')
+      expect(resolveMock).toHaveBeenCalledWith(
+        'cascade',
+        {
+          paths: ['/workspace/web-react'],
+        },
+      )
     })
 
     it('throws when the workspace folder is missing', () => {
@@ -113,6 +153,7 @@ describe(
       )
 
       expect(get).not.toHaveBeenCalled()
+      expect(resolveMock).not.toHaveBeenCalled()
     })
 
     it('throws when projectRoot is missing', () => {
@@ -120,10 +161,6 @@ describe(
         (key: string) => {
           if (key === 'projectRoot') {
             return
-          }
-
-          if (key === 'cliFile') {
-            return 'tools/token-compiler/dist/cli.js'
           }
         },
       )
@@ -138,30 +175,35 @@ describe(
       expect(appendLine).toHaveBeenCalledWith(
         'ERROR: projectRoot setting is missing',
       )
+
+      expect(resolveMock).not.toHaveBeenCalled()
     })
 
-    it('throws when cliFile is missing', () => {
-      get.mockImplementation(
-        (key: string) => {
-          if (key === 'projectRoot') {
-            return 'web-react'
-          }
+    it('resolves nested project roots', () => {
+      get.mockReturnValue('projects/web-react')
 
-          if (key === 'cliFile') {
-            return
-          }
-        },
+      joinPathMock.mockReturnValue({
+        fsPath: '/workspace/projects/web-react',
+      })
+
+      resolveMock.mockReturnValue(
+        '/workspace/projects/web-react/node_modules/cascade/index.js',
       )
 
-      expect(() =>
+      const resolver =
         createSettingsResolver(
           settings as never,
           output as never,
-        ),
-      ).toThrow()
+        )
 
-      expect(appendLine).toHaveBeenCalledWith(
-        'ERROR: cliFile setting is missing',
+      expect(
+        resolver.getProjectRootArg(),
+      ).toBe('/workspace/projects/web-react')
+
+      expect(
+        resolver.getCliSpawnPath(),
+      ).toBe(
+        '/workspace/projects/web-react/node_modules/cascade/dist/cli.js',
       )
     })
   },

@@ -17,7 +17,7 @@ const {
 }))
 
 vi.mock(
-  '../../cascade-compiler/src/entries/entry.ts',
+  '../../src/entries/entry.ts',
   () => ({
     compiler: {
       runCss,
@@ -27,7 +27,7 @@ vi.mock(
 )
 
 vi.mock(
-  '../src/helpers/finalizeScheduler.ts',
+  '../../src/vite/helpers/finalizeScheduler.ts',
   () => ({
     createFinalizeScheduler: () => ({
       schedule,

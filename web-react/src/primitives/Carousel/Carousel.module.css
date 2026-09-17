@@ -24,6 +24,7 @@ file://wsl.localhost/Ubuntu/home/david/repos/ad-web-launcher/web-react/src/style
     justify-content: center;
     width: var(--final-carousel-width);
     height: var(--final-carousel-height);
+    --black: black;
   }
 }
 

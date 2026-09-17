@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { analyzeIssues } from '../../../src/diagnostics/data/analyzers/analyzeIssues.ts'
+import { analyzeIssues } from '../../../src/diagnostics/analysis/analyzers/analyzeIssues.ts'
 import type {
   Issue,
   IssueGroup,

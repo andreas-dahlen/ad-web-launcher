@@ -8,11 +8,7 @@ export function createRuntime(
   projectRoot: string,
   onConfigChange: () => Promise<void>,
 ): CompilerRuntime | null {
-  const config = resolveConfig(projectRoot)
-
-  if (config === null) {
-    return null
-  }
+  const config = resolveConfig(projectRoot, { willEmitCss: false })
 
   const compiler = initializeCompiler(config)
 

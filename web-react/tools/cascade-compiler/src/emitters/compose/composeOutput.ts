@@ -9,7 +9,7 @@ import type { EmitData, GeneratedOutput } from '../../types/emitter.types.ts';
 import { formatPackageFile } from './format/formatPackageFile.ts';
 import { formatJsonSchema } from './format/formatJsonSchema.ts';
 
-export function generateOutput(
+export function composeOutput(
   data: EmitData,
   config: CompilerConfig
 ): GeneratedOutput {

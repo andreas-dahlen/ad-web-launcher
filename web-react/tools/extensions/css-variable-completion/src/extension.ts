@@ -2,6 +2,7 @@ import * as vscode from 'vscode'
 
 import { variableEntry } from './variables/variableEntry.ts'
 import { lspEntry } from './lsp/lspEntry.ts'
+import { resolveCascadeRoot } from './config/paths.ts'
 
 export function activate(context: vscode.ExtensionContext): void {
   const output = vscode.window.createOutputChannel('CSS Variable Completion')
@@ -10,24 +11,23 @@ export function activate(context: vscode.ExtensionContext): void {
 
   output.appendLine('[css variable completion] loaded')
 
-  const workspaceFolder = vscode.workspace.workspaceFolders?.[0]
-
-  if (!workspaceFolder) {
-    output.appendLine(
-      '[css variable completion] no workspace folder. Shutting down.',
-    )
-    return
-  }
-
   let runtime: vscode.Disposable | undefined
 
   const launch = (): void => {
     runtime?.dispose()
 
+    const cascadeRoot = resolveCascadeRoot(output)
+
+    if (!cascadeRoot) {
+      output.appendLine(
+        '[css variable completion] could not find Cascade.',
+      )
+      return
+    }
     const disposables: vscode.Disposable[] = []
 
-    const variable = variableEntry(workspaceFolder, output)
-    const lsp = lspEntry(workspaceFolder) //output
+    const variable = variableEntry(cascadeRoot, output)
+    const lsp = lspEntry(cascadeRoot, output) //output
 
     if (variable) disposables.push(variable)
     if (lsp) disposables.push(lsp)

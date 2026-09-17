@@ -11,7 +11,7 @@ import { analyzeVariableDeclarations } from './analyzers/analyzeVariableDeclarat
 import type { TokenCache } from '../../compiler/tracking/tokenCache.ts';
 import { analyzePatchResult } from './analyzers/analyzePatchResult.ts';
 
-export function buildData(
+export function buildAnalysis(
   cache: TokenCache,
   run: CompilerRun
 ): DiagnosticData {

@@ -15,14 +15,19 @@ const appBoundaryElements = [
 
 const compilerBoundaryElements = [
   { type: 'compiler', pattern: 'tools/cascade-compiler/src/compiler/*/**', capture: ['mod'] },
-  { type: 'diagnostics', pattern: 'tools/cascade-compiler/src/diagnostics/*/**', capture: ['mod'] },
-  { type: 'emitters', pattern: 'tools/cascade-compiler/src/emitters/*/**', capture: ['mod'] },
+  { type: 'analysisAnalyzers', pattern: 'tools/cascade-compiler/src/diagnostics/analysis/analyzers/**' },
+  { type: 'reportSections', pattern: 'tools/cascade-compiler/src/diagnostics/report/sections/**' },
+
+  { type: 'composeFormat', pattern: 'tools/cascade-compiler/src/emitters/compose/format/**' },
+  { type: 'extractAssemblers', pattern: 'tools/cascade-compiler/src/emitters/extract/assemblers/**' },
+  { type: 'write', pattern: 'tools/cascade-compiler/src/emitters/write/**' },
+
   { type: 'entries', pattern: 'tools/cascade-compiler/src/entries/*/**', capture: ['mod'] },
   { type: 'package', pattern: 'tools/cascade-compiler/src/package/*/**', capture: ['mod'] },
   { type: 'postCss', pattern: 'tools/cascade-compiler/src/postCss/*/**', capture: ['mod'] },
-  { type: 'schema', pattern: 'tools/cascade-compiler/src/schema/*/**' },
-  { type: 'tokenTypes', pattern: 'tools/cascade-compiler/src/types/**' },
+  { type: 'schema', pattern: 'tools/cascade-compiler/src/schema/**' },
   { type: 'utils', pattern: 'tools/cascade-compiler/src/utils/**' },
+  { type: 'vite', pattern: 'tools/cascade-compiler/src/vite/**' },
 ]
 
 //TODO add project to project boundaries to be able to see cross contamination

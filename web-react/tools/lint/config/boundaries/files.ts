@@ -18,8 +18,15 @@ const compilerBoundaryFiles = [
   { pattern: 'tools/cascade-compiler/**/*.boundary.ts', category: 'boundary' },
   { pattern: 'tools/cascade-compiler/**/*.types.ts', category: 'types' },
   { pattern: 'tools/cascade-compiler/**/compilerService.ts', category: 'compilerService' },
+
   { pattern: 'tools/cascade-compiler/**/runDiagnostics.ts', category: 'runDiagnostics' },
+  { pattern: 'tools/cascade-compiler/**/buildAnalysis.ts', category: 'buildAnalysis' },
+  { pattern: 'tools/cascade-compiler/**/buildReport.ts', category: 'buildReport' },
+
   { pattern: 'tools/cascade-compiler/**/emitFiles.ts', category: 'emitFiles' },
+  { pattern: 'tools/cascade-compiler/**/composeOutput.ts', category: 'composeOutput' },
+  { pattern: 'tools/cascade-compiler/**/extractData.ts', category: 'extractData' },
+
   { pattern: 'tools/cascade-compiler/**/processModule.ts', category: 'processModule' },
   { pattern: 'tools/cascade-compiler/**/processPost.ts', category: 'processPost' },
   { pattern: 'tools/cascade-compiler/**/cli.ts', category: 'cli' },
@@ -27,6 +34,7 @@ const compilerBoundaryFiles = [
   { pattern: 'tools/cascade-compiler/**/css.ts', category: 'css' },
   { pattern: 'tools/cascade-compiler/**/build.ts', category: 'build' },
   { pattern: 'tools/cascade-compiler/**/watch.ts', category: 'watch' },
+  { pattern: 'tools/cascade-compiler/**/vite.ts', category: 'vite' },
 ]
 
 export const boundariesFiles = [

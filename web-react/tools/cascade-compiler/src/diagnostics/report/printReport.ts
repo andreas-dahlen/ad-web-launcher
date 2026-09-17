@@ -1,4 +1,4 @@
-import type { ReportSection } from '../../diagnostics/report/buildReport.ts';
+import type { ReportSection } from './buildReport.ts';
 
 export function printReport(sections: ReportSection[]) {
   for (const section of sections) {

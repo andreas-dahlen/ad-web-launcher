@@ -1,5 +1,5 @@
 // src/extension.ts
-import * as vscode9 from "vscode";
+import * as vscode10 from "vscode";
 
 // src/completion/cssVarCompletionProvider.ts
 import * as vscode from "vscode";
@@ -33,7 +33,7 @@ var CssVariableCompletionProvider = class {
 };
 
 // src/variables/variableEntry.ts
-import * as vscode4 from "vscode";
+import * as vscode5 from "vscode";
 
 // node_modules/jsonc-parser/lib/esm/impl/scanner.js
 function createScanner(text, ignoreTrivia = false) {
@@ -960,33 +960,98 @@ var cssLanguages = [
 ];
 
 // src/config/paths.ts
+import fs from "node:fs";
+import path2 from "node:path";
+import { createRequire } from "node:module";
+import * as vscode4 from "vscode";
+
+// src/config/getConfig.ts
+import path from "node:path";
 import * as vscode3 from "vscode";
-function resolveVariablesUri(workspaceFolder) {
-  const config = vscode3.workspace.getConfiguration(
+function getConfig(output) {
+  const workspaceFolder = vscode3.workspace.workspaceFolders?.[0];
+  if (!workspaceFolder) {
+    output.appendLine(
+      "[css variable completion] no workspace folder."
+    );
+    return;
+  }
+  const settings = vscode3.workspace.getConfiguration(
     "cssVariableCompletion"
   );
-  const variablesFile = config.get("variablesFile");
-  if (!variablesFile) return;
-  return vscode3.Uri.joinPath(
-    workspaceFolder.uri,
-    ...variablesFile.split("/")
-  );
-}
-function resolveLspPath(workspaceFolder) {
-  const config = vscode3.workspace.getConfiguration(
-    "cssVariableCompletion"
-  );
-  const lspFile = config.get("lspFile");
-  if (!lspFile) return;
-  return vscode3.Uri.joinPath(
-    workspaceFolder.uri,
-    ...lspFile.split("/")
+  const rootSetting = settings.get("nodeModulesRoot");
+  if (!rootSetting) {
+    output.appendLine(
+      "[css variable completion] nodeModulesRoot is missing."
+    );
+    return;
+  }
+  return path.resolve(
+    workspaceFolder.uri.fsPath,
+    rootSetting
   );
 }
 
+// src/config/paths.ts
+function resolveCascadeRoot(output) {
+  const config = getConfig(output);
+  if (!config) return;
+  const require2 = createRequire(import.meta.url);
+  try {
+    const entryPath = require2.resolve("cascade", {
+      paths: [config]
+    });
+    output.appendLine(`Cascade entry: ${entryPath}`);
+    return findPackageRoot(entryPath);
+  } catch (error) {
+    output.appendLine(
+      `Cascade resolution failed: ${error}`
+    );
+    return;
+  }
+}
+function resolveVariablesUri(cascadeRoot) {
+  return vscode4.Uri.file(
+    path2.join(
+      cascadeRoot,
+      "generated/metadata/extension.jsonc"
+    )
+  );
+}
+function resolveLspPath(cascadeRoot) {
+  return vscode4.Uri.file(
+    path2.join(
+      cascadeRoot,
+      "generated/metadata/lsp.ts"
+    )
+  );
+}
+function findPackageRoot(startPath) {
+  let directory = path2.dirname(startPath);
+  while (true) {
+    const packagePath = path2.join(
+      directory,
+      "package.json"
+    );
+    if (fs.existsSync(packagePath)) {
+      const packageJson = JSON.parse(
+        fs.readFileSync(packagePath, "utf8")
+      );
+      if (packageJson.name === "cascade") {
+        return directory;
+      }
+    }
+    const parent = path2.dirname(directory);
+    if (parent === directory) {
+      return;
+    }
+    directory = parent;
+  }
+}
+
 // src/variables/variableEntry.ts
-function variableEntry(workspaceFolder, output) {
-  const variablesUri = resolveVariablesUri(workspaceFolder);
+function variableEntry(cascadeRoot, output) {
+  const variablesUri = resolveVariablesUri(cascadeRoot);
   if (!variablesUri) return null;
   const variables = loadVariables(variablesUri);
   const provider = new CssVariableCompletionProvider(variables);
@@ -995,12 +1060,12 @@ function variableEntry(workspaceFolder, output) {
     provider,
     output
   );
-  const completion = vscode4.languages.registerCompletionItemProvider(
+  const completion = vscode5.languages.registerCompletionItemProvider(
     cssLanguages,
     provider,
     "-"
   );
-  return vscode4.Disposable.from(
+  return vscode5.Disposable.from(
     watcher,
     completion
   );
@@ -1010,13 +1075,13 @@ function variableEntry(workspaceFolder, output) {
 import "vscode";
 
 // src/lsp/watchCssSave.ts
-import * as vscode7 from "vscode";
+import * as vscode8 from "vscode";
 
 // src/lsp/openLspDocument.ts
-import * as vscode5 from "vscode";
+import * as vscode6 from "vscode";
 async function openLspDocument(lspPath) {
   try {
-    await vscode5.workspace.openTextDocument(lspPath);
+    await vscode6.workspace.openTextDocument(lspPath);
   } catch (error) {
     console.error(
       `[css variable completion] failed to open LSP document: ${String(error)}`
@@ -1025,20 +1090,20 @@ async function openLspDocument(lspPath) {
 }
 
 // src/lsp/nudgeModule.ts
-import * as vscode6 from "vscode";
+import * as vscode7 from "vscode";
 async function nudgeCssModule(document) {
-  const editor = vscode6.window.visibleTextEditors.find(
+  const editor = vscode7.window.visibleTextEditors.find(
     (editor2) => editor2.document === document
   );
   if (!editor) return;
-  const position = new vscode6.Position(0, 0);
+  const position = new vscode7.Position(0, 0);
   const inserted = await editor.edit((editBuilder) => {
     editBuilder.insert(position, " ");
   });
   if (!inserted) return;
   const removed = await editor.edit((editBuilder) => {
     editBuilder.delete(
-      new vscode6.Range(
+      new vscode7.Range(
         position,
         position.translate(0, 1)
       )
@@ -1050,12 +1115,12 @@ async function nudgeCssModule(document) {
 
 // src/lsp/watchCssSave.ts
 function watchCssSave(lspPath) {
-  const watcher = vscode7.workspace.createFileSystemWatcher(
+  const watcher = vscode8.workspace.createFileSystemWatcher(
     lspPath.fsPath
   );
   let pendingCssDocument;
   void openLspDocument(lspPath);
-  const saveListener = vscode7.workspace.onDidSaveTextDocument((document) => {
+  const saveListener = vscode8.workspace.onDidSaveTextDocument((document) => {
     if (cssLanguages.every(({ language }) => document.languageId !== language)) {
       return;
     }
@@ -1067,7 +1132,7 @@ function watchCssSave(lspPath) {
     if (!document) return;
     await nudgeCssModule(document);
   });
-  return vscode7.Disposable.from(
+  return vscode8.Disposable.from(
     watcher,
     saveListener,
     changeListener
@@ -1075,37 +1140,41 @@ function watchCssSave(lspPath) {
 }
 
 // src/lsp/lspEntry.ts
-function lspEntry(workspaceFolder) {
-  const lspUri = resolveLspPath(workspaceFolder);
-  if (!lspUri) return null;
+function lspEntry(cascadeRoot, output) {
+  const lspUri = resolveLspPath(cascadeRoot);
+  if (!lspUri) {
+    output.appendLine("couldn't resolve LSP path");
+    return;
+  }
+  output.appendLine(`[css variable completion] lsp path: ${lspUri}`);
   return watchCssSave(lspUri);
 }
 
 // src/extension.ts
 function activate(context) {
-  const output = vscode9.window.createOutputChannel("CSS Variable Completion");
+  const output = vscode10.window.createOutputChannel("CSS Variable Completion");
   context.subscriptions.push(output);
   output.appendLine("[css variable completion] loaded");
-  const workspaceFolder = vscode9.workspace.workspaceFolders?.[0];
-  if (!workspaceFolder) {
-    output.appendLine(
-      "[css variable completion] no workspace folder. Shutting down."
-    );
-    return;
-  }
   let runtime;
   const launch = () => {
     runtime?.dispose();
+    const cascadeRoot = resolveCascadeRoot(output);
+    if (!cascadeRoot) {
+      output.appendLine(
+        "[css variable completion] could not find Cascade."
+      );
+      return;
+    }
     const disposables = [];
-    const variable = variableEntry(workspaceFolder, output);
-    const lsp = lspEntry(workspaceFolder);
+    const variable = variableEntry(cascadeRoot, output);
+    const lsp = lspEntry(cascadeRoot, output);
     if (variable) disposables.push(variable);
     if (lsp) disposables.push(lsp);
-    runtime = vscode9.Disposable.from(...disposables);
+    runtime = vscode10.Disposable.from(...disposables);
   };
   launch();
   context.subscriptions.push(
-    vscode9.workspace.onDidChangeConfiguration((event) => {
+    vscode10.workspace.onDidChangeConfiguration((event) => {
       if (!event.affectsConfiguration("cssVariableCompletion")) {
         return;
       }

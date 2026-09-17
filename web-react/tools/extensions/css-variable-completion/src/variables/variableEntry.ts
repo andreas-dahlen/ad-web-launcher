@@ -8,10 +8,10 @@ import { resolveVariablesUri } from '../config/paths.ts'
 
 
 export function variableEntry(
-  workspaceFolder: vscode.WorkspaceFolder,
+  cascadeRoot: string,
   output: vscode.OutputChannel,
 ): vscode.Disposable | null {
-  const variablesUri = resolveVariablesUri(workspaceFolder)
+  const variablesUri = resolveVariablesUri(cascadeRoot)
 
   if (!variablesUri) return null
 

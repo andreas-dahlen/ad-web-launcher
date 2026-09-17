@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import type { GroupMetadata } from '../../../src/types/emitter.types.ts'
-import { formatPathPatches } from '../../../src/emitters/generate/format/formatPathPatches.ts'
+import { formatPathPatches } from '../../../src/emitters/compose/format/formatPathPatches.ts'
 
 function createGroup(
   overrides: Partial<GroupMetadata> = {},
@@ -14,7 +14,6 @@ function createGroup(
       '/tokens/button/hover.jsonc',
     ],
     cssFile: '/components/Button/Button.module.css',
-    outputFile: '/generated/metadata/metadata.generated.jsonc',
     ...overrides,
   }
 }

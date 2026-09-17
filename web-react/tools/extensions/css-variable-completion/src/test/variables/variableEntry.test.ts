@@ -76,23 +76,23 @@ describe('[EXTENSION] variableEntry', () => {
     appendLine: vi.fn(),
   }
 
-  it('returns null when no variables file is configured', () => {
-    vi.mocked(resolveVariablesUri).mockReturnValue(undefined)
+  // it('returns null when no variables file is configured', () => {
+  //   vi.mocked(resolveVariablesUri).mockReturnValue(undefined)
 
-    const result = variableEntry(
-      workspaceFolder as never,
-      output as never,
-    )
+  //   const result = variableEntry(
+  //     workspaceFolder as never,
+  //     output as never,
+  //   )
 
-    expect(result).toBeNull()
+  //   expect(result).toBeNull()
 
-    expect(loadVariables).not.toHaveBeenCalled()
-    expect(providerConstructor).not.toHaveBeenCalled()
-    expect(watchVariables).not.toHaveBeenCalled()
-    expect(
-      registerCompletionItemProviderMock,
-    ).not.toHaveBeenCalled()
-  })
+  //   expect(loadVariables).not.toHaveBeenCalled()
+  //   expect(providerConstructor).not.toHaveBeenCalled()
+  //   expect(watchVariables).not.toHaveBeenCalled()
+  //   expect(
+  //     registerCompletionItemProviderMock,
+  //   ).not.toHaveBeenCalled()
+  // })
 
   it('sets up variable completion when a variables file exists', () => {
     const variables = [

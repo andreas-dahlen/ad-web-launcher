@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { formatMetaFile } from '../../../src/emitters/generate/format/formatMetaFile.ts'
+import { formatMetaFile } from '../../../src/emitters/compose/format/formatMetaFile.ts'
 import type { GroupMetadata } from '../../../src/types/emitter.types.ts'
 
 function createGroup(
@@ -14,21 +14,28 @@ function createGroup(
       '/tokens/button/hover.jsonc',
     ],
     cssFile: '/components/Button/Button.module.css',
-    outputFile:
-      '/generated/metadata/metadata.generated.jsonc',
     ...overrides,
   }
 }
 
 describe('[EMITTER]', () => {
   describe('formatMetaFile', () => {
-    it('returns the generated metadata file path', () => {
-      const group = createGroup()
-
-      const result = formatMetaFile([group])
+    it('returns the metadata output path', () => {
+      const result = formatMetaFile([
+        createGroup(),
+      ])
 
       expect(result.outputFile)
-        .toBe(group.outputFile)
+        .toBe('metadata/metadata.jsonc')
+    })
+
+    it('returns the metadata result kind', () => {
+      const result = formatMetaFile([
+        createGroup(),
+      ])
+
+      expect(result.kind)
+        .toBe('meta')
     })
 
     it('formats group metadata', () => {

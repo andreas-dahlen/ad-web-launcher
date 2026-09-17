@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
 
-import { printReport } from '../../src/diagnostics/print/printReport.ts'
+import { printReport } from '../../src/diagnostics/report/printReport.ts'
 import type { ReportSection } from '../../src/diagnostics/report/buildReport.ts'
 
 describe('[DIAGNOSTICS]', () => {
