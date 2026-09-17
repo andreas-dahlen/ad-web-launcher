@@ -32,11 +32,9 @@
     "vite.base.config.ts",
     "vitest.config.ts",
     "vitest.app.config.ts",
-    "vitest.react.config.ts",
-    "vitest.coverage.config.ts",
+    "vitest.all.config.ts",
     "eslint.config.ts",
     "oxlint.config.ts",
-    "tools/lint/**/*.ts",
-    "tools/cascade-compiler/**/*.ts"
+    "tools/lint/config/**/*.ts"
   ]
 }

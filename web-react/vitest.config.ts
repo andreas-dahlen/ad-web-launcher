@@ -1,18 +1,23 @@
-import { defineConfig, mergeConfig } from 'vitest/config'
-import viteBaseConfig from './vite.base.config.ts'
+import {
+  defineConfig
+} from 'vitest/config'
 
-export default mergeConfig(
-  viteBaseConfig,
-  defineConfig({
-    test: {
-      projects: [
-        './vitest.app.config.ts',
-        './vitest.react.config.ts',
-        './tools/cascade-compiler/vitest.config.ts',
-        './tools/lint/vitest.config.ts',
-        './tools/extensions/*/vitest.config.ts',
-        './packages/*/vitest.config.ts'
-      ]
-    }
-  })
-)
+// vitest.config.ts
+export default defineConfig({
+  test: {
+    projects: [
+      './vitest.app.config.ts',
+    ],
+    coverage: {
+      provider: 'v8',
+      include: [
+        'src/**/*.ts',
+        'src/**/*.tsx',
+      ],
+      exclude: [
+        'src/test/**',
+        '**/*.css',
+      ],
+    },
+  },
+})

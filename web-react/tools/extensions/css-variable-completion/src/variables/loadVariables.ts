@@ -15,13 +15,13 @@ export function loadVariables(fileUri: vscode.Uri): string[] {
 
   if (!Array.isArray(parsed)) {
     throw new TypeError(
-      'extension.generated.jsonc must contain an array',
+      'extension.jsonc must contain an array',
     )
   }
 
   if (!parsed.every((value): value is string => typeof value === 'string')) {
     throw new Error(
-      'extension.generated.jsonc must contain only strings',
+      'extension.jsonc must contain only strings',
     )
   }
 

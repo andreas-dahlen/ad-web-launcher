@@ -15,13 +15,16 @@ export default defineConfig({
     ],
     coverage: {
       provider: 'v8',
+      reportOnFailure: true,
       include: [
         'src/**/*.ts'
       ],
       exclude: [
         'test/**',
         '**/*.css',
-        '**/*.types.ts'
+        '**/*.types.ts',
+        '**/*.factory.ts',
+        '**/cli.ts'
       ]
     }
   }

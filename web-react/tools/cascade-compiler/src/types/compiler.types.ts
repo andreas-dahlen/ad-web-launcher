@@ -1,4 +1,4 @@
-import type { Rule } from 'postcss';
+import type { Root, Rule } from 'postcss';
 import type { IssueGroup } from './issueCollector.types.ts';
 import type { rawTokenSchema, rawVariableSchema } from '../schema/tokenSchema.ts';
 import * as z from "zod"
@@ -48,7 +48,13 @@ export type TokenGroupsResult = {
   groups: TokenGroup[]
   issues: IssueGroup[]
 }
-// glbal processing
+
+export type LoadedCssRoot = {
+  root?: Root
+  issues: IssueGroup[]
+}
+
+// global processing
 
 export type PostData = {
   cssPath: string;

@@ -41,15 +41,6 @@
     "vitest@5.0.0": true
   },
   "contributes": {
-    "jsonValidation": [
-      {
-        "fileMatch": [
-          "**/cascade/**/*.json",
-          "**/cascade/**/*.jsonc"
-        ],
-        "url": "./schema/cascade.schema.json"
-      }
-    ],
     "configuration": {
       "properties": {
         "cascade.projectRoot": {
@@ -62,7 +53,7 @@
     "configurationDefaults": {
       "files.associations": {
         "cascade.config.json": "jsonc",
-        "**/cascade/**/*.json": "jsonc"
+        "**/tokens/**/*.json": "jsonc"
       }
     },
     "commands": [

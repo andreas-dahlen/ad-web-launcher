@@ -906,12 +906,12 @@ function loadVariables(fileUri) {
   const parsed = parse2(contents);
   if (!Array.isArray(parsed)) {
     throw new TypeError(
-      "extension.generated.jsonc must contain an array"
+      "extension.jsonc must contain an array"
     );
   }
   if (!parsed.every((value) => typeof value === "string")) {
     throw new Error(
-      "extension.generated.jsonc must contain only strings"
+      "extension.jsonc must contain only strings"
     );
   }
   return parsed;
@@ -927,17 +927,11 @@ function watchVariables(variablesUri, provider, output) {
     variablesUri.fsPath
   );
   const reloadVariables = () => {
-    output.appendLine(
-      `[css variable completion] variables changed: ${variablesUri.fsPath}`
-    );
     try {
       const variables = loadVariables(variablesUri);
-      output.appendLine(
-        `[css variable completion] loaded ${variables.length} variables`
-      );
       provider.updateVariables(variables);
       output.appendLine(
-        `[css variable completion] provider updated`
+        `[css variable completion] updated: ${variables.length} variables`
       );
     } catch (error) {
       output.appendLine(
@@ -1079,11 +1073,14 @@ import * as vscode8 from "vscode";
 
 // src/lsp/openLspDocument.ts
 import * as vscode6 from "vscode";
-async function openLspDocument(lspPath) {
+async function openLspDocument(lspPath, output) {
   try {
     await vscode6.workspace.openTextDocument(lspPath);
+    output.appendLine(
+      `[css variable completion] LSP document refreshed`
+    );
   } catch (error) {
-    console.error(
+    output.appendLine(
       `[css variable completion] failed to open LSP document: ${String(error)}`
     );
   }
@@ -1114,12 +1111,12 @@ async function nudgeCssModule(document) {
 }
 
 // src/lsp/watchCssSave.ts
-function watchCssSave(lspPath) {
+function watchCssSave(lspPath, output) {
   const watcher = vscode8.workspace.createFileSystemWatcher(
     lspPath.fsPath
   );
   let pendingCssDocument;
-  void openLspDocument(lspPath);
+  void openLspDocument(lspPath, output);
   const saveListener = vscode8.workspace.onDidSaveTextDocument((document) => {
     if (cssLanguages.every(({ language }) => document.languageId !== language)) {
       return;
@@ -1127,6 +1124,7 @@ function watchCssSave(lspPath) {
     pendingCssDocument = document;
   });
   const changeListener = watcher.onDidChange(async () => {
+    await openLspDocument(lspPath, output);
     const document = pendingCssDocument;
     pendingCssDocument = void 0;
     if (!document) return;
@@ -1143,11 +1141,15 @@ function watchCssSave(lspPath) {
 function lspEntry(cascadeRoot, output) {
   const lspUri = resolveLspPath(cascadeRoot);
   if (!lspUri) {
-    output.appendLine("couldn't resolve LSP path");
+    output.appendLine(
+      "[css variable completion] could not resolve LSP path."
+    );
     return;
   }
-  output.appendLine(`[css variable completion] lsp path: ${lspUri}`);
-  return watchCssSave(lspUri);
+  output.appendLine(
+    `[css variable completion] lsp path: ${lspUri}`
+  );
+  return watchCssSave(lspUri, output);
 }
 
 // src/extension.ts

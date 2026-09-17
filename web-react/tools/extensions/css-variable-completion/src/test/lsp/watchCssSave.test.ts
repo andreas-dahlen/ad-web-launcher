@@ -1,4 +1,10 @@
-import { describe, expect, it, vi } from 'vitest'
+import {
+  afterEach,
+  describe,
+  expect,
+  it,
+  vi,
+} from 'vitest'
 
 import { watchCssSave } from '../../lsp/watchCssSave.ts'
 import { cssLanguages } from '../../config/languages.ts'
@@ -38,25 +44,33 @@ vi.mock('vscode', () => ({
   workspace: {
     createFileSystemWatcher:
       createFileSystemWatcherMock,
+
     onDidSaveTextDocument:
       onDidSaveTextDocumentMock,
   },
+
   Disposable: {
     from: disposableFromMock,
   },
 }))
 
 vi.mock('../../lsp/openLspDocument.ts', () => ({
-  openLspDocument: openLspDocumentMock,
+  openLspDocument:
+    openLspDocumentMock,
 }))
 
 vi.mock('../../lsp/nudgeModule.ts', () => ({
-  nudgeCssModule: nudgeCssModuleMock,
+  nudgeCssModule:
+    nudgeCssModuleMock,
 }))
 
 describe('[EXTENSION] watchCssSave', () => {
   const lspPath = {
     fsPath: '/project/generated.lsp',
+  }
+
+  const output = {
+    appendLine: vi.fn(),
   }
 
   const saveListener = {
@@ -68,15 +82,30 @@ describe('[EXTENSION] watchCssSave', () => {
   }
 
   const createWatcher = () => {
-    watcher.onDidChange.mockReturnValue(changeListener)
-    createFileSystemWatcherMock.mockReturnValue(watcher)
-    onDidSaveTextDocumentMock.mockReturnValue(saveListener)
+    watcher.onDidChange.mockReturnValue(
+      changeListener,
+    )
+
+    createFileSystemWatcherMock.mockReturnValue(
+      watcher,
+    )
+
+    onDidSaveTextDocumentMock.mockReturnValue(
+      saveListener,
+    )
   }
+
+  afterEach(() => {
+    vi.clearAllMocks()
+  })
 
   it('creates a watcher and opens the LSP document', () => {
     createWatcher()
 
-    const result = watchCssSave(lspPath as never)
+    const result = watchCssSave(
+      lspPath as never,
+      output as never,
+    )
 
     expect(
       createFileSystemWatcherMock,
@@ -84,8 +113,11 @@ describe('[EXTENSION] watchCssSave', () => {
       '/project/generated.lsp',
     )
 
-    expect(openLspDocumentMock).toHaveBeenCalledWith(
+    expect(
+      openLspDocumentMock,
+    ).toHaveBeenCalledWith(
       lspPath,
+      output,
     )
 
     expect(result).toBe(
@@ -96,7 +128,10 @@ describe('[EXTENSION] watchCssSave', () => {
   it('ignores saved documents that are not CSS', () => {
     createWatcher()
 
-    watchCssSave(lspPath as never)
+    watchCssSave(
+      lspPath as never,
+      output as never,
+    )
 
     const saveCallback =
       onDidSaveTextDocumentMock.mock.calls[0][0]
@@ -112,13 +147,18 @@ describe('[EXTENSION] watchCssSave', () => {
 
     void changeCallback()
 
-    expect(nudgeCssModuleMock).not.toHaveBeenCalled()
+    expect(
+      nudgeCssModuleMock,
+    ).not.toHaveBeenCalled()
   })
 
   it('nudges the saved CSS document when the LSP file changes', async () => {
     createWatcher()
 
-    watchCssSave(lspPath as never)
+    watchCssSave(
+      lspPath as never,
+      output as never,
+    )
 
     const saveCallback =
       onDidSaveTextDocumentMock.mock.calls[0][0]
@@ -134,23 +174,32 @@ describe('[EXTENSION] watchCssSave', () => {
 
     await changeCallback()
 
-    expect(nudgeCssModuleMock).toHaveBeenCalledWith(
+    expect(
+      nudgeCssModuleMock,
+    ).toHaveBeenCalledWith(
       document,
     )
 
-    expect(nudgeCssModuleMock).toHaveBeenCalledOnce()
+    expect(
+      nudgeCssModuleMock,
+    ).toHaveBeenCalledOnce()
   })
 
   it('does nothing when the LSP file changes without a pending CSS document', async () => {
     createWatcher()
 
-    watchCssSave(lspPath as never)
+    watchCssSave(
+      lspPath as never,
+      output as never,
+    )
 
     const changeCallback =
       watcher.onDidChange.mock.calls[0][0]
 
     await changeCallback()
 
-    expect(nudgeCssModuleMock).not.toHaveBeenCalled()
+    expect(
+      nudgeCssModuleMock,
+    ).not.toHaveBeenCalled()
   })
 })

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { resolveProjectRoot } from '../../src/helpers/resolveProjectRoot.ts'
+import { resolveProjectRoot } from '../../oxlint-plugins/helpers/resolveProjectRoot.ts'
 
 describe('[LINT]', () => {
   describe('resolveProjectRoot', () => {

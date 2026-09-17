@@ -41,7 +41,7 @@ vi.mock(
   }),
 )
 
-import rule from '../src/importExists-ox/no-nonexistent-import-extensions.ts'
+import rule from '../oxlint-plugins/importExists-ox/no-nonexistent-import-extensions.ts'
 
 const ruleTester = new RuleTester()
 

@@ -9,35 +9,50 @@ workspace := "ad-web-launcher.code-workspace"
 default: help
 
 # ================== DEVELOPMENT ====================
-
-audit:
-    npm audit
+audit *args:
+    if [ -z "{{ args }}" ]; then \
+        npm audit; \
+    else \
+        ./scripts/run-project.sh audit {{ args }}; \
+    fi
 
 audit-all:
-    ./scripts/run-cmd.sh audit
+    ./scripts/run-all.sh audit
 
-outdated:
-    npm outdated
+outdated *args:
+    if [ -z "{{ args }}" ]; then \
+        npm outdated; \
+    else \
+        ./scripts/run-project.sh outdated {{ args }}; \
+    fi
 
 outdated-all:
-    ./scripts/run-cmd.sh outdated || true
+    ./scripts/run-all.sh outdated || true
 
-doctor:
-    npm doctor
+doctor *args:
+    if [ -z "{{ args }}" ]; then \
+        npm doctor; \
+    else \
+        ./scripts/run-project.sh doctor {{ args }}; \
+    fi
 
 doctor-all:
-    ./scripts/run-cmd.sh doctor
+    ./scripts/run-all.sh doctor
 
-install:
-    npm install
+install *args:
+    if [ -z "{{ args }}" ]; then \
+        npm install; \
+    else \
+        ./scripts/run-project.sh install {{ args }}; \
+    fi
 
 install-all:
-    ./scripts/run-cmd.sh install
-    ./scripts/run-cmd.sh install-scripts ls
+    ./scripts/run-all.sh install
+    ./scripts/run-all.sh install-scripts ls
 
 update-all:
-    ./scripts/run-cmd.sh update
-    ./scripts/run-cmd.sh install-scripts ls
+    ./scripts/run-all.sh update
+    ./scripts/run-all.sh install-scripts ls
 
 install-force +packages:
     ./scripts/install-force.sh {{ packages }}
@@ -48,39 +63,47 @@ dev:
 preview:
     npm run preview
 
-build:
-    npm run build && ./scripts/deploy-android.sh
+build *args:
+    if [ -z "{{ args }}" ]; then \
+        npm run build && ./scripts/deploy-android.sh; \
+    else \
+        ./scripts/run-project.sh run build {{ args }}; \
+    fi
 
 build-all:
-    ./scripts/run-script.sh build
+    ./scripts/run-all.sh run build
 
 # ==================== QUALITY ====================
 
-type:
-    npm run type
+type *args:
+    if [ -z "{{ args }}" ]; then \
+        npm run type; \
+    else \
+        ./scripts/run-project.sh run type {{ args }}; \
+    fi    
 
 type-all: 
-    ./scripts/run-script.sh type
+    ./scripts/run-all.sh run type
 
-test project="" *args:
-    if [ -z "{{project}}" ]; then \
-        npm run test -- --project=react --project=app {{args}} --silent ; \
+test *args:
+    if [ -z "{{args}}" ]; then \
+        npm run test -- --config=vitest.config.ts --silent ; \
     else \
-        npm run test -- --project={{project}} {{args}} --silent ; \
+        ./scripts/run-project.sh run test {{args}} --silent ; \
     fi
 
 test-all *args:
-    npm run test -- --config=vitest.coverage.config.ts --silent=passed-only --reporter=dot {{args}}
+    npm run test -- --config=vitest.all.config.ts --silent=passed-only --reporter=dot {{args}}
 
 # List available Vitest projects.
-test-help:
-    ./scripts/test-project.sh
+project-help:
+    ./scripts/project-names.sh
 
-coverage project="" *args:
-    if [ -z "{{project}}" ]; then \
-        npm run test -- --project=react --project=app --silent=passed-only --coverage {{args}}; \
+coverage *args:
+    if [ -z "{{args}}" ]; then \
+        npm run test -- --config=vitest.config.ts --silent=passed-only --coverage; \
     else \
-        npm run test -- --project={{project}} --silent=passed-only --coverage {{args}}; \
+        ./scripts/run-project.sh run test {{args}} --silent=passed-only --coverage ; \
     fi
 
 coverage-all:

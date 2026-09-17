@@ -27,7 +27,7 @@ export function activate(context: vscode.ExtensionContext): void {
     const disposables: vscode.Disposable[] = []
 
     const variable = variableEntry(cascadeRoot, output)
-    const lsp = lspEntry(cascadeRoot, output) //output
+    const lsp = lspEntry(cascadeRoot, output)
 
     if (variable) disposables.push(variable)
     if (lsp) disposables.push(lsp)

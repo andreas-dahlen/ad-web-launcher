@@ -16,22 +16,22 @@ export function watchVariables(
   )
 
   const reloadVariables = (): void => {
-    output.appendLine(
-      `[css variable completion] variables changed: ${variablesUri.fsPath}`,
-    )
+    // output.appendLine(
+    //   `[css variable completion] variables changed: ${variablesUri.fsPath}`,
+    // )
 
     try {
       const variables = loadVariables(variablesUri)
 
-      output.appendLine(
-        `[css variable completion] loaded ${variables.length} variables`,
-      )
 
       provider.updateVariables(variables)
 
       output.appendLine(
-        `[css variable completion] provider updated`,
+        `[css variable completion] updated: ${variables.length} variables`,
       )
+      // output.appendLine(
+      //   `[css variable completion] provider updated`,
+      // )
     } catch (error) {
       output.appendLine(
         `[css variable completion] failed to load variables: ${String(error)}`,

@@ -16,18 +16,18 @@ export function processToken(fullPath: string): TokenResult {
     collector.scope({
       value: fullPath,
       path: fullPath,
-      context: 'file',
+      context: 'file'
     })
 
     collector.set({
       reason: error instanceof Error
         ? error.message
-        : String(error),
+        : String(error)
     })
 
     return {
       token: undefined,
-      issues: collector.flush(),
+      issues: collector.flush()
     }
   }
 
@@ -36,18 +36,18 @@ export function processToken(fullPath: string): TokenResult {
   collector.scope({
     value: json.component,
     path: fullPath,
-    context: 'component',
+    context: 'component'
   })
 
   const componentResult = parseToken.identifier(
     json.component,
-    collector,
+    collector
   )
 
   if (json.infix) {
     collector.editScope({
       value: json.infix,
-      context: 'infix',
+      context: 'infix'
     })
   }
 
@@ -69,14 +69,14 @@ export function processToken(fullPath: string): TokenResult {
           def,
           key,
           alwaysAllowed,
-          collector,
+          collector
         )
 
         return {
-          ...variableResult.variable,
+          ...variableResult.variable
         }
-      }),
+      })
     },
-    issues: collector.flush(),
+    issues: collector.flush()
   }
 }

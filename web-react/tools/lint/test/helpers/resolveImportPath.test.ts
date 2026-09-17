@@ -3,7 +3,7 @@ import path from 'node:path'
 
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
 
-import { resolveImportPath } from '../../src/helpers/resolveImportPath.ts'
+import { resolveImportPath } from '../../oxlint-plugins/helpers/resolveImportPath.ts'
 
 const projectRoot = path.resolve(
   import.meta.dirname,

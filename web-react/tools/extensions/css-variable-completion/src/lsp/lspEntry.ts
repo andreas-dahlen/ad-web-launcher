@@ -10,11 +10,15 @@ export function lspEntry(
   const lspUri = resolveLspPath(cascadeRoot)
 
   if (!lspUri) {
-
-    output.appendLine("couldn't resolve LSP path")
+    output.appendLine(
+      '[css variable completion] could not resolve LSP path.',
+    )
     return
   }
-  output.appendLine(`[css variable completion] lsp path: ${lspUri}`)
 
-  return watchCssSave(lspUri) //output
+  output.appendLine(
+    `[css variable completion] lsp path: ${lspUri}`,
+  )
+
+  return watchCssSave(lspUri, output)
 }
