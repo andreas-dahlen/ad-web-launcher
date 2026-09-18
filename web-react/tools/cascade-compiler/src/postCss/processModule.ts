@@ -46,10 +46,10 @@ export function processModule({
     for (const variable of token.vars) {
       if (trace) { print.resultCascade(variable) }
 
-      if (mutate) {
-        injectVarDefinitions(rule, token, variable);
-        injectCascade(rule, token, variable);
-      }
+      if (!mutate) continue
+
+      injectVarDefinitions(rule, token, variable);
+      injectCascade(rule, token, variable);
     }
   }
 

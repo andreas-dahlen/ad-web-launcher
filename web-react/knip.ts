@@ -8,7 +8,7 @@ const config: KnipConfig = {
         '*.config.ts',
       ],
       entry: [
-        'vitest.coverage.config.ts',
+        'vitest.all.config.ts',
       ],
     },
 
@@ -21,32 +21,13 @@ const config: KnipConfig = {
       ]
     },
 
-    'packages/cascade': {
-      project: [
-        'src/**/*.ts',
-      ],
-      entry: [
-        'src/index.ts',
-        'src/generated/metadata/lsp.ts'
-      ]
-    },
-
     'tools/lint': {
       project: [
         '**/*.ts',
       ],
       entry: [
-        'src/**/*-plugin.ts',
+        'oxlint-plugins/**/*-plugin.ts',
       ],
-    },
-
-    'tools/plugins': {
-      project: [
-        'src/**/*.ts',
-      ],
-      entry: [
-        'src/**/vite.*.ts'
-      ]
     },
 
     'tools/cascade-compiler': {
@@ -54,7 +35,9 @@ const config: KnipConfig = {
         'src/**/*.ts',
       ],
       entry: [
-        'src/**/cli.ts'
+        'src/**/cli.ts',
+        'src/public/index.ts',
+        "src/public/vite.ts"
       ]
     },
 

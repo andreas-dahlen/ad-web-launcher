@@ -70,27 +70,25 @@ export function walkModule(
     const isCustomProperty = decl.prop.startsWith("--");
 
     for (const match of decl.value.matchAll(
-      /var\((--[\w-]+)\s*(?:,[^)]+)?\)/g
+      /var\((--[\w-]+)\s*(?:,[^)]+)?\)/g,
     )) {
       const cssVar = match[1];
 
-      if (
-        variablePrefixes.some(prefix =>
-          cssVar.startsWith(prefix)
-        )
-      ) {
-        assert.cssVariable(cssVar)
-        foundFinalVariables.add(cssVar);
-
-
-        if (isCustomProperty) return
-
-        const variables = presetResetData.get(rule) ?? new Set();
-
-        variables.add(cssVar);
-
-        presetResetData.set(rule, variables);
+      if (variablePrefixes.every(prefix => !cssVar.startsWith(prefix))) {
+        continue;
       }
+
+      assert.cssVariable(cssVar);
+      foundFinalVariables.add(cssVar);
+
+      if (isCustomProperty) {
+        return;
+      }
+
+      const variables = presetResetData.get(rule) ?? new Set();
+
+      variables.add(cssVar);
+      presetResetData.set(rule, variables);
     }
   });
 

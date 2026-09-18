@@ -22,6 +22,5 @@ export async function watch(
 
   if (runtime === null) {
     console.log("Disabled: Couldn't resolve paths")
-    return
   }
 }

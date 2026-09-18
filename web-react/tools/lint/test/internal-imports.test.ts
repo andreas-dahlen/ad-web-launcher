@@ -2,7 +2,7 @@ import { RuleTester } from 'oxlint/plugins-dev'
 import { describe, it, vi } from 'vitest'
 
 vi.mock(
-  '../src/helpers/getInternalAliases.ts',
+  '../oxlint-plugins/helpers/getInternalAliases.ts',
   () => ({
     getInternalAliases: vi.fn(() => ['@/']),
   }),
