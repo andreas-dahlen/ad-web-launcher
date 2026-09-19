@@ -13,11 +13,12 @@
     "dist"
   ],
   "scripts": {
+    "type": "tsc --noEmit",
     "build": "tsc -p tsconfig.build.json",
     "test": "vitest",
     "coverage": "vitest run --coverage"
-
   },
+
   "keywords": [ ],
   "type": "module",
   "devDependencies": {

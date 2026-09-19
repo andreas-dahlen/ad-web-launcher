@@ -13,13 +13,6 @@ import oxlint from 'eslint-plugin-oxlint'
 
 export default defineConfig([
   globalIgnores(ignores),
-
-  // {
-  //   settings: boundarySettings
-  // },
-  // appBoundaries,
-  // compilerBoundaries,
-
   base,
   plugins,
   ...json,
