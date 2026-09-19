@@ -62,6 +62,11 @@ export type PostData = {
   oklchVariables: Array<[CssVarString, string]>;
 };
 
+export type PostDataResult = {
+  postData: PostData
+  issues: IssueGroup[]
+}
+
 // after CSS processing
 export type CssData = { // CssModuleResult
   groupPath: string
@@ -72,6 +77,12 @@ export type CssData = { // CssModuleResult
   foundFinalVariables: CssVarString[]
   declaredVariables: CssVarString[]
 }
+
+export type CssDataResult = {
+  cssData: CssData
+  issues: IssueGroup[]
+}
+
 export type ProcessedToken = {
   name: string
   infix: string
@@ -88,4 +99,5 @@ export type WalkModuleResult = {
   foundFinalVariables: CssVarString[]
   declaredVariables: CssVarString[]
   presetResetData: PresetResetData
+  issues: IssueGroup[]
 };

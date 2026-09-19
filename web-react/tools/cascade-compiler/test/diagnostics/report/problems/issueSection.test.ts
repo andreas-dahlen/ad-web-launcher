@@ -1,10 +1,10 @@
 import { describe, expect, it, vi } from 'vitest'
 
-import { issuesSection } from '../../../src/diagnostics/report/sections/problems/issuesSection.ts'
-import type { AnalyzedIssueGroup } from '../../../src/types/diagnostics.types.ts'
+import { issuesSection } from '../../../../src/diagnostics/report/sections/problems/issuesSection.ts'
+import type { AnalyzedIssueGroup } from '../../../../src/types/diagnostics.types.ts'
 
 vi.mock(
-  '../../../../utils/string.js',
+  '../../../../../utils/string.js',
   () => ({
     colors: {
       subHeading: 'subHeading',

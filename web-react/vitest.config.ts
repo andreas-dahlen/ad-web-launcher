@@ -1,8 +1,8 @@
 import {
   defineConfig
 } from 'vitest/config'
+import { baseCoverageExclude } from './vitest.coverage-exclude.ts'
 
-// vitest.config.ts
 export default defineConfig({
   test: {
     projects: [
@@ -14,10 +14,7 @@ export default defineConfig({
         'src/**/*.ts',
         'src/**/*.tsx',
       ],
-      exclude: [
-        'src/test/**',
-        '**/*.css',
-      ],
+      exclude: baseCoverageExclude
     },
   },
 })

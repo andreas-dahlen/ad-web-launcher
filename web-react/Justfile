@@ -54,8 +54,11 @@ update-all:
     ./scripts/run-all.sh update
     ./scripts/run-all.sh install-scripts ls
 
-install-force +packages:
-    ./scripts/install-force.sh {{ packages }}
+install-force *args:
+    ./scripts/install-force.sh {{ args }}
+
+install-force-all +packages:
+    ./scripts/install-force-all.sh {{ packages }}
 
 dev:
     npm run dev

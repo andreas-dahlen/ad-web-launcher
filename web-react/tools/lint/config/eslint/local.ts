@@ -1,5 +1,5 @@
 import * as jsoncParser from 'jsonc-eslint-parser'
-import custom from './tokens-custom-plugin/no-invalid-prefix-reloations-plugin.ts'
+import custom from '../../eslint-plugins/tokens-custom-plugin/no-invalid-prefix-reloations-plugin.ts'
 import type { Linter } from 'eslint'
 
 export const local: Linter.Config[] = [

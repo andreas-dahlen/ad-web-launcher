@@ -1,5 +1,5 @@
 import type { Root } from "postcss";
-import type { CssData, CssTokenGroup, ProcessedToken } from '../types/compiler.types.ts';
+import type { CssDataResult, CssTokenGroup, ProcessedToken } from '../types/compiler.types.ts';
 import { print } from '../utils/print.ts';
 import { walkModule } from './resolvers/walkModule.ts';
 import { injectVarDefinitions } from './inject/injectVarDefinitions.ts';
@@ -16,11 +16,11 @@ export function processModule({
   group: CssTokenGroup
   trace: boolean
   mutate: boolean
-}): CssData {
+}): CssDataResult {
 
   if (trace) { print.injecting(group.cssPath) }
 
-  const { rules, foundSelectors, usableSelectors, foundFinalVariables, declaredVariables, presetResetData } = walkModule(
+  const { rules, foundSelectors, usableSelectors, foundFinalVariables, declaredVariables, presetResetData, issues } = walkModule(
     root, group.tokens.map(token => token.infix)
   );
 
@@ -58,12 +58,15 @@ export function processModule({
   }
 
   return {
-    groupPath: group.groupPath,
-    cssPath: group.cssPath,
-    foundSelectors,
-    usableSelectors,
-    tokens: tokenResults,
-    foundFinalVariables: foundFinalVariables,
-    declaredVariables: declaredVariables
+    cssData: {
+      groupPath: group.groupPath,
+      cssPath: group.cssPath,
+      foundSelectors,
+      usableSelectors,
+      tokens: tokenResults,
+      foundFinalVariables: foundFinalVariables,
+      declaredVariables: declaredVariables
+    },
+    issues
   }
 }

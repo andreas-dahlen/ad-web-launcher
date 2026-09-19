@@ -122,5 +122,27 @@ describe('[COMPILER]', () => {
         'background',
       ]);
     });
+
+    it('reports an issue when the token file cannot be loaded', () => {
+      const filePath = path.join(tmpdir(), 'style-token-tests', 'missing.jsonc')
+
+      const result = processToken(filePath)
+
+      expect(result.token).toBeUndefined()
+
+      expect(result.issues).toEqual([
+        {
+          subject: 'Token File',
+          issues: [
+            {
+              path: filePath,
+              value: filePath,
+              reason: expect.any(String),
+              context: 'file'
+            }
+          ]
+        }
+      ])
+    })
   });
 });

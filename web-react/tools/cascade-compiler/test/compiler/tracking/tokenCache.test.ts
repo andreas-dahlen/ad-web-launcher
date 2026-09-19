@@ -395,5 +395,38 @@ describe('[COMPILER]', () => {
         expect(cache.getAllPostData()).toEqual([second])
       })
     })
+    describe('processing state', () => {
+      it('returns false when a css group has no css data', () => {
+        const group = createCssTokenGroup({
+          groupPath: '/tokens/button',
+          cssPath: '/css/Button.module.css',
+        })
+        const cache = createTokenCache([group], config)
+
+        expect(cache.isCssProcessingComplete()).toBe(false)
+      })
+
+      it('returns true when all css groups have css data', () => {
+        const button = createCssTokenGroup({
+          groupPath: '/tokens/button',
+          cssPath: '/css/Button.module.css',
+        })
+        const surface = createCssTokenGroup({
+          groupPath: '/tokens/surface',
+          cssPath: '/css/Surface.module.css',
+        })
+        const cache = createTokenCache([button, surface], config)
+
+        cache.addCssData({
+          cssPath: button.cssPath,
+        } as Parameters<typeof cache.addCssData>[0])
+
+        cache.addCssData({
+          cssPath: surface.cssPath,
+        } as Parameters<typeof cache.addCssData>[0])
+
+        expect(cache.isCssProcessingComplete()).toBe(true)
+      })
+    })
   })
 })

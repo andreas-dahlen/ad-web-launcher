@@ -1,9 +1,9 @@
 import { describe, expect, it, vi } from 'vitest'
 
-import { invalidVarSection } from '../../../src/diagnostics/report/sections/problems/invalidVarSection.ts'
-import type { InvalidVarDeclaration } from '../../../src/types/diagnostics.types.ts'
+import { invalidVarSection } from '../../../../src/diagnostics/report/sections/problems/invalidVarSection.ts'
+import type { InvalidVarDeclaration } from '../../../../src/types/diagnostics.types.ts'
 
-vi.mock('../../../../utils/string.js', () => ({
+vi.mock('../../../../../utils/string.js', () => ({
   colors: {
     error: 'error',
     value: 'value',

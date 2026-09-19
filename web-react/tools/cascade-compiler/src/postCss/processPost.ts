@@ -1,6 +1,6 @@
 import { walkProject } from './resolvers/walkProject.ts';
 import type { Root } from 'postcss';
-import type { PostData } from '../types/compiler.types.ts';
+import type { PostDataResult } from '../types/compiler.types.ts';
 
 
 export function processPost({
@@ -13,10 +13,10 @@ export function processPost({
   cssPath: string
   trace: boolean
   mutate?: boolean
-}): PostData {
+}): PostDataResult {
   void mutate // possible to avoid css mutations
   void trace //possible later trace... no tracing currently though
-  const postData = walkProject(root, cssPath)
+  const PostDataResult = walkProject(root, cssPath)
 
-  return postData
+  return PostDataResult
 }

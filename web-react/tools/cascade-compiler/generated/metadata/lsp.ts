@@ -68,6 +68,7 @@
 //--final-label-position: 🔮 position: o → p → f:absolute;
 //--final-label-offset-x: 🔮 offsetX: o → p → f:var(--final-button-width);
 //--final-label-offset-y: 🔮 offsetY: o → p → f:var(--final-button-height);
+//--final-label-inset: 🔮 inset: o → p → f;
 //--f-label-col: black;
 //--f-label-align: center;
 //--f-label-position: absolute;

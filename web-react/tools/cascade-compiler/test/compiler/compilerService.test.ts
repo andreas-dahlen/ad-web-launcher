@@ -104,8 +104,15 @@ describe('[COMPILER > COMPILER SERVICE]', () => {
       issues: [],
     })
 
-    processPostMock.mockReturnValue('post data')
-    processModuleMock.mockReturnValue('css data')
+    processPostMock.mockReturnValue({
+      postData: 'post data',
+      issues: [],
+    })
+
+    processModuleMock.mockReturnValue({
+      cssData: 'css data',
+      issues: [],
+    })
 
     cache.getGroupByCssPath.mockReturnValue({
       cssPath: '/project/styles.module.css',
@@ -241,6 +248,16 @@ describe('[COMPILER > COMPILER SERVICE]', () => {
   })
 
   it('processes CSS and records it when a matching group exists', () => {
+    processPostMock.mockReturnValue({
+      postData: 'post data',
+      issues: ['post issue'],
+    })
+
+    processModuleMock.mockReturnValue({
+      cssData: 'css data',
+      issues: ['module issue'],
+    })
+
     const compiler = initializeCompiler(config)
 
     const result = compiler.handleCssChange(
@@ -252,13 +269,17 @@ describe('[COMPILER > COMPILER SERVICE]', () => {
       '/project/styles.module.css',
       'source css',
     )
+
     expect(processPostMock).toHaveBeenCalledWith({
       root: expect.any(Object),
       cssPath: '/project/styles.module.css',
       trace: false,
       mutate: true,
     })
+
+    expect(run.recordIssues).toHaveBeenCalledWith(['post issue'])
     expect(cache.addPostData).toHaveBeenCalledWith('post data')
+
     expect(processModuleMock).toHaveBeenCalledWith({
       root: expect.any(Object),
       group: {
@@ -267,10 +288,15 @@ describe('[COMPILER > COMPILER SERVICE]', () => {
       trace: false,
       mutate: true,
     })
+
+    expect(run.recordIssues).toHaveBeenCalledWith(['module issue'])
+
     expect(cache.addCssData).toHaveBeenCalledWith('css data')
+
     expect(run.recordProcessed).toHaveBeenCalledWith(
       '/project/styles.module.css',
     )
+
     expect(result).toBe('processed css')
   })
 

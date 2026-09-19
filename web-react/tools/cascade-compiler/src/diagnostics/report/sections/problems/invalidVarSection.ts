@@ -9,6 +9,11 @@ export function invalidVarSection(data: InvalidVarDeclaration[]): ReportSection 
   for (const variable of data) {
     const lines: string[] = [];
 
+    const component =
+      variable.name == variable.infix
+        ? variable.name
+        : `${variable.name}-${variable.infix}`
+
     if (variable.invalid.length > 0) {
       lines.push(
         ` ${paint(`🎨 Invalid declarations:`, colors.error)} (${paint(variable.invalid.length, colors.value)})`,
@@ -16,10 +21,6 @@ export function invalidVarSection(data: InvalidVarDeclaration[]): ReportSection 
       );
     }
 
-    const component =
-      variable.name == variable.infix
-        ? variable.name
-        : `${variable.name}-${variable.infix}`
 
     entries.push({
       title: ` 🧩 ${paint(`Component: `, colors.subHeading)}${paint(component, colors.heading)}`,

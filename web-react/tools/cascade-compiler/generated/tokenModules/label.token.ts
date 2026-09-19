@@ -13,7 +13,8 @@ export const labelStyle = {
 align: { name: "align", allowed: ["o","p","f"]},
 position: { name: "position", allowed: ["o","p","f"]},
 offsetX: { name: "offset-x", allowed: ["o","p","f"]},
-offsetY: { name: "offset-y", allowed: ["o","p","f"]} 
+offsetY: { name: "offset-y", allowed: ["o","p","f"]},
+inset: { name: "inset", allowed: ["o","p","f"]} 
 }
   }
 } as const satisfies TokenComponent;

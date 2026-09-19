@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitest/config'
+import { baseCoverageExclude, lintCoverageExclude } from '../../vitest.coverage-exclude.ts'
 
 export default defineConfig({
   test: {
@@ -19,8 +20,8 @@ export default defineConfig({
         'src/**/*.ts'
       ],
       exclude: [
-        'test/**',
-        '**/*.types.ts'
+        ...baseCoverageExclude,
+        ...lintCoverageExclude
       ],
     },
   },

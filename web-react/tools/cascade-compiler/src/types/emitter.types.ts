@@ -70,16 +70,15 @@ export type GeneratedOutput = {
   patches: FormatPatchResult[]
 }
 
-export type FormatResult = {
-  content: string;
-};
-export type FormatFileResult = FormatResult & {
+export type FormatFileResult = {
   kind: CompilerFileOutput
   outputFile: string
+  content: string;
 }
-export type FormatPatchResult = FormatResult & {
+export type FormatPatchResult = {
   kind: CompilerPatchOutput
   outputFile: string
+  content: string;
 }
 
 //for diagnostics results

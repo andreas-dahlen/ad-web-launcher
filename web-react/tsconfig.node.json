@@ -30,11 +30,13 @@
   "include": [
     "vite.config.ts",
     "vite.base.config.ts",
-    "vitest.config.ts",
+    "**/vitest.config.ts",
     "vitest.app.config.ts",
     "vitest.all.config.ts",
+    "vitest.coverage-exclude.ts",
     "eslint.config.ts",
     "oxlint.config.ts",
-    "tools/lint/config/**/*.ts"
+    "tools/lint/config/**/*.ts",
+    "tools/lint/eslint-plugins/**/*.ts"
   ]
 }

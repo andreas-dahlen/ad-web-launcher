@@ -11,8 +11,7 @@ export function log(key: DebugKey, ...args: unknown[]): void {
   }
 
   // Normal debug-gated logging
-  if (!DEBUG.enabled) return
-  if (!DEBUG.channels[key]) return
+  if (!DEBUG.enabled || !DEBUG.channels[key]) return
 
   console.log(format(key), ...args)
 }

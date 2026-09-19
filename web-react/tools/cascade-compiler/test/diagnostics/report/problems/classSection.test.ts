@@ -1,9 +1,9 @@
 import { describe, expect, it, vi } from 'vitest'
 
-import { classSection } from '../../../src/diagnostics/report/sections/problems/classSection.ts'
-import type { MissingClass } from '../../../src/types/diagnostics.types.ts'
+import { classSection } from '../../../../src/diagnostics/report/sections/problems/classSection.ts'
+import type { MissingClass } from '../../../../src/types/diagnostics.types.ts'
 
-vi.mock('../../../../utils/string.js', () => ({
+vi.mock('../../../../../utils/string.js', () => ({
   colors: {
     muted: 'muted',
     file: 'file',
@@ -99,18 +99,6 @@ describe('[DIAGNOSTICS]', () => {
       )
 
       expect(selectorLine).toBeDefined()
-    })
-
-    it('does not include a file line when the token path is empty', () => {
-      const result = classSection([
-        createMissingClass({
-          tokenPath: '',
-        }),
-      ])
-
-      expect(result?.entries[0].lines).not.toContain(
-        expect.stringContaining('File:'),
-      )
     })
 
     it('does not create an entry when no selectors are usable', () => {

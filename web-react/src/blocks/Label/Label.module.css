@@ -1,40 +1,28 @@
-/* 
-file://wsl.localhost/Ubuntu/home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/label.jsonc
-*/
-/* 
-file://wsl.localhost/Ubuntu/home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/label.jsonc
-*/
-/* 
-file://wsl.localhost/Ubuntu/home/david/repos/ad-web-launcher/web-react/src/styleTokens/tokens/label.jsonc
-*/
+
 :root {
   --f-bg-test: blue;
 }
 
 .bottom {
-  top: var(--final-label-offset-y);
+  --f-label-inset: var(--final-label-offset-y) 0 0 0;
 }
 
 .top {
-  bottom: var(--final-label-offset-y);
+  --f-label-inset: 0 0 var(--final-label-offset-y) 0;
 }
 
 .left {
-  right: var(--final-label-offset-x);
-
+  --f-label-inset: 0 var(--final-label-offset-x) 0 0;
 }
 
 .right {
-  left: var(--final-label-offset-x);
-}
-
-.center {
-  --f-label-width: 0;
+  --f-label-inset: 0 0 0 var(--final-label-offset-x);
 }
 
 .label {
   position: var(--final-label-position);
   text-align: var(--final-label-align);
   color: var(--final-label-col);
-  /* background-color: hotpink; */
+  inset: var(--final-label-inset);
 }
+

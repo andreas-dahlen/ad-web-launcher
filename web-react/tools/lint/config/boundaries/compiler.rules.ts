@@ -179,6 +179,10 @@ export const compilerRules: {
         },
         // postCss
         {
+          from: { element: { type: "postCss", captured: { mod: "resolvers" } } },
+          allow: { to: { element: { type: "compiler", captured: { mod: "tracking" } } } }
+        },
+        {
           from: { file: { categories: "processModule" } },
           allow: {
             to: [
@@ -195,6 +199,9 @@ export const compilerRules: {
             ]
           }
         },
+        /*
+here is no policy allowing dependencies from elements of type "postCss" and captured values: mod="resolvers" to elements of type "compiler" and captured values: mod="tracking"oxc(boundaries(dependencies))
+        */
         //public
         {
           from: { file: { categories: "vite" } },

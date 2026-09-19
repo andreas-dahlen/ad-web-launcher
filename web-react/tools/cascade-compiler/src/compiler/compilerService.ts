@@ -57,12 +57,13 @@ export function initializeCompiler(config: CompilerConfig) {
 
   function processCss(cssPath: string, root: Root): string {
 
-    const postData = processPost({
+    const { postData, issues: postIssues } = processPost({
       root,
       cssPath,
       trace: config.logging.trace,
       mutate: config.internal.willEmitCss
     })
+    run.recordIssues(postIssues)
     cache.addPostData(postData)
 
     const group = cache.getGroupByCssPath(cssPath)
@@ -70,12 +71,13 @@ export function initializeCompiler(config: CompilerConfig) {
       return root.toString()
     }
 
-    const cssData = processModule({
+    const { cssData, issues: cssIssues } = processModule({
       root,
       group,
       trace: config.logging.trace,
       mutate: config.internal.willEmitCss
     })
+    run.recordIssues(cssIssues)
     cache.addCssData(cssData)
     run.recordProcessed(cssPath)
 

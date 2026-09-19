@@ -4,7 +4,6 @@
   
   export type LabelPreset = 
     | "bottom"
-  | "center"
   | "left"
   | "right"
   | "top"

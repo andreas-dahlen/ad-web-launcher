@@ -1,4 +1,5 @@
-import { defineConfig } from 'vitest/config';
+import { defineConfig } from 'vitest/config'
+import { compilerCoverageExclude, baseCoverageExclude, cascadeVscodeCoverageExclude, lintCoverageExclude } from './vitest.coverage-exclude.ts'
 export default defineConfig({
   test: {
     projects: [
@@ -6,7 +7,7 @@ export default defineConfig({
       './tools/cascade-compiler/vitest.config.ts',
       './tools/lint/vitest.config.ts',
       './tools/extensions/*/vitest.config.ts',
-      './packages/*/vitest.config.ts',
+      './packages/*/vitest.config.ts'
     ],
 
     coverage: {
@@ -18,15 +19,18 @@ export default defineConfig({
         'src/**/*.tsx',
 
         'tools/cascade-compiler/src/**/*.ts',
-        'tools/lint/src/**/*.ts',
+        'tools/lint/config/**/*.ts',
+        'tools/lint/oxlint-plugins/**/*.ts',
         'tools/extensions/*/src/**/*.ts',
-        'packages/*/src/**/*.ts',
+        'packages/*/src/**/*.ts'
       ],
 
       exclude: [
-        '**/test/**',
-        '**/*.css'
-      ],
-    },
+        ...baseCoverageExclude,
+        ...compilerCoverageExclude,
+        ...cascadeVscodeCoverageExclude,
+        ...lintCoverageExclude
+      ]
+    }
   }
 })
