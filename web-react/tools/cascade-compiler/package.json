@@ -27,7 +27,8 @@
     "test": "vitest",
     "type": "tsc --noEmit",
     "build": "tsc -p tsconfig.build.json",
-    "cli": "npm run build && node dist/cli.js"
+    "cli": "npm run build && node dist/cli.js",
+    "generate": "npm run build && node dist/cli.js build ../.."
   },
   "peerDependencies": {
     "vite": "^8.2.2"

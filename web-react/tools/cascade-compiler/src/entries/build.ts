@@ -5,7 +5,7 @@ export function build(projectRoot: string): TokenCompiler {
 
   const configData = resolveConfig(projectRoot, {
     willEmitCss: true,
-    initialProcessing: false,
+    initialProcessing: true,
   })
 
   return initializeCompiler(configData)
