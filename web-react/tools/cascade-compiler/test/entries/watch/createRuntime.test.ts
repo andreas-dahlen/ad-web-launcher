@@ -48,7 +48,11 @@ const compiler = {}
 
 const config = {
   projectRoot: '/project',
-  tokenPath: '/project/tokens',
+}
+
+const configData = {
+  config,
+  issues: [],
 }
 
 describe('[ENTRIES > WATCH]', () => {
@@ -56,7 +60,7 @@ describe('[ENTRIES > WATCH]', () => {
     beforeEach(() => {
       vi.clearAllMocks()
 
-      resolveConfigMock.mockReturnValue(config)
+      resolveConfigMock.mockReturnValue(configData)
       initializeCompilerMock.mockReturnValue(compiler)
       watchContentMock.mockReturnValue(contentWatcher)
       watchConfigMock.mockReturnValue(configWatcher)
@@ -90,7 +94,7 @@ describe('[ENTRIES > WATCH]', () => {
     it('initializes the compiler with the resolved config', () => {
       createRuntime('/project', vi.fn())
 
-      expect(initializeCompilerMock).toHaveBeenCalledWith(config)
+      expect(initializeCompilerMock).toHaveBeenCalledWith(configData)
     })
 
     it('creates the content watcher with the compiler', () => {

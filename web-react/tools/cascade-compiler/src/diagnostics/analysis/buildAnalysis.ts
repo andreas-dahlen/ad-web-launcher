@@ -1,6 +1,6 @@
 import type { DiagnosticData, InvalidVarDeclaration, MissingClass, UnusableSelector, VariableMismatch } from '../../types/diagnostics.types.ts';
 import type { CompilerRun } from '../../compiler/tracking/compilerRun.ts';
-import { mergeIssueGroups } from '../../compiler/tracking/issueCollector.ts';
+import { mergeIssueGroups } from '../../diagnostics/issueCollector.ts';
 import { extractGroupName } from '../../compiler/resolvers/extractGroupName.ts';
 import { analyzeSelectors } from "./analyzers/analyzeSelectors.ts";
 import { analyzeTokens } from './analyzers/analyzeTokens.ts';

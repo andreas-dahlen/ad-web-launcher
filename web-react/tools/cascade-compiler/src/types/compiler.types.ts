@@ -4,6 +4,11 @@ import type { rawTokenSchema, rawVariableSchema } from '../schema/tokenSchema.ts
 import * as z from "zod"
 import type { CssVarString, ValidPrefix } from './cascade.types.ts';
 
+export type TokenPathsAndIssues = {
+  tokenPaths: string[]
+  issues: IssueGroup[]
+}
+
 export type RawToken = z.infer<typeof rawTokenSchema>
 export type RawVariable = z.infer<typeof rawVariableSchema>
 

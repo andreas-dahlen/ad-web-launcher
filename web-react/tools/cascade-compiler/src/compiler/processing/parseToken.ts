@@ -1,6 +1,6 @@
 import type { CompilerVariable, RawVariable } from '../../types/compiler.types.ts'
 import { prefixLeadingNumber, removeInvalidCharacters, toCamelCase, escapeReservedWord, removeWhitespace, toKebab } from '../../utils/stringFormaters.ts'
-import { createNullIssueCollector, type IssueCollector } from '../tracking/issueCollector.ts'
+import { createNullIssueCollector, type IssueCollector } from '../../diagnostics/issueCollector.ts'
 import { resolveAllowedPrefixes } from '../resolvers/resolveAllowedPrefixes.ts'
 import type { ValidPrefix } from '../../types/cascade.types.ts'
 

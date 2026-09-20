@@ -7,7 +7,7 @@ import { watchContent } from './watchers/watchContent.ts'
 export function createRuntime(
   projectRoot: string,
   onConfigChange: () => Promise<void>,
-): CompilerRuntime | null {
+): CompilerRuntime {
   const configData = resolveConfig(projectRoot, { willEmitCss: false })
 
   const compiler = initializeCompiler(configData)

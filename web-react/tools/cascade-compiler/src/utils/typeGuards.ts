@@ -15,13 +15,5 @@ export function asObject(
 export function asArray(
   value: unknown
 ): unknown[] | undefined {
-  if (
-    value === null ||
-    typeof value === 'object' ||
-    !Array.isArray(value)
-  ) {
-    return undefined
-  }
-
-  return value as unknown[]
+  return Array.isArray(value) ? value : undefined
 }

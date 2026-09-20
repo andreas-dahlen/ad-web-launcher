@@ -58,8 +58,6 @@ describe('[COMPILER > COMPILER SERVICE]', () => {
   const config: CompilerConfig = {
     projectRoot: '/project',
     tokenPath: '/project/tokens',
-    generatedPath: '/project/generated',
-    outPath: '/project/dist',
     logging: {
       trace: false,
       emissions: 'summary',
@@ -68,7 +66,10 @@ describe('[COMPILER > COMPILER SERVICE]', () => {
     internal: {
       initialProcessing: false,
       willEmitCss: true,
+      generatedPath: '/project/generated',
     },
+
+    presetIgnore: []
   }
 
   const cache = {
@@ -89,7 +90,7 @@ describe('[COMPILER > COMPILER SERVICE]', () => {
   beforeEach(() => {
     vi.clearAllMocks()
 
-    findTokenPathsMock.mockReturnValue(['tokens.json'])
+    findTokenPathsMock.mockReturnValue({ tokenPaths: ['tokens.json'], issues: [] })
     compileTokenGroupsMock.mockReturnValue({
       groups: ['group'],
       issues: [],
@@ -123,7 +124,7 @@ describe('[COMPILER > COMPILER SERVICE]', () => {
   })
 
   it('initializes the compiler from discovered token groups', () => {
-    const compiler = initializeCompiler(config)
+    const compiler = initializeCompiler({ config, issues: [] })
 
     expect(findTokenPathsMock).toHaveBeenCalledWith(config.tokenPath)
     expect(compileTokenGroupsMock).toHaveBeenCalledWith(
@@ -149,11 +150,13 @@ describe('[COMPILER > COMPILER SERVICE]', () => {
     ])
 
     initializeCompiler({
-      ...config,
-      internal: {
-        ...config.internal,
-        initialProcessing: true,
-      },
+      config: {
+        ...config,
+        internal: {
+          ...config.internal,
+          initialProcessing: true,
+        }
+      }, issues: []
     })
 
     expect(processCssRootMock).toHaveBeenCalledTimes(2)
@@ -180,7 +183,7 @@ describe('[COMPILER > COMPILER SERVICE]', () => {
       issues: ['token issue'],
     })
 
-    const compiler = initializeCompiler(config)
+    const compiler = initializeCompiler({ config, issues: [] })
 
     const result = compiler.handleTokenChange('/project/token.json')
 
@@ -202,7 +205,7 @@ describe('[COMPILER > COMPILER SERVICE]', () => {
       issues: [],
     })
 
-    const compiler = initializeCompiler(config)
+    const compiler = initializeCompiler({ config, issues: [] })
 
     const result = compiler.handleTokenChange('/project/token.json')
 
@@ -217,7 +220,7 @@ describe('[COMPILER > COMPILER SERVICE]', () => {
       issues: ['CSS issue'],
     })
 
-    const compiler = initializeCompiler(config)
+    const compiler = initializeCompiler({ config, issues: [] })
 
     const result = compiler.handleCssChange('/project/styles.module.css')
 
@@ -238,7 +241,7 @@ describe('[COMPILER > COMPILER SERVICE]', () => {
 
     cache.getGroupByCssPath.mockReturnValue(undefined)
 
-    const compiler = initializeCompiler(config)
+    const compiler = initializeCompiler({ config, issues: [] })
 
     const result = compiler.handleCssChange('/project/styles.module.css')
 
@@ -258,7 +261,7 @@ describe('[COMPILER > COMPILER SERVICE]', () => {
       issues: ['module issue'],
     })
 
-    const compiler = initializeCompiler(config)
+    const compiler = initializeCompiler({ config, issues: [] })
 
     const result = compiler.handleCssChange(
       '/project/styles.module.css',
@@ -303,7 +306,7 @@ describe('[COMPILER > COMPILER SERVICE]', () => {
   it('does not finalize while CSS processing is incomplete', () => {
     cache.isCssProcessingComplete.mockReturnValue(false)
 
-    const compiler = initializeCompiler(config)
+    const compiler = initializeCompiler({ config, issues: [] })
 
     compiler.finalize()
 
@@ -313,25 +316,12 @@ describe('[COMPILER > COMPILER SERVICE]', () => {
   })
 
   it('emits files, runs diagnostics, and resets the run when processing is complete', () => {
-    const compiler = initializeCompiler(config)
+    const compiler = initializeCompiler({ config, issues: [] })
 
     compiler.finalize()
 
     expect(emitFilesMock).toHaveBeenCalledWith(cache, run)
     expect(run.recordEmitResult).toHaveBeenCalledWith('emit result')
-    expect(runDiagnosticsMock).toHaveBeenCalledWith(cache, run)
-    expect(run.reset).toHaveBeenCalled()
-  })
-
-  it('runs diagnostics without emitting when no generated path exists', () => {
-    const compiler = initializeCompiler({
-      ...config,
-      generatedPath: null,
-    })
-
-    compiler.finalize()
-
-    expect(emitFilesMock).not.toHaveBeenCalled()
     expect(runDiagnosticsMock).toHaveBeenCalledWith(cache, run)
     expect(run.reset).toHaveBeenCalled()
   })

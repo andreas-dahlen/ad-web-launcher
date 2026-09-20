@@ -20,10 +20,13 @@ describe('[ENTRIES > CONFIG]', () => {
       vi.clearAllMocks()
     })
 
-    it('returns an empty object when config is missing', () => {
+    it('throws when config is missing', () => {
       existsSyncMock.mockReturnValue(false)
 
-      expect(loadCompilerConfig('/project')).toEqual({})
+      expect(() => loadCompilerConfig('/project')).toThrow(
+        "couldn't find a cascade.config.json file",
+      )
+
       expect(readFileSyncMock).not.toHaveBeenCalled()
     })
 
@@ -37,7 +40,10 @@ describe('[ENTRIES > CONFIG]', () => {
       `)
 
       expect(loadCompilerConfig('/project')).toEqual({
-        tokenFolder: 'tokens',
+        config: {
+          tokenFolder: 'tokens',
+        },
+        issues: [],
       })
 
       expect(readFileSyncMock).toHaveBeenCalledWith(
@@ -55,7 +61,7 @@ describe('[ENTRIES > CONFIG]', () => {
       )
     })
 
-    it('throws when config does not match the schema', () => {
+    it('recovers when config does not match the schema', () => {
       existsSyncMock.mockReturnValue(true)
       readFileSyncMock.mockReturnValue(`
         {
@@ -63,7 +69,10 @@ describe('[ENTRIES > CONFIG]', () => {
         }
       `)
 
-      expect(() => loadCompilerConfig('/project')).toThrow()
+      const result = loadCompilerConfig('/project')
+
+      expect(result.config).toBeDefined()
+      expect(result.issues).toHaveLength(1)
     })
   })
 })

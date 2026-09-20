@@ -6,7 +6,8 @@ import type { PresetFileData } from '../../../types/emitter.types.ts';
 const NON_PRESET_SUFFIX = 'Util'
 
 export function assemblePresetData(
-  cssData: CssData
+  cssData: CssData,
+  presetIgnore: string[]
 ): PresetFileData | null {
 
   const groupName = extractGroupName(cssData.groupPath)
@@ -18,7 +19,8 @@ export function assemblePresetData(
   const selectors = cssData.usableSelectors.filter(
     selector =>
       selector !== name &&
-      !selector.endsWith(NON_PRESET_SUFFIX)
+      !selector.endsWith(NON_PRESET_SUFFIX) &&
+      !presetIgnore.includes(selector)
   )
 
   if (selectors.length === 0) return null

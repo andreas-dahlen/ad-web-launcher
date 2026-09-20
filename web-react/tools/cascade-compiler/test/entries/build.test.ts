@@ -37,7 +37,6 @@ describe('[ENTRIES]', () => {
         {
           willEmitCss: true,
           initialProcessing: false,
-          outPath: null,
         },
       )
     })

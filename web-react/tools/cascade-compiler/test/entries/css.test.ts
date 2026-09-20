@@ -17,6 +17,11 @@ const config = {
   tokenPath: '/project/tokens',
 }
 
+const configData = {
+  config,
+  issues: []
+}
+
 const compiler = {}
 
 describe('[ENTRIES]', () => {
@@ -24,7 +29,7 @@ describe('[ENTRIES]', () => {
     beforeEach(() => {
       vi.clearAllMocks()
 
-      resolveConfigMock.mockReturnValue(config)
+      resolveConfigMock.mockReturnValue(configData)
       initializeCompilerMock.mockReturnValue(compiler)
     })
 
@@ -36,7 +41,6 @@ describe('[ENTRIES]', () => {
         {
           willEmitCss: true,
           generatedPath: null,
-          outPath: null,
           initialProcessing: false,
         },
       )
@@ -48,7 +52,7 @@ describe('[ENTRIES]', () => {
         tokenFolder: '/project/tokens',
       })
 
-      expect(initializeCompilerMock).toHaveBeenCalledWith(config)
+      expect(initializeCompilerMock).toHaveBeenCalledWith(configData)
     })
   })
 })

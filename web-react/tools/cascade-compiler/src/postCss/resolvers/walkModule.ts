@@ -5,7 +5,7 @@ import type { WalkModuleResult } from '../../types/compiler.types.ts';
 import { assert } from '../../utils/assertions.ts'
 import { prefixPriority } from '../../utils/prefix.ts';
 import type { CssVarString } from '../../types/cascade.types.ts';
-import { createIssueCollector } from '../../compiler/tracking/issueCollector.ts';
+import { createIssueCollector } from '../../diagnostics/issueCollector.ts';
 
 const VALID_IDENTIFIER = /^[A-Za-z_$][A-Za-z0-9_$]*$/;
 

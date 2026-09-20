@@ -11,9 +11,7 @@ import type { CompilerConfig } from '../../../src/types/run.types.ts'
 const config: CompilerConfig = {
   projectRoot: '/project',
   tokenPath: '/project/tokens',
-  outPath: '/project/output',
-  generatedPath: '/project/generated',
-  internal: { willEmitCss: false, initialProcessing: true },
+  internal: { willEmitCss: false, initialProcessing: true, generatedPath: '/project/generated' },
 
   outputs: {
     extension: false,
@@ -28,7 +26,8 @@ const config: CompilerConfig = {
   logging: {
     trace: false,
     emissions: "summary"
-  }
+  },
+  presetIgnore: []
 }
 
 describe('[COMPILER]', () => {
@@ -230,23 +229,8 @@ describe('[COMPILER]', () => {
 
         expect(cache.getConfig()).toBe(config)
       })
-
-      it('returns the config when an output path exists', () => {
-        const cache = createTokenCache([], config)
-
-        expect(cache.getEmitConfig()).toBe(config)
-      })
-
-      it('throws when requesting emit config without an output path', () => {
-        const noOutputConfig: CompilerConfig = {
-          ...config,
-          generatedPath: null,
-        }
-        const cache = createTokenCache([], noOutputConfig)
-
-        expect(() => cache.getEmitConfig()).toThrow()
-      })
     })
+
 
     describe('CSS data', () => {
       it('attaches css data to the matching group', () => {

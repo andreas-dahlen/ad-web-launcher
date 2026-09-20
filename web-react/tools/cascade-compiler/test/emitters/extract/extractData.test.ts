@@ -32,17 +32,16 @@ vi.mock(
   '../../../src/emitters/extract/assemblers/assembleJsonSchema.js'
 )
 
-
 describe('[EMITTERS]', () => {
   describe('extractData', () => {
-    const outPath = '/generated'
-
     function createCache({
       groups = [],
       postData = [],
+      presetIgnore = [],
     }: {
       groups?: Array<{ groupPath: string }>
       postData?: unknown[]
+      presetIgnore?: string[]
     } = {}) {
       return {
         getCssDataGroups: vi.fn(() => groups),
@@ -52,8 +51,8 @@ describe('[EMITTERS]', () => {
           )
         ),
         getAllPostData: vi.fn(() => postData),
-        getEmitConfig: vi.fn(() => ({
-          outPath,
+        getConfig: vi.fn(() => ({
+          presetIgnore,
         })),
       } as never
     }
@@ -67,6 +66,7 @@ describe('[EMITTERS]', () => {
         getProcessedPaths: vi.fn(() => processedPaths),
       } as never
     }
+
     it('returns empty collections when there are no groups', () => {
       const cache = createCache()
       const run = createRun()
@@ -215,7 +215,61 @@ describe('[EMITTERS]', () => {
         .toEqual([secondTokenData])
 
       expect(assemblePresetData)
-        .toHaveBeenCalledWith(secondGroup.cssData)
+        .toHaveBeenCalledWith(
+          secondGroup.cssData,
+          [],
+        )
+    })
+
+    it('passes presetIgnore to preset assembly', () => {
+      const runGroup = {
+        groupPath: '/tokens/button',
+        cssPath: '/components/Button/Button.module.css',
+        cssData: {},
+      }
+
+      const presetIgnore = [
+        'legacy',
+        'debug',
+      ]
+
+      vi.mocked(assembleTokenData)
+        .mockReturnValue({
+          groupPath: runGroup.groupPath,
+          name: 'button',
+          tokens: [],
+        } as never)
+
+      vi.mocked(assemblePresetData)
+        .mockReturnValue(null)
+
+      vi.mocked(assembleExtensionData)
+        .mockReturnValue({
+          variables: [],
+        })
+
+      vi.mocked(assembleLspData)
+        .mockReturnValue({
+          rgbVariables: [],
+          tokens: [],
+        })
+
+      const cache = createCache({
+        groups: [runGroup],
+        presetIgnore,
+      })
+
+      const run = createRun({
+        processedPaths: [runGroup.groupPath],
+      })
+
+      extractData(cache, run)
+
+      expect(assemblePresetData)
+        .toHaveBeenCalledWith(
+          runGroup.cssData,
+          presetIgnore,
+        )
     })
 
     it('records omitted preset files when preset assembly returns null', () => {

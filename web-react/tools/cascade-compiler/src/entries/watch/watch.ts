@@ -19,8 +19,4 @@ export async function watch(
     projectRoot,
     restart
   )
-
-  if (runtime === null) {
-    console.log("Disabled: Couldn't resolve paths")
-  }
 }

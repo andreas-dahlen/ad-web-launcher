@@ -1,7 +1,7 @@
-import { createIssueCollector } from '../../compiler/tracking/issueCollector.ts';
+import { createIssueCollector } from '../../diagnostics/issueCollector.ts';
 import { compilerConfigKeys, compilerConfigSchema, compilerLoggingKeys, compilerLoggingRecoverySchema, compilerOutputsKeys, compilerOutputsRecoverySchema, compilerPresetIgnoreRecoverySchema, compilerPresetIgnoreSchema } from '../../schema/configSchema.ts';
 import type { CompilerOptionsRaw, CompilerOptionsAndIssues } from '../../types/run.types.ts';
-import { asArray, asObject } from '../../utils/asObject.ts';
+import { asArray, asObject } from '../../utils/typeGuards.ts';
 
 
 export function resolveConfigRecovery(raw: Record<string, unknown>): CompilerOptionsAndIssues {
@@ -47,16 +47,16 @@ export function resolveConfigRecovery(raw: Record<string, unknown>): CompilerOpt
     collector.set({ reason: "presetIgnore needs to be an array", value: `${typeof raw.presetIgnore}` })
   }
 
-  if (presetIgnoreArray) {
-    const wrongPresetIgnoreValues = presetIgnoreArray.filter(value => typeof value !== 'string')
+  // if (presetIgnoreArray) {
+  //   const wrongPresetIgnoreValues = presetIgnoreArray.filter(value => typeof value !== 'string')
 
-    if (wrongPresetIgnoreValues.length > 0) {
-      collector.set({
-        reason: "presetIgnore values need to be of type string",
-        value: wrongPresetIgnoreValues.flatMap(v => `${JSON.stringify(v)} of type: ${typeof v}`).join(', ')
-      })
-    }
-  }
+  //   if (wrongPresetIgnoreValues.length > 0) {
+  //     collector.set({
+  //       reason: "presetIgnore values need to be of type string",
+  //       value: wrongPresetIgnoreValues.flatMap(v => `${JSON.stringify(v)} of type: ${typeof v}`).join(', ')
+  //     })
+  //   }
+  // }
   const tokenFolderRaw = compilerConfigSchema.shape.tokenFolder.safeParse(raw.tokenFolder)
   const outputs = compilerOutputsRecoverySchema.safeParse(raw.outputs)
   const logging = compilerLoggingRecoverySchema.safeParse(raw.logging)

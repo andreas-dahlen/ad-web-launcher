@@ -19,85 +19,74 @@ describe('[ENTRIES > CONFIG]', () => {
   describe('resolveConfig', () => {
     beforeEach(() => {
       vi.clearAllMocks()
+
       findPackageRootMock.mockReturnValue('/package')
+
+      loadCompilerConfigMock.mockReturnValue({
+        config: {},
+        issues: [],
+      })
     })
 
-    it('throws when tokenFolder is missing', () => {
-      loadCompilerConfigMock.mockReturnValue({})
+    it('resolves config defaults', () => {
+      const result = resolveConfig('/project')
 
-      expect(() => resolveConfig('/project')).toThrow(
-        "Couldn't resolve token path in either cascade.config.json",
-      )
+      expect(result).toEqual({
+        config: {
+          projectRoot: '/project',
+          tokenPath: path.resolve('/project', 'src/tokens'),
+          logging: {
+            trace: false,
+            emissions: 'summary',
+          },
+          outputs: {
+            extension: false,
+            lsp: false,
+            meta: false,
+            pathPatches: false,
+            presets: false,
+            tokens: false,
+            schema: false,
+            package: false,
+          },
+          presetIgnore: [],
+          internal: {
+            generatedPath: path.join('/package', 'generated'),
+            willEmitCss: false,
+            initialProcessing: true,
+          },
+        },
+        issues: [],
+      })
     })
 
     it('resolves tokenFolder relative to the project root', () => {
       loadCompilerConfigMock.mockReturnValue({
-        tokenFolder: 'tokens',
+        config: {
+          tokenFolder: 'tokens',
+        },
+        issues: [],
       })
 
-      const config = resolveConfig('/project')
+      const result = resolveConfig('/project')
 
-      expect(config.tokenPath).toBe(
+      expect(result.config.tokenPath).toBe(
         path.resolve('/project', 'tokens'),
       )
     })
 
-    it('resolves outDir relative to the project root', () => {
+    it('uses configured logging values', () => {
       loadCompilerConfigMock.mockReturnValue({
-        tokenFolder: 'tokens',
-        outDir: 'dist',
-      })
-
-      const config = resolveConfig('/project')
-
-      expect(config.outPath).toBe(
-        path.resolve('/project', 'dist'),
-      )
-    })
-
-    it('uses null when outDir is not configured', () => {
-      loadCompilerConfigMock.mockReturnValue({
-        tokenFolder: 'tokens',
-      })
-
-      expect(resolveConfig('/project').outPath).toBeNull()
-    })
-
-    it('uses internal outPath over the configured outDir', () => {
-      loadCompilerConfigMock.mockReturnValue({
-        tokenFolder: 'tokens',
-        outDir: 'dist',
-      })
-
-      const config = resolveConfig('/project', {
-        outPath: '/internal/output',
-      })
-
-      expect(config.outPath).toBe('/internal/output')
-    })
-
-    it('uses internal generatedPath over the package default', () => {
-      loadCompilerConfigMock.mockReturnValue({
-        tokenFolder: 'tokens',
-      })
-
-      const config = resolveConfig('/project', {
-        generatedPath: '/generated',
-      })
-
-      expect(config.generatedPath).toBe('/generated')
-    })
-
-    it('uses config logging when internal logging is not provided', () => {
-      loadCompilerConfigMock.mockReturnValue({
-        tokenFolder: 'tokens',
-        logging: {
-          trace: true,
-          emissions: 'verbose',
+        config: {
+          logging: {
+            trace: true,
+            emissions: 'verbose',
+          },
         },
+        issues: [],
       })
 
-      expect(resolveConfig('/project').logging).toEqual({
+      expect(resolveConfig('/project').config.logging).toEqual({
         trace: true,
         emissions: 'verbose',
       })
@@ -105,51 +94,44 @@ describe('[ENTRIES > CONFIG]', () => {
 
     it('uses internal logging over config logging', () => {
       loadCompilerConfigMock.mockReturnValue({
-        tokenFolder: 'tokens',
-        logging: {
-          trace: false,
-          emissions: 'summary',
+        config: {
+          logging: {
+            trace: false,
+            emissions: 'summary',
+          },
         },
+        issues: [],
       })
 
       expect(
         resolveConfig('/project', {
           trace: true,
           emissions: 'off',
-        }).logging,
+        }).config.logging,
       ).toEqual({
         trace: true,
         emissions: 'off',
       })
     })
 
-    it('defaults logging when neither config nor internal values are provided', () => {
-      loadCompilerConfigMock.mockReturnValue({
-        tokenFolder: 'tokens',
-      })
-
-      expect(resolveConfig('/project').logging).toEqual({
-        trace: false,
-        emissions: 'summary',
-      })
-    })
-
     it('uses configured output flags', () => {
       loadCompilerConfigMock.mockReturnValue({
-        tokenFolder: 'tokens',
-        outputs: {
-          extension: true,
-          lsp: true,
-          meta: true,
-          pathPatches: true,
-          presets: true,
-          tokens: true,
-          schema: true,
-          package: true,
+        config: {
+          outputs: {
+            extension: true,
+            lsp: true,
+            meta: true,
+            pathPatches: true,
+            presets: true,
+            tokens: true,
+            schema: true,
+            package: true,
+          },
         },
+        issues: [],
       })
 
-      expect(resolveConfig('/project').outputs).toEqual({
+      expect(resolveConfig('/project').config.outputs).toEqual({
         extension: true,
         lsp: true,
         meta: true,
@@ -161,48 +143,69 @@ describe('[ENTRIES > CONFIG]', () => {
       })
     })
 
-    it('defaults output flags to false', () => {
+    it('resolves configured preset ignores', () => {
       loadCompilerConfigMock.mockReturnValue({
-        tokenFolder: 'tokens',
+        config: {
+          presetIgnore: ['legacy', 'experimental'],
+        },
+        issues: [],
       })
 
-      expect(resolveConfig('/project').outputs).toEqual({
-        extension: false,
-        lsp: false,
-        meta: false,
-        pathPatches: false,
-        presets: false,
-        tokens: false,
-        schema: false,
-        package: false,
-      })
-    })
-
-    it('defaults internal options', () => {
-      loadCompilerConfigMock.mockReturnValue({
-        tokenFolder: 'tokens',
-      })
-
-      expect(resolveConfig('/project').internal).toEqual({
-        willEmitCss: false,
-        initialProcessing: true,
-      })
+      expect(resolveConfig('/project').config.presetIgnore).toEqual([
+        'legacy',
+        'experimental',
+      ])
     })
 
     it('uses internal options when provided', () => {
       loadCompilerConfigMock.mockReturnValue({
-        tokenFolder: 'tokens',
+        config: {},
+        issues: [],
       })
 
-      expect(
-        resolveConfig('/project', {
-          willEmitCss: true,
-          initialProcessing: false,
-        }).internal,
-      ).toEqual({
+      const result = resolveConfig('/project', {
+        generatedPath: '/generated',
         willEmitCss: true,
         initialProcessing: false,
       })
+
+      expect(result.config.internal).toEqual({
+        generatedPath: '/generated',
+        willEmitCss: true,
+        initialProcessing: false,
+      })
+    })
+
+    it('preserves config issues', () => {
+      const issues = [
+        {
+          subject: 'Configuration',
+          issues: [
+            {
+              path: 'tokenFolder',
+              value: 'invalid',
+              reason: 'invalid value',
+            },
+          ],
+        },
+      ]
+
+      loadCompilerConfigMock.mockReturnValue({
+        config: {},
+        issues,
+      })
+
+      const result = resolveConfig('/project')
+
+      expect(result.issues).toBe(issues)
+    })
+
+    it('resolves the generated path from the package root by default', () => {
+      const result = resolveConfig('/project')
+
+      expect(result.config.internal.generatedPath).toBe(
+        path.join('/package', 'generated'),
+      )
     })
   })
 })

@@ -1,6 +1,6 @@
-import type { LoadedCssRoot } from '../../types/compiler.types.ts';
-import { loadCssRoot } from '../loaders/loadCssRoot.ts';
-import { createIssueCollector } from '../tracking/issueCollector.ts';
+import type { LoadedCssRoot } from '../../types/compiler.types.ts'
+import { loadCssRoot } from '../loaders/loadCssRoot.ts'
+import { createIssueCollector } from '../../diagnostics/issueCollector.ts'
 
 export function processCssRoot(
   cssPath: string,

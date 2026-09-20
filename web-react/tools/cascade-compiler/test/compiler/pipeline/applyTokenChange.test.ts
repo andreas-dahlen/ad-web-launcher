@@ -18,9 +18,7 @@ import type { Issue } from '../../../src/types/issueCollector.types.ts'
 const config: CompilerConfig = {
   projectRoot: '/project',
   tokenPath: '/project/tokens',
-  outPath: '/project/output',
-  generatedPath: '/project/generated',
-  internal: { willEmitCss: false, initialProcessing: true },
+  internal: { willEmitCss: false, initialProcessing: true, generatedPath: '/project/generated' },
 
   outputs: {
     extension: false,
@@ -35,7 +33,8 @@ const config: CompilerConfig = {
   logging: {
     trace: false,
     emissions: "summary"
-  }
+  },
+  presetIgnore: []
 }
 
 describe('[COMPILER]', () => {
@@ -51,7 +50,7 @@ describe('[COMPILER]', () => {
         .mockReturnValue('/css/Button.module.css')
 
       vi.spyOn(findTokenPathsModule, 'findTokenPaths')
-        .mockReturnValue([tokenPath])
+        .mockReturnValue({ tokenPaths: [tokenPath], issues: [] })
 
       vi.spyOn(processTokenModule, 'processToken')
         .mockReturnValue({
@@ -86,7 +85,7 @@ describe('[COMPILER]', () => {
         .mockReturnValue(undefined)
 
       vi.spyOn(findTokenPathsModule, 'findTokenPaths')
-        .mockReturnValue([tokenPath])
+        .mockReturnValue({ tokenPaths: [tokenPath], issues: [] })
 
       vi.spyOn(processTokenModule, 'processToken')
         .mockReturnValue({
@@ -123,7 +122,7 @@ describe('[COMPILER]', () => {
         .mockReturnValue('/css/OldButton.module.css')
 
       vi.spyOn(findTokenPathsModule, 'findTokenPaths')
-        .mockReturnValue([tokenPath])
+        .mockReturnValue({ tokenPaths: [tokenPath], issues: [] })
 
       vi.spyOn(processTokenModule, 'processToken')
         .mockReturnValue({
@@ -154,7 +153,7 @@ describe('[COMPILER]', () => {
       ).mockReturnValue(undefined)
 
       vi.spyOn(findTokenPathsModule, 'findTokenPaths')
-        .mockReturnValue([tokenPath])
+        .mockReturnValue({ tokenPaths: [tokenPath], issues: [] })
 
       vi.spyOn(processTokenModule, 'processToken')
         .mockReturnValue({
@@ -195,7 +194,7 @@ describe('[COMPILER]', () => {
         .mockReturnValue('/css/Button.module.css')
 
       vi.spyOn(findTokenPathsModule, 'findTokenPaths')
-        .mockReturnValue([tokenPath])
+        .mockReturnValue({ tokenPaths: [tokenPath], issues: [] })
 
       vi.spyOn(processTokenModule, 'processToken')
         .mockReturnValue({
@@ -235,10 +234,12 @@ describe('[COMPILER]', () => {
         .mockReturnValue(undefined)
 
       vi.spyOn(findTokenPathsModule, 'findTokenPaths')
-        .mockReturnValue([
-          changedTokenPath,
-          secondTokenPath,
-        ])
+        .mockReturnValue({
+          tokenPaths: [
+            changedTokenPath,
+            secondTokenPath,
+          ], issues: []
+        })
 
       const processToken = vi.spyOn(
         processTokenModule,
@@ -287,10 +288,12 @@ describe('[COMPILER]', () => {
         .mockReturnValue(undefined)
 
       vi.spyOn(findTokenPathsModule, 'findTokenPaths')
-        .mockReturnValue([
-          firstToken.tokenPath,
-          secondToken.tokenPath,
-        ])
+        .mockReturnValue({
+          tokenPaths: [
+            firstToken.tokenPath,
+            secondToken.tokenPath,
+          ], issues: []
+        })
 
       vi.spyOn(processTokenModule, 'processToken')
         .mockReturnValueOnce({
@@ -342,10 +345,12 @@ describe('[COMPILER]', () => {
         .mockReturnValue(undefined)
 
       vi.spyOn(findTokenPathsModule, 'findTokenPaths')
-        .mockReturnValue([
-          firstToken.tokenPath,
-          secondToken.tokenPath,
-        ])
+        .mockReturnValue({
+          tokenPaths: [
+            firstToken.tokenPath,
+            secondToken.tokenPath,
+          ], issues: []
+        })
 
       vi.spyOn(processTokenModule, 'processToken')
         .mockReturnValueOnce({
@@ -397,7 +402,7 @@ describe('[COMPILER]', () => {
         .mockReturnValue(undefined)
 
       vi.spyOn(findTokenPathsModule, 'findTokenPaths')
-        .mockReturnValue([tokenPath])
+        .mockReturnValue({ tokenPaths: [tokenPath], issues: [] })
 
       vi.spyOn(processTokenModule, 'processToken')
         .mockReturnValue({
@@ -414,6 +419,47 @@ describe('[COMPILER]', () => {
 
       expect(cache.getGroupByTokenPath(tokenPath))
         .toBe(result.group)
+    })
+
+    it('aggregates token path issues', () => {
+      const tokenPath = '/tokens/button/default.jsonc'
+
+      const pathIssue = {
+        subject: 'Token Path resolution',
+        issues: [
+          {
+            path: '/tokens/button',
+            value: 'Error: read failure',
+            reason: "wouldn't read tokenFilePath",
+          },
+        ],
+      }
+
+      vi.spyOn(findCssModulePathModule, 'findCssModulePath')
+        .mockReturnValue(undefined)
+
+      vi.spyOn(findTokenPathsModule, 'findTokenPaths')
+        .mockReturnValue({
+          tokenPaths: [tokenPath],
+          issues: [pathIssue],
+        })
+
+      vi.spyOn(processTokenModule, 'processToken')
+        .mockReturnValue({
+          token: createCompilerToken({ tokenPath }),
+          issues: [],
+        })
+
+      const cache = createTokenCache([], config)
+
+      const result = applyTokenChange({
+        tokenPath,
+        cache,
+      })
+
+      expect(result.issues).toEqual([
+        pathIssue,
+      ])
     })
   })
 })

@@ -1,5 +1,5 @@
 import { resolveAllowedPrefixes } from '../../../src/compiler/resolvers/resolveAllowedPrefixes.ts';
-import type { IssueCollector } from '../../../src/compiler/tracking/issueCollector.ts';
+import type { IssueCollector } from '../../../src/diagnostics/issueCollector.ts';
 import { describe, expect, it } from 'vitest';
 import { createTestCollector } from '../../compiler.factory.ts';
 import type { ValidPrefix } from '../../../src/types/cascade.types.ts';

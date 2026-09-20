@@ -9,7 +9,7 @@ vi.mock('../../../src/compiler/loaders/loadCssRoot.ts', () => ({
   loadCssRoot: loadCssRootMock,
 }))
 
-vi.mock('../../../src/compiler/tracking/issueCollector.ts', () => ({
+vi.mock('../../../src/diagnostics/issueCollector.ts', () => ({
   createIssueCollector: createIssueCollectorMock,
 }))
 

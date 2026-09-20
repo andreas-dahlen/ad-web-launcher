@@ -8,7 +8,7 @@ import {
 
 import type { CompilerOptionsAndIssues } from '../../types/run.types.ts'
 import { compilerConfigSchema } from '../../schema/configSchema.ts'
-import { asObject } from '../../utils/asObject.ts'
+import { asObject } from '../../utils/typeGuards.ts'
 import { resolveConfigRecovery } from './resolveConfigRecovery.ts'
 
 export function loadCompilerConfig(projectRoot: string): CompilerOptionsAndIssues {

@@ -36,7 +36,7 @@ export function resolveConfig(
     initialProcessing: internal?.initialProcessing ?? true,
   } satisfies InternalConfig
 
-  const tokenFolder = config.tokenFolder ?? "src/test"
+  const tokenFolder = config.tokenFolder ?? "src/tokens"
 
   return {
     config: {

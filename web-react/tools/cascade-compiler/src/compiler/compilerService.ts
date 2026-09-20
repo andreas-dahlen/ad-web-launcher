@@ -13,12 +13,13 @@ import { processCssRoot } from './processing/processCssRoot.ts';
 
 export type TokenCompiler = ReturnType<typeof initializeCompiler>;
 export function initializeCompiler({ config, issues }: CompilerConfigAndIssues) {
-  const tokenPaths = findTokenPaths(config.tokenPath)
+  const { tokenPaths, issues: pathIssues } = findTokenPaths(config.tokenPath)
   const loaded = compileTokenGroups(config.projectRoot, tokenPaths)
   const cache = createTokenCache(loaded.groups, config)
   const run = createCompilerRun(loaded.issues)
 
   run.recordIssues(issues)
+  run.recordIssues(pathIssues)
 
   if (config.internal.initialProcessing) {
     for (const cssPath of cache.getCssPaths()) {
