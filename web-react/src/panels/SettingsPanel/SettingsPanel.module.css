@@ -5,4 +5,5 @@
 
 [data-active-gesture="drag"] .panel {
   --panel-opacity: 0.3;
+  background-color: var(--final-carousel-background);
 }
