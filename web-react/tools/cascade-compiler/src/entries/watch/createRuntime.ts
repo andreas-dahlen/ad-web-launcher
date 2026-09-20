@@ -8,13 +8,13 @@ export function createRuntime(
   projectRoot: string,
   onConfigChange: () => Promise<void>,
 ): CompilerRuntime | null {
-  const config = resolveConfig(projectRoot, { willEmitCss: false })
+  const configData = resolveConfig(projectRoot, { willEmitCss: false })
 
-  const compiler = initializeCompiler(config)
+  const compiler = initializeCompiler(configData)
 
-  const contentWatcher = watchContent(config, compiler)
+  const contentWatcher = watchContent(configData.config, compiler)
 
-  const configWatcher = watchConfig(config.projectRoot, onConfigChange)
+  const configWatcher = watchConfig(configData.config.projectRoot, onConfigChange)
 
   async function dispose() {
     await contentWatcher.close()

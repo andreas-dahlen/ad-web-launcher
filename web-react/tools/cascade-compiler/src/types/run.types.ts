@@ -1,27 +1,39 @@
 import type z from 'zod';
-import { compilerConfigSchema, compilerLoggingSchema, compilerOutputsSchema } from '../schema/configSchema.ts';
+import { compilerConfigSchema, compilerLoggingSchema, compilerOutputsSchema, compilerPresetIgnoreSchema } from '../schema/configSchema.ts';
 import type { TokenCompiler } from '../compiler/compilerService.ts';
 import type { FSWatcher } from 'chokidar';
-export type CompilerOptions = z.infer<typeof compilerConfigSchema>
+import type { IssueGroup } from './issueCollector.types.ts';
+export type CompilerOptionsRaw = z.infer<typeof compilerConfigSchema>
+
+export type CompilerOptionsAndIssues = {
+  config: CompilerOptionsRaw
+  issues: IssueGroup[]
+}
 
 export type CompilerConfig = {
   projectRoot: string
   tokenPath: string
-  outPath: string | null
-  generatedPath: string | null
   outputs: CompilerOutputs
   logging: CompilerLogs
+  presetIgnore: string[]
   internal: InternalConfig
 }
 
-type InternalConfig = {
+export type CompilerConfigAndIssues = {
+  config: CompilerConfig
+  issues: IssueGroup[]
+}
+
+export type InternalConfig = {
+  generatedPath: string
   willEmitCss: boolean
   initialProcessing: boolean
 }
 export type CompilerOutputs = Required<z.infer<typeof compilerOutputsSchema>>
 
-type CompilerLogs = Required<z.infer<typeof compilerLoggingSchema>>
+export type CompilerLogs = Required<z.infer<typeof compilerLoggingSchema>>
 
+export type PresetIgnore = Required<z.infer<typeof compilerPresetIgnoreSchema>>
 export type CompilerRuntime = {
   compiler: TokenCompiler
   contentWatcher: FSWatcher

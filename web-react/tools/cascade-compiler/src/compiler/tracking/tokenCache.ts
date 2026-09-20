@@ -1,7 +1,6 @@
 import type { PostData } from '../../types/compiler.types.ts';
 import type { CssData, CssDataTokenGroup, CssTokenGroup, TokenGroup } from '../../types/compiler.types.ts';
 import type { CompilerConfig } from '../../types/run.types.ts';
-import type { EmitConfig } from '../../types/emitter.types.ts';
 import { assert } from '../../utils/assertions.ts';
 
 export type TokenCache = ReturnType<typeof createTokenCache>;
@@ -67,11 +66,6 @@ export function createTokenCache(initialGroups: TokenGroup[], config: CompilerCo
     },
 
     getConfig(): CompilerConfig {
-      return config
-    },
-
-    getEmitConfig(): EmitConfig {
-      assert.hasGeneratedPath(config)
       return config
     },
 

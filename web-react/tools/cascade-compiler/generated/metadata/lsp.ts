@@ -56,10 +56,9 @@
 //carousel {
 //--final-carousel-width: 🔮 width: o → p → f:100%;
 //--final-carousel-height: 🔮 height: o → p → f:100%;
-//--final-carousel-background: 🔮 background: o → p → f:hotpink;
+//--final-carousel-background: 🔮 background: o → p → f;
 //--f-carousel-width: 100%;
 //--f-carousel-height: 100%;
-//--f-carousel-background: hotpink;
 
 //},
 //label {

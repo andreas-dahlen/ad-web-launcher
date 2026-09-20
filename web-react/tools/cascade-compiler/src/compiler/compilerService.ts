@@ -8,15 +8,17 @@ import { processPost } from '../postCss/processPost.ts';
 import { processModule } from '../postCss/processModule.ts';
 import { emitFiles } from '../emitters/emitFiles.ts';
 import { runDiagnostics } from '../diagnostics/runDiagnostics.ts';
-import type { CompilerConfig } from '../types/run.types.ts';
+import type { CompilerConfigAndIssues } from '../types/run.types.ts';
 import { processCssRoot } from './processing/processCssRoot.ts';
 
 export type TokenCompiler = ReturnType<typeof initializeCompiler>;
-export function initializeCompiler(config: CompilerConfig) {
+export function initializeCompiler({ config, issues }: CompilerConfigAndIssues) {
   const tokenPaths = findTokenPaths(config.tokenPath)
   const loaded = compileTokenGroups(config.projectRoot, tokenPaths)
   const cache = createTokenCache(loaded.groups, config)
   const run = createCompilerRun(loaded.issues)
+
+  run.recordIssues(issues)
 
   if (config.internal.initialProcessing) {
     for (const cssPath of cache.getCssPaths()) {
@@ -91,7 +93,7 @@ export function initializeCompiler(config: CompilerConfig) {
       return
     }
 
-    if (config.generatedPath) {
+    if (config.internal.generatedPath) {
       const emitResult = emitFiles(cache, run)
       run.recordEmitResult(emitResult)
 

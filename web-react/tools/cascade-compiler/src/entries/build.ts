@@ -3,11 +3,10 @@ import { resolveConfig } from './config/resolveConfig.ts'
 
 export function build(projectRoot: string): TokenCompiler {
 
-  const config = resolveConfig(projectRoot, {
+  const configData = resolveConfig(projectRoot, {
     willEmitCss: true,
     initialProcessing: false,
-    outPath: null
   })
 
-  return initializeCompiler(config)
+  return initializeCompiler(configData)
 }

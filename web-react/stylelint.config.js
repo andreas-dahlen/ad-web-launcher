@@ -1,6 +1,5 @@
-import type { Config } from 'stylelint'
-
-const config: Config = {
+/** @type {import('stylelint').Config} */
+export default {
   extends: [
     'stylelint-config-standard',
     'stylelint-config-css-modules'
@@ -14,14 +13,12 @@ const config: Config = {
     'comment-empty-line-before': null,
     'declaration-empty-line-before': null,
     'custom-property-empty-line-before': null,
-    'selector-class-pattern': null,
+    'selector-class-pattern': null
     // 'property-no-unknown': [
     //   true,
     //   {
-    //     ignoreProperties: ['composes'],
-    //   },
-    // ],
-  },
-} satisfies Config
-
-export default config
+    //     ignoreProperties: ['composes']
+    //   }
+    // ]
+  }
+}
