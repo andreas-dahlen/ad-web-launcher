@@ -35,8 +35,8 @@ describe('[ENTRIES]', () => {
       expect(resolveConfigMock).toHaveBeenCalledWith(
         '/project',
         {
-          willEmitCss: true,
-          initialProcessing: false,
+          willEmitCss: false,
+          initialProcessing: true,
         },
       )
     })

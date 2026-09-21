@@ -14,7 +14,7 @@ var CssVariableCompletionProvider = class {
   provideCompletionItems(document, position) {
     const line = document.lineAt(position.line).text;
     const beforeCursor = line.slice(0, position.character);
-    if (!/(?:^|[;{])\s*-$/.test(beforeCursor)) {
+    if (!/(?:^|[;{])\s*--$/.test(beforeCursor)) {
       return new vscode.CompletionList([], false);
     }
     return new vscode.CompletionList(

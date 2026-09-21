@@ -158,6 +158,11 @@ install-pl:
     cd tools/extensions/project-lint && npm run package
     code --install-extension tools/extensions/project-lint/project-lint-0.0.1.vsix --force
 
+# Builds and installs project-lint.
+install-mc:
+    cd tools/extensions/match-completion && npm run package
+    code --install-extension tools/extensions/match-completion/match-completion-0.0.1.vsix --force
+
 # Builds compiler and installs the compiler extension.
 install-tokens:
     cd tools/cascade-compiler && npm run build
@@ -165,7 +170,7 @@ install-tokens:
     code --install-extension tools/extensions/cascade-vscode/cascade-vscode-0.0.1.vsix --force
 
 # Builds and installs all tools.
-install-extensions: install-cvc install-pl install-tokens
+install-extensions: install-cvc install-pl install-mc install-tokens 
 
 # Runs the compiler in watchMode. File emissions disabled.
 compiler:

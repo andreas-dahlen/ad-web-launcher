@@ -1,0 +1,67 @@
+{
+  "publisher": "ad-web-launcher",
+  "name": "match-completion",
+  "type": "module",
+  "displayName": "Match Completion",
+  "description": "Provides completion suggestions when text matches a configured pattern.",
+  "version": "0.0.1",
+  "private": true,
+  "engines": {
+    "vscode": "^1.134.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "scripts": {
+    "coverage": "vitest run --coverage",
+    "test": "vitest",
+    "type": "tsc --noEmit",
+    "build": "tsc --noEmit && esbuild src/extension.ts --bundle --platform=node --format=esm --external:vscode --main-fields=module,main --outfile=dist/extension.js",
+    "package": "npm run build && vsce package --allow-missing-repository"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.2",
+    "@types/vscode": "^1.134.0",
+    "@vitest/coverage-v8": "^5.0.0",
+    "@vscode/vsce": "^4.0.0",
+    "esbuild": "^0.28.2",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.0"
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true,
+    "keytar@7.9.0": true,
+    "@types/vscode@1.125.0": true,
+    "@vscode/vsce-sign@2.1.0": true
+  },
+  "contributes": {
+    "configuration": {
+      "properties": {
+        "matchCompletion.suggestions": {
+          "type": "object",
+          "default": { "//": [ "NOTE", "QUEST" ] },
+          "description": "Maps text patterns to completion suggestions."
+        },
+
+        "matchCompletion.replacements": {
+          "type": "object",
+          "default": { },
+          "description": "Maps text patterns to replacement suggestions"
+        },
+
+        "matchCompletion.languages": {
+          "type": "array",
+          "default": [
+            "typescript",
+            "javascript"
+          ],
+          "description": "Language identifiers where match completion is enabled."
+        }
+      }
+    }
+  }
+}

@@ -20,7 +20,7 @@ export class CssVariableCompletionProvider
     // vscode.window.showInformationMessage(
     //   `completion: "${beforeCursor}"`,
     // )
-    if (!/(?:^|[;{])\s*-$/.test(beforeCursor)) {
+    if (!/(?:^|[;{])\s*--$/.test(beforeCursor)) {
       return new vscode.CompletionList([], false)
     }
 
