@@ -1,89 +1,72 @@
-import type { PreparedMatches } from '../types/all.types.ts';
-import * as vscode from 'vscode'
+import type { PreparedMatches } from '../types/all.types.ts'
+import * as vscode from "vscode"
+
 export function createCompletionProvider(
   languages: string[],
   matchTable: PreparedMatches,
   output: vscode.OutputChannel,
-): vscode.Disposable | null {
+): vscode.Disposable {
 
   output.appendLine(
     `[matchCompletion] registering provider for: ${languages.join(', ')}`,
   )
 
-  output.appendLine(
-    `[matchCompletion] triggers: ${matchTable.triggers.join(', ')}`,
-  )
+  output.appendLine(`[matchCompletion] keys registered: ${matchTable.byTrigger.values().flatMap(entries => entries.map(entry => entry.matcher)).toArray().join(', ')}`)
 
   const provider: vscode.CompletionItemProvider = {
     provideCompletionItems(
       document: vscode.TextDocument,
-      position: vscode.Position,
+      position: vscode.Position
     ) {
       const line = document.lineAt(position.line).text
       const prefix = line.slice(0, position.character)
-      const trigger = prefix.at(-1)
-
-      output.appendLine(
-        `[matchCompletion] completion requested: "${prefix}"`,
-      )
+      const trigger = prefix.at(0)
 
       if (!trigger) {
-        output.appendLine(
-          '[matchCompletion] no trigger character.',
-        )
-        return
+        return new vscode.CompletionList([], true)
       }
 
-      const matches = matchTable.byTrigger.get(trigger)
+      const matches = matchTable.byTrigger.get(trigger) ?? []
 
-      if (!matches) {
-        output.appendLine(
-          `[matchCompletion] no matches for trigger "${trigger}".`,
-        )
-        return
-      }
+      const completions = matches.flatMap(match =>
+        match.suggestions.map(suggestion => {
+          const completion = new vscode.CompletionItem(
+            suggestion,
+            vscode.CompletionItemKind.Text,
+          )
 
-      output.appendLine(
-        `[matchCompletion] checking ${matches.length} match(es) for "${trigger}".`,
+          completion.insertText = suggestion
+          completion.filterText = match.matcher
+
+          return completion
+        }),
       )
 
-      const completes: vscode.CompletionItem[] = []
-
-      for (const match of matches) {
-        if (!prefix.endsWith(match.matcher)) {
-          output.appendLine(
-            `[matchCompletion] no match: "${match.matcher}".`,
-          )
-          continue
-        }
-
-        output.appendLine(
-          `[matchCompletion] matched: "${match.matcher}".`,
-        )
-
-        for (const suggestion of match.suggestions) {
-          completes.push(
-            new vscode.CompletionItem(
-              suggestion,
-              vscode.CompletionItemKind.Text,
-            ),
-          )
-        }
-      }
-
       output.appendLine(
-        `[matchCompletion] returning ${completes.length} completion(s).`,
+        `[matchCompletion] returning: ${completions
+          .map(completion => completion.label)
+          .join(', ')}`,
       )
 
-      return completes
+      return new vscode.CompletionList(
+        completions,
+        true,
+      )
     },
   }
 
+  const selectors = languages.map(language => ({
+    scheme: 'file',
+    language,
+  }))
+
   const completion = vscode.languages.registerCompletionItemProvider(
-    languages,
+    selectors,
     provider,
     ...matchTable.triggers,
   )
+
+  output.appendLine('[matchCompletion] provider registered.')
 
   return vscode.Disposable.from(completion)
 }

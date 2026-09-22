@@ -20,7 +20,7 @@
     "coverage": "vitest run --coverage",
     "test": "vitest",
     "type": "tsc --noEmit",
-    "build": "tsc --noEmit && esbuild src/extension.ts --bundle --platform=node --format=esm --external:vscode --main-fields=module,main --outfile=dist/extension.js",
+    "build": "tsc --noEmit -p tsconfig.src.json && esbuild src/extension.ts --bundle --platform=node --format=esm --external:vscode --main-fields=module,main --outfile=dist/extension.js",
     "package": "npm run build && vsce package --allow-missing-repository"
   },
   "devDependencies": {
@@ -47,10 +47,10 @@
           "description": "Maps text patterns to completion suggestions."
         },
 
-        "matchCompletion.replacements": {
-          "type": "object",
-          "default": { },
-          "description": "Maps text patterns to replacement suggestions"
+        "matchCompletion.snippetBindings": {
+          "type": "array",
+          "default": [ "ö" ],
+          "description": "Text prefixes that trigger snippet suggestions."
         },
 
         "matchCompletion.languages": {

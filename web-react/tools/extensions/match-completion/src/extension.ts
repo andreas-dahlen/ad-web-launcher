@@ -28,9 +28,7 @@ export function activate(context: vscode.ExtensionContext): void {
       matchTable,
       output)
 
-    if (completion) {
-      disposables.push(completion)
-    }
+    disposables.push(completion)
 
     runtime = vscode.Disposable.from(...disposables)
   }

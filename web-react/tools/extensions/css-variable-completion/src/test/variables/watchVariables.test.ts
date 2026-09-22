@@ -39,9 +39,7 @@ describe('[EXTENSION] watchVariables', () => {
     })),
   })
 
-  const createProvider = () => ({
-    updateVariables: vi.fn(),
-  })
+  const createUpdateVariables = () => vi.fn()
 
   const createOutput = () => ({
     appendLine: vi.fn(),
@@ -55,17 +53,18 @@ describe('[EXTENSION] watchVariables', () => {
     const watcher = createWatcher()
 
     createFileSystemWatcherMock.mockReturnValue(watcher)
+
     vi.mocked(loadVariables).mockReturnValue([
       '--color-primary',
       '--color-secondary',
     ])
 
-    const provider = createProvider()
+    const updateVariables = createUpdateVariables()
     const output = createOutput()
 
     watchVariables(
       variablesUri as never,
-      provider as never,
+      updateVariables,
       output as never,
     )
 
@@ -75,26 +74,32 @@ describe('[EXTENSION] watchVariables', () => {
     reloadVariables()
 
     expect(loadVariables).toHaveBeenCalledWith(variablesUri)
-    expect(provider.updateVariables).toHaveBeenCalledWith([
+
+    expect(updateVariables).toHaveBeenCalledWith([
       '--color-primary',
       '--color-secondary',
     ])
+
+    expect(output.appendLine).toHaveBeenCalledWith(
+      '[css variable completion] updated: 2 variables',
+    )
   })
 
   it('updates variables when the file is created', () => {
     const watcher = createWatcher()
 
     createFileSystemWatcherMock.mockReturnValue(watcher)
+
     vi.mocked(loadVariables).mockReturnValue([
       '--color-primary',
     ])
 
-    const provider = createProvider()
+    const updateVariables = createUpdateVariables()
     const output = createOutput()
 
     watchVariables(
       variablesUri as never,
-      provider as never,
+      updateVariables,
       output as never,
     )
 
@@ -103,9 +108,13 @@ describe('[EXTENSION] watchVariables', () => {
 
     reloadVariables()
 
-    expect(provider.updateVariables).toHaveBeenCalledWith([
+    expect(updateVariables).toHaveBeenCalledWith([
       '--color-primary',
     ])
+
+    expect(output.appendLine).toHaveBeenCalledWith(
+      '[css variable completion] updated: 1 variables',
+    )
   })
 
   it('logs an error when variables cannot be loaded', () => {
@@ -117,12 +126,12 @@ describe('[EXTENSION] watchVariables', () => {
       throw new Error('invalid variables')
     })
 
-    const provider = createProvider()
+    const updateVariables = createUpdateVariables()
     const output = createOutput()
 
     watchVariables(
       variablesUri as never,
-      provider as never,
+      updateVariables,
       output as never,
     )
 
@@ -131,7 +140,7 @@ describe('[EXTENSION] watchVariables', () => {
 
     reloadVariables()
 
-    expect(provider.updateVariables).not.toHaveBeenCalled()
+    expect(updateVariables).not.toHaveBeenCalled()
 
     expect(output.appendLine).toHaveBeenCalledWith(
       '[css variable completion] failed to load variables: Error: invalid variables',
@@ -142,14 +151,15 @@ describe('[EXTENSION] watchVariables', () => {
     const watcher = createWatcher()
 
     createFileSystemWatcherMock.mockReturnValue(watcher)
+
     vi.mocked(loadVariables).mockReturnValue([])
 
-    const provider = createProvider()
+    const updateVariables = createUpdateVariables()
     const output = createOutput()
 
     const disposable = watchVariables(
       variablesUri as never,
-      provider as never,
+      updateVariables,
       output as never,
     )
 

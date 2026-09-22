@@ -1,31 +1,24 @@
 import * as vscode from 'vscode'
 
-export class CssVariableCompletionProvider
-  implements vscode.CompletionItemProvider {
-  constructor(
-    private variables: string[],
-  ) { }
+export function createCssVariableCompletionProvider(
+  variables: string[]
+) {
+  let currentVariables = variables
 
-  updateVariables(variables: string[]): void {
-    this.variables = variables
-  }
+  const provider: vscode.CompletionItemProvider = {
+    provideCompletionItems(
+      document,
+      position
+    ) {
+      const line = document.lineAt(position.line).text
+      const beforeCursor = line.slice(0, position.character)
 
-  provideCompletionItems(
-    document: vscode.TextDocument,
-    position: vscode.Position,
-  ): vscode.CompletionList {
-    const line = document.lineAt(position.line).text
-    const beforeCursor = line.slice(0, position.character)
+      if (!/(?:^|[;{])\s*-/.test(beforeCursor)) {
+        return new vscode.CompletionList([], true)
+      }
+      const isDoubleDash = /(?:^|[;{])\s*--/.test(beforeCursor)
 
-    // vscode.window.showInformationMessage(
-    //   `completion: "${beforeCursor}"`,
-    // )
-    if (!/(?:^|[;{])\s*--$/.test(beforeCursor)) {
-      return new vscode.CompletionList([], false)
-    }
-
-    return new vscode.CompletionList(
-      this.variables.map((variable) => {
+      const completions = currentVariables.map(variable => {
         const item = new vscode.CompletionItem(
           variable,
           vscode.CompletionItemKind.Variable,
@@ -34,9 +27,24 @@ export class CssVariableCompletionProvider
         item.insertText = variable
         item.filterText = variable
 
+        if (!isDoubleDash) {
+          item.sortText = `zzz-${variable}`
+        }
+
         return item
-      }),
-      false,
-    )
+      })
+
+      return new vscode.CompletionList(
+        completions,
+        true,
+      )
+    }
+  }
+
+  return {
+    provider,
+    updateVariables(variables: string[]) {
+      currentVariables = variables
+    },
   }
 }

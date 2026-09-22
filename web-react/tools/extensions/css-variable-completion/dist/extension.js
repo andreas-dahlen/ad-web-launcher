@@ -3,34 +3,44 @@ import * as vscode10 from "vscode";
 
 // src/completion/cssVarCompletionProvider.ts
 import * as vscode from "vscode";
-var CssVariableCompletionProvider = class {
-  constructor(variables) {
-    this.variables = variables;
-  }
-  variables;
-  updateVariables(variables) {
-    this.variables = variables;
-  }
-  provideCompletionItems(document, position) {
-    const line = document.lineAt(position.line).text;
-    const beforeCursor = line.slice(0, position.character);
-    if (!/(?:^|[;{])\s*--$/.test(beforeCursor)) {
-      return new vscode.CompletionList([], false);
-    }
-    return new vscode.CompletionList(
-      this.variables.map((variable) => {
+function createCssVariableCompletionProvider(variables, output) {
+  let currentVariables = variables;
+  const provider = {
+    provideCompletionItems(document, position) {
+      const line = document.lineAt(position.line).text;
+      const beforeCursor = line.slice(0, position.character);
+      if (!/(?:^|[;{])\s*-/.test(beforeCursor)) {
+        return new vscode.CompletionList([], true);
+      }
+      const isDoubleDash = /(?:^|[;{])\s*--/.test(beforeCursor);
+      const completions = currentVariables.map((variable) => {
         const item = new vscode.CompletionItem(
           variable,
           vscode.CompletionItemKind.Variable
         );
         item.insertText = variable;
         item.filterText = variable;
+        if (!isDoubleDash) {
+          item.sortText = `zzz-${variable}`;
+        }
         return item;
-      }),
-      false
-    );
-  }
-};
+      });
+      return new vscode.CompletionList(
+        completions,
+        true
+      );
+    }
+  };
+  output.appendLine(
+    `[css variable completion] provided loaded`
+  );
+  return {
+    provider,
+    updateVariables(variables2) {
+      currentVariables = variables2;
+    }
+  };
+}
 
 // src/variables/variableEntry.ts
 import * as vscode5 from "vscode";
@@ -919,7 +929,7 @@ function loadVariables(fileUri) {
 
 // src/variables/watchVariables.ts
 import * as vscode2 from "vscode";
-function watchVariables(variablesUri, provider, output) {
+function watchVariables(variablesUri, updateVariables, output) {
   output.appendLine(
     `[css variable completion] watching: ${variablesUri.fsPath}`
   );
@@ -929,7 +939,7 @@ function watchVariables(variablesUri, provider, output) {
   const reloadVariables = () => {
     try {
       const variables = loadVariables(variablesUri);
-      provider.updateVariables(variables);
+      updateVariables(variables);
       output.appendLine(
         `[css variable completion] updated: ${variables.length} variables`
       );
@@ -1048,20 +1058,23 @@ function variableEntry(cascadeRoot, output) {
   const variablesUri = resolveVariablesUri(cascadeRoot);
   if (!variablesUri) return null;
   const variables = loadVariables(variablesUri);
-  const provider = new CssVariableCompletionProvider(variables);
-  const watcher = watchVariables(
-    variablesUri,
-    provider,
+  const completion = createCssVariableCompletionProvider(
+    variables,
     output
   );
-  const completion = vscode5.languages.registerCompletionItemProvider(
+  const watcher = watchVariables(
+    variablesUri,
+    completion.updateVariables,
+    output
+  );
+  const registration = vscode5.languages.registerCompletionItemProvider(
     cssLanguages,
-    provider,
+    completion.provider,
     "-"
   );
   return vscode5.Disposable.from(
     watcher,
-    completion
+    registration
   );
 }
 

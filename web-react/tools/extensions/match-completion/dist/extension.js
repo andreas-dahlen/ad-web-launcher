@@ -33,9 +33,10 @@ function createMatchingTable(config) {
   const byTrigger = /* @__PURE__ */ new Map();
   for (const [key, suggestions] of Object.entries(config.suggestions)) {
     const trimmedKey = key.trim();
-    const trigger = trimmedKey.slice(-1);
-    const current = byTrigger.get(trigger);
+    const trigger = trimmedKey.at(0);
+    if (!trigger) continue;
     triggers.add(trigger);
+    const current = byTrigger.get(trigger);
     const match = {
       matcher: trimmedKey,
       suggestions
@@ -58,64 +59,46 @@ function createCompletionProvider(languages2, matchTable, output) {
   output.appendLine(
     `[matchCompletion] registering provider for: ${languages2.join(", ")}`
   );
-  output.appendLine(
-    `[matchCompletion] triggers: ${matchTable.triggers.join(", ")}`
-  );
+  output.appendLine(`[matchCompletion] keys registered: ${matchTable.byTrigger.values().flatMap((entries) => entries.map((entry) => entry.matcher)).toArray().join(", ")}`);
   const provider = {
     provideCompletionItems(document, position) {
       const line = document.lineAt(position.line).text;
       const prefix = line.slice(0, position.character);
-      const trigger = prefix.at(-1);
-      output.appendLine(
-        `[matchCompletion] completion requested: "${prefix}"`
-      );
+      const trigger = prefix.at(0);
       if (!trigger) {
-        output.appendLine(
-          "[matchCompletion] no trigger character."
-        );
-        return;
+        return new vscode2.CompletionList([], true);
       }
-      const matches = matchTable.byTrigger.get(trigger);
-      if (!matches) {
-        output.appendLine(
-          `[matchCompletion] no matches for trigger "${trigger}".`
-        );
-        return;
-      }
-      output.appendLine(
-        `[matchCompletion] checking ${matches.length} match(es) for "${trigger}".`
-      );
-      const completes = [];
-      for (const match of matches) {
-        if (!prefix.endsWith(match.matcher)) {
-          output.appendLine(
-            `[matchCompletion] no match: "${match.matcher}".`
+      const matches = matchTable.byTrigger.get(trigger) ?? [];
+      const completions = matches.flatMap(
+        (match) => match.suggestions.map((suggestion) => {
+          const completion2 = new vscode2.CompletionItem(
+            suggestion,
+            vscode2.CompletionItemKind.Text
           );
-          continue;
-        }
-        output.appendLine(
-          `[matchCompletion] matched: "${match.matcher}".`
-        );
-        for (const suggestion of match.suggestions) {
-          completes.push(
-            new vscode2.CompletionItem(
-              suggestion,
-              vscode2.CompletionItemKind.Text
-            )
-          );
-        }
-      }
-      output.appendLine(
-        `[matchCompletion] returning ${completes.length} completion(s).`
+          completion2.insertText = suggestion;
+          completion2.filterText = match.matcher;
+          return completion2;
+        })
       );
-      return completes;
+      output.appendLine(
+        `[matchCompletion] returning: ${completions.map((completion2) => completion2.label).join(", ")}`
+      );
+      return new vscode2.CompletionList(
+        completions,
+        true
+      );
     }
   };
+  const selectors = languages2.map((language) => ({
+    scheme: "file",
+    language
+  }));
   const completion = vscode2.languages.registerCompletionItemProvider(
-    languages2,
+    selectors,
     provider,
     ...matchTable.triggers
   );
+  output.appendLine("[matchCompletion] provider registered.");
   return vscode2.Disposable.from(completion);
 }
 
@@ -136,9 +119,7 @@ function activate(context) {
       matchTable,
       output
     );
-    if (completion) {
-      disposables.push(completion);
-    }
+    disposables.push(completion);
     runtime = vscode3.Disposable.from(...disposables);
   };
   launch();

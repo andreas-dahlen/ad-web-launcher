@@ -7,10 +7,12 @@ export function createMatchingTable(config: Config): PreparedMatches {
 
   for (const [key, suggestions] of Object.entries(config.suggestions)) {
     const trimmedKey = key.trim()
-    const trigger = trimmedKey.slice(-1)
-    const current = byTrigger.get(trigger)
+    const trigger = trimmedKey.at(0)
+
+    if (!trigger) continue
     triggers.add(trigger)
 
+    const current = byTrigger.get(trigger)
     const match = {
       matcher: trimmedKey,
       suggestions
