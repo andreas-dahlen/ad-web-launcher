@@ -31,3 +31,7 @@ export function getConfig(
     rootSetting
   )
 }
+
+
+
+//NOTE TODO get zod?

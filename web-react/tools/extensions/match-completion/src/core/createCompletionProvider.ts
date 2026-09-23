@@ -42,11 +42,11 @@ export function createCompletionProvider(
         }),
       )
 
-      output.appendLine(
-        `[matchCompletion] returning: ${completions
-          .map(completion => completion.label)
-          .join(', ')}`,
-      )
+      // output.appendLine(
+      //   `[matchCompletion] returning: ${completions
+      //     .map(completion => completion.label)
+      //     .join(', ')}`,
+      // )
 
       return new vscode.CompletionList(
         completions,

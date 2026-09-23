@@ -2,6 +2,7 @@ import * as vscode from 'vscode'
 import { getConfig } from './config/getConfig.ts'
 import { createMatchingTable } from './config/createMatchingTable.ts'
 import { createCompletionProvider } from './core/createCompletionProvider.ts'
+import { createSnippetProvider } from './core/createSnippetProvider.ts'
 
 export function activate(context: vscode.ExtensionContext): void {
   const output = vscode.window.createOutputChannel('match Completion')
@@ -15,20 +16,31 @@ export function activate(context: vscode.ExtensionContext): void {
   const launch = (): void => {
     runtime?.dispose()
 
-    const config = getConfig(output)
-
-    if (!config) return
+    const { languages, snippetBindings, suggestions } = getConfig(output)
 
     const disposables: vscode.Disposable[] = []
 
-    const matchTable = createMatchingTable(config)
+    if (snippetBindings) {
+      const bindings = createSnippetProvider(
+        snippetBindings,
+        output
+      )
+      disposables.push(bindings)
+    }
+    if (!languages) {
+      output.appendLine(`[match completion] error reading languages. Idle waiting for config changes.`)
+      return
+    }
 
-    const completion = createCompletionProvider(
-      config.languages,
-      matchTable,
-      output)
+    if (suggestions) {
+      const matchTable = createMatchingTable(suggestions)
+      const completion = createCompletionProvider(
+        languages,
+        matchTable,
+        output)
+      disposables.push(completion)
+    }
 
-    disposables.push(completion)
 
     runtime = vscode.Disposable.from(...disposables)
   }

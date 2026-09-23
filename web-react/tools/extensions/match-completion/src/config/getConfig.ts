@@ -1,39 +1,50 @@
 import * as vscode from 'vscode'
 import type { Config } from '../types/all.types.ts'
+import { languagesSchema, snippetBindingsSchema, suggestionsSchema } from './settingsSchema.ts'
 
 
 
 export function getConfig(
   output: vscode.OutputChannel
-): Config | undefined {
+): Config {
 
-  const settings = vscode.workspace.getConfiguration(
-    'matchCompletion',
-  )
+  const settings = vscode.workspace.getConfiguration('matchCompletion')
 
-  const languages = settings.get<string[]>('languages')
-  if (!languages) {
+  const gotLanguages = settings.get<unknown>('languages')
+  const gotSuggestions = settings.get<unknown>('suggestions')
+  const gotSnippetBindings = settings.get<unknown>('snippetBindings')
+
+  const parsedLanguages = languagesSchema.safeParse(gotLanguages)
+  const parsedSuggestions = suggestionsSchema.safeParse(gotSuggestions)
+  const parsedSnippetBindings = snippetBindingsSchema.safeParse(gotSnippetBindings)
+
+
+  if (parsedLanguages.error) {
     output.appendLine(
-      '[matchCompletion] found no languages enabled in settings.json.',
+      `[matchCompletion] lagunages parsing error ${parsedLanguages.error}`
     )
-    return
   }
 
-  const suggestions = settings.get<Record<string, string[]>>('suggestions')
-  const snippetBindings = settings.get<Record<string, string[]>>('snippetBindings')
-  //QUEST extract snippetBindings and create snippetz retrigger from snippetBindings array strings. investrigate how to get snippet information.
-
-  //FYI need to make a suggestion autocomplete with the key if the key isn't written in its completion... / and then pressing note shouldn't become /node... it should be //note... also needs to be able to be triggered from indentated startup.
-
-  if (!suggestions) {
+  if (parsedSuggestions.error) {
     output.appendLine(
-      '[matchCompletion] found no suggestions in settings.json.',
+      `[matchCompletion] lagunages parsing error ${parsedSuggestions.error}`
     )
-    return
   }
+  if (parsedSnippetBindings.error) {
+    output.appendLine(
+      `[matchCompletion] lagunages parsing error ${parsedSnippetBindings.error}`
+    )
+  }
+
+
 
   return {
-    languages,
-    suggestions
+    languages: parsedLanguages.data ?? null,
+    suggestions: parsedSuggestions.data ?? null,
+    snippetBindings: parsedSnippetBindings.data ?? null
   }
 }
+
+//QUEST extract snippetBindings and create snippetz retrigger from snippetBindings array strings. investrigate how to get snippet information.
+
+//FYI need to make a suggestion autocomplete with the key if the key isn't written in its completion... / and then pressing note shouldn't become /node... it should be //note... also needs to be able to be triggered from indentated startup.

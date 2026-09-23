@@ -43,16 +43,21 @@
       "properties": {
         "matchCompletion.suggestions": {
           "type": "object",
-          "default": { "//": [ "NOTE", "QUEST" ] },
+          "default": {
+            "//": [
+              "NOTE",
+              "QUEST"
+            ]
+          },
           "description": "Maps text patterns to completion suggestions."
         },
-
         "matchCompletion.snippetBindings": {
           "type": "array",
-          "default": [ "ö" ],
+          "default": [
+            "ö"
+          ],
           "description": "Text prefixes that trigger snippet suggestions."
         },
-
         "matchCompletion.languages": {
           "type": "array",
           "default": [
@@ -63,5 +68,8 @@
         }
       }
     }
+  },
+  "dependencies": {
+    "zod": "^4.6.5"
   }
 }

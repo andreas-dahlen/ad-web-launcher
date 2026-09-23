@@ -1,11 +1,11 @@
-import type { Config, Match, PreparedMatches } from '../types/all.types.ts';
+import type { Match, PreparedMatches } from '../types/all.types.ts';
 
-export function createMatchingTable(config: Config): PreparedMatches {
+export function createMatchingTable(obj: Record<string, string[]>): PreparedMatches {
 
   const triggers = new Set<string>()
   const byTrigger = new Map<string, Match[]>()
 
-  for (const [key, suggestions] of Object.entries(config.suggestions)) {
+  for (const [key, suggestions] of Object.entries(obj)) {
     const trimmedKey = key.trim()
     const trigger = trimmedKey.at(0)
 
