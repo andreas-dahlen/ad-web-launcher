@@ -1,4 +1,4 @@
-import { CssVariableCompletionProvider } from '../completion/cssVarCompletionProvider.ts'
+import { createCssVariableCompletionProvider } from '../completion/cssVarCompletionProvider.ts'
 import * as vscode from 'vscode'
 import { loadVariables } from './loadVariables.ts'
 import { watchVariables } from './watchVariables.ts'
@@ -8,30 +8,30 @@ import { resolveVariablesUri } from '../config/paths.ts'
 
 
 export function variableEntry(
-  workspaceFolder: vscode.WorkspaceFolder,
+  cascadeRoot: string,
   output: vscode.OutputChannel,
 ): vscode.Disposable | null {
-  const variablesUri = resolveVariablesUri(workspaceFolder)
+  const variablesUri = resolveVariablesUri(cascadeRoot)
 
   if (!variablesUri) return null
 
   const variables = loadVariables(variablesUri)
-  const provider = new CssVariableCompletionProvider(variables)
+  const completion = createCssVariableCompletionProvider(variables)
 
   const watcher = watchVariables(
     variablesUri,
-    provider,
+    completion.updateVariables,
     output,
   )
 
-  const completion = vscode.languages.registerCompletionItemProvider(
+  const registration = vscode.languages.registerCompletionItemProvider(
     cssLanguages,
-    provider,
+    completion.provider,
     '-',
   )
 
   return vscode.Disposable.from(
     watcher,
-    completion,
+    registration,
   )
 }

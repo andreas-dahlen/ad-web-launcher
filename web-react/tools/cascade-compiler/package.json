@@ -27,7 +27,8 @@
     "test": "vitest",
     "type": "tsc --noEmit",
     "build": "tsc -p tsconfig.build.json",
-    "cli": "npm run build && node dist/cli.js"
+    "cli": "npm run build && node dist/cli.js",
+    "generate": "npm run build && node dist/cli.js build ../.."
   },
   "peerDependencies": {
     "vite": "^8.2.2"
@@ -49,7 +50,7 @@
   "devDependencies": {
     "@types/node": "^26.1.2",
     "@vitest/coverage-v8": "^5.0.0",
-    "typescript": "^6.0.3",
+    "typescript": "^7.0.2",
     "vitest": "^5.0.0",
     "vite": "^8.2.2"
   },

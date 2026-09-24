@@ -7,14 +7,14 @@ export const jsPlugins: OxlintConfig['jsPlugins'] = [
   },
   {
     name: 'test-api',
-    specifier: './tools/lint/src/testApi-ox/no-test-only-api-plugin.ts',
+    specifier: './tools/lint/oxlint-plugins/testApi-ox/no-test-only-api-plugin.ts',
   },
   {
     name: 'internal-imports',
-    specifier: './tools/lint/src/internalImports-ox/no-internal-import-extensions-plugin.ts',
+    specifier: './tools/lint/oxlint-plugins/internalImports-ox/no-internal-import-extensions-plugin.ts',
   },
   {
     name: 'existing-imports',
-    specifier: './tools/lint/src/importExists-ox/no-nonexistent-import-extensions-plugin.ts'
+    specifier: './tools/lint/oxlint-plugins/importExists-ox/no-nonexistent-import-extensions-plugin.ts'
   }
 ]

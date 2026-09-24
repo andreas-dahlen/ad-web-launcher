@@ -1,39 +1,49 @@
 // src/extension.ts
-import * as vscode9 from "vscode";
+import * as vscode10 from "vscode";
 
 // src/completion/cssVarCompletionProvider.ts
 import * as vscode from "vscode";
-var CssVariableCompletionProvider = class {
-  constructor(variables) {
-    this.variables = variables;
-  }
-  variables;
-  updateVariables(variables) {
-    this.variables = variables;
-  }
-  provideCompletionItems(document, position) {
-    const line = document.lineAt(position.line).text;
-    const beforeCursor = line.slice(0, position.character);
-    if (!/(?:^|[;{])\s*-$/.test(beforeCursor)) {
-      return new vscode.CompletionList([], false);
-    }
-    return new vscode.CompletionList(
-      this.variables.map((variable) => {
+function createCssVariableCompletionProvider(variables, output) {
+  let currentVariables = variables;
+  const provider = {
+    provideCompletionItems(document, position) {
+      const line = document.lineAt(position.line).text;
+      const beforeCursor = line.slice(0, position.character);
+      if (!/(?:^|[;{])\s*-/.test(beforeCursor)) {
+        return new vscode.CompletionList([], true);
+      }
+      const isDoubleDash = /(?:^|[;{])\s*--/.test(beforeCursor);
+      const completions = currentVariables.map((variable) => {
         const item = new vscode.CompletionItem(
           variable,
           vscode.CompletionItemKind.Variable
         );
         item.insertText = variable;
         item.filterText = variable;
+        if (!isDoubleDash) {
+          item.sortText = `zzz-${variable}`;
+        }
         return item;
-      }),
-      false
-    );
-  }
-};
+      });
+      return new vscode.CompletionList(
+        completions,
+        true
+      );
+    }
+  };
+  output.appendLine(
+    `[css variable completion] provided loaded`
+  );
+  return {
+    provider,
+    updateVariables(variables2) {
+      currentVariables = variables2;
+    }
+  };
+}
 
 // src/variables/variableEntry.ts
-import * as vscode4 from "vscode";
+import * as vscode5 from "vscode";
 
 // node_modules/jsonc-parser/lib/esm/impl/scanner.js
 function createScanner(text, ignoreTrivia = false) {
@@ -906,12 +916,12 @@ function loadVariables(fileUri) {
   const parsed = parse2(contents);
   if (!Array.isArray(parsed)) {
     throw new TypeError(
-      "extension.generated.jsonc must contain an array"
+      "extension.jsonc must contain an array"
     );
   }
   if (!parsed.every((value) => typeof value === "string")) {
     throw new Error(
-      "extension.generated.jsonc must contain only strings"
+      "extension.jsonc must contain only strings"
     );
   }
   return parsed;
@@ -919,7 +929,7 @@ function loadVariables(fileUri) {
 
 // src/variables/watchVariables.ts
 import * as vscode2 from "vscode";
-function watchVariables(variablesUri, provider, output) {
+function watchVariables(variablesUri, updateVariables, output) {
   output.appendLine(
     `[css variable completion] watching: ${variablesUri.fsPath}`
   );
@@ -927,17 +937,11 @@ function watchVariables(variablesUri, provider, output) {
     variablesUri.fsPath
   );
   const reloadVariables = () => {
-    output.appendLine(
-      `[css variable completion] variables changed: ${variablesUri.fsPath}`
-    );
     try {
       const variables = loadVariables(variablesUri);
+      updateVariables(variables);
       output.appendLine(
-        `[css variable completion] loaded ${variables.length} variables`
-      );
-      provider.updateVariables(variables);
-      output.appendLine(
-        `[css variable completion] provider updated`
+        `[css variable completion] updated: ${variables.length} variables`
       );
     } catch (error) {
       output.appendLine(
@@ -960,49 +964,117 @@ var cssLanguages = [
 ];
 
 // src/config/paths.ts
+import fs from "node:fs";
+import path2 from "node:path";
+import { createRequire } from "node:module";
+import * as vscode4 from "vscode";
+
+// src/config/getConfig.ts
+import path from "node:path";
 import * as vscode3 from "vscode";
-function resolveVariablesUri(workspaceFolder) {
-  const config = vscode3.workspace.getConfiguration(
+function getConfig(output) {
+  const workspaceFolder = vscode3.workspace.workspaceFolders?.[0];
+  if (!workspaceFolder) {
+    output.appendLine(
+      "[css variable completion] no workspace folder."
+    );
+    return;
+  }
+  const settings = vscode3.workspace.getConfiguration(
     "cssVariableCompletion"
   );
-  const variablesFile = config.get("variablesFile");
-  if (!variablesFile) return;
-  return vscode3.Uri.joinPath(
-    workspaceFolder.uri,
-    ...variablesFile.split("/")
-  );
-}
-function resolveLspPath(workspaceFolder) {
-  const config = vscode3.workspace.getConfiguration(
-    "cssVariableCompletion"
-  );
-  const lspFile = config.get("lspFile");
-  if (!lspFile) return;
-  return vscode3.Uri.joinPath(
-    workspaceFolder.uri,
-    ...lspFile.split("/")
+  const rootSetting = settings.get("nodeModulesRoot");
+  if (!rootSetting) {
+    output.appendLine(
+      "[css variable completion] nodeModulesRoot is missing."
+    );
+    return;
+  }
+  return path.resolve(
+    workspaceFolder.uri.fsPath,
+    rootSetting
   );
 }
 
+// src/config/paths.ts
+function resolveCascadeRoot(output) {
+  const config = getConfig(output);
+  if (!config) return;
+  const require2 = createRequire(import.meta.url);
+  try {
+    const entryPath = require2.resolve("cascade", {
+      paths: [config]
+    });
+    output.appendLine(`Cascade entry: ${entryPath}`);
+    return findPackageRoot(entryPath);
+  } catch (error) {
+    output.appendLine(
+      `Cascade resolution failed: ${error}`
+    );
+    return;
+  }
+}
+function resolveVariablesUri(cascadeRoot) {
+  return vscode4.Uri.file(
+    path2.join(
+      cascadeRoot,
+      "generated/metadata/extension.jsonc"
+    )
+  );
+}
+function resolveLspPath(cascadeRoot) {
+  return vscode4.Uri.file(
+    path2.join(
+      cascadeRoot,
+      "generated/metadata/lsp.ts"
+    )
+  );
+}
+function findPackageRoot(startPath) {
+  let directory = path2.dirname(startPath);
+  while (true) {
+    const packagePath = path2.join(
+      directory,
+      "package.json"
+    );
+    if (fs.existsSync(packagePath)) {
+      const packageJson = JSON.parse(
+        fs.readFileSync(packagePath, "utf8")
+      );
+      if (packageJson.name === "cascade") {
+        return directory;
+      }
+    }
+    const parent = path2.dirname(directory);
+    if (parent === directory) {
+      return;
+    }
+    directory = parent;
+  }
+}
+
 // src/variables/variableEntry.ts
-function variableEntry(workspaceFolder, output) {
-  const variablesUri = resolveVariablesUri(workspaceFolder);
+function variableEntry(cascadeRoot, output) {
+  const variablesUri = resolveVariablesUri(cascadeRoot);
   if (!variablesUri) return null;
   const variables = loadVariables(variablesUri);
-  const provider = new CssVariableCompletionProvider(variables);
-  const watcher = watchVariables(
-    variablesUri,
-    provider,
+  const completion = createCssVariableCompletionProvider(
+    variables,
     output
   );
-  const completion = vscode4.languages.registerCompletionItemProvider(
+  const watcher = watchVariables(
+    variablesUri,
+    completion.updateVariables,
+    output
+  );
+  const registration = vscode5.languages.registerCompletionItemProvider(
     cssLanguages,
-    provider,
+    completion.provider,
     "-"
   );
-  return vscode4.Disposable.from(
+  return vscode5.Disposable.from(
     watcher,
-    completion
+    registration
   );
 }
 
@@ -1010,35 +1082,38 @@ function variableEntry(workspaceFolder, output) {
 import "vscode";
 
 // src/lsp/watchCssSave.ts
-import * as vscode7 from "vscode";
+import * as vscode8 from "vscode";
 
 // src/lsp/openLspDocument.ts
-import * as vscode5 from "vscode";
-async function openLspDocument(lspPath) {
+import * as vscode6 from "vscode";
+async function openLspDocument(lspPath, output) {
   try {
-    await vscode5.workspace.openTextDocument(lspPath);
+    await vscode6.workspace.openTextDocument(lspPath);
+    output.appendLine(
+      `[css variable completion] LSP document refreshed`
+    );
   } catch (error) {
-    console.error(
+    output.appendLine(
       `[css variable completion] failed to open LSP document: ${String(error)}`
     );
   }
 }
 
 // src/lsp/nudgeModule.ts
-import * as vscode6 from "vscode";
+import * as vscode7 from "vscode";
 async function nudgeCssModule(document) {
-  const editor = vscode6.window.visibleTextEditors.find(
+  const editor = vscode7.window.visibleTextEditors.find(
     (editor2) => editor2.document === document
   );
   if (!editor) return;
-  const position = new vscode6.Position(0, 0);
+  const position = new vscode7.Position(0, 0);
   const inserted = await editor.edit((editBuilder) => {
     editBuilder.insert(position, " ");
   });
   if (!inserted) return;
   const removed = await editor.edit((editBuilder) => {
     editBuilder.delete(
-      new vscode6.Range(
+      new vscode7.Range(
         position,
         position.translate(0, 1)
       )
@@ -1049,25 +1124,26 @@ async function nudgeCssModule(document) {
 }
 
 // src/lsp/watchCssSave.ts
-function watchCssSave(lspPath) {
-  const watcher = vscode7.workspace.createFileSystemWatcher(
+function watchCssSave(lspPath, output) {
+  const watcher = vscode8.workspace.createFileSystemWatcher(
     lspPath.fsPath
   );
   let pendingCssDocument;
-  void openLspDocument(lspPath);
-  const saveListener = vscode7.workspace.onDidSaveTextDocument((document) => {
+  void openLspDocument(lspPath, output);
+  const saveListener = vscode8.workspace.onDidSaveTextDocument((document) => {
     if (cssLanguages.every(({ language }) => document.languageId !== language)) {
       return;
     }
     pendingCssDocument = document;
   });
   const changeListener = watcher.onDidChange(async () => {
+    await openLspDocument(lspPath, output);
     const document = pendingCssDocument;
     pendingCssDocument = void 0;
     if (!document) return;
     await nudgeCssModule(document);
   });
-  return vscode7.Disposable.from(
+  return vscode8.Disposable.from(
     watcher,
     saveListener,
     changeListener
@@ -1075,37 +1151,45 @@ function watchCssSave(lspPath) {
 }
 
 // src/lsp/lspEntry.ts
-function lspEntry(workspaceFolder) {
-  const lspUri = resolveLspPath(workspaceFolder);
-  if (!lspUri) return null;
-  return watchCssSave(lspUri);
+function lspEntry(cascadeRoot, output) {
+  const lspUri = resolveLspPath(cascadeRoot);
+  if (!lspUri) {
+    output.appendLine(
+      "[css variable completion] could not resolve LSP path."
+    );
+    return;
+  }
+  output.appendLine(
+    `[css variable completion] lsp path: ${lspUri}`
+  );
+  return watchCssSave(lspUri, output);
 }
 
 // src/extension.ts
 function activate(context) {
-  const output = vscode9.window.createOutputChannel("CSS Variable Completion");
+  const output = vscode10.window.createOutputChannel("CSS Variable Completion");
   context.subscriptions.push(output);
   output.appendLine("[css variable completion] loaded");
-  const workspaceFolder = vscode9.workspace.workspaceFolders?.[0];
-  if (!workspaceFolder) {
-    output.appendLine(
-      "[css variable completion] no workspace folder. Shutting down."
-    );
-    return;
-  }
   let runtime;
   const launch = () => {
     runtime?.dispose();
+    const cascadeRoot = resolveCascadeRoot(output);
+    if (!cascadeRoot) {
+      output.appendLine(
+        "[css variable completion] could not find Cascade."
+      );
+      return;
+    }
     const disposables = [];
-    const variable = variableEntry(workspaceFolder, output);
-    const lsp = lspEntry(workspaceFolder);
+    const variable = variableEntry(cascadeRoot, output);
+    const lsp = lspEntry(cascadeRoot, output);
     if (variable) disposables.push(variable);
     if (lsp) disposables.push(lsp);
-    runtime = vscode9.Disposable.from(...disposables);
+    runtime = vscode10.Disposable.from(...disposables);
   };
   launch();
   context.subscriptions.push(
-    vscode9.workspace.onDidChangeConfiguration((event) => {
+    vscode10.workspace.onDidChangeConfiguration((event) => {
       if (!event.affectsConfiguration("cssVariableCompletion")) {
         return;
       }

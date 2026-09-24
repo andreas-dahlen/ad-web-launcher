@@ -31,7 +31,7 @@ jobs:
 
       - name: Build token compiler
         working-directory: web-react/tools/cascade-compiler
-        run: npm run build
+        run: npm run generate
 
       # Install dependencies + build web-react
       - name: Install dependencies

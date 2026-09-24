@@ -104,8 +104,7 @@ export const layoutStore = create<LayoutStore>()(
         set(s => {
           const sys = getSystem(s, axis)
           const lane = sys.lanes[laneId]
-          if (!lane) return
-          if (lane.sceneOrder.length <= 1) return
+          if (!lane || lane.sceneOrder.length <= 1) return
 
           delete lane.scenes[sceneId]
           lane.sceneOrder = lane.sceneOrder.filter(x => x !== sceneId)

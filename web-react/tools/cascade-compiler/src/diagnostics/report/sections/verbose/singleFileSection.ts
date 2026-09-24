@@ -44,7 +44,6 @@ export function singleFileSection(
       skipped.length === 0 &&
       relevant[key as keyof typeof relevant] === true
     ) {
-      console.log("KEY:", key)
       throw new Error(
         `Output "${key}" was enabled but produced no reported file / skipped output.`
       )

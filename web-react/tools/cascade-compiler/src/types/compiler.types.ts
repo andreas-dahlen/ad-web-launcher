@@ -1,8 +1,13 @@
-import type { Rule } from 'postcss';
+import type { Root, Rule } from 'postcss';
 import type { IssueGroup } from './issueCollector.types.ts';
 import type { rawTokenSchema, rawVariableSchema } from '../schema/tokenSchema.ts';
 import * as z from "zod"
 import type { CssVarString, ValidPrefix } from './cascade.types.ts';
+
+export type TokenPathsAndIssues = {
+  tokenPaths: string[]
+  issues: IssueGroup[]
+}
 
 export type RawToken = z.infer<typeof rawTokenSchema>
 export type RawVariable = z.infer<typeof rawVariableSchema>
@@ -48,13 +53,24 @@ export type TokenGroupsResult = {
   groups: TokenGroup[]
   issues: IssueGroup[]
 }
-// glbal processing
+
+export type LoadedCssRoot = {
+  root?: Root
+  issues: IssueGroup[]
+}
+
+// global processing
 
 export type PostData = {
   cssPath: string;
   variables: CssVarString[];
   oklchVariables: Array<[CssVarString, string]>;
 };
+
+export type PostDataResult = {
+  postData: PostData
+  issues: IssueGroup[]
+}
 
 // after CSS processing
 export type CssData = { // CssModuleResult
@@ -66,6 +82,12 @@ export type CssData = { // CssModuleResult
   foundFinalVariables: CssVarString[]
   declaredVariables: CssVarString[]
 }
+
+export type CssDataResult = {
+  cssData: CssData
+  issues: IssueGroup[]
+}
+
 export type ProcessedToken = {
   name: string
   infix: string
@@ -82,4 +104,5 @@ export type WalkModuleResult = {
   foundFinalVariables: CssVarString[]
   declaredVariables: CssVarString[]
   presetResetData: PresetResetData
+  issues: IssueGroup[]
 };

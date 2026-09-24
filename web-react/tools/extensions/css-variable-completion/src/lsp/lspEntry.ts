@@ -4,12 +4,21 @@ import { watchCssSave } from './watchCssSave.ts'
 
 
 export function lspEntry(
-  workspaceFolder: vscode.WorkspaceFolder,
-  // output: vscode.OutputChannel,
-): vscode.Disposable | null {
-  const lspUri = resolveLspPath(workspaceFolder)
+  cascadeRoot: string,
+  output: vscode.OutputChannel,
+): vscode.Disposable | undefined {
+  const lspUri = resolveLspPath(cascadeRoot)
 
-  if (!lspUri) return null
+  if (!lspUri) {
+    output.appendLine(
+      '[css variable completion] could not resolve LSP path.',
+    )
+    return
+  }
 
-  return watchCssSave(lspUri) //output
+  output.appendLine(
+    `[css variable completion] lsp path: ${lspUri}`,
+  )
+
+  return watchCssSave(lspUri, output)
 }

@@ -32,17 +32,16 @@ vi.mock(
   '../../../src/emitters/extract/assemblers/assembleJsonSchema.js'
 )
 
-
 describe('[EMITTERS]', () => {
   describe('extractData', () => {
-    const outPath = '/generated'
-
     function createCache({
       groups = [],
       postData = [],
+      presetIgnore = [],
     }: {
       groups?: Array<{ groupPath: string }>
       postData?: unknown[]
+      presetIgnore?: string[]
     } = {}) {
       return {
         getCssDataGroups: vi.fn(() => groups),
@@ -52,8 +51,8 @@ describe('[EMITTERS]', () => {
           )
         ),
         getAllPostData: vi.fn(() => postData),
-        getEmitConfig: vi.fn(() => ({
-          outPath,
+        getConfig: vi.fn(() => ({
+          presetIgnore,
         })),
       } as never
     }
@@ -67,6 +66,7 @@ describe('[EMITTERS]', () => {
         getProcessedPaths: vi.fn(() => processedPaths),
       } as never
     }
+
     it('returns empty collections when there are no groups', () => {
       const cache = createCache()
       const run = createRun()
@@ -74,14 +74,12 @@ describe('[EMITTERS]', () => {
       vi.mocked(assembleExtensionData)
         .mockReturnValue({
           variables: [],
-          outputFile: '/generated/metadata/extension.jsonc',
         })
 
       vi.mocked(assembleLspData)
         .mockReturnValue({
           rgbVariables: [],
           tokens: [],
-          outputFile: '/generated/metadata/lsp.ts',
         })
 
       const result = extractData(cache, run)
@@ -124,7 +122,6 @@ describe('[EMITTERS]', () => {
         groupPath: group.groupPath,
         tokenFiles: [],
         cssFile: group.cssPath,
-        outputFile: 'metadata/metadata.generated.jsonc',
       }
 
       vi.mocked(assembleTokenData)
@@ -136,16 +133,12 @@ describe('[EMITTERS]', () => {
       vi.mocked(assembleExtensionData)
         .mockReturnValue({
           variables: [],
-          outputFile:
-            'metadata/extension.jsonc',
         })
 
       vi.mocked(assembleLspData)
         .mockReturnValue({
           rgbVariables: [],
           tokens: [],
-          outputFile:
-            'metadata/lsp.ts',
         })
 
       const cache = createCache({
@@ -200,16 +193,12 @@ describe('[EMITTERS]', () => {
       vi.mocked(assembleExtensionData)
         .mockReturnValue({
           variables: [],
-          outputFile:
-            'metadata/extension.jsonc',
         })
 
       vi.mocked(assembleLspData)
         .mockReturnValue({
           rgbVariables: [],
           tokens: [],
-          outputFile:
-            'metadata/lsp.ts',
         })
 
       const cache = createCache({
@@ -226,7 +215,61 @@ describe('[EMITTERS]', () => {
         .toEqual([secondTokenData])
 
       expect(assemblePresetData)
-        .toHaveBeenCalledWith(secondGroup.cssData)
+        .toHaveBeenCalledWith(
+          secondGroup.cssData,
+          [],
+        )
+    })
+
+    it('passes presetIgnore to preset assembly', () => {
+      const runGroup = {
+        groupPath: '/tokens/button',
+        cssPath: '/components/Button/Button.module.css',
+        cssData: {},
+      }
+
+      const presetIgnore = [
+        'legacy',
+        'debug',
+      ]
+
+      vi.mocked(assembleTokenData)
+        .mockReturnValue({
+          groupPath: runGroup.groupPath,
+          name: 'button',
+          tokens: [],
+        } as never)
+
+      vi.mocked(assemblePresetData)
+        .mockReturnValue(null)
+
+      vi.mocked(assembleExtensionData)
+        .mockReturnValue({
+          variables: [],
+        })
+
+      vi.mocked(assembleLspData)
+        .mockReturnValue({
+          rgbVariables: [],
+          tokens: [],
+        })
+
+      const cache = createCache({
+        groups: [runGroup],
+        presetIgnore,
+      })
+
+      const run = createRun({
+        processedPaths: [runGroup.groupPath],
+      })
+
+      extractData(cache, run)
+
+      expect(assemblePresetData)
+        .toHaveBeenCalledWith(
+          runGroup.cssData,
+          presetIgnore,
+        )
     })
 
     it('records omitted preset files when preset assembly returns null', () => {
@@ -251,16 +294,12 @@ describe('[EMITTERS]', () => {
       vi.mocked(assembleExtensionData)
         .mockReturnValue({
           variables: [],
-          outputFile:
-            'metadata/extension.jsonc',
         })
 
       vi.mocked(assembleLspData)
         .mockReturnValue({
           rgbVariables: [],
           tokens: [],
-          outputFile:
-            'metadata/lsp.ts',
         })
 
       const cache = createCache({
@@ -294,7 +333,6 @@ describe('[EMITTERS]', () => {
         typeName: 'ButtonPreset',
         cssImport: './Button.module.css',
         selectors: ['primary'],
-        outputFile: 'presets/button.preset.ts',
       }
 
       vi.mocked(assembleTokenData)
@@ -310,16 +348,12 @@ describe('[EMITTERS]', () => {
       vi.mocked(assembleExtensionData)
         .mockReturnValue({
           variables: [],
-          outputFile:
-            'metadata/extension.jsonc',
         })
 
       vi.mocked(assembleLspData)
         .mockReturnValue({
           rgbVariables: [],
           tokens: [],
-          outputFile:
-            'metadata/lsp.ts',
         })
 
       const cache = createCache({
@@ -376,16 +410,12 @@ describe('[EMITTERS]', () => {
           variables: [
             '--existing-color',
           ] as CssVarString[],
-          outputFile:
-            'metadata/extension.jsonc',
         })
 
       vi.mocked(assembleLspData)
         .mockReturnValue({
           rgbVariables: [],
           tokens: [],
-          outputFile:
-            'metadata/lsp.ts',
         })
 
       const cache = createCache({
@@ -442,16 +472,12 @@ describe('[EMITTERS]', () => {
       vi.mocked(assembleExtensionData)
         .mockReturnValue({
           variables: [],
-          outputFile:
-            'metadata/extension.jsonc',
         })
 
       vi.mocked(assembleLspData)
         .mockReturnValue({
           rgbVariables: [],
           tokens: [],
-          outputFile:
-            'metadata/lsp.ts',
         })
 
       const cache = createCache({
@@ -478,8 +504,6 @@ describe('[EMITTERS]', () => {
         variables: [
           '--button-color',
         ] as CssVarString[],
-        outputFile:
-          'metadata/extension.jsonc',
       }
 
       const lspData = {
@@ -487,8 +511,6 @@ describe('[EMITTERS]', () => {
           '--button-color: rgb(100% 0% 0%)',
         ],
         tokens: [],
-        outputFile:
-          'metadata/lsp.ts',
       }
 
       vi.mocked(assembleExtensionData)
@@ -544,16 +566,12 @@ describe('[EMITTERS]', () => {
       vi.mocked(assembleExtensionData)
         .mockReturnValue({
           variables: [],
-          outputFile:
-            '/generated/metadata/extension.jsonc',
         })
 
       vi.mocked(assembleLspData)
         .mockReturnValue({
           rgbVariables: [],
           tokens: [],
-          outputFile:
-            'metadata/lsp.ts',
         })
 
       const cache = createCache({

@@ -8,6 +8,10 @@ export function variableSection(data: VariableMismatch[]): ReportSection | undef
 
   for (const variable of data) {
     const lines: string[] = [];
+    const component =
+      variable.name == variable.infix
+        ? variable.name
+        : `${variable.name}-${variable.infix}`
 
     if (variable.unused.length > 0) {
       lines.push(
@@ -22,11 +26,6 @@ export function variableSection(data: VariableMismatch[]): ReportSection | undef
         ...variable.missing.map(variable => `    ${paint(variable, colors.variable)}`)
       );
     }
-
-    const component =
-      variable.name == variable.infix
-        ? variable.name
-        : `${variable.name}-${variable.infix}`
 
     entries.push({
       title: ` 🧩 ${paint(`Component: `, colors.subHeading)}${paint(component, colors.heading)}`,

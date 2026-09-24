@@ -6,17 +6,21 @@ import {
   type ParseError,
 } from 'jsonc-parser'
 
-import type { CompilerOptions } from '../../types/run.types.ts'
+import type { CompilerOptionsAndIssues } from '../../types/run.types.ts'
 import { compilerConfigSchema } from '../../schema/configSchema.ts'
+import { asObject } from '../../utils/typeGuards.ts'
+import { resolveConfigRecovery } from './resolveConfigRecovery.ts'
 
-export function loadCompilerConfig(projectRoot: string): CompilerOptions {
+export function loadCompilerConfig(projectRoot: string): CompilerOptionsAndIssues {
   const configPath = path.join(
     projectRoot,
     'cascade.config.json',
   )
 
   if (!fs.existsSync(configPath)) {
-    return {}
+    throw new Error(
+      `couldn't find a cascade.config.json file`
+    )
   }
 
   const text = fs.readFileSync(configPath, 'utf8')
@@ -34,5 +38,19 @@ export function loadCompilerConfig(projectRoot: string): CompilerOptions {
     )
   }
 
-  return compilerConfigSchema.parse(raw)
+  const config = asObject(raw)
+  if (!config) {
+    throw new Error('Cascade configuration must be a JSON object')
+  }
+
+  const zodResult = compilerConfigSchema.safeParse(raw)
+
+  if (zodResult.success) {
+    return {
+      config: zodResult.data,
+      issues: []
+    }
+  }
+
+  return resolveConfigRecovery(config)
 }

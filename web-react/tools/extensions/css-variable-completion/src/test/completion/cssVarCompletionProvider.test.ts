@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
+import * as vscode from 'vscode'
 
-import { CssVariableCompletionProvider } from '../../completion/cssVarCompletionProvider.ts'
+import { createCssVariableCompletionProvider } from '../../completion/cssVarCompletionProvider.ts'
 
 const CompletionItemMock = vi.hoisted(() =>
   vi.fn(function (
@@ -9,6 +10,7 @@ const CompletionItemMock = vi.hoisted(() =>
       kind: unknown
       insertText?: string
       filterText?: string
+      sortText?: string
     },
     label: string,
     kind: unknown,
@@ -42,53 +44,59 @@ vi.mock('vscode', () => ({
   CompletionList: CompletionListMock,
 }))
 
+const createProvider = (variables: string[]) =>
+  createCssVariableCompletionProvider(variables).provider
+
+const provide = (
+  provider: ReturnType<typeof createProvider>,
+  text: string,
+  character = text.length,
+): vscode.CompletionList => {
+  const result = provider.provideCompletionItems(
+    {
+      lineAt: () => ({
+        text,
+      }),
+    } as never,
+    {
+      line: 0,
+      character,
+    } as never,
+    {} as never,
+    {} as never,
+  )
+
+  return result as vscode.CompletionList
+}
 describe('[EXTENSION] CssVariableCompletionProvider', () => {
   it('returns no completions when the cursor is not after a variable trigger', () => {
-    const provider = new CssVariableCompletionProvider([
+    const provider = createProvider([
       '--color-primary',
     ])
 
-    const result = provider.provideCompletionItems(
-      {
-        lineAt: () => ({
-          text: 'color: -',
-        }),
-      } as never,
-      {
-        line: 0,
-        character: 9,
-      } as never,
-    )
+    const result = provide(provider, 'color: -')
 
     expect(result.items).toEqual([])
-    expect(result.isIncomplete).toBe(false)
+    expect(result.isIncomplete).toBe(true)
   })
 
   it('provides variables after a CSS property separator', () => {
-    const provider = new CssVariableCompletionProvider([
+    const provider = createProvider([
       '--color-primary',
       '--color-secondary',
     ])
 
-    const result = provider.provideCompletionItems(
-      {
-        lineAt: () => ({
-          text: 'color: red; -',
-        }),
-      } as never,
-      {
-        line: 0,
-        character: 13,
-      } as never,
-    )
+    const result = provide(provider, 'color: red; -')
 
     expect(result.items).toHaveLength(2)
+    expect(result.isIncomplete).toBe(true)
 
     expect(result.items[0]).toMatchObject({
       label: '--color-primary',
       kind: completionItemKind.Variable,
       insertText: '--color-primary',
       filterText: '--color-primary',
+      sortText: 'zzz---color-primary',
     })
 
     expect(result.items[1]).toMatchObject({
@@ -96,25 +104,33 @@ describe('[EXTENSION] CssVariableCompletionProvider', () => {
       kind: completionItemKind.Variable,
       insertText: '--color-secondary',
       filterText: '--color-secondary',
+      sortText: 'zzz---color-secondary',
     })
   })
 
   it('provides variables after an opening brace', () => {
-    const provider = new CssVariableCompletionProvider([
+    const provider = createProvider([
       '--color-primary',
     ])
 
-    const result = provider.provideCompletionItems(
-      {
-        lineAt: () => ({
-          text: '.foo { -',
-        }),
-      } as never,
-      {
-        line: 0,
-        character: 9,
-      } as never,
-    )
+    const result = provide(provider, '.foo { -')
+
+    expect(result.items).toHaveLength(1)
+
+    expect(result.items[0]).toMatchObject({
+      label: '--color-primary',
+      insertText: '--color-primary',
+      filterText: '--color-primary',
+      sortText: 'zzz---color-primary',
+    })
+  })
+
+  it('does not lower priority after a double dash', () => {
+    const provider = createProvider([
+      '--color-primary',
+    ])
+
+    const result = provide(provider, '.foo { --')
 
     expect(result.items).toHaveLength(1)
 
@@ -123,28 +139,20 @@ describe('[EXTENSION] CssVariableCompletionProvider', () => {
       insertText: '--color-primary',
       filterText: '--color-primary',
     })
+
+    expect(result.items[0]).not.toHaveProperty('sortText')
   })
 
   it('uses updated variables for subsequent completions', () => {
-    const provider = new CssVariableCompletionProvider([
+    const completion = createCssVariableCompletionProvider([
       '--old-variable',
     ])
 
-    provider.updateVariables([
+    completion.updateVariables([
       '--new-variable',
     ])
 
-    const result = provider.provideCompletionItems(
-      {
-        lineAt: () => ({
-          text: '-',
-        }),
-      } as never,
-      {
-        line: 0,
-        character: 1,
-      } as never,
-    )
+    const result = provide(completion.provider, '-')
 
     expect(result.items).toHaveLength(1)
 
@@ -152,6 +160,7 @@ describe('[EXTENSION] CssVariableCompletionProvider', () => {
       label: '--new-variable',
       insertText: '--new-variable',
       filterText: '--new-variable',
+      sortText: 'zzz---new-variable',
     })
   })
 })

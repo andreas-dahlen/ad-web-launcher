@@ -8,25 +8,34 @@ export const compilerRules: {
       default: 'disallow',
 
       policies: [
-        // ----------------------------------
-        // styleTokens
-        // ----------------------------------
-
         {
           from: [
             { element: { type: "compiler", captured: { mod: "*" } } },
-            { element: { type: "diagnostics", captured: { mod: "*" } } },
-            { element: { type: "emitters", captured: { mod: "*" } } },
+            { element: { type: "entries", captured: { mod: "*" } } },
             { element: { type: "postCss", captured: { mod: "*" } } },
-            { element: { type: "tokenTypes" } },
+            { element: { type: "analysisAnalyzers" } },
+            { element: { type: "reportSections" } },
+            { element: { type: "composeFormat" } },
+            { element: { type: "extractAssemblers" } },
+            { element: { type: "write" } },
             { element: { type: "utils" } },
+            { file: { categories: "runDiagnostics" } },
+            { file: { categories: "buildAnalysis" } },
+            { file: { categories: "buildReport" } },
+
             { file: { categories: "emitFiles" } },
-            { file: { categories: "processModule" } }
+            { file: { categories: "composeOutput" } },
+            { file: { categories: "extractAssemblers" } },
+            { file: { categories: "extractData" } },
+
+            { file: { categories: "processModule" } },
+            { file: { categories: "processPost" } },
+            { file: { categories: "css" } },
+            { file: { categories: "entry" } }
           ],
           allow: {
             to: [
-              { element: { type: "tokenTypes" } },
-              { element: { type: "shared", captured: { mod: "tokenUtils" } } },
+              { file: { categories: "types" } },
               { element: { type: "utils" } }
             ]
           }
@@ -35,6 +44,10 @@ export const compilerRules: {
         {
           from: { element: { type: "compiler", captured: { mod: "discovery" } } },
           allow: { to: { element: { type: "compiler", captured: { mod: "resolvers" } } } }
+        },
+        {
+          from: { element: { type: "compiler", captured: { mod: "loaders" } } },
+          allow: { to: { element: { type: "schema" } } }
         },
         {
           from: { element: { type: "compiler", captured: { mod: "pipeline" } } },
@@ -72,87 +85,103 @@ export const compilerRules: {
               { element: { type: "compiler", captured: { mod: "pipeline" } } },
               { element: { type: "compiler", captured: { mod: "tracking" } } },
               { element: { type: "compiler", captured: { mod: "processing" } } },
+              { file: { categories: "processPost" } },
               { file: { categories: "processModule" } },
               { file: { categories: "emitFiles" } },
               { file: { categories: "runDiagnostics" } },
-              { element: { type: "tokenTypes" }, file: { categories: "types" } }
+              { file: { categories: "types" } }
             ]
           }
         },
-        // //emitters
+        // diagnostics
         {
-          from: { element: { type: "emitters", captured: { mod: "extract" } } },
+          from: { file: { categories: "buildAnalysis" } },
           allow: {
             to: [
-              { element: { type: "compiler", captured: { mod: "resolvers" } } },
-              { element: { type: "compiler", captured: { mod: "tracking" } } },
-              { element: { type: "emitters", captured: { mod: "extract" } } },
+              { element: { type: "analysisAnalyzers" } },
+              { element: { type: "compiler", captured: { mod: "tracking" } } }, //for token cache type
+              { element: { type: "compiler", captured: { mod: "resolvers" } } }
             ]
           }
         },
         {
-          from: { element: { type: "emitters", captured: { mod: "generate" } } },
-          allow: {
-            to: [
-              { element: { type: "emitters", captured: { mod: "extract" } } },
-              { element: { type: "emitters", captured: { mod: "generate" } } },
-            ]
-          }
+          from: { element: { type: "reportSections" } },
+          allow: { to: { file: { categories: "buildReport" } } }
         },
         {
-          from: { element: { type: "emitters", captured: { mod: "write" } } },
-          allow: {
-            to: { element: { type: "emitters", captured: { mod: "generate" } } }
-          }
-        },
-        {
-          from: { file: { categories: "emitFiles" } },
-          allow: {
-            to: [
-              { element: { type: "compiler", captured: { mod: "tracking" } } },
-              { element: { type: "emitters", captured: { mod: "extract" } } },
-              { element: { type: "emitters", captured: { mod: "generate" } } },
-              { element: { type: "emitters", captured: { mod: "write" } } }
-            ]
-          }
-        },
-        // //diagnostics
-        {
-          from: { element: { type: "diagnostics", captured: { mod: "data" } } },
-          allow: {
-            to: [
-              { element: { type: "diagnostics", captured: { mod: "print" } } },
-              { element: { type: "diagnostics", captured: { mod: "data" } } },
-              { element: { type: "emitters", captured: { mod: "write" } } },
-              { element: { type: "compiler", captured: { mod: "resolvers" } } },
-              { element: { type: "compiler", captured: { mod: "tracking" } } }
-            ]
-          }
-        },
-        {
-          from: { element: { type: "diagnostics", captured: { mod: "print" } } },
-          allow: {
-            to: { element: { type: "diagnostics", captured: { mod: "report" } } }
-          }
-        },
-        {
-          from: { element: { type: "diagnostics", captured: { mod: "report" } } },
-          allow: {
-            to: { element: { type: "diagnostics", captured: { mod: "report" } } }
-          }
+          from: { file: { categories: "buildReport" } },
+          allow: { to: { element: { type: "reportSections" } } }
         },
         {
           from: { file: { categories: "runDiagnostics" } },
           allow: {
             to: [
-              { element: { type: "compiler", captured: { mod: "tracking" } } },
-              { element: { type: "diagnostics", captured: { mod: "data" } } },
-              { element: { type: "diagnostics", captured: { mod: "report" } } },
-              { element: { type: "diagnostics", captured: { mod: "print" } } }
+              { file: { categories: "buildReport" } },
+              { file: { categories: "buildAnalysis" } },
+              { element: { type: "compiler", captured: { mod: "tracking" } } }
             ]
           }
         },
+
+        //emitters
+        {
+          from: { file: { categories: "composeOutput" } },
+          allow: { to: { element: { type: "composeFormat" } } }
+        },
+        {
+          from: { element: { type: "extractAssemblers" } },
+          allow: {
+            to: [
+              { element: { type: "compiler", captured: { mod: "resolvers" } } },  //for extractGroupName
+              { element: { type: "schema" } }
+            ]
+          }
+        },
+
+        {
+          from: { file: { categories: "extractData" } },
+          allow: {
+            to: [
+              { element: { type: "extractAssemblers" } },
+              { element: { type: "compiler", captured: { mod: "tracking" } } }
+            ]
+          }
+        },
+
+        {
+          from: { file: { categories: "emitFiles" } },
+          allow: {
+            to: [
+              { element: { type: "write" } },
+              { element: { type: "compiler", captured: { mod: "tracking" } } },
+              { file: { categories: "composeOutput" } },
+              { file: { categories: "extractData" } },
+            ]
+          }
+        },
+        // entries 
+        {
+          from: { element: { type: "entries", captured: { mod: "*" } } },
+          allow: { to: { element: { type: "entries", captured: { mod: "{{from.element.captured.mod}}" } } } }
+        },
+        {
+          from: { element: { type: "entries", captured: { mod: "watch" } } },
+          allow: {
+            to: [
+              { element: { type: "entries", captured: { mod: "config" } } },
+              { file: { categories: "compilerService" } }
+            ]
+          }
+        },
+        {
+          from: { element: { type: "entries", captured: { mod: "config" } } },
+          allow: { to: { element: { type: "schema" } } }
+        },
         // postCss
+        {
+          from: { element: { type: "postCss", captured: { mod: "resolvers" } } },
+          allow: { to: { element: { type: "compiler", captured: { mod: "tracking" } } } }
+        },
         {
           from: { file: { categories: "processModule" } },
           allow: {
@@ -162,13 +191,63 @@ export const compilerRules: {
             ]
           }
         },
+        {
+          from: { file: { categories: "processPost" } },
+          allow: {
+            to: [
+              { element: { type: "postCss", captured: { mod: "resolvers" } } }
+            ]
+          }
+        },
+        /*
+here is no policy allowing dependencies from elements of type "postCss" and captured values: mod="resolvers" to elements of type "compiler" and captured values: mod="tracking"oxc(boundaries(dependencies))
+        */
+        //public
+        {
+          from: { file: { categories: "vite" } },
+          allow: { to: { element: { type: "vite" } } }
+        },
+        //vite
+        {
+          from: { element: { type: "vite" } },
+          allow: {
+            to: [
+              { file: { categories: "compilerService" } },
+              { file: { categories: "entry" } }
+            ]
+          }
+        },
         // // ----------------------------------
         // // FILES
         // // ----------------------------------
         {
-          from: { file: { categories: "stores" } },
+          from: [
+            { file: { categories: "build" } },
+            { file: { categories: "css" } },
+            { file: { categories: "entry" } }
+          ],
           allow: {
-            to: { element: { type: "data", captured: { mod: "generators" } } }
+            to: { file: { categories: "compilerService" } }
+          }
+        },
+        {
+          from: [
+            { file: { categories: "build" } },
+            { file: { categories: "css" } },
+          ],
+          allow: {
+            to: { element: { type: "entries", captured: { mod: "config" } } }
+          }
+        },
+        {
+          from: { file: { categories: "entry" } },
+          allow: {
+            to: [
+              { element: { type: "entries", captured: { mod: "config" } } },
+              { file: { categories: "watch" } },
+              { file: { categories: "css" } },
+              { file: { categories: "build" } }
+            ]
           }
         },
         {
@@ -177,18 +256,16 @@ export const compilerRules: {
             to: [
               { element: { captured: { mod: "{{from.element.captured.mod}}" } } },
               { file: { categories: "types" } },
-              { file: { categories: "compilerService" } },
-              // { element: { type: "compiler", captured: { mod: "loaders" } } }
-              // There is no policy allowing dependencies from file of categories "types", "types" belonging to elements of type "tokenTypes" to file of category "compilerService"
+              { element: { type: "schema" } },
+              { file: { categories: "compilerService" } }
             ]
           }
         },
         {
-          from: { file: { categories: "types", element: { type: "tokenTypes" } } },
-          allow: {
-            to: { element: { type: "compiler", captured: { mod: "loaders" } } }
-          }
+          from: { file: { categories: "cli" } },
+          allow: { to: { file: { categories: "entry" } } }
         }
+
       ] as const
     }
   ]

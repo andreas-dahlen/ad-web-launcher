@@ -1,11 +1,10 @@
 {
   "tokenFolder": "src/tokens",
-  "outDir": "packages/cascade/src/generated",
   "outputs": {
     "extension": true,
-    "lsp": false,
+    "lsp": true,
     "meta": false,
-    "pathPatches": false,
+    "pathPatches": true,
     "presets": true,
     "tokens": true,
     "schema": true,

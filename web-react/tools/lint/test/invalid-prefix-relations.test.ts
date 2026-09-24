@@ -2,7 +2,7 @@ import * as jsoncParser from 'jsonc-eslint-parser'
 import { Linter } from 'eslint'
 import { describe, expect, it } from 'vitest'
 
-import rule from '../src/tokens/no-invalid-prefixes-relations.ts'
+import rule from '../eslint-plugins/tokens-custom-plugin/no-invalid-prefixes-relations.ts'
 
 const config = [
   {

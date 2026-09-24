@@ -74,7 +74,7 @@ describe('[EXTENSION] loadVariables', () => {
 
     try {
       expect(() => loadVariables(file.uri)).toThrow(
-        'extension.generated.jsonc must contain an array',
+        'extension.jsonc must contain an array',
       )
     } finally {
       file.cleanup()
@@ -91,7 +91,7 @@ describe('[EXTENSION] loadVariables', () => {
 
     try {
       expect(() => loadVariables(file.uri)).toThrow(
-        'extension.generated.jsonc must contain only strings',
+        'extension.jsonc must contain only strings',
       )
     } finally {
       file.cleanup()

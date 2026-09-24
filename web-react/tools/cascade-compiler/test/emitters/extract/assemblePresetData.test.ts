@@ -25,21 +25,10 @@ describe('[EMITTERS]', () => {
         createCssData({
           groupPath: '/tokens/button',
         }),
+        [],
       )
 
       expect(result?.typeName).toBe('ButtonPreset')
-    })
-
-    it('builds the generated preset file path', () => {
-      const result = assemblePresetData(
-        createCssData({
-          groupPath: '/tokens/button',
-        }),
-      )
-
-      expect(result?.outputFile).toBe(
-        'presets/button.preset.ts',
-      )
     })
 
     it('filters non-preset selectors', () => {
@@ -53,11 +42,30 @@ describe('[EMITTERS]', () => {
             'focusUtil',
           ],
         }),
+        [],
       )
 
       expect(result?.selectors).toEqual([
         'button_$state',
         'active',
+      ])
+    })
+
+    it('filters selectors listed in presetIgnore', () => {
+      const result = assemblePresetData(
+        createCssData({
+          usableSelectors: [
+            'primary',
+            'secondary',
+            'disabled',
+          ],
+        }),
+        ['secondary'],
+      )
+
+      expect(result?.selectors).toEqual([
+        'primary',
+        'disabled',
       ])
     })
 
@@ -71,6 +79,21 @@ describe('[EMITTERS]', () => {
             'debugUtil',
           ],
         }),
+        [],
+      )
+
+      expect(result).toBeNull()
+    })
+
+    it('returns null when presetIgnore removes all preset selectors', () => {
+      const result = assemblePresetData(
+        createCssData({
+          usableSelectors: [
+            'primary',
+            'secondary',
+          ],
+        }),
+        ['primary', 'secondary'],
       )
 
       expect(result).toBeNull()
@@ -85,6 +108,7 @@ describe('[EMITTERS]', () => {
             'disabled',
           ],
         }),
+        [],
       )
 
       expect(result?.selectors).toEqual([

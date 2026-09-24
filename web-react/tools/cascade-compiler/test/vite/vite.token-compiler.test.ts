@@ -8,26 +8,23 @@ import { createCascadePlugin } from '../../src/vite/vite.cascade-plugin.ts'
 
 const {
   runCss,
-  runBuild,
   schedule,
 } = vi.hoisted(() => ({
   runCss: vi.fn(),
-  runBuild: vi.fn(),
   schedule: vi.fn(),
 }))
 
 vi.mock(
-  '../../cascade-compiler/src/entries/entry.ts',
+  '../../src/entries/entry.ts',
   () => ({
     compiler: {
       runCss,
-      runBuild,
     },
   }),
 )
 
 vi.mock(
-  '../src/helpers/finalizeScheduler.ts',
+  '../../src/vite/helpers/finalizeScheduler.ts',
   () => ({
     createFinalizeScheduler: () => ({
       schedule,
@@ -44,7 +41,6 @@ type TestPlugin = {
     command: 'serve' | 'build'
   }) => void
   transform: (code: string, id: string) => unknown
-  buildEnd: () => void
   configureServer: (server: {
     watcher: TestWatcher
   }) => void
@@ -70,13 +66,20 @@ const createCompiler = () => ({
   finalize: vi.fn(),
 })
 
+const remove = (directory: string) => {
+  fs.rmSync(directory, {
+    recursive: true,
+    force: true,
+  })
+}
+
 describe('[VITE] cascadeCompiler', () => {
   beforeEach(() => {
     vi.clearAllMocks()
   })
 
   describe('configResolved', () => {
-    it('initializes the CSS compiler in serve mode', () => {
+    it('initializes the CSS compiler', () => {
       const compiler = createCompiler()
       const projectRoot = createProject()
 
@@ -93,15 +96,20 @@ describe('[VITE] cascadeCompiler', () => {
         command: 'serve',
       })
 
+      expect(runCss).toHaveBeenCalledOnce()
       expect(runCss).toHaveBeenCalledWith(projectRoot)
-      expect(runBuild).not.toHaveBeenCalled()
+
+      remove(projectRoot)
     })
 
-    it('initializes the build compiler in build mode', () => {
+    it('initializes the CSS compiler in build mode', () => {
       const compiler = createCompiler()
       const projectRoot = createProject()
 
-      runBuild.mockReturnValue(compiler)
+      runCss.mockReturnValue({
+        compiler,
+        tokenFolder: '/tokens',
+      })
 
       const plugin = asTestPlugin(
         createCascadePlugin(projectRoot),
@@ -111,19 +119,25 @@ describe('[VITE] cascadeCompiler', () => {
         command: 'build',
       })
 
-      expect(runBuild).toHaveBeenCalledWith(projectRoot)
-      expect(runCss).not.toHaveBeenCalled()
+      expect(runCss).toHaveBeenCalledOnce()
+      expect(runCss).toHaveBeenCalledWith(projectRoot)
+
+      remove(projectRoot)
     })
   })
 
   describe('transform', () => {
     it('ignores non-CSS files', () => {
       const compiler = createCompiler()
+      const projectRoot = createProject()
 
-      runBuild.mockReturnValue(compiler)
+      runCss.mockReturnValue({
+        compiler,
+        tokenFolder: '/tokens',
+      })
 
       const plugin = asTestPlugin(
-        createCascadePlugin(createProject()),
+        createCascadePlugin(projectRoot),
       )
 
       plugin.configResolved({
@@ -136,19 +150,28 @@ describe('[VITE] cascadeCompiler', () => {
       )
 
       expect(result).toBeUndefined()
-      expect(compiler.handleCssChange).not.toHaveBeenCalled()
+      expect(
+        compiler.handleCssChange,
+      ).not.toHaveBeenCalled()
+
+      remove(projectRoot)
     })
 
     it('processes CSS through the compiler', () => {
       const compiler = createCompiler()
+      const projectRoot = createProject()
       const source = '.button { color: red; }'
       const cssPath = '/project/src/button.css'
 
       compiler.handleCssChange.mockReturnValue(source)
-      runBuild.mockReturnValue(compiler)
+
+      runCss.mockReturnValue({
+        compiler,
+        tokenFolder: '/tokens',
+      })
 
       const plugin = asTestPlugin(
-        createCascadePlugin(createProject()),
+        createCascadePlugin(projectRoot),
       )
 
       plugin.configResolved({
@@ -160,16 +183,25 @@ describe('[VITE] cascadeCompiler', () => {
         cssPath,
       )
 
-      expect(compiler.handleCssChange).toHaveBeenCalledWith(
+      expect(
+        compiler.handleCssChange,
+      ).toHaveBeenCalledOnce()
+
+      expect(
+        compiler.handleCssChange,
+      ).toHaveBeenCalledWith(
         cssPath,
         source,
       )
 
       expect(result).toBe(source)
+
+      remove(projectRoot)
     })
 
     it('schedules finalization in serve mode', () => {
       const compiler = createCompiler()
+      const projectRoot = createProject()
 
       runCss.mockReturnValue({
         compiler,
@@ -177,7 +209,7 @@ describe('[VITE] cascadeCompiler', () => {
       })
 
       const plugin = asTestPlugin(
-        createCascadePlugin(createProject()),
+        createCascadePlugin(projectRoot),
       )
 
       plugin.configResolved({
@@ -190,15 +222,21 @@ describe('[VITE] cascadeCompiler', () => {
       )
 
       expect(schedule).toHaveBeenCalledOnce()
+
+      remove(projectRoot)
     })
 
     it('does not schedule finalization in build mode', () => {
       const compiler = createCompiler()
+      const projectRoot = createProject()
 
-      runBuild.mockReturnValue(compiler)
+      runCss.mockReturnValue({
+        compiler,
+        tokenFolder: '/tokens',
+      })
 
       const plugin = asTestPlugin(
-        createCascadePlugin(createProject()),
+        createCascadePlugin(projectRoot),
       )
 
       plugin.configResolved({
@@ -211,30 +249,16 @@ describe('[VITE] cascadeCompiler', () => {
       )
 
       expect(schedule).not.toHaveBeenCalled()
+
+      remove(projectRoot)
     })
   })
 
-  describe('buildEnd', () => {
-    it('finalizes after a build', () => {
+  describe('configureServer', () => {
+    it('does nothing in build mode', () => {
       const compiler = createCompiler()
-
-      runBuild.mockReturnValue(compiler)
-
-      const plugin = asTestPlugin(
-        createCascadePlugin(createProject()),
-      )
-
-      plugin.configResolved({
-        command: 'build',
-      })
-
-      plugin.buildEnd()
-
-      expect(compiler.finalize).toHaveBeenCalledOnce()
-    })
-
-    it('does not finalize in serve mode', () => {
-      const compiler = createCompiler()
+      const watcher = createWatcher()
+      const projectRoot = createProject()
 
       runCss.mockReturnValue({
         compiler,
@@ -242,31 +266,64 @@ describe('[VITE] cascadeCompiler', () => {
       })
 
       const plugin = asTestPlugin(
-        createCascadePlugin(createProject()),
+        createCascadePlugin(projectRoot),
+      )
+
+      plugin.configResolved({
+        command: 'build',
+      })
+
+      plugin.configureServer({ watcher })
+
+      expect(watcher.on).not.toHaveBeenCalled()
+
+      remove(projectRoot)
+    })
+
+    it('registers a change watcher in serve mode', () => {
+      const compiler = createCompiler()
+      const watcher = createWatcher()
+      const projectRoot = createProject()
+
+      runCss.mockReturnValue({
+        compiler,
+        tokenFolder: '/tokens',
+      })
+
+      const plugin = asTestPlugin(
+        createCascadePlugin(projectRoot),
       )
 
       plugin.configResolved({
         command: 'serve',
       })
 
-      plugin.buildEnd()
+      plugin.configureServer({ watcher })
 
-      expect(compiler.finalize).not.toHaveBeenCalled()
+      expect(watcher.on).toHaveBeenCalledOnce()
+      expect(watcher.on).toHaveBeenCalledWith(
+        'change',
+        expect.any(Function),
+      )
+
+      remove(projectRoot)
     })
-  })
 
-  describe('configureServer', () => {
     it('ignores changes outside the token folder', () => {
       const compiler = createCompiler()
       const watcher = createWatcher()
+      const projectRoot = createProject()
+      const tokenFolder = fs.mkdtempSync(
+        path.join(tmpdir(), 'token-folder-'),
+      )
 
       runCss.mockReturnValue({
         compiler,
-        tokenFolder: '/project/tokens',
+        tokenFolder,
       })
 
       const plugin = asTestPlugin(
-        createCascadePlugin(createProject()),
+        createCascadePlugin(projectRoot),
       )
 
       plugin.configResolved({
@@ -277,16 +334,26 @@ describe('[VITE] cascadeCompiler', () => {
 
       const onChange = watcher.on.mock.calls[0][1]
 
-      onChange('/project/src/other.jsonc')
+      onChange(
+        path.join(
+          tokenFolder,
+          '..',
+          'other.jsonc',
+        ),
+      )
 
-      expect(compiler.handleTokenChange)
-        .not.toHaveBeenCalled()
+      expect(
+        compiler.handleTokenChange,
+      ).not.toHaveBeenCalled()
+
+      remove(projectRoot)
+      remove(tokenFolder)
     })
 
     it('handles token changes and touches the CSS file', () => {
       const compiler = createCompiler()
       const watcher = createWatcher()
-
+      const projectRoot = createProject()
       const tokenFolder = fs.mkdtempSync(
         path.join(tmpdir(), 'token-folder-'),
       )
@@ -311,10 +378,13 @@ describe('[VITE] cascadeCompiler', () => {
         tokenFolder,
       })
 
-      const utimesSync = vi.spyOn(fs, 'utimesSync')
+      const utimesSync = vi.spyOn(
+        fs,
+        'utimesSync',
+      )
 
       const plugin = asTestPlugin(
-        createCascadePlugin(createProject()),
+        createCascadePlugin(projectRoot),
       )
 
       plugin.configResolved({
@@ -327,8 +397,15 @@ describe('[VITE] cascadeCompiler', () => {
 
       onChange(tokenPath)
 
-      expect(compiler.handleTokenChange)
-        .toHaveBeenCalledWith(tokenPath)
+      expect(
+        compiler.handleTokenChange,
+      ).toHaveBeenCalledOnce()
+
+      expect(
+        compiler.handleTokenChange,
+      ).toHaveBeenCalledWith(tokenPath)
+
+      expect(utimesSync).toHaveBeenCalledOnce()
 
       expect(utimesSync).toHaveBeenCalledWith(
         cssPath,
@@ -338,16 +415,14 @@ describe('[VITE] cascadeCompiler', () => {
 
       utimesSync.mockRestore()
 
-      fs.rmSync(tokenFolder, {
-        recursive: true,
-        force: true,
-      })
+      remove(projectRoot)
+      remove(tokenFolder)
     })
 
     it('does not touch CSS when no CSS path is returned', () => {
       const compiler = createCompiler()
       const watcher = createWatcher()
-
+      const projectRoot = createProject()
       const tokenFolder = fs.mkdtempSync(
         path.join(tmpdir(), 'token-folder-'),
       )
@@ -366,10 +441,13 @@ describe('[VITE] cascadeCompiler', () => {
         tokenFolder,
       })
 
-      const utimesSync = vi.spyOn(fs, 'utimesSync')
+      const utimesSync = vi.spyOn(
+        fs,
+        'utimesSync',
+      )
 
       const plugin = asTestPlugin(
-        createCascadePlugin(createProject()),
+        createCascadePlugin(projectRoot),
       )
 
       plugin.configResolved({
@@ -382,17 +460,82 @@ describe('[VITE] cascadeCompiler', () => {
 
       onChange(tokenPath)
 
-      expect(compiler.handleTokenChange)
-        .toHaveBeenCalledWith(tokenPath)
+      expect(
+        compiler.handleTokenChange,
+      ).toHaveBeenCalledOnce()
+
+      expect(
+        compiler.handleTokenChange,
+      ).toHaveBeenCalledWith(tokenPath)
 
       expect(utimesSync).not.toHaveBeenCalled()
 
       utimesSync.mockRestore()
 
-      fs.rmSync(tokenFolder, {
-        recursive: true,
-        force: true,
+      remove(projectRoot)
+      remove(tokenFolder)
+    })
+
+    it('does not touch CSS when the CSS file does not exist', () => {
+      const compiler = createCompiler()
+      const watcher = createWatcher()
+      const projectRoot = createProject()
+      const tokenFolder = fs.mkdtempSync(
+        path.join(tmpdir(), 'token-folder-'),
+      )
+
+      const tokenPath = path.join(
+        tokenFolder,
+        'colors.jsonc',
+      )
+
+      const cssPath = path.join(
+        tokenFolder,
+        'missing.css',
+      )
+
+      fs.writeFileSync(tokenPath, '{}')
+
+      compiler.handleTokenChange.mockReturnValue(cssPath)
+
+      runCss.mockReturnValue({
+        compiler,
+        tokenFolder,
       })
+
+      const utimesSync = vi.spyOn(
+        fs,
+        'utimesSync',
+      )
+
+      const plugin = asTestPlugin(
+        createCascadePlugin(projectRoot),
+      )
+
+      plugin.configResolved({
+        command: 'serve',
+      })
+
+      plugin.configureServer({ watcher })
+
+      const onChange = watcher.on.mock.calls[0][1]
+
+      onChange(tokenPath)
+
+      expect(
+        compiler.handleTokenChange,
+      ).toHaveBeenCalledOnce()
+
+      expect(
+        compiler.handleTokenChange,
+      ).toHaveBeenCalledWith(tokenPath)
+
+      expect(utimesSync).not.toHaveBeenCalled()
+
+      utimesSync.mockRestore()
+
+      remove(projectRoot)
+      remove(tokenFolder)
     })
   })
 })

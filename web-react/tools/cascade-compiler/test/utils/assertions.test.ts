@@ -5,7 +5,6 @@ import type {
   CssDataTokenGroup,
   TokenGroup,
 } from '../../src/types/compiler.types.ts'
-import type { CompilerConfig } from '../../src/types/run.types.ts'
 
 describe('[COMPILER]', () => {
   describe('assert.cssVariable', () => {
@@ -62,66 +61,6 @@ describe('[COMPILER]', () => {
       expect(() =>
         assert.hasCssPath(group),
       ).toThrow('has no cssPath')
-    })
-  })
-
-  describe('assert.hasOutPath', () => {
-    it('accepts config with outPath', () => {
-      const config: CompilerConfig = {
-        projectRoot: '/project',
-        tokenPath: '/project/tokens',
-        outPath: '/project/output',
-        generatedPath: '/project/generated',
-        internal: { willEmitCss: false, initialProcessing: true },
-
-        outputs: {
-          extension: false,
-          lsp: false,
-          meta: false,
-          pathPatches: false,
-          presets: false,
-          tokens: false,
-          schema: false,
-          package: false
-        },
-        logging: {
-          trace: false,
-          emissions: "summary"
-        }
-      }
-
-      expect(() =>
-        assert.hasGeneratedPath(config),
-      ).not.toThrow()
-    })
-
-    it('rejects config without outPath', () => {
-      const config: CompilerConfig = {
-        projectRoot: '/project',
-        tokenPath: '/project/tokens',
-        outPath: null,
-        generatedPath: null,
-        internal: { willEmitCss: false, initialProcessing: true },
-
-        outputs: {
-          extension: false,
-          lsp: false,
-          meta: false,
-          pathPatches: false,
-          presets: false,
-          tokens: false,
-          schema: false,
-          package: false
-        },
-        logging: {
-          trace: false,
-          emissions: "summary"
-        }
-      }
-
-      expect(() =>
-        assert.hasGeneratedPath(config),
-      ).toThrow('Expected compiler config to have an outPath')
     })
   })
 

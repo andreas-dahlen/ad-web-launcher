@@ -2,13 +2,13 @@ import { RuleTester } from 'oxlint/plugins-dev'
 import { describe, it, vi } from 'vitest'
 
 vi.mock(
-  '../src/helpers/getInternalAliases.ts',
+  '../oxlint-plugins/helpers/getInternalAliases.ts',
   () => ({
     getInternalAliases: vi.fn(() => ['@/']),
   }),
 )
 
-import rule from '../src/internalImports-ox/no-internal-import-extensions.ts'
+import rule from '../oxlint-plugins/internalImports-ox/no-internal-import-extensions.ts'
 
 const ruleTester = new RuleTester()
 

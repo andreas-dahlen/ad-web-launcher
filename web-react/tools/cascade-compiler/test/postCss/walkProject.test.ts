@@ -17,12 +17,14 @@ describe('[POSTCSS]', () => {
         }
       `)
 
-      const result = walkProject(
+      const { postData, issues } = walkProject(
         root,
         '/styles/button.css',
       )
 
-      expect(result.variables).toEqual([
+      expect(issues).toEqual([])
+
+      expect(postData.variables).toEqual([
         '--button-color',
         '--button-radius',
       ])
@@ -37,12 +39,14 @@ describe('[POSTCSS]', () => {
         }
       `)
 
-      const result = walkProject(
+      const { postData, issues } = walkProject(
         root,
         '/styles/button.css',
       )
 
-      expect(result.variables).toEqual([
+      expect(issues).toEqual([])
+
+      expect(postData.variables).toEqual([
         '--button-color',
       ])
     })
@@ -58,12 +62,14 @@ describe('[POSTCSS]', () => {
         }
       `)
 
-      const result = walkProject(
+      const { postData, issues } = walkProject(
         root,
         '/styles/button.css',
       )
 
-      expect(result.variables).toEqual([
+      expect(issues).toEqual([])
+
+      expect(postData.variables).toEqual([
         '--button-color',
       ])
     })
@@ -76,12 +82,14 @@ describe('[POSTCSS]', () => {
         }
       `)
 
-      const result = walkProject(
+      const { postData, issues } = walkProject(
         root,
         '/styles/button.css',
       )
 
-      expect(result.oklchVariables).toEqual([
+      expect(issues).toEqual([])
+
+      expect(postData.oklchVariables).toEqual([
         [
           '--button-color',
           'oklch(60% 0.2 240)',
@@ -96,12 +104,14 @@ describe('[POSTCSS]', () => {
         }
       `)
 
-      const result = walkProject(
+      const { postData, issues } = walkProject(
         root,
         '/styles/button.css',
       )
 
-      expect(result.oklchVariables).toEqual([
+      expect(issues).toEqual([])
+
+      expect(postData.oklchVariables).toEqual([
         [
           '--button-color',
           'oklch(60% 0.2 240)',
@@ -118,12 +128,14 @@ describe('[POSTCSS]', () => {
         }
       `)
 
-      const result = walkProject(
+      const { postData, issues } = walkProject(
         root,
         '/styles/button.css',
       )
 
-      expect(result.oklchVariables).toEqual([])
+      expect(issues).toEqual([])
+
+      expect(postData.oklchVariables).toEqual([])
     })
 
     it('preserves the CSS path', () => {
@@ -133,12 +145,14 @@ describe('[POSTCSS]', () => {
         }
       `)
 
-      const result = walkProject(
+      const { postData, issues } = walkProject(
         root,
         '/components/Button/Button.module.css',
       )
 
-      expect(result.cssPath).toBe(
+      expect(issues).toEqual([])
+
+      expect(postData.cssPath).toBe(
         '/components/Button/Button.module.css',
       )
     })
@@ -156,9 +170,12 @@ describe('[POSTCSS]', () => {
       )
 
       expect(result).toEqual({
-        cssPath: '/styles/button.css',
-        variables: [],
-        oklchVariables: [],
+        postData: {
+          cssPath: '/styles/button.css',
+          variables: [],
+          oklchVariables: [],
+        },
+        issues: [],
       })
     })
   })

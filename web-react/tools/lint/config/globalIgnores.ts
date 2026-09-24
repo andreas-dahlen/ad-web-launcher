@@ -3,6 +3,6 @@ export const ignores = [
   '**/node_modules/**',
   '**/*.css',
   '**/*.svg',
-  '**/*.generated.ts',
   '**/coverage/**',
+  '**/generated/**/*.ts'
 ]

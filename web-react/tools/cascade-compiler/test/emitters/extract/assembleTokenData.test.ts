@@ -48,18 +48,6 @@ describe('[EMITTERS]', () => {
       })
     })
 
-    it('builds the generated token file path', () => {
-      const result = assembleTokenData(
-        createGroup({
-          groupPath: '/tokens/button',
-        })
-      )
-
-      expect(result.outputFile).toBe(
-        'tokenModules/button.token.ts',
-      )
-    })
-
     it('extracts the group name before converting it', () => {
       const result = assembleTokenData(
         createGroup({
@@ -242,16 +230,6 @@ describe('[EMITTERS]', () => {
       assembleTokenData(group)
 
       expect(group).toEqual(originalGroup)
-    })
-
-    it('creates the token output path', () => {
-      const result = assembleTokenData(
-        createGroup()
-      )
-
-      expect(result.outputFile).toBe(
-        'tokenModules/button.token.ts',
-      )
     })
   })
 })

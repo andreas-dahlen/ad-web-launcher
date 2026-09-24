@@ -8,6 +8,7 @@
   "vars": {
     "width": { "values": { "f": "100%" } },
     "height": { "values": { "f": "100%" } },
-    "background": { "values": { "f": "hotpink" } }
+    "background": { },
+    "deleteMe": { }
   }
 }

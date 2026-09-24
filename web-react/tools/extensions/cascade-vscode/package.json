@@ -20,7 +20,7 @@
     "coverage": "vitest run --coverage",
     "test": "vitest",
     "type": "tsc --noEmit",
-    "build": "tsc && esbuild src/extension.ts --bundle --platform=node --format=esm --external:vscode --main-fields=module,main --outfile=dist/extension.js",
+    "build": "tsc --noEmit -p tsconfig.src.json && esbuild src/extension.ts --bundle --platform=node --format=esm --external:vscode --main-fields=module,main --outfile=dist/extension.js",
     "package": "npm run build && vsce package --allow-missing-repository"
   },
   "devDependencies": {
@@ -29,7 +29,7 @@
     "@vitest/coverage-v8": "^5.0.0",
     "@vscode/vsce": "^4.0.0",
     "esbuild": "^0.28.2",
-    "typescript": "^6.0.3",
+    "typescript": "^7.0.2",
     "vitest": "^5.0.0"
   },
   "allowScripts": {
@@ -41,15 +41,6 @@
     "vitest@5.0.0": true
   },
   "contributes": {
-    "jsonValidation": [
-      {
-        "fileMatch": [
-          "**/cascade/**/*.json",
-          "**/cascade/**/*.jsonc"
-        ],
-        "url": "./schema/cascade.schema.json"
-      }
-    ],
     "configuration": {
       "properties": {
         "cascade.projectRoot": {
@@ -62,7 +53,7 @@
     "configurationDefaults": {
       "files.associations": {
         "cascade.config.json": "jsonc",
-        "**/cascade/**/*.json": "jsonc"
+        "**/tokens/**/*.json": "jsonc"
       }
     },
     "commands": [

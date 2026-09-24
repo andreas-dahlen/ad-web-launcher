@@ -7,18 +7,14 @@ import { watchContent } from './watchers/watchContent.ts'
 export function createRuntime(
   projectRoot: string,
   onConfigChange: () => Promise<void>,
-): CompilerRuntime | null {
-  const config = resolveConfig(projectRoot)
+): CompilerRuntime {
+  const configData = resolveConfig(projectRoot, { willEmitCss: false })
 
-  if (config === null) {
-    return null
-  }
+  const compiler = initializeCompiler(configData)
 
-  const compiler = initializeCompiler(config)
+  const contentWatcher = watchContent(configData.config, compiler)
 
-  const contentWatcher = watchContent(config, compiler)
-
-  const configWatcher = watchConfig(config.projectRoot, onConfigChange)
+  const configWatcher = watchConfig(configData.config.projectRoot, onConfigChange)
 
   async function dispose() {
     await contentWatcher.close()

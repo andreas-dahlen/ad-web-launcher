@@ -18,7 +18,5 @@ export function assembleExtensionData(allVariables: CssVarString[], tokenData: T
     }
   }
 
-  const outputFile = "metadata/extension.jsonc"
-
-  return { variables: [...variables], outputFile }
+  return { variables: [...variables] }
 }

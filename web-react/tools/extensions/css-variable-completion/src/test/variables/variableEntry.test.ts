@@ -5,6 +5,7 @@ import { resolveVariablesUri } from '../../config/paths.ts'
 import { loadVariables } from '../../variables/loadVariables.ts'
 import { watchVariables } from '../../variables/watchVariables.ts'
 import { cssLanguages } from '../../config/languages.ts'
+import type { Uri } from 'vscode'
 
 const registerCompletionItemProviderMock = vi.hoisted(() =>
   vi.fn(),
@@ -16,16 +17,12 @@ const disposableFromMock = vi.hoisted(() =>
       for (const disposable of disposables) {
         disposable.dispose()
       }
-    })
-  }))
+    }),
+  })),
 )
 
-const providerConstructor = vi.hoisted(() =>
-  vi.fn(
-    class {
-      constructor(_variables: string[]) { }
-    },
-  ),
+const createProviderMock = vi.hoisted(() =>
+  vi.fn(),
 )
 
 vi.mock('vscode', () => ({
@@ -53,7 +50,8 @@ vi.mock('../../variables/watchVariables.ts', () => ({
 vi.mock(
   '../../completion/cssVarCompletionProvider.ts',
   () => ({
-    CssVariableCompletionProvider: providerConstructor,
+    createCssVariableCompletionProvider:
+      createProviderMock,
   }),
 )
 
@@ -62,11 +60,7 @@ vi.mock('../../config/languages.ts', () => ({
 }))
 
 describe('[EXTENSION] variableEntry', () => {
-  const workspaceFolder = {
-    uri: {
-      fsPath: '/project',
-    },
-  }
+  const cascadeRoot = '/project'
 
   const variablesUri = {
     fsPath: '/project/extension.generated.jsonc',
@@ -77,17 +71,17 @@ describe('[EXTENSION] variableEntry', () => {
   }
 
   it('returns null when no variables file is configured', () => {
-    vi.mocked(resolveVariablesUri).mockReturnValue(undefined)
+    vi.mocked(resolveVariablesUri).mockReturnValue(undefined as unknown as Uri)
 
     const result = variableEntry(
-      workspaceFolder as never,
+      cascadeRoot,
       output as never,
     )
 
     expect(result).toBeNull()
 
     expect(loadVariables).not.toHaveBeenCalled()
-    expect(providerConstructor).not.toHaveBeenCalled()
+    expect(createProviderMock).not.toHaveBeenCalled()
     expect(watchVariables).not.toHaveBeenCalled()
     expect(
       registerCompletionItemProviderMock,
@@ -104,8 +98,13 @@ describe('[EXTENSION] variableEntry', () => {
       dispose: vi.fn(),
     }
 
-    const completion = {
+    const registration = {
       dispose: vi.fn(),
+    }
+
+    const completion = {
+      provider: {},
+      updateVariables: vi.fn(),
     }
 
     vi.mocked(resolveVariablesUri).mockReturnValue(
@@ -114,37 +113,36 @@ describe('[EXTENSION] variableEntry', () => {
 
     vi.mocked(loadVariables).mockReturnValue(variables)
 
+    createProviderMock.mockReturnValue(completion)
+
     vi.mocked(watchVariables).mockReturnValue(
       watcher as never,
     )
 
     registerCompletionItemProviderMock.mockReturnValue(
-      completion,
+      registration,
     )
 
     const result = variableEntry(
-      workspaceFolder as never,
+      cascadeRoot,
       output as never,
     )
 
-    const provider =
-      providerConstructor.mock.results[0].value
-
     expect(resolveVariablesUri).toHaveBeenCalledWith(
-      workspaceFolder,
+      cascadeRoot,
     )
 
     expect(loadVariables).toHaveBeenCalledWith(
       variablesUri,
     )
 
-    expect(providerConstructor).toHaveBeenCalledWith(
+    expect(createProviderMock).toHaveBeenCalledWith(
       variables,
     )
 
     expect(watchVariables).toHaveBeenCalledWith(
       variablesUri,
-      provider,
+      completion.updateVariables,
       output,
     )
 
@@ -152,13 +150,13 @@ describe('[EXTENSION] variableEntry', () => {
       registerCompletionItemProviderMock,
     ).toHaveBeenCalledWith(
       cssLanguages,
-      provider,
+      completion.provider,
       '-',
     )
 
     expect(disposableFromMock).toHaveBeenCalledWith(
       watcher,
-      completion,
+      registration,
     )
 
     expect(result).toBe(

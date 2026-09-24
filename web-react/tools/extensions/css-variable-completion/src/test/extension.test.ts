@@ -7,6 +7,7 @@ import {
 } from 'vitest'
 
 import { activate, deactivate } from '../extension.ts'
+
 const workspaceFolders = vi.hoisted(
   () => [] as unknown[],
 )
@@ -16,6 +17,10 @@ const createOutputChannelMock = vi.hoisted(() =>
 )
 
 const onDidChangeConfigurationMock = vi.hoisted(() =>
+  vi.fn(),
+)
+
+const resolveCascadeRootMock = vi.hoisted(() =>
   vi.fn(),
 )
 
@@ -57,6 +62,11 @@ vi.mock('vscode', () => ({
   },
 }))
 
+vi.mock('../config/paths.ts', () => ({
+  resolveCascadeRoot:
+    resolveCascadeRootMock,
+}))
+
 vi.mock('../variables/variableEntry.ts', () => ({
   variableEntry: variableEntryMock,
 }))
@@ -64,10 +74,6 @@ vi.mock('../variables/variableEntry.ts', () => ({
 vi.mock('../lsp/lspEntry.ts', () => ({
   lspEntry: lspEntryMock,
 }))
-
-afterEach(() => {
-  workspaceFolders.length = 0
-})
 
 describe('[EXTENSION] activate', () => {
   const output = {
@@ -80,6 +86,9 @@ describe('[EXTENSION] activate', () => {
       fsPath: '/project',
     },
   }
+
+  const cascadeRoot =
+    '/project/node_modules/cascade'
 
   const variableDisposable = {
     dispose: vi.fn(),
@@ -94,15 +103,43 @@ describe('[EXTENSION] activate', () => {
   }
 
   const createOutput = () => {
-    createOutputChannelMock.mockReturnValue(output)
+    createOutputChannelMock.mockReturnValue(
+      output,
+    )
+
+    resolveCascadeRootMock.mockReturnValue(
+      cascadeRoot,
+    )
 
     onDidChangeConfigurationMock.mockReturnValue(
       configurationListener,
     )
   }
 
-  it('shuts down when there is no workspace folder', () => {
+  afterEach(() => {
+    workspaceFolders.length = 0
+
+    output.appendLine.mockReset()
+    output.dispose.mockReset()
+
+    createOutputChannelMock.mockReset()
+    onDidChangeConfigurationMock.mockReset()
+    resolveCascadeRootMock.mockReset()
+    disposableFromMock.mockClear()
+    variableEntryMock.mockReset()
+    lspEntryMock.mockReset()
+
+    variableDisposable.dispose.mockReset()
+    lspDisposable.dispose.mockReset()
+    configurationListener.dispose.mockReset()
+  })
+
+  it('loads without launching when Cascade cannot be resolved', () => {
     createOutput()
+
+    resolveCascadeRootMock.mockReturnValue(
+      undefined,
+    )
 
     const context = {
       subscriptions: [],
@@ -110,25 +147,38 @@ describe('[EXTENSION] activate', () => {
 
     activate(context as never)
 
-    expect(createOutputChannelMock).toHaveBeenCalledWith(
+    expect(
+      createOutputChannelMock,
+    ).toHaveBeenCalledWith(
       'CSS Variable Completion',
     )
 
-    expect(output.appendLine).toHaveBeenCalledWith(
+    expect(
+      output.appendLine,
+    ).toHaveBeenCalledWith(
       '[css variable completion] loaded',
     )
 
-    expect(output.appendLine).toHaveBeenCalledWith(
-      '[css variable completion] no workspace folder. Shutting down.',
+    expect(
+      output.appendLine,
+    ).toHaveBeenCalledWith(
+      '[css variable completion] could not find Cascade.',
     )
 
-    expect(variableEntryMock).not.toHaveBeenCalled()
-    expect(lspEntryMock).not.toHaveBeenCalled()
+    expect(
+      variableEntryMock,
+    ).not.toHaveBeenCalled()
 
-    expect(context.subscriptions).toContain(output)
+    expect(
+      lspEntryMock,
+    ).not.toHaveBeenCalled()
+
+    expect(
+      context.subscriptions,
+    ).toContain(output)
   })
 
-  it('launches variable and LSP entries for the workspace', () => {
+  it('launches variable and LSP entries for Cascade', () => {
     createOutput()
     workspaceFolders.push(workspaceFolder)
 
@@ -146,22 +196,38 @@ describe('[EXTENSION] activate', () => {
 
     activate(context as never)
 
-    expect(variableEntryMock).toHaveBeenCalledWith(
-      workspaceFolder,
+    expect(
+      resolveCascadeRootMock,
+    ).toHaveBeenCalledWith(output)
+
+    expect(
+      variableEntryMock,
+    ).toHaveBeenCalledWith(
+      cascadeRoot,
       output,
     )
 
-    expect(lspEntryMock).toHaveBeenCalledWith(
-      workspaceFolder,
+    expect(
+      lspEntryMock,
+    ).toHaveBeenCalledWith(
+      cascadeRoot,
+      output,
     )
 
-    expect(disposableFromMock).toHaveBeenCalledWith(
+    expect(
+      disposableFromMock,
+    ).toHaveBeenCalledWith(
       variableDisposable,
       lspDisposable,
     )
 
-    expect(context.subscriptions).toContain(output)
-    expect(context.subscriptions).toContain(
+    expect(
+      context.subscriptions,
+    ).toContain(output)
+
+    expect(
+      context.subscriptions,
+    ).toContain(
       configurationListener,
     )
   })
@@ -189,10 +255,21 @@ describe('[EXTENSION] activate', () => {
       affectsConfiguration: vi.fn(() => false),
     })
 
-    expect(variableEntryMock).toHaveBeenCalledOnce()
-    expect(lspEntryMock).toHaveBeenCalledOnce()
-    expect(variableDisposable.dispose).not.toHaveBeenCalled()
-    expect(lspDisposable.dispose).not.toHaveBeenCalled()
+    expect(
+      variableEntryMock,
+    ).toHaveBeenCalledOnce()
+
+    expect(
+      lspEntryMock,
+    ).toHaveBeenCalledOnce()
+
+    expect(
+      variableDisposable.dispose,
+    ).not.toHaveBeenCalled()
+
+    expect(
+      lspDisposable.dispose,
+    ).not.toHaveBeenCalled()
   })
 
   it('relaunches when CSS variable configuration changes', () => {
@@ -218,13 +295,25 @@ describe('[EXTENSION] activate', () => {
       affectsConfiguration: vi.fn(() => true),
     })
 
-    expect(variableDisposable.dispose).toHaveBeenCalledOnce()
-    expect(lspDisposable.dispose).toHaveBeenCalledOnce()
+    expect(
+      variableDisposable.dispose,
+    ).toHaveBeenCalledOnce()
 
-    expect(variableEntryMock).toHaveBeenCalledTimes(2)
-    expect(lspEntryMock).toHaveBeenCalledTimes(2)
+    expect(
+      lspDisposable.dispose,
+    ).toHaveBeenCalledOnce()
 
-    expect(output.appendLine).toHaveBeenCalledWith(
+    expect(
+      variableEntryMock,
+    ).toHaveBeenCalledTimes(2)
+
+    expect(
+      lspEntryMock,
+    ).toHaveBeenCalledTimes(2)
+
+    expect(
+      output.appendLine,
+    ).toHaveBeenCalledWith(
       '[css variable completion] configuration changed. Relaunching.',
     )
   })
@@ -234,4 +323,4 @@ describe('[EXTENSION] deactivate', () => {
   it('can deactivate without errors', () => {
     expect(() => deactivate()).not.toThrow()
   })
-}) 
+})

@@ -84,23 +84,23 @@ function processGroup(
       const [prefix, varKey] =
         key.split(":", 2)
 
-      if (!isValidPrefix(prefix)) {
+      if (!varKey || !isValidPrefix(prefix)) {
         // console.warn(`[svsx] Invalid prefix "${prefix}".`);
         continue;
       }
 
-      if (!varKey) {
-        continue
-      }
+      // if (!varKey) {
+      //   continue
+      // }
 
       const def = definitions[varKey]
 
-      if (!def) {
-        // console.warn(`[svsx] Unknown variable "${varKey}" in "${infix}".`);
-        continue
-      }
+      // if (!def) {
+      //   // console.warn(`[svsx] Unknown variable "${varKey}" in "${infix}".`);
+      //   continue
+      // }
 
-      if (!def.allowed.includes(prefix as ValidPrefix)) {
+      if (!def || !def.allowed.includes(prefix as ValidPrefix)) {
         // console.warn(`[svsx] Prefix "${prefix}" not allowed for "${varKey}".`);
         continue;
       }

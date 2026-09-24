@@ -82,3 +82,5 @@ function getProjectRoot(
     ...projectRoot.split('/'),
   ).fsPath
 }
+
+//TODO get zod?

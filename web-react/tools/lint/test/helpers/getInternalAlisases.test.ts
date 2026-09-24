@@ -4,7 +4,7 @@ import path from 'node:path'
 
 import { describe, expect, it } from 'vitest'
 
-import { getInternalAliases } from '../../src/helpers/getInternalAliases.ts'
+import { getInternalAliases } from '../../oxlint-plugins/helpers/getInternalAliases.ts'
 
 const createTempProject = (config?: string) => {
   const cwd = mkdtempSync(path.join(tmpdir(), 'lint-test-'))

@@ -22,7 +22,7 @@ export function applyTokenChange({
 
   const cssPath = findCssModulePath(projectRoot, groupPath);
 
-  const tokenPaths = findTokenPaths(groupPath);
+  const { tokenPaths, issues: pathIssues } = findTokenPaths(groupPath);
   const results = tokenPaths.map(tokenPath =>
     processToken(tokenPath)
   )
@@ -30,7 +30,10 @@ export function applyTokenChange({
   const tokens = results.flatMap(result =>
     result.token ? [result.token] : []
   )
-  const issues = results.flatMap(result => result.issues);
+  const issues = [
+    ...pathIssues,
+    ...results.flatMap(result => result.issues),
+  ]
 
   const group = buildTokenGroup(groupPath, tokens, cssPath);
 

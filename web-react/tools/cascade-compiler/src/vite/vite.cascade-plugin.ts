@@ -10,6 +10,7 @@ export function createCascadePlugin(
 ): Plugin {
   let tokenCompiler: TokenCompiler
   let tokenFolder: string | undefined
+  let isServe = false
 
   const finalizeScheduler = createFinalizeScheduler(
     () => tokenCompiler.finalize()
@@ -20,14 +21,12 @@ export function createCascadePlugin(
     enforce: 'pre',
 
     configResolved(config) {
-      if (config.command === 'serve') {
-        const result = compiler.runCss(startDirectory)
+      isServe = config.command === 'serve'
 
-        tokenCompiler = result.compiler
-        tokenFolder = result.tokenFolder
-      } else {
-        tokenCompiler = compiler.runBuild(startDirectory)
-      }
+      const result = compiler.runCss(startDirectory)
+
+      tokenCompiler = result.compiler
+      tokenFolder = result.tokenFolder
     },
 
     transform(code, cssPath) {
@@ -35,25 +34,20 @@ export function createCascadePlugin(
 
       const result = tokenCompiler.handleCssChange(cssPath, code)
 
-      if (tokenFolder) {
+      if (isServe) {
         finalizeScheduler.schedule()
       }
+
       return result
     },
 
-    buildEnd() {
-      if (!tokenFolder) {
-        tokenCompiler.finalize()
-      }
-    },
-
     configureServer(server) {
-      if (!tokenFolder) return
+      if (!isServe) return
 
       const resolvedFolder = tokenFolder
 
       server.watcher.on('change', tokenPath => {
-        if (!isTokenFile(resolvedFolder, tokenPath)) return
+        if (!resolvedFolder || !isTokenFile(resolvedFolder, tokenPath)) return
 
         const cssPath = tokenCompiler.handleTokenChange(tokenPath)
 

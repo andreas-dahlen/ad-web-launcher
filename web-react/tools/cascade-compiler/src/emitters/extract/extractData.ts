@@ -27,7 +27,7 @@ export function extractData(cache: TokenCache,
   const groups = cache.getCssDataGroups()
   const runGroups = cache.getCssDataGroupsByPaths(run.getProcessedPaths())
   const postData = cache.getAllPostData()
-  // const config = cache.getEmitConfig()
+  const config = cache.getConfig()
 
   /*---------------------------------------
         all groups
@@ -48,7 +48,7 @@ export function extractData(cache: TokenCache,
       tokenFiles.push(tokenFile)
     }
 
-    const presetResult = assemblePresetData(runGroup.cssData)
+    const presetResult = assemblePresetData(runGroup.cssData, config.presetIgnore)
     if (presetResult) { presetFiles.push(presetResult) }
     else { omittedPresetFiles.add(runGroup.cssPath) }
   }

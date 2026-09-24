@@ -1,4 +1,4 @@
-import { createIssueCollector } from '../src/compiler/tracking/issueCollector.ts';
+import { createIssueCollector } from '../src/diagnostics/issueCollector.ts';
 import type { CompilerToken, CompilerVariable, CssTokenGroup, RawVariable, TokenGroup } from '../src/types/compiler.types.ts';
 
 export function createRawVariable(

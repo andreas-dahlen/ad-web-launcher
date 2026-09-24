@@ -1,7 +1,7 @@
 import { RuleTester } from 'oxlint/plugins-dev'
 import { describe, it } from 'vitest'
 
-import rule from '../src/testApi-ox/no-test-only-api.ts'
+import rule from '../oxlint-plugins/testApi-ox/no-test-only-api.ts'
 
 const ruleTester = new RuleTester()
 

@@ -92,21 +92,23 @@ describe('[POSTCSS]', () => {
             vars: [
               createVariable({
                 name: 'borderRadius',
-                cssName: 'border-radius'
+                cssName: 'border-radius',
               }),
             ],
           }),
         ],
       })
 
-      const result = processModule({
+      const { cssData, issues } = processModule({
         root,
         group,
         trace: true,
-        mutate: true
+        mutate: true,
       })
 
-      expect(result.tokens).toEqual([
+      expect(issues).toEqual([])
+
+      expect(cssData.tokens).toEqual([
         {
           name: 'button',
           infix: 'button',
@@ -129,14 +131,16 @@ describe('[POSTCSS]', () => {
         }
       `)
 
-      const result = processModule({
+      const { cssData, issues } = processModule({
         root,
         group: createGroup(),
         trace: true,
-        mutate: true
+        mutate: true,
       })
 
-      expect(result.tokens).toEqual([
+      expect(issues).toEqual([])
+
+      expect(cssData.tokens).toEqual([
         {
           name: 'button',
           infix: 'button',
@@ -153,7 +157,7 @@ describe('[POSTCSS]', () => {
         }
       `)
 
-      processModule({
+      const { issues } = processModule({
         root,
         group: createGroup({
           tokens: [
@@ -171,8 +175,10 @@ describe('[POSTCSS]', () => {
           ],
         }),
         trace: true,
-        mutate: true
+        mutate: true,
       })
+
+      expect(issues).toEqual([])
 
       const declarations = getDeclarations(root, '.button')
 
@@ -198,7 +204,7 @@ describe('[POSTCSS]', () => {
         }
       `)
 
-      processModule({
+      const { issues } = processModule({
         root,
         group: createGroup({
           tokens: [
@@ -213,8 +219,10 @@ describe('[POSTCSS]', () => {
           ],
         }),
         trace: true,
-        mutate: true
+        mutate: true,
       })
+
+      expect(issues).toEqual([])
 
       const declarations = getDeclarations(root, '.button')
 
@@ -235,7 +243,7 @@ describe('[POSTCSS]', () => {
 
       const before = root.toString()
 
-      const result = processModule({
+      const { cssData, issues } = processModule({
         root,
         group: createGroup(),
         mutate: false,
@@ -243,8 +251,9 @@ describe('[POSTCSS]', () => {
       })
 
       expect(root.toString()).toBe(before)
+      expect(issues).toEqual([])
 
-      expect(result.tokens).toEqual([
+      expect(cssData.tokens).toEqual([
         {
           name: 'button',
           infix: 'button',
@@ -253,7 +262,7 @@ describe('[POSTCSS]', () => {
         },
       ])
 
-      expect(result.foundFinalVariables).toEqual([
+      expect(cssData.foundFinalVariables).toEqual([
         '--final-button-back-ground',
       ])
     })
@@ -270,35 +279,87 @@ describe('[POSTCSS]', () => {
         }
       `)
 
-      const result = processModule({
+      const { cssData, issues } = processModule({
         root,
         group: createGroup(),
         mutate: false,
-        trace: true
+        trace: true,
       })
 
-      expect(result.groupPath).toBe('/tokens/button')
-      expect(result.cssPath).toBe(
+      expect(issues).toEqual([])
+
+      expect(cssData.groupPath).toBe('/tokens/button')
+      expect(cssData.cssPath).toBe(
         '/components/Button/Button.module.css',
       )
 
-      expect(result.foundSelectors).toEqual([
+      expect(cssData.foundSelectors).toEqual([
         'button',
         'other',
       ])
 
-      expect(result.usableSelectors).toEqual([
+      expect(cssData.usableSelectors).toEqual([
         'button',
         'other',
       ])
 
-      expect(result.declaredVariables).toEqual([
+      expect(cssData.declaredVariables).toEqual([
         '--s-button-back-ground',
       ])
 
-      expect(result.foundFinalVariables).toEqual([
+      expect(cssData.foundFinalVariables).toEqual([
         '--final-button-back-ground',
       ])
+    })
+
+    it('processes every variable for a matching token', () => {
+      const root = parseCss(`
+        .button {
+          color: red;
+        }
+      `)
+
+      const { issues } = processModule({
+        root,
+        group: createGroup({
+          tokens: [
+            createToken({
+              vars: [
+                // eslint-disable-next-line unicorn/max-nested-calls
+                createVariable({
+                  name: 'background',
+                  cssName: 'background',
+                }),
+                // eslint-disable-next-line unicorn/max-nested-calls
+                createVariable({
+                  name: 'borderRadius',
+                  cssName: 'border-radius',
+                }),
+              ],
+            }),
+          ],
+        }),
+        trace: false,
+        mutate: true,
+      })
+
+      expect(issues).toEqual([])
+
+      const declarations = getDeclarations(root, '.button')
+
+      expect(declarations).toContainEqual(
+        expect.objectContaining({
+          prop: '--f-button-background',
+          value: 'red',
+        }),
+      )
+
+      expect(declarations).toContainEqual(
+        expect.objectContaining({
+          prop: '--f-button-border-radius',
+          value: 'red',
+        }),
+      )
     })
   })
 })

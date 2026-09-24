@@ -4,17 +4,16 @@ import { resolveConfig } from './config/resolveConfig.ts';
 
 export function css(projectRoot: string): CssReturn {
 
-  const config = resolveConfig(projectRoot, {
+  const configData = resolveConfig(projectRoot, {
     willEmitCss: true,
     generatedPath: null,
-    outPath: null,
     initialProcessing: false
   })
 
-  const compiler = initializeCompiler(config)
+  const compiler = initializeCompiler(configData)
 
   return {
     compiler,
-    tokenFolder: config.tokenPath
+    tokenFolder: configData.config.tokenPath
   }
 }

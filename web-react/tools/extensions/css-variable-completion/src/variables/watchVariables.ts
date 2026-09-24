@@ -1,10 +1,9 @@
 import * as vscode from 'vscode'
 import { loadVariables } from './loadVariables.ts'
-import { CssVariableCompletionProvider } from '../completion/cssVarCompletionProvider.ts'
 
 export function watchVariables(
   variablesUri: vscode.Uri,
-  provider: CssVariableCompletionProvider,
+  updateVariables: (variables: string[]) => void,
   output: vscode.OutputChannel,
 ): vscode.Disposable {
   output.appendLine(
@@ -16,21 +15,14 @@ export function watchVariables(
   )
 
   const reloadVariables = (): void => {
-    output.appendLine(
-      `[css variable completion] variables changed: ${variablesUri.fsPath}`,
-    )
-
     try {
       const variables = loadVariables(variablesUri)
 
-      output.appendLine(
-        `[css variable completion] loaded ${variables.length} variables`,
-      )
 
-      provider.updateVariables(variables)
+      updateVariables(variables)
 
       output.appendLine(
-        `[css variable completion] provider updated`,
+        `[css variable completion] updated: ${variables.length} variables`,
       )
     } catch (error) {
       output.appendLine(

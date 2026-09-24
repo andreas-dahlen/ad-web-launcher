@@ -5,6 +5,7 @@ import type { WalkModuleResult } from '../../types/compiler.types.ts';
 import { assert } from '../../utils/assertions.ts'
 import { prefixPriority } from '../../utils/prefix.ts';
 import type { CssVarString } from '../../types/cascade.types.ts';
+import { createIssueCollector } from '../../diagnostics/issueCollector.ts';
 
 const VALID_IDENTIFIER = /^[A-Za-z_$][A-Za-z0-9_$]*$/;
 
@@ -12,6 +13,9 @@ export function walkModule(
   root: Root,
   infixes: string[]
 ): WalkModuleResult {
+
+  const collector = createIssueCollector()
+
   const expectedRules = new Set(
     infixes.map(infix => `.${infix}`)
   )
@@ -57,8 +61,23 @@ export function walkModule(
         decl.prop.startsWith(prefix)
       )
     ) {
-      assert.cssVariable(decl.prop)
-      declaredVariables.add(decl.prop);
+      try {
+
+        assert.cssVariable(decl.prop)
+        declaredVariables.add(decl.prop);
+      } catch (error) {
+        collector.setSubject('Walk module')
+        collector.scope({
+          value: decl.prop,
+          path: decl.source?.input.file ?? decl.source?.input.document ?? "unknown",
+          context: 'css variable'
+        })
+        collector.set({
+          reason: error instanceof Error
+            ? error.message
+            : String(error)
+        })
+      }
     }
 
     const rule = decl.parent;
@@ -70,26 +89,38 @@ export function walkModule(
     const isCustomProperty = decl.prop.startsWith("--");
 
     for (const match of decl.value.matchAll(
-      /var\((--[\w-]+)\s*(?:,[^)]+)?\)/g
+      /var\((--[\w-]+)\s*(?:,[^)]+)?\)/g,
     )) {
       const cssVar = match[1];
 
-      if (
-        variablePrefixes.some(prefix =>
-          cssVar.startsWith(prefix)
-        )
-      ) {
-        assert.cssVariable(cssVar)
+      if (variablePrefixes.every(prefix => !cssVar.startsWith(prefix))) {
+        continue;
+      }
+      try {
+
+        assert.cssVariable(cssVar);
         foundFinalVariables.add(cssVar);
 
-
-        if (isCustomProperty) return
+        if (isCustomProperty) {
+          return;
+        }
 
         const variables = presetResetData.get(rule) ?? new Set();
 
         variables.add(cssVar);
-
         presetResetData.set(rule, variables);
+      } catch (error) {
+        collector.setSubject('Walk module')
+        collector.scope({
+          value: cssVar,
+          path: decl.source?.input.file ?? decl.source?.input.document ?? "unknown",
+          context: 'css variable'
+        })
+        collector.set({
+          reason: error instanceof Error
+            ? error.message
+            : String(error)
+        })
       }
     }
   });
@@ -100,6 +131,7 @@ export function walkModule(
     usableSelectors: [...usableSelectors],
     foundFinalVariables: [...foundFinalVariables],
     declaredVariables: [...declaredVariables],
-    presetResetData: [...presetResetData]
+    presetResetData: [...presetResetData],
+    issues: collector.flush()
   }
 }

@@ -175,9 +175,8 @@ function handleSwipeStart(current: GestureSession, x: number, y: number, point: 
 ----------------------------- */
 function handleSwipeMove(point: Vec2, pointerId: number): InterpreterSwipe | null {
   const current = gestures[pointerId]
-  if (!current) return null
 
-  if (current.phase === 'PENDING') return null
+  if (!current || current.phase === 'PENDING') return null
   const { state, gesture: g } = current
   const deltaX = point.x - state.last.x
   const deltaY = point.y - state.last.y

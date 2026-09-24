@@ -22,7 +22,7 @@
     "coverage": "vitest run --coverage",
     "test": "vitest",
     "type": "tsc --noEmit",
-    "build": "tsc && esbuild src/extension.ts --bundle --platform=node --format=esm --external:vscode --main-fields=module,main --outfile=dist/extension.js",
+    "build": "tsc --noEmit -p tsconfig.src.json && esbuild src/extension.ts --bundle --platform=node --format=esm --external:vscode --main-fields=module,main --outfile=dist/extension.js",
     "package": "npm run build && vsce package --allow-missing-repository"
   },
   "dependencies": {
@@ -34,7 +34,7 @@
     "@vitest/coverage-v8": "^5.0.0",
     "@vscode/vsce": "^4.0.0",
     "esbuild": "^0.28.2",
-    "typescript": "^6.0.3",
+    "typescript": "^7.0.2",
     "vitest": "^5.0.0"
   },
   "allowScripts": {
@@ -50,13 +50,18 @@
       "properties": {
         "cssVariableCompletion.variablesFile": {
           "type": "string",
-          "default": "packages/cascade/src/generated/metadata/extension.jsonc",
+          "default": "node_modules/cascade/src/generated/metadata/extension.jsonc",
           "description": "Path to the CSS variable metadata file, relative to the workspace."
         },
         "cssVariableCompletion.lspFile": {
           "type": "string",
-          "default": "packages/cascade/src/generated/metadata/lsp.ts",
+          "default": "node_modules/cascade/src/generated/metadata/lsp.ts",
           "description": "Path to the LSP variable metadata file, relative to the workspace."
+        },
+        "cssVariableCompletion.nodeModulesRoot": {
+          "type": "string",
+          "default": ".",
+          "description": "Directory from which to resolve the Cascade package."
         }
       }
     }
