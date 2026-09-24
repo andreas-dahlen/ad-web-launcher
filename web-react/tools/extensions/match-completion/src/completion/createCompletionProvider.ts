@@ -1,4 +1,4 @@
-import type { PreparedMatches } from '../types/all.types.ts'
+import type { PreparedMatches } from '../types/completion.types.ts'
 import * as vscode from "vscode"
 
 export function createCompletionProvider(

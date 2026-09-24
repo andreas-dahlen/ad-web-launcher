@@ -1,4 +1,4 @@
-import type { Match, PreparedMatches } from '../types/all.types.ts';
+import type { Match, PreparedMatches } from '../../types/completion.types.ts';
 
 export function createMatchingTable(obj: Record<string, string[]>): PreparedMatches {
 

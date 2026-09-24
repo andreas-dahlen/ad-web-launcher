@@ -23,6 +23,11 @@
     "build": "tsc --noEmit -p tsconfig.src.json && esbuild src/extension.ts --bundle --platform=node --format=esm --external:vscode --main-fields=module,main --outfile=dist/extension.js",
     "package": "npm run build && vsce package --allow-missing-repository"
   },
+  "dependencies": {
+    "jsonc-parser": "^3.3.1",
+    "micromatch": "^4.0.8",
+    "zod": "^4.6.5"
+  },
   "devDependencies": {
     "@types/node": "^26.1.2",
     "@types/vscode": "^1.134.0",
@@ -54,9 +59,15 @@
         "matchCompletion.snippetBindings": {
           "type": "array",
           "default": [
-            "ö"
+            "ö",
+            "asd"
           ],
           "description": "Text prefixes that trigger snippet suggestions."
+        },
+        "matchCompletion.snippetPath": {
+          "type": "string",
+          "default": ".vscode/ad-web.code-snippets",
+          "description": "Path to a snippet file."
         },
         "matchCompletion.languages": {
           "type": "array",
@@ -68,8 +79,5 @@
         }
       }
     }
-  },
-  "dependencies": {
-    "zod": "^4.6.5"
   }
 }

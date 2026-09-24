@@ -32,3 +32,4 @@ function isTokenFile(
 function isCssFile(filePath: string): boolean {
   return filePath.endsWith(".css")
 }
+

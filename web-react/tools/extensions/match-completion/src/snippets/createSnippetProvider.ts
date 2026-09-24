@@ -1,22 +1,9 @@
 import * as vscode from 'vscode'
-
-const testSnippet = {
-  name: 'React Component',
-  body: [
-    'export default function ${1:Component}({',
-    '  ${2:Props}',
-    '}: ${3:type}) {',
-    '  return (',
-    '    <>',
-    '      $0',
-    '    </>',
-    '  )',
-    '}',
-  ].join('\n'),
-}
+import type { Snippets } from '../types/snippet.types.ts'
 
 export function createSnippetProvider(
   bindings: string[],
+  snippetz: Snippets,
   output: vscode.OutputChannel,
 ): vscode.Disposable {
   output.appendLine(
@@ -24,25 +11,29 @@ export function createSnippetProvider(
   )
 
   const provider: vscode.CompletionItemProvider = {
-    provideCompletionItems(
-      _document,
-      _position,
-    ) {
+    provideCompletionItems() {
       output.appendLine(
         '[matchCompletion] providing test snippet',
       )
 
-      const item = new vscode.CompletionItem(
-        testSnippet.name,
-        vscode.CompletionItemKind.Snippet,
-      )
-      item.filterText = 'ö'
+      const snippets = Object.entries(snippetz)
 
-      item.insertText = new vscode.SnippetString(
-        testSnippet.body,
+      return bindings.flatMap(binding =>
+        snippets.map(([name, snippet]) => {
+          const item = new vscode.CompletionItem(
+            name,
+            vscode.CompletionItemKind.Snippet
+          )
+
+          item.filterText = binding
+          item.insertText = new vscode.SnippetString(
+            snippet.body.join('\n')
+          )
+
+          return item
+        })
       )
-      return [item]
-    },
+    }
   }
 
   const selectors = [

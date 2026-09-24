@@ -1,10 +1,11 @@
 import * as vscode from 'vscode'
-import { getConfig } from './config/getConfig.ts'
-import { createMatchingTable } from './config/createMatchingTable.ts'
-import { createCompletionProvider } from './core/createCompletionProvider.ts'
-import { createSnippetProvider } from './core/createSnippetProvider.ts'
+import { snippetEntry } from './snippets/snippetEntry.ts'
+import { completionEntry } from './completion/completionEntry.ts'
+import { parseSnippetConfig } from './snippets/data/parseSnippetConfig.ts'
+
 
 export function activate(context: vscode.ExtensionContext): void {
+  vscode.window.showInformationMessage('match-completion activated')
   const output = vscode.window.createOutputChannel('match Completion')
 
   context.subscriptions.push(output)
@@ -16,31 +17,17 @@ export function activate(context: vscode.ExtensionContext): void {
   const launch = (): void => {
     runtime?.dispose()
 
-    const { languages, snippetBindings, suggestions } = getConfig(output)
-
     const disposables: vscode.Disposable[] = []
 
-    if (snippetBindings) {
-      const bindings = createSnippetProvider(
-        snippetBindings,
-        output
-      )
-      disposables.push(bindings)
-    }
-    if (!languages) {
-      output.appendLine(`[match completion] error reading languages. Idle waiting for config changes.`)
-      return
-    }
+    const completion = completionEntry(output)
+    const snippetz = snippetEntry(output)
 
-    if (suggestions) {
-      const matchTable = createMatchingTable(suggestions)
-      const completion = createCompletionProvider(
-        languages,
-        matchTable,
-        output)
+    if (completion) {
       disposables.push(completion)
     }
-
+    if (snippetz) {
+      disposables.push(snippetz)
+    }
 
     runtime = vscode.Disposable.from(...disposables)
   }
@@ -54,12 +41,31 @@ export function activate(context: vscode.ExtensionContext): void {
       }
 
       output.appendLine(
-        '[match completion] configuration changed. Relaunching.',
+        '[match completion] configuration changed. Relaunching.'
       )
 
       launch()
     }),
+
   )
+
+  const snippetFile = parseSnippetConfig(output).file
+
+  if (snippetFile) {
+    context.subscriptions.push(
+      vscode.workspace.onDidSaveTextDocument(document => {
+        if (document.uri.fsPath !== snippetFile) {
+          return
+        }
+
+        output.appendLine(
+          '[match completion] snippets saved. Relaunching.'
+        )
+
+        launch()
+      }),
+    )
+  }
 }
 
 export function deactivate(): void { }

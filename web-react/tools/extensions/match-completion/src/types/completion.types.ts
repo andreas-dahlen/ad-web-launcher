@@ -1,17 +1,13 @@
-import type { languagesSchema, snippetBindingsSchema, suggestionsSchema } from '../config/settingsSchema.ts'
+import type { languagesSchema, suggestionsSchema } from '../schemas/settingsSchema.ts'
 import * as z from "zod"
 export type SuggestionsSchema = z.infer<typeof suggestionsSchema>
-export type SnippetBindingsSchema = z.infer<typeof snippetBindingsSchema>
 export type LanguagesSchema = z.infer<typeof languagesSchema>
 
 
-export type Config = {
+export type CompletionConfig = {
   languages: LanguagesSchema | null
   suggestions: SuggestionsSchema | null
-  snippetBindings: SnippetBindingsSchema | null
 }
-
-
 
 export type Match = {
   matcher: string
