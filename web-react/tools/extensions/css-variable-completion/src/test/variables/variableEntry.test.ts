@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest'
 
 import { variableEntry } from '../../variables/variableEntry.ts'
 import { resolveVariablesUri } from '../../config/paths.ts'
-import { loadVariables } from '../../variables/loadVariables.ts'
+import { loadVariables } from '../../variables/loadExtensionData.ts'
 import { watchVariables } from '../../variables/watchVariables.ts'
 import { cssLanguages } from '../../config/languages.ts'
 import type { Uri } from 'vscode'

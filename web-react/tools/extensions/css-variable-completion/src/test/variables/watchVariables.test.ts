@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 
 import { watchVariables } from '../../variables/watchVariables.ts'
-import { loadVariables } from '../../variables/loadVariables.ts'
+import { loadVariables } from '../../variables/loadExtensionData.ts'
 
 const createFileSystemWatcherMock = vi.hoisted(() =>
   vi.fn(),

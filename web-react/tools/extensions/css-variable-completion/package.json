@@ -26,7 +26,8 @@
     "package": "npm run build && vsce package --allow-missing-repository"
   },
   "dependencies": {
-    "jsonc-parser": "^3.3.1"
+    "jsonc-parser": "^3.3.1",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "@types/node": "^26.1.2",

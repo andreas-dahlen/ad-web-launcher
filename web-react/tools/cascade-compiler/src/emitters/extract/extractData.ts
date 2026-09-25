@@ -58,10 +58,7 @@ export function extractData(cache: TokenCache,
     Final processing
   -------------------------------------*/
 
-  const extensionData = assembleExtensionData(
-    postData.flatMap(t => t.variables),
-    tokenData.flatMap(t => t.tokens)
-  )
+  const extensionData = assembleExtensionData(postData, tokenData)
 
   const lspData = assembleLspData(
     postData.flatMap(t => t.oklchVariables),

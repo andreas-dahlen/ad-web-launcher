@@ -32,6 +32,7 @@ export function assembleTokenData(
 
   return {
     groupPath: group.groupPath,
+    cssPath: group.cssPath,
     name,
     styleName,
     typeName,

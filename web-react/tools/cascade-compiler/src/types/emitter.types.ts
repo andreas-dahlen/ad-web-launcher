@@ -12,6 +12,7 @@ type CompilerPatchOutput = "jsonc" | "css"
 // extractData types
 export type TokenGroupData = {
   groupPath: string
+  cssPath: string
   name: string
   styleName: string
   typeName: string
@@ -48,6 +49,7 @@ export type LspData = {
 }
 
 export type ExtensionData = {
+  cssPath: string
   variables: CssVarString[]
 }
 
@@ -61,7 +63,7 @@ export type EmitData = {
   tokenFiles: TokenGroupData[]
   jsonSchema: string
   metadata: GroupMetadata[]
-  extensionData: ExtensionData
+  extensionData: ExtensionData[]
   lspData: LspData
   packageData: PackageData
 }

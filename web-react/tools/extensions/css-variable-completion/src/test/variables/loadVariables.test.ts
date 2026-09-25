@@ -8,7 +8,7 @@ import path from 'node:path'
 
 import { describe, expect, it } from 'vitest'
 
-import { loadVariables } from '../../variables/loadVariables.ts'
+import { loadVariables } from '../../variables/loadExtensionData.ts'
 
 const createVariablesFile = (contents: string) => {
   const directory = mkdtempSync(
