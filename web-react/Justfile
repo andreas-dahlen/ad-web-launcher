@@ -8,42 +8,68 @@ workspace := "ad-web-launcher.code-workspace"
 
 default: help
 
+# ================== GIT ====================
+
+diff-branches:
+    @echo "Trees:"
+    @git diff --quiet main dev \
+        && echo "  ✓ identical" \
+        || echo "  ✗ differ"
+    @echo "Commits:"
+    @test "$(git rev-parse main)" = "$(git rev-parse dev)" \
+        && echo "  ✓ identical" \
+        || echo "  ✗ differ"
+
+sync-main:
+    @git switch main
+    @git merge dev
+    @git push
+
+commit *args:
+    if [ -z "{{args}}" ]; then \
+        echo "No commit message provided"; \
+    else \
+        git add --all; \
+        git commit -m "{{args}}"; \
+        git push; \
+    fi
+
 # ================== DEVELOPMENT ====================
 audit *args:
-    if [ -z "{{ args }}" ]; then \
+    if [ -z "{{args}}" ]; then \
         npm audit; \
     else \
-        ./scripts/run-project.sh audit {{ args }}; \
+        ./scripts/run-project.sh audit {{args}}; \
     fi
 
 audit-all:
     ./scripts/run-all.sh audit
 
 outdated *args:
-    if [ -z "{{ args }}" ]; then \
+    if [ -z "{{args}}" ]; then \
         npm outdated; \
     else \
-        ./scripts/run-project.sh outdated {{ args }}; \
+        ./scripts/run-project.sh outdated {{args}}; \
     fi
 
 outdated-all:
     ./scripts/run-all.sh outdated || true
 
 doctor *args:
-    if [ -z "{{ args }}" ]; then \
+    if [ -z "{{args}}" ]; then \
         npm doctor; \
     else \
-        ./scripts/run-project.sh doctor {{ args }}; \
+        ./scripts/run-project.sh doctor {{args}}; \
     fi
 
 doctor-all:
     ./scripts/run-all.sh doctor
 
 install *args:
-    if [ -z "{{ args }}" ]; then \
+    if [ -z "{{args}}" ]; then \
         npm install; \
     else \
-        ./scripts/run-project.sh install {{ args }}; \
+        ./scripts/run-project.sh install {{args}}; \
     fi
 
 install-all:
@@ -55,7 +81,7 @@ update-all:
     ./scripts/run-all.sh install-scripts ls
 
 install-force *args:
-    ./scripts/install-force.sh {{ args }}
+    ./scripts/install-force.sh {{args}}
 
 install-force-all +packages:
     ./scripts/install-force-all.sh {{ packages }}
@@ -67,10 +93,10 @@ preview:
     npm run preview
 
 build *args:
-    if [ -z "{{ args }}" ]; then \
+    if [ -z "{{args}}" ]; then \
         npm run build && ./scripts/deploy-android.sh; \
     else \
-        ./scripts/run-project.sh run build {{ args }}; \
+        ./scripts/run-project.sh run build {{args}}; \
     fi
 
 build-all:
@@ -79,10 +105,10 @@ build-all:
 # ==================== QUALITY ====================
 
 type *args:
-    if [ -z "{{ args }}" ]; then \
+    if [ -z "{{args}}" ]; then \
         npm run type; \
     else \
-        ./scripts/run-project.sh run type {{ args }}; \
+        ./scripts/run-project.sh run type {{args}}; \
     fi    
 
 type-all: 
@@ -116,24 +142,24 @@ coverage-open:
     xdg-open coverage/index.html
 
 lint *args:
-    if [ -z "{{ args }}" ]; then \
+    if [ -z "{{args}}" ]; then \
         npm run lint; \
     else \
-        ./scripts/lint.sh {{ args }}; \
+        ./scripts/lint.sh {{args}}; \
     fi
 
 stylelint *args:
-    if [ -z "{{ args }}" ]; then \
+    if [ -z "{{args}}" ]; then \
         npm run stylelint; \
     else \
-        npx stylelint {{ args }}; \
+        npx stylelint {{args}}; \
     fi
 
 eslint *args:
-    npx eslint {{ args }}
+    npx eslint {{args}}
 
 oxlint *args:
-    npx oxlint {{ args }}
+    npx oxlint {{args}}
 
 style: stylelint
 
@@ -142,7 +168,7 @@ ox: oxlint
 es: eslint
 
 knip *args:
-    npm run knip -- {{ args }}
+    npm run knip -- {{args}}
 
 # chmod +x scripts/index.sh <- an example for enabling a script
 
@@ -197,7 +223,7 @@ check-ts-v:
 
 # Lists the dependencies of project versus tools. Takes dependency as args.
 check-deps *args:
-    scripts/dependencies.sh {{ args }}
+    scripts/dependencies.sh {{args}}
 
     
 # ==================== HELP ====================
