@@ -4,26 +4,26 @@ import path from 'node:path'
 import { existsSync } from 'node:fs'
 
 export function parseSnippetConfig(output: vscode.OutputChannel) {
-  const settings = vscode.workspace.getConfiguration('matchCompletion')
+  const settings = vscode.workspace.getConfiguration('matchSuggestions')
 
-  const gotSnippetBindings = settings.get<unknown>('snippetBindings')
+  const gotSnippetTriggers = settings.get<unknown>('snippetTriggers')
   const gotSnippetPath = settings.get<unknown>('snippetPath')
   const parsedSnippetPath = snippetPathSchema.safeParse(gotSnippetPath)
-  const parsedSnippetBindings = snippetBindingsSchema.safeParse(gotSnippetBindings)
+  const parsedSnippetBindings = snippetBindingsSchema.safeParse(gotSnippetTriggers)
   if (parsedSnippetBindings.error) {
     output.appendLine(
-      `[matchCompletion] binding parsing error ${parsedSnippetBindings.error}`
+      `[match suggestions] snippet trigger parsing error ${parsedSnippetBindings.error}`
     )
   }
   if (parsedSnippetPath.error) {
     output.appendLine(
-      `[matchCompletion] snippetPath parsing error ${parsedSnippetBindings.error}`
+      `[match suggestions] snippetPath parsing error ${parsedSnippetBindings.error}`
     )
   }
   const workspace = vscode.workspace.workspaceFolders?.[0]
 
   if (!workspace) {
-    output.appendLine('[snippets] workspace does not exist')
+    output.appendLine('[match suggestions] workspace does not exist')
   }
 
   let file: string | null = null
@@ -33,14 +33,13 @@ export function parseSnippetConfig(output: vscode.OutputChannel) {
       parsedSnippetPath.data,
     )
     if (!existsSync(file)) {
-      output.appendLine('[snippets] file does not exist')
+      output.appendLine('[match suggestions] file does not exist')
       file = null
     }
   }
 
   return {
-    bindings: parsedSnippetBindings.data ?? null,
+    triggers: parsedSnippetBindings.data ?? null,
     file
   }
 }
-

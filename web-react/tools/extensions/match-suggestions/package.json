@@ -1,9 +1,9 @@
 {
   "publisher": "ad-web-launcher",
-  "name": "match-completion",
+  "name": "match-suggestions",
   "type": "module",
-  "displayName": "Match Completion",
-  "description": "Provides completion suggestions when text matches a configured pattern.",
+  "displayName": "Match Suggestions",
+  "description": "Type a configured pattern to get completion suggestions that extend it, or replace it with a snippet.",
   "version": "0.0.1",
   "private": true,
   "engines": {
@@ -49,20 +49,20 @@
   "contributes": {
     "configuration": {
       "properties": {
-        "matchCompletion.snippetPath": {
+        "matchSuggestions.snippetPath": {
           "type": "string",
           "default": ".vscode/ad-web.code-snippets",
           "description": "Path to a snippet file."
         },
-        "matchCompletion.snippetBindings": {
+        "matchSuggestions.snippetTriggers": {
           "type": "array",
           "default": [
             "ö",
             "asd"
           ],
-          "description": "Text prefixes that trigger snippet suggestions."
+          "description": "Text prefixes that trigger snippet replacement suggestions."
         },
-        "matchCompletion.suggestions": {
+        "matchSuggestions.completions": {
           "type": "object",
           "default": {
             "//": [
@@ -72,13 +72,13 @@
           },
           "description": "Maps text patterns to completion suggestions."
         },
-        "matchCompletion.languages": {
+        "matchSuggestions.languages": {
           "type": "array",
           "default": [
             "typescript",
             "javascript"
           ],
-          "description": "Language identifiers where match completion is enabled."
+          "description": "Language identifiers where matchSuggestions.completions is enabled."
         }
       }
     }

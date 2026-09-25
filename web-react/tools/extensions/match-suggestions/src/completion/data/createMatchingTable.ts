@@ -5,7 +5,7 @@ export function createMatchingTable(obj: Record<string, string[]>): PreparedMatc
   const triggers = new Set<string>()
   const byTrigger = new Map<string, Match[]>()
 
-  for (const [key, suggestions] of Object.entries(obj)) {
+  for (const [key, completions] of Object.entries(obj)) {
     const trimmedKey = key.trim()
     const trigger = trimmedKey.at(0)
 
@@ -15,7 +15,7 @@ export function createMatchingTable(obj: Record<string, string[]>): PreparedMatc
     const current = byTrigger.get(trigger)
     const match = {
       matcher: trimmedKey,
-      suggestions
+      completions
     }
 
     if (current) {

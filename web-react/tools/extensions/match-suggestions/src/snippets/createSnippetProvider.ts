@@ -3,21 +3,19 @@ import type { Snippets } from '../types/snippet.types.ts'
 import picomatch from 'picomatch'
 
 export function createSnippetProvider(
-  bindings: string[],
+  triggers: string[],
   snippetz: Snippets,
   output: vscode.OutputChannel,
 ): vscode.Disposable {
   output.appendLine(
-    `[matchCompletion] registering snippet test provider: ${bindings.join(', ')}`,
+    `[match suggestions] registered snippet provider: ${triggers.join(', ')}`,
   )
 
   const provider: vscode.CompletionItemProvider = {
     provideCompletionItems(
-      document
+      document,
+      position
     ) {
-      output.appendLine(
-        '[matchCompletion] providing test snippet',
-      )
 
       const filePath = document.uri.fsPath
       const snippets = Object.entries(snippetz)
@@ -27,18 +25,24 @@ export function createSnippetProvider(
         snippet.include.some(pattern => picomatch(pattern)(filePath))
       )
 
+      const line = document.lineAt(position.line).text
+      const beforeCursor = line.slice(0, position.character)
 
       return matchingSnippets.flatMap(([name, snippet]) => {
-        return bindings.map(binding => {
+        return triggers.map(trigger => {
           const item = new vscode.CompletionItem(
             name,
             vscode.CompletionItemKind.Snippet
           )
 
-          item.filterText = binding
+          item.filterText = `${trigger}${name}`
           item.insertText = new vscode.SnippetString(
             snippet.body.join('\n')
           )
+
+          if (trigger !== beforeCursor) {
+            item.sortText = `zzz-${name}`
+          }
 
           return item
         })
@@ -50,11 +54,11 @@ export function createSnippetProvider(
     vscode.languages.registerCompletionItemProvider(
       { scheme: 'file' },
       provider,
-      ...bindings
+      ...triggers
     )
 
   output.appendLine(
-    '[matchCompletion] snippet test provider registered.'
+    '[match suggestions] snippet test provider registered.'
   )
 
   return vscode.Disposable.from(completion)
