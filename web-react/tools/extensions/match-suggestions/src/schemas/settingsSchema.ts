@@ -1,6 +1,6 @@
 import * as z from 'zod';
 
-export const suggestionsSchema = z.record(
+export const completionsSchema = z.record(
   z.string(),
   z.array(z.string()),
 )

@@ -1,17 +1,17 @@
-import type { languagesSchema, suggestionsSchema } from '../schemas/settingsSchema.ts'
+import type { languagesSchema, completionsSchema } from '../schemas/settingsSchema.ts'
 import * as z from "zod"
-export type SuggestionsSchema = z.infer<typeof suggestionsSchema>
+export type SuggestionsSchema = z.infer<typeof completionsSchema>
 export type LanguagesSchema = z.infer<typeof languagesSchema>
 
 
 export type CompletionConfig = {
   languages: LanguagesSchema | null
-  suggestions: SuggestionsSchema | null
+  completions: SuggestionsSchema | null
 }
 
 export type Match = {
   matcher: string
-  suggestions: string[]
+  completions: string[]
 }
 
 export type PreparedMatches = {

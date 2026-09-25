@@ -6,11 +6,11 @@ import { parseSnippetConfig } from './snippets/data/parseSnippetConfig.ts'
 
 export function activate(context: vscode.ExtensionContext): void {
   vscode.window.showInformationMessage('match-completion activated')
-  const output = vscode.window.createOutputChannel('match Completion')
+  const output = vscode.window.createOutputChannel('match Suggestions')
 
   context.subscriptions.push(output)
 
-  output.appendLine('[match completion] loaded')
+  output.appendLine('[match suggestions] loaded')
 
   let runtime: vscode.Disposable | undefined
 
@@ -36,12 +36,12 @@ export function activate(context: vscode.ExtensionContext): void {
 
   context.subscriptions.push(
     vscode.workspace.onDidChangeConfiguration(event => {
-      if (!event.affectsConfiguration('matchCompletion')) {
+      if (!event.affectsConfiguration('match suggestions')) {
         return
       }
 
       output.appendLine(
-        '[match completion] configuration changed. Relaunching.'
+        '[match suggestions] configuration changed. Relaunching.'
       )
 
       launch()
@@ -59,7 +59,7 @@ export function activate(context: vscode.ExtensionContext): void {
         }
 
         output.appendLine(
-          '[match completion] snippets saved. Relaunching.'
+          '[match suggestions] snippets saved. Relaunching.'
         )
 
         launch()

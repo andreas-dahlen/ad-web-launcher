@@ -46,6 +46,11 @@ const config: KnipConfig = {
         'src/**/*.ts',
       ],
     },
+    'tools/extensions/match-suggestions': {
+      project: [
+        'src/**/*.ts',
+      ],
+    },
 
     'tools/extensions/cascade-vscode': {
       project: [

@@ -1,9 +1,9 @@
 {
   "publisher": "ad-web-launcher",
-  "name": "match-completion",
+  "name": "match-suggestions",
   "type": "module",
-  "displayName": "Match Completion",
-  "description": "Provides completion suggestions when text matches a configured pattern.",
+  "displayName": "Match Suggestions",
+  "description": "Type a configured pattern to get completion suggestions that extend it, or replace it with a snippet.",
   "version": "0.0.1",
   "private": true,
   "engines": {
@@ -26,10 +26,13 @@
   "dependencies": {
     "jsonc-parser": "^3.3.1",
     "micromatch": "^4.0.8",
+    "picomatch": "^4.0.7",
     "zod": "^4.6.5"
   },
   "devDependencies": {
+    "@types/micromatch": "^4.0.10",
     "@types/node": "^26.1.2",
+    "@types/picomatch": "^4.0.3",
     "@types/vscode": "^1.134.0",
     "@vitest/coverage-v8": "^5.0.0",
     "@vscode/vsce": "^4.0.0",
@@ -46,7 +49,20 @@
   "contributes": {
     "configuration": {
       "properties": {
-        "matchCompletion.suggestions": {
+        "matchSuggestions.snippetPath": {
+          "type": "string",
+          "default": ".vscode/ad-web.code-snippets",
+          "description": "Path to a snippet file."
+        },
+        "matchSuggestions.snippetTriggers": {
+          "type": "array",
+          "default": [
+            "ö",
+            "asd"
+          ],
+          "description": "Text prefixes that trigger snippet replacement suggestions."
+        },
+        "matchSuggestions.completions": {
           "type": "object",
           "default": {
             "//": [
@@ -56,26 +72,13 @@
           },
           "description": "Maps text patterns to completion suggestions."
         },
-        "matchCompletion.snippetBindings": {
-          "type": "array",
-          "default": [
-            "ö",
-            "asd"
-          ],
-          "description": "Text prefixes that trigger snippet suggestions."
-        },
-        "matchCompletion.snippetPath": {
-          "type": "string",
-          "default": ".vscode/ad-web.code-snippets",
-          "description": "Path to a snippet file."
-        },
-        "matchCompletion.languages": {
+        "matchSuggestions.languages": {
           "type": "array",
           "default": [
             "typescript",
             "javascript"
           ],
-          "description": "Language identifiers where match completion is enabled."
+          "description": "Language identifiers where matchSuggestions.completions is enabled."
         }
       }
     }
