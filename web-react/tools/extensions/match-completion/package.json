@@ -26,10 +26,13 @@
   "dependencies": {
     "jsonc-parser": "^3.3.1",
     "micromatch": "^4.0.8",
+    "picomatch": "^4.0.7",
     "zod": "^4.6.5"
   },
   "devDependencies": {
+    "@types/micromatch": "^4.0.10",
     "@types/node": "^26.1.2",
+    "@types/picomatch": "^4.0.3",
     "@types/vscode": "^1.134.0",
     "@vitest/coverage-v8": "^5.0.0",
     "@vscode/vsce": "^4.0.0",
@@ -46,15 +49,10 @@
   "contributes": {
     "configuration": {
       "properties": {
-        "matchCompletion.suggestions": {
-          "type": "object",
-          "default": {
-            "//": [
-              "NOTE",
-              "QUEST"
-            ]
-          },
-          "description": "Maps text patterns to completion suggestions."
+        "matchCompletion.snippetPath": {
+          "type": "string",
+          "default": ".vscode/ad-web.code-snippets",
+          "description": "Path to a snippet file."
         },
         "matchCompletion.snippetBindings": {
           "type": "array",
@@ -64,10 +62,15 @@
           ],
           "description": "Text prefixes that trigger snippet suggestions."
         },
-        "matchCompletion.snippetPath": {
-          "type": "string",
-          "default": ".vscode/ad-web.code-snippets",
-          "description": "Path to a snippet file."
+        "matchCompletion.suggestions": {
+          "type": "object",
+          "default": {
+            "//": [
+              "NOTE",
+              "QUEST"
+            ]
+          },
+          "description": "Maps text patterns to completion suggestions."
         },
         "matchCompletion.languages": {
           "type": "array",

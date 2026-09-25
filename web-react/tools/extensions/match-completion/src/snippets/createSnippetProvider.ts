@@ -1,5 +1,6 @@
 import * as vscode from 'vscode'
 import type { Snippets } from '../types/snippet.types.ts'
+import picomatch from 'picomatch'
 
 export function createSnippetProvider(
   bindings: string[],
@@ -11,15 +12,24 @@ export function createSnippetProvider(
   )
 
   const provider: vscode.CompletionItemProvider = {
-    provideCompletionItems() {
+    provideCompletionItems(
+      document
+    ) {
       output.appendLine(
         '[matchCompletion] providing test snippet',
       )
 
+      const filePath = document.uri.fsPath
       const snippets = Object.entries(snippetz)
 
-      return bindings.flatMap(binding =>
-        snippets.map(([name, snippet]) => {
+      const matchingSnippets = snippets.filter(([_, snippet]) =>
+        !snippet.include ||
+        snippet.include.some(pattern => picomatch(pattern)(filePath))
+      )
+
+
+      return matchingSnippets.flatMap(([name, snippet]) => {
+        return bindings.map(binding => {
           const item = new vscode.CompletionItem(
             name,
             vscode.CompletionItemKind.Snippet
@@ -32,24 +42,19 @@ export function createSnippetProvider(
 
           return item
         })
-      )
+      })
     }
   }
 
-  const selectors = [
-    { scheme: 'file', language: 'typescript' },
-    { scheme: 'file', language: 'javascript' },
-  ]
-
   const completion =
     vscode.languages.registerCompletionItemProvider(
-      selectors,
+      { scheme: 'file' },
       provider,
-      ...bindings,
+      ...bindings
     )
 
   output.appendLine(
-    '[matchCompletion] snippet test provider registered.',
+    '[matchCompletion] snippet test provider registered.'
   )
 
   return vscode.Disposable.from(completion)

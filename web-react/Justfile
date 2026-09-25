@@ -25,7 +25,7 @@ sync-main:
     @git merge dev
     @git push
 
-commit *args:
+push *args:
     if [ -z "{{args}}" ]; then \
         echo "No commit message provided"; \
     else \
