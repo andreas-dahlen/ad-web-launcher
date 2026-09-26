@@ -1,4 +1,4 @@
-import type { BoundaryRule } from './lint.types.ts'
+import type { BoundaryRule } from '../lint.types.ts'
 
 export const appRules: {
   'boundaries/dependencies': BoundaryRule

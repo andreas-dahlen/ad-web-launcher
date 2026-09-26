@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 
 import { watchVariables } from '../../variables/watchVariables.ts'
-import { loadVariables } from '../../variables/loadExtensionData.ts'
+import { loadExtensionData } from '../../variables/loadExtensionData.ts'
 
 const createFileSystemWatcherMock = vi.hoisted(() =>
   vi.fn(),
@@ -22,8 +22,8 @@ vi.mock('vscode', () => ({
   },
 }))
 
-vi.mock('../../variables/loadVariables.ts', () => ({
-  loadVariables: vi.fn(),
+vi.mock('../../variables/loadExtensionData.ts', () => ({
+  loadExtensionData: vi.fn(),
 }))
 
 describe('[EXTENSION] watchVariables', () => {
@@ -39,111 +39,107 @@ describe('[EXTENSION] watchVariables', () => {
     })),
   })
 
-  const createUpdateVariables = () => vi.fn()
+  const createUpdateExtensionData = () => vi.fn()
 
   const createOutput = () => ({
     appendLine: vi.fn(),
   })
 
+  const extensionData = [
+    {
+      cssPath: '/project/src/button.css',
+      variables: [
+        '--color-primary',
+        '--color-secondary',
+      ],
+    },
+    {
+      cssPath: '/project/src/carousel.css',
+      variables: [
+        '--carousel-height',
+      ],
+    },
+  ]
+
   const variablesUri = {
     fsPath: '/project/extension.generated.jsonc',
   }
 
-  it('updates variables when the file changes', () => {
+  it('updates extension data when the file changes', () => {
     const watcher = createWatcher()
 
     createFileSystemWatcherMock.mockReturnValue(watcher)
 
-    vi.mocked(loadVariables).mockReturnValue([
-      '--color-primary',
-      '--color-secondary',
-    ])
+    vi.mocked(loadExtensionData).mockReturnValue(
+      extensionData,
+    )
 
-    const updateVariables = createUpdateVariables()
+    const updateExtensionData = createUpdateExtensionData()
     const output = createOutput()
 
     watchVariables(
       variablesUri as never,
-      updateVariables,
+      updateExtensionData,
       output as never,
     )
 
-    const reloadVariables =
+    const reloadExtensionData =
       watcher.onDidChange.mock.calls[0][0]
 
-    reloadVariables()
+    reloadExtensionData()
 
-    expect(loadVariables).toHaveBeenCalledWith(variablesUri)
+    expect(loadExtensionData).toHaveBeenCalledWith(
+      variablesUri,
+    )
 
-    expect(updateVariables).toHaveBeenCalledWith([
-      '--color-primary',
-      '--color-secondary',
-    ])
+    expect(updateExtensionData).toHaveBeenCalledWith(
+      extensionData,
+    )
 
     expect(output.appendLine).toHaveBeenCalledWith(
       '[css variable completion] updated: 2 variables',
     )
   })
 
-  it('updates variables when the file is created', () => {
+  it('updates extension data when the file is created', () => {
     const watcher = createWatcher()
 
     createFileSystemWatcherMock.mockReturnValue(watcher)
 
-    vi.mocked(loadVariables).mockReturnValue([
-      '--color-primary',
+    vi.mocked(loadExtensionData).mockReturnValue([
+      {
+        cssPath: '/project/src/button.css',
+        variables: [
+          '--color-primary',
+        ],
+      },
     ])
 
-    const updateVariables = createUpdateVariables()
+    const updateExtensionData = createUpdateExtensionData()
     const output = createOutput()
 
     watchVariables(
       variablesUri as never,
-      updateVariables,
+      updateExtensionData,
       output as never,
     )
 
-    const reloadVariables =
+    const reloadExtensionData =
       watcher.onDidCreate.mock.calls[0][0]
 
-    reloadVariables()
+    reloadExtensionData()
 
-    expect(updateVariables).toHaveBeenCalledWith([
-      '--color-primary',
+    expect(updateExtensionData).toHaveBeenCalledWith([
+      {
+        cssPath: '/project/src/button.css',
+        variables: [
+          '--color-primary',
+        ],
+      },
     ])
 
     expect(output.appendLine).toHaveBeenCalledWith(
       '[css variable completion] updated: 1 variables',
-    )
-  })
-
-  it('logs an error when variables cannot be loaded', () => {
-    const watcher = createWatcher()
-
-    createFileSystemWatcherMock.mockReturnValue(watcher)
-
-    vi.mocked(loadVariables).mockImplementation(() => {
-      throw new Error('invalid variables')
-    })
-
-    const updateVariables = createUpdateVariables()
-    const output = createOutput()
-
-    watchVariables(
-      variablesUri as never,
-      updateVariables,
-      output as never,
-    )
-
-    const reloadVariables =
-      watcher.onDidChange.mock.calls[0][0]
-
-    reloadVariables()
-
-    expect(updateVariables).not.toHaveBeenCalled()
-
-    expect(output.appendLine).toHaveBeenCalledWith(
-      '[css variable completion] failed to load variables: Error: invalid variables',
     )
   })
 
@@ -152,14 +148,14 @@ describe('[EXTENSION] watchVariables', () => {
 
     createFileSystemWatcherMock.mockReturnValue(watcher)
 
-    vi.mocked(loadVariables).mockReturnValue([])
+    vi.mocked(loadExtensionData).mockReturnValue([])
 
-    const updateVariables = createUpdateVariables()
+    const updateExtensionData = createUpdateExtensionData()
     const output = createOutput()
 
     const disposable = watchVariables(
       variablesUri as never,
-      updateVariables,
+      updateExtensionData,
       output as never,
     )
 

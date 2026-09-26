@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 import * as vscode from 'vscode'
 
+import type { ExtensionData } from '../../variables/variableSchema.ts'
 import { createCssVariableCompletionProvider } from '../../completion/cssVarCompletionProvider.ts'
 
 const CompletionItemMock = vi.hoisted(() =>
@@ -44,19 +45,37 @@ vi.mock('vscode', () => ({
   CompletionList: CompletionListMock,
 }))
 
-const createProvider = (variables: string[]) =>
-  createCssVariableCompletionProvider(variables).provider
+const cssPath = '/styles/button.css'
+
+type ExtensionDataItem = ExtensionData[number]
+
+const createExtensionData = (
+  variables: string[],
+  path = cssPath,
+): ExtensionDataItem => ({
+  cssPath: path,
+  variables,
+})
+
+const createProvider = (
+  extensionData: ExtensionData,
+) =>
+  createCssVariableCompletionProvider(extensionData).provider
 
 const provide = (
   provider: ReturnType<typeof createProvider>,
   text: string,
   character = text.length,
+  filePath = cssPath,
 ): vscode.CompletionList => {
   const result = provider.provideCompletionItems(
     {
       lineAt: () => ({
         text,
       }),
+      uri: {
+        fsPath: filePath,
+      },
     } as never,
     {
       line: 0,
@@ -68,10 +87,13 @@ const provide = (
 
   return result as vscode.CompletionList
 }
+
 describe('[EXTENSION] CssVariableCompletionProvider', () => {
   it('returns no completions when the cursor is not after a variable trigger', () => {
     const provider = createProvider([
-      '--color-primary',
+      createExtensionData([
+        '--color-primary',
+      ]),
     ])
 
     const result = provide(provider, 'color: -')
@@ -82,8 +104,10 @@ describe('[EXTENSION] CssVariableCompletionProvider', () => {
 
   it('provides variables after a CSS property separator', () => {
     const provider = createProvider([
-      '--color-primary',
-      '--color-secondary',
+      createExtensionData([
+        '--color-primary',
+        '--color-secondary',
+      ]),
     ])
 
     const result = provide(provider, 'color: red; -')
@@ -110,7 +134,9 @@ describe('[EXTENSION] CssVariableCompletionProvider', () => {
 
   it('provides variables after an opening brace', () => {
     const provider = createProvider([
-      '--color-primary',
+      createExtensionData([
+        '--color-primary',
+      ]),
     ])
 
     const result = provide(provider, '.foo { -')
@@ -127,7 +153,9 @@ describe('[EXTENSION] CssVariableCompletionProvider', () => {
 
   it('does not lower priority after a double dash', () => {
     const provider = createProvider([
-      '--color-primary',
+      createExtensionData([
+        '--color-primary',
+      ]),
     ])
 
     const result = provide(provider, '.foo { --')
@@ -143,13 +171,61 @@ describe('[EXTENSION] CssVariableCompletionProvider', () => {
     expect(result.items[0]).not.toHaveProperty('sortText')
   })
 
-  it('uses updated variables for subsequent completions', () => {
-    const completion = createCssVariableCompletionProvider([
-      '--old-variable',
+  it('only provides variables for the current file', () => {
+    const provider = createProvider([
+      createExtensionData([
+        '--button-color',
+      ], '/styles/button.css'),
+      createExtensionData([
+        '--label-color',
+      ], '/styles/label.css'),
     ])
 
-    completion.updateVariables([
-      '--new-variable',
+    const result = provide(
+      provider,
+      '.foo { -',
+      undefined,
+      '/styles/button.css',
+    )
+
+    expect(result.items).toHaveLength(1)
+
+    expect(result.items[0]).toMatchObject({
+      label: '--button-color',
+      insertText: '--button-color',
+      filterText: '--button-color',
+    })
+  })
+
+  it('returns no completions when the current file has no extension data', () => {
+    const provider = createProvider([
+      createExtensionData([
+        '--button-color',
+      ], '/styles/button.css'),
+    ])
+
+    const result = provide(
+      provider,
+      '.foo { -',
+      undefined,
+      '/styles/unknown.css',
+    )
+
+    expect(result.items).toEqual([])
+    expect(result.isIncomplete).toBe(true)
+  })
+
+  it('uses updated extension data for subsequent completions', () => {
+    const completion = createCssVariableCompletionProvider([
+      createExtensionData([
+        '--old-variable',
+      ]),
+    ])
+
+    completion.updateExtensionData([
+      createExtensionData([
+        '--new-variable',
+      ]),
     ])
 
     const result = provide(completion.provider, '-')

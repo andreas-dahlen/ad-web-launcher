@@ -6,7 +6,6 @@ import { assembleTokenData } from '../../../src/emitters/extract/assemblers/asse
 import { assemblePresetData } from '../../../src/emitters/extract/assemblers/assemblePresetData.ts'
 import { assembleLspData } from '../../../src/emitters/extract/assemblers/assembleLspData.ts'
 import { assembleExtensionData } from '../../../src/emitters/extract/assemblers/assembleExtensionData.ts'
-import type { CssVarString } from '../../../src/types/cascade.types.ts'
 
 vi.mock(
   '../../../src/emitters/extract/assemblers/assembleMetadata.js',
@@ -29,7 +28,7 @@ vi.mock(
 )
 
 vi.mock(
-  '../../../src/emitters/extract/assemblers/assembleJsonSchema.js'
+  '../../../src/emitters/extract/assemblers/assembleJsonSchema.js',
 )
 
 describe('[EMITTERS]', () => {
@@ -72,9 +71,7 @@ describe('[EMITTERS]', () => {
       const run = createRun()
 
       vi.mocked(assembleExtensionData)
-        .mockReturnValue({
-          variables: [],
-        })
+        .mockReturnValue([])
 
       vi.mocked(assembleLspData)
         .mockReturnValue({
@@ -91,6 +88,9 @@ describe('[EMITTERS]', () => {
         .toEqual([])
 
       expect(result.outputData.metadata)
+        .toEqual([])
+
+      expect(result.outputData.extensionData)
         .toEqual([])
 
       expect(result.extractResult.omittedPresetFiles)
@@ -131,9 +131,7 @@ describe('[EMITTERS]', () => {
         .mockReturnValue(metadata as never)
 
       vi.mocked(assembleExtensionData)
-        .mockReturnValue({
-          variables: [],
-        })
+        .mockReturnValue([])
 
       vi.mocked(assembleLspData)
         .mockReturnValue({
@@ -144,6 +142,7 @@ describe('[EMITTERS]', () => {
       const cache = createCache({
         groups: [group],
       })
+
       const run = createRun()
 
       const result = extractData(cache, run)
@@ -191,9 +190,7 @@ describe('[EMITTERS]', () => {
         .mockReturnValue(null)
 
       vi.mocked(assembleExtensionData)
-        .mockReturnValue({
-          variables: [],
-        })
+        .mockReturnValue([])
 
       vi.mocked(assembleLspData)
         .mockReturnValue({
@@ -244,9 +241,7 @@ describe('[EMITTERS]', () => {
         .mockReturnValue(null)
 
       vi.mocked(assembleExtensionData)
-        .mockReturnValue({
-          variables: [],
-        })
+        .mockReturnValue([])
 
       vi.mocked(assembleLspData)
         .mockReturnValue({
@@ -292,9 +287,7 @@ describe('[EMITTERS]', () => {
         .mockReturnValue(null)
 
       vi.mocked(assembleExtensionData)
-        .mockReturnValue({
-          variables: [],
-        })
+        .mockReturnValue([])
 
       vi.mocked(assembleLspData)
         .mockReturnValue({
@@ -346,9 +339,7 @@ describe('[EMITTERS]', () => {
         .mockReturnValue(presetData as never)
 
       vi.mocked(assembleExtensionData)
-        .mockReturnValue({
-          variables: [],
-        })
+        .mockReturnValue([])
 
       vi.mocked(assembleLspData)
         .mockReturnValue({
@@ -373,7 +364,7 @@ describe('[EMITTERS]', () => {
         .toEqual([])
     })
 
-    it('passes post data and assembled token variables to extension assembly', () => {
+    it('passes post data and token data to extension assembly', () => {
       const group = {
         groupPath: '/tokens/button',
       }
@@ -402,15 +393,20 @@ describe('[EMITTERS]', () => {
         },
       ]
 
+      const extensionData = [
+        {
+          cssPath: '/components/Button/Button.module.css',
+          variables: [
+            '--existing-color',
+          ],
+        },
+      ]
+
       vi.mocked(assembleTokenData)
         .mockReturnValue(tokenData as never)
 
       vi.mocked(assembleExtensionData)
-        .mockReturnValue({
-          variables: [
-            '--existing-color',
-          ] as CssVarString[],
-        })
+        .mockReturnValue(extensionData as never)
 
       vi.mocked(assembleLspData)
         .mockReturnValue({
@@ -425,16 +421,16 @@ describe('[EMITTERS]', () => {
 
       const run = createRun()
 
-      extractData(cache, run)
+      const result = extractData(cache, run)
 
       expect(assembleExtensionData)
         .toHaveBeenCalledWith(
-          [
-            '--existing-color',
-            '--existing-radius',
-          ],
-          tokenData.tokens
+          postData,
+          [tokenData],
         )
+
+      expect(result.outputData.extensionData)
+        .toBe(extensionData)
     })
 
     it('passes all OKLCH variables and token data to LSP assembly', () => {
@@ -470,9 +466,7 @@ describe('[EMITTERS]', () => {
         .mockReturnValue(tokenData as never)
 
       vi.mocked(assembleExtensionData)
-        .mockReturnValue({
-          variables: [],
-        })
+        .mockReturnValue([])
 
       vi.mocked(assembleLspData)
         .mockReturnValue({
@@ -495,16 +489,19 @@ describe('[EMITTERS]', () => {
             ['--button-color', 'oklch(70% 0.2 30)'],
             ['--button-bg', 'oklch(80% 0.1 120)'],
           ],
-          tokenData.tokens
+          tokenData.tokens,
         )
     })
 
     it('returns assembled extension and LSP data', () => {
-      const extensionData = {
-        variables: [
-          '--button-color',
-        ] as CssVarString[],
-      }
+      const extensionData = [
+        {
+          cssPath: '/components/Button/Button.module.css',
+          variables: [
+            '--button-color',
+          ],
+        },
+      ]
 
       const lspData = {
         rgbVariables: [
@@ -514,7 +511,7 @@ describe('[EMITTERS]', () => {
       }
 
       vi.mocked(assembleExtensionData)
-        .mockReturnValue(extensionData)
+        .mockReturnValue(extensionData as never)
 
       vi.mocked(assembleLspData)
         .mockReturnValue(lspData)
@@ -564,9 +561,7 @@ describe('[EMITTERS]', () => {
         .mockReturnValue(null)
 
       vi.mocked(assembleExtensionData)
-        .mockReturnValue({
-          variables: [],
-        })
+        .mockReturnValue([])
 
       vi.mocked(assembleLspData)
         .mockReturnValue({
@@ -597,9 +592,9 @@ describe('[EMITTERS]', () => {
         .toHaveBeenCalledWith(
           [],
           [
-            ...groupTokenData.tokens,
-            ...runTokenData.tokens,
-          ]
+            groupTokenData,
+            runTokenData,
+          ],
         )
     })
   })

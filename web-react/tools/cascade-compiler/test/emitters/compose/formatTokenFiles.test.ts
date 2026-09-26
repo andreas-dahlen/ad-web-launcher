@@ -9,6 +9,7 @@ function createTokenGroup(
   return {
     groupPath: '/tokens/button',
     name: 'button',
+    cssPath: "button.css",
     styleName: 'buttonStyle',
     typeName: 'ButtonStyle',
     tokens: [
