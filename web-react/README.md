@@ -1,73 +1,117 @@
-# React + TypeScript + Vite
+# Web React
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+The main web application for [ADWebLauncher](../README.md).
 
-Currently, two official plugins are available:
+A React and TypeScript application developed as a standalone web application and compiled into a single HTML file for use inside the Android WebView.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Contents
 
-## React Compiler
+* [Overview](#overview)
+* [Project Structure](#project-structure)
+* [Application](#application)
+* [Interaction System](#interaction-system)
+* [Development Tooling](#development-tooling)
+* [Testing](#testing)
+* [Build](#build)
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+## Overview
 
-## Expanding the ESLint configuration
+`web-react` contains the main application as well as the development environment used to build, test, and maintain it.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+The project has a strong focus on developer experience, code quality, and maintainability. Development tooling is kept alongside the application so that the environment can evolve together with the codebase.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Project Structure
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```text
+web-react/
+├── src/        # Application source
+├── packages/   # Local packages
+├── tools/      # Development tooling
+├── scripts/    # Project scripts
+├── docs/       # Documentation
+└── analysis/   # Development and analysis material
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Application
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+The application is built with React and TypeScript.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+UI components are responsible for rendering the interface, while application behaviour and user interactions are handled separately. This keeps interaction logic out of individual components and allows different elements to provide different behaviours.
+
+## Interaction System
+
+User interactions are handled through a shared pipeline:
+
+```text
+Input
+  ↓
+Intent
+  ↓
+Reaction
+  ↓
+Solver
+  ↓
+Dispatcher
+  ↓
+DOM
 ```
+
+The intent phase determines what the user is doing.
+
+The reaction phase determines what happens as a result.
+
+This separation allows interaction behaviour to be shared across different UI elements while keeping the resolution of each interaction type independent.
+
+The system currently supports interactions such as:
+
+* Press
+* Swipe
+* Carousel
+* Slider
+* Drag
+
+## Development Tooling
+
+Development tooling is maintained as part of the project rather than being treated as a separate environment.
+
+### Cascade
+
+Cascade is the project's CSS tooling system.
+
+It manages CSS variables and their priorities using token definitions and CSS analysis. It can generate CSS variables, metadata, and other files consumed by the application and development tools.
+
+Cascade can be used through its CLI, Vite plugin, or Visual Studio Code extension.
+
+### VS Code Extensions
+
+The project contains custom Visual Studio Code extensions that provide development-time tooling and editor integrations.
+
+### Linting
+
+The project uses dedicated linting and code-quality tooling for the application and supporting packages.
+
+## Testing
+
+Tests are written with Vitest.
+
+The repository contains separate test configurations for the application and supporting development tooling.
+
+## Build
+
+The application uses Vite and is configured to produce a single-file build for the Android WebView.
+
+```text
+React + TypeScript
+        ↓
+       Vite
+        ↓
+ Single HTML file
+        ↓
+ Android WebView
+```
+
+## Development
+
+Common development tasks are defined in the `Justfile`.
+
+Run `just --list` or `just --help` to see the available commands.

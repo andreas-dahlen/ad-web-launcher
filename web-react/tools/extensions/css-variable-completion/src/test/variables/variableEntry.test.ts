@@ -2,10 +2,11 @@ import { describe, expect, it, vi } from 'vitest'
 
 import { variableEntry } from '../../variables/variableEntry.ts'
 import { resolveVariablesUri } from '../../config/paths.ts'
-import { loadVariables } from '../../variables/loadVariables.ts'
+import { loadExtensionData } from '../../variables/loadExtensionData.ts'
 import { watchVariables } from '../../variables/watchVariables.ts'
 import { cssLanguages } from '../../config/languages.ts'
 import type { Uri } from 'vscode'
+import type { ExtensionData } from '../../variables/variableSchema.ts'
 
 const registerCompletionItemProviderMock = vi.hoisted(() =>
   vi.fn(),
@@ -39,8 +40,8 @@ vi.mock('../../config/paths.ts', () => ({
   resolveVariablesUri: vi.fn(),
 }))
 
-vi.mock('../../variables/loadVariables.ts', () => ({
-  loadVariables: vi.fn(),
+vi.mock('../../variables/loadExtensionData.ts', () => ({
+  loadExtensionData: vi.fn(),
 }))
 
 vi.mock('../../variables/watchVariables.ts', () => ({
@@ -71,7 +72,9 @@ describe('[EXTENSION] variableEntry', () => {
   }
 
   it('returns null when no variables file is configured', () => {
-    vi.mocked(resolveVariablesUri).mockReturnValue(undefined as unknown as Uri)
+    vi.mocked(resolveVariablesUri).mockReturnValue(
+      undefined as unknown as Uri,
+    )
 
     const result = variableEntry(
       cascadeRoot,
@@ -80,7 +83,7 @@ describe('[EXTENSION] variableEntry', () => {
 
     expect(result).toBeNull()
 
-    expect(loadVariables).not.toHaveBeenCalled()
+    expect(loadExtensionData).not.toHaveBeenCalled()
     expect(createProviderMock).not.toHaveBeenCalled()
     expect(watchVariables).not.toHaveBeenCalled()
     expect(
@@ -89,9 +92,20 @@ describe('[EXTENSION] variableEntry', () => {
   })
 
   it('sets up variable completion when a variables file exists', () => {
-    const variables = [
-      '--color-primary',
-      '--color-secondary',
+    const extensionData: ExtensionData = [
+      {
+        cssPath: '/project/src/button.css',
+        variables: [
+          '--color-primary',
+          '--color-secondary',
+        ],
+      },
+      {
+        cssPath: '/project/src/carousel.css',
+        variables: [
+          '--carousel-height',
+        ],
+      },
     ]
 
     const watcher = {
@@ -104,14 +118,16 @@ describe('[EXTENSION] variableEntry', () => {
 
     const completion = {
       provider: {},
-      updateVariables: vi.fn(),
+      updateExtensionData: vi.fn(),
     }
 
     vi.mocked(resolveVariablesUri).mockReturnValue(
       variablesUri as never,
     )
 
-    vi.mocked(loadVariables).mockReturnValue(variables)
+    vi.mocked(loadExtensionData).mockReturnValue(
+      extensionData,
+    )
 
     createProviderMock.mockReturnValue(completion)
 
@@ -132,17 +148,17 @@ describe('[EXTENSION] variableEntry', () => {
       cascadeRoot,
     )
 
-    expect(loadVariables).toHaveBeenCalledWith(
+    expect(loadExtensionData).toHaveBeenCalledWith(
       variablesUri,
     )
 
     expect(createProviderMock).toHaveBeenCalledWith(
-      variables,
+      extensionData,
     )
 
     expect(watchVariables).toHaveBeenCalledWith(
       variablesUri,
-      completion.updateVariables,
+      completion.updateExtensionData,
       output,
     )
 

@@ -20,7 +20,7 @@ export function parseSnippets(
 
   const content = readFileSync(file, 'utf8')
 
-  const parsed = parse(content)
+  const parsed: unknown = parse(content)
 
   const result = snippetsSchema.safeParse(parsed)
 

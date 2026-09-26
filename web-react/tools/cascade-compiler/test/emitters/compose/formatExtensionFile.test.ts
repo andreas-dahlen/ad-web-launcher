@@ -5,14 +5,15 @@ import type { ExtensionData } from '../../../src/types/emitter.types.ts'
 
 function createExtensionData(
   overrides: Partial<ExtensionData> = {},
-): ExtensionData {
-  return {
+): ExtensionData[] {
+  return [{
+    cssPath: "example",
     variables: [
       '--button-color',
       '--button-radius',
     ],
     ...overrides,
-  }
+  }]
 }
 
 describe('[EMITTER]', () => {

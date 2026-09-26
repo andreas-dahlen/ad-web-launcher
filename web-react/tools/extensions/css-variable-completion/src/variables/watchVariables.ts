@@ -1,9 +1,10 @@
 import * as vscode from 'vscode'
-import { loadVariables } from './loadVariables.ts'
+import { loadExtensionData } from './loadExtensionData.ts'
+import type { ExtensionData } from './variableSchema.ts'
 
 export function watchVariables(
   variablesUri: vscode.Uri,
-  updateVariables: (variables: string[]) => void,
+  updateVariables: (extensionData: ExtensionData) => void,
   output: vscode.OutputChannel,
 ): vscode.Disposable {
   output.appendLine(
@@ -16,13 +17,13 @@ export function watchVariables(
 
   const reloadVariables = (): void => {
     try {
-      const variables = loadVariables(variablesUri)
+      const extensionData = loadExtensionData(variablesUri)
 
 
-      updateVariables(variables)
+      updateVariables(extensionData)
 
       output.appendLine(
-        `[css variable completion] updated: ${variables.length} variables`,
+        `[css variable completion] updated: ${extensionData.length} variables`,
       )
     } catch (error) {
       output.appendLine(

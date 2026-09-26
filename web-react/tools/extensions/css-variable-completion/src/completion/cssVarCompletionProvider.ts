@@ -1,9 +1,10 @@
 import * as vscode from 'vscode'
+import type { ExtensionData } from '../variables/variableSchema.ts'
 
 export function createCssVariableCompletionProvider(
-  variables: string[]
+  extensionData: ExtensionData
 ) {
-  let currentVariables = variables
+  let currentData = extensionData
 
   const provider: vscode.CompletionItemProvider = {
     provideCompletionItems(
@@ -13,12 +14,21 @@ export function createCssVariableCompletionProvider(
       const line = document.lineAt(position.line).text
       const beforeCursor = line.slice(0, position.character)
 
+
       if (!/(?:^|[;{])\s*-/.test(beforeCursor)) {
         return new vscode.CompletionList([], true)
       }
       const isDoubleDash = /(?:^|[;{])\s*--/.test(beforeCursor)
 
-      const completions = currentVariables.map(variable => {
+
+      const currentFileData = currentData.find(data => document.uri.fsPath === data.cssPath)
+
+      if (!currentFileData) {
+        return new vscode.CompletionList([], true)
+      }
+
+
+      const completions = currentFileData.variables.map(variable => {
         const item = new vscode.CompletionItem(
           variable,
           vscode.CompletionItemKind.Variable,
@@ -43,8 +53,8 @@ export function createCssVariableCompletionProvider(
 
   return {
     provider,
-    updateVariables(variables: string[]) {
-      currentVariables = variables
+    updateExtensionData(extensionData: ExtensionData) {
+      currentData = extensionData
     },
   }
 }

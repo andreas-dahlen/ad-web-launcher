@@ -37,7 +37,25 @@ const compilerBoundaryFiles = [
   { pattern: 'tools/cascade-compiler/**/vite.ts', category: 'vite' },
 ]
 
+
+const matchSuggestionFiles = [
+  { pattern: 'tools/extensions/match-suggestions/src/extension.ts', category: 'entry' }
+]
+const cascadeVscodeFiles = [
+  { pattern: 'tools/extensions/cascade-vscode/src/extension.ts', category: 'entry' }
+]
+const cssVariableCompletionFiles = [
+  { pattern: 'tools/extensions/css-variable-completion/src/extension.ts', category: 'entry' }
+]
+const projectLintFiles = [
+  { pattern: 'tools/extensions/project-lint/src/extension.ts', category: 'entry' }
+]
+
 export const boundariesFiles = [
   ...appBoundaryFiles,
   ...compilerBoundaryFiles,
+  ...matchSuggestionFiles,
+  ...cascadeVscodeFiles,
+  ...cssVariableCompletionFiles,
+  ...projectLintFiles
 ]

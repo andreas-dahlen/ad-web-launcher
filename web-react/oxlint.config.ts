@@ -1,7 +1,7 @@
 import { defineConfig } from 'oxlint'
 
 import { boundarySettings } from './tools/lint/config/boundaries/settings.ts'
-import { appBoundaries, compilerBoundaries } from './tools/lint/config/boundaries/index.ts'
+import { appBoundaries, cascadeVscodeBoundaries, compilerBoundaries, cssVariableCompletionBoundaries, matchSuggestionsBoundaries, projectLintBoundaries } from './tools/lint/config/boundaries/index.ts'
 import { ignores } from './tools/lint/config/globalIgnores.ts'
 import { unusedVars } from './tools/lint/config/oxlint/unusedVars.ts'
 import { jsPlugins } from './tools/lint/config/oxlint/plugins.ts'
@@ -21,7 +21,11 @@ export default defineConfig({
   overrides: [
     appBoundaries,
     compilerBoundaries,
-    unusedVars,
+    matchSuggestionsBoundaries,
+    cascadeVscodeBoundaries,
+    cssVariableCompletionBoundaries,
+    projectLintBoundaries,
+    unusedVars
   ],
 
   plugins: [

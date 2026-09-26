@@ -1,5 +1,5 @@
 import * as vscode from 'vscode'
-import type { Snippets } from '../types/snippet.types.ts'
+import type { Snippet, Snippets } from '../types/snippet.types.ts'
 import picomatch from 'picomatch'
 
 export function createSnippetProvider(
@@ -21,8 +21,7 @@ export function createSnippetProvider(
       const snippets = Object.entries(snippetz)
 
       const matchingSnippets = snippets.filter(([_, snippet]) =>
-        !snippet.include ||
-        snippet.include.some(pattern => picomatch(pattern)(filePath))
+        isMatchForSnippetFile(snippet, filePath)
       )
 
       const line = document.lineAt(position.line).text
@@ -57,9 +56,23 @@ export function createSnippetProvider(
       ...triggers
     )
 
-  output.appendLine(
-    '[match suggestions] snippet test provider registered.'
-  )
+  // output.appendLine(
+  //   '[match suggestions] snippet test provider registered.'
+  // )
 
   return vscode.Disposable.from(completion)
+}
+
+function isMatchForSnippetFile(
+  snippet: Snippet,
+  filePath: string,
+): boolean {
+  const included =
+    !snippet.include ||
+    snippet.include.some(pattern => picomatch(pattern)(filePath))
+
+  const excluded =
+    snippet.exclude?.some(pattern => picomatch(pattern)(filePath))
+
+  return included && !excluded
 }

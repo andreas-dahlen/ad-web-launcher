@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest'
 
-import type { TokenData } from '../../../src/types/emitter.types.ts'
-import { assembleExtensionData } from '../../../src/emitters/extract/assemblers/assembleExtensionData.ts'
 import type { CssVarString, ValidPrefix } from '../../../src/types/cascade.types.ts'
+import type { PostData } from '../../../src/types/compiler.types.ts'
+import type { TokenData, TokenGroupData } from '../../../src/types/emitter.types.ts'
+import { assembleExtensionData } from '../../../src/emitters/extract/assemblers/assembleExtensionData.ts'
 
 function createToken(
   overrides: Partial<TokenData> = {},
@@ -21,40 +22,73 @@ function createToken(
   }
 }
 
+function createPostData(
+  overrides: Partial<PostData> = {},
+): PostData {
+  return {
+    cssPath: 'button.css',
+    variables: [
+      '--existing-color',
+      '--existing-radius',
+    ] as CssVarString[],
+    ...overrides,
+  } as PostData
+}
+
+function createTokenGroup(
+  overrides: Partial<TokenGroupData> = {},
+): TokenGroupData {
+  return {
+    cssPath: 'button.css',
+    tokens: [createToken()],
+    ...overrides,
+  } as TokenGroupData
+}
+
 describe('[EMITTERS]', () => {
   describe('assembleExtensionData', () => {
     it('preserves existing variables', () => {
-      const allVariables = [
-        '--existing-color',
-        '--existing-radius',
-      ] as CssVarString[]
-
       const result = assembleExtensionData(
-        allVariables,
-        []
+        [createPostData()],
+        [],
       )
 
-      expect(result.variables).toEqual(allVariables)
+      expect(result).toEqual([
+        {
+          cssPath: 'button.css',
+          variables: [
+            '--existing-color',
+            '--existing-radius',
+          ],
+        },
+      ])
     })
 
     it('adds the final variable for each token variable', () => {
       const result = assembleExtensionData(
         [],
-        [createToken()]
+        [createTokenGroup()],
       )
 
-      expect(result.variables).toContain(
-        '--final-button-test-color'
-      )
+      expect(result).toEqual([
+        {
+          cssPath: 'button.css',
+          variables: [
+            '--final-button-test-color',
+            '--o-button-test-color',
+            '--s-button-test-color',
+          ],
+        },
+      ])
     })
 
     it('adds variables for every allowed prefix', () => {
       const result = assembleExtensionData(
         [],
-        [createToken()]
+        [createTokenGroup()],
       )
 
-      expect(result.variables).toEqual([
+      expect(result[0].variables).toEqual([
         '--final-button-test-color',
         '--o-button-test-color',
         '--s-button-test-color',
@@ -65,32 +99,36 @@ describe('[EMITTERS]', () => {
       const result = assembleExtensionData(
         [],
         [
-          createToken({
-            infix: 'button',
-            variables: [
-              {
-                cssName: 'test-color',
-                key: 'color',
-                allowed: ['o'] as ValidPrefix[],
-                values: {},
-              },
+          createTokenGroup({
+            tokens: [
+              createToken({
+                infix: 'button',
+                variables: [
+                  {
+                    cssName: 'test-color',
+                    key: 'color',
+                    allowed: ['o'] as ValidPrefix[],
+                    values: {},
+                  },
+                ],
+              }),
+              createToken({
+                infix: 'button_hover',
+                variables: [
+                  {
+                    cssName: 'test-color',
+                    key: 'color',
+                    allowed: ['s'] as ValidPrefix[],
+                    values: {},
+                  },
+                ],
+              }),
             ],
           }),
-          createToken({
-            infix: 'button_hover',
-            variables: [
-              {
-                cssName: 'test-color',
-                key: 'color',
-                allowed: ['s'] as ValidPrefix[],
-                values: {},
-              },
-            ],
-          }),
-        ]
+        ],
       )
 
-      expect(result.variables).toEqual([
+      expect(result[0].variables).toEqual([
         '--final-button-test-color',
         '--o-button-test-color',
         '--final-button_hover-test-color',
@@ -99,17 +137,19 @@ describe('[EMITTERS]', () => {
     })
 
     it('deduplicates existing and generated variables', () => {
-      const allVariables = [
-        '--final-button-test-color',
-        '--existing-color',
-      ] as CssVarString[]
-
       const result = assembleExtensionData(
-        allVariables,
-        [createToken()]
+        [
+          createPostData({
+            variables: [
+              '--final-button-test-color',
+              '--existing-color',
+            ] as CssVarString[],
+          }),
+        ],
+        [createTokenGroup()],
       )
 
-      expect(result.variables).toEqual([
+      expect(result[0].variables).toEqual([
         '--final-button-test-color',
         '--existing-color',
         '--o-button-test-color',
@@ -121,31 +161,90 @@ describe('[EMITTERS]', () => {
       const result = assembleExtensionData(
         [],
         [
-          createToken({
-            variables: [
-              {
-                cssName: 'test-color',
-                key: 'color',
-                allowed: [],
-                values: {},
-              },
+          createTokenGroup({
+            tokens: [
+              createToken({
+                variables: [
+                  {
+                    cssName: 'test-color',
+                    key: 'color',
+                    allowed: [],
+                    values: {},
+                  },
+                ],
+              }),
             ],
           }),
-        ]
+        ],
       )
 
-      expect(result.variables).toEqual([
+      expect(result[0].variables).toEqual([
         '--final-button-test-color',
       ])
     })
 
     it('returns an empty collection when there are no variables', () => {
+      const result = assembleExtensionData([], [])
+
+      expect(result).toEqual([])
+    })
+
+    it('merges variables belonging to the same css file', () => {
       const result = assembleExtensionData(
-        [],
-        []
+        [
+          createPostData({
+            variables: ['--existing-color'] as CssVarString[],
+          }),
+        ],
+        [
+          createTokenGroup({
+            tokens: [createToken()],
+          }),
+        ],
       )
 
-      expect(result.variables).toEqual([])
+      expect(result).toEqual([
+        {
+          cssPath: 'button.css',
+          variables: [
+            '--existing-color',
+            '--final-button-test-color',
+            '--o-button-test-color',
+            '--s-button-test-color',
+          ],
+        },
+      ])
+    })
+
+    it('keeps variables for different css files separate', () => {
+      const result = assembleExtensionData(
+        [
+          createPostData({
+            cssPath: 'button.css',
+          }),
+          createPostData({
+            cssPath: 'label.css',
+            variables: ['--label-color'] as CssVarString[],
+          }),
+        ],
+        [],
+      )
+
+      expect(result).toEqual([
+        {
+          cssPath: 'button.css',
+          variables: [
+            '--existing-color',
+            '--existing-radius',
+          ],
+        },
+        {
+          cssPath: 'label.css',
+          variables: [
+            '--label-color',
+          ],
+        },
+      ])
     })
   })
 })

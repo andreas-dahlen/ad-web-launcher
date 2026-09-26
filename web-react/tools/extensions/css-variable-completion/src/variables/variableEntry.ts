@@ -1,6 +1,6 @@
 import { createCssVariableCompletionProvider } from '../completion/cssVarCompletionProvider.ts'
 import * as vscode from 'vscode'
-import { loadVariables } from './loadVariables.ts'
+import { loadExtensionData } from './loadExtensionData.ts'
 import { watchVariables } from './watchVariables.ts'
 import { cssLanguages } from '../config/languages.ts'
 import { resolveVariablesUri } from '../config/paths.ts'
@@ -15,12 +15,12 @@ export function variableEntry(
 
   if (!variablesUri) return null
 
-  const variables = loadVariables(variablesUri)
-  const completion = createCssVariableCompletionProvider(variables)
+  const data = loadExtensionData(variablesUri)
+  const completion = createCssVariableCompletionProvider(data)
 
   const watcher = watchVariables(
     variablesUri,
-    completion.updateVariables,
+    completion.updateExtensionData,
     output,
   )
 
