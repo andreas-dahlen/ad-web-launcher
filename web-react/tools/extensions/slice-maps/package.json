@@ -1,9 +1,9 @@
 {
   "publisher": "ad-web-launcher",
-  "name": "match-suggestions",
+  "name": "slice-maps",
   "type": "module",
-  "displayName": "Match Suggestions",
-  "description": "Type a configured pattern to get completion suggestions that extend it, or replace it with a snippet.",
+  "displayName": "Slice Maps",
+  "description": "Create slices of workspace folders and files for easier navigation.",
   "version": "0.0.1",
   "private": true,
   "engines": {
@@ -45,40 +45,49 @@
     "@vscode/vsce-sign@2.1.0": true
   },
   "contributes": {
-    "configuration": {
-      "properties": {
-        "matchSuggestions.snippetPath": {
-          "type": "string",
-          "default": ".vscode/ad-web.code-snippets",
-          "description": "Path to a snippet file."
-        },
-        "matchSuggestions.snippetTriggers": {
-          "type": "array",
-          "default": [
-            "ö",
-            "asd"
-          ],
-          "description": "Text prefixes that trigger snippet replacement suggestions."
-        },
-        "matchSuggestions.completions": {
-          "type": "object",
-          "default": {
-            "//": [
-              "NOTE",
-              "QUEST"
-            ]
-          },
-          "description": "Maps text patterns to completion suggestions."
-        },
-        "matchSuggestions.languages": {
-          "type": "array",
-          "default": [
-            "typescript",
-            "javascript"
-          ],
-          "description": "Language identifiers where matchSuggestions.completions is enabled."
+    "views": {
+      "explorer": [
+        {
+          "id": "sliceMaps",
+          "name": "Slice Maps",
+          "icon": "resources/slice-maps.svg"
         }
+      ]
+    },
+
+    "commands": [
+      {
+        "command": "sliceMaps.activate",
+        "title": "Activate Slice Map"
+      },
+      {
+        "command": "sliceMaps.create",
+        "title": "Create Slice Map"
+      },
+      {
+        "command": "sliceMaps.delete",
+        "title": "Delete Slice Map"
       }
+    ],
+
+    "menus": {
+      "view/item/context": [
+        {
+          "command": "sliceMaps.activate",
+          "when": "view == sliceMaps"
+        },
+        {
+          "command": "sliceMaps.delete",
+          "when": "view == sliceMaps"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "sliceMaps.create",
+          "when": "view == sliceMaps",
+          "group": "navigation"
+        }
+      ]
     }
   }
 }

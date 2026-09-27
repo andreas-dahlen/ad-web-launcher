@@ -25,6 +25,9 @@
 				]
 			}
 		],
-		"cssModulesIntellisense.diagnostics.classNotUsed.enabled": false
+		"cssModulesIntellisense.diagnostics.classNotUsed.enabled": false,
+		"files.exclude": {
+			"README.md": true
+		}
 	}
 }

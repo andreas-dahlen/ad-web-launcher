@@ -195,8 +195,13 @@ install-tokens:
     cd tools/extensions/cascade-vscode && npm run package
     code --install-extension tools/extensions/cascade-vscode/cascade-vscode-0.0.1.vsix --force
 
+# Builds compiler and installs the compiler extension.
+install-sm:
+    cd tools/extensions/slice-maps && npm run package
+    code --install-extension tools/extensions/slice-maps/slice-maps-0.0.1.vsix --force
+
 # Builds and installs all tools.
-install-extensions: install-cvc install-pl install-ms install-tokens 
+install-extensions: install-cvc install-pl install-ms install-tokens install-sm
 
 # Runs the compiler in watchMode. File emissions disabled.
 compiler:

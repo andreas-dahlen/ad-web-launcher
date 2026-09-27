@@ -5,7 +5,8 @@
     "**/.hg": true,
     "**/.jj": true,
     "**/.DS_Store": true,
-    "**/Thumbs.db": true
+    "**/Thumbs.db": true,
+    "README.md": true
   },
   "search.exclude": {
     "**/node_modules": true,
