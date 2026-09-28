@@ -30,9 +30,9 @@ export async function createSliceMaps(output: vscode.OutputChannel) {
     'exclude',
     {
       ...folderExclude,
-      'README.md': true,
+      'README.md': true
     },
-    vscode.ConfigurationTarget.WorkspaceFolder,
+    vscode.ConfigurationTarget.WorkspaceFolder
   )
 
   output.appendLine(JSON.stringify(inspect, null, 2))

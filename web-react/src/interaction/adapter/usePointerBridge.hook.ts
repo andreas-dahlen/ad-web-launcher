@@ -81,8 +81,7 @@ export function usePointerBridge({
     }
 
     function handlePointerMove(e: PointerEvent) {
-      if (!isActive.current) return
-      if (e.pointerId !== activePointerId.current) return
+      if (!isActive.current || (e.pointerId !== activePointerId.current)) return
 
       pipeline.orchestrate({
         eventType: 'move',

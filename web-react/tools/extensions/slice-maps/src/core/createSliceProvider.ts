@@ -52,7 +52,7 @@ export function createSliceProvider(
     getTreeItem(map: SliceMap): vscode.TreeItem {
       const item = new vscode.TreeItem(
         map.name,
-        vscode.TreeItemCollapsibleState.None,
+        vscode.TreeItemCollapsibleState.None
       )
 
       item.id = `${map.id}-${map.id === activeMapId}`
@@ -61,13 +61,13 @@ export function createSliceProvider(
         map.id === activeMapId ? 'circle-filled' : 'circle-outline',
         map.id === activeMapId
           ? new vscode.ThemeColor('charts.red')
-          : undefined,
+          : undefined
       )
 
       item.command = {
         command: 'sliceMaps.activate',
         title: 'Activate Slice Map',
-        arguments: [map.id],
+        arguments: [map.id]
       }
 
       return item
@@ -80,5 +80,4 @@ export function createSliceProvider(
     reload,
     treeProvider
   }
-
 }
