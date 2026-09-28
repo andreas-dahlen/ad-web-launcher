@@ -1,13 +1,7 @@
 
 import fs from 'node:fs'
 import path from 'node:path'
-
-type TreeNode = {
-  name: string
-  path: string
-  type: 'file' | 'folder'
-  children?: TreeNode[]
-}
+import type { TreeNode } from '../types/dataStructure.types.ts'
 
 export function loadTree(root: string): TreeNode {
   const name = path.basename(root)

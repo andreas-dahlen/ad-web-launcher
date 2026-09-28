@@ -23,6 +23,13 @@
 				"patterns": [
 					"web-react/tools/**"
 				]
+			},
+			{
+				"id": "mulj9gv3nxmfs",
+				"name": "slice-maps",
+				"patterns": [
+					"web-react/tools/extensions/slice-maps/**"
+				]
 			}
 		],
 		"cssModulesIntellisense.diagnostics.classNotUsed.enabled": false,

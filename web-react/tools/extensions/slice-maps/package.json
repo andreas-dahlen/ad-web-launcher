@@ -24,6 +24,7 @@
     "package": "npm run build && vsce package --allow-missing-repository"
   },
   "dependencies": {
+    "find-up": "^8.0.0",
     "jsonc-parser": "^3.3.1",
     "picomatch": "^4.0.7",
     "zod": "^4.6.5"
@@ -54,7 +55,6 @@
         }
       ]
     },
-
     "commands": [
       {
         "command": "sliceMaps.activate",
@@ -65,20 +65,23 @@
         "title": "Create Slice Map"
       },
       {
+        "command": "sliceMaps.rename",
+        "title": "Rename Slice Map"
+      },
+      {
         "command": "sliceMaps.delete",
         "title": "Delete Slice Map"
       }
     ],
-
     "menus": {
       "view/item/context": [
         {
-          "command": "sliceMaps.activate",
-          "when": "view == sliceMaps"
+          "command": "sliceMaps.rename",
+          "when": "view == sliceMaps && viewItem == sliceMap"
         },
         {
           "command": "sliceMaps.delete",
-          "when": "view == sliceMaps"
+          "when": "view == sliceMaps && viewItem == sliceMap"
         }
       ],
       "view/title": [

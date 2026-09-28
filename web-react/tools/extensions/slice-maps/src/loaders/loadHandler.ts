@@ -2,7 +2,7 @@ import * as vscode from 'vscode'
 import { loadTree } from './loadTree.ts'
 import type { LoadedConfig, SliceMap } from '../types/dataStructure.types.ts'
 
-
+//NOTE return only sliceMaps OR expose 3 getter functions... possibly export load... load.getTree... load.getSliceMaps... whatever...
 export function loadHandler(context: vscode.ExtensionContext): LoadedConfig | null {
   const root = vscode.workspace.workspaceFolders?.[0]
 
