@@ -14,10 +14,6 @@ export function createSliceProvider(
 
   if (!loaded) return
 
-  // const maps = [
-  //   { id: 'app', name: 'app' },
-  //   { id: 'tools', name: 'tools' },
-
   const maps = loaded.sliceMaps
   // ]
   const treeChanged = new vscode.EventEmitter<void>()

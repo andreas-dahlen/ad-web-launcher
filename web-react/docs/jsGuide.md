@@ -62,6 +62,35 @@
 // side effects only
 ```
 
+const array = [{key: value}, {key: value}]
+
+for (const thisObject of array) {
+
+  console.log(thisObject.key)
+}
+
+for (const [index, thisObject] of array.entries()) {
+
+  console.log(index, thisObject.key)
+}
+
+for (const {key, key2} of array) {
+
+  console.log(key, key2)
+}
+
+const thisObject = {key: value, key2: value2}
+
+Object.keys(thisObject)        // ['key', 'key2']
+Object.values(thisObject)       // [value, value2]
+Object.entries(thisObject)      // [['key', value], ['key2', value2]]
+
+Object.keys(thisObject).map(key => console.log(key))
+
+Object.entries(thisObject).forEach(([key, value]) => console.log(key, value))
+
+
+
 ---
 
 ### `.find()`
