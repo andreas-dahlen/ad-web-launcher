@@ -10,7 +10,35 @@ default: help
 
 # ================== GIT ====================
 
-diff-branches:
+push *args:
+    if [ -z "{{args}}" ]; then \
+        echo "No commit message provided"; \
+        exit 1; \
+    else \
+        git add --all; \
+        git commit -m "{{args}}"; \
+        git push; \
+    fi
+
+rebase:
+    @git fetch origin
+    @git rebase origin/main
+    @git push --force-with-lease
+
+sync-main:
+    @git switch main
+    @git merge dev
+    @git push
+
+done *args:
+    @test "$(git branch --show-current)" = "dev" || \
+        (echo "Must be on dev"; exit 1)
+    @just push "{{args}}"
+    @just rebase
+    @just sync-main
+    @git switch dev
+    
+diff:
     @echo "Trees:"
     @git diff --quiet main dev \
         && echo "  ✓ identical" \
@@ -19,20 +47,6 @@ diff-branches:
     @test "$(git rev-parse main)" = "$(git rev-parse dev)" \
         && echo "  ✓ identical" \
         || echo "  ✗ differ"
-
-sync-main:
-    @git switch main
-    @git merge dev
-    @git push
-
-push *args:
-    if [ -z "{{args}}" ]; then \
-        echo "No commit message provided"; \
-    else \
-        git add --all; \
-        git commit -m "{{args}}"; \
-        git push; \
-    fi
 
 # ================== DEVELOPMENT ====================
 audit *args:
