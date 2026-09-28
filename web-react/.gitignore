@@ -26,4 +26,4 @@ coverage
 
 
 # generated json .vitest folders... TODO needs evaluation...
-.vitest/*
+.vitest/**.vsix
