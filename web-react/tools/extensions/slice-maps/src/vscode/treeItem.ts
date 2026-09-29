@@ -3,7 +3,8 @@ import type { SliceMap } from '../types/dataStructure.types.ts'
 
 export function treeItem(
   map: SliceMap,
-  isActive: boolean
+  isActive: boolean,
+  isConfiguring: boolean
 ): vscode.TreeItem {
   const item = new vscode.TreeItem(
     map.name,
@@ -13,6 +14,7 @@ export function treeItem(
   item.id = `${map.id}-${isActive}`
 
   item.contextValue = 'sliceMap'
+  item.description = isConfiguring ? '⚙ CONFIG' : undefined
 
   item.iconPath = new vscode.ThemeIcon(
     isActive ? 'circle-filled' : 'circle-outline',
@@ -22,8 +24,8 @@ export function treeItem(
   )
 
   item.command = {
-    command: 'sliceMaps.activate',
-    title: 'Activate Slice Map',
+    command: 'sliceMaps.toggle',
+    title: 'Toggle Slice Map',
     arguments: [map.id]
   }
 

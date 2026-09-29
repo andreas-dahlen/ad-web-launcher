@@ -10,16 +10,17 @@ export async function createMap(
   })
 
 
-  if (name === undefined) {
+  if (name === undefined || name.trim().length === 0) {
     return null
   }
 
 
   return {
     id: crypto.randomUUID(),
-    name: name || 'right click to rename',
+    name: name.trim(),
     files: [],
     folders: [],
-    names: []
+    names: [],
+    resolvedExclude: new Map()
   }
 }

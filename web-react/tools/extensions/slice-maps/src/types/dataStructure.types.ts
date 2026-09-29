@@ -1,3 +1,4 @@
+import type { UUID } from 'node:crypto'
 
 export type TreeNode = {
   name: string
@@ -7,11 +8,12 @@ export type TreeNode = {
 }
 
 export type SliceMap = {
-  id: string
+  id: UUID
   name: string
   files: string[]
   folders: string[]
   names: string[]
+  resolvedExclude: Map<string, boolean>
 }
 
 export type LoadedConfig = {

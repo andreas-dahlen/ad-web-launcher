@@ -1,61 +1,68 @@
-import type { UUID } from 'node:crypto'
-import type { LoadedConfig, SliceMap } from '../types/dataStructure.types.ts'
 import * as vscode from 'vscode'
+import type { UUID } from 'node:crypto'
+import type { SliceMap } from '../types/dataStructure.types.ts'
 
 export type SliceCache = NonNullable<ReturnType<typeof createSliceMapCache>>
 
 export function createSliceMapCache(
   context: vscode.ExtensionContext,
-  data: LoadedConfig
+  sliceMaps: SliceMap[]
 ) {
 
   async function persist(): Promise<void> {
     await context.workspaceState.update(
       'sliceMaps',
-      data.sliceMaps
+      sliceMaps
     )
   }
 
   function get(): SliceMap[] {
-    return data.sliceMaps
+    return sliceMaps
   }
 
   function getById(id: UUID): SliceMap | null {
-    return data.sliceMaps.find(map => map.id === id) ?? null
+    return sliceMaps.find(map => map.id === id) ?? null
   }
 
   async function add(map: SliceMap): Promise<void> {
-    data.sliceMaps.push(map)
+    sliceMaps.push(map)
     await persist()
   }
 
   async function remove(id: UUID): Promise<SliceMap | null> {
-    const index = data.sliceMaps.findIndex(map => map.id === id)
+    const index = sliceMaps.findIndex(map => map.id === id)
 
     if (index === -1) return null
 
-    const [map] = data.sliceMaps.splice(index, 1)
+    const [map] = sliceMaps.splice(index, 1)
 
     await persist()
 
     return map
   }
 
-  async function update(map: SliceMap): Promise<void> {
-    const index = data.sliceMaps.findIndex(item => item.id === map.id)
+  async function replace(map: SliceMap): Promise<void> {
+    const index = sliceMaps.findIndex(item => item.id === map.id)
 
     if (index === -1) return
 
-    data.sliceMaps[index] = map
+    sliceMaps[index] = map
     await persist()
   }
 
-  async function rename(id: UUID, name: string): Promise<void> {
-    const index = data.sliceMaps.findIndex(item => item.id === id)
+  async function patch(
+    id: UUID,
+    patch: Partial<SliceMap>
+  ): Promise<void> {
+    const index = sliceMaps.findIndex(item => item.id === id)
 
     if (index === -1) return
 
-    data.sliceMaps[index].name = name
+    // Object.assign(map, patch)
+    // await persist()
+
+
+    sliceMaps[index] = { ...sliceMaps[index], ...patch }
     await persist()
   }
 
@@ -64,7 +71,7 @@ export function createSliceMapCache(
     getById,
     add,
     remove,
-    update,
-    rename
+    replace,
+    patch
   }
 }

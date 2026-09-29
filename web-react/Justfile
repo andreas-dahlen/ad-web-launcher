@@ -48,6 +48,9 @@ diff:
         && echo "  ✓ identical" \
         || echo "  ✗ differ"
 
+git-remove glob:
+    git ls-files -z "{{glob}}" | xargs -0 -r git rm --cached
+    
 # ================== DEVELOPMENT ====================
 audit *args:
     if [ -z "{{args}}" ]; then \

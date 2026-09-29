@@ -57,8 +57,13 @@
     },
     "commands": [
       {
-        "command": "sliceMaps.activate",
-        "title": "Activate Slice Map"
+        "command": "sliceMaps.toggle",
+        "title": "Toggle Slice Map"
+      },
+      {
+        "command": "sliceMaps.configure",
+        "title": "Configure Slice Map",
+        "icon": "$(settings-gear)"
       },
       {
         "command": "sliceMaps.create",
@@ -71,10 +76,26 @@
       {
         "command": "sliceMaps.delete",
         "title": "Delete Slice Map"
+      },
+      {
+        "command": "sliceMaps.addToSlice",
+        "title": "Add to Slice Map"
       }
     ],
     "menus": {
+      "explorer/context": [
+        {
+          "command": "sliceMaps.addToSlice",
+          "when": "resourceScheme == file"
+        }
+      ],
+
       "view/item/context": [
+        {
+          "command": "sliceMaps.configure",
+          "when": "view == sliceMaps && viewItem == sliceMap",
+          "group": "inline"
+        },
         {
           "command": "sliceMaps.rename",
           "when": "view == sliceMaps && viewItem == sliceMap"
