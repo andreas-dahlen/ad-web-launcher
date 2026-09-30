@@ -41,6 +41,10 @@ export function register(
       'sliceMaps.addToSlice',
       (uri: vscode.Uri) => maps.addPathToSliceMap(uri)
     ),
+    vscode.commands.registerCommand(
+      'sliceMaps.removeFromSlice',
+      (uri: vscode.Uri) => maps.removePathFromSliceMap(uri)
+    ),
 
 
     vscode.workspace.onDidChangeConfiguration(event => {

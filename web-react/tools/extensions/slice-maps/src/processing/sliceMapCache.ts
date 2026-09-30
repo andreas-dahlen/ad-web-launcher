@@ -1,6 +1,6 @@
 import * as vscode from 'vscode'
 import type { UUID } from 'node:crypto'
-import type { SliceMap } from '../types/dataStructure.types.ts'
+import type { AddContent, RemoveContent, SliceMap } from '../types/dataStructure.types.ts'
 
 export type SliceCache = NonNullable<ReturnType<typeof createSliceMapCache>>
 
@@ -50,19 +50,36 @@ export function createSliceMapCache(
     await persist()
   }
 
-  async function patch(
+  async function addContent(
     id: UUID,
-    patch: Partial<SliceMap>
+    value: string,
+    type: AddContent
   ): Promise<void> {
-    const index = sliceMaps.findIndex(item => item.id === id)
+    const map = sliceMaps.find(item => item.id === id)
+    if (!map) return
 
-    if (index === -1) return
+    if (type === "name") {
+      map[type] = value
+      await persist()
+      return
+    }
 
-    // Object.assign(map, patch)
-    // await persist()
+    if (map[type].includes(value)) return
 
+    map[type].push(value)
 
-    sliceMaps[index] = { ...sliceMaps[index], ...patch }
+    await persist()
+  }
+
+  async function removeContent(
+    id: UUID,
+    value: string,
+    type: RemoveContent
+  ): Promise<void> {
+    const map = sliceMaps.find(item => item.id === id)
+    if (!map) return
+
+    map[type] = map[type].filter(item => item !== value)
     await persist()
   }
 
@@ -72,6 +89,7 @@ export function createSliceMapCache(
     add,
     remove,
     replace,
-    patch
+    addContent,
+    removeContent
   }
 }

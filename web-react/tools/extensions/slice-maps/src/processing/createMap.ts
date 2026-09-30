@@ -20,7 +20,6 @@ export async function createMap(
     name: name.trim(),
     files: [],
     folders: [],
-    names: [],
-    resolvedExclude: new Map()
+    names: []
   }
 }

@@ -80,12 +80,21 @@
       {
         "command": "sliceMaps.addToSlice",
         "title": "Add to Slice Map"
+      },
+      {
+        "command": "sliceMaps.removeFromSlice",
+        "title": "Remove from Slice Map"
       }
+
     ],
     "menus": {
       "explorer/context": [
         {
           "command": "sliceMaps.addToSlice",
+          "when": "resourceScheme == file"
+        },
+        {
+          "command": "sliceMaps.removeFromSlice",
           "when": "resourceScheme == file"
         }
       ],

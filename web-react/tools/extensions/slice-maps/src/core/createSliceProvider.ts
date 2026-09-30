@@ -7,9 +7,10 @@ import type { UUID } from 'node:crypto'
 import { createSliceMapCache } from '../processing/sliceMapCache.ts'
 import { deactivateMap } from '../processing/deactivateMap.ts'
 import { loadHandler } from '../loaders/loadHandler.ts'
-import { addPathToMap } from '../processing/addPathToMap.ts'
+import { requestSliceMap } from '../processing/requestSliceMap.ts'
 import { showMsg } from '../utils/showMsg.ts'
 import { formatPath } from '../utils/formatPath.ts'
+import { exclusionHandler } from '../exclude/exclusionHandler.ts'
 
 export type SliceProvider = NonNullable<ReturnType<typeof createSliceProvider>>
 export function createSliceProvider(
@@ -20,11 +21,15 @@ export function createSliceProvider(
 
   const loader = loadHandler(context, root)
   const cache = createSliceMapCache(context, loader.sliceMaps())
+  const excluder = exclusionHandler(loader)
+
+  const target = loader.getExcludeConfigTarget()
 
   const treeChanged = new vscode.EventEmitter<void>()
   let activeMapId: UUID | undefined
   let activeConfigId: UUID | undefined
 
+  let localExclude: Record<string, boolean> | undefined
 
   async function createSliceMap(): Promise<void> {
     const map = await createMap()
@@ -38,23 +43,25 @@ export function createSliceProvider(
   }
 
   async function toggleSliceMap(id: UUID): Promise<void> {
+
     const map = cache.getById(id)
     if (!map) return
-    const exclude = loader.exclude()
-    const config = loader.getExcludeConfig()
+
     if (activeMapId === id) {
+      if (!localExclude) throw new Error("lol")
+      await deactivateMap(localExclude, target)
+
       activeMapId = undefined
       treeChanged.fire()
-      await deactivateMap(map, exclude, config)
-
       output.appendLine('[slice maps] deactivated')
     } else {
-      // const tree = loader.fileTree()
-      // const newMap: SliceMap | null = resolveExclusions(map, tree)
-      // 
-      // const activationMap = newMap ?? map
-      // await activateMap(activationMap, exclude, config)
-      // if (newMap) await cache.update(newMap)
+      if (activeMapId !== undefined) {
+        if (!localExclude) throw new Error("lol")
+        await deactivateMap(localExclude, target)
+      }
+      localExclude = loader.getLocalExclude()
+      const exclude = excluder.resolve(map)
+      await activateMap(exclude, target) //does it need to know localExclude?
 
       activeMapId = id
       output.appendLine(`[slice maps] activated: ${id}`)
@@ -62,7 +69,7 @@ export function createSliceProvider(
     }
   }
 
-  function toggleConfig(id: UUID): void {
+  async function toggleConfig(id: UUID): Promise<void> {
     if (activeConfigId === id) {
       activeConfigId = undefined
     } else {
@@ -86,7 +93,7 @@ export function createSliceProvider(
 
     if (!name) return
 
-    await cache.patch(id, { name })
+    await cache.addContent(id, name, "name")
 
     treeChanged.fire()
   }
@@ -99,7 +106,36 @@ export function createSliceProvider(
     let id = activeConfigId ?? activeMapId
 
     if (!id) {
-      const checkId = await addPathToMap(cache.get())
+      const checkId = await requestSliceMap(cache.get())
+      if (!checkId) return
+      id = checkId
+      activeConfigId = checkId
+      treeChanged.fire()
+    }
+
+    const map = cache.getById(id)
+    if (!map) return //log?
+
+    await cache.addContent(id, resolvedPath.value, resolvedPath.type)
+
+
+    showMsg(`[slice maps] added ${resolvedPath.type} to ${map.name}`)
+    treeChanged.fire()
+
+    if (activeMapId) {
+      //need to update activeMap if there is one active.
+    }
+  }
+
+  async function removePathFromSliceMap(uri: vscode.Uri): Promise<void> {
+
+    //NOTE formatPath uses statSync which could throw
+    const resolvedPath = formatPath(uri, root)
+
+    let id = activeConfigId ?? activeMapId
+
+    if (!id) {
+      const checkId = await requestSliceMap(cache.get())
       if (!checkId) return
       id = checkId
       activeConfigId = checkId
@@ -109,23 +145,14 @@ export function createSliceProvider(
     const map = cache.getById(id)
     if (!map) return
 
-    if (resolvedPath.type === "file") {
-      await cache.patch(id, { files: [...map.files, resolvedPath.path] })
-    } else {
-      await cache.patch(id, { folders: [...map.folders, resolvedPath.path] })
-    }
+    await cache.removeContent(id, resolvedPath.value, resolvedPath.type)
 
-    showMsg(`[slice maps] added ${resolvedPath.type} to ${map.name}`)
+    showMsg(`[slice maps] removed ${resolvedPath.type} to ${map.name}`)
+    treeChanged.fire()
 
     if (activeMapId) {
       //need to update activeMap if there is one active.
     }
-  }
-
-
-
-  function reload(): void {
-    output.appendLine('[slice maps] reload')
   }
   const treeProvider: vscode.TreeDataProvider<SliceMap> = {
     onDidChangeTreeData: treeChanged.event,
@@ -141,14 +168,22 @@ export function createSliceProvider(
       )
     }
   }
+  async function deactivate() {
+    if (activeMapId !== undefined && localExclude) {
+      await deactivateMap(localExclude, target)
+    }
+  }
+
+
   return {
     toggleSliceMap,
     toggleConfig,
     createSliceMap,
     removeSliceMap,
     renameSliceMap,
-    reload,
     addPathToSliceMap,
-    treeProvider
+    removePathFromSliceMap,
+    treeProvider,
+    deactivate
   }
 }

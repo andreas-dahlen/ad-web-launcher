@@ -9,11 +9,11 @@ export const loadHandler = (context: vscode.ExtensionContext, root: vscode.Works
       return vscode.workspace.getConfiguration('SliceMaps')
     },
 
-    getExcludeConfig() {
+    getExcludeConfigTarget() {
       return vscode.workspace.getConfiguration('files', root.uri)
     },
 
-    exclude(): Record<string, boolean> {
+    getLocalExclude(): Record<string, boolean> {
       const config = vscode.workspace.getConfiguration('files', root.uri)
       const inspect = config.inspect<Record<string, boolean>>('exclude')
       return inspect?.workspaceFolderValue ?? {}
@@ -23,7 +23,7 @@ export const loadHandler = (context: vscode.ExtensionContext, root: vscode.Works
       return context.workspaceState.get<SliceMap[]>('sliceMaps') ?? []
     },
 
-    fileTree(): TreeNode {
+    fileTree(): TreeNode[] {
       return loadTree(root.uri.fsPath)
     }
   }

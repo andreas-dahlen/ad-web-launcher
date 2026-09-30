@@ -1,7 +1,14 @@
 import * as vscode from 'vscode'
-import { createSliceProvider } from './core/createSliceProvider.ts'
+import { createSliceProvider, type SliceProvider } from './core/createSliceProvider.ts'
 import { register } from './vscode/register.ts'
 
+type State = {
+  maps: SliceProvider | undefined
+}
+
+const state: State = {
+  maps: undefined
+}
 export function activate(context: vscode.ExtensionContext): void {
   const root = vscode.workspace.workspaceFolders?.[0]
 
@@ -15,11 +22,13 @@ export function activate(context: vscode.ExtensionContext): void {
 
   output.appendLine('[slice maps] loaded')
 
-  const maps = createSliceProvider(context, root, output)
+  state.maps = createSliceProvider(context, root, output)
 
-  if (!maps) return
+  if (!state.maps) return
 
-  register(context, maps, output)
+  register(context, state.maps, output)
 }
 
-export function deactivate(): void { }
+export async function deactivate(): Promise<void> {
+  await state.maps?.deactivate()
+}
