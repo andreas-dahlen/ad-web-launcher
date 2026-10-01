@@ -11,6 +11,7 @@ import { requestSliceMap } from '../processing/requestSliceMap.ts'
 import { showMsg } from '../utils/showMsg.ts'
 import { formatPath } from '../utils/formatPath.ts'
 import { exclusionHandler } from '../exclude/exclusionHandler.ts'
+import { activateMap } from '../processing/activateMap.ts'
 
 export type SliceProvider = NonNullable<ReturnType<typeof createSliceProvider>>
 export function createSliceProvider(
@@ -61,7 +62,7 @@ export function createSliceProvider(
       }
       localExclude = loader.getLocalExclude()
       const exclude = excluder.resolve(map)
-      await activateMap(exclude, target) //does it need to know localExclude?
+      await activateMap(localExclude, exclude, target)
 
       activeMapId = id
       output.appendLine(`[slice maps] activated: ${id}`)

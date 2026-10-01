@@ -52,8 +52,8 @@ export function register(
         return
       }
 
-      output.appendLine('[slice maps] configuration changed')
-      maps.reload()
+      output.appendLine('[slice maps] configuration changed. Need to reload')
+      // maps.reload()
     })
 
     //need a watcher on the settings.json file... and reload there aswell...?
