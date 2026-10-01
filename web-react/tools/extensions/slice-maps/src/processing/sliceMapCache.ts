@@ -83,6 +83,22 @@ export function createSliceMapCache(
     await persist()
   }
 
+  function getLocalExclude(): Record<string, boolean> | undefined {
+    return context.workspaceState.get<Record<string, boolean>>('localExclude')
+  }
+  async function setLocalExclude(localExclude: Record<string, boolean>): Promise<void> {
+    await context.workspaceState.update(
+      'localExclude',
+      localExclude
+    )
+  }
+  async function removeLocalExclude(): Promise<void> {
+    await context.workspaceState.update(
+      'localExclude',
+      undefined
+    )
+  }
+
   return {
     get,
     getById,
@@ -90,6 +106,9 @@ export function createSliceMapCache(
     remove,
     replace,
     addContent,
-    removeContent
+    removeContent,
+    getLocalExclude,
+    setLocalExclude,
+    removeLocalExclude
   }
 }

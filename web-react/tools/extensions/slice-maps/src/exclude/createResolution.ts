@@ -4,11 +4,43 @@ export function createResolution(
   map: SliceMap,
   fileTree: TreeNode[]
 ): Map<string, boolean> {
-  const resolvedExclude = new Map<string, boolean>()
+
+
+  const resolution = initialResolution(map, fileTree)
+
+  const exclude = new Map<string, boolean>()
+
+  let currentTarget: string | undefined
+
+  for (const path of resolution.exclude.toReversed()) {
+    if (path.startsWith(`${currentTarget}/`)) {
+      continue
+    }
+
+    exclude.set(path, true)
+    currentTarget = path
+  }
+
+  return exclude
+}
+
+type Resolution = {
+  include: string[]
+  exclude: string[]
+}
+
+function initialResolution(
+  map: SliceMap,
+  fileTree: TreeNode[]
+): Resolution {
 
   if (map.files.length === 0 && map.folders.length === 0) {
-    return resolvedExclude
+    return { include: [], exclude: [] }
   }
+
+  const include = new Set<string>()
+  const exclude = new Set<string>()
+
 
   function shouldIncludeNode(
     node: TreeNode,
@@ -23,19 +55,25 @@ export function createResolution(
       map.files.includes(node.path)
 
     if (isInsideIncludedFolder || isIncludedFolder || isIncludedFile) {
-      resolvedExclude.set(node.path, false)
+      include.add(node.path)
       return true
     }
 
     if (node.type === 'files') {
-      resolvedExclude.set(node.path, true)
+      exclude.add(node.path)
       return false
     }
 
-    const hasIncludedChild = node.children?.some(child =>
-      shouldIncludeNode(child, false)) ?? false
+    const hasIncludedChild =
+      node.children?.some(child =>
+        shouldIncludeNode(child, false)
+      ) ?? false
 
-    resolvedExclude.set(node.path, !hasIncludedChild)
+    if (hasIncludedChild) {
+      include.add(node.path)
+    } else {
+      exclude.add(node.path)
+    }
 
     return hasIncludedChild
   }
@@ -44,5 +82,8 @@ export function createResolution(
     shouldIncludeNode(node, false)
   }
 
-  return resolvedExclude
+  return {
+    include: [...include],
+    exclude: [...exclude]
+  }
 }
