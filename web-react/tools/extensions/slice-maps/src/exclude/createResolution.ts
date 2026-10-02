@@ -3,59 +3,70 @@ import type { SliceMap, TreeNode } from '../types/dataStructure.types.ts'
 export function createResolution(
   map: SliceMap,
   fileTree: TreeNode[]
-): Map<string, boolean> {
+): Record<string, true> {
 
 
-  const resolution = initialResolution(map, fileTree)
+  const accumulated = accumulateExclusions(map, fileTree)
 
-  const exclude = new Map<string, boolean>()
+  const exclude: Record<string, true> = {}
 
   let currentTarget: string | undefined
 
-  for (const path of resolution.exclude.toReversed()) {
+  for (const path of accumulated.toReversed()) {
     if (path.startsWith(`${currentTarget}/`)) {
       continue
     }
 
-    exclude.set(path, true)
+    exclude[path] = true
     currentTarget = path
   }
 
   return exclude
 }
 
-type Resolution = {
-  include: string[]
-  exclude: string[]
-}
-
-function initialResolution(
+function accumulateExclusions(
   map: SliceMap,
   fileTree: TreeNode[]
-): Resolution {
+): string[] {
 
-  if (map.files.length === 0 && map.folders.length === 0) {
-    return { include: [], exclude: [] }
+  if (
+    map.includeFiles.length === 0 &&
+    map.includeFolders.length === 0 &&
+    map.excludeFiles.length === 0 &&
+    map.excludeFolders.length === 0
+  ) {
+    return []
   }
 
-  const include = new Set<string>()
   const exclude = new Set<string>()
 
 
   function shouldIncludeNode(
     node: TreeNode,
-    isInsideIncludedFolder: boolean,
+    isInsideIncludedFolder: boolean
   ): boolean {
     const isIncludedFolder =
       node.type === 'folders' &&
-      map.folders.includes(node.path)
+      map.includeFolders.includes(node.path)
 
     const isIncludedFile =
       node.type === 'files' &&
-      map.files.includes(node.path)
+      map.includeFiles.includes(node.path)
+
+    const isExcludeFolder =
+      node.type === 'folders' &&
+      map.excludeFolders.includes(node.path)
+
+    const isExcludeFile =
+      node.type === 'files' &&
+      map.excludeFiles.includes(node.path)
+
+    if (isExcludeFolder || isExcludeFile) {
+      exclude.add(node.path)
+      return false
+    }
 
     if (isInsideIncludedFolder || isIncludedFolder || isIncludedFile) {
-      include.add(node.path)
       return true
     }
 
@@ -66,12 +77,13 @@ function initialResolution(
 
     const hasIncludedChild =
       node.children?.some(child =>
-        shouldIncludeNode(child, false)
+        shouldIncludeNode(
+          child,
+          isInsideIncludedFolder || isIncludedFolder
+        )
       ) ?? false
 
-    if (hasIncludedChild) {
-      include.add(node.path)
-    } else {
+    if (!hasIncludedChild) {
       exclude.add(node.path)
     }
 
@@ -82,8 +94,5 @@ function initialResolution(
     shouldIncludeNode(node, false)
   }
 
-  return {
-    include: [...include],
-    exclude: [...exclude]
-  }
+  return [...exclude]
 }

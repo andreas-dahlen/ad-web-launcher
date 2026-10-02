@@ -1,11 +1,12 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import type * as vscode from 'vscode'
-import type { FormatPathResult } from '../types/dataStructure.types.ts'
+import type { FormatPathResult, UserChoice } from '../types/dataStructure.types.ts'
 
 export function formatPath(
   uri: vscode.Uri,
-  root: vscode.WorkspaceFolder
+  root: vscode.WorkspaceFolder,
+  choice: UserChoice
 ): FormatPathResult {
   const absolutePath = uri.fsPath
 
@@ -17,7 +18,7 @@ export function formatPath(
   return {
     value: solvedPath,
     type: fs.statSync(absolutePath).isDirectory()
-      ? 'folders'
-      : 'files',
+      ? `${choice}Folders`
+      : `${choice}Files`
   }
 }

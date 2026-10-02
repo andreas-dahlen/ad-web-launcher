@@ -4,33 +4,35 @@ import * as vscode from 'vscode'
 export type TreeNode = {
   name: string
   path: string
-  type: PathContent
+  type: 'files' | 'folders'
   children?: TreeNode[]
 }
 
 export type SliceMap = {
   id: UUID
   name: string
-  files: string[]
-  folders: string[]
-  names: string[]
+  includeFiles: string[]
+  includeFolders: string[]
+  excludeFiles: string[]
+  excludeFolders: string[]
 }
 
+export type UserChoice = "include" | "exclude"
+
 export type SliceMapResolution = SliceMap & {
-  resolvedExclude: Map<string, boolean>
+  resolvedExclude: Record<string, true>
 }
 
 export type ExcludePackage = {
   configTarget: vscode.WorkspaceConfiguration
-  resolvedExclude: Map<string, boolean>
+  resolvedExclude: Record<string, true>
 }
 
 export type AddContent = Exclude<keyof SliceMap, 'id'>
 export type RemoveContent = Exclude<AddContent, "name">
 
-export type PathContent = Exclude<RemoveContent, "names">
 
 export type FormatPathResult = {
   value: string
-  type: PathContent
+  type: RemoveContent
 }

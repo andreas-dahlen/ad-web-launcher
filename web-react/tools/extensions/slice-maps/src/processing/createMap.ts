@@ -18,8 +18,9 @@ export async function createMap(
   return {
     id: crypto.randomUUID(),
     name: name.trim(),
-    files: [],
-    folders: [],
-    names: []
+    includeFiles: [],
+    includeFolders: [],
+    excludeFiles: [],
+    excludeFolders: []
   }
 }

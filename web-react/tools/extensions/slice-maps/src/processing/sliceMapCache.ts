@@ -1,6 +1,6 @@
 import * as vscode from 'vscode'
 import type { UUID } from 'node:crypto'
-import type { AddContent, RemoveContent, SliceMap } from '../types/dataStructure.types.ts'
+import type { SliceMap } from '../types/dataStructure.types.ts'
 
 export type SliceCache = NonNullable<ReturnType<typeof createSliceMapCache>>
 
@@ -50,38 +50,55 @@ export function createSliceMapCache(
     await persist()
   }
 
-  async function addContent(
-    id: UUID,
-    value: string,
-    type: AddContent
-  ): Promise<void> {
+  async function rename(id: UUID, name: string): Promise<void> {
     const map = sliceMaps.find(item => item.id === id)
     if (!map) return
 
-    if (type === "name") {
-      map[type] = value
-      await persist()
-      return
-    }
-
-    if (map[type].includes(value)) return
-
-    map[type].push(value)
-
+    map.name = name
     await persist()
   }
 
-  async function removeContent(
-    id: UUID,
-    value: string,
-    type: RemoveContent
-  ): Promise<void> {
-    const map = sliceMaps.find(item => item.id === id)
-    if (!map) return
+  // async function addContent(
+  //   id: UUID,
+  //   value: string,
+  //   type: AddContent
+  // ): Promise<string | void> {
+  //   const map = sliceMaps.find(item => item.id === id)
+  //   if (!map) return
 
-    map[type] = map[type].filter(item => item !== value)
-    await persist()
-  }
+  //   if (type === "name") {
+  //     map[type] = value
+  //     await persist()
+  //     return value
+  //   }
+
+  //   if (map[type].includes(value)) return
+
+  //   map[type].push(value)
+
+  //   await persist()
+  // }
+
+  // async function removeContent(
+  //   id: UUID,
+  //   value: string,
+  //   type: RemoveContent
+  // ): Promise<void> {
+  //   const map = sliceMaps.find(item => item.id === id)
+  //   if (!map) return
+
+  //   map[type] = map[type].filter(item => item !== value)
+
+  //   if (type === "folders") {
+  //     map.folders = map.folders.filter(path => !path.startsWith(`${value}/`))
+  //     map.files = map.files.filter(path => !path.startsWith(`${value}/`))
+  //   } else if (type === "excludeFolders") {
+  //     map.excludeFolders = map.excludeFolders.filter(path => !path.startsWith(`${value}/`))
+  //     map.excludeFiles = map.excludeFiles.filter(path => !path.startsWith(`${value}/`))
+  //   }
+
+  //   await persist()
+  // }
 
   function getLocalExclude(): Record<string, boolean> | undefined {
     return context.workspaceState.get<Record<string, boolean>>('localExclude')
@@ -105,8 +122,9 @@ export function createSliceMapCache(
     add,
     remove,
     replace,
-    addContent,
-    removeContent,
+    rename,
+    // addContent,
+    // removeContent,
     getLocalExclude,
     setLocalExclude,
     removeLocalExclude

@@ -17,8 +17,9 @@ export function isContentEqual(
   }
 
   return (
-    compareArrays(prev.files, map.files) &&
-    compareArrays(prev.folders, map.folders) &&
-    compareArrays(prev.names, map.names)
+    compareArrays(prev.includeFiles, map.includeFiles) &&
+    compareArrays(prev.excludeFolders, map.excludeFolders) &&
+    compareArrays(prev.excludeFiles, map.excludeFiles) &&
+    compareArrays(prev.excludeFolders, map.excludeFolders)
   )
 }
