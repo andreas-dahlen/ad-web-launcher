@@ -1,10 +1,10 @@
 import * as vscode from 'vscode'
 import { treeItem } from '../vscode/treeItem.ts'
-import type { FormatPathResult, SliceMap, UserChoice } from '../types/dataStructure.types.ts'
+import type { ResolvedTargetMap, SliceMap, UserChoice } from '../types/dataStructure.types.ts'
 import { createMap } from '../processing/createMap.ts'
 import { renameMap } from '../processing/renameMap.ts'
 import type { UUID } from 'node:crypto'
-import { createSliceMapCache } from '../processing/sliceMapCache.ts'
+import { createSliceMapCache } from './sliceMapCache.ts'
 import { deactivateMap } from '../processing/deactivateMap.ts'
 import { loadHandler } from '../loaders/loadHandler.ts'
 import { requestSliceMap } from '../processing/requestSliceMap.ts'
@@ -12,6 +12,8 @@ import { showMsg } from '../utils/showMsg.ts'
 import { formatPath } from '../utils/formatPath.ts'
 import { exclusionHandler } from '../exclude/exclusionHandler.ts'
 import { activateMap } from '../processing/activateMap.ts'
+import { resolveSliceMap } from './resolveSliceMap.ts'
+import { createDebug } from '../utils/debug.ts'
 
 export type SliceProvider = NonNullable<ReturnType<typeof createSliceProvider>>
 export function createSliceProvider(
@@ -23,6 +25,8 @@ export function createSliceProvider(
   const cache = createSliceMapCache(context, loader.sliceMaps())
   const excluder = exclusionHandler(loader)
   const target = loader.getExcludeConfigTarget()
+
+  const debug = createDebug(output)
 
   const treeChanged = new vscode.EventEmitter<void>()
   let activeMapId: UUID | undefined
@@ -40,7 +44,6 @@ export function createSliceProvider(
   async function toggleSliceMap(id: UUID): Promise<void> {
     const map = cache.getById(id)
     if (!map) return
-
     if (activeMapId === id) {
       await deactivateSliceMap()
     } else {
@@ -59,13 +62,13 @@ export function createSliceProvider(
   }
 
   async function createSliceMap(): Promise<void> {
-    const map = await createMap()
+    const map = await createMap(root)
     if (!map) return
 
     await cache.add(map)
 
     treeChanged.fire()
-    output.appendLine(`[slice maps] created: ${map.id}`)
+    output.appendLine(`[slice maps] created`) //TODO needs name
   }
 
   async function removeSliceMap(id: UUID): Promise<void> {
@@ -76,7 +79,7 @@ export function createSliceProvider(
     await cache.remove(id)
 
     treeChanged.fire()
-    output.appendLine(`[slice maps] remove: ${id}`)
+    output.appendLine(`[slice maps] removed`) //Todo needs name
   }
   async function renameSliceMap(id: UUID): Promise<void> {
     const name = await renameMap()
@@ -91,10 +94,11 @@ export function createSliceProvider(
   async function addPathToSliceMap(uri: vscode.Uri): Promise<void> {
     const target = await resolveTargetMap(uri, "include")
     if (!target) return
+    debug('[ADD] user adds', `${target.resolvedPath.type}: ${target.resolvedPath.value}`)
     const nextMap = resolveSliceMap(target)
-    // await cache.addContent(map.id, resolvedPath.value, resolvedPath.type)
+    debug('[ADD] before resolve', target.map)
     await cache.replace(nextMap)
-
+    debug('[ADD] after resolve', nextMap)
     treeChanged.fire()
     showMsg(`[slice maps] added ${target.resolvedPath.value} to ${nextMap.name}`)
     if (activeMapId === nextMap.id) {
@@ -105,13 +109,13 @@ export function createSliceProvider(
   async function removePathFromSliceMap(uri: vscode.Uri): Promise<void> {
     const target = await resolveTargetMap(uri, "exclude")
     if (!target) return
+    debug('[ADD] user removes', target.resolvedPath.value)
     const nextMap = resolveSliceMap(target)
-
-    // await cache.removeContent(map.id, resolvedPath.value, resolvedPath.type)
+    debug('[REMOVE] before resolve', target.map)
     await cache.replace(nextMap)
-
+    debug('[REMOVE] after resolve', nextMap)
     treeChanged.fire()
-    showMsg(`[slice maps] removed ${target.resolvedPath.value} to ${nextMap.name}`)
+    showMsg(`[slice maps] removed ${target.resolvedPath.value} from ${nextMap.name}`)
     if (activeMapId === nextMap.id) {
       await updateSliceMap(nextMap)
     }
@@ -168,17 +172,20 @@ export function createSliceProvider(
     }
     localExclude = loader.getLocalExclude()
     await cache.setLocalExclude(localExclude)
-    const exclude = excluder.resolve(map) ?? excluder.getResolution(map)
+    // debug("this is before", "exclude")
+    const exclude = excluder.resolve(map, output) ?? excluder.getResolution(map, output)
+    // debug("this is exclude", exclude)
     if (!exclude) {
       output.appendLine(`[ERROR] exclusion unresolved`)
       return
     }
+    // debug("this is a", "check")
     await activateMap(localExclude, exclude, target)
 
     activeMapId = map.id
     activeConfigId = map.id
     treeChanged.fire()
-    output.appendLine(`[slice maps] activated: ${map.name}`)
+    // output.appendLine(`[slice maps] activated: ${map.name}`)
   }
 
   async function updateSliceMap(map: SliceMap) {
@@ -186,22 +193,19 @@ export function createSliceProvider(
       output.appendLine('[slice maps] error: localExclude is undefined')
       return
     }
-    const exclude = excluder.resolve(map)
+    const exclude = excluder.resolve(map, output)
     if (!exclude) {
-      output.appendLine(`[DEBUG] found no difference in exclude resolution`)
+      output.appendLine(`[DEBUG] [UPDATE] found no difference in exclude resolution`)
       return
     }
 
     await activateMap(localExclude, exclude, target)
 
     treeChanged.fire()
-    output.appendLine(`[slice maps] updated: ${map.name}`)
+    // output.appendLine(`[slice maps] updated: ${map.name}`)
   }
 
-  async function resolveTargetMap(uri: vscode.Uri, choice: UserChoice): Promise<{
-    map: SliceMap
-    resolvedPath: FormatPathResult
-  } | undefined> {
+  async function resolveTargetMap(uri: vscode.Uri, choice: UserChoice): Promise<ResolvedTargetMap | undefined> {
     //NOTE formatPath uses statSync which could throw
     const resolvedPath = formatPath(uri, root, choice)
 

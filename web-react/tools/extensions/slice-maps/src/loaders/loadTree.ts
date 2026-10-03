@@ -9,6 +9,7 @@ const traversalStops = new Set([
 ])
 
 export function loadTree(root: string): TreeNode[] {
+
   function load(current: string): TreeNode {
     const name = path.basename(current)
     const relativePath = path.relative(root, current)
@@ -16,31 +17,28 @@ export function loadTree(root: string): TreeNode[] {
 
     if (stats.isFile()) {
       return {
-        name,
         path: relativePath,
-        type: 'files',
+        type: 'files'
       }
     }
 
     if (traversalStops.has(name)) {
       return {
-        name,
         path: relativePath,
-        type: 'folders',
+        type: 'folders'
       }
     }
 
     return {
-      name,
       path: relativePath,
       type: 'folders',
       children: fs.readdirSync(current).map(child =>
-        load(path.join(current, child)),
-      ),
+        load(path.join(current, child))
+      )
     }
   }
 
   return fs.readdirSync(root).map(child =>
-    load(path.join(root, child)),
+    load(path.join(root, child))
   )
 }

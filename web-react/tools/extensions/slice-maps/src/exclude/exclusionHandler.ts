@@ -1,21 +1,25 @@
 import type { LoadHandler } from '../loaders/loadHandler.ts';
 import type { SliceMap, SliceMapResolution } from '../types/dataStructure.types.ts';
-import { createResolution } from './createResolution.ts';
+import { createDebug } from '../utils/debug.ts';
 import { isContentEqual } from './isContentEqual.ts';
-import { isResolutionEqual } from './isResolutionEqual.ts';
+import * as vscode from 'vscode'
+import { newResolution } from './newResolutionHandler.ts';
 
 export function exclusionHandler(
-  loader: LoadHandler
+  loader: LoadHandler,
+
 ) {
   const resolutions: SliceMapResolution[] = []
+  // const debug = createDebug(output)
 
-  function resolve(map: SliceMap): Record<string, true> | undefined {
-
+  function resolve(map: SliceMap, output: vscode.OutputChannel): Record<string, true> | undefined {
+    const debug = createDebug(output)
     const fileTree = loader.fileTree()
     const index = resolutions.findIndex(item => item.id === map.id)
-
+    // output.appendLine("hello!")
     if (index === -1) {
-      const resolvedExclude = createResolution(map, fileTree)
+      const resolvedExclude = newResolution(map, fileTree, output)
+      debug('[RESOLVE]', resolvedExclude)
       resolutions.push({
         ...map,
         includeFiles: [...map.includeFiles],
@@ -31,12 +35,9 @@ export function exclusionHandler(
 
     if (isContentEqual(prev, map)) return
 
-    const resolvedExclude = createResolution(map, fileTree)
-
-    const isEqual = isResolutionEqual(
-      resolutions[index].resolvedExclude,
-      resolvedExclude
-    )
+    debug('[RESOLVE] previous', resolutions[index].resolvedExclude)
+    const resolvedExclude = newResolution(map, fileTree, output)
+    debug('[RESOLVE] next', resolvedExclude)
 
     resolutions[index] = {
       ...map,
@@ -46,12 +47,11 @@ export function exclusionHandler(
       excludeFolders: [...map.excludeFolders],
       resolvedExclude
     }
-
-    if (isEqual) return
     return resolvedExclude
   }
 
-  function getResolution(map: SliceMap): Record<string, true> | undefined {
+  function getResolution(map: SliceMap, output: vscode.OutputChannel): Record<string, true> | undefined {
+    output.appendLine(`activation fallback [getResolution]: ${JSON.stringify(resolutions.find(res => res.id === map.id)?.resolvedExclude, null, 2)}`)
     return resolutions.find(res => res.id === map.id)?.resolvedExclude
   }
 

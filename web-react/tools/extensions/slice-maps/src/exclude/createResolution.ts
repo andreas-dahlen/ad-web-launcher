@@ -1,12 +1,12 @@
 import type { SliceMap, TreeNode } from '../types/dataStructure.types.ts'
-
+import * as vscode from 'vscode'
 export function createResolution(
   map: SliceMap,
-  fileTree: TreeNode[]
+  fileTree: TreeNode[],
+  output: vscode.OutputChannel
 ): Record<string, true> {
 
-
-  const accumulated = accumulateExclusions(map, fileTree)
+  const accumulated = accumulateExclusions(map, fileTree, output)
 
   const exclude: Record<string, true> = {}
 
@@ -26,20 +26,11 @@ export function createResolution(
 
 function accumulateExclusions(
   map: SliceMap,
-  fileTree: TreeNode[]
+  fileTree: TreeNode[],
+  output: vscode.OutputChannel
 ): string[] {
 
-  if (
-    map.includeFiles.length === 0 &&
-    map.includeFolders.length === 0 &&
-    map.excludeFiles.length === 0 &&
-    map.excludeFolders.length === 0
-  ) {
-    return []
-  }
-
   const exclude = new Set<string>()
-
 
   function shouldIncludeNode(
     node: TreeNode,
@@ -61,9 +52,30 @@ function accumulateExclusions(
       node.type === 'files' &&
       map.excludeFiles.includes(node.path)
 
-    if (isExcludeFolder || isExcludeFile) {
+    output.appendLine(
+      `[DEBUGOLD] ${node.path}: ` +
+      `exclude=${isExcludeFolder}, ` +
+      `include=${isIncludedFolder}, ` +
+      `includedFile=${isIncludedFile}, ` +
+      `insideIncluded=${isInsideIncludedFolder}`
+    )
+
+    if (isExcludeFile) {
       exclude.add(node.path)
       return false
+    }
+
+    if (isExcludeFolder) {
+      const hasIncludedChild =
+        node.children?.some(child =>
+          shouldIncludeNode(child, false)
+        ) ?? false
+
+      if (!hasIncludedChild) {
+        exclude.add(node.path)
+      }
+
+      return hasIncludedChild
     }
 
     if (isInsideIncludedFolder || isIncludedFolder || isIncludedFile) {

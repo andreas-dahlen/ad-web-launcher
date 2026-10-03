@@ -2,11 +2,14 @@ import type { UUID } from 'node:crypto'
 import * as vscode from 'vscode'
 
 export type TreeNode = {
-  name: string
   path: string
   type: 'files' | 'folders'
   children?: TreeNode[]
 }
+export type ProcessedNode = {
+  hasExcluded: boolean
+  hasIncluded: boolean
+} //used as Map<string, ProcessedNode>
 
 export type SliceMap = {
   id: UUID
@@ -21,6 +24,12 @@ export type UserChoice = "include" | "exclude"
 
 export type SliceMapResolution = SliceMap & {
   resolvedExclude: Record<string, true>
+}
+
+
+export type ResolvedTargetMap = {
+  map: SliceMap
+  resolvedPath: FormatPathResult
 }
 
 export type ExcludePackage = {
