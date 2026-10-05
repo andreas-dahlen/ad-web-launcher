@@ -6,44 +6,86 @@ import type { SliceMap } from '../types/dataStructure.types.ts'
 export function register(
   context: vscode.ExtensionContext,
   maps: SliceProvider,
-  output: vscode.OutputChannel) {
+  output: vscode.OutputChannel
+) {
+  async function safe(
+    name: string,
+    action: () => Promise<void>
+  ): Promise<void> {
+    try {
+      await action()
+    } catch (error) {
+      output.appendLine(`[ERROR] ${name}`)
+      output.appendLine(
+        error instanceof Error
+          ? error.stack ?? error.message
+          : String(error)
+      )
+    }
+  }
 
   context.subscriptions.push(
     vscode.window.registerTreeDataProvider(
       'sliceMaps',
-      maps.treeProvider,
+      maps.treeProvider
     ),
 
-    vscode.commands.registerCommand('sliceMaps.create', () => {
-      maps.createSliceMap()
-    }),
+    vscode.commands.registerCommand(
+      'sliceMaps.create',
+      () => safe('create slice', () => maps.createSliceMap())
+    ),
 
-    vscode.commands.registerCommand('sliceMaps.toggle', (id: UUID) => {
-      maps.toggleSliceMap(id as UUID)
-    }),
+    vscode.commands.registerCommand(
+      'sliceMaps.toggle',
+      (id: UUID) => safe('toggle slice', () => maps.toggleSliceMap(id))
+    ),
 
     vscode.commands.registerCommand(
       'sliceMaps.configure',
-      (map: SliceMap) => maps.toggleConfig(map.id as UUID)
+      (map: SliceMap) => safe(
+        'configure slice',
+        () => maps.toggleConfig(map.id)
+      )
     ),
 
     vscode.commands.registerCommand(
       'sliceMaps.rename',
-      (map: SliceMap) => maps.renameSliceMap(map.id as UUID)
+      (map: SliceMap) => safe(
+        'rename slice',
+        () => maps.renameSliceMap(map.id)
+      )
     ),
 
     vscode.commands.registerCommand(
       'sliceMaps.delete',
-      (map: SliceMap) => maps.removeSliceMap(map.id as UUID)
+      (map: SliceMap) => safe(
+        'delete slice',
+        () => maps.removeSliceMap(map.id)
+      )
     ),
 
     vscode.commands.registerCommand(
-      'sliceMaps.addToSlice',
-      (uri: vscode.Uri) => maps.addPathToSliceMap(uri)
+      'sliceMaps.reset',
+      (map: SliceMap) => safe(
+        'reset slice',
+        () => maps.resetSliceMap(map)
+      )
     ),
+
     vscode.commands.registerCommand(
-      'sliceMaps.removeFromSlice',
-      (uri: vscode.Uri) => maps.removePathFromSliceMap(uri)
+      'sliceMaps.include',
+      (uri: vscode.Uri) => safe(
+        'include in slice',
+        () => maps.addPathToSliceMap(uri)
+      )
+    ),
+
+    vscode.commands.registerCommand(
+      'sliceMaps.exclude',
+      (uri: vscode.Uri) => safe(
+        'exclude from slice',
+        () => maps.removePathFromSliceMap(uri)
+      )
     ),
 
 
@@ -52,10 +94,11 @@ export function register(
         return
       }
 
-      output.appendLine('[slice maps] configuration changed. Need to reload')
-      // maps.reload()
-    })
+      output.appendLine(
+        '[slice maps] configuration changed. Need to reload. Not implemented yet'
+      )
 
-    //need a watcher on the settings.json file... and reload there aswell...?
+      //TODO add user settings and resolve configuration change behavior
+    })
   )
 }

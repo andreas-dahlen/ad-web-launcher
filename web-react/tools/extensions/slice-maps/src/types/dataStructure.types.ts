@@ -7,9 +7,9 @@ export type TreeNode = {
   children?: TreeNode[]
 }
 export type ProcessedNode = {
-  hasExcluded: boolean
-  hasIncluded: boolean
-} //used as Map<string, ProcessedNode>
+  hasIncludedOverride: boolean
+  state: 'included' | 'excluded'
+}
 
 export type SliceMap = {
   id: UUID

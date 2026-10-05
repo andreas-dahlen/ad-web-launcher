@@ -50,7 +50,7 @@
       "explorer": [
         {
           "id": "sliceMaps",
-          "name": "Slice Maps",
+          "name": "Slice",
           "icon": "resources/slice-maps.svg"
         }
       ]
@@ -58,43 +58,47 @@
     "commands": [
       {
         "command": "sliceMaps.toggle",
-        "title": "Toggle Slice Map"
+        "title": "Toggle Slice"
       },
       {
         "command": "sliceMaps.configure",
-        "title": "Configure Slice Map",
+        "title": "Configure Slice",
         "icon": "$(settings-gear)"
       },
       {
         "command": "sliceMaps.create",
-        "title": "Create Slice Map"
+        "title": "Create Slice"
       },
       {
         "command": "sliceMaps.rename",
-        "title": "Rename Slice Map"
+        "title": "Rename Slice"
       },
       {
         "command": "sliceMaps.delete",
-        "title": "Delete Slice Map"
+        "title": "Delete Slice"
       },
       {
-        "command": "sliceMaps.addToSlice",
-        "title": "Add to Slice Map"
+        "command": "sliceMaps.include",
+        "title": "Include in Slice"
       },
       {
-        "command": "sliceMaps.removeFromSlice",
-        "title": "Remove from Slice Map"
+        "command": "sliceMaps.exclude",
+        "title": "Exclude from Slice"
+      },
+      {
+        "command": "sliceMaps.reset",
+        "title": "Reset Slice"
       }
 
     ],
     "menus": {
       "explorer/context": [
         {
-          "command": "sliceMaps.addToSlice",
+          "command": "sliceMaps.include",
           "when": "resourceScheme == file"
         },
         {
-          "command": "sliceMaps.removeFromSlice",
+          "command": "sliceMaps.exclude",
           "when": "resourceScheme == file"
         }
       ],
@@ -111,6 +115,10 @@
         },
         {
           "command": "sliceMaps.delete",
+          "when": "view == sliceMaps && viewItem == sliceMap"
+        },
+        {
+          "command": "sliceMaps.reset",
           "when": "view == sliceMaps && viewItem == sliceMap"
         }
       ],

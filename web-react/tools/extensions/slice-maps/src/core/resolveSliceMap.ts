@@ -82,11 +82,11 @@ export function resolveSliceMap({
         }
       }
 
-      for (const path of includeFiles) {
-        if (isBasePath(value, path)) {
-          includeFiles.delete(path)
-        }
-      }
+      // for (const path of includeFiles) {
+      //   if (isBasePath(value, path)) {
+      //     includeFiles.delete(path)
+      //   }
+      // }
 
       for (const path of includeFolders) {
         if (isBasePath(value, path)) {

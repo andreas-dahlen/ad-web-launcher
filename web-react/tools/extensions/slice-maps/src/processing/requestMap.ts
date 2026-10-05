@@ -1,7 +1,7 @@
 import type { UUID } from 'node:crypto'
 import * as vscode from 'vscode'
 import type { SliceMap } from '../types/dataStructure.types.ts'
-export async function requestSliceMap(maps: SliceMap[]): Promise<UUID | null> {
+export async function requestMap(maps: SliceMap[]): Promise<UUID | null> {
 
   const selected = await vscode.window.showQuickPick(
     maps.map(map => ({
