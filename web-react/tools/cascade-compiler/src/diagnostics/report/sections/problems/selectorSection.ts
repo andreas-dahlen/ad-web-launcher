@@ -1,5 +1,3 @@
-
-
 import type { UnusableSelector } from '../../../../types/diagnostics.types.ts';
 import type { ReportEntry, ReportSection } from '../../buildReport.ts';
 import { colors, formatLogPath, paint } from '../../../../utils/string.ts';

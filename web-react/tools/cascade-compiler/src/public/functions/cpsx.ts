@@ -1,15 +1,3 @@
-
-/** Transforms preset names into CSS module class names */
-// export function cpsx<P extends string>(
-//   presets: P[] | undefined,
-//   map: Record<P, string>
-// ): string[] {
-//   if (!presets) return []
-
-//   return presets.map(p => map[p])
-// }
-
-//TODO possible way to avoid having to spread the return
 export function cpsx<P extends string>(
   presets: P | P[] | undefined,
   css: Record<string, string>,

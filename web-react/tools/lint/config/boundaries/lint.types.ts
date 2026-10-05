@@ -1,4 +1,3 @@
-
 export type BoundaryRule = [
   'error',
   {

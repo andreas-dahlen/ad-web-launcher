@@ -1,4 +1,3 @@
-
 import type { CssVarString } from '../types/cascade.types.ts';
 import { reserved } from './reservedList.ts';
 

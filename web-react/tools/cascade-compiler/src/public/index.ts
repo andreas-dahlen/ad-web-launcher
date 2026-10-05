@@ -1,5 +1,3 @@
-
-// index.ts
 export { svsx } from './functions/svsx.ts'
 export { cpsx } from './functions/cpsx.ts'
 

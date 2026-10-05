@@ -42,6 +42,15 @@ export const unicorn: Linter.Config[] = [
     }
   },
   {
+    files: [
+      '**/*.config.{ts,js}',
+      'tools/lint/oxlint-plugins/**/*.ts'
+    ],
+    rules: {
+      'unicorn/no-top-level-side-effects': 'off'
+    }
+  },
+  {
     files: ['src/**/*.{tsx,jsx,module.css,svg}'],
     ignores: [
       "**/*.test.tsx",

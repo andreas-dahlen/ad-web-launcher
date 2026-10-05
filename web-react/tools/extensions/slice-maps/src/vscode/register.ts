@@ -74,17 +74,17 @@ export function register(
 
     vscode.commands.registerCommand(
       'sliceMaps.include',
-      (uri: vscode.Uri) => safe(
+      (_, uris: vscode.Uri[]) => safe(
         'include in slice',
-        () => maps.addPathToSliceMap(uri)
+        () => maps.addPathsToSliceMap(uris)
       )
     ),
 
     vscode.commands.registerCommand(
       'sliceMaps.exclude',
-      (uri: vscode.Uri) => safe(
+      (_, uris: vscode.Uri[]) => safe(
         'exclude from slice',
-        () => maps.removePathFromSliceMap(uri)
+        () => maps.removePathsFromSliceMap(uris)
       )
     ),
 

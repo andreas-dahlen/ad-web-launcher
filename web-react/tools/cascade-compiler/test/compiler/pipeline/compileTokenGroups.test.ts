@@ -1,6 +1,4 @@
-
 import { describe, expect, it, vi } from 'vitest'
-
 import { compileTokenGroups } from '../../../src/compiler/pipeline/compileTokenGroups.ts'
 import { createModuleMap } from '../../../src/compiler/discovery/createModuleMap.ts'
 import { processToken } from '../../../src/compiler/processing/processToken.ts'

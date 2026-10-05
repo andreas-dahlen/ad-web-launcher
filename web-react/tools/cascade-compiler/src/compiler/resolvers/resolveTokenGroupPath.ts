@@ -1,5 +1,3 @@
-
-
 export function resolveTokenGroupPath(
   tokenPath: string
 ): string {

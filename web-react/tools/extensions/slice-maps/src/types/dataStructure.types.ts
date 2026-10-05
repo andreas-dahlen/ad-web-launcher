@@ -29,7 +29,7 @@ export type SliceMapResolution = SliceMap & {
 
 export type ResolvedTargetMap = {
   map: SliceMap
-  resolvedPath: FormatPathResult
+  resolvedPaths: FormatPathResult[]
 }
 
 export type ExcludePackage = {

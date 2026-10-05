@@ -9,7 +9,7 @@ import type { Axis1D } from '../../shared/types/core.types.ts'
 import { SceneContext } from '@primitives/Carousel/hooks/useSceneContext.hook.ts'
 import DragGrid from '@features/DragGrid/DragGrid.tsx'
 /** LAYER 2/4! Interactive=false carousel. Contents are mounted inside!
- * The carousel swipes are handled by baseLayer. */
+  The carousel swipes are handled by baseLayer. */
 
 // ---------------------------
 // SceneRenderer

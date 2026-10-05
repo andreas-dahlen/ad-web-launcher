@@ -1,4 +1,3 @@
-
 import type { ValidPrefix } from '../../types/cascade.types.ts';
 import { prefixPriority } from '../../utils/prefix.ts';
 import { createNullIssueCollector, type IssueCollector } from '../../diagnostics/issueCollector.ts';

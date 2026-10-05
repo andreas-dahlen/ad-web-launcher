@@ -1,4 +1,3 @@
-
 import { colors, paint } from '../../../../utils/string.ts';
 import type { VariableMismatch } from '../../../../types/diagnostics.types.ts';
 import type { ReportEntry, ReportSection } from '../../buildReport.ts';

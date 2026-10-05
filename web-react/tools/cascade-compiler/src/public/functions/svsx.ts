@@ -6,16 +6,16 @@ import { normalizeCssValue, toCssVar } from '../../utils/stringFormaters.ts';
 type StyleInput = Record<string, unknown>;
 
 /**
- * Resolves style variables against a generated TokenComponent.
- * Primary component vars can be passed directly:
- * { bg: "red" }
- *
- * Named groups can be targeted explicitly:
- * { thumb: {
- *      bg: "blue"
- *          }
- * }
- */
+Resolves style variables against a generated TokenComponent.
+Primary component vars can be passed directly:
+{ bg: "red" }
+
+Named groups can be targeted explicitly:
+{ thumb: {
+     bg: "blue"
+         }
+}
+*/
 export function svsx(
   input: StyleInput | null | undefined,
   component: TokenComponent

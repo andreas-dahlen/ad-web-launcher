@@ -42,8 +42,8 @@ export class CompilerTerminal implements vscode.Pseudoterminal {
       this.write(data.toString())
     })
 
-    this.compiler.on('exit', code => {
-      this.write(`\r\nCompiler exited with code ${code ?? 0}\r\n`)
+    this.compiler.on('exit', (code = 0) => {
+      this.write(`\r\nCompiler exited with code ${code}\r\n`)
       this.compiler = undefined
     })
   }

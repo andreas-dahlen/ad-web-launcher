@@ -1,6 +1,6 @@
 import { defineConfig, globalIgnores } from 'eslint/config'
 import { ignores } from './tools/lint/config/globalIgnores.ts'
-import base from './tools/lint/config/eslint/base.ts'
+import base from './tools/lint/config/eslint/base.config.ts'
 import { json } from './tools/lint/config/eslint/json.ts'
 import { local } from './tools/lint/config/eslint/local.ts'
 import { plugins } from './tools/lint/config/eslint/plugins.ts'

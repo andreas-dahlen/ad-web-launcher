@@ -1,4 +1,3 @@
-
 import type { EmitResult } from '../types/emitter.types.ts';
 import type { TokenCache } from '../compiler/tracking/tokenCache.ts';
 import { extractData } from './extract/extractData.ts';

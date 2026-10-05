@@ -1,6 +1,6 @@
 import * as vscode from 'vscode'
 import { treeItem } from '../vscode/treeItem.ts'
-import type { ResolvedTargetMap, SliceMap, UserChoice } from '../types/dataStructure.types.ts'
+import type { FormatPathResult, ResolvedTargetMap, SliceMap, UserChoice } from '../types/dataStructure.types.ts'
 import { createMap } from '../processing/createMap.ts'
 import { renameMap } from '../processing/renameMap.ts'
 import type { UUID } from 'node:crypto'
@@ -104,31 +104,40 @@ export function createSliceProvider(
     showMsg(`[slice maps] reset ${newMap.name}`)
   }
 
-  async function addPathToSliceMap(uri: vscode.Uri): Promise<void> {
-    const target = await resolveTargetMap(uri, "include")
+  async function addPathsToSliceMap(uris: vscode.Uri[]): Promise<void> {
+    const target = await resolveTargetMap(uris, "include")
     if (!target) return
-    debug('[ADD] user adds', `${target.resolvedPath.type}: ${target.resolvedPath.value}`)
+    debug('[ADD] user adds', target.resolvedPaths)
     const nextMap = resolveSliceMap(target)
+
     debug('[ADD] before resolve', target.map)
     await cache.replace(nextMap)
     debug('[ADD] after resolve', nextMap)
+
     treeChanged.fire()
-    showMsg(`[slice maps] added ${target.resolvedPath.value} to ${nextMap.name}`)
+    showMsg(`[slice maps] added ${target.resolvedPaths.length === 1
+      ? target.resolvedPaths[0].value
+      : `${target.resolvedPaths.length} paths`} to ${nextMap.name}`)
+
     if (activeMapId === nextMap.id) {
       await updateSliceMap(nextMap)
     }
   }
 
-  async function removePathFromSliceMap(uri: vscode.Uri): Promise<void> {
-    const target = await resolveTargetMap(uri, "exclude")
+  async function removePathsFromSliceMap(uris: vscode.Uri[]): Promise<void> {
+    const target = await resolveTargetMap(uris, "exclude")
     if (!target) return
-    debug('[REMOVE] user removes', target.resolvedPath.value)
+    debug('[REMOVE] user removes', target.resolvedPaths)
     const nextMap = resolveSliceMap(target)
+
     debug('[REMOVE] before resolve', target.map)
     await cache.replace(nextMap)
     debug('[REMOVE] after resolve', nextMap)
+
     treeChanged.fire()
-    showMsg(`[slice maps] removed ${target.resolvedPath.value} from ${nextMap.name}`)
+    showMsg(`[slice maps] removed ${target.resolvedPaths.length === 1
+      ? target.resolvedPaths[0].value
+      : `${target.resolvedPaths.length} paths`} from ${nextMap.name}`)
     if (activeMapId === nextMap.id) {
       await updateSliceMap(nextMap)
     }
@@ -157,8 +166,8 @@ export function createSliceProvider(
     removeSliceMap,
     renameSliceMap,
     resetSliceMap,
-    addPathToSliceMap,
-    removePathFromSliceMap,
+    addPathsToSliceMap,
+    removePathsFromSliceMap,
     treeProvider,
     startup
   }
@@ -217,29 +226,36 @@ export function createSliceProvider(
     output.appendLine(`[slice maps] updated: ${map.name}`)
   }
 
-  async function resolveTargetMap(uri: vscode.Uri, choice: UserChoice): Promise<ResolvedTargetMap | undefined> {
-    //NOTE formatPath uses statSync which could throw
-    const resolvedPath = formatPath(uri, root, choice)
-
+  async function resolveTargetMap(
+    uris: vscode.Uri[],
+    choice: UserChoice
+  ): Promise<ResolvedTargetMap | undefined> {
     let id = activeConfigId ?? activeMapId
+    const maps = cache.get()
 
     if (!id) {
-      const maps = cache.get()
       if (maps.length === 1) {
-        activeConfigId = maps[0].id
-        treeChanged.fire()
-        return { map: maps[0], resolvedPath }
+        id = maps[0].id
+        activeConfigId = id
+      } else {
+        const newId = await requestMap(maps)
+        if (!newId) return
+        id = newId
+        activeConfigId = newId
       }
-      const newId = await requestMap(maps)
-      if (!newId) return
-      id = newId
-      activeConfigId = newId
       treeChanged.fire()
     }
 
     const map = cache.getById(id)
     if (!map) return
 
-    return { map, resolvedPath }
+    const resolvedPaths: FormatPathResult[] = []
+
+    for (const uri of uris) {
+      //NOTE formatPath uses statSync which could throw
+      resolvedPaths.push(formatPath(uri, root, choice))
+    }
+
+    return { map, resolvedPaths }
   }
 }

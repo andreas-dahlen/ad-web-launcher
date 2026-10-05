@@ -1,4 +1,3 @@
-
 export function formatLogPath(file: string) {
   return file
     .replaceAll("\\", "/")
@@ -20,22 +19,22 @@ export function emitValueMsg(
 
 export const ESC = "\u{1B}" as const
 /**
- * Terminal color theme
- *
- * heading    → bold bright cyan
- * success    → bright green
- * warning    → bright yellow
- * error      → bright red
- * token      → bright magenta
- * variable   → bright blue
- * muted      → bright black (gray)
- * info       → bright cyan
- * file       → white
- * path       → gray
- * selector   → green
- * value      → yellow
- * debug      → dim white
- */
+Terminal color theme
+
+heading    → bold bright cyan
+success    → bright green
+warning    → bright yellow
+error      → bright red
+token      → bright magenta
+variable   → bright blue
+muted      → bright black (gray)
+info       → bright cyan
+file       → white
+path       → gray
+selector   → green
+value      → yellow
+debug      → dim white
+*/
 export const colors = {
   // structure
   heading: `${ESC}[1;96m`,      // bright cyan

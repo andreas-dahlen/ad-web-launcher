@@ -1,4 +1,3 @@
-
 const VITE_FLUSH_DELAY_MS = 500
 export function createFinalizeScheduler(finalize: () => void) {
   let timer: ReturnType<typeof setTimeout> | undefined

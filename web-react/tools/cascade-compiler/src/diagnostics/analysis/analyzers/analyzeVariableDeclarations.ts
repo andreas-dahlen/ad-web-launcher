@@ -1,5 +1,3 @@
-
-
 import type { CssVarString } from '../../../types/cascade.types.ts';
 import type { CssDataTokenGroup } from '../../../types/compiler.types.ts';
 import type { InvalidVarDeclaration } from '../../../types/diagnostics.types.ts';

@@ -1,4 +1,3 @@
-
 import type { GeneratedFiles } from '../../../types/diagnostics.types.ts'
 import type { FileResult } from '../../../types/emitter.types.ts'
 
