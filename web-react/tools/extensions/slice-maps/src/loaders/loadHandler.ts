@@ -1,6 +1,6 @@
 import * as vscode from 'vscode'
 import { loadTree } from './loadTree.ts'
-import type { SliceMap, TreeNode } from '../types/dataStructure.types.ts'
+import type { SliceData, TreeNode } from '../types/dataStructure.types.ts'
 
 export type LoadHandler = NonNullable<ReturnType<typeof loadHandler>>
 export const loadHandler = (context: vscode.ExtensionContext, root: vscode.WorkspaceFolder) => {
@@ -19,8 +19,11 @@ export const loadHandler = (context: vscode.ExtensionContext, root: vscode.Works
       return inspect?.workspaceFolderValue ?? {}
     },
 
-    sliceMaps(): SliceMap[] {
-      return context.workspaceState.get<SliceMap[]>('sliceMaps') ?? []
+    sliceData(): SliceData {
+      return context.workspaceState.get<SliceData>('sliceMaps') ?? {
+        maps: [],
+        filters: []
+      }
     },
 
     fileTree(): TreeNode[] {

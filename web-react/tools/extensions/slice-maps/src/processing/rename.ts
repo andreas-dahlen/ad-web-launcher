@@ -12,3 +12,14 @@ export async function renameMap(): Promise<string | null> {
 
   return name
 }
+
+export async function renameFilter(): Promise<string | null> {
+  const name = await vscode.window.showInputBox({
+    prompt: 'Slice filter name',
+    placeHolder: 'Source files'
+  })
+
+  if (!name) return null
+
+  return name
+}

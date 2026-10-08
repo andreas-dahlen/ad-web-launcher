@@ -1,11 +1,10 @@
 import * as vscode from 'vscode'
-import type { SliceProvider } from '../core/createSliceProvider.ts'
-import type { UUID } from 'node:crypto'
-import type { SliceMap } from '../types/dataStructure.types.ts'
+import type { SliceProvider } from '../core/newProvider.ts'
+import type { SliceFilter, SliceMap, Slice } from '../types/dataStructure.types.ts'
 
 export function register(
   context: vscode.ExtensionContext,
-  maps: SliceProvider,
+  provider: SliceProvider,
   output: vscode.OutputChannel
 ) {
   async function safe(
@@ -27,66 +26,141 @@ export function register(
   context.subscriptions.push(
     vscode.window.registerTreeDataProvider(
       'sliceMaps',
-      maps.treeProvider
-    ),
-
-    vscode.commands.registerCommand(
-      'sliceMaps.create',
-      () => safe('create slice', () => maps.createSliceMap())
-    ),
-
-    vscode.commands.registerCommand(
-      'sliceMaps.toggle',
-      (id: UUID) => safe('toggle slice', () => maps.toggleSliceMap(id))
+      provider.treeProvider
     ),
 
     vscode.commands.registerCommand(
       'sliceMaps.configure',
-      (map: SliceMap) => safe(
-        'configure slice',
-        () => maps.toggleConfig(map.id)
+      (node: Slice) => safe(
+        'configure item',
+        () => provider.toggleConfig(node)
       )
     ),
-
-    vscode.commands.registerCommand(
-      'sliceMaps.rename',
-      (map: SliceMap) => safe(
-        'rename slice',
-        () => maps.renameSliceMap(map.id)
-      )
-    ),
-
-    vscode.commands.registerCommand(
-      'sliceMaps.delete',
-      (map: SliceMap) => safe(
-        'delete slice',
-        () => maps.removeSliceMap(map.id)
-      )
-    ),
-
-    vscode.commands.registerCommand(
-      'sliceMaps.reset',
-      (map: SliceMap) => safe(
-        'reset slice',
-        () => maps.resetSliceMap(map)
-      )
-    ),
-
     vscode.commands.registerCommand(
       'sliceMaps.include',
       (_, uris: vscode.Uri[]) => safe(
-        'include in slice',
-        () => maps.addPathsToSliceMap(uris)
+        'include in map',
+        () => provider.include(uris)
       )
     ),
 
     vscode.commands.registerCommand(
       'sliceMaps.exclude',
       (_, uris: vscode.Uri[]) => safe(
-        'exclude from slice',
-        () => maps.removePathsFromSliceMap(uris)
+        'exclude from map',
+        () => provider.exclude(uris)
       )
     ),
+    vscode.commands.registerCommand(
+      'sliceMaps.removeExcludeFilter',
+      (_, uris: vscode.Uri[]) => safe(
+        'remove exclude from filter',
+        () => provider.removeExcludeFilter(uris)
+      )
+    ),
+
+    vscode.commands.registerCommand(
+      'sliceMaps.addExcludeFilter',
+      (_, uris: vscode.Uri[]) => safe(
+        'add exclude to filter',
+        () => provider.addExcludeFilter(uris)
+      )
+    ),
+
+    vscode.commands.registerCommand(
+      'sliceMaps.create',
+      () => safe('create map', () => provider.map.create())
+    ),
+
+    vscode.commands.registerCommand(
+      'sliceMaps.toggle',
+      (map: SliceMap) => safe(
+        'toggle map',
+        () => provider.map.toggle(map)
+      )
+    ),
+
+
+    vscode.commands.registerCommand(
+      'sliceMaps.rename',
+      (map: SliceMap) => safe(
+        'rename map',
+        () => provider.map.rename(map)
+      )
+    ),
+
+    vscode.commands.registerCommand(
+      'sliceMaps.delete',
+      (map: SliceMap) => safe(
+        'delete map',
+        () => provider.map.remove(map)
+      )
+    ),
+
+    vscode.commands.registerCommand(
+      'sliceMaps.reset',
+      (map: SliceMap) => safe(
+        'reset map',
+        () => provider.map.reset(map)
+      )
+    ),
+
+    //Filter
+
+    vscode.commands.registerCommand(
+      'sliceMaps.createFilter',
+      () => safe('create filter', () => provider.filter.create())
+    ),
+
+    vscode.commands.registerCommand(
+      'sliceMaps.toggleFilter',
+      (filter: SliceFilter) => safe(
+        'toggle filter',
+        () => provider.filter.toggle(filter)
+      )
+    ),
+
+
+    vscode.commands.registerCommand(
+      'sliceMaps.renameFilter',
+      (filter: SliceFilter) => safe(
+        'rename filter',
+        () => provider.filter.rename(filter)
+      )
+    ),
+
+    vscode.commands.registerCommand(
+      'sliceMaps.deleteFilter',
+      (filter: SliceFilter) => safe(
+        'delete filter',
+        () => provider.filter.remove(filter)
+      )
+    ),
+
+    vscode.commands.registerCommand(
+      'sliceMaps.resetFilter',
+      (filter: SliceFilter) => safe(
+        'reset filter',
+        () => provider.filter.reset(filter)
+      )
+    ),
+
+    // vscode.commands.registerCommand(
+    //   'sliceMaps.addExcludeFilter',
+    //   (_, uris: vscode.Uri[]) => safe(
+    //     'add exclude filter',
+    //     () => provider.filter.addPathsToFilter(uris)
+    //   )
+    // ),
+
+    // vscode.commands.registerCommand(
+    //   'sliceMaps.removeExcludeFilter',
+    //   (_, uris: vscode.Uri[]) => safe(
+    //     'remove exclude filter',
+    //     () => provider.filter.removePathsFromFilter(uris)
+    //   )
+    // ),
+
 
 
     vscode.workspace.onDidChangeConfiguration(event => {

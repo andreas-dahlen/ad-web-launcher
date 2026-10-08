@@ -1,9 +1,9 @@
-import type { SliceMap } from '../types/dataStructure.types.ts';
+import type { MergedSlice, SliceResolution } from '../types/dataStructure.types.ts';
 
 
 export function isContentEqual(
-  prev: SliceMap,
-  map: SliceMap,
+  prev: SliceResolution,
+  map: MergedSlice,
 ): boolean {
   const compareArrays = (prev: string[], map: string[]) => {
     if (prev.length !== map.length) return false

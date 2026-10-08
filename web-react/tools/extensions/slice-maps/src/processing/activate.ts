@@ -1,6 +1,6 @@
 import * as vscode from 'vscode'
 
-export async function activateMap(
+export async function activate(
   localExclude: Record<string, boolean>,
   exclude: Record<string, true>,
   config: vscode.WorkspaceConfiguration

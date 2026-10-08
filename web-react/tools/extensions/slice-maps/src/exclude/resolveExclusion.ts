@@ -1,10 +1,10 @@
-import type { SliceMap, TreeNode } from '../types/dataStructure.types.ts';
+import type { MergedSlice, TreeNode } from '../types/dataStructure.types.ts';
 import * as vscode from 'vscode'
 import { compress } from './compress.ts';
 import { createDebug } from '../utils/debug.ts';
 
 export function resolveExclusion(
-  map: SliceMap,
+  slice: MergedSlice,
   fileTree: TreeNode[],
   output: vscode.OutputChannel
 ): Record<string, true> {
@@ -20,10 +20,10 @@ export function resolveExclusion(
   function topToBottom(nodes: TreeNode[], implicit: 'include' | 'exclude') {
 
     for (const node of nodes) {
-      const explicitInclude = map.includeFiles.includes(node.path) || map.includeFolders.includes(node.path)
+      const explicitInclude = slice.includeFiles.includes(node.path) || slice.includeFolders.includes(node.path)
 
-      const explicitExclude = map.excludeFiles.includes(node.path) ||
-        map.excludeFolders.includes(node.path)
+      const explicitExclude = slice.excludeFiles.includes(node.path) ||
+        slice.excludeFolders.includes(node.path)
 
       const explicit = explicitInclude
         ? 'include'

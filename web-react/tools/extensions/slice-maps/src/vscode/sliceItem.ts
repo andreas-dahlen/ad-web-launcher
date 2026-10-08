@@ -1,7 +1,7 @@
 import * as vscode from 'vscode'
 import type { SliceMap } from '../types/dataStructure.types.ts'
 
-export function treeItem(
+export function mapItem(
   map: SliceMap,
   isActive: boolean,
   isConfiguring: boolean
@@ -25,8 +25,8 @@ export function treeItem(
 
   item.command = {
     command: 'sliceMaps.toggle',
-    title: 'Toggle Slice Map',
-    arguments: [map.id]
+    title: 'Toggle Slice',
+    arguments: [map]
   }
 
   return item
