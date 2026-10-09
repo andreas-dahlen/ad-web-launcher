@@ -1,6 +1,8 @@
 import * as vscode from 'vscode'
 
 export const debugFlags: Record<string, boolean> = {
+  filterProvider: true,
+  mapProvider: true,
   resolution: false,
   compression: false,
   provider: false,

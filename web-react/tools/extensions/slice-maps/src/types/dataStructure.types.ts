@@ -70,6 +70,7 @@ export type ActiveFilter = {
 export type ActiveSlice = ActiveMap | ActiveFilter
 
 export type UserChoice = "include" | "exclude"
+export type NodeState = "include" | "exclude"
 
 export type SliceResolution = MergedSlice & {
   resolvedExclude: Record<string, true>

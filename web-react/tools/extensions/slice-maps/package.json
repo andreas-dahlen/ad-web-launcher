@@ -59,7 +59,11 @@
       {
         "command": "sliceMaps.configure",
         "title": "Configure Slice Item",
-        "icon": "$(settings-gear)"
+        "icon": "$(gear)"
+      },
+      {
+        "command": "sliceMaps.explorerConfig",
+        "title": "Add To SliceMaps"
       },
       {
         "command": "sliceMaps.toggle",
@@ -67,8 +71,7 @@
       },
       {
         "command": "sliceMaps.create",
-        "title": "Create Slice",
-        "icon": "$(add)"
+        "title": "Create Slice"
       },
       {
         "command": "sliceMaps.rename",
@@ -92,8 +95,7 @@
       },
       {
         "command": "sliceMaps.createFilter",
-        "title": "Create Filter",
-        "icon": "$(filter)"
+        "title": "Create Filter"
       },
       {
         "command": "sliceMaps.toggleFilter",
@@ -118,6 +120,10 @@
       {
         "command": "sliceMaps.addExcludeFilter",
         "title": "Add Exclude Filter"
+      },
+      {
+        "command": "sliceMaps.glob",
+        "title": "Add Glob Exclusion"
       }
     ],
     "menus": {
@@ -137,6 +143,10 @@
         {
           "command": "sliceMaps.addExcludeFilter",
           "when": "resourceScheme == file && sliceMaps.activeType == filter"
+        },
+        {
+          "command": "sliceMaps.explorerConfig",
+          "when": "resourceScheme == file && !sliceMaps.activeType"
         }
       ],
 
@@ -174,6 +184,10 @@
         {
           "command": "sliceMaps.resetFilter",
           "when": "view == sliceMaps && viewItem == sliceFilter"
+        },
+        {
+          "command": "sliceMaps.glob",
+          "when": "view == sliceMaps && (viewItem == sliceFilter || viewItem == sliceMap)"
         }
 
       ],

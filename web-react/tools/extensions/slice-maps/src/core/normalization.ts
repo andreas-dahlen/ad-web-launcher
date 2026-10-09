@@ -1,4 +1,5 @@
 import type { NormalizedPaths } from '../types/dataStructure.types.ts'
+import { hasBasePath, isBasePath } from '../utils/comparePaths.ts'
 
 export function resolveNormalization(
   base: NormalizedPaths,
@@ -11,13 +12,11 @@ export function resolveNormalization(
 
   for (const additions of mergePaths) {
     for (const path of additions.includeFiles) {
+      includeFiles.add(path)
       excludeFiles.delete(path)
-
-      if (!hasBasePath(includeFolders, path)) {
-        includeFiles.add(path)
-      }
     }
     for (const path of additions.includeFolders) {
+      includeFolders.add(path)
       excludeFolders.delete(path)
 
       for (const existingPath of includeFiles) {
@@ -42,10 +41,6 @@ export function resolveNormalization(
         if (isBasePath(path, existingPath)) {
           excludeFolders.delete(existingPath)
         }
-      }
-
-      if (!hasBasePath(includeFolders, path)) {
-        includeFolders.add(path)
       }
     }
     for (const existingPath of additions.excludeFiles) {
@@ -94,23 +89,4 @@ export function resolveNormalization(
     excludeFiles: [...excludeFiles],
     excludeFolders: [...excludeFolders]
   }
-}
-
-
-
-function isBasePath(basePath: string, path: string): boolean {
-  return path.startsWith(`${basePath}/`)
-}
-
-function hasBasePath(
-  paths: Set<string>,
-  path: string
-): boolean {
-  for (const basePath of paths) {
-    if (isBasePath(basePath, path)) {
-      return true
-    }
-  }
-
-  return false
 }

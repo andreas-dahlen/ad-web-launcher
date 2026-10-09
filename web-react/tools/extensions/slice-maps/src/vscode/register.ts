@@ -1,5 +1,5 @@
 import * as vscode from 'vscode'
-import type { SliceProvider } from '../core/newProvider.ts'
+import type { SliceProvider } from '../core/createSliceProvider.ts'
 import type { SliceFilter, SliceMap, Slice } from '../types/dataStructure.types.ts'
 
 export function register(
@@ -9,7 +9,7 @@ export function register(
 ) {
   async function safe(
     name: string,
-    action: () => Promise<void>
+    action: () => Promise<void> | void
   ): Promise<void> {
     try {
       await action()
@@ -33,14 +33,30 @@ export function register(
       'sliceMaps.configure',
       (node: Slice) => safe(
         'configure item',
-        () => provider.toggleConfig(node)
+        () => provider.general.toggleConfig(node)
+      )
+    ),
+
+    vscode.commands.registerCommand(
+      'sliceMaps.explorerConfig',
+      (_, uris: vscode.Uri[]) => safe(
+        'add to slice',
+        () => provider.general.explorerConfig(uris)
+      )
+    ),
+
+    vscode.commands.registerCommand(
+      'sliceMaps.glob',
+      (node: Slice) => safe(
+        'glob item',
+        () => provider.general.addGlob(node)
       )
     ),
     vscode.commands.registerCommand(
       'sliceMaps.include',
       (_, uris: vscode.Uri[]) => safe(
         'include in map',
-        () => provider.include(uris)
+        () => provider.map.include(uris)
       )
     ),
 
@@ -48,14 +64,14 @@ export function register(
       'sliceMaps.exclude',
       (_, uris: vscode.Uri[]) => safe(
         'exclude from map',
-        () => provider.exclude(uris)
+        () => provider.map.exclude(uris)
       )
     ),
     vscode.commands.registerCommand(
       'sliceMaps.removeExcludeFilter',
       (_, uris: vscode.Uri[]) => safe(
         'remove exclude from filter',
-        () => provider.removeExcludeFilter(uris)
+        () => provider.filter.removeExclude(uris)
       )
     ),
 
@@ -63,7 +79,7 @@ export function register(
       'sliceMaps.addExcludeFilter',
       (_, uris: vscode.Uri[]) => safe(
         'add exclude to filter',
-        () => provider.addExcludeFilter(uris)
+        () => provider.filter.addExclude(uris)
       )
     ),
 
@@ -144,24 +160,6 @@ export function register(
         () => provider.filter.reset(filter)
       )
     ),
-
-    // vscode.commands.registerCommand(
-    //   'sliceMaps.addExcludeFilter',
-    //   (_, uris: vscode.Uri[]) => safe(
-    //     'add exclude filter',
-    //     () => provider.filter.addPathsToFilter(uris)
-    //   )
-    // ),
-
-    // vscode.commands.registerCommand(
-    //   'sliceMaps.removeExcludeFilter',
-    //   (_, uris: vscode.Uri[]) => safe(
-    //     'remove exclude filter',
-    //     () => provider.filter.removePathsFromFilter(uris)
-    //   )
-    // ),
-
-
 
     vscode.workspace.onDidChangeConfiguration(event => {
       if (!event.affectsConfiguration('sliceMaps')) {

@@ -36,7 +36,7 @@ export function createTreeProvider(
     },
     getTreeItem(node: SliceTreeNode): vscode.TreeItem {
       if (node.type === 'mapGroup') {
-        return sectionItem('Slice')
+        return sectionItem('Maps')
       }
 
       if (node.type === 'filterGroup') {

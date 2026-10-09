@@ -5,7 +5,11 @@ import { createMap } from '../processing/create.ts';
 import { renameMap } from '../processing/rename.ts';
 import { resetMap } from '../processing/reset.ts';
 import { resolveMap } from '../core/normalizationApi.ts';
+import { resolveActiveIdentity } from '../processing/identity.ts';
+import * as vscode from 'vscode'
+import { resolvePaths } from '../utils/formatPath.ts';
 
+export type MapController = NonNullable<ReturnType<typeof createMapController>>
 export function createMapController({
   loader,
   root,
@@ -39,6 +43,10 @@ export function createMapController({
 
   async function remove(map: SliceMap): Promise<void> {
     await cache.removeMap(map.id)
+
+    if (appState.getActiveConfig()?.id === map.id) {
+      appState.setActiveConfig(undefined)
+    }
 
     if (appState.isActiveMap(map.id)) {
       appState.setActiveMap(undefined)
@@ -74,55 +82,50 @@ export function createMapController({
     showMsg(`[slice maps] map reset ${newMap.name}`)
   }
 
-  async function addPathsToMap(
-    map: SliceMap,
-    resolvedPaths: NormalizedPaths
+  async function include(
+    uris: vscode.Uri[]
   ): Promise<void> {
-    debug('[ADD] user adds', resolvedPaths)
-    const nextMap = resolveMap(map, resolvedPaths)
+    const id = await resolveActiveIdentity(appState, cache)
+    if (!id) return
 
-    debug('[ADD] before resolve', map)
-    await cache.addMap(nextMap)
-    debug('[ADD] after resolve', nextMap)
+    const map = cache.getMapById(id)
+    if (!map) return
 
-
-    if (appState.isActiveMap(nextMap.id)) {
-      await applyEffectiveSlice()
-    } else {
-      treeChanged.fire()
-    }
-    // showMsg(
-    //   `[slice maps] added ${resolvedPaths.length === 1
-    //     ? path.relative(root.uri.fsPath, uris[0].fsPath)
-    //     : `${uris.length} paths`
-    //   } to ${nextMap.name}`
-    // )
+    const paths = resolvePaths(uris, root, 'include')
+    await update(map, paths, '[ADD] user adds')
   }
 
-  async function removePathsFromMap(
-    map: SliceMap,
-    resolvedPaths: NormalizedPaths
+  async function exclude(
+    uris: vscode.Uri[]
   ): Promise<void> {
+    const id = await resolveActiveIdentity(appState, cache)
+    if (!id) return
 
-    debug('[REMOVE] user removes', resolvedPaths)
-    const nextMap = resolveMap(map, resolvedPaths)
+    const map = cache.getMapById(id)
+    if (!map) return
 
-    debug('[REMOVE] before resolve', map)
+    const paths = resolvePaths(uris, root, 'exclude')
+    await update(map, paths, '[REMOVE] user removes')
+  }
+
+  async function update(
+    map: SliceMap,
+    paths: NormalizedPaths,
+    message: string
+  ): Promise<void> {
+    debug(message, paths)
+
+    const nextMap = resolveMap(map, paths)
+
+    debug('[UPDATE] before resolve', map)
     await cache.addMap(nextMap)
-    debug('[REMOVE] after resolve', nextMap)
-
+    debug('[UPDATE] after resolve', nextMap)
 
     if (appState.isActiveMap(nextMap.id)) {
       await applyEffectiveSlice()
     } else {
       treeChanged.fire()
     }
-    // showMsg(
-    //   `[slice maps] removed ${uris.length === 1
-    //     ? path.relative(root.uri.fsPath, uris[0].fsPath)
-    //     : `${uris.length} paths`
-    //   } from ${nextMap.name}`
-    // )
   }
 
   return {
@@ -131,8 +134,9 @@ export function createMapController({
     remove,
     rename,
     reset,
-    addPathsToMap,
-    removePathsFromMap
+    include,
+    exclude,
+    update
   }
 
   async function resolveDeactivation() {

@@ -1,5 +1,5 @@
 import * as vscode from 'vscode'
-import { createSliceProvider } from './core/newProvider.ts'
+import { createSliceProvider } from './core/createSliceProvider.ts'
 import { register } from './vscode/register.ts'
 
 export async function activate(context: vscode.ExtensionContext): Promise<void> {
@@ -16,7 +16,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 
   const provider = createSliceProvider(context, root, output)
 
-  await provider.startup()
+  await provider.general.startup()
 
   register(context, provider, output)
 
