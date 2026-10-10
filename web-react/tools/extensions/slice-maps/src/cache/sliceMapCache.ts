@@ -22,17 +22,9 @@ export function createSliceMapCache(
     sliceData.maps.map(map => [map.id, map])
   )
 
-  // output.appendLine(
-  //   `[cache] 1`
-  // )
-
   const filters = new Map<UUID, SliceFilter>(
     sliceData.filters.map(filter => [filter.id, filter])
   )
-
-  // output.appendLine(
-  //   `[cache] 2`
-  // )
 
   function getEffectiveSlice(): MergedSlice {
     const activeMapIdentity = appState.getActiveMap()

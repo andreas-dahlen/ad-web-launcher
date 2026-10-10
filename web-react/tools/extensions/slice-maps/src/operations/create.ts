@@ -46,7 +46,6 @@ export async function createFilter(
     id: crypto.randomUUID(),
     name: name.trim(),
     excludeFiles: [],
-    excludeFolders: [],
-    excludePatterns: []
+    excludeFolders: []
   }
 }

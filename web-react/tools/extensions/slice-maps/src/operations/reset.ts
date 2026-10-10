@@ -22,7 +22,6 @@ export function resetFilter(
     id: filter.id,
     name: filter.name,
     excludeFiles: [],
-    excludeFolders: [],
-    excludePatterns: []
+    excludeFolders: []
   }
 }

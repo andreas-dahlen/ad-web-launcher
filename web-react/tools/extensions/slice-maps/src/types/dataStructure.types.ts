@@ -14,47 +14,44 @@ export type SliceTreeNode =
   | SliceFilter
   | { type: 'filterGroup' }
   | { type: 'mapGroup' }
+  | { type: 'workspaceGroup' }
 
-export type Slice = SliceMap | SliceFilter
+export type TreeProviderNode = SliceTreeNode | VisualTreeNode
 
-export type SliceData = {
-  maps: SliceMap[]
-  filters: SliceFilter[]
+export type VisualTreeNode = {
+  path: string
+  children?: VisualTreeNode[]
+  type: 'files' | 'folders'
 }
 
-export type SliceMap = {
+
+export type SliceMap = NormalizedPaths & {
   type: 'map'
   id: UUID
   name: string
-  includeFiles: string[]
-  includeFolders: string[]
-  excludeFiles: string[]
-  excludeFolders: string[]
 }
-
 export type SliceFilter = {
   type: 'filter'
   id: UUID
   name: string
   excludeFiles: string[]
   excludeFolders: string[]
-  excludePatterns: string[]
 }
+export type Slice = SliceMap | SliceFilter
 
-export type MergedSlice = {
-  mergeId: string
-  includeFiles: string[]
-  includeFolders: string[]
-  excludeFiles: string[]
-  excludeFolders: string[]
-  // excludePatterns: string[]
+export type SliceData = {
+  maps: SliceMap[]
+  filters: SliceFilter[]
 }
-
 export type NormalizedPaths = {
   includeFiles: string[]
   includeFolders: string[]
   excludeFiles: string[]
   excludeFolders: string[]
+}
+
+export type MergedSlice = NormalizedPaths & {
+  mergeId: string
 }
 
 export type ActiveMap = {
@@ -76,36 +73,13 @@ export type SliceResolution = MergedSlice & {
   resolvedExclude: Record<string, true>
 }
 
-
-export type ResolvedTarget = {
-  slice: Slice
-  resolvedPaths: NormalizedPaths
-}
-
-// export type ExcludePackage = {
-//   configTarget: vscode.WorkspaceConfiguration
-//   resolvedExclude: Record<string, true>
-// }
-
 export type Scope = {
   loader: LoadHandler
   root: vscode.WorkspaceFolder
   cache: SliceCache
   output: vscode.OutputChannel
-  treeChanged: vscode.EventEmitter<void>
   appState: AppStateCache
-  applyEffectiveSlice: ApplyEffectiveSlice
-  resolveNothingActive: ResolveNothingActive
-  // add: Add
-  // remove: Remove
+  updateTree: () => void
+  applyEffectiveSlice: () => Promise<void>
+  resolveNothingActive: () => Promise<void>
 }
-
-// type ResolveTarget = (
-//   uris: vscode.Uri[],
-//   choice: UserChoice
-// ) => Promise<ResolvedTarget | undefined>
-
-type ApplyEffectiveSlice = () => Promise<void>
-type ResolveNothingActive = () => Promise<void>
-// type Add = (uris: vscode.Uri[]) => Promise<void>
-// type Remove = (uris: vscode.Uri[]) => Promise<void>

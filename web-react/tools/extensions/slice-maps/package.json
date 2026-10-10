@@ -201,6 +201,11 @@
           "command": "sliceMaps.createFilter",
           "when": "view == sliceMaps",
           "group": "navigation"
+        },
+        {
+          "command": "sliceMaps.toggleEditView",
+          "when": "view == sliceMaps",
+          "group": "navigation"
         }
       ]
     }

@@ -1,15 +1,17 @@
 import * as vscode from 'vscode'
 import { createSliceMapCache } from '../cache/sliceMapCache.ts'
-import { deactivate } from '../processing/deactivate.ts'
+import { deactivate } from '../operations/deactivate.ts'
 import { loadHandler } from '../loaders/loadHandler.ts'
-import { exclusionHandler } from '../exclude/exclusionHandler.ts'
+import { exclusionHandler } from '../exclusions/exclusionHandler.ts'
 import { createTreeProvider } from '../vscode/tree.ts'
 import { createAppStateCache } from '../cache/appStateCache.ts'
 import type { Scope } from '../types/dataStructure.types.ts'
-import { createMapController } from '../controllers/createMapController.ts'
-import { createFilterController } from '../controllers/createFilterController.ts'
-import { activate } from '../processing/activate.ts'
-import { createGeneralController } from '../controllers/generalController.ts'
+import { createMapController } from './mapController.ts'
+import { createFilterController } from './filterController.ts'
+import { activate } from '../operations/activate.ts'
+import { createGeneralController } from './generalController.ts'
+import { createVisualController } from './visualController.ts'
+import { createVisualCache } from '../cache/visualCache.ts'
 
 export type SliceProvider = NonNullable<ReturnType<typeof createSliceProvider>>
 export function createSliceProvider(
@@ -24,36 +26,46 @@ export function createSliceProvider(
     context, loader.sliceData(),
     appState, output
   )
+
+  const visualCache = createVisualCache()
   const excluder = exclusionHandler(loader)
   const target = loader.getExcludeConfigTarget()
 
-  const { treeProvider, treeChanged } =
-    createTreeProvider(cache, appState)
+  const {
+    treeProvider,
+    treeDisposable,
+    updateTree
+  } = createTreeProvider(cache, appState, visualCache)
 
   const scope: Scope = {
     loader,
     root,
     cache,
     output,
-    treeChanged,
     appState,
+    updateTree,
     applyEffectiveSlice,
     resolveNothingActive
   }
 
   const map = createMapController(scope)
   const filter = createFilterController(scope)
+  const visuals = createVisualController(scope, visualCache)
+
   const general = createGeneralController(
     scope,
     map,
-    filter
+    filter,
+    visuals
   )
 
   return {
+    general,
     map,
     filter,
+    visuals,
     treeProvider,
-    general
+    treeDisposable,
   }
 
   async function applyEffectiveSlice() {
@@ -67,7 +79,8 @@ export function createSliceProvider(
     const exclude = excluder.resolve(slice, output)
 
     await activate(localExclude, exclude, target)
-    treeChanged.fire()
+    updateTree()
+    visuals.update(slice.mergeId)
   }
 
   async function resolveNothingActive(): Promise<void> {
@@ -79,6 +92,7 @@ export function createSliceProvider(
 
     await deactivate(localExclude, target)
     await cache.setRecoveryExclude(undefined)
-    treeChanged.fire()
+    updateTree()
+    visuals.clear()
   }
 }

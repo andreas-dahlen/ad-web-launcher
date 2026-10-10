@@ -1,7 +1,7 @@
 import type { NormalizedPaths, SliceFilter, SliceMap } from '../types/dataStructure.types.ts'
-import { resolveNormalization } from './normalization.ts'
+import { resolveNormalization } from './resolve.ts'
 
-export function resolveMap(
+export function normalizeMap(
   map: SliceMap,
   resolvedPaths: NormalizedPaths
 ): SliceMap {
@@ -20,7 +20,7 @@ export function resolveMap(
 
   return { ...rest, ...resolved }
 }
-export function resolveFilter(
+export function normalizeFilter(
   filter: SliceFilter,
   resolvedPaths: NormalizedPaths
 ): SliceFilter {
@@ -42,7 +42,7 @@ export function resolveFilter(
   return { ...rest, ...resolved }
 }
 
-export function resolveFilterRemoval(
+export function normalizeFilterRemoval(
   filter: SliceFilter,
   resolvedPaths: NormalizedPaths
 ): SliceFilter {

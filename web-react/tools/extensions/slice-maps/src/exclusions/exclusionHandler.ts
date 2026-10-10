@@ -11,6 +11,8 @@ export function exclusionHandler(
   loader: LoadHandler
 ) {
   const resolutions: SliceResolution[] = []
+  //TODO new Map<mergedId, SliceResolution>
+
   // const debug = createDebug(output)
 
   function resolve(slice: MergedSlice,

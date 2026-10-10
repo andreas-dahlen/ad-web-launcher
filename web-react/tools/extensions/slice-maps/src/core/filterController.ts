@@ -1,21 +1,21 @@
 import type { NormalizedPaths, Scope, SliceFilter } from '../types/dataStructure.types.ts';
 import { createDebug } from '../utils/debug.ts';
 import { showMsg } from '../utils/showMsg.ts';
-import { createFilter } from '../processing/create.ts';
-import { renameFilter } from '../processing/rename.ts';
-import { resetFilter } from '../processing/reset.ts';
-import { resolveFilter } from '../core/normalizationApi.ts';
+import { createFilter } from '../operations/create.ts';
+import { renameFilter } from '../operations/rename.ts';
+import { resetFilter } from '../operations/reset.ts';
+import { normalizeFilter, normalizeFilterRemoval } from '../normalize/slice.ts';
 import * as vscode from 'vscode'
-import { resolvePaths } from '../utils/formatPath.ts';
-import { resolveActiveIdentity } from '../processing/identity.ts';
+import { normalizeUris } from '../normalize/uris.ts';
+import { resolveActiveIdentity } from '../operations/identity.ts';
 export type FilterController = NonNullable<ReturnType<typeof createFilterController>>
 export function createFilterController({
   loader,
   root,
   cache,
   output,
-  treeChanged,
   appState,
+  updateTree,
   applyEffectiveSlice,
   resolveNothingActive
 }: Scope
@@ -36,7 +36,7 @@ export function createFilterController({
 
     await cache.addFilter(filter)
 
-    treeChanged.fire()
+    updateTree()
     output.appendLine(`[slice maps] filter created ${filter.name}`)
   }
 
@@ -65,7 +65,7 @@ export function createFilterController({
 
     await cache.renameFilter(filter.id, name)
 
-    treeChanged.fire()
+    updateTree()
     output.appendLine(`[slice maps] filter rename: ${name}`)
   }
 
@@ -77,7 +77,7 @@ export function createFilterController({
     if (appState.isActiveFilter(filter.id)) {
       await applyEffectiveSlice()
     } else {
-      treeChanged.fire()
+      updateTree()
     }
     showMsg(`[slice maps] filter reset ${newFilter.name}`)
   }
@@ -85,44 +85,50 @@ export function createFilterController({
   async function removeExclude(
     uris: vscode.Uri[]
   ): Promise<void> {
-    const id = await resolveActiveIdentity(appState, cache)
-    if (!id) return
-    const filter = cache.getFilterById(id)
+    const identity = await resolveActiveIdentity(appState, cache)
+    if (!identity) return
+    updateTree()
+    const filter = cache.getFilterById(identity.id)
     if (!filter) return
 
-    const paths = resolvePaths(uris, root, 'exclude')
-    await update(filter, paths, '[UNEXCLUDED] user removes')
+    const paths = normalizeUris(uris, root, 'exclude')
+    await update(filter, paths, '[UNEXCLUDED] user removes', 'remove')
   }
 
   async function addExclude(
     uris: vscode.Uri[]
   ): Promise<void> {
-    const id = await resolveActiveIdentity(appState, cache)
-    if (!id) return
-    const filter = cache.getFilterById(id)
+    const identity = await resolveActiveIdentity(appState, cache)
+    if (!identity) return
+    updateTree()
+    const filter = cache.getFilterById(identity.id)
     if (!filter) return
 
-    const paths = resolvePaths(uris, root, 'exclude')
+    const paths = normalizeUris(uris, root, 'exclude')
     await update(filter, paths, '[EXCLUDES] user excludes')
   }
 
   async function update(
     filter: SliceFilter,
     paths: NormalizedPaths,
-    message: string
+    message: string,
+    remove?: 'remove'
   ): Promise<void> {
     debug(message, paths)
 
-    const nextFilter = resolveFilter(filter, paths)
+    const nextFilter = remove === 'remove'
+      ? normalizeFilterRemoval(filter, paths)
+      : normalizeFilter(filter, paths)
 
     debug('[UPDATE] before resolve', filter)
     await cache.addFilter(nextFilter)
+
     debug('[UPDATE] after resolve', nextFilter)
 
     if (appState.isActiveFilter(nextFilter.id)) {
       await applyEffectiveSlice()
     } else {
-      treeChanged.fire()
+      updateTree()
     }
   }
 

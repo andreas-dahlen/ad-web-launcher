@@ -1,5 +1,5 @@
 import * as vscode from 'vscode'
-import type { SliceProvider } from '../core/createSliceProvider.ts'
+import type { SliceProvider } from '../core/sliceProvider.ts'
 import type { SliceFilter, SliceMap, Slice } from '../types/dataStructure.types.ts'
 
 export function register(
@@ -28,6 +28,7 @@ export function register(
       'sliceMaps',
       provider.treeProvider
     ),
+    provider.treeDisposable,
 
     vscode.commands.registerCommand(
       'sliceMaps.configure',

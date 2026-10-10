@@ -7,7 +7,6 @@ export function createAppStateCache() {
   let activeMap: ActiveMap | undefined
   const activeFilters = new Set<UUID>()
   let activeConfig: ActiveSlice | undefined
-  // let localExclude: Record<string, boolean> | undefined
 
   return {
 
@@ -39,11 +38,6 @@ export function createAppStateCache() {
       return activeConfig
     },
 
-    // getLocalExclude() {
-    //   return localExclude
-    // },
-
-
     setActiveMap(mapIdentity: ActiveMap | undefined) {
       activeMap = mapIdentity
     },
@@ -56,9 +50,8 @@ export function createAppStateCache() {
         activeConfig?.type
       )
     },
-    // setLocalExclude(exclude: Record<string, boolean> | undefined) {
-    //   localExclude = exclude
-    // },
+
+
     addActiveFilter(id: UUID) {
       activeFilters.add(id)
     },

@@ -2,7 +2,7 @@ import type { NormalizedPaths, TreeNode } from '../types/dataStructure.types.ts'
 import picomatch from 'picomatch'
 import { hasBasePath } from '../utils/comparePaths.ts';
 
-export default function resolveGlob(
+export default function normalizeGlob(
   pattern: string,
   fileTree: TreeNode[]
 ): NormalizedPaths {

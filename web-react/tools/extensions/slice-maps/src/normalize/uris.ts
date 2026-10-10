@@ -3,7 +3,7 @@ import path from 'node:path'
 import type * as vscode from 'vscode'
 import type { NormalizedPaths, UserChoice } from '../types/dataStructure.types.ts'
 
-export function resolvePaths(
+export function normalizeUris(
   uris: vscode.Uri[],
   root: vscode.WorkspaceFolder,
   choice: UserChoice
