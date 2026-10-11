@@ -1,10 +1,17 @@
 import * as vscode from 'vscode'
 import type { SliceProvider } from '../core/sliceProvider.ts'
-import type { SliceFilter, SliceMap, Slice } from '../types/dataStructure.types.ts'
+import type { SliceFilter, SliceMap, Slice, VisualTreeNode } from '../types/dataStructure.types.ts'
+import { normalizePaths } from '../utils/normalizePathType.ts'
+
+type SingleCommand = VisualTreeNode | vscode.Uri
+type ArrayCommand = VisualTreeNode[] | vscode.Uri[]
+
+type CommandPath = [single: SingleCommand, array?: ArrayCommand]
 
 export function register(
   context: vscode.ExtensionContext,
   provider: SliceProvider,
+  root: vscode.WorkspaceFolder,
   output: vscode.OutputChannel
 ) {
   async function safe(
@@ -24,10 +31,10 @@ export function register(
   }
 
   context.subscriptions.push(
-    vscode.window.registerTreeDataProvider(
-      'sliceMaps',
-      provider.treeProvider
-    ),
+    vscode.window.createTreeView('sliceMaps', {
+      treeDataProvider: provider.treeProvider,
+      canSelectMany: true,
+    }),
     provider.treeDisposable,
 
     vscode.commands.registerCommand(
@@ -40,9 +47,9 @@ export function register(
 
     vscode.commands.registerCommand(
       'sliceMaps.explorerConfig',
-      (_, uris: vscode.Uri[]) => safe(
+      (...args: CommandPath) => safe(
         'add to slice',
-        () => provider.general.explorerConfig(uris)
+        () => provider.general.explorerConfig(normalizePaths(...args, root))
       )
     ),
 
@@ -53,34 +60,35 @@ export function register(
         () => provider.general.addGlob(node)
       )
     ),
+
     vscode.commands.registerCommand(
       'sliceMaps.include',
-      (_, uris: vscode.Uri[]) => safe(
+      (...args: CommandPath) => safe(
         'include in map',
-        () => provider.map.include(uris)
+        () => provider.map.include(normalizePaths(...args, root))
       )
     ),
 
     vscode.commands.registerCommand(
       'sliceMaps.exclude',
-      (_, uris: vscode.Uri[]) => safe(
+      (...args: CommandPath) => safe(
         'exclude from map',
-        () => provider.map.exclude(uris)
+        () => provider.map.exclude(normalizePaths(...args, root))
       )
     ),
     vscode.commands.registerCommand(
       'sliceMaps.removeExcludeFilter',
-      (_, uris: vscode.Uri[]) => safe(
+      (...args: CommandPath) => safe(
         'remove exclude from filter',
-        () => provider.filter.removeExclude(uris)
+        () => provider.filter.removeExclude(normalizePaths(...args, root))
       )
     ),
 
     vscode.commands.registerCommand(
       'sliceMaps.addExcludeFilter',
-      (_, uris: vscode.Uri[]) => safe(
+      (...args: CommandPath) => safe(
         'add exclude to filter',
-        () => provider.filter.addExclude(uris)
+        () => provider.filter.addExclude(normalizePaths(...args, root))
       )
     ),
 

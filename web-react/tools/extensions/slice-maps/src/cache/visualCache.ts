@@ -1,30 +1,21 @@
-import type { TreeNode } from '../types/dataStructure.types.ts'
+import type { VisualTreeNode } from '../types/dataStructure.types.ts'
 import * as vscode from 'vscode'
-type VisualData = {
-  data: TreeNode[]
-}
+
 export type VisualCache = NonNullable<ReturnType<typeof createVisualCache>>
 export function createVisualCache() {
-  let isEnabled = false
-  let data: VisualData | undefined
+  const data = new Map<string, VisualTreeNode[]>()
   let root: vscode.WorkspaceFolder | undefined
 
   return {
-    isEnabled() {
-      return isEnabled
-    },
-
     getData() {
       return data
     },
 
-    setEnabled(willBeEnabled: boolean) {
-      isEnabled = willBeEnabled
+    setData(mergeId: string, visualTree: VisualTreeNode[]) {
+      data.set(mergeId, visualTree)
     },
 
-    setData(value: VisualData | undefined) {
-      data = value
-    },
+
 
 
     setRoot(saveRoot: vscode.WorkspaceFolder) {

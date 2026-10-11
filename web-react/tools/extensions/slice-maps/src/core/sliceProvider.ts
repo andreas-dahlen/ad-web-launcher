@@ -35,7 +35,7 @@ export function createSliceProvider(
     treeProvider,
     treeDisposable,
     updateTree
-  } = createTreeProvider(cache, appState, visualCache)
+  } = createTreeProvider(cache, appState, visualCache, output)
 
   const scope: Scope = {
     loader,
@@ -50,7 +50,7 @@ export function createSliceProvider(
 
   const map = createMapController(scope)
   const filter = createFilterController(scope)
-  const visuals = createVisualController(scope, visualCache)
+  const visuals = createVisualController(scope, excluder, visualCache)
 
   const general = createGeneralController(
     scope,

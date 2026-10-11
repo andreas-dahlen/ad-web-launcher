@@ -6,7 +6,6 @@ import { requestOperation } from '../operations/requestOperation.ts';
 import type { Scope, Slice } from '../types/dataStructure.types.ts';
 import type { FilterController } from './filterController.ts';
 import type { MapController } from './mapController.ts';
-import * as vscode from 'vscode'
 import type { VisualController } from './visualController.ts';
 
 export function createGeneralController(
@@ -45,7 +44,7 @@ export function createGeneralController(
     updateTree()
   }
 
-  async function explorerConfig(uris: vscode.Uri[]): Promise<void> {
+  async function explorerConfig(absolutePaths: string[]): Promise<void> {
     const identity = await resolveActiveIdentity(appState, cache)
     if (!identity) return
     updateTree()
@@ -54,16 +53,16 @@ export function createGeneralController(
 
     switch (operation) {
       case 'include':
-        await map.include(uris)
+        await map.include(absolutePaths)
         break
       case 'exclude':
-        await map.exclude(uris)
+        await map.exclude(absolutePaths)
         break
       case 'addExclude':
-        await filter.addExclude(uris)
+        await filter.addExclude(absolutePaths)
         break
       case 'removeExclude':
-        await filter.removeExclude(uris)
+        await filter.removeExclude(absolutePaths)
         break
     }
   }

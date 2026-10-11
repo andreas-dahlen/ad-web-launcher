@@ -18,7 +18,7 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 
   await provider.general.startup()
 
-  register(context, provider, output)
+  register(context, provider, root, output)
 
 
   output.appendLine('[slice maps] loaded')

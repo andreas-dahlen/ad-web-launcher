@@ -11,6 +11,7 @@ export function createTreeProvider(
   cache: SliceCache,
   state: AppStateCache,
   visualCache: VisualCache,
+  output: vscode.OutputChannel
 ): {
   treeProvider: vscode.TreeDataProvider<TreeProviderNode>
   updateTree: () => void
@@ -80,7 +81,7 @@ export function createTreeProvider(
       if (!root) {
         return new vscode.TreeItem(node.path)
       }
-      return fileTreeItem(node, vscode.Uri.joinPath(root.uri, node.path))
+      return fileTreeItem(node, vscode.Uri.joinPath(root.uri, node.path), output)
     }
   }
   return {

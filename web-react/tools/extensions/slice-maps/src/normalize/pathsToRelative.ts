@@ -3,8 +3,8 @@ import path from 'node:path'
 import type * as vscode from 'vscode'
 import type { NormalizedPaths, UserChoice } from '../types/dataStructure.types.ts'
 
-export function normalizeUris(
-  uris: vscode.Uri[],
+export function pathsToRelative(
+  absolutePaths: string[],
   root: vscode.WorkspaceFolder,
   choice: UserChoice
 ): NormalizedPaths {
@@ -15,9 +15,8 @@ export function normalizeUris(
     excludeFiles: [],
     excludeFolders: []
   }
-  for (const uri of uris) {
+  for (const absolutePath of absolutePaths) {
     //NOTE formatPath uses statSync which could throw
-    const absolutePath = uri.fsPath
     const solvedPath = path.relative(
       root.uri.fsPath,
       absolutePath

@@ -5,9 +5,8 @@ import { createFilter } from '../operations/create.ts';
 import { renameFilter } from '../operations/rename.ts';
 import { resetFilter } from '../operations/reset.ts';
 import { normalizeFilter, normalizeFilterRemoval } from '../normalize/slice.ts';
-import * as vscode from 'vscode'
-import { normalizeUris } from '../normalize/uris.ts';
 import { resolveActiveIdentity } from '../operations/identity.ts';
+import { pathsToRelative } from '../normalize/pathsToRelative.ts';
 export type FilterController = NonNullable<ReturnType<typeof createFilterController>>
 export function createFilterController({
   loader,
@@ -83,7 +82,7 @@ export function createFilterController({
   }
 
   async function removeExclude(
-    uris: vscode.Uri[]
+    absolutePaths: string[]
   ): Promise<void> {
     const identity = await resolveActiveIdentity(appState, cache)
     if (!identity) return
@@ -91,12 +90,12 @@ export function createFilterController({
     const filter = cache.getFilterById(identity.id)
     if (!filter) return
 
-    const paths = normalizeUris(uris, root, 'exclude')
+    const paths = pathsToRelative(absolutePaths, root, 'exclude')
     await update(filter, paths, '[UNEXCLUDED] user removes', 'remove')
   }
 
   async function addExclude(
-    uris: vscode.Uri[]
+    absolutePaths: string[]
   ): Promise<void> {
     const identity = await resolveActiveIdentity(appState, cache)
     if (!identity) return
@@ -104,7 +103,7 @@ export function createFilterController({
     const filter = cache.getFilterById(identity.id)
     if (!filter) return
 
-    const paths = normalizeUris(uris, root, 'exclude')
+    const paths = pathsToRelative(absolutePaths, root, 'exclude')
     await update(filter, paths, '[EXCLUDES] user excludes')
   }
 

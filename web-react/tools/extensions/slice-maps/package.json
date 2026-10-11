@@ -188,8 +188,30 @@
         {
           "command": "sliceMaps.glob",
           "when": "view == sliceMaps && (viewItem == sliceFilter || viewItem == sliceMap)"
-        }
+        },
 
+
+
+        {
+          "command": "sliceMaps.include",
+          "when": "view == sliceMaps && viewItem == workspaceFile && sliceMaps.activeType == map"
+        },
+        {
+          "command": "sliceMaps.exclude",
+          "when": "view == sliceMaps && viewItem == workspaceFile && sliceMaps.activeType == map"
+        },
+        {
+          "command": "sliceMaps.removeExcludeFilter",
+          "when": "view == sliceMaps && viewItem == workspaceFile && sliceMaps.activeType == filter"
+        },
+        {
+          "command": "sliceMaps.addExcludeFilter",
+          "when": "view == sliceMaps && viewItem == workspaceFile && sliceMaps.activeType == filter"
+        },
+        {
+          "command": "sliceMaps.explorerConfig",
+          "when": "view == sliceMaps && viewItem == workspaceFile && !sliceMaps.activeType"
+        }
       ],
       "view/title": [
         {

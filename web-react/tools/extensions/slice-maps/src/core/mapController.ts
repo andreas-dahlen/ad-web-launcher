@@ -6,8 +6,7 @@ import { renameMap } from '../operations/rename.ts';
 import { resetMap } from '../operations/reset.ts';
 import { normalizeMap } from '../normalize/slice.ts';
 import { resolveActiveIdentity } from '../operations/identity.ts';
-import * as vscode from 'vscode'
-import { normalizeUris } from '../normalize/uris.ts';
+import { pathsToRelative } from '../normalize/pathsToRelative.ts';
 
 export type MapController = NonNullable<ReturnType<typeof createMapController>>
 export function createMapController({
@@ -83,7 +82,7 @@ export function createMapController({
   }
 
   async function include(
-    uris: vscode.Uri[]
+    absolutePaths: string[]
   ): Promise<void> {
     const identity = await resolveActiveIdentity(appState, cache)
     if (!identity) return
@@ -91,12 +90,12 @@ export function createMapController({
     const map = cache.getMapById(identity.id)
     if (!map) return
 
-    const paths = normalizeUris(uris, root, 'include')
+    const paths = pathsToRelative(absolutePaths, root, 'include')
     await update(map, paths, '[ADD] user adds')
   }
 
   async function exclude(
-    uris: vscode.Uri[]
+    absolutePaths: string[]
   ): Promise<void> {
     const identity = await resolveActiveIdentity(appState, cache)
     if (!identity) return
@@ -104,7 +103,7 @@ export function createMapController({
     const map = cache.getMapById(identity.id)
     if (!map) return
 
-    const paths = normalizeUris(uris, root, 'exclude')
+    const paths = pathsToRelative(absolutePaths, root, 'exclude')
     await update(map, paths, '[REMOVE] user removes')
   }
 

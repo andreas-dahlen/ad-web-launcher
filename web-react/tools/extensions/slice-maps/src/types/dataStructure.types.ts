@@ -20,8 +20,10 @@ export type TreeProviderNode = SliceTreeNode | VisualTreeNode
 
 export type VisualTreeNode = {
   path: string
+  absolutePath: string
   children?: VisualTreeNode[]
   type: 'files' | 'folders'
+  semantics?: NodeSemantics
 }
 
 
@@ -69,9 +71,27 @@ export type ActiveSlice = ActiveMap | ActiveFilter
 export type UserChoice = "include" | "exclude"
 export type NodeState = "include" | "exclude"
 
-export type SliceResolution = MergedSlice & {
+export type InharitedTruth = {
+  implicit: NodeState
+  explicit: NodeState | null
+}
+
+export type NodeSemantics = {
+  type: 'explicit' | 'implicit'
+  outcome: 'include' | 'exclude' | 'overwritten'
+}
+
+export type EffectiveResult = {
+  resolution: Map<string, NodeState>
+  semantics: Map<string, NodeSemantics>
+}
+
+
+export type ResolvedExclusion = {
+  result: EffectiveResult
   resolvedExclude: Record<string, true>
 }
+export type SliceResolution = MergedSlice & ResolvedExclusion
 
 export type Scope = {
   loader: LoadHandler
