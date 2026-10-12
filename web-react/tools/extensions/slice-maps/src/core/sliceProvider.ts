@@ -22,12 +22,9 @@ export function createSliceProvider(
 
   const appState = createAppStateCache()
   const loader = loadHandler(context, root)
-  const cache = createSliceMapCache(
-    context, loader.sliceData(),
-    appState, output
-  )
+  const cache = createSliceMapCache(loader, appState)
 
-  const visualCache = createVisualCache()
+  const visualCache = createVisualCache(loader, root)
   const excluder = exclusionHandler(loader)
   const target = loader.getExcludeConfigTarget()
 
@@ -55,8 +52,7 @@ export function createSliceProvider(
   const general = createGeneralController(
     scope,
     map,
-    filter,
-    visuals
+    filter
   )
 
   return {
@@ -79,8 +75,8 @@ export function createSliceProvider(
     const exclude = excluder.resolve(slice, output)
 
     await activate(localExclude, exclude, target)
-    updateTree()
     visuals.update(slice.mergeId)
+    updateTree()
   }
 
   async function resolveNothingActive(): Promise<void> {
@@ -91,8 +87,8 @@ export function createSliceProvider(
     }
 
     await deactivate(localExclude, target)
-    await cache.setRecoveryExclude(undefined)
+    await loader.setPersistedExclude(undefined)
+    visuals.reset()
     updateTree()
-    visuals.clear()
   }
 }

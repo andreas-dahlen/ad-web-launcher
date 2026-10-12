@@ -1,6 +1,6 @@
 import * as vscode from 'vscode'
 import { loadTree } from './loadTree.ts'
-import type { SliceData, TreeNode } from '../types/dataStructure.types.ts'
+import type { ActiveSlice, SliceData, TreeNode } from '../types/dataStructure.types.ts'
 
 export type LoadHandler = NonNullable<ReturnType<typeof loadHandler>>
 export const loadHandler = (context: vscode.ExtensionContext, root: vscode.WorkspaceFolder) => {
@@ -19,15 +19,43 @@ export const loadHandler = (context: vscode.ExtensionContext, root: vscode.Works
       return inspect?.workspaceFolderValue ?? {}
     },
 
-    sliceData(): SliceData {
+    fileTree(): TreeNode[] {
+      return loadTree(root.uri.fsPath)
+    },
+
+
+    getPersistedSliceData(): SliceData {
       return context.workspaceState.get<SliceData>('sliceMaps') ?? {
         maps: [],
         filters: []
       }
     },
+    async setPersistedSliceData(data: SliceData): Promise<void> {
+      await context.workspaceState.update(
+        'sliceMaps',
+        data
+      )
+    },
 
-    fileTree(): TreeNode[] {
-      return loadTree(root.uri.fsPath)
+    getPersistedExclude(): Record<string, boolean> | undefined {
+      return context.workspaceState.get<Record<string, boolean>>('localExclude')
+    },
+    async setPersistedExclude(exclude: Record<string, boolean> | undefined): Promise<void> {
+      await context.workspaceState.update(
+        'localExclude',
+        exclude
+      )
+    },
+
+    getPersistedActiveConfig(): ActiveSlice | undefined {
+      return context.workspaceState.get<ActiveSlice>('activeConfig')
+    },
+
+    async setPersistedActiveConfig(recoveryActiveConfig: ActiveSlice | undefined): Promise<void> {
+      await context.workspaceState.update(
+        'activeConfig',
+        recoveryActiveConfig
+      )
     }
   }
 }

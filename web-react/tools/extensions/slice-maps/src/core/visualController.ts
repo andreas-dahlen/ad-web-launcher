@@ -5,21 +5,13 @@ import * as vscode from 'vscode'
 
 export type VisualController = NonNullable<ReturnType<typeof createVisualController>>
 export function createVisualController(
-  { updateTree, loader, root }: Scope,
+  { loader, root }: Scope,
   excluder: ExclusionHandler,
   visualCache: VisualCache
 ) {
 
-  function setTreeView() {
-    const tree = sortTree(loader.fileTree())
-    const result = enrichTree(tree, root)
-    visualCache.setData('inactive', result)
-    visualCache.setRoot(root)
-    updateTree()
-  }
-
-  async function update(mergeId: string) {
-    const tree = sortTree(loader.fileTree())
+  function update(mergeId: string) {
+    const tree = loader.fileTree()
     const data = excluder.getResolutionByMergeId(mergeId)
     if (!data) return
 
@@ -28,52 +20,61 @@ export function createVisualController(
     const result = enrichTree(tree, root, semantics)
 
     visualCache.setData(mergeId, result)
-
-    updateTree()
+    visualCache.setActive(mergeId)
   }
-  async function clear() {
-    void visualCache
+
+  function reset() {
+    const tree = loader.fileTree()
+    const result = enrichTree(tree, root)
+    visualCache.setData('inactive', result)
+    visualCache.setActive('inactive')
   }
 
   return {
     update,
-    clear,
-    setTreeView
+    reset
   }
 }
 
-function enrichTree(
+
+export function enrichTree(
   nodes: TreeNode[],
   root: vscode.WorkspaceFolder,
-  semantics?: Map<string, NodeSemantics>
+  semanticData?: Map<string, NodeSemantics>
 ): VisualTreeNode[] {
-  return nodes.map(node => ({
-    ...node,
-    absolutePath: vscode.Uri.joinPath(root.uri, node.path).fsPath,
-    semantics: semantics
-      ? semantics.get(node.path)
-      : undefined,
-    children: node.children
-      ? enrichTree(node.children, root, semantics)
-      : undefined
-  }))
-}
-function sortTree(fileTree: TreeNode[]): TreeNode[] {
-  return fileTree
-    .toSorted((a, b) => {
-      if (a.type !== b.type) {
-        return a.type === 'folders' ? -1 : 1
-      }
 
-      return getName(a.path).localeCompare(getName(b.path), undefined, {
-        numeric: true,
-        sensitivity: 'base',
+  function resolve(treeNodes: TreeNode[]): VisualTreeNode[] {
+    const tree: VisualTreeNode[] = []
+
+    for (const node of sortNodes(treeNodes)) {
+      const absolutePath = vscode.Uri.joinPath(root.uri, node.path).fsPath
+      const semantics = semanticData?.get(node.path)
+
+      tree.push({
+        ...node,
+        absolutePath,
+        semantics,
+        children: node.children
+          ? resolve(node.children)
+          : undefined,
       })
+    }
+    return tree
+  }
+  return resolve(nodes)
+}
+
+function sortNodes(nodes: TreeNode[]): TreeNode[] {
+  return nodes.toSorted((a, b) => {
+    if (a.type !== b.type) {
+      return a.type === 'folders' ? -1 : 1
+    }
+
+    return getName(a.path).localeCompare(getName(b.path), undefined, {
+      numeric: true,
+      sensitivity: 'base',
     })
-    .map(node => ({
-      ...node,
-      ...(node.children && { children: sortTree(node.children) }),
-    }))
+  })
 }
 
 function getName(path: string): string {

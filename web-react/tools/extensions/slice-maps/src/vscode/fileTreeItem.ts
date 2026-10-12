@@ -1,44 +1,18 @@
 import * as vscode from 'vscode'
 
-import type { TreeNode } from '../types/dataStructure.types.ts'
-
-type VisualState =
-  | 'explicitInclude'
-  | 'implicitInclude'
-  | 'explicitExclude'
-  | 'implicitExclude'
-  | 'excludedWithIncludedChildren'
-
-const stateColors: Partial<Record<VisualState, string>> = {
-  explicitInclude: 'charts.green',
-  explicitExclude: 'charts.red',
-  excludedWithIncludedChildren: 'charts.yellow',
-}
-
-const stateLabels: Record<VisualState, string> = {
-  explicitInclude: '    +',
-  implicitInclude: '    +',
-  explicitExclude: '    -',
-  implicitExclude: '    -',
-  excludedWithIncludedChildren: '   ~',
-}
-
-const stateDescriptions: Record<VisualState, string> = {
-  explicitInclude: '**Explicitly included**',
-  implicitInclude: 'Implicitly included',
-  explicitExclude: '**Explicitly excluded**',
-  implicitExclude: 'Implicitly excluded',
-  excludedWithIncludedChildren:
-    '**Excluded** — contains included children',
-}
+import type { NodeSemantics, VisualTreeNode } from '../types/dataStructure.types.ts'
 
 export function fileTreeItem(
-  node: TreeNode,
+  node: VisualTreeNode,
   uri: vscode.Uri,
   output: vscode.OutputChannel
 ): vscode.TreeItem {
+
+  void output //TODO remove output
+
   const isFolder = node.type === 'folders'
   const name = node.path.split(/[\\/]/).pop() ?? node.path
+  const semantics = node.semantics
 
   const item = new vscode.TreeItem(
     name,
@@ -58,47 +32,24 @@ export function fileTreeItem(
   item.resourceUri = uri
   item.contextValue = 'workspaceFile'
 
-  // Temporary visual experiment
-  const state = getTestState(name)
+  item.description = getLabel(semantics?.outcome)
+  item.tooltip = new vscode.MarkdownString(getTooltip(semantics))
 
-  item.description = getStateLabel(state)
-  item.tooltip = new vscode.MarkdownString(stateDescriptions[state])
-  output.appendLine(
-    `[Visual] path=${node.path} | name=${name} | type=${node.type} | state=${state}`,
-  )
-  if (
-    state === 'explicitInclude' ||
-    state === 'explicitExclude' ||
-    (state === 'excludedWithIncludedChildren' && isFolder)
-  ) {
-    item.iconPath = getStateIcon(state, isFolder)
+  if (semantics?.type === 'explicit') {
+    const icon = getStateIcon(semantics.outcome, isFolder)
+    item.iconPath = icon
   }
-
-  output.appendLine(
-    `[Icon] ${name} | ${item.iconPath ? 'custom icon assigned' : 'native icon'}`,
-  )
 
   return item
 }
 
-function getTestState(name: string): VisualState {
-  if (name === 'identity.ts') return 'explicitInclude'
-  if (name === 'setup.utils.ts') return 'explicitExclude'
-  if (name === 'operations') return 'excludedWithIncludedChildren'
-  if (name === 'test') return 'implicitExclude'
-
-  return 'implicitInclude'
-}
-
 function getStateIcon(
-  state: VisualState,
+  outcome: NodeSemantics['outcome'],
   isFolder: boolean,
 ): vscode.ThemeIcon {
-  const color = stateColors[state]
-
-  if (!color) {
-    throw new Error(`No icon color configured for state: ${state}`)
-  }
+  let color: string = 'charts.green'
+  if (outcome === 'overwritten') color = 'charts.yellow'
+  else if (outcome === 'exclude') color = 'charts.red'
 
   return new vscode.ThemeIcon(
     isFolder ? 'file-directory' : 'symbol-file',
@@ -106,6 +57,24 @@ function getStateIcon(
   )
 }
 
-function getStateLabel(state: VisualState): string {
-  return stateLabels[state]
+function getLabel(outcome: NodeSemantics['outcome'] | undefined) {
+  if (outcome === 'exclude') return '-'
+  if (outcome === 'overwritten') return '~'
+  return '+'
+}
+
+function getTooltip(semantics: NodeSemantics | undefined) {
+
+  if (!semantics) return 'Implicitly included'
+
+  if (semantics.type === 'explicit') {
+    if (semantics.outcome === 'include') return '**Explicitly included**'
+    if (semantics.outcome === 'overwritten') return '**Excluded** — explicitly but contains included children'
+    return '**Explicitly excluded**'
+  }
+  if (semantics.type === 'implicit') {
+    if (semantics.outcome === 'exclude') return 'Implicitly excluded'
+    if (semantics.outcome === 'overwritten') return '**Excluded** — inplicitly but contains included children'
+  }
+  return 'Implicitly included'
 }

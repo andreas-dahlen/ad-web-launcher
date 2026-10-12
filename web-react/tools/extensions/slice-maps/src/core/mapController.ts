@@ -5,8 +5,8 @@ import { createMap } from '../operations/create.ts';
 import { renameMap } from '../operations/rename.ts';
 import { resetMap } from '../operations/reset.ts';
 import { normalizeMap } from '../normalize/slice.ts';
-import { resolveActiveIdentity } from '../operations/identity.ts';
 import { pathsToRelative } from '../normalize/pathsToRelative.ts';
+import { resolveConfigIdentity } from '../identity/configIdentity.ts';
 
 export type MapController = NonNullable<ReturnType<typeof createMapController>>
 export function createMapController({
@@ -36,6 +36,10 @@ export function createMapController({
 
     await cache.addMap(map)
 
+    if (!appState.getActiveConfig()) {
+      await resolveConfigIdentity(appState, cache, loader)
+    }
+
     updateTree()
     output.appendLine(`[slice maps] map created ${map.name}`)
   }
@@ -44,7 +48,7 @@ export function createMapController({
     await cache.removeMap(map.id)
 
     if (appState.getActiveConfig()?.id === map.id) {
-      appState.setActiveConfig(undefined)
+      await resolveConfigIdentity(appState, cache, loader)
     }
 
     if (appState.isActiveMap(map.id)) {
@@ -55,6 +59,8 @@ export function createMapController({
       } else {
         await resolveNothingActive()
       }
+    } else {
+      updateTree()
     }
     output.appendLine(`[slice maps] map removed`)
   }
@@ -84,9 +90,9 @@ export function createMapController({
   async function include(
     absolutePaths: string[]
   ): Promise<void> {
-    const identity = await resolveActiveIdentity(appState, cache)
-    if (!identity) return
-    updateTree()
+    const identity = await resolveConfigIdentity(appState, cache, loader)
+    if (identity?.type !== 'map') return
+
     const map = cache.getMapById(identity.id)
     if (!map) return
 
@@ -97,9 +103,9 @@ export function createMapController({
   async function exclude(
     absolutePaths: string[]
   ): Promise<void> {
-    const identity = await resolveActiveIdentity(appState, cache)
-    if (!identity) return
-    updateTree()
+    const identity = await resolveConfigIdentity(appState, cache, loader)
+    if (identity?.type !== 'map') return
+
     const map = cache.getMapById(identity.id)
     if (!map) return
 
@@ -153,8 +159,7 @@ export function createMapController({
     if (!appState.hasActiveSlice()) {
       const localExclude = loader.getLocalExclude()
       cache.setLocalExclude(localExclude)
-      await cache.setRecoveryExclude(localExclude)
-      appState.setActiveConfig({ type: map.type, id: map.id })
+      await loader.setPersistedExclude(localExclude)
     }
     appState.setActiveMap({ type: map.type, id: map.id })
     await applyEffectiveSlice()

@@ -11,7 +11,6 @@ type CommandPath = [single: SingleCommand, array?: ArrayCommand]
 export function register(
   context: vscode.ExtensionContext,
   provider: SliceProvider,
-  root: vscode.WorkspaceFolder,
   output: vscode.OutputChannel
 ) {
   async function safe(
@@ -41,17 +40,17 @@ export function register(
       'sliceMaps.configure',
       (node: Slice) => safe(
         'configure item',
-        () => provider.general.toggleConfig(node)
+        () => provider.general.changeConfig(node)
       )
     ),
 
-    vscode.commands.registerCommand(
-      'sliceMaps.explorerConfig',
-      (...args: CommandPath) => safe(
-        'add to slice',
-        () => provider.general.explorerConfig(normalizePaths(...args, root))
-      )
-    ),
+    // vscode.commands.registerCommand(
+    //   'sliceMaps.explorerConfig',
+    //   (...args: CommandPath) => safe(
+    //     'add to slice',
+    //     () => provider.general.explorerConfig(normalizePaths(...args))
+    //   )
+    // ),
 
     vscode.commands.registerCommand(
       'sliceMaps.glob',
@@ -65,7 +64,7 @@ export function register(
       'sliceMaps.include',
       (...args: CommandPath) => safe(
         'include in map',
-        () => provider.map.include(normalizePaths(...args, root))
+        () => provider.map.include(normalizePaths(...args))
       )
     ),
 
@@ -73,14 +72,14 @@ export function register(
       'sliceMaps.exclude',
       (...args: CommandPath) => safe(
         'exclude from map',
-        () => provider.map.exclude(normalizePaths(...args, root))
+        () => provider.map.exclude(normalizePaths(...args))
       )
     ),
     vscode.commands.registerCommand(
       'sliceMaps.removeExcludeFilter',
       (...args: CommandPath) => safe(
         'remove exclude from filter',
-        () => provider.filter.removeExclude(normalizePaths(...args, root))
+        () => provider.filter.removeExclude(normalizePaths(...args))
       )
     ),
 
@@ -88,7 +87,7 @@ export function register(
       'sliceMaps.addExcludeFilter',
       (...args: CommandPath) => safe(
         'add exclude to filter',
-        () => provider.filter.addExclude(normalizePaths(...args, root))
+        () => provider.filter.addExclude(normalizePaths(...args))
       )
     ),
 

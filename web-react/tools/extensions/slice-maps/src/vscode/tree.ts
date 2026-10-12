@@ -40,7 +40,7 @@ export function createTreeProvider(
       }
 
       if (node.type === 'workspaceGroup') {
-        return visualCache.getData()?.data ?? []
+        return visualCache.getActiveData() ?? []
       }
 
       if (node.type === 'folders') {
@@ -76,12 +76,7 @@ export function createTreeProvider(
           node.id === state.getActiveConfig()?.id
         )
       }
-
-      const root = visualCache.getRoot()
-      if (!root) {
-        return new vscode.TreeItem(node.path)
-      }
-      return fileTreeItem(node, vscode.Uri.joinPath(root.uri, node.path), output)
+      return fileTreeItem(node, vscode.Uri.file(node.absolutePath), output)
     }
   }
   return {

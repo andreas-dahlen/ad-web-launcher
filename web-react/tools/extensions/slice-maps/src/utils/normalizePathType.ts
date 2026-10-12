@@ -1,11 +1,9 @@
-import path from 'node:path'
 import type { VisualTreeNode } from '../types/dataStructure.types.ts'
 import * as vscode from 'vscode'
 
 export function normalizePaths(
   unsolvedObject: VisualTreeNode | vscode.Uri,
-  unsolvedArray: VisualTreeNode[] | vscode.Uri[] | undefined,
-  root: vscode.WorkspaceFolder
+  unsolvedArray: VisualTreeNode[] | vscode.Uri[] | undefined
 ): string[] {
   const entries = unsolvedArray ?? (unsolvedObject ? [unsolvedObject] : [])
   const paths = new Set<string>()
@@ -13,7 +11,7 @@ export function normalizePaths(
   for (const entry of entries) {
     const absolutePath = entry instanceof vscode.Uri
       ? entry.fsPath
-      : path.resolve(root.uri.fsPath, entry.path)
+      : entry.absolutePath
 
     paths.add(absolutePath)
   }

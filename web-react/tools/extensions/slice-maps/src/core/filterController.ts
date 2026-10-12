@@ -5,8 +5,8 @@ import { createFilter } from '../operations/create.ts';
 import { renameFilter } from '../operations/rename.ts';
 import { resetFilter } from '../operations/reset.ts';
 import { normalizeFilter, normalizeFilterRemoval } from '../normalize/slice.ts';
-import { resolveActiveIdentity } from '../operations/identity.ts';
 import { pathsToRelative } from '../normalize/pathsToRelative.ts';
+import { resolveConfigIdentity } from '../identity/configIdentity.ts';
 export type FilterController = NonNullable<ReturnType<typeof createFilterController>>
 export function createFilterController({
   loader,
@@ -35,6 +35,10 @@ export function createFilterController({
 
     await cache.addFilter(filter)
 
+    if (!appState.getActiveConfig()) {
+      await resolveConfigIdentity(appState, cache, loader)
+    }
+
     updateTree()
     output.appendLine(`[slice maps] filter created ${filter.name}`)
   }
@@ -43,7 +47,7 @@ export function createFilterController({
     await cache.removeFilter(filter.id)
 
     if (appState.getActiveConfig()?.id === filter.id) {
-      appState.setActiveConfig(undefined)
+      await resolveConfigIdentity(appState, cache, loader)
     }
 
     if (appState.isActiveFilter(filter.id)) {
@@ -54,6 +58,8 @@ export function createFilterController({
       } else {
         await resolveNothingActive()
       }
+    } else {
+      updateTree()
     }
     output.appendLine(`[slice maps] filter removed`)
   }
@@ -70,7 +76,6 @@ export function createFilterController({
 
   async function reset(filter: SliceFilter): Promise<void> {
     const newFilter = resetFilter(filter)
-
     await cache.addFilter(newFilter)
 
     if (appState.isActiveFilter(filter.id)) {
@@ -84,9 +89,9 @@ export function createFilterController({
   async function removeExclude(
     absolutePaths: string[]
   ): Promise<void> {
-    const identity = await resolveActiveIdentity(appState, cache)
-    if (!identity) return
-    updateTree()
+    const identity = await resolveConfigIdentity(appState, cache, loader)
+    if (identity?.type !== 'filter') return
+
     const filter = cache.getFilterById(identity.id)
     if (!filter) return
 
@@ -97,9 +102,9 @@ export function createFilterController({
   async function addExclude(
     absolutePaths: string[]
   ): Promise<void> {
-    const identity = await resolveActiveIdentity(appState, cache)
-    if (!identity) return
-    updateTree()
+    const identity = await resolveConfigIdentity(appState, cache, loader)
+    if (identity?.type !== 'filter') return
+
     const filter = cache.getFilterById(identity.id)
     if (!filter) return
 
@@ -158,8 +163,7 @@ export function createFilterController({
     if (!appState.hasActiveSlice()) {
       const localExclude = loader.getLocalExclude()
       cache.setLocalExclude(localExclude)
-      await cache.setRecoveryExclude(localExclude)
-      appState.setActiveConfig({ type: filter.type, id: filter.id })
+      await loader.setPersistedExclude(localExclude)
     }
     appState.addActiveFilter(filter.id)
     await applyEffectiveSlice()

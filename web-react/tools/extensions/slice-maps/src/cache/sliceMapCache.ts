@@ -1,22 +1,16 @@
-import * as vscode from 'vscode'
 import type { UUID } from 'node:crypto'
-import type { MergedSlice, SliceData, SliceFilter, SliceMap } from '../types/dataStructure.types.ts'
+import type { MergedSlice, SliceFilter, SliceMap } from '../types/dataStructure.types.ts'
 import type { AppStateCache } from './appStateCache.ts'
+import type { LoadHandler } from '../loaders/loadHandler.ts'
 
 export type SliceCache = NonNullable<ReturnType<typeof createSliceMapCache>>
 
 export function createSliceMapCache(
-  context: vscode.ExtensionContext,
-  sliceData: SliceData,
-  appState: AppStateCache,
-  output: vscode.OutputChannel
+  loader: LoadHandler,
+  appState: AppStateCache
 ) {
 
-  void output
-
-  // output.appendLine(
-  //   `[cache] sliceData: ${JSON.stringify(sliceData)}`
-  // )
+  const sliceData = loader.getPersistedSliceData()
 
   const maps = new Map<UUID, SliceMap>(
     sliceData.maps.map(map => [map.id, map])
@@ -35,11 +29,8 @@ export function createSliceMapCache(
 
     const excludeFiles = new Set<string>()
     const excludeFolders = new Set<string>()
-    // const excludePatterns = new Set<string>()
-
 
     let mergeId = activeMapIdentity?.id ?? ''
-
 
     const filterIds = activeFiltersIdentities
       .map(filter => filter.id)
@@ -75,7 +66,7 @@ export function createSliceMapCache(
 
 
   async function persist(): Promise<void> {
-    await context.workspaceState.update('sliceMaps', {
+    await loader.setPersistedSliceData({
       maps: maps.values().toArray(),
       filters: filters.values().toArray()
     })
@@ -107,7 +98,6 @@ export function createSliceMapCache(
     await persist()
   }
 
-
   function getFilters(): SliceFilter[] {
     return filters.values().toArray()
   }
@@ -134,18 +124,6 @@ export function createSliceMapCache(
     await persist()
   }
 
-
-
-  function getRecoveryExclude(): Record<string, boolean> | undefined {
-    return context.workspaceState.get<Record<string, boolean>>('localExclude')
-  }
-  async function setRecoveryExclude(exclude: Record<string, boolean> | undefined): Promise<void> {
-    await context.workspaceState.update(
-      'localExclude',
-      exclude
-    )
-  }
-
   let localExclude: Record<string, boolean> | undefined
 
   function getLocalExclude(): Record<string, boolean> | undefined {
@@ -163,19 +141,13 @@ export function createSliceMapCache(
     getMapById,
     addMap,
     removeMap,
-    // replaceMap,
     renameMap,
 
     getFilters,
     getFilterById,
     addFilter,
     removeFilter,
-    // replaceFilter,
     renameFilter,
-
-
-    getRecoveryExclude,
-    setRecoveryExclude,
 
     getLocalExclude,
     setLocalExclude
