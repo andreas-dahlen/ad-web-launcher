@@ -32,49 +32,52 @@ export function fileTreeItem(
   item.resourceUri = uri
   item.contextValue = 'workspaceFile'
 
-  item.description = getLabel(semantics?.outcome)
+  item.label = `${getLabel(semantics, isFolder)}   ${name} `
+
+  // item.description = getLabel(semantics?.outcome, item.label)
   item.tooltip = new vscode.MarkdownString(getTooltip(semantics))
-
-  if (semantics?.type === 'explicit') {
-    const icon = getStateIcon(semantics.outcome, isFolder)
-    item.iconPath = icon
-  }
-
   return item
 }
 
-function getStateIcon(
-  outcome: NodeSemantics['outcome'],
-  isFolder: boolean,
-): vscode.ThemeIcon {
-  let color: string = 'charts.green'
-  if (outcome === 'overwritten') color = 'charts.yellow'
-  else if (outcome === 'exclude') color = 'charts.red'
+function getLabel(
+  s: NodeSemantics | undefined,
+  isFolder: boolean
+): string {
+  if (!s) return ''
 
-  return new vscode.ThemeIcon(
-    isFolder ? 'file-directory' : 'symbol-file',
-    new vscode.ThemeColor(color),
-  )
-}
+  if (s.type === 'implicit') {
+    if (s.outcome === 'exclude') return `🔻`
+    if (s.outcome === 'overwritten') return `🧈`
+    return `🌲`
+  }
 
-function getLabel(outcome: NodeSemantics['outcome'] | undefined) {
-  if (outcome === 'exclude') return '-'
-  if (outcome === 'overwritten') return '~'
-  return '+'
+  if (isFolder) {
+    if (s.outcome === 'exclude') return `🟥`
+    if (s.outcome === 'overwritten') return `🟨`
+    return `🟩`
+  }
+
+  if (s.outcome === 'exclude') return `🔴`
+  if (s.outcome === 'overwritten') return `🟡`
+  return `🟢`
+
+
 }
 
 function getTooltip(semantics: NodeSemantics | undefined) {
-
   if (!semantics) return 'Implicitly included'
 
-  if (semantics.type === 'explicit') {
-    if (semantics.outcome === 'include') return '**Explicitly included**'
-    if (semantics.outcome === 'overwritten') return '**Excluded** — explicitly but contains included children'
-    return '**Explicitly excluded**'
+  const { type, outcome } = semantics
+  const isExplicit = type === 'explicit'
+  const prefix = isExplicit ? 'Explicitly' : 'Implicitly'
+
+  if (outcome === 'include') {
+    return `${prefix} included`
   }
-  if (semantics.type === 'implicit') {
-    if (semantics.outcome === 'exclude') return 'Implicitly excluded'
-    if (semantics.outcome === 'overwritten') return '**Excluded** — inplicitly but contains included children'
+
+  if (outcome === 'exclude') {
+    return `${prefix} excluded`
   }
-  return 'Implicitly included'
+
+  return `Excluded, but contains included descendants (${type})`
 }

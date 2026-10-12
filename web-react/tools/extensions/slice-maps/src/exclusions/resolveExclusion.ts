@@ -11,9 +11,9 @@ export function resolveExclusion(
   const debug = createDebug(output, "resolution")
 
   const baseTruth = resolveBaseTruth(slice, fileTree)
-  debug('baseTruth:', baseTruth)
+  debug('baseTruth:', [...baseTruth])
   const result = effectiveResult(baseTruth, fileTree)
-  debug('resolution:', result.resolution)
+  debug('resolution:', [...result.resolution])
   const resolvedExclude = compress(result.resolution, output)
 
   return { result, resolvedExclude }

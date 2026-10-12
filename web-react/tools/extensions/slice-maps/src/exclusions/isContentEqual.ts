@@ -18,7 +18,7 @@ export function isContentEqual(
 
   return (
     compareArrays(prev.includeFiles, map.includeFiles) &&
-    compareArrays(prev.excludeFolders, map.excludeFolders) &&
+    compareArrays(prev.includeFolders, map.includeFolders) &&
     compareArrays(prev.excludeFiles, map.excludeFiles) &&
     compareArrays(prev.excludeFolders, map.excludeFolders)
   )
