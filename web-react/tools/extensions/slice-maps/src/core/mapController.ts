@@ -1,4 +1,4 @@
-import type { NormalizedPaths, Scope, SliceMap } from '../types/dataStructure.types.ts';
+import type { NormalizedPaths, Scope, SliceMap } from '../types/core.types.ts';
 import { createDebug } from '../utils/debug.ts';
 import { showMsg } from '../utils/showMsg.ts';
 import { createMap } from '../operations/create.ts';
@@ -120,7 +120,7 @@ export function createMapController({
   ): Promise<void> {
     debug(message, paths)
 
-    const nextMap = normalizeMap(map, paths)
+    const nextMap = normalizeMap(map, paths, loader.getBehavior())
 
     debug('[UPDATE] before resolve', map)
     await cache.addMap(nextMap)
@@ -157,9 +157,9 @@ export function createMapController({
 
   async function resolveActivation(map: SliceMap) {
     if (!appState.hasActiveSlice()) {
-      const localExclude = loader.getLocalExclude()
-      cache.setLocalExclude(localExclude)
-      await loader.setPersistedExclude(localExclude)
+      const excludes = loader.getFileExcludes()
+      appState.setExcludes(excludes)
+      await loader.setPersistedExclude(excludes)
     }
     appState.setActiveMap({ type: map.type, id: map.id })
     await applyEffectiveSlice()

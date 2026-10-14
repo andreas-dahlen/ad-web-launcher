@@ -5,7 +5,7 @@ import { loadHandler } from '../loaders/loadHandler.ts'
 import { exclusionHandler } from '../exclusions/exclusionHandler.ts'
 import { createTreeProvider } from '../vscode/tree.ts'
 import { createAppStateCache } from '../cache/appStateCache.ts'
-import type { Scope } from '../types/dataStructure.types.ts'
+import type { Scope } from '../types/core.types.ts'
 import { createMapController } from './mapController.ts'
 import { createFilterController } from './filterController.ts'
 import { activate } from '../operations/activate.ts'
@@ -21,11 +21,11 @@ export function createSliceProvider(
 ) {
 
   const appState = createAppStateCache()
-  const loader = loadHandler(context, root)
+  const loader = loadHandler(context, root, output)
   const cache = createSliceMapCache(loader, appState)
 
-  const visualCache = createVisualCache(loader, root)
-  const excluder = exclusionHandler(loader)
+  const visualCache = createVisualCache()
+  const excluder = exclusionHandler(loader, appState)
   const target = loader.getExcludeConfigTarget()
 
   const {
@@ -52,7 +52,9 @@ export function createSliceProvider(
   const general = createGeneralController(
     scope,
     map,
-    filter
+    filter,
+    visuals,
+    excluder
   )
 
   return {
@@ -65,7 +67,7 @@ export function createSliceProvider(
   }
 
   async function applyEffectiveSlice() {
-    const localExclude = cache.getLocalExclude()
+    const localExclude = appState.getLocalExclude()
     if (!localExclude) {
       output.appendLine('[slice maps] error: localExclude is undefined')
       return
@@ -80,7 +82,7 @@ export function createSliceProvider(
   }
 
   async function resolveNothingActive(): Promise<void> {
-    const localExclude = cache.getLocalExclude()
+    const localExclude = appState.getLocalExclude()
     if (!localExclude) {
       output.appendLine('[slice maps] error: localExclude is undefined')
       return

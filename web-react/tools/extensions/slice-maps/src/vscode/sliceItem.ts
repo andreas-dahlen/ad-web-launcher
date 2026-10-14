@@ -1,5 +1,5 @@
 import * as vscode from 'vscode'
-import type { SliceMap } from '../types/dataStructure.types.ts'
+import type { SliceMap } from '../types/core.types.ts'
 
 export function mapItem(
   map: SliceMap,

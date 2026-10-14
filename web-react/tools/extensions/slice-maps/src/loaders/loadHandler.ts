@@ -1,26 +1,55 @@
 import * as vscode from 'vscode'
 import { loadTree } from './loadTree.ts'
-import type { ActiveSlice, SliceData, TreeNode } from '../types/dataStructure.types.ts'
+import type { ActiveSlice, SliceData, TreeNode } from '../types/core.types.ts'
+import type { ExclusionFileData, OverrideBehavior } from '../types/vscode.types.ts'
+// import picomatch from 'picomatch'
 
 export type LoadHandler = NonNullable<ReturnType<typeof loadHandler>>
-export const loadHandler = (context: vscode.ExtensionContext, root: vscode.WorkspaceFolder) => {
+export const loadHandler = (
+  context: vscode.ExtensionContext,
+  root: vscode.WorkspaceFolder,
+  output: vscode.OutputChannel
+) => {
   return {
     getUserSettings() {
-      return vscode.workspace.getConfiguration('SliceMaps')
+      return vscode.workspace.getConfiguration('sliceMaps')
+    },
+
+    getBehavior(): OverrideBehavior {
+      return vscode.workspace
+        .getConfiguration('sliceMaps')
+        .get<OverrideBehavior>('behavior', 'recursive')
     },
 
     getExcludeConfigTarget() {
       return vscode.workspace.getConfiguration('files', root.uri)
     },
 
-    getLocalExclude(): Record<string, boolean> {
+    getFileExcludes(): ExclusionFileData {
       const config = vscode.workspace.getConfiguration('files', root.uri)
-      const inspect = config.inspect<Record<string, boolean>>('exclude')
-      return inspect?.workspaceFolderValue ?? {}
+      const localExclude = config.inspect<Record<string, boolean>>('exclude')
+      const totalExclude = config.get<Record<string, boolean>>('exclude', {})
+      return {
+        local: localExclude?.workspaceFolderValue ?? {},
+        total: totalExclude
+      }
     },
 
-    fileTree(): TreeNode[] {
-      return loadTree(root.uri.fsPath)
+    fileTree(totalExclude: ExclusionFileData['total']): TreeNode[] {
+      // const exclude = vscode.workspace
+      //   .getConfiguration('files', root.uri)
+      //   .get<Record<string, boolean>>('exclude', {})
+
+      output.appendLine(
+        `[slice maps] files.exclude: ${JSON.stringify(totalExclude, null, 2)}`
+      )
+
+      const loadedTree = loadTree(root.uri.fsPath, totalExclude)
+      output.appendLine(
+        `[slice maps] fileTree: ${JSON.stringify(loadedTree, null, 2)}`
+      )
+
+      return loadedTree
     },
 
 
@@ -37,12 +66,12 @@ export const loadHandler = (context: vscode.ExtensionContext, root: vscode.Works
       )
     },
 
-    getPersistedExclude(): Record<string, boolean> | undefined {
-      return context.workspaceState.get<Record<string, boolean>>('localExclude')
+    getPersistedExclude(): ExclusionFileData | undefined {
+      return context.workspaceState.get<ExclusionFileData>('excludeSnapshots')
     },
-    async setPersistedExclude(exclude: Record<string, boolean> | undefined): Promise<void> {
+    async setPersistedExclude(exclude: ExclusionFileData | undefined): Promise<void> {
       await context.workspaceState.update(
-        'localExclude',
+        'excludeSnapshots',
         exclude
       )
     },

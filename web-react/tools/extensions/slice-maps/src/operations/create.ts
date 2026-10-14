@@ -1,5 +1,5 @@
 import * as vscode from 'vscode'
-import type { SliceFilter, SliceMap } from '../types/dataStructure.types.ts'
+import type { SliceFilter, SliceMap } from '../types/core.types.ts'
 // import { loadRootEntries } from '../loaders/loadRootEntries.ts'
 
 export async function createMap(

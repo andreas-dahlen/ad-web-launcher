@@ -1,18 +1,9 @@
-import { enrichTree } from '../core/visualController.ts'
-import type { LoadHandler } from '../loaders/loadHandler.ts'
-import type { VisualTreeNode } from '../types/dataStructure.types.ts'
-import * as vscode from 'vscode'
+import type { VisualTreeNode } from '../types/core.types.ts'
 
 export type VisualCache = NonNullable<ReturnType<typeof createVisualCache>>
 
-export function createVisualCache(
-  loader: LoadHandler,
-  root: vscode.WorkspaceFolder
-) {
+export function createVisualCache() {
   const data = new Map<string, VisualTreeNode[]>()
-
-  const tree = loader.fileTree()
-  data.set('inactive', enrichTree(tree, root))
 
   let activeMergeId = 'inactive'
 

@@ -1,4 +1,4 @@
-import type { EffectiveResult, InharitedTruth, MergedSlice, NodeSemantics, NodeState, ResolvedExclusion, TreeNode } from '../types/dataStructure.types.ts';
+import type { EffectiveResult, InharitedTruth, MergedSlice, NodeSemantics, ExcludeOrInclude, ResolvedExclusion, TreeNode } from '../types/core.types.ts';
 import * as vscode from 'vscode'
 import { compress } from './compress.ts';
 import { createDebug } from '../utils/debug.ts';
@@ -10,7 +10,7 @@ export function resolveExclusion(
 ): ResolvedExclusion {
   const debug = createDebug(output, "resolution")
 
-  const baseTruth = resolveBaseTruth(slice, fileTree)
+  const baseTruth = resolveInheritedTruth(slice, fileTree)
   debug('baseTruth:', [...baseTruth])
   const result = effectiveResult(baseTruth, fileTree)
   debug('resolution:', [...result.resolution])
@@ -19,7 +19,7 @@ export function resolveExclusion(
   return { result, resolvedExclude }
 }
 
-function resolveBaseTruth( //rename to resolve parent structure or something?
+function resolveInheritedTruth(
   slice: MergedSlice,
   fileTree: TreeNode[]
 ): Map<string, InharitedTruth> {
@@ -27,7 +27,7 @@ function resolveBaseTruth( //rename to resolve parent structure or something?
 
   function topToBottomLoop(
     nodes: TreeNode[],
-    implicit: NodeState) {
+    implicit: ExcludeOrInclude) {
 
     for (const node of nodes) {
       const explicitInclude = slice.includeFiles.includes(node.path)
@@ -57,7 +57,7 @@ function effectiveResult(
   baseTruth: Map<string, InharitedTruth>,
   fileTree: TreeNode[]
 ): EffectiveResult {
-  const resolution = new Map<string, NodeState>()
+  const resolution = new Map<string, ExcludeOrInclude>()
   const semantics = new Map<string, NodeSemantics>()
 
   walkReverseOrder(fileTree, ({ path, children }) => {
@@ -85,7 +85,7 @@ function effectiveResult(
     resolution.set(path, 'exclude')
     semantics.set(path, { type, outcome: 'exclude' })
   })
-  return { resolution, semantics }
+  return { resolution, semantics, baseTruth }
 }
 
 export function walkReverseOrder(

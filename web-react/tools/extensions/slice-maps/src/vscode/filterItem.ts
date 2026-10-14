@@ -1,5 +1,5 @@
 import * as vscode from 'vscode'
-import type { SliceFilter } from '../types/dataStructure.types.ts'
+import type { SliceFilter } from '../types/core.types.ts'
 
 export function filterItem(
   filter: SliceFilter,

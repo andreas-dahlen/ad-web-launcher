@@ -1,12 +1,12 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import type * as vscode from 'vscode'
-import type { NormalizedPaths, UserChoice } from '../types/dataStructure.types.ts'
+import type { NormalizedPaths, ExcludeOrInclude } from '../types/core.types.ts'
 
 export function pathsToRelative(
   absolutePaths: string[],
   root: vscode.WorkspaceFolder,
-  choice: UserChoice
+  choice: ExcludeOrInclude
 ): NormalizedPaths {
 
   const resolvedPaths: NormalizedPaths = {

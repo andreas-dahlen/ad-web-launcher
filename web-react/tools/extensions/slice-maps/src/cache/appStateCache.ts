@@ -1,6 +1,7 @@
 import { type UUID } from 'node:crypto'
-import type { ActiveFilter, ActiveMap, ActiveSlice } from '../types/dataStructure.types.ts'
+import type { ActiveFilter, ActiveMap, ActiveSlice } from '../types/core.types.ts'
 import * as vscode from 'vscode'
+import type { ExclusionFileData } from '../types/vscode.types.ts'
 
 export type AppStateCache = NonNullable<ReturnType<typeof createAppStateCache>>
 export function createAppStateCache() {
@@ -8,10 +9,13 @@ export function createAppStateCache() {
   const activeFilters = new Set<UUID>()
   let activeConfig: ActiveSlice | undefined
 
+  let localExclude: Record<string, boolean> | undefined
+  let totalExclude: Record<string, boolean> | undefined
+
   return {
 
     hasActiveSlice(): boolean {
-      return Boolean(activeMap || activeFilters.size > 0);
+      return Boolean(activeMap || activeFilters.size > 0)
     },
     hasActiveFilter(): boolean {
       return activeFilters.size > 0
@@ -57,6 +61,23 @@ export function createAppStateCache() {
     },
     removeActiveFilter(id: UUID) {
       activeFilters.delete(id)
+    },
+
+
+    getLocalExclude(): Record<string, boolean> | undefined {
+      return localExclude
+    },
+
+    getTotalExclude(): Record<string, boolean> | undefined {
+      return totalExclude
+    },
+
+    setExcludes({
+      total,
+      local
+    }: ExclusionFileData): void {
+      totalExclude = total
+      localExclude = local
     }
   }
 }

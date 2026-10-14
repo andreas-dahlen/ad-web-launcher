@@ -1,7 +1,7 @@
 import type { AppStateCache } from '../cache/appStateCache.ts';
 import type { SliceCache } from '../cache/sliceMapCache.ts';
 import type { LoadHandler } from '../loaders/loadHandler.ts';
-import type { ActiveSlice } from '../types/dataStructure.types.ts';
+import type { ActiveSlice } from '../types/core.types.ts';
 
 export async function resolveConfigIdentity(
   appState: AppStateCache,

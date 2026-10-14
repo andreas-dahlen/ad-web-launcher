@@ -1,5 +1,5 @@
 import type { UUID } from 'node:crypto'
-import type { MergedSlice, SliceFilter, SliceMap } from '../types/dataStructure.types.ts'
+import type { MergedSlice, SliceFilter, SliceMap } from '../types/core.types.ts'
 import type { AppStateCache } from './appStateCache.ts'
 import type { LoadHandler } from '../loaders/loadHandler.ts'
 
@@ -40,6 +40,7 @@ export function createSliceMapCache(
       mergeId += `.${id}`
     }
 
+    //// Safe to merge: filters only exclude, and includes take priority in resolveExclusion.
     if (activeMapIdentity) {
       const map = getMapById(activeMapIdentity.id)
       map?.includeFiles.forEach(include => includeFiles.add(include))
@@ -52,7 +53,6 @@ export function createSliceMapCache(
       const filter = getFilterById(activeFilter.id)
       filter?.excludeFiles.forEach(exclude => excludeFiles.add(exclude))
       filter?.excludeFolders.forEach(exclude => excludeFolders.add(exclude))
-      // filter?.excludePatterns.forEach(exclude => excludePatterns.add(exclude))
     }
 
     return {
@@ -124,15 +124,15 @@ export function createSliceMapCache(
     await persist()
   }
 
-  let localExclude: Record<string, boolean> | undefined
+  // let localExclude: Record<string, boolean> | undefined
 
-  function getLocalExclude(): Record<string, boolean> | undefined {
-    return localExclude
-  }
+  // function getLocalExclude(): Record<string, boolean> | undefined {
+  //   return localExclude
+  // }
 
-  function setLocalExclude(exclude: Record<string, boolean> | undefined): void {
-    localExclude = exclude
-  }
+  // function setLocalExclude(exclude: Record<string, boolean> | undefined): void {
+  //   localExclude = exclude
+  // }
 
   return {
     getEffectiveSlice,
@@ -149,7 +149,7 @@ export function createSliceMapCache(
     removeFilter,
     renameFilter,
 
-    getLocalExclude,
-    setLocalExclude
+    // getLocalExclude,
+    // setLocalExclude
   }
 }

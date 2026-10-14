@@ -46,172 +46,114 @@
     "@vscode/vsce-sign@2.1.0": true
   },
   "contributes": {
+    "configuration": {
+      "properties": {
+        "sliceMaps.behavior": {
+          "type": "string",
+          "default": "recursive",
+          "enum": [ "recursive", "preserve" ],
+          "enumDescriptions": [
+            "Including or excluding a folder recursively overrides the configuration of its children.",
+            "Including or excluding a folder preserves the existing configuration of its children."
+          ],
+          "description": "Controls how folder inclusion and exclusion affect descendant configuration." }
+      }
+    },
+
     "views": {
       "explorer": [
-        {
-          "id": "sliceMaps",
+        { "id": "sliceMaps",
           "name": "Slice",
-          "icon": "resources/slice-maps.svg"
-        }
+          "icon": "resources/slice-maps.svg" }
       ]
     },
     "commands": [
-      {
-        "command": "sliceMaps.configure",
-        "title": "Configure Slice Item",
-        "icon": "$(gear)"
-      },
-      {
-        "command": "sliceMaps.explorerConfig",
-        "title": "Add To SliceMaps"
-      },
-      {
-        "command": "sliceMaps.toggle",
-        "title": "Toggle Slice"
-      },
-      {
-        "command": "sliceMaps.create",
-        "title": "Create Slice"
-      },
-      {
-        "command": "sliceMaps.rename",
-        "title": "Rename Slice"
-      },
-      {
-        "command": "sliceMaps.delete",
-        "title": "Delete Slice"
-      },
-      {
-        "command": "sliceMaps.include",
-        "title": "Include in Slice"
-      },
-      {
-        "command": "sliceMaps.exclude",
-        "title": "Exclude from Slice"
-      },
-      {
-        "command": "sliceMaps.reset",
-        "title": "Reset Slice"
-      },
-      {
-        "command": "sliceMaps.createFilter",
-        "title": "Create Filter"
-      },
-      {
-        "command": "sliceMaps.toggleFilter",
-        "title": "Toggle Filter"
-      },
-      {
-        "command": "sliceMaps.renameFilter",
-        "title": "Rename Filter"
-      },
-      {
-        "command": "sliceMaps.deleteFilter",
-        "title": "Delete Filter"
-      },
-      {
-        "command": "sliceMaps.resetFilter",
-        "title": "Reset Filter"
-      },
-      {
-        "command": "sliceMaps.removeExcludeFilter",
-        "title": "Remove Exclude Filter"
-      },
-      {
-        "command": "sliceMaps.addExcludeFilter",
-        "title": "Add Exclude Filter"
-      },
-      {
-        "command": "sliceMaps.glob",
-        "title": "Add Glob Exclusion"
-      }
+      { "command": "sliceMaps.configure", "title": "Configure Slice Item", "icon": "$(gear)" },
+      { "command": "sliceMaps.missingConfig", "title": "Set Up Slice Maps" },
+      { "command": "sliceMaps.toggle", "title": "Toggle Slice" },
+      { "command": "sliceMaps.create", "title": "Create Slice" },
+      { "command": "sliceMaps.rename", "title": "Rename Slice" },
+      { "command": "sliceMaps.delete", "title": "Delete Slice" },
+      { "command": "sliceMaps.include", "title": "Include in Slice" },
+      { "command": "sliceMaps.exclude", "title": "Exclude from Slice" },
+      { "command": "sliceMaps.reset", "title": "Reset Slice" },
+      { "command": "sliceMaps.createFilter", "title": "Create Filter" },
+      { "command": "sliceMaps.toggleFilter", "title": "Toggle Filter" },
+      { "command": "sliceMaps.renameFilter", "title": "Rename Filter" },
+      { "command": "sliceMaps.deleteFilter", "title": "Delete Filter" },
+      { "command": "sliceMaps.resetFilter", "title": "Reset Filter" },
+      { "command": "sliceMaps.removeExcludeFilter", "title": "Remove Exclude Filter" },
+      { "command": "sliceMaps.addExcludeFilter", "title": "Add Exclude Filter" },
+      { "command": "sliceMaps.glob", "title": "Add Glob Exclusion" },
+      { "command": "sliceMaps.compressPreserved", "title": "Compress Redundant Rules" }
     ],
     "menus": {
       "explorer/context": [
-        {
-          "command": "sliceMaps.include",
-          "when": "resourceScheme == file && sliceMaps.activeType == map"
-        },
-        {
-          "command": "sliceMaps.exclude",
-          "when": "resourceScheme == file && sliceMaps.activeType == map"
-        },
-        {
-          "command": "sliceMaps.removeExcludeFilter",
-          "when": "resourceScheme == file && sliceMaps.activeType == filter"
-        },
-        {
-          "command": "sliceMaps.addExcludeFilter",
-          "when": "resourceScheme == file && sliceMaps.activeType == filter"
-        },
-        {
-          "command": "sliceMaps.explorerConfig",
-          "when": "resourceScheme == file && !sliceMaps.activeType"
-        }
+        { "command": "sliceMaps.include",
+          "when": "resourceScheme == file && sliceMaps.activeType == map" },
+
+        { "command": "sliceMaps.exclude",
+          "when": "resourceScheme == file && sliceMaps.activeType == map" },
+
+        { "command": "sliceMaps.removeExcludeFilter",
+          "when": "resourceScheme == file && sliceMaps.activeType == filter" },
+
+        { "command": "sliceMaps.addExcludeFilter",
+          "when": "resourceScheme == file && sliceMaps.activeType == filter" },
+
+        { "command": "sliceMaps.missingConfig",
+          "when": "resourceScheme == file && !sliceMaps.activeType" }
       ],
 
       "view/item/context": [
-        {
-          "command": "sliceMaps.configure",
+        { "command": "sliceMaps.configure",
           "when": "view == sliceMaps && viewItem == sliceMap",
-          "group": "inline"
-        },
-        {
-          "command": "sliceMaps.rename",
-          "when": "view == sliceMaps && viewItem == sliceMap"
-        },
-        {
-          "command": "sliceMaps.delete",
-          "when": "view == sliceMaps && viewItem == sliceMap"
-        },
-        {
-          "command": "sliceMaps.reset",
-          "when": "view == sliceMaps && viewItem == sliceMap"
-        },
-        {
-          "command": "sliceMaps.configure",
+          "group": "inline" },
+
+        { "command": "sliceMaps.glob",
+          "when": "view == sliceMaps && (viewItem == sliceFilter || viewItem == sliceMap || viewItem == workspaceFile)" },
+
+        { "command": "sliceMaps.compressPreserved",
+          "when": "view == sliceMaps && config.sliceMaps.behavior == preserve && (viewItem == sliceMap || viewItem == sliceFilter)" },
+
+        { "command": "sliceMaps.rename",
+          "when": "view == sliceMaps && viewItem == sliceMap" },
+
+        { "command": "sliceMaps.delete",
+          "when": "view == sliceMaps && viewItem == sliceMap" },
+
+        { "command": "sliceMaps.reset",
+          "when": "view == sliceMaps && viewItem == sliceMap" },
+
+        { "command": "sliceMaps.configure",
           "when": "view == sliceMaps && viewItem == sliceFilter",
-          "group": "inline"
-        },
-        {
-          "command": "sliceMaps.renameFilter",
-          "when": "view == sliceMaps && viewItem == sliceFilter"
-        },
-        {
-          "command": "sliceMaps.deleteFilter",
-          "when": "view == sliceMaps && viewItem == sliceFilter"
-        },
-        {
-          "command": "sliceMaps.resetFilter",
-          "when": "view == sliceMaps && viewItem == sliceFilter"
-        },
-        {
-          "command": "sliceMaps.glob",
-          "when": "view == sliceMaps && (viewItem == sliceFilter || viewItem == sliceMap)"
-        },
+          "group": "inline" },
+
+        { "command": "sliceMaps.renameFilter",
+          "when": "view == sliceMaps && viewItem == sliceFilter" },
+
+        { "command": "sliceMaps.deleteFilter",
+          "when": "view == sliceMaps && viewItem == sliceFilter" },
+
+        { "command": "sliceMaps.resetFilter",
+          "when": "view == sliceMaps && viewItem == sliceFilter" },
 
 
 
-        {
-          "command": "sliceMaps.include",
-          "when": "view == sliceMaps && viewItem == workspaceFile && sliceMaps.activeType == map"
-        },
-        {
-          "command": "sliceMaps.exclude",
-          "when": "view == sliceMaps && viewItem == workspaceFile && sliceMaps.activeType == map"
-        },
-        {
-          "command": "sliceMaps.removeExcludeFilter",
-          "when": "view == sliceMaps && viewItem == workspaceFile && sliceMaps.activeType == filter"
-        },
-        {
-          "command": "sliceMaps.addExcludeFilter",
-          "when": "view == sliceMaps && viewItem == workspaceFile && sliceMaps.activeType == filter"
-        },
-        {
-          "command": "sliceMaps.explorerConfig",
-          "when": "view == sliceMaps && viewItem == workspaceFile && !sliceMaps.activeType"
-        }
+        { "command": "sliceMaps.include",
+          "when": "view == sliceMaps && viewItem == workspaceFile && sliceMaps.activeType == map" },
+
+        { "command": "sliceMaps.exclude",
+          "when": "view == sliceMaps && viewItem == workspaceFile && sliceMaps.activeType == map" },
+
+        { "command": "sliceMaps.removeExcludeFilter",
+          "when": "view == sliceMaps && viewItem == workspaceFile && sliceMaps.activeType == filter" },
+
+        { "command": "sliceMaps.addExcludeFilter",
+          "when": "view == sliceMaps && viewItem == workspaceFile && sliceMaps.activeType == filter" },
+
+        { "command": "sliceMaps.missingConfig",
+          "when": "view == sliceMaps && viewItem == workspaceFile && !sliceMaps.activeType" }
       ],
       "view/title": [
         {

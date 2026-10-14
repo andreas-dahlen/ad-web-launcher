@@ -1,4 +1,4 @@
-import type { SliceFilter, SliceMap } from '../types/dataStructure.types.ts'
+import type { SliceFilter, SliceMap } from '../types/core.types.ts'
 export function resetMap(
   map: SliceMap
 ): SliceMap {

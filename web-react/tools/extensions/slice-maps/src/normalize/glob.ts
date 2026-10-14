@@ -1,4 +1,4 @@
-import type { NormalizedPaths, TreeNode } from '../types/dataStructure.types.ts';
+import type { NormalizedPaths, TreeNode } from '../types/core.types.ts';
 import picomatch from 'picomatch'
 import { hasBasePath } from '../utils/comparePaths.ts';
 
@@ -6,7 +6,7 @@ export default function normalizeGlob(
   pattern: string,
   fileTree: TreeNode[]
 ): NormalizedPaths {
-  const matcher = picomatch(pattern)
+  const matcher = picomatch(pattern, { dot: true })
   const folders = new Set<string>()
   const files = new Set<string>()
 

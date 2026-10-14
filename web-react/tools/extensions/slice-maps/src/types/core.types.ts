@@ -9,7 +9,7 @@ export type TreeNode = {
   type: 'files' | 'folders'
   children?: TreeNode[]
 }
-export type SliceTreeNode =
+type SliceTreeNode =
   | SliceMap
   | SliceFilter
   | { type: 'filterGroup' }
@@ -25,7 +25,12 @@ export type VisualTreeNode = {
   type: 'files' | 'folders'
   semantics?: NodeSemantics
 }
-
+export type NormalizedPaths = {
+  includeFiles: string[]
+  includeFolders: string[]
+  excludeFiles: string[]
+  excludeFolders: string[]
+}
 
 export type SliceMap = NormalizedPaths & {
   type: 'map'
@@ -45,12 +50,6 @@ export type SliceData = {
   maps: SliceMap[]
   filters: SliceFilter[]
 }
-export type NormalizedPaths = {
-  includeFiles: string[]
-  includeFolders: string[]
-  excludeFiles: string[]
-  excludeFolders: string[]
-}
 
 export type MergedSlice = NormalizedPaths & {
   mergeId: string
@@ -68,12 +67,11 @@ export type ActiveFilter = {
 
 export type ActiveSlice = ActiveMap | ActiveFilter
 
-export type UserChoice = "include" | "exclude"
-export type NodeState = "include" | "exclude"
+export type ExcludeOrInclude = 'include' | 'exclude'
 
 export type InharitedTruth = {
-  implicit: NodeState
-  explicit: NodeState | null
+  implicit: ExcludeOrInclude
+  explicit: ExcludeOrInclude | null
 }
 
 export type NodeSemantics = {
@@ -82,8 +80,9 @@ export type NodeSemantics = {
 }
 
 export type EffectiveResult = {
-  resolution: Map<string, NodeState>
+  resolution: Map<string, ExcludeOrInclude>
   semantics: Map<string, NodeSemantics>
+  baseTruth: Map<string, InharitedTruth>
 }
 
 

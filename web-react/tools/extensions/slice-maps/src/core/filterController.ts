@@ -1,4 +1,4 @@
-import type { NormalizedPaths, Scope, SliceFilter } from '../types/dataStructure.types.ts';
+import type { NormalizedPaths, Scope, SliceFilter } from '../types/core.types.ts';
 import { createDebug } from '../utils/debug.ts';
 import { showMsg } from '../utils/showMsg.ts';
 import { createFilter } from '../operations/create.ts';
@@ -122,7 +122,7 @@ export function createFilterController({
 
     const nextFilter = remove === 'remove'
       ? normalizeFilterRemoval(filter, paths)
-      : normalizeFilter(filter, paths)
+      : normalizeFilter(filter, paths, loader.getBehavior())
 
     debug('[UPDATE] before resolve', filter)
     await cache.addFilter(nextFilter)
@@ -161,9 +161,9 @@ export function createFilterController({
 
   async function resolveActivation(filter: SliceFilter) {
     if (!appState.hasActiveSlice()) {
-      const localExclude = loader.getLocalExclude()
-      cache.setLocalExclude(localExclude)
-      await loader.setPersistedExclude(localExclude)
+      const excludes = loader.getFileExcludes()
+      appState.setExcludes(excludes)
+      await loader.setPersistedExclude(excludes)
     }
     appState.addActiveFilter(filter.id)
     await applyEffectiveSlice()

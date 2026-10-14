@@ -1,5 +1,5 @@
 import * as vscode from 'vscode'
-import type { ActiveSlice } from '../types/dataStructure.types.ts'
+import type { ActiveSlice } from '../types/core.types.ts'
 
 export type SliceOperation =
   | 'include'

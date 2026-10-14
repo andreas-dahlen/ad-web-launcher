@@ -1,12 +1,16 @@
+import type { ExclusionHandler } from '../exclusions/exclusionHandler.ts';
 import { resolveConfigIdentity } from '../identity/configIdentity.ts';
+import { cleanPerserved } from '../normalize/cleanPerserved.ts';
 import normalizeGlob from '../normalize/glob.ts';
+import { createFilter, createMap } from '../operations/create.ts';
 import { deactivate } from '../operations/deactivate.ts';
 import { requestGlob } from '../operations/glob.ts';
-// import { resolveActiveIdentity } from '../operations/identity.ts';
-// import { requestOperation } from '../operations/requestOperation.ts';
-import type { Scope, Slice } from '../types/dataStructure.types.ts';
+import { requestMapOrFilter } from '../operations/mapOrFilter.ts';
+import { requestOperation } from '../operations/requestOperation.ts';
+import type { Scope, Slice } from '../types/core.types.ts';
 import type { FilterController } from './filterController.ts';
 import type { MapController } from './mapController.ts';
+import type { VisualController } from './visualController.ts';
 
 export function createGeneralController(
   {
@@ -14,22 +18,30 @@ export function createGeneralController(
     cache,
     output,
     appState,
-    updateTree
+    updateTree,
+    root,
+    applyEffectiveSlice
   }: Scope,
   map: MapController,
-  filter: FilterController
+  filter: FilterController,
+  visuals: VisualController,
+  excluder: ExclusionHandler
 ) {
   const target = loader.getExcludeConfigTarget()
 
   void output
 
   async function startup(): Promise<void> {
-    const cachedLocalExclude = loader.getPersistedExclude()
-    if (cachedLocalExclude) {
-      await deactivate(cachedLocalExclude, target)
+    const cachedExclude = loader.getPersistedExclude()
+    if (cachedExclude) {
+      await deactivate(cachedExclude.local, target)
+      appState.setExcludes(cachedExclude)
       await loader.setPersistedExclude(undefined)
+    } else {
+      appState.setExcludes(loader.getFileExcludes())
     }
     await resolveConfigIdentity(appState, cache, loader)
+    visuals.reset()
     updateTree()
   }
 
@@ -46,34 +58,50 @@ export function createGeneralController(
 
     updateTree()
   }
-  // async function explorerConfig(absolutePaths: string[]): Promise<void> {
-  //   const identity = await resolveActiveIdentity(appState, cache)
-  //   if (!identity) return
-  //   updateTree()
-  //   const operation = await requestOperation(identity)
-  //   if (!operation) return
-
-  //   switch (operation) {
-  //     case 'include':
-  //       await map.include(absolutePaths)
-  //       break
-  //     case 'exclude':
-  //       await map.exclude(absolutePaths)
-  //       break
-  //     case 'addExclude':
-  //       await filter.addExclude(absolutePaths)
-  //       break
-  //     case 'removeExclude':
-  //       await filter.removeExclude(absolutePaths)
-  //       break
-  //   }
-  // }
+  async function missingConfig(absolutePaths: string[]): Promise<void> {
+    const type = await requestMapOrFilter()
+    if (!type) return
+    let identity
+    if (type === 'map') {
+      const map = await createMap(root)
+      if (!map) return
+      await cache.addMap(map)
+      identity = { id: map.id, type: map.type }
+    } else if (type === 'filter') {
+      const filter = await createFilter(root)
+      if (!filter) return
+      await cache.addFilter(filter)
+      identity = { id: filter.id, type: filter.type }
+    } else { return }
+    const operation = await requestOperation(identity)
+    if (!operation) {
+      await resolveConfigIdentity(appState, cache, loader)
+      updateTree()
+      return
+    }
+    switch (operation) {
+      case 'include':
+        await map.include(absolutePaths)
+        break
+      case 'exclude':
+        await map.exclude(absolutePaths)
+        break
+      case 'addExclude':
+        await filter.addExclude(absolutePaths)
+        break
+      case 'removeExclude':
+        await filter.removeExclude(absolutePaths)
+        break
+    }
+  }
 
   async function addGlob(slice: Slice): Promise<void> {
     const pattern = await requestGlob()
     if (!pattern) return
+    const total = appState.getTotalExclude()
+    if (!total) return
 
-    const paths = normalizeGlob(pattern, loader.fileTree())
+    const paths = normalizeGlob(pattern, loader.fileTree(total))
     if (slice.type === 'map') {
       await map.update(slice, paths, '[ADD] user adds')
     } else if (slice.type === 'filter') {
@@ -81,10 +109,33 @@ export function createGeneralController(
     }
   }
 
+  async function compressPreserved(slice: Slice): Promise<void> {
+    const cleanedSlice = cleanPerserved(slice, excluder, output)
+
+    if (!cleanedSlice) {
+      output.appendLine('error cleaning slice')
+      return
+    }
+
+    let isActive: boolean
+
+    if (cleanedSlice.type === 'map') {
+      await cache.addMap(cleanedSlice)
+      isActive = appState.isActiveMap(slice.id)
+    } else {
+      await cache.addFilter(cleanedSlice)
+      isActive = appState.isActiveFilter(slice.id)
+    }
+    if (isActive) {
+      await applyEffectiveSlice()
+    }
+  }
+
   return {
     startup,
     changeConfig,
-    // explorerConfig,
-    addGlob
+    missingConfig,
+    addGlob,
+    compressPreserved
   }
 }

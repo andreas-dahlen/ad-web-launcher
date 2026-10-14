@@ -1,17 +1,19 @@
 import type { VisualCache } from '../cache/visualCache.ts';
 import type { ExclusionHandler } from '../exclusions/exclusionHandler.ts';
-import type { NodeSemantics, Scope, TreeNode, VisualTreeNode } from '../types/dataStructure.types.ts';
+import type { NodeSemantics, Scope, TreeNode, VisualTreeNode } from '../types/core.types.ts';
 import * as vscode from 'vscode'
 
 export type VisualController = NonNullable<ReturnType<typeof createVisualController>>
 export function createVisualController(
-  { loader, root }: Scope,
+  { loader, root, appState }: Scope,
   excluder: ExclusionHandler,
   visualCache: VisualCache
 ) {
 
   function update(mergeId: string) {
-    const tree = loader.fileTree()
+    const total = appState.getTotalExclude()
+    if (!total) return
+    const tree = loader.fileTree(total)
     const data = excluder.getResolutionByMergeId(mergeId)
     if (!data) return
 
@@ -24,7 +26,9 @@ export function createVisualController(
   }
 
   function reset() {
-    const tree = loader.fileTree()
+    const total = appState.getTotalExclude()
+    if (!total) return
+    const tree = loader.fileTree(total)
     const result = enrichTree(tree, root)
     visualCache.setData('inactive', result)
     visualCache.setActive('inactive')

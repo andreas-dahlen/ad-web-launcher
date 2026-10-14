@@ -1,6 +1,6 @@
 import * as vscode from 'vscode'
 
-import type { NodeSemantics, VisualTreeNode } from '../types/dataStructure.types.ts'
+import type { NodeSemantics, VisualTreeNode } from '../types/core.types.ts'
 
 export function fileTreeItem(
   node: VisualTreeNode,

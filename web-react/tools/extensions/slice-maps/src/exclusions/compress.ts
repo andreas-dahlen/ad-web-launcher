@@ -1,11 +1,11 @@
 import * as vscode from 'vscode'
 import { createDebug } from '../utils/debug.ts'
 import { hasBasePath } from '../utils/comparePaths.ts'
-import type { NodeState } from '../types/dataStructure.types.ts'
+import type { ExcludeOrInclude } from '../types/core.types.ts'
 
 
 export function compress(
-  resolutionData: Map<string, NodeState>,
+  resolutionData: Map<string, ExcludeOrInclude>,
   output: vscode.OutputChannel
 ): Record<string, true> {
 
@@ -15,7 +15,7 @@ export function compress(
 }
 
 function filter(
-  data: Map<string, NodeState>,
+  data: Map<string, ExcludeOrInclude>,
   output: vscode.OutputChannel
 ): Set<string> {
   const exclude = new Set<string>()

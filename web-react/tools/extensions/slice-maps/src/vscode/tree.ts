@@ -1,5 +1,5 @@
 import * as vscode from 'vscode'
-import type { TreeProviderNode } from '../types/dataStructure.types.ts'
+import type { TreeProviderNode } from '../types/core.types.ts'
 import type { SliceCache } from '../cache/sliceMapCache.ts'
 import { mapItem } from './sliceItem.ts'
 import type { AppStateCache } from '../cache/appStateCache.ts'

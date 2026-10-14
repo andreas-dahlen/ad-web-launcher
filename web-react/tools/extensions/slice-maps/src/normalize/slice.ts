@@ -1,9 +1,11 @@
-import type { NormalizedPaths, SliceFilter, SliceMap } from '../types/dataStructure.types.ts'
+import type { NormalizedPaths, SliceFilter, SliceMap } from '../types/core.types.ts'
+import type { OverrideBehavior } from '../types/vscode.types.ts'
 import { resolveNormalization } from './resolve.ts'
 
 export function normalizeMap(
   map: SliceMap,
-  resolvedPaths: NormalizedPaths
+  resolvedPaths: NormalizedPaths,
+  behavior: OverrideBehavior
 ): SliceMap {
 
   const { includeFiles,
@@ -16,13 +18,14 @@ export function normalizeMap(
     includeFolders,
     excludeFiles,
     excludeFolders
-  }, [resolvedPaths])
+  }, [resolvedPaths], behavior)
 
   return { ...rest, ...resolved }
 }
 export function normalizeFilter(
   filter: SliceFilter,
-  resolvedPaths: NormalizedPaths
+  resolvedPaths: NormalizedPaths,
+  behavior: OverrideBehavior
 ): SliceFilter {
 
   const {
@@ -37,7 +40,7 @@ export function normalizeFilter(
     includeFolders,
     excludeFiles,
     excludeFolders
-  }, [resolvedPaths])
+  }, [resolvedPaths], behavior)
 
   return { ...rest, ...resolved }
 }

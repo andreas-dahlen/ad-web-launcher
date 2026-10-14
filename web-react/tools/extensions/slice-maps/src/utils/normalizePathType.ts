@@ -1,4 +1,4 @@
-import type { VisualTreeNode } from '../types/dataStructure.types.ts'
+import type { VisualTreeNode } from '../types/core.types.ts'
 import * as vscode from 'vscode'
 
 export function normalizePaths(

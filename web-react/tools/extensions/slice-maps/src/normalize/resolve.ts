@@ -1,9 +1,11 @@
-import type { NormalizedPaths } from '../types/dataStructure.types.ts'
+import type { NormalizedPaths } from '../types/core.types.ts'
+import type { OverrideBehavior } from '../types/vscode.types.ts'
 import { hasBasePath, isBasePath } from '../utils/comparePaths.ts'
 
 export function resolveNormalization(
   base: NormalizedPaths,
-  mergePaths: NormalizedPaths[]
+  mergePaths: NormalizedPaths[],
+  behavior: OverrideBehavior
 ): NormalizedPaths {
   const includeFiles = new Set<string>(base.includeFiles)
   const includeFolders = new Set<string>(base.includeFolders)
@@ -18,6 +20,8 @@ export function resolveNormalization(
     for (const path of additions.includeFolders) {
       includeFolders.add(path)
       excludeFolders.delete(path)
+
+      if (behavior === 'preserve') continue
 
       for (const existingPath of includeFiles) {
         if (isBasePath(path, existingPath)) {
@@ -43,15 +47,29 @@ export function resolveNormalization(
         }
       }
     }
+
     for (const existingPath of additions.excludeFiles) {
       includeFiles.delete(existingPath)
+
+      if (behavior === 'preserve') {
+        excludeFiles.add(existingPath)
+        continue
+      }
 
       if (!hasBasePath(excludeFolders, existingPath)) {
         excludeFiles.add(existingPath)
       }
     }
+
     for (const path of additions.excludeFolders) {
       includeFolders.delete(path)
+
+      if (behavior === 'preserve') {
+        excludeFolders.add(path)
+        continue
+      }
+
+      // Intentional asymmetry: excludeFolders should never delete includeFiles.
 
       for (const existingPath of excludeFiles) {
         if (isBasePath(path, existingPath)) {
@@ -65,12 +83,6 @@ export function resolveNormalization(
         }
       }
 
-      // for (const path of includeFiles) {
-      //   if (isBasePath(path, path)) {
-      //     includeFiles.delete(path)
-      //   }
-      // }
-
       for (const existingPath of includeFolders) {
         if (isBasePath(path, existingPath)) {
           includeFolders.delete(existingPath)
@@ -80,7 +92,6 @@ export function resolveNormalization(
       if (!hasBasePath(excludeFolders, path)) {
         excludeFolders.add(path)
       }
-
     }
   }
   return {
