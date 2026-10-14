@@ -9,32 +9,6 @@
 	],
 	"settings": {
 		"terminal.integrated.cwd": "${workspaceFolder}",
-		"scopesManager.localScopes": [
-			{
-				"id": "mtrkipng1asno",
-				"name": "app",
-				"patterns": [
-					"web-react/src/**"
-				]
-			},
-			{
-				"id": "mu1ryhe800jb4",
-				"name": "tools",
-				"patterns": [
-					"web-react/tools/**"
-				]
-			},
-			{
-				"id": "mulj9gv3nxmfs",
-				"name": "slice-maps",
-				"patterns": [
-					"web-react/tools/extensions/slice-maps/**"
-				]
-			}
-		],
 		"cssModulesIntellisense.diagnostics.classNotUsed.enabled": false,
-		"files.exclude": {
-			"README.md": true
-		}
 	}
 }

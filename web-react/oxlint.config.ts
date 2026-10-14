@@ -8,7 +8,6 @@ import { jsPlugins } from './tools/lint/config/oxlint/plugins.ts'
 export default defineConfig({
   ignorePatterns: ignores,
 
-  // jsPlugins,
   settings: {
     ...boundarySettings,
     custom: {

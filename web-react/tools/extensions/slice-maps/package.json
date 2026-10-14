@@ -60,11 +60,33 @@
       }
     },
 
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "sliceMapsContainer",
+          "title": "Slice Maps",
+          "icon": "resources/slice-maps.svg"
+        }
+      ]
+    },
+
     "views": {
       "explorer": [
         { "id": "sliceMaps",
           "name": "Slice",
           "icon": "resources/slice-maps.svg" }
+      ],
+      "sliceMapsContainer": [
+        {
+          "id": "sliceWorkspace",
+          "name": "Workspace",
+          "icon": "resources/slice-maps.svg"
+        },
+        {
+          "id": "sliceMapsWorkspace",
+          "name": "Slice",
+          "icon": "resources/slice-maps.svg"
+        }
       ]
     },
     "commands": [

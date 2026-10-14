@@ -66,7 +66,7 @@ export function createSliceProvider(
     treeDisposable,
   }
 
-  async function applyEffectiveSlice() {
+  async function applyEffectiveSlice(): Promise<void> {
     const localExclude = appState.getLocalExclude()
     if (!localExclude) {
       output.appendLine('[slice maps] error: localExclude is undefined')
