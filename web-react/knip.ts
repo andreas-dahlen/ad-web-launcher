@@ -62,6 +62,16 @@ const config: KnipConfig = {
         'src/**/*.ts',
       ],
     },
+    'tools/extensions/slice-maps': {
+      project: [
+        'src/**/*.ts',
+      ],
+    },
+    'tools/extensions/unfolder': {
+      project: [
+        'src/**/*.ts',
+      ],
+    },
   },
 }
 

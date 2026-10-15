@@ -29,6 +29,7 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
+    "forceConsistentCasingInFileNames": true,
     /* json */
     "resolveJsonModule": true
   },

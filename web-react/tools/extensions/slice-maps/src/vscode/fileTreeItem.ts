@@ -1,9 +1,9 @@
 import * as vscode from 'vscode'
 
-import type { NodeSemantics, VisualTreeNode } from '../types/core.types.ts'
+import type { NodeSemantics, WorkspaceTreeNode } from '../types/core.types.ts'
 
 export function fileTreeItem(
-  node: VisualTreeNode,
+  node: WorkspaceTreeNode,
   uri: vscode.Uri,
   output: vscode.OutputChannel
 ): vscode.TreeItem {
@@ -30,6 +30,7 @@ export function fileTreeItem(
   }
 
   item.resourceUri = uri
+  item.id = uri.toString()
   item.contextValue = 'workspaceFile'
 
   item.label = `${getLabel(semantics, isFolder)}   ${name} `

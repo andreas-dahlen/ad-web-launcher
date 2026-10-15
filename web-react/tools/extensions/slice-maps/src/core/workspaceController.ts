@@ -1,10 +1,10 @@
 import type { VisualCache } from '../cache/visualCache.ts';
 import type { ExclusionHandler } from '../exclusions/exclusionHandler.ts';
-import type { NodeSemantics, Scope, TreeNode, VisualTreeNode } from '../types/core.types.ts';
+import type { NodeSemantics, Scope, TreeNode, WorkspaceTreeNode } from '../types/core.types.ts';
 import * as vscode from 'vscode'
 
-export type VisualController = NonNullable<ReturnType<typeof createVisualController>>
-export function createVisualController(
+export type WorkspaceController = NonNullable<ReturnType<typeof createWorkspaceController>>
+export function createWorkspaceController(
   { loader, root, appState }: Scope,
   excluder: ExclusionHandler,
   visualCache: VisualCache
@@ -45,10 +45,10 @@ export function enrichTree(
   nodes: TreeNode[],
   root: vscode.WorkspaceFolder,
   semanticData?: Map<string, NodeSemantics>
-): VisualTreeNode[] {
+): WorkspaceTreeNode[] {
 
-  function resolve(treeNodes: TreeNode[]): VisualTreeNode[] {
-    const tree: VisualTreeNode[] = []
+  function resolve(treeNodes: TreeNode[]): WorkspaceTreeNode[] {
+    const tree: WorkspaceTreeNode[] = []
 
     for (const node of sortNodes(treeNodes)) {
       const absolutePath = vscode.Uri.joinPath(root.uri, node.path).fsPath

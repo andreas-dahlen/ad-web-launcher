@@ -4,6 +4,7 @@
     "module": "NodeNext",
     "verbatimModuleSyntax": true,
     "rewriteRelativeImportExtensions": true,
+    "forceConsistentCasingInFileNames": true,
 
     "lib": [ "ESNext" ],
     "types": [ "node" ],

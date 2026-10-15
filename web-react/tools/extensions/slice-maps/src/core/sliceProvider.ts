@@ -3,15 +3,16 @@ import { createSliceMapCache } from '../cache/sliceMapCache.ts'
 import { deactivate } from '../operations/deactivate.ts'
 import { loadHandler } from '../loaders/loadHandler.ts'
 import { exclusionHandler } from '../exclusions/exclusionHandler.ts'
-import { createTreeProvider } from '../vscode/tree.ts'
+import { createSliceTreeProvider } from '../vscode/sliceTree.ts'
 import { createAppStateCache } from '../cache/appStateCache.ts'
 import type { Scope } from '../types/core.types.ts'
 import { createMapController } from './mapController.ts'
 import { createFilterController } from './filterController.ts'
 import { activate } from '../operations/activate.ts'
 import { createGeneralController } from './generalController.ts'
-import { createVisualController } from './visualController.ts'
+import { createWorkspaceController } from './workspaceController.ts'
 import { createVisualCache } from '../cache/visualCache.ts'
+import { createWorkspaceTreeProvider } from '../vscode/workspaceTree.ts'
 
 export type SliceProvider = NonNullable<ReturnType<typeof createSliceProvider>>
 export function createSliceProvider(
@@ -29,10 +30,16 @@ export function createSliceProvider(
   const target = loader.getExcludeConfigTarget()
 
   const {
-    treeProvider,
-    treeDisposable,
-    updateTree
-  } = createTreeProvider(cache, appState, visualCache, output)
+    sliceTreeProvider,
+    sliceTreeDisposable,
+    updateSliceTree
+  } = createSliceTreeProvider(cache, appState)
+
+  const {
+    workspaceTreeProvider,
+    workspaceTreeDisposable,
+    updateWorkspaceTree
+  } = createWorkspaceTreeProvider(visualCache, output)
 
   const scope: Scope = {
     loader,
@@ -40,14 +47,14 @@ export function createSliceProvider(
     cache,
     output,
     appState,
-    updateTree,
+    updateSliceTree,
     applyEffectiveSlice,
     resolveNothingActive
   }
 
   const map = createMapController(scope)
   const filter = createFilterController(scope)
-  const visuals = createVisualController(scope, excluder, visualCache)
+  const visuals = createWorkspaceController(scope, excluder, visualCache)
 
   const general = createGeneralController(
     scope,
@@ -62,8 +69,10 @@ export function createSliceProvider(
     map,
     filter,
     visuals,
-    treeProvider,
-    treeDisposable,
+    sliceTreeProvider,
+    sliceTreeDisposable,
+    workspaceTreeProvider,
+    workspaceTreeDisposable,
   }
 
   async function applyEffectiveSlice(): Promise<void> {
@@ -78,7 +87,8 @@ export function createSliceProvider(
 
     await activate(localExclude, exclude, target)
     visuals.update(slice.mergeId)
-    updateTree()
+    updateSliceTree()
+    updateWorkspaceTree()
   }
 
   async function resolveNothingActive(): Promise<void> {
@@ -91,6 +101,7 @@ export function createSliceProvider(
     await deactivate(localExclude, target)
     await loader.setPersistedExclude(undefined)
     visuals.reset()
-    updateTree()
+    updateSliceTree()
+    updateWorkspaceTree()
   }
 }

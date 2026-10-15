@@ -10,7 +10,7 @@ import { requestOperation } from '../operations/requestOperation.ts';
 import type { Scope, Slice } from '../types/core.types.ts';
 import type { FilterController } from './filterController.ts';
 import type { MapController } from './mapController.ts';
-import type { VisualController } from './visualController.ts';
+import type { WorkspaceController } from './workspaceController.ts';
 
 export function createGeneralController(
   {
@@ -18,13 +18,13 @@ export function createGeneralController(
     cache,
     output,
     appState,
-    updateTree,
+    updateSliceTree,
     root,
     applyEffectiveSlice
   }: Scope,
   map: MapController,
   filter: FilterController,
-  visuals: VisualController,
+  visuals: WorkspaceController,
   excluder: ExclusionHandler
 ) {
   const target = loader.getExcludeConfigTarget()
@@ -42,7 +42,7 @@ export function createGeneralController(
     }
     await resolveConfigIdentity(appState, cache, loader)
     visuals.reset()
-    updateTree()
+    updateSliceTree()
   }
 
   async function changeConfig(slice: Slice): Promise<void> {
@@ -56,7 +56,7 @@ export function createGeneralController(
     appState.setActiveConfig(identity)
     await loader.setPersistedActiveConfig(identity)
 
-    updateTree()
+    updateSliceTree()
   }
   async function missingConfig(absolutePaths: string[]): Promise<void> {
     const type = await requestMapOrFilter()
@@ -76,7 +76,7 @@ export function createGeneralController(
     const operation = await requestOperation(identity)
     if (!operation) {
       await resolveConfigIdentity(appState, cache, loader)
-      updateTree()
+      updateSliceTree()
       return
     }
     switch (operation) {

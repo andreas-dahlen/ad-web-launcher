@@ -9,19 +9,16 @@ export type TreeNode = {
   type: 'files' | 'folders'
   children?: TreeNode[]
 }
-type SliceTreeNode =
+export type SliceTreeNode =
   | SliceMap
   | SliceFilter
   | { type: 'filterGroup' }
   | { type: 'mapGroup' }
-  | { type: 'workspaceGroup' }
 
-export type TreeProviderNode = SliceTreeNode | VisualTreeNode
-
-export type VisualTreeNode = {
+export type WorkspaceTreeNode = {
   path: string
   absolutePath: string
-  children?: VisualTreeNode[]
+  children?: WorkspaceTreeNode[]
   type: 'files' | 'folders'
   semantics?: NodeSemantics
 }
@@ -98,7 +95,7 @@ export type Scope = {
   cache: SliceCache
   output: vscode.OutputChannel
   appState: AppStateCache
-  updateTree: () => void
+  updateSliceTree: () => void
   applyEffectiveSlice: () => Promise<void>
   resolveNothingActive: () => Promise<void>
 }

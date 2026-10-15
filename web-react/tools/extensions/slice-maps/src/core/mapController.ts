@@ -15,7 +15,7 @@ export function createMapController({
   cache,
   output,
   appState,
-  updateTree,
+  updateSliceTree,
   applyEffectiveSlice,
   resolveNothingActive
 }: Scope
@@ -40,7 +40,7 @@ export function createMapController({
       await resolveConfigIdentity(appState, cache, loader)
     }
 
-    updateTree()
+    updateSliceTree()
     output.appendLine(`[slice maps] map created ${map.name}`)
   }
 
@@ -60,7 +60,7 @@ export function createMapController({
         await resolveNothingActive()
       }
     } else {
-      updateTree()
+      updateSliceTree()
     }
     output.appendLine(`[slice maps] map removed`)
   }
@@ -71,7 +71,7 @@ export function createMapController({
 
     await cache.renameMap(map.id, name)
 
-    updateTree()
+    updateSliceTree()
     output.appendLine(`[slice maps] map rename: ${name}`)
   }
 
@@ -82,7 +82,7 @@ export function createMapController({
     if (appState.isActiveMap(map.id)) {
       await applyEffectiveSlice()
     } else {
-      updateTree()
+      updateSliceTree()
     }
     showMsg(`[slice maps] map reset ${newMap.name}`)
   }
@@ -129,7 +129,7 @@ export function createMapController({
     if (appState.isActiveMap(nextMap.id)) {
       await applyEffectiveSlice()
     } else {
-      updateTree()
+      updateSliceTree()
     }
   }
 

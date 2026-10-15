@@ -1,10 +1,10 @@
 import * as vscode from 'vscode'
 import type { SliceProvider } from '../core/sliceProvider.ts'
-import type { SliceFilter, SliceMap, Slice, VisualTreeNode } from '../types/core.types.ts'
+import type { SliceFilter, SliceMap, Slice, WorkspaceTreeNode } from '../types/core.types.ts'
 import { normalizePaths } from '../utils/normalizePathType.ts'
 
-type SingleCommand = VisualTreeNode | vscode.Uri
-type ArrayCommand = VisualTreeNode[] | vscode.Uri[]
+type SingleCommand = WorkspaceTreeNode | vscode.Uri
+type ArrayCommand = WorkspaceTreeNode[] | vscode.Uri[]
 
 type CommandPath = [single: SingleCommand, array?: ArrayCommand]
 
@@ -31,10 +31,23 @@ export function register(
 
   context.subscriptions.push(
     vscode.window.createTreeView('sliceMaps', {
-      treeDataProvider: provider.treeProvider,
+      treeDataProvider: provider.sliceTreeProvider,
+      canSelectMany: true, //will be false once workspace is dragged out
+    }),
+
+    vscode.window.createTreeView('sliceWorkspace', {
+      treeDataProvider: provider.workspaceTreeProvider,
       canSelectMany: true,
     }),
-    provider.treeDisposable,
+
+    vscode.window.createTreeView('sliceMapsWorkspace', {
+      treeDataProvider: provider.sliceTreeProvider,
+      canSelectMany: true,//will be false once workspace is dragged out
+    }),
+
+
+    provider.sliceTreeDisposable,
+
 
     //general
 

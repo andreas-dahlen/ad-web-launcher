@@ -13,6 +13,7 @@
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
     "rewriteRelativeImportExtensions": true,
+    "forceConsistentCasingInFileNames": true,
 
     "strict": true,
     "verbatimModuleSyntax": true,

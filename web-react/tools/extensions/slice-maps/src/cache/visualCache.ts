@@ -1,9 +1,9 @@
-import type { VisualTreeNode } from '../types/core.types.ts'
+import type { WorkspaceTreeNode } from '../types/core.types.ts'
 
 export type VisualCache = NonNullable<ReturnType<typeof createVisualCache>>
 
 export function createVisualCache() {
-  const data = new Map<string, VisualTreeNode[]>()
+  const data = new Map<string, WorkspaceTreeNode[]>()
 
   let activeMergeId = 'inactive'
 
@@ -16,7 +16,7 @@ export function createVisualCache() {
       return data.get(mergeId)
     },
 
-    setData(mergeId: string, visualTree: VisualTreeNode[]) {
+    setData(mergeId: string, visualTree: WorkspaceTreeNode[]) {
       data.set(mergeId, visualTree)
     },
 

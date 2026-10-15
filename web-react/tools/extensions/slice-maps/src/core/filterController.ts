@@ -14,7 +14,7 @@ export function createFilterController({
   cache,
   output,
   appState,
-  updateTree,
+  updateSliceTree,
   applyEffectiveSlice,
   resolveNothingActive
 }: Scope
@@ -39,7 +39,7 @@ export function createFilterController({
       await resolveConfigIdentity(appState, cache, loader)
     }
 
-    updateTree()
+    updateSliceTree()
     output.appendLine(`[slice maps] filter created ${filter.name}`)
   }
 
@@ -59,7 +59,7 @@ export function createFilterController({
         await resolveNothingActive()
       }
     } else {
-      updateTree()
+      updateSliceTree()
     }
     output.appendLine(`[slice maps] filter removed`)
   }
@@ -70,7 +70,7 @@ export function createFilterController({
 
     await cache.renameFilter(filter.id, name)
 
-    updateTree()
+    updateSliceTree()
     output.appendLine(`[slice maps] filter rename: ${name}`)
   }
 
@@ -81,7 +81,7 @@ export function createFilterController({
     if (appState.isActiveFilter(filter.id)) {
       await applyEffectiveSlice()
     } else {
-      updateTree()
+      updateSliceTree()
     }
     showMsg(`[slice maps] filter reset ${newFilter.name}`)
   }
@@ -132,7 +132,7 @@ export function createFilterController({
     if (appState.isActiveFilter(nextFilter.id)) {
       await applyEffectiveSlice()
     } else {
-      updateTree()
+      updateSliceTree()
     }
   }
 

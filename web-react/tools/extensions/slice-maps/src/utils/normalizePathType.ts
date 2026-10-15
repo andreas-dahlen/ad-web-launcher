@@ -1,9 +1,9 @@
-import type { VisualTreeNode } from '../types/core.types.ts'
+import type { WorkspaceTreeNode } from '../types/core.types.ts'
 import * as vscode from 'vscode'
 
 export function normalizePaths(
-  unsolvedObject: VisualTreeNode | vscode.Uri,
-  unsolvedArray: VisualTreeNode[] | vscode.Uri[] | undefined
+  unsolvedObject: WorkspaceTreeNode | vscode.Uri,
+  unsolvedArray: WorkspaceTreeNode[] | vscode.Uri[] | undefined
 ): string[] {
   const entries = unsolvedArray ?? (unsolvedObject ? [unsolvedObject] : [])
   const paths = new Set<string>()

@@ -9,6 +9,6 @@
 	],
 	"settings": {
 		"terminal.integrated.cwd": "${workspaceFolder}",
-		"cssModulesIntellisense.diagnostics.classNotUsed.enabled": false,
+		"cssModulesIntellisense.diagnostics.classNotUsed.enabled": true,
 	}
 }
