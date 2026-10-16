@@ -1,49 +1,34 @@
 import * as vscode from 'vscode'
-import { loadTree } from './loadTree.ts'
 
 export type LoadHandler = NonNullable<ReturnType<typeof loadHandler>>
 export const loadHandler = (
   context: vscode.ExtensionContext,
-  root: vscode.WorkspaceFolder,
-  output: vscode.OutputChannel
+  output: vscode.OutputChannel,
+  root: vscode.WorkspaceFolder | undefined
 ) => {
+
+  void context
+  void output
+
   return {
     getUserSettings() {
       return vscode.workspace.getConfiguration('unfolder')
     },
 
-    getFileExcludes(): ExclusionFileData {
+    getExcludePatterns(): string[] {
+      const config = vscode.workspace.getConfiguration('unfolder')
+      return config.get<string[]>('excludePatterns') ?? []
+    },
+
+    getFileExcludes(): string[] {
+      if (!root) return []
+
       const config = vscode.workspace.getConfiguration('files', root.uri)
+      const excludes = config.get<Record<string, boolean>>('exclude', {})
 
-      const totalExclude = config.get<Record<string, boolean>>('exclude', {})
-      return totalExclude
-    },
-
-    fileTree(totalExclude: ExclusionFileData['total']): TreeNode[] {
-      // const exclude = vscode.workspace
-      //   .getConfiguration('files', root.uri)
-      //   .get<Record<string, boolean>>('exclude', {})
-
-      output.appendLine(
-        `[slice maps] files.exclude: ${JSON.stringify(totalExclude, null, 2)}`
-      )
-
-      const loadedTree = loadTree(root.uri.fsPath, totalExclude)
-      output.appendLine(
-        `[slice maps] fileTree: ${JSON.stringify(loadedTree, null, 2)}`
-      )
-
-      return loadedTree
-    },
-
-    getPersistedExclude(): ExclusionFileData | undefined {
-      return context.workspaceState.get<ExclusionFileData>('excludeSnapshots')
-    },
-    async setPersistedExclude(exclude: ExclusionFileData | undefined): Promise<void> {
-      await context.workspaceState.update(
-        'excludeSnapshots',
-        exclude
-      )
+      return Object.entries(excludes)
+        .filter(([, enabled]) => enabled)
+        .map(([pattern]) => pattern)
     }
   }
 }

@@ -44,20 +44,45 @@
     "@vscode/vsce-sign@2.1.0": true
   },
   "contributes": {
+    "configuration": {
+      "properties": {
+        "unfolder.traversalStoppers": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": [ ".git", ".svn", ".vs", ".vscode", ".cache", "__pycache__", "node_modules", "dist", "packages", "build", "target", "Release", "Debug", "bin", "obj" ],
+          "description": "Folders to skip during recursive unfold and collapse." }
+      }
+    },
+
     "commands": [
-      { "command": "unfolder.unfoldRecursively", "title": "Unfold Recursively" },
-      { "command": "unfolder.collapseRecursively", "title": "Collapse Recursively" }
+      { "command": "unfolder.unfoldRecursively",
+        "title": "Unfold Recursively",
+        "category": "Unfolder" },
+
+      { "command": "unfolder.collapseRecursively",
+        "title": "Collapse Recursively",
+        "category": "Unfolder" }
     ],
-    "menus": {
-      "explorer/context": [
+
+    "menus":
+    { "explorer/context":
+      [
         { "command": "unfolder.unfoldRecursively",
           "when": "explorerResourceIsFolder",
-          "category": "Unfolder" },
-
+          "group": "navigation" },
         { "command": "unfolder.collapseRecursively",
           "when": "explorerResourceIsFolder",
-          "category": "Unfolder" }
+          "group": "navigation" }
       ]
-    }
+    },
+    "keybindings":
+    [ { "command": "unfolder.unfoldRecursively",
+        "key": "alt+e",
+        "when": "filesExplorerFocus" },
+
+      { "command": "unfolder.collapseRecursively",
+        "key": "alt+c",
+        "when": "filesExplorerFocus" }
+    ]
   }
 }

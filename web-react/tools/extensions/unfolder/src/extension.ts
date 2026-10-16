@@ -1,27 +1,20 @@
 import * as vscode from 'vscode'
-import { createSliceProvider } from './core/sliceProvider.ts'
 import { register } from './vscode/register.ts'
+import { createUnfolderService } from './core/unfolderService.ts'
 
-export async function activate(context: vscode.ExtensionContext): Promise<void> {
-  const root = vscode.workspace.workspaceFolders?.[0]
+export function activate(context: vscode.ExtensionContext): void {
 
-  if (!root) {
-    return
-  }
   // await context.workspaceState.update('Unfolder', undefined)
 
   const output = vscode.window.createOutputChannel('Unfolder')
 
   context.subscriptions.push(output)
 
-  const provider = createSliceProvider(context, root, output)
-
-  await provider.general.startup()
+  const provider = createUnfolderService(context, output)
 
   register(context, provider, output)
 
-
-  output.appendLine('[slice maps] loaded')
+  output.appendLine('[unfolder] loaded')
 }
 
 export function deactivate(): void { }

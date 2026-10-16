@@ -223,7 +223,7 @@ install-unfolder:
     code --install-extension tools/extensions/unfolder/unfolder-0.0.1.vsix --force
 
 # Builds and installs all tools.
-install-extensions: install-cvc install-pl install-ms install-tokens install-sm
+install-extensions: install-cvc install-pl install-ms install-tokens install-sm install-unfolder
 
 # Runs the compiler in watchMode. File emissions disabled.
 compiler:
