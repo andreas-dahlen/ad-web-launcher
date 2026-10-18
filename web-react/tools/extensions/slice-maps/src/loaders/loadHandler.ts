@@ -10,6 +10,8 @@ export const loadHandler = (
   root: vscode.WorkspaceFolder,
   output: vscode.OutputChannel
 ) => {
+
+  void output
   return {
     getUserSettings() {
       return vscode.workspace.getConfiguration('sliceMaps')
@@ -36,19 +38,10 @@ export const loadHandler = (
     },
 
     fileTree(totalExclude: ExclusionFileData['total']): TreeNode[] {
-      // const exclude = vscode.workspace
-      //   .getConfiguration('files', root.uri)
-      //   .get<Record<string, boolean>>('exclude', {})
-
-      output.appendLine(
-        `[slice maps] files.exclude: ${JSON.stringify(totalExclude, null, 2)}`
-      )
-
-      const loadedTree = loadTree(root.uri.fsPath, totalExclude)
-      output.appendLine(
-        `[slice maps] fileTree: ${JSON.stringify(loadedTree, null, 2)}`
-      )
-
+      const traversalStops = vscode.workspace
+        .getConfiguration('sliceMaps')
+        .get<string[]>('traversalStoppers', [])
+      const loadedTree = loadTree(root.uri.fsPath, totalExclude, traversalStops)
       return loadedTree
     },
 

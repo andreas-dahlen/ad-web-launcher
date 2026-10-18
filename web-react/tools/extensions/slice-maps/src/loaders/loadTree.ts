@@ -3,15 +3,13 @@ import path from 'node:path'
 import type { TreeNode } from '../types/core.types.ts'
 import picomatch from 'picomatch'
 
-const traversalStops = new Set([
-  '.git',
-  'node_modules',
-])
 
 export function loadTree(
   root: string,
-  excl: Record<string, boolean>
+  excl: Record<string, boolean>,
+  traversalStops: string[]
 ): TreeNode[] {
+  const stops = new Set(traversalStops)
 
   const matchers = getMatches(excl)
 
@@ -31,7 +29,7 @@ export function loadTree(
       }
     }
 
-    if (traversalStops.has(name)) {
+    if (stops.has(name)) {
       return {
         path: relativePath,
         type: 'folders'

@@ -6,8 +6,8 @@ import type { AppStateCache } from '../cache/appStateCache.ts'
 import { filterItem } from './filterItem.ts'
 
 export function createSliceTreeProvider(
-  cache: SliceCache,
-  state: AppStateCache
+  sliceCache: SliceCache,
+  appState: AppStateCache
 ): {
   sliceTreeProvider: vscode.TreeDataProvider<SliceTreeNode>
   updateSliceTree: () => void
@@ -27,11 +27,11 @@ export function createSliceTreeProvider(
       }
 
       if (node.type === 'mapGroup') {
-        return cache.getMaps()
+        return sliceCache.getMaps()
       }
 
       if (node.type === 'filterGroup') {
-        return cache.getFilters()
+        return sliceCache.getFilters()
       }
 
       return []
@@ -48,14 +48,14 @@ export function createSliceTreeProvider(
       if (node.type === 'map') {
         return mapItem(
           node,
-          node.id === state.getActiveMap()?.id,
-          node.id === state.getActiveConfig()?.id
+          node.id === appState.getActiveMap()?.id,
+          node.id === appState.getActiveConfig()?.id
         )
       }
       return filterItem(
         node,
-        state.getActiveFilters().some(filter => filter.id === node.id),
-        node.id === state.getActiveConfig()?.id
+        appState.getActiveFilters().some(filter => filter.id === node.id),
+        node.id === appState.getActiveConfig()?.id
       )
     }
   }

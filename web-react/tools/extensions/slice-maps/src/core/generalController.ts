@@ -1,3 +1,4 @@
+import type { MergeCache } from '../cache/mergeCache.ts';
 import type { ExclusionHandler } from '../exclusions/exclusionHandler.ts';
 import { resolveConfigIdentity } from '../identity/configIdentity.ts';
 import { cleanPerserved } from '../normalize/cleanPerserved.ts';
@@ -7,15 +8,16 @@ import { deactivate } from '../operations/deactivate.ts';
 import { requestGlob } from '../operations/glob.ts';
 import { requestMapOrFilter } from '../operations/mapOrFilter.ts';
 import { requestOperation } from '../operations/requestOperation.ts';
-import type { Scope, Slice } from '../types/core.types.ts';
+import type { Scope, Slice, SliceTreeNode } from '../types/core.types.ts';
 import type { FilterController } from './filterController.ts';
 import type { MapController } from './mapController.ts';
-import type { WorkspaceController } from './workspaceController.ts';
+import type { TreeController } from './treeHandler.ts';
+import * as vscode from 'vscode'
 
 export function createGeneralController(
   {
     loader,
-    cache,
+    sliceCache,
     output,
     appState,
     updateSliceTree,
@@ -24,8 +26,9 @@ export function createGeneralController(
   }: Scope,
   map: MapController,
   filter: FilterController,
-  visuals: WorkspaceController,
-  excluder: ExclusionHandler
+  tree: TreeController,
+  excluder: ExclusionHandler,
+  mergeCache: MergeCache
 ) {
   const target = loader.getExcludeConfigTarget()
 
@@ -40,8 +43,8 @@ export function createGeneralController(
     } else {
       appState.setExcludes(loader.getFileExcludes())
     }
-    await resolveConfigIdentity(appState, cache, loader)
-    visuals.reset()
+    await resolveConfigIdentity(appState, sliceCache, loader)
+    tree.reset()
     updateSliceTree()
   }
 
@@ -65,17 +68,17 @@ export function createGeneralController(
     if (type === 'map') {
       const map = await createMap(root)
       if (!map) return
-      await cache.addMap(map)
+      await sliceCache.addMap(map)
       identity = { id: map.id, type: map.type }
     } else if (type === 'filter') {
       const filter = await createFilter(root)
       if (!filter) return
-      await cache.addFilter(filter)
+      await sliceCache.addFilter(filter)
       identity = { id: filter.id, type: filter.type }
     } else { return }
     const operation = await requestOperation(identity)
     if (!operation) {
-      await resolveConfigIdentity(appState, cache, loader)
+      await resolveConfigIdentity(appState, sliceCache, loader)
       updateSliceTree()
       return
     }
@@ -110,7 +113,7 @@ export function createGeneralController(
   }
 
   async function compressPreserved(slice: Slice): Promise<void> {
-    const cleanedSlice = cleanPerserved(slice, excluder, output)
+    const cleanedSlice = cleanPerserved(slice, mergeCache, excluder, output)
 
     if (!cleanedSlice) {
       output.appendLine('error cleaning slice')
@@ -120,10 +123,10 @@ export function createGeneralController(
     let isActive: boolean
 
     if (cleanedSlice.type === 'map') {
-      await cache.addMap(cleanedSlice)
+      await sliceCache.addMap(cleanedSlice)
       isActive = appState.isActiveMap(slice.id)
     } else {
-      await cache.addFilter(cleanedSlice)
+      await sliceCache.addFilter(cleanedSlice)
       isActive = appState.isActiveFilter(slice.id)
     }
     if (isActive) {
@@ -131,11 +134,42 @@ export function createGeneralController(
     }
   }
 
+  let updateViews = () => { }
+
+  function updateTitle() {
+    updateViews()
+  }
+
+  function setSliceViews(views: vscode.TreeView<SliceTreeNode>[]) {
+    const baseTitle = `Slice `
+    updateViews = () => {
+
+      const data = mergeCache.getDetails(appState.getActiveMergeId())
+
+      if (!data) {
+        for (const view of views) view.title = baseTitle
+        return
+      }
+      let count = 0
+      data.completeExclude.forEach(type => {
+        if (type === 'exclude') count++
+      })
+      const title = `Slice · ${count} excluded`
+
+      for (const view of views) {
+        view.title = title
+      }
+    }
+    updateTitle()
+  }
+
   return {
     startup,
     changeConfig,
     missingConfig,
     addGlob,
-    compressPreserved
+    compressPreserved,
+    setSliceViews,
+    updateTitle
   }
 }

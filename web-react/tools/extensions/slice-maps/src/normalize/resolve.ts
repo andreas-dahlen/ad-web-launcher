@@ -1,10 +1,9 @@
-import type { NormalizedPaths } from '../types/core.types.ts'
+import type { PathChoice, NormalizedPaths } from '../types/core.types.ts'
 import type { OverrideBehavior } from '../types/vscode.types.ts'
-import { hasBasePath, isBasePath } from '../utils/comparePaths.ts'
-
+import { isChildOf, isInhariting } from '../utils/comparePaths.ts'
 export function resolveNormalization(
   base: NormalizedPaths,
-  mergePaths: NormalizedPaths[],
+  input: PathChoice,
   behavior: OverrideBehavior
 ): NormalizedPaths {
   const includeFiles = new Set<string>(base.includeFiles)
@@ -12,88 +11,77 @@ export function resolveNormalization(
   const excludeFiles = new Set(base.excludeFiles)
   const excludeFolders = new Set(base.excludeFolders)
 
-  for (const additions of mergePaths) {
-    for (const path of additions.includeFiles) {
+  if (input.action === 'include') {
+    for (const path of input.files) {
       includeFiles.add(path)
       excludeFiles.delete(path)
     }
-    for (const path of additions.includeFolders) {
+    for (const path of input.folders) {
       includeFolders.add(path)
       excludeFolders.delete(path)
-
-      if (behavior === 'preserve') continue
-
-      for (const existingPath of includeFiles) {
-        if (isBasePath(path, existingPath)) {
-          includeFiles.delete(existingPath)
-        }
-      }
-
-      for (const existingPath of includeFolders) {
-        if (isBasePath(path, existingPath)) {
-          includeFolders.delete(existingPath)
-        }
-      }
-
-      for (const existingPath of excludeFiles) {
-        if (isBasePath(path, existingPath)) {
-          excludeFiles.delete(existingPath)
-        }
-      }
-
-      for (const existingPath of excludeFolders) {
-        if (isBasePath(path, existingPath)) {
-          excludeFolders.delete(existingPath)
-        }
-      }
+    }
+  } else {
+    for (const path of input.files) {
+      includeFiles.delete(path)
+      excludeFiles.add(path)
     }
 
-    for (const existingPath of additions.excludeFiles) {
-      includeFiles.delete(existingPath)
-
-      if (behavior === 'preserve') {
-        excludeFiles.add(existingPath)
-        continue
-      }
-
-      if (!hasBasePath(excludeFolders, existingPath)) {
-        excludeFiles.add(existingPath)
-      }
-    }
-
-    for (const path of additions.excludeFolders) {
+    for (const path of input.folders) {
       includeFolders.delete(path)
+      excludeFolders.add(path)
+    }
+  }
 
-      if (behavior === 'preserve') {
-        excludeFolders.add(path)
-        continue
+  if (behavior === 'preserve') return {
+    includeFiles: [...includeFiles],
+    includeFolders: [...includeFolders],
+    excludeFiles: [...excludeFiles],
+    excludeFolders: [...excludeFolders]
+  }
+
+  if (input.action === 'include') {
+    resolveInclude()
+  } else {
+    resolveExclude()
+  }
+
+  function resolveInclude() {
+    for (const parent of input.folders) {
+      for (const file of includeFiles) {
+        if (isChildOf(file, parent)) { includeFiles.delete(file) }
       }
-
-      // Intentional asymmetry: excludeFolders should never delete includeFiles.
-
-      for (const existingPath of excludeFiles) {
-        if (isBasePath(path, existingPath)) {
-          excludeFiles.delete(existingPath)
-        }
+      for (const file of excludeFiles) {
+        if (isChildOf(file, parent)) { excludeFiles.delete(file) }
       }
-
-      for (const existingPath of excludeFolders) {
-        if (isBasePath(path, existingPath)) {
-          excludeFolders.delete(existingPath)
-        }
+      for (const folder of includeFolders) {
+        if (isChildOf(folder, parent)) { includeFolders.delete(folder) }
       }
-
-      for (const existingPath of includeFolders) {
-        if (isBasePath(path, existingPath)) {
-          includeFolders.delete(existingPath)
-        }
-      }
-
-      if (!hasBasePath(excludeFolders, path)) {
-        excludeFolders.add(path)
+      for (const folder of excludeFolders) {
+        if (isChildOf(folder, parent)) { excludeFolders.delete(folder) }
       }
     }
   }
+
+  function resolveExclude() {
+    const folders = { includeFolders, excludeFolders }
+    for (const parent of input.folders) {
+
+      for (const file of excludeFiles) {
+        if (isChildOf(file, parent) &&
+          isInhariting(file, 'exclude', folders)) {
+          excludeFiles.delete(file)
+        }
+      }
+
+      for (const folder of excludeFolders) {
+        if (isChildOf(folder, parent) &&
+          isInhariting(folder, 'exclude', folders)) {
+          excludeFolders.delete(folder)
+        }
+      }
+    }
+  }
+
   return {
     includeFiles: [...includeFiles],
     includeFolders: [...includeFolders],

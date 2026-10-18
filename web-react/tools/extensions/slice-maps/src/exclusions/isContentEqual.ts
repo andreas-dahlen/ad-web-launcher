@@ -1,16 +1,16 @@
-import type { MergedSlice, SliceResolution } from '../types/core.types.ts';
+import type { NormalizedPaths } from '../types/core.types.ts';
 
 
 export function isContentEqual(
-  prev: SliceResolution,
-  map: MergedSlice,
+  prev: NormalizedPaths,
+  slice: NormalizedPaths,
 ): boolean {
 
   return (
-    compareArrays(prev.includeFiles, map.includeFiles) &&
-    compareArrays(prev.includeFolders, map.includeFolders) &&
-    compareArrays(prev.excludeFiles, map.excludeFiles) &&
-    compareArrays(prev.excludeFolders, map.excludeFolders)
+    compareArrays(prev.includeFiles, slice.includeFiles) &&
+    compareArrays(prev.includeFolders, slice.includeFolders) &&
+    compareArrays(prev.excludeFiles, slice.excludeFiles) &&
+    compareArrays(prev.excludeFolders, slice.excludeFolders)
   )
 }
 

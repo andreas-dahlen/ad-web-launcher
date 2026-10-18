@@ -56,7 +56,12 @@
             "Including or excluding a folder recursively overrides the configuration of its children.",
             "Including or excluding a folder preserves the existing configuration of its children."
           ],
-          "description": "Controls how folder inclusion and exclusion affect descendant configuration." }
+          "description": "Controls how folder inclusion and exclusion affect descendant configuration." },
+        "sliceMaps.traversalStoppers": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": [ ".git", ".svn", ".vs", ".vscode", ".cache", "__pycache__", "node_modules", "dist", "packages", "build", "target", "Release", "Debug", "bin", "obj" ],
+          "description": "Exclude folders that are not traversed by sliceMaps." }
       }
     },
 
@@ -107,8 +112,42 @@
       { "command": "sliceMaps.removeExcludeFilter", "title": "Remove Exclude Filter" },
       { "command": "sliceMaps.addExcludeFilter", "title": "Add Exclude Filter" },
       { "command": "sliceMaps.glob", "title": "Add Glob Exclusion" },
-      { "command": "sliceMaps.compressPreserved", "title": "Compress Redundant Rules" }
+      { "command": "sliceMaps.compressPreserved", "title": "Compress Redundant Rules" },
+      { "command": "sliceMaps.includeWorkspace", "title": "Include in Slice (Workspace)" },
+      { "command": "sliceMaps.removeExcludeFilterWorkspace", "title": "Remove Exclude Filter (Workspace)" },
+      { "command": "sliceMaps.excludeWorkspace", "title": "Exclude from Slice (Workspace)" },
+      { "command": "sliceMaps.addExcludeFilterWorkspace", "title": "Add Exclude Filter (Workspace)" },
+      { "command": "sliceMaps.missingConfigWorkspace", "title": "Set Up Slice Maps (Workspace)" }
+
     ],
+    "keybindings": [
+      { "command": "sliceMaps.include", "key": "alt+d",
+        "when": "filesExplorerFocus  && sliceMaps.activeType == map" },
+
+      { "command": "sliceMaps.removeExcludeFilter", "key": "alt+d",
+        "when": "filesExplorerFocus  && sliceMaps.activeType == filter" },
+
+      { "command": "sliceMaps.exclude", "key": "alt+s",
+        "when": "filesExplorerFocus  && sliceMaps.activeType == map" },
+
+      { "command": "sliceMaps.addExcludeFilter", "key": "alt+s",
+        "when": "filesExplorerFocus  && sliceMaps.activeType == filter" },
+
+
+
+      { "command": "sliceMaps.includeWorkspace", "key": "alt+d",
+        "when": "focusedView == sliceWorkspace && sliceMaps.activeType == map" },
+
+      { "command": "sliceMaps.removeExcludeFilterWorkspace", "key": "alt+d",
+        "when": "focusedView == sliceWorkspace && sliceMaps.activeType == filter" },
+
+      { "command": "sliceMaps.excludeWorkspace", "key": "alt+s",
+        "when": "focusedView == sliceWorkspace && sliceMaps.activeType == map" },
+
+      { "command": "sliceMaps.addExcludeFilterWorkspace", "key": "alt+s",
+        "when": "focusedView == sliceWorkspace && sliceMaps.activeType == filter" }
+    ],
+
     "menus": {
       "explorer/context": [
         { "command": "sliceMaps.include",
@@ -128,24 +167,24 @@
       ],
 
       "view/item/context": [
-        { "command": "sliceMaps.include", "when": "view == sliceWorkspace && viewItem == workspaceFile && sliceMaps.activeType == map" },
-        { "command": "sliceMaps.include", "when": "view == sliceWorkspace && viewItem == workspaceFile && sliceMaps.activeType == map",
+        { "command": "sliceMaps.includeWorkspace", "when": "view == sliceWorkspace && viewItem == workspaceFile && sliceMaps.activeType == map" },
+        { "command": "sliceMaps.includeWorkspace", "when": "view == sliceWorkspace && viewItem == workspaceFile && sliceMaps.activeType == map",
           "group": "inline" },
 
-        { "command": "sliceMaps.exclude", "when": "view == sliceWorkspace && viewItem == workspaceFile && sliceMaps.activeType == map" },
-        { "command": "sliceMaps.exclude", "when": "view == sliceWorkspace && viewItem == workspaceFile && sliceMaps.activeType == map",
+        { "command": "sliceMaps.excludeWorkspace", "when": "view == sliceWorkspace && viewItem == workspaceFile && sliceMaps.activeType == map" },
+        { "command": "sliceMaps.excludeWorkspace", "when": "view == sliceWorkspace && viewItem == workspaceFile && sliceMaps.activeType == map",
           "group": "inline" },
 
-        { "command": "sliceMaps.removeExcludeFilter", "when": "view == sliceWorkspace && viewItem == workspaceFile && sliceMaps.activeType == filter" },
-        { "command": "sliceMaps.removeExcludeFilter", "when": "view == sliceWorkspace && viewItem == workspaceFile && sliceMaps.activeType == filter",
+        { "command": "sliceMaps.removeExcludeFilterWorkspace", "when": "view == sliceWorkspace && viewItem == workspaceFile && sliceMaps.activeType == filter" },
+        { "command": "sliceMaps.removeExcludeFilterWorkspace", "when": "view == sliceWorkspace && viewItem == workspaceFile && sliceMaps.activeType == filter",
           "group": "inline" },
 
-        { "command": "sliceMaps.addExcludeFilter", "when": "view == sliceWorkspace && viewItem == workspaceFile && sliceMaps.activeType == filter" },
-        { "command": "sliceMaps.addExcludeFilter", "when": "view == sliceWorkspace && viewItem == workspaceFile && sliceMaps.activeType == filter",
+        { "command": "sliceMaps.addExcludeFilterWorkspace", "when": "view == sliceWorkspace && viewItem == workspaceFile && sliceMaps.activeType == filter" },
+        { "command": "sliceMaps.addExcludeFilterWorkspace", "when": "view == sliceWorkspace && viewItem == workspaceFile && sliceMaps.activeType == filter",
           "group": "inline" },
 
-        { "command": "sliceMaps.missingConfig", "when": "view == sliceWorkspace && viewItem == workspaceFile && !sliceMaps.activeType" },
-        { "command": "sliceMaps.missingConfig", "when": "view == sliceWorkspace && viewItem == workspaceFile && !sliceMaps.activeType",
+        { "command": "sliceMaps.missingConfigWorkspace", "when": "view == sliceWorkspace && viewItem == workspaceFile && !sliceMaps.activeType" },
+        { "command": "sliceMaps.missingConfigWorkspace", "when": "view == sliceWorkspace && viewItem == workspaceFile && !sliceMaps.activeType",
           "group": "inline" },
 
 

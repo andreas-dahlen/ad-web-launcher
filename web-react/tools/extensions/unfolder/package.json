@@ -77,11 +77,11 @@
     },
     "keybindings":
     [ { "command": "unfolder.unfoldRecursively",
-        "key": "alt+e",
+        "key": "alt+c",
         "when": "filesExplorerFocus" },
 
       { "command": "unfolder.collapseRecursively",
-        "key": "alt+c",
+        "key": "alt+x",
         "when": "filesExplorerFocus" }
     ]
   }

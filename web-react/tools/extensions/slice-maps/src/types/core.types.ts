@@ -3,6 +3,7 @@ import * as vscode from 'vscode'
 import type { LoadHandler } from '../loaders/loadHandler.ts'
 import type { SliceCache } from '../cache/sliceMapCache.ts'
 import type { AppStateCache } from '../cache/appStateCache.ts'
+import type { NodeSemantics } from './exclusion.types.ts'
 
 export type TreeNode = {
   path: string
@@ -27,6 +28,12 @@ export type NormalizedPaths = {
   includeFolders: string[]
   excludeFiles: string[]
   excludeFolders: string[]
+}
+
+export type PathChoice = {
+  action: ExcludeOrInclude
+  files: Set<string>
+  folders: Set<string>
 }
 
 export type SliceMap = NormalizedPaths & {
@@ -66,33 +73,11 @@ export type ActiveSlice = ActiveMap | ActiveFilter
 
 export type ExcludeOrInclude = 'include' | 'exclude'
 
-export type InharitedTruth = {
-  implicit: ExcludeOrInclude
-  explicit: ExcludeOrInclude | null
-}
-
-export type NodeSemantics = {
-  type: 'explicit' | 'implicit'
-  outcome: 'include' | 'exclude' | 'overwritten'
-}
-
-export type EffectiveResult = {
-  resolution: Map<string, ExcludeOrInclude>
-  semantics: Map<string, NodeSemantics>
-  baseTruth: Map<string, InharitedTruth>
-}
-
-
-export type ResolvedExclusion = {
-  result: EffectiveResult
-  resolvedExclude: Record<string, true>
-}
-export type SliceResolution = MergedSlice & ResolvedExclusion
 
 export type Scope = {
   loader: LoadHandler
   root: vscode.WorkspaceFolder
-  cache: SliceCache
+  sliceCache: SliceCache
   output: vscode.OutputChannel
   appState: AppStateCache
   updateSliceTree: () => void

@@ -1,4 +1,4 @@
-import type { NormalizedPaths, Scope, SliceMap } from '../types/core.types.ts';
+import type { PathChoice, Scope, SliceMap } from '../types/core.types.ts';
 import { createDebug } from '../utils/debug.ts';
 import { showMsg } from '../utils/showMsg.ts';
 import { createMap } from '../operations/create.ts';
@@ -12,7 +12,7 @@ export type MapController = NonNullable<ReturnType<typeof createMapController>>
 export function createMapController({
   loader,
   root,
-  cache,
+  sliceCache,
   output,
   appState,
   updateSliceTree,
@@ -21,6 +21,7 @@ export function createMapController({
 }: Scope
 ) {
   const debug = createDebug(output, "mapProvider")
+  const debugTrack = createDebug(output, "flowTracker")
 
   async function toggle(map: SliceMap): Promise<void> {
     if (appState.isActiveMap(map.id)) {
@@ -34,10 +35,10 @@ export function createMapController({
     const map = await createMap(root)
     if (!map) return
 
-    await cache.addMap(map)
+    await sliceCache.addMap(map)
 
     if (!appState.getActiveConfig()) {
-      await resolveConfigIdentity(appState, cache, loader)
+      await resolveConfigIdentity(appState, sliceCache, loader)
     }
 
     updateSliceTree()
@@ -45,10 +46,10 @@ export function createMapController({
   }
 
   async function remove(map: SliceMap): Promise<void> {
-    await cache.removeMap(map.id)
+    await sliceCache.removeMap(map.id)
 
     if (appState.getActiveConfig()?.id === map.id) {
-      await resolveConfigIdentity(appState, cache, loader)
+      await resolveConfigIdentity(appState, sliceCache, loader)
     }
 
     if (appState.isActiveMap(map.id)) {
@@ -69,7 +70,7 @@ export function createMapController({
     const name = await renameMap()
     if (!name) return
 
-    await cache.renameMap(map.id, name)
+    await sliceCache.renameMap(map.id, name)
 
     updateSliceTree()
     output.appendLine(`[slice maps] map rename: ${name}`)
@@ -77,7 +78,7 @@ export function createMapController({
 
   async function reset(map: SliceMap): Promise<void> {
     const newMap = resetMap(map)
-    await cache.addMap(newMap)
+    await sliceCache.addMap(newMap)
 
     if (appState.isActiveMap(map.id)) {
       await applyEffectiveSlice()
@@ -90,40 +91,42 @@ export function createMapController({
   async function include(
     absolutePaths: string[]
   ): Promise<void> {
-    const identity = await resolveConfigIdentity(appState, cache, loader)
+    const identity = await resolveConfigIdentity(appState, sliceCache, loader)
     if (identity?.type !== 'map') return
 
-    const map = cache.getMapById(identity.id)
+    const map = sliceCache.getMapById(identity.id)
     if (!map) return
 
     const paths = pathsToRelative(absolutePaths, root, 'include')
+    debugTrack('[INCLUDE]', paths)
     await update(map, paths, '[ADD] user adds')
   }
 
   async function exclude(
     absolutePaths: string[]
   ): Promise<void> {
-    const identity = await resolveConfigIdentity(appState, cache, loader)
+    const identity = await resolveConfigIdentity(appState, sliceCache, loader)
     if (identity?.type !== 'map') return
 
-    const map = cache.getMapById(identity.id)
+    const map = sliceCache.getMapById(identity.id)
     if (!map) return
 
     const paths = pathsToRelative(absolutePaths, root, 'exclude')
+    debugTrack('[EXCLUDE]', paths)
     await update(map, paths, '[REMOVE] user removes')
   }
 
   async function update(
     map: SliceMap,
-    paths: NormalizedPaths,
+    paths: PathChoice,
     message: string
   ): Promise<void> {
     debug(message, paths)
 
     const nextMap = normalizeMap(map, paths, loader.getBehavior())
-
+    debugTrack('[NORMALIZED]', nextMap)
     debug('[UPDATE] before resolve', map)
-    await cache.addMap(nextMap)
+    await sliceCache.addMap(nextMap)
     debug('[UPDATE] after resolve', nextMap)
 
     if (appState.isActiveMap(nextMap.id)) {

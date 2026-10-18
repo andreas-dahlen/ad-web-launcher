@@ -1,6 +1,6 @@
-import type { ExcludeOrInclude, MergedSlice } from './core.types.ts'
+import type { ExcludeOrInclude, NormalizedPaths } from './core.types.ts'
 
-export type InharitedTruth = {
+export type InheritedTruth = {
   implicit: ExcludeOrInclude
   explicit: ExcludeOrInclude | null
 }
@@ -10,14 +10,20 @@ export type NodeSemantics = {
   outcome: 'include' | 'exclude' | 'overwritten'
 }
 
-export type EffectiveResult = {
-  resolution: Map<string, ExcludeOrInclude>
+export type ResolutionDetails = {
+  completeExclude: Map<string, ExcludeOrInclude>
   semantics: Map<string, NodeSemantics>
+  baseTruth: Map<string, InheritedTruth>
 }
 
 
-export type ResolvedExclusion = {
-  result: EffectiveResult
+export type ExclusionResolution = {
+  details: ResolutionDetails
   resolvedExclude: Record<string, true>
 }
-export type SliceResolution = MergedSlice & ResolvedExclusion
+
+export type CachedMergeData = {
+  sliceData: NormalizedPaths
+  details: ResolutionDetails
+  resolvedExclude: Record<string, true>
+}

@@ -1,15 +1,14 @@
 import type { WorkspaceTreeNode } from '../types/core.types.ts'
+import type { AppStateCache } from './appStateCache.ts'
 
-export type VisualCache = NonNullable<ReturnType<typeof createVisualCache>>
+export type TreeCache = NonNullable<ReturnType<typeof createTreeCache>>
 
-export function createVisualCache() {
+export function createTreeCache(appState: AppStateCache) {
   const data = new Map<string, WorkspaceTreeNode[]>()
-
-  let activeMergeId = 'inactive'
 
   return {
     getActiveData() {
-      return data.get(activeMergeId)
+      return data.get(appState.getActiveMergeId())
     },
 
     getDataById(mergeId: string) {
@@ -18,10 +17,6 @@ export function createVisualCache() {
 
     setData(mergeId: string, visualTree: WorkspaceTreeNode[]) {
       data.set(mergeId, visualTree)
-    },
-
-    setActive(mergeId: string) {
-      activeMergeId = mergeId
     }
   }
 }

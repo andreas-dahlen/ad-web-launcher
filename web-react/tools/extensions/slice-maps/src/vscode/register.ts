@@ -1,12 +1,7 @@
 import * as vscode from 'vscode'
 import type { SliceProvider } from '../core/sliceProvider.ts'
 import type { SliceFilter, SliceMap, Slice, WorkspaceTreeNode } from '../types/core.types.ts'
-import { normalizePaths } from '../utils/normalizePathType.ts'
-
-type SingleCommand = WorkspaceTreeNode | vscode.Uri
-type ArrayCommand = WorkspaceTreeNode[] | vscode.Uri[]
-
-type CommandPath = [single: SingleCommand, array?: ArrayCommand]
+import { normalizeExplorerPaths, normalizeTreePaths } from '../utils/normalizePathType.ts'
 
 export function register(
   context: vscode.ExtensionContext,
@@ -29,35 +24,31 @@ export function register(
     }
   }
 
+  const sliceMapsView = vscode.window.createTreeView('sliceMaps', {
+    treeDataProvider: provider.sliceTreeProvider
+  })
+
+  const workspaceView = vscode.window.createTreeView('sliceWorkspace', {
+    treeDataProvider: provider.workspaceTreeProvider,
+    canSelectMany: true
+  })
+
+  const sliceMapsWorkspaceView = vscode.window.createTreeView('sliceMapsWorkspace', {
+    treeDataProvider: provider.sliceTreeProvider
+  })
+
+  provider.general.setSliceViews([sliceMapsView, sliceMapsWorkspaceView])
+
   context.subscriptions.push(
-    vscode.window.createTreeView('sliceMaps', {
-      treeDataProvider: provider.sliceTreeProvider,
-      canSelectMany: true, //will be false once workspace is dragged out
-    }),
-
-    vscode.window.createTreeView('sliceWorkspace', {
-      treeDataProvider: provider.workspaceTreeProvider,
-      canSelectMany: true,
-    }),
-
-    vscode.window.createTreeView('sliceMapsWorkspace', {
-      treeDataProvider: provider.sliceTreeProvider,
-      canSelectMany: true,//will be false once workspace is dragged out
-    }),
-
-
+    sliceMapsView,
+    workspaceView,
+    sliceMapsWorkspaceView,
     provider.sliceTreeDisposable,
-
-
     //general
 
     vscode.commands.registerCommand(
       'sliceMaps.configure', (node: Slice) => safe('configure item',
         () => provider.general.changeConfig(node))),
-
-    vscode.commands.registerCommand(
-      'sliceMaps.missingConfig', (...args: CommandPath) => safe('Set Up SliceMaps',
-        () => provider.general.missingConfig(normalizePaths(...args)))),
 
     vscode.commands.registerCommand(
       'sliceMaps.glob', (node: Slice) => safe('glob item',
@@ -68,22 +59,52 @@ export function register(
         () => provider.general.compressPreserved(node))),
 
     //main
+    vscode.commands.registerCommand(
+      'sliceMaps.missingConfig', (_, uris: vscode.Uri[]) => safe('Set Up SliceMaps',
+        async () => provider.general.missingConfig(await normalizeExplorerPaths(uris)))),
 
     vscode.commands.registerCommand(
-      'sliceMaps.include', (...args: CommandPath) => safe('include in map',
-        () => provider.map.include(normalizePaths(...args)))),
+      'sliceMaps.include', (_, uris: vscode.Uri[]) => safe('include in map',
+        async () => provider.map.include(await normalizeExplorerPaths(uris)))),
 
     vscode.commands.registerCommand(
-      'sliceMaps.exclude', (...args: CommandPath) => safe('exclude from map',
-        () => provider.map.exclude(normalizePaths(...args)))),
+      'sliceMaps.exclude', (_, uris: vscode.Uri[]) => safe('exclude from map',
+        async () => provider.map.exclude(await normalizeExplorerPaths(uris)))),
 
     vscode.commands.registerCommand(
-      'sliceMaps.removeExcludeFilter', (...args: CommandPath) => safe('remove exclude from filter',
-        () => provider.filter.removeExclude(normalizePaths(...args)))),
+      'sliceMaps.removeExcludeFilter', (_, uris: vscode.Uri[]) => safe('remove exclude from filter',
+        async () => provider.filter.removeExclude(await normalizeExplorerPaths(uris)))),
 
     vscode.commands.registerCommand(
-      'sliceMaps.addExcludeFilter', (...args: CommandPath) => safe('add exclude to filter',
-        () => provider.filter.addExclude(normalizePaths(...args)))),
+      'sliceMaps.addExcludeFilter', (_, uris: vscode.Uri[]) => safe('add exclude to filter',
+        async () => provider.filter.addExclude(await normalizeExplorerPaths(uris)))),
+
+    //main custom tree view
+
+    vscode.commands.registerCommand(
+      'sliceMaps.missingConfigWorkspace', (treeNode: WorkspaceTreeNode) =>
+      safe('Set Up SliceMaps (workspace)',
+        () => provider.general.missingConfig(normalizeTreePaths(treeNode, workspaceView.selection)))),
+
+    vscode.commands.registerCommand(
+      'sliceMaps.includeWorkspace', (treeNode: WorkspaceTreeNode) =>
+      safe('include in map (workspace)',
+        () => provider.map.include(normalizeTreePaths(treeNode, workspaceView.selection)))),
+
+    vscode.commands.registerCommand(
+      'sliceMaps.excludeWorkspace', (treeNode: WorkspaceTreeNode) =>
+      safe('exclude from map (workspace)',
+        () => provider.map.exclude(normalizeTreePaths(treeNode, workspaceView.selection)))),
+
+    vscode.commands.registerCommand(
+      'sliceMaps.removeExcludeFilterWorkspace', (treeNode: WorkspaceTreeNode) =>
+      safe('remove exclude from filter (workspace)',
+        () => provider.filter.removeExclude(normalizeTreePaths(treeNode, workspaceView.selection)))),
+
+    vscode.commands.registerCommand(
+      'sliceMaps.addExcludeFilterWorkspace', (treeNode: WorkspaceTreeNode) =>
+      safe('add exclude to filter (workspace)',
+        () => provider.filter.addExclude(normalizeTreePaths(treeNode, workspaceView.selection)))),
 
     //Maps
 

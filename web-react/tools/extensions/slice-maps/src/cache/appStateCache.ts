@@ -2,6 +2,7 @@ import { type UUID } from 'node:crypto'
 import type { ActiveFilter, ActiveMap, ActiveSlice } from '../types/core.types.ts'
 import * as vscode from 'vscode'
 import type { ExclusionFileData } from '../types/vscode.types.ts'
+import { getCurrentMergeId } from '../normalize/mergeId.ts'
 
 export type AppStateCache = NonNullable<ReturnType<typeof createAppStateCache>>
 export function createAppStateCache() {
@@ -11,6 +12,9 @@ export function createAppStateCache() {
 
   let localExclude: Record<string, boolean> | undefined
   let totalExclude: Record<string, boolean> | undefined
+  function getActiveFilters(): ActiveFilter[] {
+    return [...activeFilters].map(id => ({ type: 'filter', id }))
+  }
 
   return {
 
@@ -20,7 +24,6 @@ export function createAppStateCache() {
     hasActiveFilter(): boolean {
       return activeFilters.size > 0
     },
-
 
     isActiveMap(id: UUID): boolean {
       return activeMap?.id === id
@@ -35,9 +38,13 @@ export function createAppStateCache() {
     getActiveFilter(id: UUID): ActiveFilter | undefined {
       if (activeFilters.has(id)) return { type: 'filter', id }
     },
-    getActiveFilters(): ActiveFilter[] {
-      return [...activeFilters].map(id => ({ type: 'filter', id }))
+    getActiveFilters,
+
+    getActiveMergeId(): string {
+      return getCurrentMergeId(activeMap, getActiveFilters())
     },
+
+
     getActiveConfig() {
       return activeConfig
     },

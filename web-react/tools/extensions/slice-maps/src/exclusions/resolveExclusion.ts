@@ -1,29 +1,30 @@
-import type { EffectiveResult, InharitedTruth, MergedSlice, NodeSemantics, ExcludeOrInclude, ResolvedExclusion, TreeNode } from '../types/core.types.ts';
+import type { MergedSlice, ExcludeOrInclude, TreeNode } from '../types/core.types.ts';
 import * as vscode from 'vscode'
 import { compress } from './compress.ts';
 import { createDebug } from '../utils/debug.ts';
+import type { ResolutionDetails, InheritedTruth, NodeSemantics, ExclusionResolution } from '../types/exclusion.types.ts';
 
 export function resolveExclusion(
   slice: MergedSlice,
   fileTree: TreeNode[],
   output: vscode.OutputChannel
-): ResolvedExclusion {
+): ExclusionResolution {
   const debug = createDebug(output, "resolution")
 
   const baseTruth = resolveInheritedTruth(slice, fileTree)
   debug('baseTruth:', [...baseTruth])
-  const result = effectiveResult(baseTruth, fileTree)
-  debug('resolution:', [...result.resolution])
-  const resolvedExclude = compress(result.resolution, output)
+  const details = effectiveResult(baseTruth, fileTree)
+  debug('resolution:', [...details.completeExclude])
+  const resolvedExclude = compress(details.completeExclude, output)
 
-  return { result, resolvedExclude }
+  return { details, resolvedExclude }
 }
 
 function resolveInheritedTruth(
   slice: MergedSlice,
   fileTree: TreeNode[]
-): Map<string, InharitedTruth> {
-  const baseTruth = new Map<string, InharitedTruth>()
+): Map<string, InheritedTruth> {
+  const baseTruth = new Map<string, InheritedTruth>()
 
   function topToBottomLoop(
     nodes: TreeNode[],
@@ -54,38 +55,38 @@ function resolveInheritedTruth(
 }
 
 function effectiveResult(
-  baseTruth: Map<string, InharitedTruth>,
+  baseTruth: Map<string, InheritedTruth>,
   fileTree: TreeNode[]
-): EffectiveResult {
-  const resolution = new Map<string, ExcludeOrInclude>()
+): ResolutionDetails {
+  const completeExclude = new Map<string, ExcludeOrInclude>()
   const semantics = new Map<string, NodeSemantics>()
 
   walkReverseOrder(fileTree, ({ path, children }) => {
     const { implicit, explicit } = baseTruth.get(path)!
     if (explicit === 'include') {
-      resolution.set(path, 'include')
+      completeExclude.set(path, 'include')
       semantics.set(path, { type: 'explicit', outcome: 'include' })
       return
     }
     if (implicit === 'include' && explicit !== 'exclude') {
-      resolution.set(path, 'include')
+      completeExclude.set(path, 'include')
       semantics.set(path, { type: 'implicit', outcome: 'include' })
       return
     }
     const hasIncludedChild =
-      children?.some(child => resolution.get(child.path) === 'include') ?? false
+      children?.some(child => completeExclude.get(child.path) === 'include') ?? false
 
     const type = explicit ? 'explicit' : 'implicit'
 
     if (hasIncludedChild) {
-      resolution.set(path, 'include')
+      completeExclude.set(path, 'include')
       semantics.set(path, { type, outcome: 'overwritten' })
       return
     }
-    resolution.set(path, 'exclude')
+    completeExclude.set(path, 'exclude')
     semantics.set(path, { type, outcome: 'exclude' })
   })
-  return { resolution, semantics, baseTruth }
+  return { completeExclude, semantics, baseTruth }
 }
 
 export function walkReverseOrder(

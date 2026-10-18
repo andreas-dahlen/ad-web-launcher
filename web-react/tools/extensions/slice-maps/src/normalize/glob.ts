@@ -1,22 +1,22 @@
-import type { NormalizedPaths, TreeNode } from '../types/core.types.ts';
+import type { PathChoice, TreeNode } from '../types/core.types.ts';
 import picomatch from 'picomatch'
 import { hasBasePath } from '../utils/comparePaths.ts';
 
 export default function normalizeGlob(
   pattern: string,
   fileTree: TreeNode[]
-): NormalizedPaths {
+): PathChoice {
   const matcher = picomatch(pattern, { dot: true })
-  const folders = new Set<string>()
-  const files = new Set<string>()
+  const rawFolders: string[] = []
+  const rawFiles: string[] = []
 
   function convertToPaths(nodes: TreeNode[]) {
     for (const node of nodes) {
       if (matcher(node.path)) {
         if (node.type === 'folders') {
-          folders.add(node.path)
+          rawFolders.push(node.path)
         } else {
-          files.add(node.path)
+          rawFiles.push(node.path)
         }
       }
 
@@ -29,18 +29,17 @@ export default function normalizeGlob(
   convertToPaths(fileTree)
 
 
-  const excludeFolders = [...folders].filter(
-    folder => !hasBasePath(folders, folder)
+  const folders = new Set(
+    rawFolders.filter(folder => !hasBasePath(rawFolders, folder))
   )
 
-  const excludeFiles = [...files].filter(
-    file => !hasBasePath(folders, file)
+  const files = new Set(
+    rawFiles.filter(file => !hasBasePath(rawFolders, file))
   )
 
   return {
-    includeFiles: [],
-    includeFolders: [],
-    excludeFiles,
-    excludeFolders
+    action: 'exclude',
+    files,
+    folders
   }
 }

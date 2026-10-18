@@ -1,6 +1,7 @@
 import * as vscode from 'vscode'
 
-import type { NodeSemantics, WorkspaceTreeNode } from '../types/core.types.ts'
+import type { WorkspaceTreeNode } from '../types/core.types.ts'
+import type { NodeSemantics } from '../types/exclusion.types.ts'
 
 export function fileTreeItem(
   node: WorkspaceTreeNode,

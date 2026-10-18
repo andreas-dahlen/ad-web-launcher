@@ -1,5 +1,6 @@
 import path from 'node:path'
-export function isBasePath(basePath: string, pathToCheck: string): boolean {
+import type { ExcludeOrInclude } from '../types/core.types.ts'
+export function isChildOf(pathToCheck: string, basePath: string,): boolean {
   const relative = path.relative(basePath, pathToCheck)
 
   return relative !== '' &&
@@ -9,14 +10,46 @@ export function isBasePath(basePath: string, pathToCheck: string): boolean {
 }
 
 export function hasBasePath(
-  paths: Set<string>,
+  paths: Iterable<string>,
   path: string
 ): boolean {
   for (const basePath of paths) {
-    if (isBasePath(basePath, path)) {
+    if (isChildOf(path, basePath)) {
       return true
     }
   }
 
   return false
+}
+
+export function isInhariting(
+  pathToCheck: string,
+  intent: ExcludeOrInclude,
+  { excludeFolders, includeFolders }:
+    { excludeFolders: Set<string>, includeFolders: Set<string> }
+): boolean {
+  let resolved: ExcludeOrInclude = 'include'
+  let longestMatch = ''
+
+  for (const folder of excludeFolders) {
+    if (
+      !isChildOf(pathToCheck, folder) ||
+      folder.length <= longestMatch.length
+    ) continue
+
+    resolved = 'exclude'
+    longestMatch = folder
+  }
+
+  for (const folder of includeFolders) {
+    if (
+      !isChildOf(pathToCheck, folder) ||
+      folder.length <= longestMatch.length
+    ) continue
+
+    resolved = 'include'
+    longestMatch = folder
+  }
+
+  return resolved === intent
 }

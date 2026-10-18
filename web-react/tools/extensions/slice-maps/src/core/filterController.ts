@@ -1,4 +1,4 @@
-import type { NormalizedPaths, Scope, SliceFilter } from '../types/core.types.ts';
+import type { PathChoice, Scope, SliceFilter } from '../types/core.types.ts';
 import { createDebug } from '../utils/debug.ts';
 import { showMsg } from '../utils/showMsg.ts';
 import { createFilter } from '../operations/create.ts';
@@ -11,7 +11,7 @@ export type FilterController = NonNullable<ReturnType<typeof createFilterControl
 export function createFilterController({
   loader,
   root,
-  cache,
+  sliceCache,
   output,
   appState,
   updateSliceTree,
@@ -33,10 +33,10 @@ export function createFilterController({
     const filter = await createFilter(root)
     if (!filter) return
 
-    await cache.addFilter(filter)
+    await sliceCache.addFilter(filter)
 
     if (!appState.getActiveConfig()) {
-      await resolveConfigIdentity(appState, cache, loader)
+      await resolveConfigIdentity(appState, sliceCache, loader)
     }
 
     updateSliceTree()
@@ -44,10 +44,10 @@ export function createFilterController({
   }
 
   async function remove(filter: SliceFilter): Promise<void> {
-    await cache.removeFilter(filter.id)
+    await sliceCache.removeFilter(filter.id)
 
     if (appState.getActiveConfig()?.id === filter.id) {
-      await resolveConfigIdentity(appState, cache, loader)
+      await resolveConfigIdentity(appState, sliceCache, loader)
     }
 
     if (appState.isActiveFilter(filter.id)) {
@@ -68,7 +68,7 @@ export function createFilterController({
     const name = await renameFilter()
     if (!name) return
 
-    await cache.renameFilter(filter.id, name)
+    await sliceCache.renameFilter(filter.id, name)
 
     updateSliceTree()
     output.appendLine(`[slice maps] filter rename: ${name}`)
@@ -76,7 +76,7 @@ export function createFilterController({
 
   async function reset(filter: SliceFilter): Promise<void> {
     const newFilter = resetFilter(filter)
-    await cache.addFilter(newFilter)
+    await sliceCache.addFilter(newFilter)
 
     if (appState.isActiveFilter(filter.id)) {
       await applyEffectiveSlice()
@@ -89,10 +89,10 @@ export function createFilterController({
   async function removeExclude(
     absolutePaths: string[]
   ): Promise<void> {
-    const identity = await resolveConfigIdentity(appState, cache, loader)
+    const identity = await resolveConfigIdentity(appState, sliceCache, loader)
     if (identity?.type !== 'filter') return
 
-    const filter = cache.getFilterById(identity.id)
+    const filter = sliceCache.getFilterById(identity.id)
     if (!filter) return
 
     const paths = pathsToRelative(absolutePaths, root, 'exclude')
@@ -102,10 +102,10 @@ export function createFilterController({
   async function addExclude(
     absolutePaths: string[]
   ): Promise<void> {
-    const identity = await resolveConfigIdentity(appState, cache, loader)
+    const identity = await resolveConfigIdentity(appState, sliceCache, loader)
     if (identity?.type !== 'filter') return
 
-    const filter = cache.getFilterById(identity.id)
+    const filter = sliceCache.getFilterById(identity.id)
     if (!filter) return
 
     const paths = pathsToRelative(absolutePaths, root, 'exclude')
@@ -114,7 +114,7 @@ export function createFilterController({
 
   async function update(
     filter: SliceFilter,
-    paths: NormalizedPaths,
+    paths: PathChoice,
     message: string,
     remove?: 'remove'
   ): Promise<void> {
@@ -125,7 +125,7 @@ export function createFilterController({
       : normalizeFilter(filter, paths, loader.getBehavior())
 
     debug('[UPDATE] before resolve', filter)
-    await cache.addFilter(nextFilter)
+    await sliceCache.addFilter(nextFilter)
 
     debug('[UPDATE] after resolve', nextFilter)
 

@@ -1,3 +1,4 @@
+import type { MergeCache } from '../cache/mergeCache.ts';
 import type { ExclusionHandler } from '../exclusions/exclusionHandler.ts';
 import { compareArrays } from '../exclusions/isContentEqual.ts';
 import type { ExcludeOrInclude, Slice } from '../types/core.types.ts';
@@ -6,24 +7,24 @@ import * as vscode from 'vscode'
 
 export function cleanPerserved(
   slice: Slice,
+  mergeCache: MergeCache,
   excluder: ExclusionHandler,
   output: vscode.OutputChannel
 ): Slice | undefined {
 
-  const prev = excluder.getResolutionByMergeId(slice.id)
+  const prev = mergeCache.getCachedMergeData(slice.id)
 
   if (!prev) return
+  const { sliceData, details, resolvedExclude } = prev
+  const { completeExclude, baseTruth } = details
 
-  const includeFiles = new Set<string>(prev.includeFiles)
-  const includeFolders = new Set<string>(prev.includeFolders)
-  const excludeFiles = new Set(prev.excludeFiles)
-  const excludeFolders = new Set(prev.excludeFolders)
-
-
-  const { result: { resolution, baseTruth } } = prev
+  const includeFiles = new Set<string>(sliceData.includeFiles)
+  const includeFolders = new Set<string>(sliceData.includeFolders)
+  const excludeFiles = new Set(sliceData.excludeFiles)
+  const excludeFolders = new Set(sliceData.excludeFolders)
 
   const isDeletable = (file: string, expected: ExcludeOrInclude): boolean => {
-    return resolution.get(file) === expected
+    return completeExclude.get(file) === expected
       && baseTruth.get(file)?.implicit === expected
   }
 
@@ -56,13 +57,13 @@ export function cleanPerserved(
   }
 
   if (
-    compareArrays(newSlice.includeFiles, prev.includeFiles) &&
-    compareArrays(newSlice.includeFolders, prev.includeFolders) &&
-    compareArrays(newSlice.excludeFiles, prev.excludeFiles) &&
-    compareArrays(newSlice.excludeFolders, prev.excludeFolders)
+    compareArrays(newSlice.includeFiles, sliceData.includeFiles) &&
+    compareArrays(newSlice.includeFolders, sliceData.includeFolders) &&
+    compareArrays(newSlice.excludeFiles, sliceData.excludeFiles) &&
+    compareArrays(newSlice.excludeFolders, sliceData.excludeFolders)
   ) return
 
-  const prevResult = Object.keys(prev.resolvedExclude)
+  const prevResult = Object.keys(resolvedExclude)
 
   const newExclude = excluder.resolve(newSlice, output)
   const newResult = Object.keys(newExclude)

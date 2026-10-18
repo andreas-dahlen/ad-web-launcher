@@ -1,13 +1,11 @@
 import type { UUID } from 'node:crypto'
-import type { MergedSlice, SliceFilter, SliceMap } from '../types/core.types.ts'
-import type { AppStateCache } from './appStateCache.ts'
+import type { SliceFilter, SliceMap } from '../types/core.types.ts'
 import type { LoadHandler } from '../loaders/loadHandler.ts'
 
 export type SliceCache = NonNullable<ReturnType<typeof createSliceMapCache>>
 
 export function createSliceMapCache(
-  loader: LoadHandler,
-  appState: AppStateCache
+  loader: LoadHandler
 ) {
 
   const sliceData = loader.getPersistedSliceData()
@@ -19,51 +17,6 @@ export function createSliceMapCache(
   const filters = new Map<UUID, SliceFilter>(
     sliceData.filters.map(filter => [filter.id, filter])
   )
-
-  function getEffectiveSlice(): MergedSlice {
-    const activeMapIdentity = appState.getActiveMap()
-    const activeFiltersIdentities = appState.getActiveFilters()
-
-    const includeFiles = new Set<string>()
-    const includeFolders = new Set<string>()
-
-    const excludeFiles = new Set<string>()
-    const excludeFolders = new Set<string>()
-
-    let mergeId = activeMapIdentity?.id ?? ''
-
-    const filterIds = activeFiltersIdentities
-      .map(filter => filter.id)
-      .toSorted((a, b) => a.localeCompare(b))
-
-    for (const id of filterIds) {
-      mergeId += `.${id}`
-    }
-
-    //// Safe to merge: filters only exclude, and includes take priority in resolveExclusion.
-    if (activeMapIdentity) {
-      const map = getMapById(activeMapIdentity.id)
-      map?.includeFiles.forEach(include => includeFiles.add(include))
-      map?.includeFolders.forEach(include => includeFolders.add(include))
-      map?.excludeFiles.forEach(exclude => excludeFiles.add(exclude))
-      map?.excludeFolders.forEach(exclude => excludeFolders.add(exclude))
-    }
-
-    for (const activeFilter of activeFiltersIdentities) {
-      const filter = getFilterById(activeFilter.id)
-      filter?.excludeFiles.forEach(exclude => excludeFiles.add(exclude))
-      filter?.excludeFolders.forEach(exclude => excludeFolders.add(exclude))
-    }
-
-    return {
-      mergeId,
-      includeFiles: [...includeFiles],
-      includeFolders: [...includeFolders],
-      excludeFiles: [...excludeFiles],
-      excludeFolders: [...excludeFolders]
-    }
-  }
-
 
   async function persist(): Promise<void> {
     await loader.setPersistedSliceData({
@@ -124,18 +77,7 @@ export function createSliceMapCache(
     await persist()
   }
 
-  // let localExclude: Record<string, boolean> | undefined
-
-  // function getLocalExclude(): Record<string, boolean> | undefined {
-  //   return localExclude
-  // }
-
-  // function setLocalExclude(exclude: Record<string, boolean> | undefined): void {
-  //   localExclude = exclude
-  // }
-
   return {
-    getEffectiveSlice,
 
     getMaps,
     getMapById,
@@ -147,9 +89,6 @@ export function createSliceMapCache(
     getFilterById,
     addFilter,
     removeFilter,
-    renameFilter,
-
-    // getLocalExclude,
-    // setLocalExclude
+    renameFilter
   }
 }
