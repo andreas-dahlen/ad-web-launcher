@@ -14,9 +14,9 @@ export async function activate(context: vscode.ExtensionContext): Promise<void> 
 
   context.subscriptions.push(output)
 
-  const provider = createSliceProvider(context, root, output)
+  const provider = createSliceProvider(context, root)
 
-  await provider.general.startup()
+  await provider.ctrl.general.startup()
 
   register(context, provider, output)
 

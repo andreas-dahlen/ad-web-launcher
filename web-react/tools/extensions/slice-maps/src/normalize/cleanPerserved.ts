@@ -2,14 +2,11 @@ import type { MergeCache } from '../cache/mergeCache.ts';
 import type { ExclusionHandler } from '../exclusions/exclusionHandler.ts';
 import { compareArrays } from '../exclusions/isContentEqual.ts';
 import type { ExcludeOrInclude, Slice } from '../types/core.types.ts';
-import * as vscode from 'vscode'
-
 
 export function cleanPerserved(
   slice: Slice,
   mergeCache: MergeCache,
   excluder: ExclusionHandler,
-  output: vscode.OutputChannel
 ): Slice | undefined {
 
   const prev = mergeCache.getCachedMergeData(slice.id)
@@ -65,7 +62,7 @@ export function cleanPerserved(
 
   const prevResult = Object.keys(resolvedExclude)
 
-  const newExclude = excluder.resolve(newSlice, output)
+  const newExclude = excluder.resolve(newSlice)
   const newResult = Object.keys(newExclude)
 
   if (!compareArrays(prevResult, newResult)) {

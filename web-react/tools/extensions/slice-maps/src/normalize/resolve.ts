@@ -1,10 +1,9 @@
 import type { PathChoice, NormalizedPaths } from '../types/core.types.ts'
-import type { OverrideBehavior } from '../types/vscode.types.ts'
 import { isChildOf, isInhariting } from '../utils/comparePaths.ts'
+import { getBehavior } from '../loaders/loadSettings.ts'
 export function resolveNormalization(
   base: NormalizedPaths,
-  input: PathChoice,
-  behavior: OverrideBehavior
+  input: PathChoice
 ): NormalizedPaths {
   const includeFiles = new Set<string>(base.includeFiles)
   const includeFolders = new Set<string>(base.includeFolders)
@@ -32,7 +31,7 @@ export function resolveNormalization(
     }
   }
 
-  if (behavior === 'preserve') return {
+  if (getBehavior() === 'preserve') return {
     includeFiles: [...includeFiles],
     includeFolders: [...includeFolders],
     excludeFiles: [...excludeFiles],

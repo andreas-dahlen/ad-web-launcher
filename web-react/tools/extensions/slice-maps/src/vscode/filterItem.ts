@@ -12,9 +12,14 @@ export function filterItem(
   )
 
   item.id = `${filter.id}-${isActive}`
-
   item.contextValue = 'sliceFilter'
-  item.description = isConfiguring ? '⚙ CONFIG' : undefined
+
+  const rawExcCalc = filter.excludeFiles.length + filter.excludeFolders.length
+  const exclude = rawExcCalc === 0 ? '0' : `-${rawExcCalc}`
+
+  const config = isConfiguring ? ' · ⚙ CONFIG' : ''
+
+  item.description = `${exclude}${config}`
 
   item.iconPath = new vscode.ThemeIcon(
     isActive ? 'circle-filled' : 'circle-outline',

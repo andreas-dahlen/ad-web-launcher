@@ -3,12 +3,12 @@ import type { AppStateCache } from './appStateCache.ts'
 
 export type TreeCache = NonNullable<ReturnType<typeof createTreeCache>>
 
-export function createTreeCache(appState: AppStateCache) {
+export function createTreeCache(appGet: AppStateCache["appGet"]) {
   const data = new Map<string, WorkspaceTreeNode[]>()
 
   return {
     getActiveData() {
-      return data.get(appState.getActiveMergeId())
+      return data.get(appGet.getActiveMergeId())
     },
 
     getDataById(mergeId: string) {

@@ -1,70 +1,18 @@
-import fs from 'node:fs'
-import path from 'node:path'
+import * as vscode from 'vscode'
+import { buildFileTree } from './buildFileTree.ts'
 import type { TreeNode } from '../types/core.types.ts'
-import picomatch from 'picomatch'
+import type { ExclusionFileData } from '../types/vscode.types.ts'
+// import picomatch from 'picomatch'
 
+export type LoadTree = ReturnType<typeof createLoadTree>
 
-export function loadTree(
-  root: string,
-  excl: Record<string, boolean>,
-  traversalStops: string[]
-): TreeNode[] {
-  const stops = new Set(traversalStops)
+export const createLoadTree =
+  (root: vscode.WorkspaceFolder) => ({
+    build(totalExclude: ExclusionFileData['total']): TreeNode[] {
+      const traversalStops = vscode.workspace
+        .getConfiguration('sliceMaps')
+        .get<string[]>('traversalStoppers', [])
 
-  const matchers = getMatches(excl)
-
-  function load(current: string): TreeNode | undefined {
-    const name = path.basename(current)
-    const relativePath = path.relative(root, current)
-      .replaceAll(path.sep, '/')
-
-    if (matchers.some(matches => matches(relativePath))) { return }
-
-    const stats = fs.statSync(current)
-
-    if (stats.isFile()) {
-      return {
-        path: relativePath,
-        type: 'files'
-      }
+      return buildFileTree(root.uri.fsPath, totalExclude, traversalStops)
     }
-
-    if (stops.has(name)) {
-      return {
-        path: relativePath,
-        type: 'folders'
-      }
-    }
-
-    const rawChildren = fs.readdirSync(current).map(child =>
-      load(path.join(current, child)))
-
-    return {
-      path: relativePath,
-      type: 'folders',
-      children: filterUndefined(rawChildren
-      )
-    }
-  }
-
-  return filterUndefined(
-    fs.readdirSync(root)
-      .map(child =>
-        load(path.join(root, child)))
-  )
-}
-
-function filterUndefined(
-  mix: (TreeNode | undefined)[]
-): TreeNode[] {
-  return mix.filter(entry => entry !== undefined)
-}
-
-
-function getMatches(check: Record<string, boolean>) {
-  const enabledExcludes = Object.entries(check)
-    .filter((entry) => entry[1] === true)
-
-  return enabledExcludes
-    .map((entry) => picomatch(entry[0], { dot: true }))
-}
+  })

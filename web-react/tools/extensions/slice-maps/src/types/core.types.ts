@@ -1,8 +1,4 @@
 import type { UUID } from 'node:crypto'
-import * as vscode from 'vscode'
-import type { LoadHandler } from '../loaders/loadHandler.ts'
-import type { SliceCache } from '../cache/sliceMapCache.ts'
-import type { AppStateCache } from '../cache/appStateCache.ts'
 import type { NodeSemantics } from './exclusion.types.ts'
 
 export type TreeNode = {
@@ -72,15 +68,3 @@ export type ActiveFilter = {
 export type ActiveSlice = ActiveMap | ActiveFilter
 
 export type ExcludeOrInclude = 'include' | 'exclude'
-
-
-export type Scope = {
-  loader: LoadHandler
-  root: vscode.WorkspaceFolder
-  sliceCache: SliceCache
-  output: vscode.OutputChannel
-  appState: AppStateCache
-  updateSliceTree: () => void
-  applyEffectiveSlice: () => Promise<void>
-  resolveNothingActive: () => Promise<void>
-}

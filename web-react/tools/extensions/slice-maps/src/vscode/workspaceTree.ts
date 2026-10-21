@@ -5,9 +5,8 @@ import { fileTreeItem } from './fileTreeItem.ts'
 
 export function createWorkspaceTreeProvider(
   treeCache: TreeCache,
-  output: vscode.OutputChannel
 ): {
-  workspaceTreeProvider: vscode.TreeDataProvider<WorkspaceTreeNode>
+  workspaceView: vscode.TreeView<WorkspaceTreeNode>
   updateWorkspaceTree: () => void
   workspaceTreeDisposable: vscode.Disposable
 } {
@@ -31,13 +30,16 @@ export function createWorkspaceTreeProvider(
       return fileTreeItem(
         node,
         vscode.Uri.file(node.absolutePath),
-        output
       )
     }
   }
+  const workspaceView = vscode.window.createTreeView('sliceWorkspace', {
+    treeDataProvider: workspaceTreeProvider,
+    canSelectMany: true
+  })
 
   return {
-    workspaceTreeProvider,
+    workspaceView,
     updateWorkspaceTree: () => workspaceTreeChanged.fire(),
     workspaceTreeDisposable: workspaceTreeChanged,
   }

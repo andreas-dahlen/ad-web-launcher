@@ -5,6 +5,7 @@ import { appBoundaries, cascadeVscodeBoundaries, compilerBoundaries, cssVariable
 import { ignores } from './tools/lint/config/globalIgnores.ts'
 import { unusedVars } from './tools/lint/config/oxlint/unusedVars.ts'
 import { jsPlugins } from './tools/lint/config/oxlint/plugins.ts'
+import { typeAwareRules } from './tools/lint/config/oxlint/typeAwareRules.ts'
 export default defineConfig({
   ignorePatterns: ignores,
 
@@ -26,6 +27,7 @@ export default defineConfig({
     projectLintBoundaries,
     unusedVars
   ],
+  options: { "typeAware": true },
 
   plugins: [
     'eslint',
@@ -61,6 +63,9 @@ export default defineConfig({
         ignorePackages: true,
         checkTypeImports: true,
       }
-    ]
+    ],
+
+
+    ...typeAwareRules,
   }
 })

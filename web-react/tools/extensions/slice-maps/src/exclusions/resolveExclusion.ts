@@ -1,21 +1,15 @@
 import type { MergedSlice, ExcludeOrInclude, TreeNode } from '../types/core.types.ts';
-import * as vscode from 'vscode'
 import { compress } from './compress.ts';
-import { createDebug } from '../utils/debug.ts';
 import type { ResolutionDetails, InheritedTruth, NodeSemantics, ExclusionResolution } from '../types/exclusion.types.ts';
 
 export function resolveExclusion(
   slice: MergedSlice,
   fileTree: TreeNode[],
-  output: vscode.OutputChannel
 ): ExclusionResolution {
-  const debug = createDebug(output, "resolution")
 
   const baseTruth = resolveInheritedTruth(slice, fileTree)
-  debug('baseTruth:', [...baseTruth])
   const details = effectiveResult(baseTruth, fileTree)
-  debug('resolution:', [...details.completeExclude])
-  const resolvedExclude = compress(details.completeExclude, output)
+  const resolvedExclude = compress(details.completeExclude)
 
   return { details, resolvedExclude }
 }

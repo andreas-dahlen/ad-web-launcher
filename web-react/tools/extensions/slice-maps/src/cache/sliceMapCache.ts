@@ -1,14 +1,13 @@
 import type { UUID } from 'node:crypto'
-import type { SliceFilter, SliceMap } from '../types/core.types.ts'
-import type { LoadHandler } from '../loaders/loadHandler.ts'
-
+import type { SliceData, SliceFilter, SliceMap } from '../types/core.types.ts'
+import * as vscode from 'vscode'
 export type SliceCache = NonNullable<ReturnType<typeof createSliceMapCache>>
 
 export function createSliceMapCache(
-  loader: LoadHandler
+  context: vscode.ExtensionContext
 ) {
 
-  const sliceData = loader.getPersistedSliceData()
+  const sliceData = getPersistedSliceData(context)
 
   const maps = new Map<UUID, SliceMap>(
     sliceData.maps.map(map => [map.id, map])
@@ -19,10 +18,10 @@ export function createSliceMapCache(
   )
 
   async function persist(): Promise<void> {
-    await loader.setPersistedSliceData({
+    await setPersistedSliceData({
       maps: maps.values().toArray(),
       filters: filters.values().toArray()
-    })
+    }, context)
   }
 
   function getMaps(): SliceMap[] {
@@ -91,4 +90,18 @@ export function createSliceMapCache(
     removeFilter,
     renameFilter
   }
+}
+
+function getPersistedSliceData(context: vscode.ExtensionContext): SliceData {
+  return context.workspaceState.get<SliceData>('sliceMaps') ?? {
+    maps: [],
+    filters: []
+  }
+}
+
+async function setPersistedSliceData(data: SliceData, context: vscode.ExtensionContext): Promise<void> {
+  await context.workspaceState.update(
+    'sliceMaps',
+    data
+  )
 }

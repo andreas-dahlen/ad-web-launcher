@@ -4,17 +4,17 @@ import type { MergedSlice } from '../types/core.types.ts'
 
 export function mergeSlice(
   sliceCache: SliceCache,
-  appState: AppStateCache
+  appGet: AppStateCache["appGet"]
 ): MergedSlice {
-  const activeMapIdentity = appState.getActiveMap()
-  const activeFiltersIdentities = appState.getActiveFilters()
+  const activeMapIdentity = appGet.getActiveMap()
+  const activeFiltersIdentities = appGet.getActiveFilters()
 
   const includeFiles = new Set<string>()
   const includeFolders = new Set<string>()
   const excludeFiles = new Set<string>()
   const excludeFolders = new Set<string>()
 
-  const mergeId = appState.getActiveMergeId()
+  const mergeId = appGet.getActiveMergeId()
 
   //// Safe to merge: filters only exclude, and includes take priority in resolveExclusion.
   if (activeMapIdentity) {

@@ -6,10 +6,7 @@ import type { NodeSemantics } from '../types/exclusion.types.ts'
 export function fileTreeItem(
   node: WorkspaceTreeNode,
   uri: vscode.Uri,
-  output: vscode.OutputChannel
 ): vscode.TreeItem {
-
-  void output //TODO remove output
 
   const isFolder = node.type === 'folders'
   const name = node.path.split(/[\\/]/).pop() ?? node.path

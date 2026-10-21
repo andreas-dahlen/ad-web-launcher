@@ -10,5 +10,6 @@
 	"settings": {
 		"terminal.integrated.cwd": "${workspaceFolder}",
 		"cssModulesIntellisense.diagnostics.classNotUsed.enabled": true,
+		"scopesManager.localScopes": [ ],
 	}
 }

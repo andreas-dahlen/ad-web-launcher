@@ -1,115 +1,106 @@
 import * as vscode from 'vscode'
 import { createSliceMapCache } from '../cache/sliceMapCache.ts'
-import { deactivate } from '../operations/deactivate.ts'
-import { loadHandler } from '../loaders/loadHandler.ts'
+import { createLoadTree } from '../loaders/loadTree.ts'
 import { exclusionHandler } from '../exclusions/exclusionHandler.ts'
 import { createSliceTreeProvider } from '../vscode/sliceTree.ts'
 import { createAppStateCache } from '../cache/appStateCache.ts'
-import type { Scope } from '../types/core.types.ts'
-import { createMapController } from './mapController.ts'
-import { createFilterController } from './filterController.ts'
-import { activate } from '../operations/activate.ts'
-import { createGeneralController } from './generalController.ts'
+import { createMapController } from '../controllers/mapController.ts'
+import { createFilterController } from '../controllers/filterController.ts'
+import { createGeneralController } from '../controllers/generalController.ts'
 import { createTreeHandler } from './treeHandler.ts'
 import { createTreeCache } from '../cache/treeCache.ts'
 import { createWorkspaceTreeProvider } from '../vscode/workspaceTree.ts'
-import { mergeSlice } from '../normalize/mergeSlice.ts'
 import { createMergeCache } from '../cache/mergeCache.ts'
+import type { CompDeps } from '../types/controller.types.ts'
+import { createNativeBackupHandler } from './nativeBackupHandler.ts'
+import { createSliceOrchestrator } from './sliceOrchestrator.ts'
+import { setUpConfigCache } from '../identity/configIdentity.ts'
+import { getExcludeConfigTarget } from '../loaders/loadSettings.ts'
 
-export type SliceProvider = NonNullable<ReturnType<typeof createSliceProvider>>
+export type SliceProvider = ReturnType<typeof createSliceProvider>
 export function createSliceProvider(
   context: vscode.ExtensionContext,
-  root: vscode.WorkspaceFolder,
-  output: vscode.OutputChannel
+  root: vscode.WorkspaceFolder
 ) {
 
-  const loader = loadHandler(context, root, output)
+  const loadTree = createLoadTree(root)
+  const sliceCache = createSliceMapCache(context)
+  const { appGet, appSet } = createAppStateCache()
 
-  const sliceCache = createSliceMapCache(loader)
-  const appState = createAppStateCache()
+  const conf = setUpConfigCache(appGet, sliceCache, context)
+  const treeCache = createTreeCache(appGet)
   const mergeCache = createMergeCache()
-  const treeCache = createTreeCache(appState)
 
-  const excluder = exclusionHandler(loader, appState, mergeCache)
-
-
-  const target = loader.getExcludeConfigTarget()
+  const native = createNativeBackupHandler(appGet, context, root)
+  const excluder = exclusionHandler(loadTree, native, mergeCache)
 
   const {
-    sliceTreeProvider,
+    sliceMapsView,
+    sliceMapsWorkspaceView,
     sliceTreeDisposable,
     updateSliceTree
-  } = createSliceTreeProvider(sliceCache, appState)
+  } = createSliceTreeProvider(sliceCache, appGet, conf)
 
   const {
-    workspaceTreeProvider,
+    workspaceView,
     workspaceTreeDisposable,
     updateWorkspaceTree
-  } = createWorkspaceTreeProvider(treeCache, output)
+  } = createWorkspaceTreeProvider(treeCache)
 
-  const scope: Scope = {
-    loader,
+  const tree = createTreeHandler({
     root,
-    sliceCache,
-    output,
-    appState,
-    updateSliceTree,
-    applyEffectiveSlice,
-    resolveNothingActive
-  }
-  const tree = createTreeHandler(scope, treeCache, mergeCache)
-
-  const map = createMapController(scope)
-  const filter = createFilterController(scope)
-
-  const general = createGeneralController(
-    scope,
-    map,
-    filter,
-    tree,
-    excluder,
+    treeCache,
     mergeCache,
-  )
+    native,
+    loadTree
+  })
+
+  const shared = {
+    sliceCache,
+    mergeCache,
+    excluder,
+    native,
+    target: getExcludeConfigTarget(root),
+    updateSliceTree
+  }
+
+  const orchestrator = createSliceOrchestrator({
+    ...shared,
+    appGet,
+    appSet,
+    tree,
+    sliceViews: [sliceMapsView, sliceMapsWorkspaceView],
+    updateWorkspaceTree
+  })
+
+  const compDeps: CompDeps = {
+    root,
+    appGet,
+    conf,
+    sliceCache,
+    orchestrator,
+    updateSliceTree
+  }
+
+  const map = createMapController(compDeps)
+  const filter = createFilterController(compDeps)
+
+  const general = createGeneralController({
+    ...shared,
+    appGet,
+    ctrl: { tree, map, filter },
+    conf,
+    loadTree,
+    orchestrator
+  })
+
 
   return {
-    general,
-    map,
-    filter,
-    tree,
-    sliceTreeProvider,
+    ctrl: { tree, map, filter, general },
+    sliceMapsView,
+    sliceMapsWorkspaceView,
+    workspaceView,
     sliceTreeDisposable,
-    workspaceTreeProvider,
     workspaceTreeDisposable,
-  }
-  async function applyEffectiveSlice(): Promise<void> {
-    const localExclude = appState.getLocalExclude()
-    if (!localExclude) {
-      output.appendLine('[slice maps] error: localExclude is undefined')
-      return
-    }
-
-    const slice = mergeSlice(sliceCache, appState)
-    const exclude = excluder.resolve(slice, output)
-
-    await activate(localExclude, exclude, target)
-    tree.update(slice.mergeId)
-    updateSliceTree()
-    updateWorkspaceTree()
-    general.updateTitle()
-  }
-
-  async function resolveNothingActive(): Promise<void> {
-    const localExclude = appState.getLocalExclude()
-    if (!localExclude) {
-      output.appendLine('[slice maps] error: localExclude is undefined')
-      return
-    }
-
-    await deactivate(localExclude, target)
-    await loader.setPersistedExclude(undefined)
-    tree.reset()
-    updateSliceTree()
-    updateWorkspaceTree()
-    general.updateTitle()
   }
 }

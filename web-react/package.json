@@ -43,6 +43,7 @@
     "jsdom": "^30.0.1",
     "knip": "^6.38.0",
     "oxlint": "^1.79.0",
+    "oxlint-tsgolint": "^7.0.2004",
     "stylelint": "^17.14.1",
     "stylelint-config-css-modules": "^4.6.0",
     "stylelint-config-standard": "^40.0.0",

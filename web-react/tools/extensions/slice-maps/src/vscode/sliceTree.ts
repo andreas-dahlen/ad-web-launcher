@@ -4,12 +4,15 @@ import type { SliceCache } from '../cache/sliceMapCache.ts'
 import { mapItem } from './sliceItem.ts'
 import type { AppStateCache } from '../cache/appStateCache.ts'
 import { filterItem } from './filterItem.ts'
+import type { ConfigCache } from '../identity/configIdentity.ts'
 
 export function createSliceTreeProvider(
   sliceCache: SliceCache,
-  appState: AppStateCache
+  appGet: AppStateCache["appGet"],
+  conf: ConfigCache
 ): {
-  sliceTreeProvider: vscode.TreeDataProvider<SliceTreeNode>
+  sliceMapsView: vscode.TreeView<SliceTreeNode>
+  sliceMapsWorkspaceView: vscode.TreeView<SliceTreeNode>
   updateSliceTree: () => void
   sliceTreeDisposable: vscode.Disposable
 } {
@@ -38,40 +41,53 @@ export function createSliceTreeProvider(
     },
     getTreeItem(node: SliceTreeNode): vscode.TreeItem {
       if (node.type === 'mapGroup') {
-        return sectionItem('Maps')
+        return sectionItem('Maps', 'sliceMapGroup')
       }
 
       if (node.type === 'filterGroup') {
-        return sectionItem('Filters')
+        return sectionItem('Filters', 'sliceFilterGroup')
       }
 
       if (node.type === 'map') {
         return mapItem(
           node,
-          node.id === appState.getActiveMap()?.id,
-          node.id === appState.getActiveConfig()?.id
+          node.id === appGet.getActiveMap()?.id,
+          node.id === conf.getActiveConfig()?.id
         )
       }
       return filterItem(
         node,
-        appState.getActiveFilters().some(filter => filter.id === node.id),
-        node.id === appState.getActiveConfig()?.id
+        appGet.getActiveFilters().some(filter => filter.id === node.id),
+        node.id === conf.getActiveConfig()?.id
       )
     }
   }
+
+  const sliceMapsView = vscode.window.createTreeView('sliceMaps', {
+    treeDataProvider: sliceTreeProvider
+  })
+
+  const sliceMapsWorkspaceView = vscode.window.createTreeView('sliceMapsWorkspace', {
+    treeDataProvider: sliceTreeProvider
+  })
+
   return {
-    sliceTreeProvider,
+    sliceMapsView,
+    sliceMapsWorkspaceView,
     updateSliceTree: () => sliceTreeChanged.fire(),
     sliceTreeDisposable: sliceTreeChanged,
   }
 }
 
-
 function sectionItem(
-  label: string
+  label: string,
+  contextValue: string
 ): vscode.TreeItem {
-  return new vscode.TreeItem(
+  const item = new vscode.TreeItem(
     label,
     vscode.TreeItemCollapsibleState.Expanded
   )
+  item.contextValue = contextValue
+
+  return item
 }
