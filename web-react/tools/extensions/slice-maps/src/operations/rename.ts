@@ -1,25 +1,31 @@
 import * as vscode from 'vscode'
 
-export async function renameMap(): Promise<string | null> {
+const MAX_NAME_LENGTH = 20
 
-
+async function rename(prompt: string, placeholderString: string): Promise<string | null> {
   const name = await vscode.window.showInputBox({
-    prompt: 'Slice map name',
-    placeHolder: 'Pizza Slice'
+    prompt,
+    placeHolder: placeholderString,
+    validateInput: value => {
+      const trimmed = value.trim()
+
+      if (!trimmed) return 'Name cannot be empty'
+      if (trimmed.length > MAX_NAME_LENGTH) {
+        return `Name cannot exceed ${MAX_NAME_LENGTH} characters`
+      }
+
+      return null
+    },
   })
 
-  if (!name) return null
-
-  return name
+  const trimmed = name?.trim()
+  return trimmed || null
 }
 
-export async function renameFilter(): Promise<string | null> {
-  const name = await vscode.window.showInputBox({
-    prompt: 'Slice filter name',
-    placeHolder: 'Source files'
-  })
+export function renameMap(): Promise<string | null> {
+  return rename('Slice map name', 'Pizza Slice')
+}
 
-  if (!name) return null
-
-  return name
+export function renameFilter(): Promise<string | null> {
+  return rename('Slice filter name', 'Tortilla Filter')
 }

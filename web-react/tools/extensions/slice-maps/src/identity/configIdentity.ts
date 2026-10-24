@@ -44,6 +44,7 @@ export function setUpConfigCache(
   return {
     getActiveConfig,
     setActiveConfig,
+
     async resolveConfigIdentity() {
 
       const fetched = getActiveConfig()

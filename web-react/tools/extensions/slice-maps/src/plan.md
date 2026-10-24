@@ -1,105 +1,85 @@
 # 🗒️ Slice Maps — Backlog
 
-## 1. UX Improvements
+## 1. Search Exclusions
 
-* [ ] Show explicit include/exclude counts for each map in workspace-configuration tree.
-* [ ] Refine icons for all six semantic states, especially implicit states.
-* [x] Replace text with icons where it improves menu clarity.
-
-* [ ] Add automatic glob exclusions.
-  * Consider converting selected paths into patterns such as `**/tsconfig.json`.
-  * Decide whether this should be automatic, configurable, or an explicit action.
-  * Ensure the behavior fits the existing recursive/preserve setting.
-  * should it support keybinding, files and folders and the whole shebang.
-
-* [ ] Add confirmation dialogs for destructive actions, primarily deleting maps and filters.
-* [ ] Improve user-facing VS Code messages for important actions.
-  * Provide useful feedback for successful and unsuccessful operations.
-  * Avoid unnecessary notifications for routine operations.
-
-* [ ] Clean up diagnostic output.
-  * Remove noisy `output.appendLine()` calls.
-  * Remove redundant debugging output, including unnecessary debug-flagged logging.
-  * Retain useful diagnostics, especially for errors and recovery.
-
-
-## 2. Tree Updates & Performance
-
-* [x] Preserve expanded tree state across refreshes.
-* [x] Collapse the file tree by default on startup — no longer relevant.
-* [ ] Investigate visibility-aware updates.
-
-  * Consider deferring visual refreshes for invisible trees.
-  * Keep configuration and resolution state up to date regardless of visibility.
-
-* [ ] Profile tree recalculation and refresh costs before optimizing update granularity.
-  * Currently, recalculating the tree is reasonable given inherited rules and semantic dependencies.
-  * Let VS Code handle presentation updates where practical.
-  * Avoid implementing complex granular updates without evidence of a performance problem.
-
-## 3. File-System Traversal & Watching
-
-* [x] Add configurable traversal-stop folder names.
-
-* [ ] Investigate VS Code filesystem APIs vs. `node:fs`.
-
-  * Evaluate `workspace.fs` and VS Code's filesystem watcher APIs.
-  * Consider compatibility with non-local workspaces.
-  * Measure potential benefits before committing to a larger refactor.
-
-* [ ] Add filesystem watching and change notifications.
-
-  * Keep the workspace tree synchronized with filesystem changes.
-  * Investigate VS Code's native watcher API.
-  * Determine when a full tree refresh is necessary.
-
-## 4. Configuration Watching
-
-* [ ] Watch for external changes to Slice Maps configuration.
-  * Reload or reconcile cached configuration when files change.
-  * Handle external changes without leaving application state inconsistent.
-  * Avoid unnecessary tree refreshes when possible.
-
-* [ ] Review startup error handling.
-  * Wrap startup in appropriate error handling.
-  * Report useful diagnostics when initialization or recovery fails.
-  * Avoid registering functionality that depends on unsuccessful initialization.
-
-**Note:** Watching external changes to VS Code's exclusion configuration is not currently considered necessary. The existing activation flow captures the original exclusions when transitioning from an inactive state.
-
-## 5. Search Exclusions
-
-* [ ] Add optional integration with `search.exclude`, alongside `files.exclude`.
+* [ ] Evaluate optional integration with `search.exclude`, alongside `files.exclude`.
 
   * Decide between a static user setting and a runtime toggle.
   * Determine whether Slice Maps should mirror its effective exclusions into `search.exclude`.
   * Preserve unrelated user configuration.
-  * Ensure users can still search files they have chosen to hide from Explorer, unless they explicitly opt into excluding them from search.
+  * Keep Explorer visibility and search exclusion behavior independent unless the user opts into linking them.
 
-## 6. Recovery & State Management
+## 2. Tree Updates & Performance
 
-* [ ] Verify startup recovery and rapid activation/deactivation edge cases. //rapid activation/deactivation seems to save the wrong data in local or/and persisted state resulting in a broken state where the user has to manually delete the persisted state to recover.
+### Performance Investigation
 
-  * Test recovery after a crash or unexpected shutdown.
-  * Test recovery after rapid activation and deactivation of Slice Maps.
-  * Ensure that the application can recover gracefully without losing user configuration.
+* [ ] Profile tree recalculation and refresh costs before optimizing update granularity.
 
-## 7. Deferred / Probably Unnecessary
-* [ ] Reconsider granular tree updates only if profiling demonstrates a meaningful performance problem.
+  * Measure the cost of semantic recalculation, tree construction, and refreshes.
+  * Let VS Code handle presentation updates where practical.
+  * Avoid complex granular updates without evidence of a meaningful performance problem.
+
+### Deferred Optimization
+
+* [ ] Consider visibility-aware updates if profiling identifies a worthwhile improvement.
+
+  * Consider deferring visual refreshes for invisible trees.
+  * Keep configuration and resolution state up to date regardless of visibility.
+  * Ensure deferred presentation updates are applied when necessary.
+
+* [ ] Consider granular tree updates only if profiling demonstrates a meaningful performance problem.
+
+## 3. File-System Traversal & Watching
+
+### Initial Activation Performance
+
+* [ ] Investigate the cost of the first map activation.
+
+  * Measure filesystem traversal and semantic resolution separately.
+  * Compare initial activation with subsequent activations using the local cache.
+  * Determine whether persisting traversal results would meaningfully improve performance.
+  * Account for cache invalidation when files or configuration change.
+  * Persist traversal results only if measurements justify the added complexity.
+
+### Filesystem API Compatibility
+
+* [ ] Investigate VS Code filesystem APIs versus `node:fs`.
+
+  * Evaluate `workspace.fs` and VS Code's filesystem watcher APIs.
+  * Consider compatibility with remote and non-local workspaces.
+  * Identify concrete benefits before committing to a broader refactor.
+
+### Filesystem Synchronization
+
+* [ ] Investigate filesystem watching and change notifications.
+
+  * Keep the workspace tree synchronized with filesystem changes.
+  * Determine whether filesystem changes can invalidate cached traversal results.
+  * Investigate VS Code's native watcher API.
+  * Determine when a full tree refresh is necessary.
+  * Avoid redundant refreshes when multiple filesystem events occur together.
+
+## 4. Configuration Watching
+
+* [ ] Investigate watching for external changes to Slice Maps configuration.
+
+  * Reload or reconcile cached configuration when relevant files change.
+  * Prevent external changes from leaving application state inconsistent.
+  * Avoid unnecessary tree refreshes.
+  * Determine whether external configuration editing is common enough to justify the added complexity.
+
+**Note:** Watching external changes to VS Code's exclusion configuration is not currently considered necessary. The existing activation flow captures the original exclusions when transitioning from an inactive state.
 
 ---
 
 ## Suggested Order
 
-1. Implement automatic glob exclusions.
-2. Decide the behavior and configuration model for `search.exclude`.
-3. Improve user-facing messages and add confirmation for destructive actions.
-4. Clean up noisy diagnostic output.
-5. Add startup error handling.
-6. Implement configuration watching.
-7. Investigate filesystem watching and the VS Code filesystem APIs.
-8. Profile tree updates and traversal before considering performance refactors.
-9. Verify recovery edge cases and finalize the restore-to-no-slice action.
+1. Investigate initial map-activation performance.
+2. Decide whether `search.exclude` integration is worthwhile.
+3. Investigate filesystem synchronization and watching.
+4. Evaluate VS Code filesystem APIs if broader workspace compatibility is a goal.
+5. Consider external configuration watching if a concrete need arises.
+6. Profile tree updates before considering granular or visibility-aware optimizations.
 
 ---
 
@@ -113,3 +93,5 @@
 * **Recovery ownership:** The native backup handler owns recovery persistence and synchronization; the orchestrator coordinates when recovery operations occur.
 * **Tree recalculation:** Full semantic recalculation is acceptable while inherited rules and dependencies make incremental recalculation disproportionately complex.
 * **Filesystem architecture:** Investigate the benefits of VS Code's filesystem APIs before committing to a broad migration.
+* **Performance optimization:** Measure actual costs before introducing persistent caches, granular updates, or visibility-aware refreshes.
+* **Scope control:** Investigations do not automatically imply implementation. Retain deferred tasks only when a concrete need justifies the additional complexity.

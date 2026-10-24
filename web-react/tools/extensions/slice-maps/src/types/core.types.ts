@@ -18,6 +18,18 @@ export type WorkspaceTreeNode = {
   children?: WorkspaceTreeNode[]
   type: 'files' | 'folders'
   semantics?: NodeSemantics
+  counts: TreeCounts
+}
+
+export type TreeCounts = {
+  include: {
+    files: number
+    folders: number
+  }
+  exclude: {
+    files: number
+    folders: number
+  }
 }
 export type NormalizedPaths = {
   includeFiles: string[]
@@ -27,7 +39,7 @@ export type NormalizedPaths = {
 }
 
 export type PathChoice = {
-  action: ExcludeOrInclude
+  action: ExcludeOrInclude | 'remove'
   files: Set<string>
   folders: Set<string>
 }

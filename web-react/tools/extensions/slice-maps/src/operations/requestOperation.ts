@@ -6,6 +6,7 @@ export type SliceOperation =
   | 'exclude'
   | 'addExclude'
   | 'removeExclude'
+  | 'excludeAll'
 
 export async function requestOperation(
   identity: ActiveSlice
@@ -21,6 +22,7 @@ export async function requestOperation(
       : [
         { label: 'Add Exclusion', operation: 'addExclude' },
         { label: 'Remove Exclusion', operation: 'removeExclude' },
+        { label: 'Exclude All', operation: 'excludeAll' },
       ]
 
   const selected = await vscode.window.showQuickPick(

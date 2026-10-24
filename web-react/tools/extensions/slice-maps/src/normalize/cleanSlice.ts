@@ -2,16 +2,30 @@ import type { MergeCache } from '../cache/mergeCache.ts';
 import type { ExclusionHandler } from '../exclusions/exclusionHandler.ts';
 import { compareArrays } from '../exclusions/isContentEqual.ts';
 import type { ExcludeOrInclude, Slice } from '../types/core.types.ts';
+import { throwError } from '../utils/throwError.ts';
 
-export function cleanPerserved(
+export function cleanSlice(
   slice: Slice,
   mergeCache: MergeCache,
   excluder: ExclusionHandler,
 ): Slice | undefined {
 
-  const prev = mergeCache.getCachedMergeData(slice.id)
+  let prev = mergeCache.getCachedMergeData(slice.id)
 
-  if (!prev) return
+  if (!prev) {
+    const isMap = slice.type === 'map'
+    excluder.resolve({
+      mergeId: slice.id,
+      excludeFiles: slice.excludeFiles,
+      excludeFolders: slice.excludeFolders,
+      includeFiles: isMap ? slice.includeFiles : [],
+      includeFolders: isMap ? slice.includeFolders : []
+    })
+    prev = mergeCache.getCachedMergeData(slice.id)
+
+    if (!prev) throwError('Cannot compress: could not resolve cached data for slice.')
+  }
+
   const { sliceData, details, resolvedExclude } = prev
   const { completeExclude, baseTruth } = details
 
@@ -66,7 +80,7 @@ export function cleanPerserved(
   const newResult = Object.keys(newExclude)
 
   if (!compareArrays(prevResult, newResult)) {
-    return
+    throwError('Cannot compress: error, compression would change the resolved exclusions.')
   }
 
   if (slice.type === 'map') {

@@ -1,8 +1,17 @@
 import { activate } from '../operations/activate.ts';
 import { mergeSlice } from '../normalize/mergeSlice.ts';
-import type { OrchestratorDeps, QueItem } from '../types/controller.types.ts';
+import type { OrchestratorDeps } from '../types/controller.types.ts';
 import { deactivate } from '../operations/deactivate.ts';
+import type { UUID } from 'node:crypto';
 
+type QueItem =
+  | {
+    type: 'map' | 'filter'
+    id: UUID
+    doesActivate: boolean
+  } | {
+    type: 'resolve'
+  }
 export type SliceOrchestrator = NonNullable<ReturnType<typeof createSliceOrchestrator>>
 export function createSliceOrchestrator({
   appGet,
@@ -15,7 +24,8 @@ export function createSliceOrchestrator({
   target,
   tree,
   updateSliceTree,
-  updateWorkspaceTree
+  updateWorkspaceTree,
+  updateStatusBar
 }: OrchestratorDeps
 ) {
 
@@ -38,6 +48,7 @@ export function createSliceOrchestrator({
     if (isRunning) return
 
     isRunning = true
+    updateStatusBar({ isLoading: true })
 
     try {
       while (pending.length > 0) {
@@ -48,6 +59,7 @@ export function createSliceOrchestrator({
       }
     } finally {
       isRunning = false
+      updateStatusBar({ isLoading: false })
     }
   }
 

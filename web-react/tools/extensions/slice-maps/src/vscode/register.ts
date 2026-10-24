@@ -27,6 +27,7 @@ export function register(
   // provider.general.setSliceViews([sliceMapsView, sliceMapsWorkspaceView])
 
   context.subscriptions.push(
+    provider.statusBar,
     provider.sliceMapsView,
     provider.sliceMapsWorkspaceView,
     provider.workspaceView,
@@ -43,12 +44,18 @@ export function register(
         () => provider.ctrl.general.deactivateAll())),
 
     vscode.commands.registerCommand(
+      'sliceMaps.toggleOnActiveConfig', () => safe('toggle config target',
+        () => provider.ctrl.general.toggleConfigTarget())),
+
+
+
+    vscode.commands.registerCommand(
       'sliceMaps.glob', (node: Slice) => safe('glob item',
         () => provider.ctrl.general.addGlob(node))),
 
     vscode.commands.registerCommand(
-      'sliceMaps.compressPreserved', (node: Slice) => safe('compress preserved',
-        () => provider.ctrl.general.compressPreserved(node))),
+      'sliceMaps.compress', () => safe('compress active config',
+        () => provider.ctrl.general.compress())),
 
     //main
     vscode.commands.registerCommand(
@@ -62,6 +69,10 @@ export function register(
     vscode.commands.registerCommand(
       'sliceMaps.exclude', (_, uris: vscode.Uri[]) => safe('exclude from map',
         async () => provider.ctrl.map.exclude(await normalizeExplorerPaths(uris)))),
+
+    vscode.commands.registerCommand(
+      'sliceMaps.excludeAll', (_, uris: vscode.Uri[]) => safe('glob all',
+        async () => provider.ctrl.filter.globAll(await normalizeExplorerPaths(uris)))),
 
     vscode.commands.registerCommand(
       'sliceMaps.removeExcludeFilter', (_, uris: vscode.Uri[]) => safe('remove exclude from filter',
@@ -89,6 +100,11 @@ export function register(
         () => provider.ctrl.map.exclude(normalizeTreePaths(treeNode, provider.workspaceView.selection)))),
 
     vscode.commands.registerCommand(
+      'sliceMaps.excludeAllWorkspace', (treeNode: WorkspaceTreeNode) =>
+      safe('glob all (workspace)',
+        () => provider.ctrl.filter.globAll(normalizeTreePaths(treeNode, provider.workspaceView.selection)))),
+
+    vscode.commands.registerCommand(
       'sliceMaps.removeExcludeFilterWorkspace', (treeNode: WorkspaceTreeNode) =>
       safe('remove exclude from filter (workspace)',
         () => provider.ctrl.filter.removeExclude(normalizeTreePaths(treeNode, provider.workspaceView.selection)))),
@@ -97,6 +113,38 @@ export function register(
       'sliceMaps.addExcludeFilterWorkspace', (treeNode: WorkspaceTreeNode) =>
       safe('add exclude to filter (workspace)',
         () => provider.ctrl.filter.addExclude(normalizeTreePaths(treeNode, provider.workspaceView.selection)))),
+
+    //inline buttons
+
+    vscode.commands.registerCommand(
+      'sliceMaps.missingConfigWorkspaceItem', (treeNode: WorkspaceTreeNode) =>
+      safe('Set Up SliceMaps (workspaceItem)',
+        () => provider.ctrl.general.missingConfig(normalizeTreePaths(treeNode, [])))),
+
+    vscode.commands.registerCommand(
+      'sliceMaps.includeWorkspaceItem', (treeNode: WorkspaceTreeNode) =>
+      safe('include in map (workspaceItem)',
+        () => provider.ctrl.map.include(normalizeTreePaths(treeNode, [])))),
+
+    vscode.commands.registerCommand(
+      'sliceMaps.excludeWorkspaceItem', (treeNode: WorkspaceTreeNode) =>
+      safe('exclude from map (workspaceItem)',
+        () => provider.ctrl.map.exclude(normalizeTreePaths(treeNode, [])))),
+
+    vscode.commands.registerCommand(
+      'sliceMaps.excludeAllWorkspaceItem', (treeNode: WorkspaceTreeNode) =>
+      safe('glob all (workspaceItem)',
+        () => provider.ctrl.filter.globAll(normalizeTreePaths(treeNode, [])))),
+
+    vscode.commands.registerCommand(
+      'sliceMaps.removeExcludeFilterWorkspaceItem', (treeNode: WorkspaceTreeNode) =>
+      safe('remove exclude from filter (workspaceItem)',
+        () => provider.ctrl.filter.removeExclude(normalizeTreePaths(treeNode, [])))),
+
+    vscode.commands.registerCommand(
+      'sliceMaps.addExcludeFilterWorkspaceItem', (treeNode: WorkspaceTreeNode) =>
+      safe('add exclude to filter (workspaceItem)',
+        () => provider.ctrl.filter.addExclude(normalizeTreePaths(treeNode, [])))),
 
     //Maps
 

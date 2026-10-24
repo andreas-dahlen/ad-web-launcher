@@ -11,11 +11,13 @@ import { createTreeHandler } from './treeHandler.ts'
 import { createTreeCache } from '../cache/treeCache.ts'
 import { createWorkspaceTreeProvider } from '../vscode/workspaceTree.ts'
 import { createMergeCache } from '../cache/mergeCache.ts'
-import type { CompDeps } from '../types/controller.types.ts'
+import type { CompDeps, SharedDeps } from '../types/controller.types.ts'
 import { createNativeBackupHandler } from './nativeBackupHandler.ts'
 import { createSliceOrchestrator } from './sliceOrchestrator.ts'
 import { setUpConfigCache } from '../identity/configIdentity.ts'
 import { getExcludeConfigTarget } from '../loaders/loadSettings.ts'
+import { createStatusBar } from '../vscode/statusBar.ts'
+import { createGlobHandler } from '../normalize/glob.ts'
 
 export type SliceProvider = ReturnType<typeof createSliceProvider>
 export function createSliceProvider(
@@ -23,16 +25,16 @@ export function createSliceProvider(
   root: vscode.WorkspaceFolder
 ) {
 
-  const loadTree = createLoadTree(root)
-  const sliceCache = createSliceMapCache(context)
   const { appGet, appSet } = createAppStateCache()
-
+  const sliceCache = createSliceMapCache(context)
   const conf = setUpConfigCache(appGet, sliceCache, context)
   const treeCache = createTreeCache(appGet)
   const mergeCache = createMergeCache()
 
   const native = createNativeBackupHandler(appGet, context, root)
-  const excluder = exclusionHandler(loadTree, native, mergeCache)
+  const loadTree = createLoadTree(root, native)
+  const excluder = exclusionHandler(loadTree, mergeCache)
+  const globber = createGlobHandler(loadTree)
 
   const {
     sliceMapsView,
@@ -47,21 +49,23 @@ export function createSliceProvider(
     updateWorkspaceTree
   } = createWorkspaceTreeProvider(treeCache)
 
+  const { updateStatusBar, statusBar } = createStatusBar(context, appGet, sliceCache)
+
   const tree = createTreeHandler({
     root,
     treeCache,
     mergeCache,
-    native,
     loadTree
   })
 
-  const shared = {
+  const shared: SharedDeps = {
     sliceCache,
     mergeCache,
     excluder,
     native,
     target: getExcludeConfigTarget(root),
-    updateSliceTree
+    updateSliceTree,
+    updateStatusBar
   }
 
   const orchestrator = createSliceOrchestrator({
@@ -83,20 +87,21 @@ export function createSliceProvider(
   }
 
   const map = createMapController(compDeps)
-  const filter = createFilterController(compDeps)
+  const filter = createFilterController({ ...compDeps, globber })
 
   const general = createGeneralController({
     ...shared,
     appGet,
     ctrl: { tree, map, filter },
     conf,
-    loadTree,
-    orchestrator
+    orchestrator,
+    globber
   })
 
 
   return {
     ctrl: { tree, map, filter, general },
+    statusBar,
     sliceMapsView,
     sliceMapsWorkspaceView,
     workspaceView,

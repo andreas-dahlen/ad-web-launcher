@@ -1,31 +1,6 @@
 import type { WorkspaceTreeNode } from '../types/core.types.ts'
 import * as vscode from 'vscode'
 
-// export async function normalizePaths(
-//   unsolvedObject: WorkspaceTreeNode | vscode.Uri | undefined,
-//   unsolvedArray: WorkspaceTreeNode[] | vscode.Uri[] | undefined
-// ): Promise<string[]> {
-//   const entries = unsolvedArray ?? (unsolvedObject ? [unsolvedObject] : [])
-//   const paths = new Set<string>()
-
-//   for (const entry of entries) {
-//     const absolutePath = entry instanceof vscode.Uri
-//       ? entry.fsPath
-//       : entry.absolutePath
-
-//     paths.add(absolutePath)
-//   }
-
-//   if (paths.size === 0) {
-//     const backup = await getExplorerSelection()
-//     backup.forEach(uri => paths.add(uri.fsPath));
-//   }
-
-//   return [...paths]
-// }
-
-
-
 export async function normalizeExplorerPaths(
   unsolvedArray: vscode.Uri[] | undefined
 ): Promise<string[]> {
@@ -49,13 +24,18 @@ export function normalizeTreePaths(
   target: WorkspaceTreeNode | undefined,
   selection: readonly WorkspaceTreeNode[]
 ): string[] {
-  const paths = new Set(selection.map(node => node.absolutePath))
-
-  if (target) {
-    paths.add(target.absolutePath)
+  if (!target) {
+    return selection.map(node => node.absolutePath)
   }
 
-  return [...paths]
+  const isSelected = selection.some(
+    node => node.absolutePath === target.absolutePath
+  )
+  if (!isSelected) {
+    return [target.absolutePath]
+  }
+
+  return selection.map(node => node.absolutePath)
 }
 
 async function getExplorerSelection(): Promise<vscode.Uri[]> {

@@ -22,7 +22,7 @@ export function hasBasePath(
   return false
 }
 
-export function isInhariting(
+export function isInheriting(
   pathToCheck: string,
   intent: ExcludeOrInclude,
   { excludeFolders, includeFolders }:

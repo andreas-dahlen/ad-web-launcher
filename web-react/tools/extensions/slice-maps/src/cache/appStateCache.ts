@@ -15,6 +15,7 @@ export function createAppStateCache() {
     hasActiveSlice(): boolean {
       return Boolean(activeMap || activeFilters.size > 0)
     },
+
     isActiveMap(id: UUID): boolean {
       return activeMap?.id === id
     },

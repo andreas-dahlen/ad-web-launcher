@@ -6,7 +6,7 @@ import type { ExcludeOrInclude, PathChoice } from '../types/core.types.ts'
 export function pathsToRelative(
   absolutePaths: string[],
   root: vscode.WorkspaceFolder,
-  action: ExcludeOrInclude
+  action: ExcludeOrInclude | 'remove'
 ): PathChoice {
 
   const files = new Set<string>()

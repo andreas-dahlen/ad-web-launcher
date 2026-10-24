@@ -12,38 +12,33 @@ import type { SliceTreeNode } from './core.types.ts'
 import type { NativeBackupHandler } from '../core/nativeBackupHandler.ts'
 import type { SliceOrchestrator } from '../core/sliceOrchestrator.ts'
 import type { ConfigCache } from '../identity/configIdentity.ts'
-import type { UUID } from 'node:crypto'
+import type { StatusBarState } from './vscode.types.ts'
+import type { GlobHandler } from '../normalize/glob.ts'
 
+export type TreeHandlerDeps = {
+  root: vscode.WorkspaceFolder
+  loadTree: LoadTree
+  treeCache: TreeCache
+  mergeCache: MergeCache
+}
+export type SharedDeps = {
+  sliceCache: SliceCache
+  mergeCache: MergeCache
+  excluder: ExclusionHandler
+  native: NativeBackupHandler
+  target: vscode.WorkspaceConfiguration
+  updateSliceTree: () => void
+  updateStatusBar: (state: StatusBarState) => void
+}
 
-
-export type OrchestratorDeps = {
+export type OrchestratorDeps = SharedDeps & {
   appGet: AppStateCache["appGet"]
   appSet: AppStateCache["appSet"]
-  sliceViews: vscode.TreeView<SliceTreeNode>[]
-  native: NativeBackupHandler
-  sliceCache: SliceCache
-  excluder: ExclusionHandler
-  target: vscode.WorkspaceConfiguration
-  mergeCache: MergeCache
   tree: TreeController
-  updateSliceTree: () => void
+  sliceViews: vscode.TreeView<SliceTreeNode>[]
   updateWorkspaceTree: () => void
 }
 
-export type QueItem =
-  | {
-    type: 'map' | 'filter'
-    id: UUID
-    doesActivate: boolean
-  } | {
-    type: 'resolve'
-  }
-
-type GeneralCtrlDeps = {
-  tree: TreeController
-  map: MapController
-  filter: FilterController
-}
 export type CompDeps = {
   root: vscode.WorkspaceFolder
   conf: ConfigCache
@@ -52,23 +47,21 @@ export type CompDeps = {
   orchestrator: SliceOrchestrator
   updateSliceTree: () => void
 }
-export type TreeHandlerDeps = {
-  root: vscode.WorkspaceFolder
-  loadTree: LoadTree
-  treeCache: TreeCache
-  mergeCache: MergeCache
-  native: NativeBackupHandler
+
+export type FilterControllerDeps = CompDeps & {
+  globber: GlobHandler
 }
-export type GeneralControllerDeps = {
+
+export type GeneralControllerDeps = SharedDeps & {
   appGet: AppStateCache["appGet"]
   ctrl: GeneralCtrlDeps
   conf: ConfigCache
-  loadTree: LoadTree
-  target: vscode.WorkspaceConfiguration
-  sliceCache: SliceCache
   orchestrator: SliceOrchestrator
-  native: NativeBackupHandler
-  excluder: ExclusionHandler
-  mergeCache: MergeCache
-  updateSliceTree: () => void
+  globber: GlobHandler
+}
+
+type GeneralCtrlDeps = {
+  tree: TreeController
+  map: MapController
+  filter: FilterController
 }

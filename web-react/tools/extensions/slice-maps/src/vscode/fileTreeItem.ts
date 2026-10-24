@@ -1,6 +1,6 @@
 import * as vscode from 'vscode'
 
-import type { WorkspaceTreeNode } from '../types/core.types.ts'
+import type { TreeCounts, WorkspaceTreeNode } from '../types/core.types.ts'
 import type { NodeSemantics } from '../types/exclusion.types.ts'
 
 export function fileTreeItem(
@@ -33,7 +33,8 @@ export function fileTreeItem(
 
   item.label = `${getLabel(semantics, isFolder)}   ${name} `
 
-  // item.description = getLabel(semantics?.outcome, item.label)
+  item.description = `${getDescription(semantics, node.counts)}`
+
   item.tooltip = new vscode.MarkdownString(getTooltip(semantics))
   return item
 }
@@ -46,8 +47,8 @@ function getLabel(
 
   if (s.type === 'implicit') {
     if (s.outcome === 'exclude') return `🔻`
-    if (s.outcome === 'overwritten') return `🧈`
-    return `🌲`
+    if (s.outcome === 'overwritten') return `🟡`
+    return `🌳`
   }
 
   if (isFolder) {
@@ -57,10 +58,24 @@ function getLabel(
   }
 
   if (s.outcome === 'exclude') return `🔴`
-  if (s.outcome === 'overwritten') return `🟡`
   return `🟢`
 
 
+}
+
+function getDescription(semantics: NodeSemantics | undefined, counts: TreeCounts): string {
+
+  if (!semantics) return ''
+
+  const totalIncl = counts.include.files + counts.include.folders
+  const totalExcl = counts.exclude.files + counts.exclude.folders
+
+  if ((totalIncl + totalExcl) === 0) return ''
+
+  if (totalExcl === 0) return `+${totalIncl}`
+  if (totalIncl === 0) return `-${totalExcl}`
+
+  return ` +${totalIncl} / -${totalExcl}`
 }
 
 function getTooltip(semantics: NodeSemantics | undefined) {

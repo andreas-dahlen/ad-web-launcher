@@ -6,27 +6,22 @@ export function createTreeHandler({
   root,
   loadTree,
   treeCache,
-  mergeCache,
-  native
+  mergeCache
 }: TreeHandlerDeps
 ) {
 
   function update(mergeId: string) {
-    const total = native.getTotalExclude()
-    if (!total) return
     const details = mergeCache.getDetails(mergeId)
     if (!details) return
 
-    const tree = loadTree.build(total)
-    const result = enrichTree(tree, root, details.semantics)
+    const tree = loadTree.build()
+    const result = enrichTree(tree, root, details)
 
     treeCache.setData(mergeId, result)
   }
 
   function reset() {
-    const total = native.getTotalExclude()
-    if (!total) return
-    const tree = loadTree.build(total)
+    const tree = loadTree.build()
     const result = enrichTree(tree, root)
     treeCache.setData('inactive', result)
   }

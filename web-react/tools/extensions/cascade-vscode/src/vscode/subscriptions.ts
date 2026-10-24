@@ -1,9 +1,9 @@
 import * as vscode from 'vscode'
 
 type CompilerActions = {
-  startCompiler(): void
-  stopCompiler(): void
-  restartCompiler(): void
+  startCompiler: () => void
+  stopCompiler: () => void
+  restartCompiler: () => void
 }
 export function createCommandSubscriptions({
   startCompiler,

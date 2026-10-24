@@ -1,5 +1,5 @@
 import type { PathChoice, NormalizedPaths } from '../types/core.types.ts'
-import { isChildOf, isInhariting } from '../utils/comparePaths.ts'
+import { isChildOf, isInheriting } from '../utils/comparePaths.ts'
 import { getBehavior } from '../loaders/loadSettings.ts'
 export function resolveNormalization(
   base: NormalizedPaths,
@@ -67,14 +67,14 @@ export function resolveNormalization(
 
       for (const file of excludeFiles) {
         if (isChildOf(file, parent) &&
-          isInhariting(file, 'exclude', folders)) {
+          isInheriting(file, 'exclude', folders)) {
           excludeFiles.delete(file)
         }
       }
 
       for (const folder of excludeFolders) {
         if (isChildOf(folder, parent) &&
-          isInhariting(folder, 'exclude', folders)) {
+          isInheriting(folder, 'exclude', folders)) {
           excludeFolders.delete(folder)
         }
       }

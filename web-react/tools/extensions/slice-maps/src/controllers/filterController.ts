@@ -1,21 +1,24 @@
 import type { PathChoice, SliceFilter } from '../types/core.types.ts';
-import { showMsg } from '../utils/showMsg.ts';
 import { createFilter } from '../operations/create.ts';
 import { renameFilter } from '../operations/rename.ts';
 import { resetFilter } from '../operations/reset.ts';
 import { normalizeFilter, normalizeFilterRemoval } from '../normalize/slice.ts';
 import { pathsToRelative } from '../normalize/pathsToRelative.ts';
-import type { CompDeps } from '../types/controller.types.ts';
-export type FilterController = NonNullable<ReturnType<typeof createFilterController>>
+import type { FilterControllerDeps } from '../types/controller.types.ts';
+import { booleanQuestion } from '../operations/booleanQuestion.ts';
+import { throwError } from '../utils/throwError.ts';
+export type FilterController = ReturnType<typeof createFilterController>
 export function createFilterController({
   root,
   conf,
   sliceCache,
   appGet,
+  globber,
   orchestrator,
   updateSliceTree,
-}: CompDeps
+}: FilterControllerDeps
 ) {
+
 
   async function toggle(filter: SliceFilter): Promise<void> {
     await orchestrator.queRequest({
@@ -39,6 +42,9 @@ export function createFilterController({
   }
 
   async function remove(filter: SliceFilter): Promise<void> {
+    const choice = await booleanQuestion(`Sure you want to delete ${filter.name}?`)
+    if (!choice) return
+
     await sliceCache.removeFilter(filter.id)
 
     if (conf.getActiveConfig()?.id === filter.id) {
@@ -66,6 +72,9 @@ export function createFilterController({
   }
 
   async function reset(filter: SliceFilter): Promise<void> {
+    const choice = await booleanQuestion(`Sure you want to reset ${filter.name}?`)
+    if (!choice) return
+
     const newFilter = resetFilter(filter)
     await sliceCache.addFilter(newFilter)
 
@@ -78,41 +87,47 @@ export function createFilterController({
     } else {
       updateSliceTree()
     }
-    showMsg(`[slice maps] filter reset ${newFilter.name}`)
   }
 
   async function removeExclude(
     absolutePaths: string[]
   ): Promise<void> {
     const identity = await conf.resolveConfigIdentity()
-    if (identity?.type !== 'filter') return
+    if (!identity) throwError('No map or filter available.')
+
+    if (identity.type !== 'filter') {
+      throwError('Cannot remove exclusions from a map. Select a filter instead.')
+    }
 
     const filter = sliceCache.getFilterById(identity.id)
-    if (!filter) return
+    if (!filter) throwError('The selected filter could not be found.')
 
-    const paths = pathsToRelative(absolutePaths, root, 'exclude')
-    await update(filter, paths, 'remove')
+    const paths = pathsToRelative(absolutePaths, root, 'remove')
+    await update(filter, paths)
   }
 
   async function addExclude(
     absolutePaths: string[]
   ): Promise<void> {
     const identity = await conf.resolveConfigIdentity()
-    if (identity?.type !== 'filter') return
+    if (!identity) throwError('No map or filter available.')
+
+    if (identity.type !== 'filter') {
+      throwError('Cannot add exclusions to a map. Select a filter instead.')
+    }
 
     const filter = sliceCache.getFilterById(identity.id)
-    if (!filter) return
+    if (!filter) throwError('The selected filter could not be found.')
 
     const paths = pathsToRelative(absolutePaths, root, 'exclude')
-    await update(filter, paths, 'add')
+    await update(filter, paths)
   }
 
   async function update(
     filter: SliceFilter,
     paths: PathChoice,
-    remove: 'remove' | 'add'
   ): Promise<void> {
-    const nextFilter = remove === 'remove'
+    const nextFilter = paths.action === 'remove'
       ? normalizeFilterRemoval(filter, paths)
       : normalizeFilter(filter, paths)
 
@@ -129,6 +144,24 @@ export function createFilterController({
     }
   }
 
+  async function globAll(absolutePaths: string[]) {
+    const identity = await conf.resolveConfigIdentity()
+    if (!identity) throwError('No map or filter available.')
+
+    if (identity.type !== 'filter') {
+      throwError('Cannot generate exclusion patterns for a map. Select a filter instead.')
+    }
+
+    const filter = sliceCache.getFilterById(identity.id)
+    if (!filter) throwError('The selected filter could not be found.')
+
+    const paths = globber.globMany(absolutePaths)
+    if (!paths) {
+      throwError('No matching files or folders found for the selected path(s).')
+    }
+
+    await update(filter, paths)
+  }
   return {
     toggle,
     create,
@@ -137,6 +170,7 @@ export function createFilterController({
     reset,
     addExclude,
     removeExclude,
-    update
+    update,
+    globAll
   }
 }
