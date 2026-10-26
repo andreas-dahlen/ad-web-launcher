@@ -2,11 +2,11 @@ import type { PathChoice, SliceMap } from '../types/core.types.ts';
 import { createMap } from '../operations/create.ts';
 import { renameMap } from '../operations/rename.ts';
 import { resetMap } from '../operations/reset.ts';
-import { normalizeMap } from '../normalize/slice.ts';
 import { pathsToRelative } from '../normalize/pathsToRelative.ts';
 import type { CompDeps } from '../types/controller.types.ts';
 import { booleanQuestion } from '../operations/booleanQuestion.ts';
 import { throwError } from '../utils/throwError.ts';
+import { normalizeMap } from '../normalize/slice.ts';
 
 export type MapController = NonNullable<ReturnType<typeof createMapController>>
 export function createMapController({
@@ -135,7 +135,10 @@ export function createMapController({
       await orchestrator.queRequest({
         type: 'map',
         id: nextMap.id,
-        doesActivate: true
+        doesActivate: true,
+        excludeCleanupInput: paths.action === 'exclude'
+          ? [...paths.folders]
+          : undefined
       })
     } else {
       updateSliceTree()

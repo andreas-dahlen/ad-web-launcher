@@ -23,6 +23,7 @@ export type ExclusionResolution = {
 }
 
 export type CachedMergeData = {
+  // composition: 'map' | 'filter' | 'merged'
   sliceData: NormalizedPaths
   details: ResolutionDetails
   resolvedExclude: Record<string, true>

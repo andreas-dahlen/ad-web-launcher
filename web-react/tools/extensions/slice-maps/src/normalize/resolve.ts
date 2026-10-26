@@ -1,5 +1,5 @@
 import type { PathChoice, NormalizedPaths } from '../types/core.types.ts'
-import { isChildOf, isInheriting } from '../utils/comparePaths.ts'
+import { isChildOf } from '../utils/comparePaths.ts'
 import { getBehavior } from '../loaders/loadSettings.ts'
 export function resolveNormalization(
   base: NormalizedPaths,
@@ -40,9 +40,10 @@ export function resolveNormalization(
 
   if (input.action === 'include') {
     resolveInclude()
-  } else {
-    resolveExclude()
   }
+  // else {
+  // resolveExclude()
+  // }
 
   function resolveInclude() {
     for (const parent of input.folders) {
@@ -61,25 +62,25 @@ export function resolveNormalization(
     }
   }
 
-  function resolveExclude() {
-    const folders = { includeFolders, excludeFolders }
-    for (const parent of input.folders) {
+  // function resolveExclude() {
+  //   const folders = { includeFolders, excludeFolders }
+  //   for (const parent of input.folders) {
 
-      for (const file of excludeFiles) {
-        if (isChildOf(file, parent) &&
-          isInheriting(file, 'exclude', folders)) {
-          excludeFiles.delete(file)
-        }
-      }
+  //     for (const file of excludeFiles) {
+  //       if (isChildOf(file, parent) &&
+  //         isInheriting(file, 'exclude', folders)) {
+  //         excludeFiles.delete(file)
+  //       }
+  //     }
 
-      for (const folder of excludeFolders) {
-        if (isChildOf(folder, parent) &&
-          isInheriting(folder, 'exclude', folders)) {
-          excludeFolders.delete(folder)
-        }
-      }
-    }
-  }
+  //     for (const folder of excludeFolders) {
+  //       if (isChildOf(folder, parent) &&
+  //         isInheriting(folder, 'exclude', folders)) {
+  //         excludeFolders.delete(folder)
+  //       }
+  //     }
+  //   }
+  // }
 
   return {
     includeFiles: [...includeFiles],

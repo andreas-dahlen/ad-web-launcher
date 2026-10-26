@@ -11,26 +11,31 @@ export function exclusionHandler(
 ) {
 
   function resolve(
-    slice: MergedSlice
+    slice: MergedSlice,
+    isDryRun: boolean = false
   ): Record<string, true> {
     const { mergeId, ...sliceData } = slice
     const prev = mergeCache.getCachedMergeData(mergeId)
     if (!prev) {
-      return runAndUpdate(slice)
+      return runAndUpdate(slice, isDryRun)
     }
     if (isContentEqual(prev.sliceData, sliceData)) {
       return prev.resolvedExclude
     }
-    return runAndUpdate(slice)
+    return runAndUpdate(slice, isDryRun)
   }
 
   function runAndUpdate(
     slice: MergedSlice,
+    isDryRun: boolean
   ): Record<string, true> {
     const { mergeId, ...sliceData } = slice
     const fileTree = loadTree.build()
     const result = resolveExclusion(slice, fileTree)
-    mergeCache.set(mergeId, { ...result, sliceData })
+
+    if (!isDryRun) {
+      mergeCache.set(mergeId, { ...result, sliceData })
+    }
     return result.resolvedExclude
   }
 

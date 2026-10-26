@@ -2,11 +2,11 @@ import type { PathChoice, SliceFilter } from '../types/core.types.ts';
 import { createFilter } from '../operations/create.ts';
 import { renameFilter } from '../operations/rename.ts';
 import { resetFilter } from '../operations/reset.ts';
-import { normalizeFilter, normalizeFilterRemoval } from '../normalize/slice.ts';
 import { pathsToRelative } from '../normalize/pathsToRelative.ts';
 import type { FilterControllerDeps } from '../types/controller.types.ts';
 import { booleanQuestion } from '../operations/booleanQuestion.ts';
 import { throwError } from '../utils/throwError.ts';
+import { normalizeFilter, normalizeFilterRemoval } from '../normalize/slice.ts';
 export type FilterController = ReturnType<typeof createFilterController>
 export function createFilterController({
   root,
@@ -137,7 +137,10 @@ export function createFilterController({
       await orchestrator.queRequest({
         type: 'filter',
         id: nextFilter.id,
-        doesActivate: true
+        doesActivate: true,
+        excludeCleanupInput: paths.action === 'exclude'
+          ? [...paths.folders]
+          : undefined
       })
     } else {
       updateSliceTree()

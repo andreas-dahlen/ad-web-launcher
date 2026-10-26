@@ -2,7 +2,6 @@ import fs from 'node:fs'
 import path from 'node:path'
 import { parse } from 'jsonc-parser'
 
-type PathsConfig = Record<string, string[]>
 
 export function resolveImportPath(
   source: string,
@@ -26,7 +25,7 @@ export function resolveImportPath(
   const config = parse(sourceText)
 
   const paths = config?.compilerOptions?.paths as
-    | PathsConfig
+    | Record<string, string[]>
     | undefined
 
   if (!paths) {

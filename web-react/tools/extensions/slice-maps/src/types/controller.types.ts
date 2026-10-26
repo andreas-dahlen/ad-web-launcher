@@ -27,6 +27,7 @@ export type SharedDeps = {
   excluder: ExclusionHandler
   native: NativeBackupHandler
   target: vscode.WorkspaceConfiguration
+  searchTarget: vscode.WorkspaceConfiguration
   updateSliceTree: () => void
   updateStatusBar: (state: StatusBarState) => void
 }

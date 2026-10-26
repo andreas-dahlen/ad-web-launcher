@@ -15,3 +15,19 @@ export async function activate(
     vscode.ConfigurationTarget.WorkspaceFolder
   )
 }
+
+export async function activateSearch(
+  localSearch: Record<string, boolean>,
+  exclude: Record<string, true>,
+  searchConfig: vscode.WorkspaceConfiguration
+): Promise<void> {
+
+  await searchConfig.update(
+    'exclude',
+    {
+      ...localSearch,
+      ...exclude,
+    },
+    vscode.ConfigurationTarget.WorkspaceFolder
+  )
+}

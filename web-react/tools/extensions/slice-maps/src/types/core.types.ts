@@ -65,6 +65,7 @@ export type SliceData = {
 
 export type MergedSlice = NormalizedPaths & {
   mergeId: string
+  // composition: 'map' | 'filter' | 'merged'
 }
 
 export type ActiveMap = {

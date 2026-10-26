@@ -29,8 +29,22 @@ export function mergeSlice(
     filter?.excludeFiles.forEach(exclude => excludeFiles.add(exclude))
     filter?.excludeFolders.forEach(exclude => excludeFolders.add(exclude))
   }
+
+  // let composition: MergedSlice["composition"]
+
+  // if (activeMapIdentity && activeFiltersIdentities.length > 0) {
+  //   composition = 'merged'
+  // } else if (activeMapIdentity) {
+  //   composition = 'map'
+  // } else if (activeFiltersIdentities.length > 1) {
+  //   composition = 'merged'
+  // } else {
+  //   composition = 'filter'
+  // }
+
   return {
     mergeId,
+    // composition,
     includeFiles: [...includeFiles],
     includeFolders: [...includeFolders],
     excludeFiles: [...excludeFiles],

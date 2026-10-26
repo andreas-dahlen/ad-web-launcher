@@ -1,5 +1,6 @@
 import type { PathChoice, SliceFilter, SliceMap } from '../types/core.types.ts'
 import { resolveNormalization } from './resolve.ts'
+
 export function normalizeMap(
   map: SliceMap,
   input: PathChoice,
@@ -21,7 +22,7 @@ export function normalizeMap(
 }
 export function normalizeFilter(
   filter: SliceFilter,
-  paths: PathChoice
+  input: PathChoice
 ): SliceFilter {
 
   const {
@@ -36,7 +37,7 @@ export function normalizeFilter(
     includeFolders,
     excludeFiles,
     excludeFolders
-  }, paths)
+  }, input)
 
   return { ...rest, ...resolved }
 }

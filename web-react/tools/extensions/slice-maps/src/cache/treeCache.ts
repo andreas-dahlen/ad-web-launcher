@@ -8,7 +8,9 @@ export function createTreeCache(appGet: AppStateCache["appGet"]) {
 
   return {
     getActiveData() {
-      return data.get(appGet.getActiveMergeId())
+      const mergeId = appGet.getActiveMergeId()
+
+      return data.get(mergeId)
     },
 
     getDataById(mergeId: string) {

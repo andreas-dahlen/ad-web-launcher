@@ -12,6 +12,7 @@ export function createMergeCache() {
       if (!data) return
       return {
         mergeId,
+        // composition: data.composition,
         ...data.sliceData
       }
     },

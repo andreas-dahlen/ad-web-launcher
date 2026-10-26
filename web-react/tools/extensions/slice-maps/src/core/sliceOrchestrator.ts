@@ -1,17 +1,12 @@
-import { activate } from '../operations/activate.ts';
+import { activate, activateSearch } from '../operations/activate.ts';
 import { mergeSlice } from '../normalize/mergeSlice.ts';
 import type { OrchestratorDeps } from '../types/controller.types.ts';
-import { deactivate } from '../operations/deactivate.ts';
+import { deactivate, deactivateSearch } from '../operations/deactivate.ts';
 import type { UUID } from 'node:crypto';
+import { getBehavior, hasSearchSetting } from '../loaders/loadSettings.ts';
+import type { NormalizedPaths } from '../types/core.types.ts';
+import { cleanupChildExcludes } from '../cleanup/cleanChildExclude.ts';
 
-type QueItem =
-  | {
-    type: 'map' | 'filter'
-    id: UUID
-    doesActivate: boolean
-  } | {
-    type: 'resolve'
-  }
 export type SliceOrchestrator = NonNullable<ReturnType<typeof createSliceOrchestrator>>
 export function createSliceOrchestrator({
   appGet,
@@ -22,12 +17,22 @@ export function createSliceOrchestrator({
   mergeCache,
   excluder,
   target,
+  searchTarget,
   tree,
   updateSliceTree,
   updateWorkspaceTree,
   updateStatusBar
 }: OrchestratorDeps
 ) {
+  type QueItem =
+    | {
+      type: 'map' | 'filter'
+      id: UUID
+      doesActivate: boolean
+      excludeCleanupInput?: string[]
+    } | {
+      type: 'resolve'
+    }
 
   let isRunning = false
   const pending: QueItem[] = []
@@ -89,23 +94,53 @@ export function createSliceOrchestrator({
     }
 
     await applyActiveState()
-    await native.syncActiveState()
+    await postRunCleanup(item)
+    updateWorkspaceTree()
   }
 
   async function applyActiveState() {
     const localExclude = native.getLocalExclude()
+    const localSearchExclude = native.getSearchExclude()
     if (appGet.hasActiveSlice()) {
       const slice = mergeSlice(sliceCache, appGet)
       const exclude = excluder.resolve(slice)
       await activate(localExclude, exclude, target)
       tree.update(slice.mergeId)
+
+      if (hasSearchSetting()) {
+        await activateSearch(localSearchExclude, exclude, searchTarget)
+      }
     } else {
       await deactivate(localExclude, target)
       tree.reset()
+      await deactivateSearch(localSearchExclude, searchTarget)
     }
     updateSliceTree()
-    updateWorkspaceTree()
     updateTitle()
+    await native.syncActiveState()
+  }
+
+  async function postRunCleanup(item: QueItem) {
+    if (item.type === 'resolve'
+      || !item.excludeCleanupInput
+      || item.excludeCleanupInput.length === 0
+      || getBehavior() === 'preserve') return
+
+    let result: NormalizedPaths | undefined
+    if (item.type === 'map') {
+      const map = sliceCache.getMapById(item.id)
+      if (!map) return
+      result = cleanupChildExcludes(map, mergeCache, excluder, item.excludeCleanupInput)
+      if (!result) return
+      await sliceCache.addMap({ ...map, ...result })
+    } else {
+      const filter = sliceCache.getFilterById(item.id)
+      if (!filter) return
+      result = cleanupChildExcludes(filter, mergeCache, excluder, item.excludeCleanupInput)
+      if (!result) return
+      await sliceCache.addFilter({ ...filter, ...result })
+    }
+    await applyActiveState()
   }
 
   function updateTitle() {

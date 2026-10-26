@@ -61,7 +61,12 @@
           "type": "array",
           "items": { "type": "string" },
           "default": [ ".git", ".svn", ".vs", ".vscode", ".cache", "__pycache__", "node_modules", "dist", "packages", "build", "target", "Release", "Debug", "bin", "obj" ],
-          "description": "Exclude folders that are not traversed by sliceMaps." }
+          "description": "Exclude folders that are not traversed by sliceMaps." },
+        "sliceMaps.excludeSearch": {
+          "type": "boolean",
+          "default": true,
+          "description": "Apply Slice Maps exclusions to search results while a slice is active."
+        }
       }
     },
 

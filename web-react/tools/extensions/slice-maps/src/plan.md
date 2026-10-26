@@ -1,15 +1,6 @@
 # 🗒️ Slice Maps — Backlog
 
-## 1. Search Exclusions
-
-* [ ] Evaluate optional integration with `search.exclude`, alongside `files.exclude`.
-
-  * Decide between a static user setting and a runtime toggle.
-  * Determine whether Slice Maps should mirror its effective exclusions into `search.exclude`.
-  * Preserve unrelated user configuration.
-  * Keep Explorer visibility and search exclusion behavior independent unless the user opts into linking them.
-
-## 2. Tree Updates & Performance
+## 1. Tree Updates & Performance
 
 ### Performance Investigation
 
@@ -29,17 +20,7 @@
 
 * [ ] Consider granular tree updates only if profiling demonstrates a meaningful performance problem.
 
-## 3. File-System Traversal & Watching
-
-### Initial Activation Performance
-
-* [ ] Investigate the cost of the first map activation.
-
-  * Measure filesystem traversal and semantic resolution separately.
-  * Compare initial activation with subsequent activations using the local cache.
-  * Determine whether persisting traversal results would meaningfully improve performance.
-  * Account for cache invalidation when files or configuration change.
-  * Persist traversal results only if measurements justify the added complexity.
+## 2. File-System Traversal & Watching
 
 ### Filesystem API Compatibility
 
@@ -59,7 +40,7 @@
   * Determine when a full tree refresh is necessary.
   * Avoid redundant refreshes when multiple filesystem events occur together.
 
-## 4. Configuration Watching
+## 3. Configuration Watching
 
 * [ ] Investigate watching for external changes to Slice Maps configuration.
 

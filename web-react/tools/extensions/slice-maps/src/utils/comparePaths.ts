@@ -1,5 +1,6 @@
 import path from 'node:path'
 import type { ExcludeOrInclude } from '../types/core.types.ts'
+// import type { ExcludeOrInclude } from '../types/core.types.ts'
 export function isChildOf(pathToCheck: string, basePath: string,): boolean {
   const relative = path.relative(basePath, pathToCheck)
 

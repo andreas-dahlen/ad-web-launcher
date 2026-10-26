@@ -10,3 +10,14 @@ export async function deactivate(
     vscode.ConfigurationTarget.WorkspaceFolder
   )
 }
+
+export async function deactivateSearch(
+  localSearch: Record<string, boolean>,
+  searchConfig: vscode.WorkspaceConfiguration
+): Promise<void> {
+  await searchConfig.update(
+    'exclude',
+    localSearch,
+    vscode.ConfigurationTarget.WorkspaceFolder
+  )
+}

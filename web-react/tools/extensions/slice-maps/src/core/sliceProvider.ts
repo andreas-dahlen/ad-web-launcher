@@ -15,7 +15,7 @@ import type { CompDeps, SharedDeps } from '../types/controller.types.ts'
 import { createNativeBackupHandler } from './nativeBackupHandler.ts'
 import { createSliceOrchestrator } from './sliceOrchestrator.ts'
 import { setUpConfigCache } from '../identity/configIdentity.ts'
-import { getExcludeConfigTarget } from '../loaders/loadSettings.ts'
+import { getExcludeConfigTarget, getSearchConfigTarget } from '../loaders/loadSettings.ts'
 import { createStatusBar } from '../vscode/statusBar.ts'
 import { createGlobHandler } from '../normalize/glob.ts'
 
@@ -64,6 +64,7 @@ export function createSliceProvider(
     excluder,
     native,
     target: getExcludeConfigTarget(root),
+    searchTarget: getSearchConfigTarget(root),
     updateSliceTree,
     updateStatusBar
   }

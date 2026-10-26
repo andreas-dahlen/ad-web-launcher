@@ -14,6 +14,8 @@ export function createNativeBackupHandler(
 
   let total: Record<string, boolean>
 
+  let search: Record<string, boolean>
+
   const backup = loadBackups(context)
 
   async function syncActiveState(): Promise<void> {
@@ -28,6 +30,9 @@ export function createNativeBackupHandler(
     },
     getTotalExclude(): Record<string, boolean> {
       return total
+    },
+    getSearchExclude(): Record<string, boolean> {
+      return search
     },
 
     getPersistedExclude(): ExclusionFileData {
@@ -51,12 +56,11 @@ export function createNativeBackupHandler(
       await backup.setPersistedExclude(data)
       local = data.local
       total = data.total
+      search = data.search
       await syncActiveState()
     }
   }
 }
-
-
 
 function getFileExcludes(root: vscode.WorkspaceFolder): ExclusionFileData {
   const config = vscode.workspace.getConfiguration('files', root.uri)
@@ -64,6 +68,14 @@ function getFileExcludes(root: vscode.WorkspaceFolder): ExclusionFileData {
   const totalExclude = config.get<Record<string, boolean>>('exclude', {})
   return {
     local: localExclude?.workspaceFolderValue ?? {},
-    total: totalExclude
+    total: totalExclude,
+    search: getSearchExcludes(root)
   }
+}
+
+function getSearchExcludes(root: vscode.WorkspaceFolder): Record<string, boolean> {
+  const config = vscode.workspace.getConfiguration('search', root.uri)
+  const searchExclude = config.inspect<Record<string, boolean>>('exclude')
+
+  return searchExclude?.workspaceFolderValue ?? {}
 }

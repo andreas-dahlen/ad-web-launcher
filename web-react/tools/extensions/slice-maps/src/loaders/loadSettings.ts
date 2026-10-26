@@ -5,7 +5,16 @@ export function getBehavior(): OverrideBehavior {
     .getConfiguration('sliceMaps')
     .get<OverrideBehavior>('behavior', 'recursive')
 }
+export function hasSearchSetting(): boolean {
+  return vscode.workspace
+    .getConfiguration('sliceMaps')
+    .get<boolean>('excludeSearch', false)
+}
 
 export function getExcludeConfigTarget(root: vscode.WorkspaceFolder) {
   return vscode.workspace.getConfiguration('files', root.uri)
+}
+
+export function getSearchConfigTarget(root: vscode.WorkspaceFolder) {
+  return vscode.workspace.getConfiguration('search', root.uri)
 }

@@ -1,18 +1,18 @@
-import { cleanSlice } from '../normalize/cleanSlice.ts';
+import { cleanSlice } from '../cleanup/cleanSlice.ts';
 import { createFilter, createMap } from '../operations/create.ts';
-import { deactivate } from '../operations/deactivate.ts';
+import { deactivate, deactivateSearch } from '../operations/deactivate.ts';
 import { requestGlob } from '../operations/glob.ts';
 import { requestMapOrFilter } from '../operations/mapOrFilter.ts';
 import { requestOperation } from '../operations/requestOperation.ts';
 import type { GeneralControllerDeps } from '../types/controller.types.ts';
 import type { ActiveSlice, Slice } from '../types/core.types.ts';
 import { throwError } from '../utils/throwError.ts';
-
 export function createGeneralController({
   appGet,
   conf,
   ctrl,
   target,
+  searchTarget,
   excluder,
   native,
   sliceCache,
@@ -29,6 +29,8 @@ export function createGeneralController({
     if (wasActive) {
       const cachedExclude = native.getPersistedExclude()
       await deactivate(cachedExclude.local, target)
+      await deactivateSearch(cachedExclude.search, searchTarget)
+
     }
     await native.syncExclude()
     await conf.resolveConfigIdentity()
@@ -131,7 +133,6 @@ export function createGeneralController({
     if (!slice) throwError('The active configuration Slice could not be found.')
 
     const cleanedSlice = cleanSlice(slice, mergeCache, excluder)
-
     if (!cleanedSlice) return
 
     let isActive: boolean

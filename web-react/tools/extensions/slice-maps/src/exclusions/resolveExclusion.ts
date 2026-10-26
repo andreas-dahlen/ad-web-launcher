@@ -1,30 +1,30 @@
 import type { MergedSlice, ExcludeOrInclude, TreeNode } from '../types/core.types.ts';
 import { compress } from './compress.ts';
 import type { ResolutionDetails, InheritedTruth, NodeSemantics, ExclusionResolution } from '../types/exclusion.types.ts';
-import * as vscode from 'vscode'
+// import * as vscode from 'vscode'
 export function resolveExclusion(
   slice: MergedSlice,
   fileTree: TreeNode[],
 ): ExclusionResolution {
 
-  const startTruth = performance.now()
+  // const startTruth = performance.now()
   const baseTruth = resolveInheritedTruth(slice, fileTree)
-  const truthDuration = performance.now() - startTruth
+  // const truthDuration = performance.now() - startTruth
 
-  const startEffective = performance.now()
+  // const startEffective = performance.now()
   const details = effectiveResult(baseTruth, fileTree)
-  const effectiveDuration = performance.now() - startEffective
+  // const effectiveDuration = performance.now() - startEffective
 
-  const startCompress = performance.now()
+  // const startCompress = performance.now()
   const resolvedExclude = compress(details.completeExclude)
-  const compressDuration = performance.now() - startCompress
+  // const compressDuration = performance.now() - startCompress
 
 
-  void vscode.window.showInformationMessage(
-    `truth: ${truthDuration.toFixed(2)} ms | ` +
-    `effective: ${effectiveDuration.toFixed(2)} ms` +
-    `compress: ${compressDuration.toFixed(2)} ms `
-  )
+  // void vscode.window.showInformationMessage(
+  //   `truth: ${truthDuration.toFixed(2)} ms | ` +
+  //   `effective: ${effectiveDuration.toFixed(2)} ms` +
+  //   `compress: ${compressDuration.toFixed(2)} ms `
+  // )
 
   return { details, resolvedExclude }
 }
