@@ -90,6 +90,10 @@ export function register(
         () => provider.ctrl.general.missingConfig(normalizeTreePaths(treeNode, provider.workspaceView.selection)))),
 
     vscode.commands.registerCommand(
+      'sliceMaps.workspaceChangeDisplayMode', () => safe('change display mode (workspace)',
+        () => provider.ctrl.general.toggleDisplayMode())),
+
+    vscode.commands.registerCommand(
       'sliceMaps.includeWorkspace', (treeNode: WorkspaceTreeNode) =>
       safe('include in map (workspace)',
         () => provider.ctrl.map.include(normalizeTreePaths(treeNode, provider.workspaceView.selection)))),
@@ -113,6 +117,7 @@ export function register(
       'sliceMaps.addExcludeFilterWorkspace', (treeNode: WorkspaceTreeNode) =>
       safe('add exclude to filter (workspace)',
         () => provider.ctrl.filter.addExclude(normalizeTreePaths(treeNode, provider.workspaceView.selection)))),
+
 
     //inline buttons
 

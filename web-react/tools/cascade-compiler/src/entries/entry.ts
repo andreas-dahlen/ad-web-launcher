@@ -13,6 +13,6 @@ export const compiler = {
     return build(findProjectRoot(startDirectory))
   },
   runWatch(startDirectory: string): void {
-    watch(findProjectRoot(startDirectory))
+    void watch(findProjectRoot(startDirectory))
   }
 }

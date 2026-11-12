@@ -1,8 +1,8 @@
-import type { ActiveFilter, ActiveMap } from '../types/core.types.ts'
+import type { FilterIdentity, MapIdentity } from '../types/core.types.ts'
 
 export function getCurrentMergeId(
-  mapId: ActiveMap | undefined,
-  filterIds: ActiveFilter[]
+  mapId: MapIdentity | undefined,
+  filterIds: FilterIdentity[]
 ): string {
 
   let constructedId = mapId?.id ?? ''

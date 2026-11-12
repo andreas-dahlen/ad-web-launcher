@@ -19,8 +19,9 @@ export function createGeneralController({
   mergeCache,
   globber,
   orchestrator,
-  updateSliceTree,
-  updateStatusBar
+  updateStatusBar,
+  treeCache,
+  tree
 }: GeneralControllerDeps
 ) {
 
@@ -34,8 +35,7 @@ export function createGeneralController({
     }
     await native.syncExclude()
     await conf.resolveConfigIdentity()
-    ctrl.tree.reset()
-    updateSliceTree()
+    tree.update()
     updateStatusBar({ isLoading: false })
   }
 
@@ -46,29 +46,33 @@ export function createGeneralController({
       type: slice.type,
       id: slice.id
     }
-    await conf.setActiveConfig(identity)
-
-    updateSliceTree()
+    await conf.doesChangeActiveConfig(identity)
+    tree.update()
   }
 
   async function toggleConfigTarget(): Promise<void> {
     const mergeId = appGet.getActiveMergeId()
     if (mergeId !== 'inactive') throwError(`A map or filter is already active ${mergeId}`)
 
-    const identity = await conf.resolveConfigIdentity()
-    if (!identity) throwError('No map or filter available.')
+    const configData = await conf.resolveConfigIdentity()
+    if (!configData?.activeIdentity) throwError('No map or filter available.')
 
-    if (identity.type === 'map') {
-      const map = sliceCache.getMapById(identity.id)
+    if (configData.activeIdentity.type === 'map') {
+      const map = sliceCache.getMapById(configData.activeIdentity.id)
       if (!map) throwError('The active config map could not be found.')
 
       await ctrl.map.toggle(map)
       return
     }
-    const filter = sliceCache.getFilterById(identity.id)
+    const filter = sliceCache.getFilterById(configData.activeIdentity.id)
     if (!filter) throwError('The active config filter could not be found.')
 
     await ctrl.filter.toggle(filter)
+  }
+
+  async function toggleDisplayMode(): Promise<void> {
+    treeCache.changeDisplayMode()
+    tree.update()
   }
 
   async function missingConfig(absolutePaths: string[]): Promise<void> {
@@ -90,7 +94,7 @@ export function createGeneralController({
     const operation = await requestOperation(identity)
     if (!operation) {
       await conf.resolveConfigIdentity()
-      updateSliceTree()
+      tree.update()
       return
     }
     switch (operation) {
@@ -150,6 +154,8 @@ export function createGeneralController({
         id: slice.id,
         doesActivate: true
       })
+    } else {
+      tree.update()
     }
   }
 
@@ -166,6 +172,7 @@ export function createGeneralController({
     missingConfig,
     addGlob,
     compress,
-    deactivateAll
+    deactivateAll,
+    toggleDisplayMode
   }
 }

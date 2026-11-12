@@ -55,8 +55,6 @@
 
 ## Suggested Order
 
-1. Investigate initial map-activation performance.
-2. Decide whether `search.exclude` integration is worthwhile.
 3. Investigate filesystem synchronization and watching.
 4. Evaluate VS Code filesystem APIs if broader workspace compatibility is a goal.
 5. Consider external configuration watching if a concrete need arises.

@@ -21,6 +21,12 @@ export type WorkspaceTreeNode = {
   counts: TreeCounts
 }
 
+export type TreeCacheEntry = {
+  nodeData: WorkspaceTreeNode[]
+  sliceData?: NormalizedPaths
+}
+
+
 export type TreeCounts = {
   include: {
     files: number
@@ -68,16 +74,31 @@ export type MergedSlice = NormalizedPaths & {
   // composition: 'map' | 'filter' | 'merged'
 }
 
-export type ActiveMap = {
+export type MapIdentity = {
   type: 'map'
   id: UUID
 }
 
-export type ActiveFilter = {
+export type FilterIdentity = {
   type: 'filter'
   id: UUID
 }
 
-export type ActiveSlice = ActiveMap | ActiveFilter
+export type MergeIdentity = {
+  type: 'merged'
+  id: string
+}
+
+export type ActiveSlice = MapIdentity | FilterIdentity
+
+export type ActiveIdentity = ActiveSlice | MergeIdentity
+
+export type ActiveConfigChanged = {
+  activeIdentity?: ActiveSlice
+  requiresUpdate: boolean
+}
+
 
 export type ExcludeOrInclude = 'include' | 'exclude'
+
+export type WorkspaceDisplayMode = "effective" | "configuration"

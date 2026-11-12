@@ -1,13 +1,13 @@
 import { type UUID } from 'node:crypto'
-import type { ActiveFilter, ActiveMap } from '../types/core.types.ts'
+import type { FilterIdentity, MapIdentity } from '../types/core.types.ts'
 import { getCurrentMergeId } from '../normalize/mergeId.ts'
 
 export type AppStateCache = NonNullable<ReturnType<typeof createAppStateCache>>
 export function createAppStateCache() {
-  let activeMap: ActiveMap | undefined
+  let activeMap: MapIdentity | undefined
   const activeFilters = new Set<UUID>()
 
-  function getActiveFilters(): ActiveFilter[] {
+  function getActiveFilters(): FilterIdentity[] {
     return [...activeFilters].map(id => ({ type: 'filter', id }))
   }
 
@@ -43,7 +43,7 @@ export function createAppStateCache() {
       activeFilters.clear()
     },
 
-    setActiveMap(mapIdentity: ActiveMap | undefined) {
+    setActiveMap(mapIdentity: MapIdentity | undefined) {
       activeMap = mapIdentity
     }
   }

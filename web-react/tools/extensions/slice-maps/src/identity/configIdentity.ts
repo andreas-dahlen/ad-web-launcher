@@ -1,6 +1,6 @@
 import type { AppStateCache } from '../cache/appStateCache.ts';
 import type { SliceCache } from '../cache/sliceMapCache.ts';
-import type { ActiveSlice } from '../types/core.types.ts';
+import type { ActiveConfigChanged, ActiveSlice } from '../types/core.types.ts';
 import * as vscode from 'vscode'
 
 export type ConfigCache = ReturnType<typeof setUpConfigCache>
@@ -28,61 +28,73 @@ export function setUpConfigCache(
     return activeConfig
   }
 
-  async function setActiveConfig(configIdentity: ActiveSlice | undefined) {
+  async function doesChangeActiveConfig(configIdentity: ActiveSlice | undefined): Promise<boolean> {
+    const hasChanged =
+      activeConfig?.id !== configIdentity?.id ||
+      activeConfig?.type !== configIdentity?.type
+
+    if (!hasChanged) return false
+
     activeConfig = configIdentity
-    await context.workspaceState.update(
-      'activeConfig',
-      activeConfig
-    )
+
     await vscode.commands.executeCommand(
       'setContext',
       'sliceMaps.activeType',
       activeConfig?.type
     )
+
+    await context.workspaceState.update(
+      'activeConfig',
+      activeConfig
+    )
+
+    return true
   }
 
   return {
     getActiveConfig,
-    setActiveConfig,
+    doesChangeActiveConfig,
 
-    async resolveConfigIdentity() {
-
+    async resolveConfigIdentity(): Promise<ActiveConfigChanged> {
       const fetched = getActiveConfig()
-      let identity = checkIdentity(fetched)
-      if (identity) return identity
+
+      let requiresUpdate: boolean = false
+      let activeIdentity = checkIdentity(fetched)
+      if (activeIdentity) return { activeIdentity, requiresUpdate }
 
       const loaded = getPersistedActiveConfig()
-      identity = checkIdentity(loaded)
-      if (identity) {
-        await setActiveConfig(identity)
-        return identity
+      activeIdentity = checkIdentity(loaded)
+      if (activeIdentity) {
+        requiresUpdate = await doesChangeActiveConfig(activeIdentity)
+        return { activeIdentity, requiresUpdate }
       }
 
-      identity = appGet.getActiveMap()
-      if (identity) {
-        await setActiveConfig(identity)
-        return identity
+      activeIdentity = appGet.getActiveMap()
+      if (activeIdentity) {
+        requiresUpdate = await doesChangeActiveConfig(activeIdentity)
+        return { activeIdentity, requiresUpdate }
       }
 
       const activeFilters = appGet.getActiveFilters()
       if (activeFilters.length === 1) {
-        await setActiveConfig(activeFilters[0])
-        return activeFilters[0]
+        requiresUpdate = await doesChangeActiveConfig(activeFilters[0])
+        return { activeIdentity: activeFilters[0], requiresUpdate }
       }
 
       const maps = cache.getMaps()
       if (maps.length > 0) {
-        identity = { type: maps[0].type, id: maps[0].id }
-        await setActiveConfig(identity)
-        return identity
+        activeIdentity = { type: maps[0].type, id: maps[0].id }
+        requiresUpdate = await doesChangeActiveConfig(activeIdentity)
+        return { activeIdentity, requiresUpdate }
       }
 
       const filters = cache.getFilters()
-      identity = filters[0]
+      activeIdentity = filters[0]
         ? { type: filters[0].type, id: filters[0].id }
         : undefined
-      await setActiveConfig(identity)
-      return identity
+      requiresUpdate = await doesChangeActiveConfig(activeIdentity)
+      if (!activeIdentity) return { requiresUpdate }
+      return { activeIdentity, requiresUpdate }
     }
   }
 }

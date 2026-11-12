@@ -12,15 +12,12 @@ export function createSliceOrchestrator({
   appGet,
   appSet,
   native,
-  sliceViews,
   sliceCache,
   mergeCache,
   excluder,
   target,
   searchTarget,
   tree,
-  updateSliceTree,
-  updateWorkspaceTree,
   updateStatusBar
 }: OrchestratorDeps
 ) {
@@ -95,7 +92,10 @@ export function createSliceOrchestrator({
 
     await applyActiveState()
     await postRunCleanup(item)
-    updateWorkspaceTree()
+
+    await native.syncActiveState()
+    tree.updateSliceTitle()
+    tree.update()
   }
 
   async function applyActiveState() {
@@ -105,19 +105,14 @@ export function createSliceOrchestrator({
       const slice = mergeSlice(sliceCache, appGet)
       const exclude = excluder.resolve(slice)
       await activate(localExclude, exclude, target)
-      tree.update(slice.mergeId)
 
       if (hasSearchSetting()) {
         await activateSearch(localSearchExclude, exclude, searchTarget)
       }
     } else {
       await deactivate(localExclude, target)
-      tree.reset()
       await deactivateSearch(localSearchExclude, searchTarget)
     }
-    updateSliceTree()
-    updateTitle()
-    await native.syncActiveState()
   }
 
   async function postRunCleanup(item: QueItem) {
@@ -142,26 +137,6 @@ export function createSliceOrchestrator({
     }
     await applyActiveState()
   }
-
-  function updateTitle() {
-    const data = mergeCache.getDetails(appGet.getActiveMergeId())
-
-    if (!data) {
-      for (const view of sliceViews) view.title = 'Slice'
-      return
-    }
-
-    let count = 0
-    data.completeExclude.forEach(type => {
-      if (type === 'exclude') count++
-    })
-    const title = `Slice · ${count} excluded`
-
-    for (const view of sliceViews) {
-      view.title = title
-    }
-  }
-
 
   return { queRequest }
 }

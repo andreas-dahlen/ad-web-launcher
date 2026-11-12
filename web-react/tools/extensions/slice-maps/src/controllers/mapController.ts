@@ -15,7 +15,7 @@ export function createMapController({
   appGet,
   conf,
   orchestrator,
-  updateSliceTree
+  tree
 }: CompDeps
 ) {
 
@@ -33,11 +33,12 @@ export function createMapController({
 
     await sliceCache.addMap(map)
 
-    if (!conf.getActiveConfig()) {
-      await conf.resolveConfigIdentity()
+    if (conf.getActiveConfig()) {
+      tree.updateSliceTree()
+    } else {
+      const activeConfigChanged = await conf.resolveConfigIdentity()
+      if (activeConfigChanged.requiresUpdate) tree.update()
     }
-
-    updateSliceTree()
   }
 
   async function remove(map: SliceMap): Promise<void> {
@@ -46,28 +47,33 @@ export function createMapController({
 
     await sliceCache.removeMap(map.id)
 
-    if (conf.getActiveConfig()?.id === map.id) {
-      await conf.resolveConfigIdentity()
-    }
+    const isActive = appGet.isActiveMap(map.id)
 
-    if (appGet.isActiveMap(map.id)) {
+    const activeConfigChanged =
+      conf.getActiveConfig()?.id === map.id
+        ? await conf.resolveConfigIdentity()
+        : null
+
+    if (isActive) {
       await orchestrator.queRequest({
         type: 'map',
         id: map.id,
         doesActivate: false
       })
+    } else if (activeConfigChanged?.requiresUpdate) {
+      tree.update()
     } else {
-      updateSliceTree()
+      tree.updateSliceTree()
     }
   }
-
   async function rename(map: SliceMap): Promise<void> {
     const name = await renameMap()
     if (!name) return
 
     await sliceCache.renameMap(map.id, name)
 
-    updateSliceTree()
+    tree.updateWorkspaceTitle()
+    tree.updateSliceTree()
   }
 
   async function reset(map: SliceMap): Promise<void> {
@@ -77,28 +83,31 @@ export function createMapController({
     const newMap = resetMap(map)
     await sliceCache.addMap(newMap)
 
-    if (appGet.isActiveMap(map.id)) {
+    const isActive = appGet.isActiveMap(map.id)
+
+    if (isActive) {
       await orchestrator.queRequest({
         type: 'map',
         id: map.id,
         doesActivate: true
       })
     } else {
-      updateSliceTree()
+      tree.updateSliceTree()
     }
   }
 
   async function include(
     absolutePaths: string[]
   ): Promise<void> {
-    const identity = await conf.resolveConfigIdentity()
-    if (!identity) throwError('No map or filter available.')
+    const configData = await conf.resolveConfigIdentity()
+    if (!configData) throwError('No map or filter available.')
+    const { activeIdentity } = configData
 
-    if (identity.type !== 'map') {
+    if (activeIdentity?.type !== 'map') {
       throwError('Cannot include paths in a filter. Select a map instead.')
     }
 
-    const map = sliceCache.getMapById(identity.id)
+    const map = sliceCache.getMapById(activeIdentity.id)
     if (!map) throwError('The selected map could not be found.')
 
     const paths = pathsToRelative(absolutePaths, root, 'include')
@@ -108,14 +117,15 @@ export function createMapController({
   async function exclude(
     absolutePaths: string[]
   ): Promise<void> {
-    const identity = await conf.resolveConfigIdentity()
-    if (!identity) throwError('No map or filter available.')
+    const configData = await conf.resolveConfigIdentity()
+    if (!configData) throwError('No map or filter available.')
+    const { activeIdentity } = configData
 
-    if (identity.type !== 'map') {
+    if (activeIdentity?.type !== 'map') {
       throwError('Cannot exclude paths in a filter. Select a map instead.')
     }
 
-    const map = sliceCache.getMapById(identity.id)
+    const map = sliceCache.getMapById(activeIdentity.id)
     if (!map) throwError('The selected map could not be found.')
 
     const paths = pathsToRelative(absolutePaths, root, 'exclude')
@@ -126,12 +136,13 @@ export function createMapController({
     map: SliceMap,
     paths: PathChoice,
   ): Promise<void> {
-
     const nextMap = normalizeMap(map, paths)
-
     await sliceCache.addMap(nextMap)
 
-    if (appGet.isActiveMap(nextMap.id)) {
+    const isActive = appGet.isActiveMap(map.id)
+
+
+    if (isActive) {
       await orchestrator.queRequest({
         type: 'map',
         id: nextMap.id,
@@ -140,8 +151,10 @@ export function createMapController({
           ? [...paths.folders]
           : undefined
       })
+    } else if (conf.getActiveConfig()?.id === map.id) {
+      tree.update()
     } else {
-      updateSliceTree()
+      tree.updateSliceTree()
     }
   }
 

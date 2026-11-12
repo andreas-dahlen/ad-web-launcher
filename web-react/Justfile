@@ -217,10 +217,18 @@ install-sm:
     cd tools/extensions/slice-maps && npm run package
     code --install-extension tools/extensions/slice-maps/slice-maps-0.0.1.vsix --force
 
+install-sm-windows:
+    cd tools/extensions/slice-maps && npm run package
+    bash scripts/install-vsix.sh tools/extensions/slice-maps/slice-maps-0.0.1.vsix
+
 # Builds installs unfolder.
 install-unfolder:
     cd tools/extensions/unfolder && npm run package
     code --install-extension tools/extensions/unfolder/unfolder-0.0.1.vsix --force
+
+install-unfolder-windows:
+    cd tools/extensions/unfolder && npm run package
+    bash scripts/install-vsix.sh tools/extensions/unfolder/unfolder-0.0.1.vsix
 
 # Builds and installs all tools.
 install-extensions: install-cvc install-pl install-ms install-tokens install-sm install-unfolder

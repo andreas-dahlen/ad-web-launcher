@@ -16,7 +16,7 @@ export function createWorkspaceTreeProvider(
 
     getChildren(node?: WorkspaceTreeNode): WorkspaceTreeNode[] {
       if (!node) {
-        return treeCache.getActiveData() ?? []
+        return treeCache.getTreeNodes() ?? []
       }
 
       if (node.type === 'folders') {

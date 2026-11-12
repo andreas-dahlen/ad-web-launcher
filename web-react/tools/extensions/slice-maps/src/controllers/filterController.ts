@@ -16,6 +16,8 @@ export function createFilterController({
   globber,
   orchestrator,
   updateSliceTree,
+  tree,
+  updateWorkspaceTree
 }: FilterControllerDeps
 ) {
 
@@ -36,8 +38,9 @@ export function createFilterController({
 
     if (!conf.getActiveConfig()) {
       await conf.resolveConfigIdentity()
+      tree.update()
+      updateWorkspaceTree()
     }
-
     updateSliceTree()
   }
 
@@ -47,11 +50,18 @@ export function createFilterController({
 
     await sliceCache.removeFilter(filter.id)
 
+    const isActive = appGet.isActiveFilter(filter.id)
+
     if (conf.getActiveConfig()?.id === filter.id) {
-      await conf.resolveConfigIdentity()
+      const configData = await conf.resolveConfigIdentity()
+
+      if (!isActive && (!configData || configData.requiresUpdate)) {
+        tree.update()
+        updateWorkspaceTree()
+      }
     }
 
-    if (appGet.isActiveFilter(filter.id)) {
+    if (isActive) {
       await orchestrator.queRequest({
         type: 'filter',
         id: filter.id,
@@ -78,7 +88,9 @@ export function createFilterController({
     const newFilter = resetFilter(filter)
     await sliceCache.addFilter(newFilter)
 
-    if (appGet.isActiveFilter(filter.id)) {
+    const isActive = appGet.isActiveFilter(filter.id)
+
+    if (isActive) {
       await orchestrator.queRequest({
         type: 'filter',
         id: filter.id,
@@ -87,19 +99,23 @@ export function createFilterController({
     } else {
       updateSliceTree()
     }
+    if (isActive || conf.getActiveConfig()?.id !== filter.id) return
+    tree.update()
+    updateWorkspaceTree()
   }
 
   async function removeExclude(
     absolutePaths: string[]
   ): Promise<void> {
-    const identity = await conf.resolveConfigIdentity()
-    if (!identity) throwError('No map or filter available.')
+    const configData = await conf.resolveConfigIdentity()
+    if (!configData) throwError('No map or filter available.')
+    const { activeIdentity } = configData
 
-    if (identity.type !== 'filter') {
+    if (activeIdentity.type !== 'filter') {
       throwError('Cannot remove exclusions from a map. Select a filter instead.')
     }
 
-    const filter = sliceCache.getFilterById(identity.id)
+    const filter = sliceCache.getFilterById(activeIdentity.id)
     if (!filter) throwError('The selected filter could not be found.')
 
     const paths = pathsToRelative(absolutePaths, root, 'remove')
@@ -109,14 +125,15 @@ export function createFilterController({
   async function addExclude(
     absolutePaths: string[]
   ): Promise<void> {
-    const identity = await conf.resolveConfigIdentity()
-    if (!identity) throwError('No map or filter available.')
+    const configData = await conf.resolveConfigIdentity()
+    if (!configData) throwError('No map or filter available.')
+    const { activeIdentity } = configData
 
-    if (identity.type !== 'filter') {
+    if (activeIdentity.type !== 'filter') {
       throwError('Cannot add exclusions to a map. Select a filter instead.')
     }
 
-    const filter = sliceCache.getFilterById(identity.id)
+    const filter = sliceCache.getFilterById(activeIdentity.id)
     if (!filter) throwError('The selected filter could not be found.')
 
     const paths = pathsToRelative(absolutePaths, root, 'exclude')
@@ -133,7 +150,14 @@ export function createFilterController({
 
     await sliceCache.addFilter(nextFilter)
 
-    if (appGet.isActiveFilter(nextFilter.id)) {
+    const isActive = appGet.isActiveFilter(filter.id)
+
+    if (!isActive && conf.getActiveConfig()?.id === filter.id) {
+      tree.update()
+      updateWorkspaceTree()
+    }
+
+    if (isActive) {
       await orchestrator.queRequest({
         type: 'filter',
         id: nextFilter.id,
@@ -148,14 +172,14 @@ export function createFilterController({
   }
 
   async function globAll(absolutePaths: string[]) {
-    const identity = await conf.resolveConfigIdentity()
-    if (!identity) throwError('No map or filter available.')
-
-    if (identity.type !== 'filter') {
+    const configData = await conf.resolveConfigIdentity()
+    if (!configData) throwError('No map or filter available.')
+    const { activeIdentity } = configData
+    if (activeIdentity.type !== 'filter') {
       throwError('Cannot generate exclusion patterns for a map. Select a filter instead.')
     }
 
-    const filter = sliceCache.getFilterById(identity.id)
+    const filter = sliceCache.getFilterById(activeIdentity.id)
     if (!filter) throwError('The selected filter could not be found.')
 
     const paths = globber.globMany(absolutePaths)

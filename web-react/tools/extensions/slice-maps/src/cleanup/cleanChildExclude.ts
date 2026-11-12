@@ -4,7 +4,7 @@ import type { NormalizedPaths, Slice } from '../types/core.types.ts'
 import type { CachedMergeData } from '../types/exclusion.types.ts'
 import { isChildOf } from '../utils/comparePaths.ts'
 import { createCleanupValidator } from './preCleanupValidation.ts'
-import * as vscode from 'vscode'
+// import * as vscode from 'vscode'
 
 
 
@@ -15,9 +15,9 @@ export function cleanupChildExcludes(
   input: string[]
 ): NormalizedPaths | undefined {
 
-  void vscode.window.showInformationMessage(
-    `cleanup called`
-  )
+  // void vscode.window.showInformationMessage(
+  //   `cleanup called`
+  // )
 
   const validator = createCleanupValidator(slice, mergeCache, excluder)
 

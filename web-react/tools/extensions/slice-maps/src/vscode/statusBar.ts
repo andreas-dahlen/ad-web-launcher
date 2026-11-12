@@ -2,7 +2,7 @@ import * as vscode from 'vscode'
 import type { StatusBarState } from '../types/vscode.types.ts'
 import type { AppStateCache } from '../cache/appStateCache.ts'
 import type { SliceCache } from '../cache/sliceMapCache.ts'
-import type { ActiveFilter, ActiveMap } from '../types/core.types.ts'
+import type { FilterIdentity, MapIdentity } from '../types/core.types.ts'
 
 export function createStatusBar(
   context: vscode.ExtensionContext,
@@ -84,14 +84,14 @@ export function createStatusBar(
 type ActiveType =
   | {
     type: 'Slice'
-    activeMap: ActiveMap
-    activeFilters: ActiveFilter[]
+    activeMap: MapIdentity
+    activeFilters: FilterIdentity[]
   } | {
     type: 'Map'
-    activeMap: ActiveMap
+    activeMap: MapIdentity
   } | {
     type: 'Filter'
-    activeFilters: ActiveFilter[]
+    activeFilters: FilterIdentity[]
   }
 
 function getType(appGet: AppStateCache["appGet"]): ActiveType | undefined {

@@ -84,7 +84,8 @@
       "explorer": [
         { "id": "sliceMaps",
           "name": "Slice",
-          "icon": "resources/slice-maps.svg" }
+          "icon": "resources/slice-maps.svg"
+        }
       ],
       "sliceMapsContainer": [
         {
@@ -136,7 +137,9 @@
       { "command": "sliceMaps.excludeAllWorkspaceItem", "title": "Exclude All Matching Name (workspace)", "icon": "$(layers)" },
       { "command": "sliceMaps.removeExcludeFilterWorkspaceItem", "title": "Remove Exclude Filter (Workspace)", "icon": "$(diff-removed)" },
       { "command": "sliceMaps.addExcludeFilterWorkspaceItem", "title": "Add Exclude Filter (Workspace)", "icon": "$(diff-added)" },
-      { "command": "sliceMaps.missingConfigWorkspaceItem", "title": "Set Up Slice Maps (Workspace)", "icon": "$(heart)" }
+      { "command": "sliceMaps.missingConfigWorkspaceItem", "title": "Set Up Slice Maps (Workspace)", "icon": "$(heart)" },
+
+      { "command": "sliceMaps.workspaceChangeDisplayMode", "title": "Change Display Mode (Workspace)", "icon": "$(heart)" }
     ],
 
     "keybindings": [
@@ -270,6 +273,11 @@
           "command": "sliceMaps.deactivateAll",
           "when": "view == sliceMaps || view == sliceMapsWorkspace",
           "group": "navigation"
+        },
+        {
+          "command": "sliceMaps.workspaceChangeDisplayMode",
+          "when": "view == sliceWorkspace",
+          "group": "navigation"
         }
       ],
       "commandPalette": [
@@ -305,7 +313,8 @@
         { "command": "sliceMaps.removeExcludeFilterWorkspaceItem", "when": "false" },
         { "command": "sliceMaps.addExcludeFilterWorkspaceItem", "when": "false" },
         { "command": "sliceMaps.excludeAllWorkspaceItem", "when": "false" },
-        { "command": "sliceMaps.missingConfigWorkspaceItem", "when": "false" }
+        { "command": "sliceMaps.missingConfigWorkspaceItem", "when": "false" },
+        { "command": "sliceMaps.workspaceChangeDisplayMode", "when": "false" }
       ]
     }
   }

@@ -2,6 +2,7 @@ import type { AppStateCache } from '../cache/appStateCache.ts'
 import type { ExclusionFileData } from '../types/vscode.types.ts'
 import * as vscode from 'vscode'
 import { loadBackups } from '../loaders/loadBackups.ts'
+import { throwError } from '../utils/throwError.ts'
 
 export type NativeBackupHandler = NonNullable<ReturnType<typeof createNativeBackupHandler>>
 export function createNativeBackupHandler(
@@ -39,7 +40,7 @@ export function createNativeBackupHandler(
       const data = backup.getPersistedExclude()
       if (data) return data
       if (appGet.hasActiveSlice()) {
-        throw new Error("[ERROR] persisted was undefined and unable to get backup value in an active state")
+        throwError("[ERROR] persisted was undefined and unable to get backup value in an active state")
       }
       return getFileExcludes(root)
     },
