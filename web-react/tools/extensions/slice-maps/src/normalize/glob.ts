@@ -1,4 +1,4 @@
-import type { PathChoice, TreeNode } from '../types/core.types.ts';
+import type { FilesAndFolders, TreeNode } from '../types/core.types.ts';
 import picomatch from 'picomatch'
 import { hasBasePath } from '../utils/comparePaths.ts';
 import type { LoadTree } from '../loaders/loadTree.ts';
@@ -7,15 +7,14 @@ export type GlobHandler = ReturnType<typeof createGlobHandler>
 export function createGlobHandler(
   loadTree: LoadTree) {
 
-  function globSingle(pattern: string): PathChoice {
+  function globSingle(pattern: string): FilesAndFolders {
 
     return normalizeGlob(pattern, loadTree.build())
   }
 
-  function globMany(absolutePaths: string[]): PathChoice | undefined {
+  function globMany(absolutePaths: string[]): FilesAndFolders | undefined {
     const tree = loadTree.build()
-    const paths: PathChoice = {
-      action: 'exclude',
+    const paths: FilesAndFolders = {
       files: new Set(),
       folders: new Set()
     }
@@ -38,7 +37,7 @@ export function createGlobHandler(
   function normalizeGlob(
     pattern: string,
     fileTree: TreeNode[]
-  ): PathChoice {
+  ): FilesAndFolders {
     const matcher = picomatch(pattern, { dot: true })
     const rawFolders: string[] = []
     const rawFiles: string[] = []
@@ -71,7 +70,6 @@ export function createGlobHandler(
     )
 
     return {
-      action: 'exclude',
       files,
       folders
     }

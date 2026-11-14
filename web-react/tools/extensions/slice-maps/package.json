@@ -101,90 +101,87 @@
       ]
     },
     "commands": [
-      { "command": "sliceMaps.configure", "title": "Configure Slice Item", "icon": "$(gear)" },
-      { "command": "sliceMaps.deactivateAll", "title": "Deactivate All", "icon": "$(clear-all)" },
-      { "command": "sliceMaps.toggleOnActiveConfig", "title": "Toggle Active Configuration" },
+      { "command": "sliceMaps.deactivateAllSlices", "title": "Deactivate All", "icon": "$(clear-all)" },
+      { "command": "sliceMaps.selectConfigSlice", "title": "Configure Slice Item", "icon": "$(gear)" },
+      { "command": "sliceMaps.compressRules", "title": "Compress Redundant Rules", "icon": "$(sync)" },
+      { "command": "sliceMaps.toggleActiveConfigSlice", "title": "Toggle Active Config Slice" },
+      { "command": "sliceMaps.addGlobExclusion", "title": "Add Glob Exclusion" },
       { "command": "sliceMaps.missingConfig", "title": "Set Up Slice Maps" },
-      { "command": "sliceMaps.toggle", "title": "Toggle Slice" },
-      { "command": "sliceMaps.glob", "title": "Add Glob Exclusion" },
-      { "command": "sliceMaps.compress", "title": "Compress Redundant Rules", "icon": "$(sync)" },
 
-      { "command": "sliceMaps.create", "title": "Create Map", "icon": "$(add)" },
-      { "command": "sliceMaps.rename", "title": "Rename Map" },
-      { "command": "sliceMaps.delete", "title": "Delete Map" },
-      { "command": "sliceMaps.reset", "title": "Reset Map" },
-      { "command": "sliceMaps.include", "title": "Include in Map" },
-      { "command": "sliceMaps.exclude", "title": "Exclude from Map" },
+      { "command": "sliceMaps.toggleMap", "title": "Toggle Map" },
+      { "command": "sliceMaps.includeMap", "title": "Toggle Inclusions in Map" },
+      { "command": "sliceMaps.excludeMap", "title": "Toggle Exclusions in Map" },
+      { "command": "sliceMaps.createMap", "title": "Create Map", "icon": "$(add)" },
+      { "command": "sliceMaps.renameMap", "title": "Rename Map" },
+      { "command": "sliceMaps.deleteMap", "title": "Delete Map" },
+      { "command": "sliceMaps.resetMap", "title": "Reset Map" },
 
-      { "command": "sliceMaps.createFilter", "title": "Create Filter", "icon": "$(add)" },
       { "command": "sliceMaps.toggleFilter", "title": "Toggle Filter" },
+      { "command": "sliceMaps.excludeFilter", "title": "Toggle Exclusions in Filter" },
+      { "command": "sliceMaps.excludeAllFilter", "title": "Toggle All Matching Names in Filter" },
+      { "command": "sliceMaps.createFilter", "title": "Create Filter", "icon": "$(add)" },
       { "command": "sliceMaps.renameFilter", "title": "Rename Filter" },
       { "command": "sliceMaps.deleteFilter", "title": "Delete Filter" },
       { "command": "sliceMaps.resetFilter", "title": "Reset Filter" },
-      { "command": "sliceMaps.removeExcludeFilter", "title": "Remove Exclude Filter" },
-      { "command": "sliceMaps.addExcludeFilter", "title": "Add Exclude Filter" },
-      { "command": "sliceMaps.excludeAll", "title": "Exclude All Matching Names" },
 
-      { "command": "sliceMaps.includeWorkspace", "title": "Include in Slice (Workspace)" },
-      { "command": "sliceMaps.excludeWorkspace", "title": "Exclude from Slice (Workspace)" },
-      { "command": "sliceMaps.excludeAllWorkspace", "title": "Exclude All Matching Names (workspace)" },
-      { "command": "sliceMaps.removeExcludeFilterWorkspace", "title": "Remove Exclude Filter (Workspace)" },
-      { "command": "sliceMaps.addExcludeFilterWorkspace", "title": "Add Exclude Filter (Workspace)" },
+      { "command": "sliceMaps.changeDisplayModeWorkspace", "title": "Change Display Mode (Workspace)", "icon": "$(eye)" },
       { "command": "sliceMaps.missingConfigWorkspace", "title": "Set Up Slice Maps (Workspace)" },
 
-      { "command": "sliceMaps.includeWorkspaceItem", "title": "Include in Slice (Workspace)", "icon": "$(add)" },
-      { "command": "sliceMaps.excludeWorkspaceItem", "title": "Exclude from Slice (Workspace)", "icon": "$(circle-slash)" },
-      { "command": "sliceMaps.excludeAllWorkspaceItem", "title": "Exclude All Matching Name (workspace)", "icon": "$(layers)" },
-      { "command": "sliceMaps.removeExcludeFilterWorkspaceItem", "title": "Remove Exclude Filter (Workspace)", "icon": "$(diff-removed)" },
-      { "command": "sliceMaps.addExcludeFilterWorkspaceItem", "title": "Add Exclude Filter (Workspace)", "icon": "$(diff-added)" },
-      { "command": "sliceMaps.missingConfigWorkspaceItem", "title": "Set Up Slice Maps (Workspace)", "icon": "$(heart)" },
+      { "command": "sliceMaps.includeMapWorkspace", "title": "Toggle Inclusions in Map (Workspace)" },
+      { "command": "sliceMaps.excludeMapWorkspace", "title": "Toggle Exclusions in Map (Workspace)" },
 
-      { "command": "sliceMaps.workspaceChangeDisplayMode", "title": "Change Display Mode (Workspace)", "icon": "$(heart)" }
+      { "command": "sliceMaps.excludeAllFilterWorkspace", "title": "Toggle All Matching Names in Filter (workspace)" },
+      { "command": "sliceMaps.excludeFilterWorkspace", "title": "Toggle Exclusions in Filter (Workspace)" },
+
+      { "command": "sliceMaps.missingConfigWorkspaceItem", "title": "Set Up Slice Maps (Workspace)", "icon": "$(play)" },
+
+      { "command": "sliceMaps.includeMapWorkspaceItem", "title": "Toggle Inclusion in Map (Workspace)", "icon": "$(add)" },
+      { "command": "sliceMaps.excludeMapWorkspaceItem", "title": "Toggle Exclusion in Map (Workspace)", "icon": "$(circle-slash)" },
+
+      { "command": "sliceMaps.excludeAllFilterWorkspaceItem", "title": "Toggle All Matching Names in Filter (workspace)", "icon": "$(layers)" },
+      { "command": "sliceMaps.excludeFilterWorkspaceItem", "title": "Toggle Exclusion in Filter (Workspace)", "icon": "$(diff-added)" }
     ],
 
     "keybindings": [
-      { "command": "sliceMaps.include", "key": "alt+d",
+      { "command": "sliceMaps.includeMap", "key": "alt+d",
         "when": "filesExplorerFocus  && sliceMaps.activeType == map" },
 
-      { "command": "sliceMaps.removeExcludeFilter", "key": "alt+d",
-        "when": "filesExplorerFocus  && sliceMaps.activeType == filter" },
+      { "command": "sliceMaps.excludeAllFilter", "key": "alt+d",
+        "when": "filesExplorerFocus && sliceMaps.activeType == filter" },
 
-      { "command": "sliceMaps.exclude", "key": "alt+s",
+      { "command": "sliceMaps.excludeMap", "key": "alt+s",
         "when": "filesExplorerFocus  && sliceMaps.activeType == map" },
 
-      { "command": "sliceMaps.addExcludeFilter", "key": "alt+s",
+      { "command": "sliceMaps.excludeFilter", "key": "alt+s",
         "when": "filesExplorerFocus  && sliceMaps.activeType == filter" },
 
 
 
-      { "command": "sliceMaps.includeWorkspace", "key": "alt+d",
+      { "command": "sliceMaps.includeMapWorkspace", "key": "alt+d",
         "when": "focusedView == sliceWorkspace && sliceMaps.activeType == map" },
 
-      { "command": "sliceMaps.removeExcludeFilterWorkspace", "key": "alt+d",
+      { "command": "sliceMaps.excludeAllFilterWorkspace", "key": "alt+d",
         "when": "focusedView == sliceWorkspace && sliceMaps.activeType == filter" },
 
-      { "command": "sliceMaps.excludeWorkspace", "key": "alt+s",
+      { "command": "sliceMaps.excludeMapWorkspace", "key": "alt+s",
         "when": "focusedView == sliceWorkspace && sliceMaps.activeType == map" },
 
-      { "command": "sliceMaps.addExcludeFilterWorkspace", "key": "alt+s",
+      { "command": "sliceMaps.excludeFilterWorkspace", "key": "alt+s",
         "when": "focusedView == sliceWorkspace && sliceMaps.activeType == filter" }
     ],
 
     "menus": {
       "explorer/context": [
-        { "command": "sliceMaps.include",
+        { "command": "sliceMaps.includeMap",
           "when": "resourceScheme == file && sliceMaps.activeType == map" },
 
-        { "command": "sliceMaps.exclude",
+        { "command": "sliceMaps.excludeMap",
           "when": "resourceScheme == file && sliceMaps.activeType == map" },
 
-        { "command": "sliceMaps.removeExcludeFilter",
+        { "command": "sliceMaps.excludeFilter",
           "when": "resourceScheme == file && sliceMaps.activeType == filter" },
 
-        { "command": "sliceMaps.addExcludeFilter",
-          "when": "resourceScheme == file && sliceMaps.activeType == filter" },
-
-        { "command": "sliceMaps.excludeAll",
+        { "command": "sliceMaps.excludeAllFilter",
           "when": "resourceScheme == file && sliceMaps.activeType == filter" },
 
         { "command": "sliceMaps.missingConfig",
@@ -192,29 +189,25 @@
       ],
 
       "view/item/context": [
-        { "command": "sliceMaps.includeWorkspace",
+        { "command": "sliceMaps.includeMapWorkspace",
           "when": "view == sliceWorkspace && viewItem == workspaceFile && sliceMaps.activeType == map" },
-        { "command": "sliceMaps.includeWorkspaceItem",
+        { "command": "sliceMaps.includeMapWorkspaceItem",
           "when": "view == sliceWorkspace && viewItem == workspaceFile && sliceMaps.activeType == map", "group": "inline" },
 
-        { "command": "sliceMaps.excludeWorkspace",
+        { "command": "sliceMaps.excludeMapWorkspace",
           "when": "view == sliceWorkspace && viewItem == workspaceFile && sliceMaps.activeType == map" },
-        { "command": "sliceMaps.excludeWorkspaceItem",
+        { "command": "sliceMaps.excludeMapWorkspaceItem",
           "when": "view == sliceWorkspace && viewItem == workspaceFile && sliceMaps.activeType == map", "group": "inline" },
 
-        { "command": "sliceMaps.removeExcludeFilterWorkspace",
+
+        { "command": "sliceMaps.excludeFilterWorkspace",
           "when": "view == sliceWorkspace && viewItem == workspaceFile && sliceMaps.activeType == filter" },
-        { "command": "sliceMaps.removeExcludeFilterWorkspaceItem",
+        { "command": "sliceMaps.excludeFilterWorkspaceItem",
           "when": "view == sliceWorkspace && viewItem == workspaceFile && sliceMaps.activeType == filter", "group": "inline" },
 
-        { "command": "sliceMaps.addExcludeFilterWorkspace",
+        { "command": "sliceMaps.excludeAllFilterWorkspace",
           "when": "view == sliceWorkspace && viewItem == workspaceFile && sliceMaps.activeType == filter" },
-        { "command": "sliceMaps.addExcludeFilterWorkspaceItem",
-          "when": "view == sliceWorkspace && viewItem == workspaceFile && sliceMaps.activeType == filter", "group": "inline" },
-
-        { "command": "sliceMaps.excludeAllWorkspace",
-          "when": "view == sliceWorkspace && viewItem == workspaceFile && sliceMaps.activeType == filter" },
-        { "command": "sliceMaps.excludeAllWorkspaceItem",
+        { "command": "sliceMaps.excludeAllFilterWorkspaceItem",
           "when": "view == sliceWorkspace && viewItem == workspaceFile && sliceMaps.activeType == filter", "group": "inline" },
 
 
@@ -226,9 +219,9 @@
 
 
 
-        { "command": "sliceMaps.create",
+        { "command": "sliceMaps.createMap",
           "when": "(view == sliceMaps || view == sliceMapsWorkspace) && viewItem == sliceMapGroup" },
-        { "command": "sliceMaps.create",
+        { "command": "sliceMaps.createMap",
           "when": "(view == sliceMaps || view == sliceMapsWorkspace) && viewItem == sliceMapGroup", "group": "inline" },
 
         { "command": "sliceMaps.createFilter",
@@ -236,17 +229,17 @@
         { "command": "sliceMaps.createFilter",
           "when": "(view == sliceMaps || view == sliceMapsWorkspace) && viewItem == sliceFilterGroup", "group": "inline" },
 
-        { "command": "sliceMaps.configure",
+        { "command": "sliceMaps.selectConfigSlice",
           "when": "(view == sliceMaps || view == sliceMapsWorkspace) && (viewItem == sliceMap || viewItem == sliceFilter)",
           "group": "inline" },
 
-        { "command": "sliceMaps.rename",
+        { "command": "sliceMaps.renameMap",
           "when": "(view == sliceMaps || view == sliceMapsWorkspace) && viewItem == sliceMap" },
 
-        { "command": "sliceMaps.delete",
+        { "command": "sliceMaps.deleteMap",
           "when": "(view == sliceMaps || view == sliceMapsWorkspace) && viewItem == sliceMap" },
 
-        { "command": "sliceMaps.reset",
+        { "command": "sliceMaps.resetMap",
           "when": "(view == sliceMaps || view == sliceMapsWorkspace) && viewItem == sliceMap" },
 
         { "command": "sliceMaps.renameFilter",
@@ -259,62 +252,62 @@
           "when": "(view == sliceMaps || view == sliceMapsWorkspace) && viewItem == sliceFilter" },
 
 
-        { "command": "sliceMaps.glob",
+        { "command": "sliceMaps.addGlobExclusion",
           "when": "(view == sliceMaps || view == sliceMapsWorkspace) && sliceMaps.activeType && (viewItem == sliceMap || viewItem == sliceFilter)" }
 
       ],
       "view/title": [
         {
-          "command": "sliceMaps.compress",
+          "command": "sliceMaps.compressRules",
           "when": "view == sliceMaps || view == sliceMapsWorkspace",
           "group": "navigation"
         },
         {
-          "command": "sliceMaps.deactivateAll",
+          "command": "sliceMaps.deactivateAllSlices",
           "when": "view == sliceMaps || view == sliceMapsWorkspace",
           "group": "navigation"
         },
         {
-          "command": "sliceMaps.workspaceChangeDisplayMode",
+          "command": "sliceMaps.changeDisplayModeWorkspace",
           "when": "view == sliceWorkspace",
           "group": "navigation"
         }
       ],
       "commandPalette": [
-        { "command": "sliceMaps.configure", "when": "false" },
+        { "command": "sliceMaps.selectConfigSlice", "when": "false" },
         { "command": "sliceMaps.missingConfig", "when": "false" },
-        { "command": "sliceMaps.toggle", "when": "false" },
-        { "command": "sliceMaps.rename", "when": "false" },
-        { "command": "sliceMaps.delete", "when": "false" },
-        { "command": "sliceMaps.reset", "when": "false" },
+        { "command": "sliceMaps.toggleActiveConfigSlice", "when": "false" },
 
-        { "command": "sliceMaps.include", "when": "false" },
-        { "command": "sliceMaps.exclude", "when": "false" },
+        { "command": "sliceMaps.toggleMap", "when": "false" },
+        { "command": "sliceMaps.renameMap", "when": "false" },
+        { "command": "sliceMaps.deleteMap", "when": "false" },
+        { "command": "sliceMaps.resetMap", "when": "false" },
+
+        { "command": "sliceMaps.includeMap", "when": "false" },
+        { "command": "sliceMaps.excludeMap", "when": "false" },
 
         { "command": "sliceMaps.toggleFilter", "when": "false" },
         { "command": "sliceMaps.renameFilter", "when": "false" },
         { "command": "sliceMaps.deleteFilter", "when": "false" },
         { "command": "sliceMaps.resetFilter", "when": "false" },
 
-        { "command": "sliceMaps.removeExcludeFilter", "when": "false" },
-        { "command": "sliceMaps.addExcludeFilter", "when": "false" },
-        { "command": "sliceMaps.glob", "when": "false" },
-        { "command": "sliceMaps.excludeAll", "when": "false" },
+        { "command": "sliceMaps.excludeFilter", "when": "false" },
+        { "command": "sliceMaps.addGlobExclusion", "when": "false" },
+        { "command": "sliceMaps.excludeAllFilter", "when": "false" },
 
-        { "command": "sliceMaps.includeWorkspace", "when": "false" },
-        { "command": "sliceMaps.excludeWorkspace", "when": "false" },
-        { "command": "sliceMaps.removeExcludeFilterWorkspace", "when": "false" },
-        { "command": "sliceMaps.addExcludeFilterWorkspace", "when": "false" },
-        { "command": "sliceMaps.excludeAllWorkspace", "when": "false" },
+        { "command": "sliceMaps.includeMapWorkspace", "when": "false" },
+        { "command": "sliceMaps.excludeMapWorkspace", "when": "false" },
+        { "command": "sliceMaps.excludeFilterWorkspace", "when": "false" },
+        { "command": "sliceMaps.excludeAllFilterWorkspace", "when": "false" },
         { "command": "sliceMaps.missingConfigWorkspace", "when": "false" },
 
-        { "command": "sliceMaps.includeWorkspaceItem", "when": "false" },
-        { "command": "sliceMaps.excludeWorkspaceItem", "when": "false" },
-        { "command": "sliceMaps.removeExcludeFilterWorkspaceItem", "when": "false" },
-        { "command": "sliceMaps.addExcludeFilterWorkspaceItem", "when": "false" },
-        { "command": "sliceMaps.excludeAllWorkspaceItem", "when": "false" },
+        { "command": "sliceMaps.includeMapWorkspaceItem", "when": "false" },
+        { "command": "sliceMaps.excludeMapWorkspaceItem", "when": "false" },
+        { "command": "sliceMaps.excludeFilterWorkspaceItem", "when": "false" },
+        { "command": "sliceMaps.excludeAllFilterWorkspaceItem", "when": "false" },
         { "command": "sliceMaps.missingConfigWorkspaceItem", "when": "false" },
-        { "command": "sliceMaps.workspaceChangeDisplayMode", "when": "false" }
+
+        { "command": "sliceMaps.changeDisplayModeWorkspace", "when": "false" }
       ]
     }
   }

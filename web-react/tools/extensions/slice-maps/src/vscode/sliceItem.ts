@@ -19,19 +19,23 @@ export function mapItem(
   const include = rawIncCalc === 0 ? '0' : `+${rawIncCalc}`
   const exclude = rawExcCalc === 0 ? '0' : `-${rawExcCalc}`
 
-  const config = isConfiguring ? ' · ⚙ CONFIG' : ''
+  item.description = `${include} / ${exclude}`
 
-  item.description = `${include} / ${exclude}${config}`
+  const icon = isConfiguring
+    ? (isActive ? 'record' : 'circle-filled')
+    : (isActive ? 'circle-filled' : 'circle-outline')
+
+  const color = isConfiguring
+    ? (isActive ? 'charts.purple' : 'charts.blue')
+    : (isActive ? 'charts.red' : undefined)
 
   item.iconPath = new vscode.ThemeIcon(
-    isActive ? 'circle-filled' : 'circle-outline',
-    isActive
-      ? new vscode.ThemeColor('charts.red')
-      : undefined
+    icon,
+    color ? new vscode.ThemeColor(color) : undefined
   )
 
   item.command = {
-    command: 'sliceMaps.toggle',
+    command: 'sliceMaps.toggleMap',
     title: 'Toggle Slice',
     arguments: [map]
   }

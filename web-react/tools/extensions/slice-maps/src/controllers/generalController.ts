@@ -107,9 +107,6 @@ export function createGeneralController({
       case 'addExclude':
         await ctrl.filter.addExclude(absolutePaths)
         break
-      case 'removeExclude':
-        await ctrl.filter.removeExclude(absolutePaths)
-        break
       case 'excludeAll':
         await ctrl.filter.globAll(absolutePaths)
         break
@@ -122,9 +119,9 @@ export function createGeneralController({
 
     const paths = globber.globSingle(pattern)
     if (slice.type === 'map') {
-      await ctrl.map.update(slice, paths)
+      await ctrl.map.update(slice, paths, 'exclude')
     } else if (slice.type === 'filter') {
-      await ctrl.filter.update(slice, paths)
+      await ctrl.filter.update(slice, paths, 'exclude')
     }
   }
 

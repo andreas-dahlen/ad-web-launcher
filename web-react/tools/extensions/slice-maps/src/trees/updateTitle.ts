@@ -26,15 +26,31 @@ export function updateSliceT(
   }
 }
 
-const getName = (
-  activeConfig: ActiveSlice | undefined,
+const getConfigName = (
+  activeConfig: ActiveSlice,
   sliceCache: SliceCache
 ) => {
-  return activeConfig === undefined
-    ? null
-    : (activeConfig.type === 'map'
-      ? sliceCache.getMapById(activeConfig.id)?.name
-      : sliceCache.getFilterById(activeConfig.id)?.name) ?? null
+  return activeConfig.type === 'map'
+    ? sliceCache.getMapById(activeConfig.id)?.name
+    : sliceCache.getFilterById(activeConfig.id)?.name
+}
+
+const resolveEffective = (
+  appGet: AppStateCache["appGet"],
+  sliceCache: SliceCache
+): string | null => {
+  const activeMap = appGet.getActiveMap()
+  const activeFilters = appGet.getActiveFilters()
+  const filterCount = activeFilters.length
+  if (!activeMap && filterCount === 0) return null
+  const mapName = activeMap && sliceCache.getMapById(activeMap.id)?.name
+  const filterName = filterCount === 1 && sliceCache.getFilterById(activeFilters[0].id)?.name
+
+  if (mapName && filterCount > 0) return `${mapName} + ${filterCount}`
+  if (mapName) return mapName
+  if (filterName) return filterName
+  if (filterCount > 1) return `${filterCount} filters`
+  return null
 }
 
 export function updateWorkspaceT(
@@ -44,47 +60,45 @@ export function updateWorkspaceT(
   view: TreeView<WorkspaceTreeNode>,
   sliceCache: SliceCache
 ) {
-  if (displayMode === 'configuration' && !activeConfig) {
-    view.title = 'Configuration'
+  const base = displayMode === 'effective' ? '🎯 Effective' : '🧩 Configuration'
+
+  if (!activeConfig) {
+    view.title = base
     return
   }
-  const name = getName(activeConfig, sliceCache)
 
-  const base = displayMode === 'effective' ? 'Effective' : 'Configuration'
   if (displayMode === 'configuration') {
-    if (!activeConfig || !name) {
-      view.title = `${base}`
+    const confName = getConfigName(activeConfig, sliceCache)
+    if (!confName) {
+      view.title = base
       return
     }
-    view.title = `${base} · ${name}`
+    view.title = `${base} · ${confName}`
     return
   }
 
-  if (!activeConfig || !name) {
+  const activeMap = appGet.getActiveMap()
+  const activeFilters = appGet.getActiveFilters().length
+
+  const isActive = activeConfig.type === 'map'
+    ? appGet.isActiveMap(activeConfig.id)
+    : appGet.isActiveFilter(activeConfig.id)
+
+  const name = resolveEffective(appGet, sliceCache)
+  if (!name) {
     view.title = `${base}`
     return
   }
 
-  if (!appGet.hasActiveSlice()) {
-    view.title = `${base} · ${name}`
-    return
-  }
-  const activeMap = appGet.getActiveMap()
-  const activeFilters = appGet.getActiveFilters().length
-
-  const isActiveMap = appGet.isActiveMap(activeConfig.id)
-  const isActiveFilter = appGet.isActiveFilter(activeConfig.id)
-
-  if ((isActiveMap && activeFilters > 0)
-    || (isActiveFilter && activeMap)) {
-    view.title = `${base} · ${name} $(layers)`
+  if (isActive && activeMap && activeFilters > 0) {
+    view.title = `${base} · ${name} 📚`
     return
   }
 
-  if (isActiveMap || isActiveFilter) {
-    view.title = `${base} · ${name} $(check)`
+  if (isActive) {
+    view.title = `${base} · ${name} ✅`
     return
   }
 
-  view.title = `${base} · ${name} $(warning)`
+  view.title = `${base} · ${name} ⚠️`
 }

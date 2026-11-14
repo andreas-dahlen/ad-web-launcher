@@ -1,13 +1,12 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import type * as vscode from 'vscode'
-import type { ExcludeOrInclude, PathChoice } from '../types/core.types.ts'
+import type { FilesAndFolders } from '../types/core.types.ts'
 
 export function pathsToRelative(
   absolutePaths: string[],
   root: vscode.WorkspaceFolder,
-  action: ExcludeOrInclude | 'remove'
-): PathChoice {
+): FilesAndFolders {
 
   const files = new Set<string>()
   const folders = new Set<string>()
@@ -28,7 +27,6 @@ export function pathsToRelative(
   }
 
   return {
-    action,
     files,
     folders
   }

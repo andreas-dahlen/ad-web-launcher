@@ -30,6 +30,7 @@ export function createWorkspaceTreeProvider(
       return fileTreeItem(
         node,
         vscode.Uri.file(node.absolutePath),
+        treeCache.getMetadata()
       )
     }
   }

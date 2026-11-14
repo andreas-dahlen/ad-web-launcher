@@ -26,6 +26,10 @@ export type TreeCacheEntry = {
   sliceData?: NormalizedPaths
 }
 
+export type TreeMetadata = {
+  isOnlyFilterActive: boolean
+}
+
 
 export type TreeCounts = {
   include: {
@@ -44,10 +48,25 @@ export type NormalizedPaths = {
   excludeFolders: string[]
 }
 
-export type PathChoice = {
-  action: ExcludeOrInclude | 'remove'
+export type NormalizedSets = {
+  includeFiles: Set<string>
+  includeFolders: Set<string>
+  excludeFiles: Set<string>
+  excludeFolders: Set<string>
+}
+
+export type AddOrRemove = 'add' | 'remove'
+
+export type FilesAndFolders = {
   files: Set<string>
   folders: Set<string>
+}
+
+export type UpdateData = FilesAndFolders & NormalizedSets & Action
+
+export type Action = {
+  operation: AddOrRemove
+  category: ExcludeOrInclude
 }
 
 export type SliceMap = NormalizedPaths & {

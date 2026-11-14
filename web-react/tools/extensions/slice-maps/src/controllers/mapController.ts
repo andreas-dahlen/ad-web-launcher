@@ -1,4 +1,4 @@
-import type { PathChoice, SliceMap } from '../types/core.types.ts';
+import type { ExcludeOrInclude, FilesAndFolders, SliceMap } from '../types/core.types.ts';
 import { createMap } from '../operations/create.ts';
 import { renameMap } from '../operations/rename.ts';
 import { resetMap } from '../operations/reset.ts';
@@ -35,10 +35,10 @@ export function createMapController({
 
     if (conf.getActiveConfig()) {
       tree.updateSliceTree()
-    } else {
-      const activeConfigChanged = await conf.resolveConfigIdentity()
-      if (activeConfigChanged.requiresUpdate) tree.update()
+      return
     }
+    const activeConfigChanged = await conf.resolveConfigIdentity()
+    if (activeConfigChanged.requiresUpdate) tree.update()
   }
 
   async function remove(map: SliceMap): Promise<void> {
@@ -60,7 +60,10 @@ export function createMapController({
         id: map.id,
         doesActivate: false
       })
-    } else if (activeConfigChanged?.requiresUpdate) {
+      return
+    }
+    if (activeConfigChanged?.requiresUpdate
+      || !activeConfigChanged?.activeIdentity) {
       tree.update()
     } else {
       tree.updateSliceTree()
@@ -91,6 +94,10 @@ export function createMapController({
         id: map.id,
         doesActivate: true
       })
+      return
+    }
+    if (conf.getActiveConfig()?.id === map.id) {
+      tree.update()
     } else {
       tree.updateSliceTree()
     }
@@ -99,59 +106,54 @@ export function createMapController({
   async function include(
     absolutePaths: string[]
   ): Promise<void> {
-    const configData = await conf.resolveConfigIdentity()
-    if (!configData) throwError('No map or filter available.')
-    const { activeIdentity } = configData
-
+    const { activeIdentity } = await conf.resolveConfigIdentity()
     if (activeIdentity?.type !== 'map') {
       throwError('Cannot include paths in a filter. Select a map instead.')
     }
-
     const map = sliceCache.getMapById(activeIdentity.id)
     if (!map) throwError('The selected map could not be found.')
 
-    const paths = pathsToRelative(absolutePaths, root, 'include')
-    await update(map, paths)
+    const paths = pathsToRelative(absolutePaths, root)
+    await update(map, paths, 'include')
   }
 
   async function exclude(
     absolutePaths: string[]
   ): Promise<void> {
-    const configData = await conf.resolveConfigIdentity()
-    if (!configData) throwError('No map or filter available.')
-    const { activeIdentity } = configData
-
+    const { activeIdentity } = await conf.resolveConfigIdentity()
     if (activeIdentity?.type !== 'map') {
       throwError('Cannot exclude paths in a filter. Select a map instead.')
     }
-
     const map = sliceCache.getMapById(activeIdentity.id)
     if (!map) throwError('The selected map could not be found.')
 
-    const paths = pathsToRelative(absolutePaths, root, 'exclude')
-    await update(map, paths)
+    const paths = pathsToRelative(absolutePaths, root)
+    await update(map, paths, 'exclude')
   }
 
   async function update(
     map: SliceMap,
-    paths: PathChoice,
+    input: FilesAndFolders,
+    category: ExcludeOrInclude,
   ): Promise<void> {
-    const nextMap = normalizeMap(map, paths)
+    const { map: nextMap, action } = normalizeMap(map, input, category)
     await sliceCache.addMap(nextMap)
 
     const isActive = appGet.isActiveMap(map.id)
-
 
     if (isActive) {
       await orchestrator.queRequest({
         type: 'map',
         id: nextMap.id,
         doesActivate: true,
-        excludeCleanupInput: paths.action === 'exclude'
-          ? [...paths.folders]
+        excludeCleanupInput: action.category === 'exclude'
+          && action.operation === 'add'
+          ? [...input.folders]
           : undefined
       })
-    } else if (conf.getActiveConfig()?.id === map.id) {
+      return
+    }
+    if (conf.getActiveConfig()?.id === map.id) {
       tree.update()
     } else {
       tree.updateSliceTree()

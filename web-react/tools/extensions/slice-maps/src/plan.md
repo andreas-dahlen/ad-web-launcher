@@ -74,3 +74,8 @@
 * **Filesystem architecture:** Investigate the benefits of VS Code's filesystem APIs before committing to a broad migration.
 * **Performance optimization:** Measure actual costs before introducing persistent caches, granular updates, or visibility-aware refreshes.
 * **Scope control:** Investigations do not automatically imply implementation. Retain deferred tasks only when a concrete need justifies the additional complexity.
+
+
+
+* IDEAS....
+do more toggle like behaviors... example: toggle implicit/explicit for any button. basically do/undo for any button. currently pressing a button twice does nothing the second time. it should undo the first action. this would be a nice feature for any button that has a toggleable state.

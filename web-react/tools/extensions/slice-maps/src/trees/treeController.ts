@@ -1,6 +1,5 @@
 import { createTreeHandler } from './treeHandler.ts'
 import type { TreeControllerDeps } from '../types/controller.types.ts'
-import { throwError } from '../utils/throwError.ts'
 import { createSliceTreeProvider } from '../vscode/sliceTree.ts'
 import { createWorkspaceTreeProvider } from '../vscode/workspaceTree.ts'
 import { updateSliceT, updateWorkspaceT } from './updateTitle.ts'
@@ -52,37 +51,53 @@ export function createTreeController({
     sliceCache
   )
 
-
-  function update() {
-    const displayMode = treeCache.getDisplayMode()
-    if (displayMode === 'effective') {
-      if (appGet.hasActiveSlice()) {
-        const mergeId = appGet.getActiveMergeId()
-        treeHandler.updateEffectiveTree(mergeId)
-      } else {
-        treeHandler.resetEffectiveTree()
-      }
-    } else if (displayMode === 'configuration') {
-      const activeConfSlice = conf.getActiveConfig()
-      if (!activeConfSlice) throwError('active config is missing')
-      treeHandler.updateConfigTree(activeConfSlice)
-    }
+  function updateTree() {
     updateWorkspaceTitle()
     updateSliceTree()
     updateWorkspaceTree()
   }
 
+  function updateConfigMode() {
+    const activeConfSlice = conf.getActiveConfig()
+    if (activeConfSlice) {
+      treeHandler.updateConfigTree(activeConfSlice)
+    } else {
+      treeHandler.resetConfigTree()
+    }
+    updateTree()
+  }
 
+  function updateEffectiveMode() {
+    if (appGet.hasActiveSlice()) {
+      const mergeId = appGet.getActiveMergeId()
+      treeHandler.updateEffectiveTree(mergeId)
+    } else {
+      treeHandler.resetEffectiveTree()
+    }
+    updateTree()
+  }
+
+  function update() {
+    const displayMode = treeCache.getDisplayMode()
+    if (displayMode === 'effective') {
+      updateEffectiveMode()
+    } else if (displayMode === 'configuration') {
+      updateConfigMode()
+    }
+
+    const isOnlyFiltersActive =
+      !appGet.getActiveMap() && appGet.getActiveFilters().length > 0
+
+    treeHandler.updateMetaData(isOnlyFiltersActive)
+  }
 
   const tree = {
     update, // <-does updateWorkspaceTitle, does updateSliceTree, does updateWorkspaceTree
     // resetEffectiveTree, //<- updateWorkspaceTree, updateWorkspaceTitle, updateSliceTree 
-    updateWorkspaceTitle,
     updateSliceTitle, // one explicit call site
-    updateSliceTree // needed for quick updates
+    updateWorkspaceTitle, // needed for granular updates
+    updateSliceTree // needed for granular updates
   }
-
-
 
   return {
     tree,

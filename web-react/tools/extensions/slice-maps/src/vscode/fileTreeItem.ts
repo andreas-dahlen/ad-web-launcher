@@ -1,11 +1,12 @@
 import * as vscode from 'vscode'
 
-import type { TreeCounts, WorkspaceTreeNode } from '../types/core.types.ts'
+import type { TreeCounts, TreeMetadata, WorkspaceTreeNode } from '../types/core.types.ts'
 import type { NodeSemantics } from '../types/exclusion.types.ts'
 
 export function fileTreeItem(
   node: WorkspaceTreeNode,
   uri: vscode.Uri,
+  { isOnlyFilterActive }: TreeMetadata
 ): vscode.TreeItem {
 
   const isFolder = node.type === 'folders'
@@ -31,9 +32,9 @@ export function fileTreeItem(
   item.id = uri.toString()
   item.contextValue = 'workspaceFile'
 
-  item.label = `${getLabel(semantics, isFolder)}   ${name} `
+  item.label = `${getLabel(semantics, isFolder, isOnlyFilterActive)}   ${name} `
 
-  item.description = `${getDescription(semantics, node.counts)}`
+  item.description = `${getDescription(semantics, node.counts, isOnlyFilterActive)}`
 
   item.tooltip = new vscode.MarkdownString(getTooltip(semantics))
   return item
@@ -41,13 +42,15 @@ export function fileTreeItem(
 
 function getLabel(
   s: NodeSemantics | undefined,
-  isFolder: boolean
+  isFolder: boolean,
+  isOnlyFilterActive: boolean
 ): string {
   if (!s) return ''
 
   if (s.type === 'implicit') {
     if (s.outcome === 'exclude') return `🔻`
     if (s.outcome === 'overwritten') return `🟡`
+    if (isOnlyFilterActive) return '🔘'
     return `🌳`
   }
 
@@ -63,7 +66,11 @@ function getLabel(
 
 }
 
-function getDescription(semantics: NodeSemantics | undefined, counts: TreeCounts): string {
+function getDescription(
+  semantics: NodeSemantics | undefined,
+  counts: TreeCounts,
+  isOnlyFilterActive: boolean
+): string {
 
   if (!semantics) return ''
 
@@ -72,9 +79,10 @@ function getDescription(semantics: NodeSemantics | undefined, counts: TreeCounts
 
   if ((totalIncl + totalExcl) === 0) return ''
 
-  if (totalExcl === 0) return `+${totalIncl}`
+  if (totalExcl === 0 && !isOnlyFilterActive) return `+${totalIncl}`
   if (totalIncl === 0) return `-${totalExcl}`
 
+  if (isOnlyFilterActive) return ''
   return ` +${totalIncl} / -${totalExcl}`
 }
 

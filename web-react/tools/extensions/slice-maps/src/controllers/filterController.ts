@@ -1,4 +1,4 @@
-import type { PathChoice, SliceFilter } from '../types/core.types.ts';
+import type { ExcludeOrInclude, FilesAndFolders, SliceFilter } from '../types/core.types.ts';
 import { createFilter } from '../operations/create.ts';
 import { renameFilter } from '../operations/rename.ts';
 import { resetFilter } from '../operations/reset.ts';
@@ -6,7 +6,7 @@ import { pathsToRelative } from '../normalize/pathsToRelative.ts';
 import type { FilterControllerDeps } from '../types/controller.types.ts';
 import { booleanQuestion } from '../operations/booleanQuestion.ts';
 import { throwError } from '../utils/throwError.ts';
-import { normalizeFilter, normalizeFilterRemoval } from '../normalize/slice.ts';
+import { normalizeFilter } from '../normalize/slice.ts';
 export type FilterController = ReturnType<typeof createFilterController>
 export function createFilterController({
   root,
@@ -15,9 +15,7 @@ export function createFilterController({
   appGet,
   globber,
   orchestrator,
-  updateSliceTree,
   tree,
-  updateWorkspaceTree
 }: FilterControllerDeps
 ) {
 
@@ -36,12 +34,12 @@ export function createFilterController({
 
     await sliceCache.addFilter(filter)
 
-    if (!conf.getActiveConfig()) {
-      await conf.resolveConfigIdentity()
-      tree.update()
-      updateWorkspaceTree()
+    if (conf.getActiveConfig()) {
+      tree.updateSliceTree()
+      return
     }
-    updateSliceTree()
+    const activeConfigChanged = await conf.resolveConfigIdentity()
+    if (activeConfigChanged.requiresUpdate) tree.update()
   }
 
   async function remove(filter: SliceFilter): Promise<void> {
@@ -52,14 +50,10 @@ export function createFilterController({
 
     const isActive = appGet.isActiveFilter(filter.id)
 
-    if (conf.getActiveConfig()?.id === filter.id) {
-      const configData = await conf.resolveConfigIdentity()
-
-      if (!isActive && (!configData || configData.requiresUpdate)) {
-        tree.update()
-        updateWorkspaceTree()
-      }
-    }
+    const activeConfigChanged =
+      conf.getActiveConfig()?.id === filter.id
+        ? await conf.resolveConfigIdentity()
+        : null
 
     if (isActive) {
       await orchestrator.queRequest({
@@ -67,8 +61,13 @@ export function createFilterController({
         id: filter.id,
         doesActivate: false
       })
+      return
+    }
+    if (activeConfigChanged?.requiresUpdate
+      || !activeConfigChanged?.activeIdentity) {
+      tree.update()
     } else {
-      updateSliceTree()
+      tree.updateSliceTree()
     }
   }
 
@@ -78,7 +77,8 @@ export function createFilterController({
 
     await sliceCache.renameFilter(filter.id, name)
 
-    updateSliceTree()
+    tree.updateWorkspaceTitle()
+    tree.updateSliceTree()
   }
 
   async function reset(filter: SliceFilter): Promise<void> {
@@ -96,86 +96,77 @@ export function createFilterController({
         id: filter.id,
         doesActivate: true
       })
+      return
+    }
+    if (conf.getActiveConfig()?.id === filter.id) {
+      tree.update()
     } else {
-      updateSliceTree()
+      tree.updateSliceTree()
     }
-    if (isActive || conf.getActiveConfig()?.id !== filter.id) return
-    tree.update()
-    updateWorkspaceTree()
   }
 
-  async function removeExclude(
-    absolutePaths: string[]
-  ): Promise<void> {
-    const configData = await conf.resolveConfigIdentity()
-    if (!configData) throwError('No map or filter available.')
-    const { activeIdentity } = configData
+  // async function removeExclude(
+  //   absolutePaths: string[]
+  // ): Promise<void> {
+  //   const { activeIdentity } = await conf.resolveConfigIdentity()
 
-    if (activeIdentity.type !== 'filter') {
-      throwError('Cannot remove exclusions from a map. Select a filter instead.')
-    }
+  //   if (activeIdentity?.type !== 'filter') {
+  //     throwError('Cannot remove exclusions from a map. Select a filter instead.')
+  //   }
+  //   const filter = sliceCache.getFilterById(activeIdentity.id)
+  //   if (!filter) throwError('The selected filter could not be found.')
 
-    const filter = sliceCache.getFilterById(activeIdentity.id)
-    if (!filter) throwError('The selected filter could not be found.')
-
-    const paths = pathsToRelative(absolutePaths, root, 'remove')
-    await update(filter, paths)
-  }
+  //   const paths = pathsToRelative(absolutePaths, root, 'remove')
+  //   await update(filter, paths)
+  // }
 
   async function addExclude(
     absolutePaths: string[]
   ): Promise<void> {
-    const configData = await conf.resolveConfigIdentity()
-    if (!configData) throwError('No map or filter available.')
-    const { activeIdentity } = configData
-
-    if (activeIdentity.type !== 'filter') {
+    const { activeIdentity } = await conf.resolveConfigIdentity()
+    if (activeIdentity?.type !== 'filter') {
       throwError('Cannot add exclusions to a map. Select a filter instead.')
     }
-
     const filter = sliceCache.getFilterById(activeIdentity.id)
     if (!filter) throwError('The selected filter could not be found.')
 
-    const paths = pathsToRelative(absolutePaths, root, 'exclude')
-    await update(filter, paths)
+    const paths = pathsToRelative(absolutePaths, root)
+    await update(filter, paths, 'exclude')
   }
 
   async function update(
     filter: SliceFilter,
-    paths: PathChoice,
+    input: FilesAndFolders,
+    category: ExcludeOrInclude
   ): Promise<void> {
-    const nextFilter = paths.action === 'remove'
-      ? normalizeFilterRemoval(filter, paths)
-      : normalizeFilter(filter, paths)
+    const { filter: nextFilter, action } = normalizeFilter(filter, input, category)
 
     await sliceCache.addFilter(nextFilter)
 
     const isActive = appGet.isActiveFilter(filter.id)
-
-    if (!isActive && conf.getActiveConfig()?.id === filter.id) {
-      tree.update()
-      updateWorkspaceTree()
-    }
 
     if (isActive) {
       await orchestrator.queRequest({
         type: 'filter',
         id: nextFilter.id,
         doesActivate: true,
-        excludeCleanupInput: paths.action === 'exclude'
-          ? [...paths.folders]
+        excludeCleanupInput: action.category === 'exclude'
+          && action.operation === 'add'
+          ? [...input.folders]
           : undefined
       })
+      return
+    }
+    if (conf.getActiveConfig()?.id === filter.id) {
+      tree.update()
     } else {
-      updateSliceTree()
+      tree.updateSliceTree()
     }
   }
 
   async function globAll(absolutePaths: string[]) {
-    const configData = await conf.resolveConfigIdentity()
-    if (!configData) throwError('No map or filter available.')
-    const { activeIdentity } = configData
-    if (activeIdentity.type !== 'filter') {
+    const { activeIdentity } = await conf.resolveConfigIdentity()
+    if (activeIdentity?.type !== 'filter') {
       throwError('Cannot generate exclusion patterns for a map. Select a filter instead.')
     }
 
@@ -186,8 +177,7 @@ export function createFilterController({
     if (!paths) {
       throwError('No matching files or folders found for the selected path(s).')
     }
-
-    await update(filter, paths)
+    await update(filter, paths, 'exclude')
   }
   return {
     toggle,
@@ -196,7 +186,6 @@ export function createFilterController({
     rename,
     reset,
     addExclude,
-    removeExclude,
     update,
     globAll
   }

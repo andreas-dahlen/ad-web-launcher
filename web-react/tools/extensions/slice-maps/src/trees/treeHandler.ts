@@ -14,19 +14,12 @@ export function createTreeHandler({
   excluder
 }: TreeHandlerDeps
 ) {
-  function updateCache(mergeId: string, mergeData: CachedMergeData) {
-    const displayMode = treeCache.getDisplayMode()
+  function getEnrichment(mergeData: CachedMergeData) {
     const tree = loadTree.build()
     const result = enrichTree(tree, root, mergeData.details)
-    const data = {
+    return {
       nodeData: result,
       sliceData: mergeData.sliceData
-    }
-
-    if (displayMode === 'effective') {
-      treeCache.setSliceData(mergeId, data)
-    } else if (displayMode === 'configuration') {
-      treeCache.setConfigData(mergeId as UUID, data)
     }
   }
 
@@ -78,7 +71,8 @@ export function createTreeHandler({
     updateEffectiveTree(mergeId: string) {
       const mergeData = mergeCache.getCachedMergeData(mergeId)
       if (!mergeData || isTreeUpToDate({ id: mergeId, type: 'merged' })) return
-      updateCache(mergeId, mergeData)
+      const data = getEnrichment(mergeData)
+      treeCache.setSliceData(mergeId, data)
     }, //mergeData is updated before running in this case
 
     updateConfigTree(activeSlice: ActiveSlice) {
@@ -98,7 +92,8 @@ export function createTreeHandler({
       excluder.resolve(resolved)
       mergeData = mergeCache.getCachedMergeData(activeSlice.id)
       if (!mergeData) throwError('updateConfigTree had undefined mergeData')
-      updateCache(activeSlice.id, mergeData)
+      const data = getEnrichment(mergeData)
+      treeCache.setConfigData(id, data)
     },
 
     resetEffectiveTree() {
@@ -107,6 +102,18 @@ export function createTreeHandler({
       const tree = loadTree.build()
       const result = enrichTree(tree, root)
       treeCache.setSliceData('inactive', { nodeData: result })
+    },
+
+    resetConfigTree() {
+      const displayMode = treeCache.getDisplayMode()
+      if (displayMode !== 'configuration') return
+      const tree = loadTree.build()
+      const result = enrichTree(tree, root)
+      treeCache.setConfigData('inactive' as UUID, { nodeData: result })
+    },
+
+    updateMetaData(isOnlyFilterActive: boolean) {
+      treeCache.setMetadata(isOnlyFilterActive)
     }
   }
 }

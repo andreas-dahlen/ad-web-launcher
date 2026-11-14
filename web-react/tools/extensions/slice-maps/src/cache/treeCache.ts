@@ -1,6 +1,6 @@
 import type { UUID } from 'node:crypto'
 import type { ConfigCache } from '../identity/configIdentity.ts'
-import type { TreeCacheEntry, WorkspaceDisplayMode } from '../types/core.types.ts'
+import type { TreeCacheEntry, TreeMetadata, WorkspaceDisplayMode } from '../types/core.types.ts'
 import type { AppStateCache } from './appStateCache.ts'
 import { throwError } from '../utils/throwError.ts'
 
@@ -12,7 +12,8 @@ export function createTreeCache(appGet: AppStateCache["appGet"], conf: ConfigCac
   const activeConfigData = new Map<UUID, TreeCacheEntry>()
 
   let displayMode: WorkspaceDisplayMode = 'effective'
-  let hasInactiveSliceData: boolean = false
+
+  let metadata: TreeMetadata
 
   return {
     getTreeNodes() {
@@ -24,7 +25,7 @@ export function createTreeCache(appGet: AppStateCache["appGet"], conf: ConfigCac
       const activeConfig = conf.getActiveConfig()
       if (!activeConfig) throwError('active config is undefined')
 
-      return activeConfigData.get(activeConfig.id)?.nodeData
+      return activeConfigData.get(activeConfig.id ?? 'inactive')?.nodeData
     },
 
     getSliceDataById(mergeId: string) {
@@ -32,11 +33,6 @@ export function createTreeCache(appGet: AppStateCache["appGet"], conf: ConfigCac
     },
     setSliceData(mergeId: string, data: TreeCacheEntry) {
       activeSliceData.set(mergeId, data)
-    },
-    checkHasInactiveSlideData() {
-      const isInitiated = hasInactiveSliceData
-      hasInactiveSliceData = true
-      return isInitiated
     },
 
     getConfigDataById(activeConfigId: UUID) {
@@ -57,6 +53,14 @@ export function createTreeCache(appGet: AppStateCache["appGet"], conf: ConfigCac
     },
     getDisplayMode() {
       return displayMode
+    },
+
+    setMetadata(isOnlyFilterActive: boolean) {
+      metadata = { isOnlyFilterActive }
+    },
+
+    getMetadata() {
+      return metadata
     }
   }
 }
